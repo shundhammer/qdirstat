@@ -138,7 +138,7 @@ before closing parentheses:
         doSomething(arg1, arg2)  // WRONG!!!
     }
 
-Use blank lines liberally. No rubocop-Style code.
+Use blank lines liberally. No Rubocop-Style code.
 
 Use CamelCase for classes and camelCase for variables. Do not use
 snake_case. Prefix member variables with an underscore: _someValue. Prefix its
@@ -203,35 +203,43 @@ Misleading documentation is worse than no documentation at all.
 ### Getting Help for Contributers
 
 - Use the Qt reference documentation.
-- Install and the the available Qt examples for reference.
+- Install and study carefully the available Qt examples for reference.
 - Use Stack Overflow.
 - Use Google.
 - Make sure you can build a basic Qt program.
 - Make sure you have the compiler and other developer tools set up correctly.
-- Make sure you have the relevant -devel (SUSE) or -dev (Ubuntu/Debian) packages installed.
+- Make sure you have the relevant -devel (SUSE) or -dev (Ubuntu/Debian)
+  packages installed.
 
-If you did all of the above and still couldn't figure out what's wrong:
+If you did all of the above (and only then!) and still couldn't figure out
+what's wrong:
 
-- Use IRC (#qdirstat on irc.freenode.net; fallback: contact HuHa in #yast on freenode IRC)
+- Use IRC (#qdirstat on irc.freenode.net; fallback: contact HuHa in #yast on
+  freenode IRC)
 - Write a mail
 
 It is a matter of professional courtesy to first use what is freely available
 on the web before you consume somebody else's time and expertise. It is utterly
 rude to let somebody else point you to the exact part of the Qt documentation
-you couldn't be bothered to read (been there, done that, got the fucking
-T-shirt -- countless times).
+you couldn't be bothered to read.
+
+Does this sound unfriendly? Well, maybe - but: Been there, done that, got the
+fucking T-shirt -- countless times. This is not how I want to spend my spare
+time.
 
 There are some people who keep arguing that "it takes hours for me to read
 through all the documentation, whereas you as an expert can give me the right
-answer within a minute". - Well, yes, it might only take a minute to write the
-answer in IRC, but then that newbie won't learn anything except that it pays
-off to disturb people rather than learn for himself. And reading the
-documentation is always a good investment of time; it is never wasted. In the
-process of searching for an answer you will come across many things you hadn't
-known - and that might just be useful for your next question.
+answer within a minute".
+
+Well, yes, it might only take a minute to write the answer in IRC, but then
+that newbie won't learn anything except that it pays off to disturb people
+rather than learn for himself. And reading the documentation is always a good
+investment of time; it is never wasted. In the process of searching for an
+answer you will come across many things you hadn't known - and that might just
+be useful for your next question.
 
 Plus, it will take the expert that one or two minutes to write the answer to
-IRC - and then 15-20 minuters to recover from the interrupt, to restore the
+IRC - and then **15-20 minutes to recover from the interrupt**, to restore the
 fragile buildings in his mind he needs to solve the problem he was originally
 working on.
 
