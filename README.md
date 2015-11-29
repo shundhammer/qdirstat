@@ -88,7 +88,12 @@ http://askubuntu.com/questions/508503/whats-the-development-package-for-qt5-in-1
 
 #### SUSE
 
-_TO DO_
+Install the required packages for building:
+
+    sudo zypper install -t pattern devel_C_C++
+    sudo zypper install libqt5-qtbase-common-devel libqt5-qttools-devel
+
+**FIXME:** Untested. This needs to be tested and verified.
 
 
 ### Compiling
