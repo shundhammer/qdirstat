@@ -73,13 +73,13 @@ Make sure you have a working Qt 5 build environment installed. This includes:
 
 Install the required packages for building:
 
-    sudo apt-get install g++ qtbase5-dev
+    sudo apt-get install build-essential qtbase5-dev
 
 Dependent packages will be added automatically.
 
 Recommended packages for developers:
 
-    sudo apt-get install qttools5-dev qtbase5-doc qtbase5-doc-html qtbase5-examples
+    sudo apt-get install qttools5-dev-tools qtbase5-doc qtbase5-doc-html qtbase5-examples
 
 See also
 
