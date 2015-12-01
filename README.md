@@ -143,7 +143,7 @@ before closing parentheses:
         doSomething(arg1, arg2)  // WRONG!!!
     }
 
-Use blank lines liberally. No Rubocop-Style code.
+Use blank lines liberally. No Rubocop-style code.
 
 Use CamelCase for classes and camelCase for variables. Do not use
 snake_case. Prefix member variables with an underscore: _someValue. Prefix its
