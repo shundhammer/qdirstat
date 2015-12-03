@@ -205,7 +205,7 @@ Be careful when copying and pasting documentation from some other place.
 Misleading documentation is worse than no documentation at all.
 
 
-### Getting Help for Contributers
+### Getting Help for Contributors
 
 - Use the Qt reference documentation.
 - Install and study carefully the available Qt examples for reference.
