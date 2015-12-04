@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/window-close.png</file>
+        <file>icons/qdirstat.png</file>
     </qresource>
 </RCC>

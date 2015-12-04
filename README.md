@@ -205,6 +205,24 @@ Be careful when copying and pasting documentation from some other place.
 Misleading documentation is worse than no documentation at all.
 
 
+### Legalese in the Sources
+
+**Do not** copy 30+ lines of legalese bullshit into any source file. One line
+in the header like
+
+    License: GPL V2 - see file LICENSE
+
+is plenty. Seriously, what are those people thinking who put all that legalese
+into source files? Sure, they listened to spineless corporate lawyers who just
+want to make sure. But those lawyers are not going to have that crap smack up
+their faces every time they open a file for editing. We developers do.
+
+You lawyers out there, can you here me? **This crap is in the way! Nobody wants
+to read that!** It's in the way of people trying to do their jobs! We could
+construct a harassment case from this!
+
+
+
 ### Getting Help for Contributors
 
 - Use the Qt reference documentation.
