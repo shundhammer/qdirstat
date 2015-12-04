@@ -887,7 +887,7 @@ DirTreeView::popupContextMenu( QListViewItem *	listViewItem,
 
 void
 DirTreeView::popupContextSizeInfo( const QPoint &	pos,
-				    KFileSize		size )
+				    FileSize		size )
 {
     QString info;
 
@@ -1840,7 +1840,7 @@ DirTreeViewItem::paintPercentageBar( float		percent,
 
 
 QString
-QDirStat::formatSizeLong( KFileSize size )
+QDirStat::formatSizeLong( FileSize size )
 {
     QString sizeText;
     int count = 0;
@@ -1862,7 +1862,7 @@ QDirStat::formatSizeLong( KFileSize size )
 
 
 QString
-QDirStat::hexKey( KFileSize size )
+QDirStat::hexKey( FileSize size )
 {
     /**
      * This is optimized for performance, not for aesthetics.
@@ -1871,7 +1871,7 @@ QDirStat::hexKey( KFileSize size )
      **/
 
     static const char hexDigits[] = "0123456789ABCDEF";
-    char key[ sizeof( KFileSize ) * 2 + 1 ];	// 2 hex digits per byte required
+    char key[ sizeof( FileSize ) * 2 + 1 ];	// 2 hex digits per byte required
     char *cptr = key + sizeof( key ) - 1;	// now points to last char of key
 
     memset( key, '0', sizeof( key ) - 1 );	// fill with zeroes

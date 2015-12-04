@@ -153,7 +153,7 @@ CacheWriter::writeItem( gzFile cache, FileInfo * item )
 
 
 QString
-CacheWriter::formatSize( KFileSize size )
+CacheWriter::formatSize( FileSize size )
 {
     QString str;
 
@@ -309,7 +309,7 @@ CacheReader::addItem()
     // Size
 
     char * end = 0;
-    KFileSize size = strtoll( size_str, &end, 10 );
+    FileSize size = strtoll( size_str, &end, 10 );
 
     if ( end )
     {
@@ -330,7 +330,7 @@ CacheReader::addItem()
 
     // Blocks
 
-    KFileSize blocks = blocks_str ? strtoll( blocks_str, 0, 10 ) : -1;
+    FileSize blocks = blocks_str ? strtoll( blocks_str, 0, 10 ) : -1;
 
 
     // Links

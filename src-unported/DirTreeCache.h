@@ -48,7 +48,7 @@ namespace QDirStat
 	 * "Gigabytes", "Megabytes, "Kilobytes", respectively (provided there
 	 * is no fractional part - 27M is OK, 27.2M is not).
 	 **/
-	QString formatSize( KFileSize size );
+	QString formatSize( FileSize size );
 
 
     protected:

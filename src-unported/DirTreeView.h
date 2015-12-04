@@ -438,7 +438,7 @@ namespace QDirStat
 	 * Pop up info window with exact byte size.
 	 **/
 	void 	popupContextSizeInfo	( const QPoint &	pos,
-					  KFileSize		size );
+					  FileSize		size );
 
 	/**
 	 * Pop up info window with arbitrary one-line text.
@@ -840,13 +840,13 @@ namespace QDirStat
      * Format a file size with all digits, yet human readable using the current
      * locale's thousand separator, i.e. 12,345,678 rather than 12345678
      **/
-    QString formatSizeLong( KFileSize size );
+    QString formatSizeLong( FileSize size );
 
     /**
      * Format a file size for use within a QListView::key() function:
      * Right-justify and fill with leading zeroes.
      **/
-    QString hexKey( KFileSize size );
+    QString hexKey( FileSize size );
 
     /**
      * Format a millisecond granularity time human readable.

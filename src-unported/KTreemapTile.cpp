@@ -128,7 +128,7 @@ KTreemapTile::createChildrenSimple( const QRect &	rect,
     _cushionSurface.addRidge( childDir, _cushionSurface.height(), rect );
 
     FileInfoSortedBySizeIterator it( _orig,
-				      (KFileSize) ( _parentView->minTileSize() / scale ),
+				      (FileSize) ( _parentView->minTileSize() / scale ),
 				      KDotEntryAsSubDir );
 
     while ( *it )
@@ -172,7 +172,7 @@ KTreemapTile::createSquarifiedChildren( const QRect & rect )
     }
 
     double scale	= rect.width() * (double) rect.height() / _orig->totalSize();
-    KFileSize minSize	= (KFileSize) ( _parentView->minTileSize() / scale );
+    FileSize minSize	= (FileSize) ( _parentView->minTileSize() / scale );
 
 #if 0
     if ( _orig->hasChildren() )
@@ -276,7 +276,7 @@ KTreemapTile::layoutRow( const QRect &		rect,
 
     // This row's secondary length is determined by the area (the number of
     // pixels) to be allocated for all of the row's items.
-    KFileSize sum = row.sumTotalSizes();
+    FileSize sum = row.sumTotalSizes();
     int secondary = (int) ( sum * scale / primary );
 
     if ( sum == 0 )	// Prevent division by zero.
