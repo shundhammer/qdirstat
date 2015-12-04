@@ -138,7 +138,7 @@ LocalDirReadJob::startReading()
 		{
 		    if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
 		    {
-			DirInfo *subDir = new KDirInfo( entryName, &statInfo, _tree, _dir );
+			DirInfo *subDir = new DirInfo( entryName, &statInfo, _tree, _dir );
 			_dir->insertChild( subDir );
 			childAdded( subDir );
 
@@ -219,7 +219,7 @@ LocalDirReadJob::startReading()
 			}
 			else
 			{
-			    FileInfo *child = new KFileInfo( entryName, &statInfo, _tree, _dir );
+			    FileInfo *child = new FileInfo( entryName, &statInfo, _tree, _dir );
 			    _dir->insertChild( child );
 			    childAdded( child );
 			}
@@ -233,7 +233,7 @@ LocalDirReadJob::startReading()
 		     * Not much we can do when lstat() didn't work; let's at
 		     * least create an (almost empty) entry as a placeholder.
 		     */
-		    DirInfo *child = new KDirInfo( _tree, _dir, entry->d_name );
+		    DirInfo *child = new DirInfo( _tree, _dir, entry->d_name );
 		    child->setReadState( KDirError );
 		    _dir->insertChild( child );
 		    childAdded( child );
@@ -275,7 +275,7 @@ LocalDirReadJob::stat( const KURL & 	url,
 
 	if ( S_ISDIR( statInfo.st_mode ) )		// directory?
 	{
-	    DirInfo * dir = new KDirInfo( name, &statInfo, tree, parent );
+	    DirInfo * dir = new DirInfo( name, &statInfo, tree, parent );
 
 	    if ( dir && parent && dir->device() != parent->device() )
 		dir->setMountPoint();

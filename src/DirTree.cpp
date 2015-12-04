@@ -1,7 +1,7 @@
 /*
  *   File name:	DirTree.cpp
  *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -18,7 +18,7 @@ using namespace QDirStat;
 
 
 
-DirTree::KDirTree()
+DirTree::DirTree()
     : QObject()
 {
     _root		= 0;
@@ -27,12 +27,12 @@ DirTree::KDirTree()
 
     readConfig();
 
-    connect( & _jobQueue, SIGNAL( finished()     ),
-	     this,        SLOT  ( slotFinished() ) );
+    connect( & _jobQueue, SIGNAL( finished()	 ),
+	     this,	  SLOT	( slotFinished() ) );
 }
 
 
-DirTree::~KDirTree()
+DirTree::~DirTree()
 {
     selectItem( 0 );
 
@@ -47,7 +47,7 @@ DirTree::readConfig()
     KConfig * config = kapp->config();
     config->setGroup( "Directory Reading" );
 
-    _crossFileSystems		= config->readBoolEntry( "CrossFileSystems",     false );
+    _crossFileSystems		= config->readBoolEntry( "CrossFileSystems",	 false );
     _enableLocalDirReader	= config->readBoolEntry( "EnableLocalDirReader", true  );
 }
 
@@ -91,19 +91,9 @@ DirTree::clear( bool sendSignals )
 
 
 void
-DirTree::startReading( const KURL & url )
+DirTree::startReading( const QString & url )
 {
-    // logDebug() << k_funcinfo << " " << url.url() << endl;
-
-#if 0
-    logDebug() << "url: "		<< url.url()		<< endl;
-    logDebug() << "path: "		<< url.path()		<< endl;
-    logDebug() << "filename: "		<< url.filename() 	<< endl;
-    logDebug() << "protocol: "		<< url.protocol() 	<< endl;
-    logDebug() << "isValid: "		<< url.isValid() 	<< endl;
-    logDebug() << "isMalformed: "	<< url.isMalformed() 	<< endl;
-    logDebug() << "isLocalFile: "	<< url.isLocalFile() 	<< endl;
-#endif
+    logDebug() << "startReading" << url << endl;
 
     _isBusy = true;
     emit startingReading();
@@ -112,7 +102,7 @@ DirTree::startReading( const KURL & url )
     readConfig();
 
     _root = LocalDirReadJob::stat( url, this );
-    Q_CHECK_PTR( _root );
+    CHECK_PTR( _root );
 
     if ( _root )
     {
@@ -121,7 +111,7 @@ DirTree::startReading( const KURL & url )
 	if ( _root->isDir() )
 	{
 	    DirInfo *dir = (KDirInfo *) _root;
-            addJob( new LocalDirReadJob( this, dir ) );
+	    addJob( new LocalDirReadJob( this, dir ) );
 	}
 	else
 	{
@@ -131,7 +121,7 @@ DirTree::startReading( const KURL & url )
     }
     else	// stat() failed
     {
-	// logWarning() << "stat(" << url.url() << ") failed" << endl;
+	logWarning() << "stat(" << url << ") failed" << endl;
 	_isBusy = false;
 	emit finished();
 	emit finalizeLocal( 0 );
@@ -147,14 +137,14 @@ DirTree::refresh( FileInfo *subtree )
 
     if ( ! subtree || ! subtree->parent() )	// Refresh all (from root)
     {
-	startReading( fixedUrl( _root->url() ) );
+	startReading( QDir::cleanPath( _root->url() ) );
     }
     else	// Refresh subtree
     {
 	// Save some values from the old subtree.
 
-	KURL url		= subtree->url();
-	DirInfo * parent	= subtree->parent();
+	QString	  url	 = subtree->url();
+	DirInfo * parent = subtree->parent();
 
 
 	// Select nothing if the current selection is to be deleted
@@ -167,7 +157,7 @@ DirTree::refresh( FileInfo *subtree )
 
 	subtree->setExcluded( false );
 
-	
+
 	// Get rid of the old subtree.
 
 	emit deletingChild( subtree );
@@ -189,7 +179,7 @@ DirTree::refresh( FileInfo *subtree )
 
 	_isBusy = true;
 	emit startingReading();
-	
+
 	// Create new subtree root.
 
 	subtree = LocalDirReadJob::stat( url, this, parent );
@@ -208,7 +198,7 @@ DirTree::refresh( FileInfo *subtree )
 		// Prepare reading this subtree's contents.
 
 		DirInfo *dir = (KDirInfo *) subtree;
-                addJob( new LocalDirReadJob( this, dir ) );
+		addJob( new LocalDirReadJob( this, dir ) );
 	    }
 	    else
 	    {

@@ -16,9 +16,9 @@ using namespace QDirStat;
 Cleanup *
 StdCleanup::openInKonqueror( KActionCollection *parent )
 {
-    Cleanup *cleanup = new KCleanup( "cleanup_open_in_konqueror",
+    Cleanup *cleanup = new Cleanup( "cleanup_open_in_konqueror",
 				      "kfmclient openURL %p",
-				      i18n( "Open in &Konqueror" ),
+				      tr( "Open in &Konqueror" ),
 				      parent );
     CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true );
@@ -36,9 +36,9 @@ StdCleanup::openInKonqueror( KActionCollection *parent )
 Cleanup *
 StdCleanup::openInTerminal( KActionCollection *parent )
 {
-    Cleanup *cleanup = new KCleanup( "cleanup_open_in_terminal",
+    Cleanup *cleanup = new Cleanup( "cleanup_open_in_terminal",
 				      "konsole",
-				      i18n( "Open in &Terminal" ),
+				      tr( "Open in &Terminal" ),
 				      parent );
     CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true );
@@ -55,9 +55,9 @@ StdCleanup::openInTerminal( KActionCollection *parent )
 Cleanup *
 StdCleanup::compressSubtree( KActionCollection *parent )
 {
-    Cleanup *cleanup = new KCleanup( "cleanup_compress_subtree",
+    Cleanup *cleanup = new Cleanup( "cleanup_compress_subtree",
 				      "cd ..; tar cjvf %n.tar.bz2 %n && rm -rf %n",
-				      i18n( "&Compress" ),
+				      tr( "&Compress" ),
 				      parent );
     CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
@@ -73,9 +73,9 @@ StdCleanup::compressSubtree( KActionCollection *parent )
 Cleanup *
 StdCleanup::makeClean( KActionCollection *parent )
 {
-    Cleanup *cleanup = new KCleanup( "cleanup_make_clean",
+    Cleanup *cleanup = new Cleanup( "cleanup_make_clean",
 				      "make clean",
-				      i18n( "&make clean" ),
+				      tr( "&make clean" ),
 				      parent );
     CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
@@ -90,9 +90,9 @@ StdCleanup::makeClean( KActionCollection *parent )
 Cleanup *
 StdCleanup::deleteTrash( KActionCollection *parent )
 {
-    Cleanup *cleanup = new KCleanup( "cleanup_delete_trash",
+    Cleanup *cleanup = new Cleanup( "cleanup_delete_trash",
 				      "rm -f *.o *~ *.bak *.auto core",
-				      i18n( "Delete T&rash Files" ),
+				      tr( "Delete T&rash Files" ),
 				      parent );
     CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
@@ -108,9 +108,9 @@ StdCleanup::deleteTrash( KActionCollection *parent )
 Cleanup *
 StdCleanup::moveToTrashBin( KActionCollection *parent )
 {
-    Cleanup *cleanup = new KCleanup( "cleanup_move_to_trash_bin",
+    Cleanup *cleanup = new Cleanup( "cleanup_move_to_trash_bin",
 				      "kfmclient move %p %t",
-				      i18n( "Delete (to Trash &Bin)" ),
+				      tr( "Delete (to Trash &Bin)" ),
 				      parent );
     CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );
@@ -127,9 +127,9 @@ StdCleanup::moveToTrashBin( KActionCollection *parent )
 Cleanup *
 StdCleanup::hardDelete( KActionCollection *parent )
 {
-    Cleanup *cleanup = new KCleanup( "cleanup_hard_delete",
+    Cleanup *cleanup = new Cleanup( "cleanup_hard_delete",
 				      "rm -rf %p",
-				      i18n( "&Delete (no way to undelete!)" ),
+				      tr( "&Delete (no way to undelete!)" ),
 				      parent );
     CHECK_PTR( cleanup );
     cleanup->setWorksForDir     ( true  );

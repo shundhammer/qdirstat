@@ -1,21 +1,23 @@
 /*
- *   File name:	DirInfo.cpp
+ *   File name: DirInfo.cpp
  *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
 #include "DirInfo.h"
-#include "DirTreeIterators.h"
+#include "DirTree.h"
+#include "DirTreeIterator.h"
+#include "Exception.h"
 
 using namespace QDirStat;
 
 
-DirInfo::KDirInfo( DirTree *	tree,
-		    DirInfo *	parent,
-		    bool	asDotEntry )
+DirInfo::DirInfo( DirTree * tree,
+		  DirInfo * parent,
+		  bool	    asDotEntry )
     : FileInfo( tree, parent )
 {
     init();
@@ -34,44 +36,32 @@ DirInfo::KDirInfo( DirTree *	tree,
 }
 
 
-DirInfo::KDirInfo( const QString &	filenameWithoutPath,
-		    struct stat	*	statInfo,
-		    DirTree    *	tree,
-		    DirInfo	*	parent )
+DirInfo::DirInfo( const QString & filenameWithoutPath,
+		  struct stat	* statInfo,
+		  DirTree	* tree,
+		  DirInfo	* parent )
     : FileInfo( filenameWithoutPath,
-		 statInfo,
-		 tree,
-		 parent )
+		statInfo,
+		tree,
+		parent )
 {
     init();
     _dotEntry	= new DirInfo( tree, this, true );
 }
 
 
-DirInfo::KDirInfo( const KFileItem	* fileItem,
-		    DirTree 		* tree,
-		    DirInfo		* parent )
-    : FileInfo( fileItem,
-		 tree,
-		 parent )
-{
-    init();
-    _dotEntry	= new DirInfo( tree, this, true );
-}
-
-
-DirInfo::KDirInfo( DirTree * 		tree,
-		    DirInfo * 		parent,
-		    const QString &	filenameWithoutPath,
-		    mode_t	 	mode,
-		    KFileSize	 	size,
-		    time_t	 	mtime )
+DirInfo::DirInfo( DirTree *	  tree,
+		  DirInfo *	  parent,
+		  const QString & filenameWithoutPath,
+		  mode_t	  mode,
+		  FileSize	  size,
+		  time_t	  mtime )
     : FileInfo( tree,
-		 parent,
-		 filenameWithoutPath,
-		 mode,
-		 size,
-		 mtime )
+		parent,
+		filenameWithoutPath,
+		mode,
+		size,
+		mtime )
 {
     init();
     _dotEntry	= new DirInfo( tree, this, true );
@@ -95,14 +85,14 @@ DirInfo::init()
     _isExcluded		= false;
     _summaryDirty	= false;
     _beingDestroyed	= false;
-    _readState		= KDirQueued;
+    _readState		= DirQueued;
 }
 
 
-DirInfo::~KDirInfo()
+DirInfo::~DirInfo()
 {
-    _beingDestroyed	= true;
-    FileInfo	*child	= _firstChild;
+    _beingDestroyed = true;
+    FileInfo *child = _firstChild;
 
 
     // Recursively delete all children.
@@ -129,14 +119,14 @@ DirInfo::recalc()
 {
     // logDebug() << k_funcinfo << this << endl;
 
-    _totalSize		= _size;
-    _totalBlocks	= _blocks;
-    _totalItems		= 0;
-    _totalSubDirs	= 0;
-    _totalFiles		= 0;
-    _latestMtime	= _mtime;
+    _totalSize	  = _size;
+    _totalBlocks  = _blocks;
+    _totalItems	  = 0;
+    _totalSubDirs = 0;
+    _totalFiles	  = 0;
+    _latestMtime  = _mtime;
 
-    FileInfoIterator it( this, KDotEntryAsSubDir );
+    FileInfoIterator it( this, DotEntryAsSubDir );
 
     while ( *it )
     {
@@ -171,7 +161,7 @@ DirInfo::setMountPoint( bool isMountPoint )
 }
 
 
-KFileSize
+FileSize
 DirInfo::totalSize()
 {
     if ( _summaryDirty )
@@ -181,7 +171,7 @@ DirInfo::totalSize()
 }
 
 
-KFileSize
+FileSize
 DirInfo::totalBlocks()
 {
     if ( _summaryDirty )
@@ -238,11 +228,11 @@ DirInfo::isFinished()
 }
 
 
-void DirInfo::setReadState( KDirReadState newReadState )
+void DirInfo::setReadState( DirReadState newReadState )
 {
     // "aborted" has higher priority than "finished"
 
-    if ( _readState == KDirAborted && newReadState == KDirFinished )
+    if ( _readState == DirAborted && newReadState == DirFinished )
 	return;
 
     _readState = newReadState;
@@ -252,11 +242,11 @@ void DirInfo::setReadState( KDirReadState newReadState )
 bool
 DirInfo::isBusy()
 {
-    if ( _pendingReadJobs > 0 && _readState != KDirAborted )
+    if ( _pendingReadJobs > 0 && _readState != DirAborted )
 	return true;
 
-    if ( readState() == KDirReading ||
-	 readState() == KDirQueued    )
+    if ( readState() == DirReading ||
+	 readState() == DirQueued    )
 	return true;
 
     return false;
@@ -379,7 +369,7 @@ DirInfo::unlinkChild( FileInfo *deletedChild )
     if ( deletedChild->parent() != this )
     {
 	logError() << deletedChild << " is not a child of " << this
-		  << " - cannot unlink from children list!" << endl;
+		   << " - cannot unlink from children list!" << endl;
 	return;
     }
 
@@ -406,7 +396,7 @@ DirInfo::unlinkChild( FileInfo *deletedChild )
     }
 
     logError() << "Couldn't unlink " << deletedChild << " from "
-	      << this << " children list" << endl;
+	       << this << " children list" << endl;
 }
 
 
@@ -433,7 +423,7 @@ DirInfo::readJobFinished()
 void
 DirInfo::readJobAborted()
 {
-    _readState = KDirAborted;
+    _readState = DirAborted;
 
     if ( _parent )
 	_parent->readJobAborted();
@@ -457,7 +447,7 @@ DirInfo::finalizeAll()
 
     while ( child )
     {
-	DirInfo * dir = dynamic_cast<KDirInfo *> (child);
+	DirInfo * dir = dynamic_cast<DirInfo *> (child);
 
 	if ( dir && ! dir->isDotEntry() )
 	    dir->finalizeAll();
@@ -474,12 +464,12 @@ DirInfo::finalizeAll()
     // get all their plain file children reparented to themselves, so they
     // would need to be processed in the loop, too.
 
-    _tree->sendFinalizeLocal( this ); // Must be sent _before_ finalizeLocal()!
+     _tree->sendFinalizeLocal( this ); // Must be sent _before_ finalizeLocal()!
     finalizeLocal();
 }
 
 
-KDirReadState
+DirReadState
 DirInfo::readState() const
 {
     if ( _isDotEntry && _parent )

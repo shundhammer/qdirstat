@@ -1,7 +1,7 @@
 /*
  *   File name: FileInfo.h
  *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -22,14 +22,11 @@
 
 namespace QDirStat
 {
-    // With today's hard disks, the 2 GB we could sum up with 'long' (or 4 GB
-    // with 'unsigned long') are definitely not enough. So we have to go for
-    // something larger:
-    typedef long long	KFileSize;
+    typedef long long FileSize;
 
     // Taken from Linux <limits.h> (the Alpha definition - 64 Bit long!).
     // This is how much bytes this program can handle.
-#define KFileSizeMax 9223372036854775807LL
+#define FileSizeMax 9223372036854775807LL
 
     // Forward declarations
     class DirInfo;
@@ -41,29 +38,22 @@ namespace QDirStat
      **/
     typedef enum
     {
-	KDirQueued,		// Waiting in the directory read queue
-	KDirReading,		// Reading in progress
-	KDirFinished,		// Reading finished and OK
-	KDirOnRequestOnly,	// Will be read upon explicit request only (mount points)
-	KDirCached,		// Content was read from a cache
-	KDirAborted,		// Reading aborted upon user request
-	KDirError		// Error while reading
-    } KDirReadState;
+	DirQueued,		// Waiting in the directory read queue
+	DirReading,		// Reading in progress
+	DirFinished,		// Reading finished and OK
+	DirOnRequestOnly,	// Will be read upon explicit request only (mount points)
+	DirCached,		// Content was read from a cache
+	DirAborted,		// Reading aborted upon user request
+	DirError		// Error while reading
+    } DirReadState;
 
 
-    
+
     /**
      * The most basic building block of a @ref DirTree:
      *
      * Information about one single directory entry. This is the type of info
-     * typically obtained by stat() / lstat() or similar calls.	 Most of this
-     * can also be obtained by @ref KIO::KDirListJob, but not all: The device
-     * this file resides on is something none of KIO's many classes will tell
-     * (since of course this only makes sense for local files) - yet this had
-     * been _the_ single most requested feature of QDirStat <1.0: Stay on one
-     * filesystem. To facilitate this, information about the device is
-     * required, thus we'll do lstat() sys calls ourselves for local
-     * files. This is what the classes in this file are all about.
+     * typically obtained by stat() / lstat() or similar calls.
      *
      * This class is tuned for size rather than speed: A typical Linux system
      * easily has 150,000+ file system objects, and at least one entry of this
@@ -81,17 +71,17 @@ namespace QDirStat
 	/**
 	 * Default constructor.
 	 **/
-	FileInfo( DirTree   * tree,
-		   DirInfo   * parent = 0,
-		   const char * name   = 0 );
+	FileInfo( DirTree    * tree,
+		  DirInfo    * parent = 0,
+		  const char * name   = 0 );
 
 	/**
 	 * Constructor from a stat buffer (i.e. based on an lstat() call).
 	 **/
-	FileInfo( const QString &	filenameWithoutPath,
-		   struct stat *	statInfo,
-		   DirTree    *	tree,
-		   DirInfo    *	parent = 0 );
+	FileInfo( const QString & filenameWithoutPath,
+		  struct stat	* statInfo,
+		  DirTree	* tree,
+		  DirInfo	* parent = 0 );
 
 	/**
 	 * Constructor from the bare neccessary fields
@@ -99,14 +89,14 @@ namespace QDirStat
 	 *
 	 * If 'blocks' is -1, it will be calculated from 'size'.
 	 **/
-	FileInfo( DirTree *		tree,
-		   DirInfo *		parent,
-		   const QString &	filenameWithoutPath,
-		   mode_t		mode,
-		   KFileSize		size,
-		   time_t		mtime,
-		   KFileSize		blocks = -1,
-		   nlink_t		links  = 1 );
+	FileInfo( DirTree *	  tree,
+		  DirInfo *	  parent,
+		  const QString & filenameWithoutPath,
+		  mode_t	  mode,
+		  FileSize	  size,
+		  time_t	  mtime,
+		  FileSize	  blocks = -1,
+		  nlink_t	  links	 = 1 );
 
 	/**
 	 * Destructor.
@@ -120,39 +110,38 @@ namespace QDirStat
 	 * Returns whether or not this is a local file (protocol "file:").
 	 * It might as well be a remote file ("ftp:", "smb:" etc.).
 	 **/
-	bool			isLocalFile()	const { return _isLocalFile; }
+	bool isLocalFile() const { return _isLocalFile; }
 
 	/**
+
 	 * Returns the file or directory name without path, i.e. only the last
 	 * path name component (i.e. "printcap" rather than "/etc/printcap").
 	 *
 	 * If a directory scan doesn't begin at the root directory and this is
-	 * the top entry of this directory scan it will also contain the base
-	 * path and maybe the protocol (for remote files),
-	 * i.e. "/usr/share/man" rather than just "man" if a scan was requested
-	 * for "/usr/share/man". Notice, however, that the entry for
+	 * the top entry of this directory scan, it will also contain the base
+	 * path, i.e. "/usr/share/man" rather than just "man" if a scan was
+	 * requested for "/usr/share/man". Notice, however, that the entry for
 	 * "/usr/share/man/man1" will only return "man1" in this example.
 	 **/
-	QString			name()		const { return _name; }
+	QString name() const { return _name; }
 
 	/**
-	 * Returns the full URL of this object with full path and protocol
-	 * (unless the protocol is "file:").
+	 * Returns the full URL of this object with full path.
 	 *
 	 * This is a (somewhat) expensive operation since it will recurse up
 	 * to the top of the tree.
 	 **/
-	QString			url()			const;
+	QString url() const;
 
 	/**
 	 * Very much like @ref FileInfo::url(), but with "/<Files>" appended
 	 * if this is a dot entry. Useful for debugging.
-	 * Notice: You can simply use the @ref kdbgstream operator<< to
+	 * Notice: You can simply use the @ref QTextStream operator<< to
 	 * output exactly this:
 	 *
 	 * logDebug() << "Found fileInfo " << info << endl;
 	 **/
-	QString			debugUrl()		const;
+	QString debugUrl() const;
 
 	/**
 	 * Returns part no. "level" of this object's URL, i.e. traverses up the
@@ -160,26 +149,26 @@ namespace QDirStat
 	 * @ref name() . This is useful for tree searches in symmetrical trees
 	 * to find an item's counterpart in the other tree.
 	 **/
-	QString			urlPart( int level )	const;
+	QString urlPart( int level ) const;
 
 	/**
 	 * Returns the major and minor device numbers of the device this file
 	 * resides on or 0 if this is a remote file.
 	 **/
-	dev_t			device()	const { return _device; }
+	dev_t device() const { return _device; }
 
 	/**
 	 * The file permissions and object type as returned by lstat().
 	 * You might want to use the repective convenience methods instead:
 	 * @ref isDir(), @ref isFile(), ...
 	 **/
-	mode_t			mode()		const { return _mode;	}
+	mode_t mode() const { return _mode;   }
 
 	/**
 	 * The number of hard links to this file. Relevant for size summaries
 	 * to avoid counting one file several times.
 	 **/
-	nlink_t			links()		const { return _links;	}
+	nlink_t links() const { return _links;	}
 
 	/**
 	 * The file size in bytes. This does not take unused space in the last
@@ -187,7 +176,7 @@ namespace QDirStat
 	 * of info functions can obtain. This is also what most file system
 	 * utilities (like "ls -l") display.
 	 **/
-	KFileSize		byteSize()	const { return _size;	}
+	FileSize byteSize() const { return _size;   }
 
 	/**
 	 * The number of bytes actually allocated on the file system. Usually
@@ -206,7 +195,7 @@ namespace QDirStat
 	 * have options to handle this more graciously - but usually only when
 	 * specifically requested. See the respective man pages.
 	 **/
-	KFileSize		allocatedSize() const;
+	FileSize allocatedSize() const;
 
 	/**
 	 * The file size, taking into account multiple links for plain files or
@@ -214,82 +203,81 @@ namespace QDirStat
 	 * multiple links this will be size/no_links, for sparse files it is
 	 * the number of bytes actually allocated.
 	 **/
-	KFileSize		size()		const;
+	FileSize size() const;
 
 	/**
 	 * The file size in 512 byte blocks.
 	 **/
-	KFileSize		blocks()	const { return _blocks; }
+	FileSize blocks() const { return _blocks; }
 
 	/**
 	 * The size of one single block that @ref blocks() returns.
 	 * Notice: This is _not_ the blocksize that lstat() returns!
 	 **/
-	KFileSize		blockSize()	const { return 512L;	}
+	FileSize blockSize() const { return 512L;    }
 
 	/**
 	 * The modification time of the file (not the inode).
 	 **/
-	time_t			mtime()		const { return _mtime;	}
+	time_t mtime() const { return _mtime; }
 
 	/**
 	 * Returns the total size in bytes of this subtree.
 	 * Derived classes that have children should overwrite this.
 	 **/
-	virtual KFileSize	totalSize()	{ return size();  }
+	virtual FileSize totalSize() { return size(); }
 
 	/**
 	 * Returns the total size in blocks of this subtree.
 	 * Derived classes that have children should overwrite this.
 	 **/
-	virtual KFileSize	totalBlocks()	{ return _blocks; }
+	virtual FileSize totalBlocks() { return _blocks; }
 
 	/**
 	 * Returns the total number of children in this subtree, excluding this item.
 	 * Derived classes that have children should overwrite this.
 	 **/
-	virtual int		totalItems()	{ return 0;	}
+	virtual int totalItems() { return 0; }
 
 	/**
 	 * Returns the total number of subdirectories in this subtree,
 	 * excluding this item. Dot entries and "." or ".." are not counted.
 	 * Derived classes that have children should overwrite this.
 	 **/
-	virtual int		totalSubDirs()	{ return 0;	}
+	virtual int totalSubDirs() { return 0; }
 
 	/**
 	 * Returns the total number of plain file children in this subtree,
 	 * excluding this item.
 	 * Derived classes that have children should overwrite this.
 	 **/
-	virtual int		totalFiles()	{ return 0;	}
+	virtual int totalFiles() { return 0; }
 
 	/**
 	 * Returns the latest modification time of this subtree.
 	 * Derived classes that have children should overwrite this.
 	 **/
-	virtual time_t		latestMtime()	{ return _mtime;  }
+	virtual time_t latestMtime() { return _mtime; }
 
 	/**
 	 * Returns 'true' if this had been excluded while reading.
 	 * Derived classes may want to overwrite this.
 	 **/
-	virtual bool		isExcluded() const { return false; }
+	virtual bool isExcluded() const { return false; }
 
 	/**
-	 * Set the 'excluded' status. 
+	 * Set the 'excluded' status.
 	 *
 	 * This default implementation silently ignores the value passed and
 	 * does nothing. Derived classes may want to overwrite this.
 	 **/
-	virtual void		setExcluded( bool excl )
-	    { ((void) excl); return; }
+	virtual void setExcluded( bool excl ) { Q_UNUSED( excl); return; }
 
 	/**
 	 * Returns whether or not this is a mount point.
 	 * Derived classes may want to overwrite this.
 	 **/
-	virtual bool		isMountPoint()	{ return false; }
+	virtual bool isMountPoint()  { return false; }
 
 	/**
 	 * Sets the mount point state, i.e. whether or not this is a mount
@@ -298,8 +286,8 @@ namespace QDirStat
 	 * This default implementation silently ignores the value passed and
 	 * does nothing. Derived classes may want to overwrite this.
 	 **/
-	virtual void		setMountPoint( bool isMountPoint = true )
-	    { ((void) isMountPoint); return; }
+	virtual void setMountPoint( bool isMountPoint = true )
+	    { Q_UNUSED( isMountPoint ); return; }
 
 	/**
 	 * Returns true if this subtree is finished reading.
@@ -307,7 +295,7 @@ namespace QDirStat
 	 * This default implementation always returns 'true';
 	 * derived classes should overwrite this.
 	 **/
-	virtual bool		isFinished()	{ return true; }
+	virtual bool isFinished() { return true; }
 
 	/**
 	 * Returns true if this subtree is busy, i.e. it is not finished
@@ -316,14 +304,14 @@ namespace QDirStat
 	 * This default implementation always returns 'false';
 	 * derived classes should overwrite this.
 	 **/
-	virtual bool		isBusy()	{ return false; }
+	virtual bool isBusy() { return false; }
 
 	/**
 	 * Returns the number of pending read jobs in this subtree. When this
 	 * number reaches zero, the entire subtree is done.
 	 * Derived classes that have children should overwrite this.
 	 **/
-	virtual int		pendingReadJobs()	{ return 0;  }
+	virtual int pendingReadJobs() { return 0;  }
 
 
 	//
@@ -333,29 +321,29 @@ namespace QDirStat
 	/**
 	 * Returns a pointer to the @ref DirTree this entry belongs to.
 	 **/
-	DirTree *	tree()			const { return _tree; }
+	DirTree * tree() const { return _tree; }
 
 	/**
 	 * Returns a pointer to this entry's parent entry or 0 if there is
 	 * none.
 	 **/
-	DirInfo *	parent()		const { return _parent; }
+	DirInfo * parent() const { return _parent; }
 
 	/**
 	 * Set the "parent" pointer.
 	 **/
-	void		setParent( DirInfo *newParent ) { _parent = newParent; }
+	void setParent( DirInfo *newParent ) { _parent = newParent; }
 
 	/**
 	 * Returns a pointer to the next entry on the same level
 	 * or 0 if there is none.
 	 **/
-	FileInfo *	next()			const { return _next;	}
+	FileInfo * next() const { return _next;	  }
 
 	/**
 	 * Set the "next" pointer.
 	 **/
-	void		setNext( FileInfo *newNext ) { _next = newNext; }
+	void  setNext( FileInfo *newNext ) { _next = newNext; }
 
 	/**
 	 * Returns the first child of this item or 0 if there is none.
@@ -363,7 +351,7 @@ namespace QDirStat
 	 *
 	 * This default implementation always returns 0.
 	 **/
-	virtual FileInfo * firstChild()	const { return 0;	}
+	virtual FileInfo * firstChild() const { return 0; }
 
 	/**
 	 * Set this entry's first child.
@@ -372,13 +360,13 @@ namespace QDirStat
 	 * This default implementation does nothing.
 	 * Derived classes might want to overwrite this.
 	 **/
-	virtual void	setFirstChild( FileInfo *newFirstChild )
+	virtual void setFirstChild( FileInfo *newFirstChild )
 	    { Q_UNUSED( newFirstChild ); }
 
 	/**
 	 * Returns true if this entry has any children.
 	 **/
-	virtual bool	hasChildren()		const;
+	virtual bool hasChildren() const;
 
 	/**
 	 * Returns true if this entry is in subtree 'subtree', i.e. if this is
@@ -395,7 +383,7 @@ namespace QDirStat
 	 *
 	 * Derived classes might or might not wish to overwrite this method;
 	 * it's only advisable to do so if a derived class comes up with a
-	 * different method than brute-force search all children.
+	 * different method than brute-force searching all children.
 	 *
 	 * 'findDotEntries' specifies if locating "dot entries" (".../<Files>")
 	 * is desired.
@@ -410,7 +398,7 @@ namespace QDirStat
 	 *
 	 * This default implementation does nothing.
 	 **/
-	virtual void	insertChild( FileInfo *newChild ) { Q_UNUSED( newChild ); }
+	virtual void insertChild( FileInfo *newChild ) { Q_UNUSED( newChild ); }
 
 	/**
 	 * Return the "Dot Entry" for this node if there is one (or 0
@@ -428,7 +416,8 @@ namespace QDirStat
 	 *
 	 * This default implementation does nothing.
 	 **/
-	virtual void	setDotEntry( FileInfo *newDotEntry ) { Q_UNUSED( newDotEntry ); }
+	virtual void setDotEntry( FileInfo *newDotEntry )
+	    { Q_UNUSED( newDotEntry ); }
 
 	/**
 	 * Returns true if this is a "Dot Entry".
@@ -436,7 +425,7 @@ namespace QDirStat
 	 *
 	 * This default implementation always returns false.
 	 **/
-	virtual bool	isDotEntry() const { return false; }
+	virtual bool isDotEntry() const { return false; }
 
 	/**
 	 * Returns the tree level (depth) of this item.
@@ -445,14 +434,14 @@ namespace QDirStat
 	 * This is a (somewhat) expensive operation since it will recurse up
 	 * to the top of the tree.
 	 **/
-	int		treeLevel() const;
+	int treeLevel() const;
 
 	/**
 	 * Notification that a child has been added somewhere in the subtree.
 	 *
 	 * This default implementation does nothing.
 	 **/
-	virtual void	childAdded( FileInfo *newChild ) { Q_UNUSED( newChild ); }
+	virtual void childAdded( FileInfo *newChild ) { Q_UNUSED( newChild ); }
 
 	/**
 	 * Remove a child from the children list.
@@ -465,21 +454,21 @@ namespace QDirStat
 	 * This default implementation does nothing.
 	 * Derived classes that can handle children should overwrite this.
 	 **/
-	virtual void	unlinkChild( FileInfo *deletedChild ) { Q_UNUSED( deletedChild ); }
+	virtual void unlinkChild( FileInfo *deletedChild ) { Q_UNUSED( deletedChild ); }
 
 	/**
 	 * Notification that a child is about to be deleted somewhere in the
 	 * subtree.
 	 **/
-	virtual void	deletingChild( FileInfo *deletedChild ) { Q_UNUSED( deletedChild ); }
+	virtual void deletingChild( FileInfo *deletedChild ) { Q_UNUSED( deletedChild ); }
 
 	/**
 	 * Get the current state of the directory reading process:
 	 *
-	 * This default implementation always returns KDirFinished.
+	 * This default implementation always returns DirFinished.
 	 * Derived classes should overwrite this.
 	 **/
-	virtual KDirReadState readState() const { return KDirFinished; }
+	virtual DirReadState readState() const { return DirFinished; }
 
 	/**
 	 * Returns true if this is a @ref DirInfo object.
@@ -577,23 +566,25 @@ namespace QDirStat
 	dev_t		_device;		// device this object resides on
 	mode_t		_mode;			// file permissions + object type
 	nlink_t		_links;			// number of links
-	KFileSize	_size;			// size in bytes
-	KFileSize	_blocks;		// 512 bytes blocks
+	FileSize	_size;			// size in bytes
+	FileSize	_blocks;		// 512 bytes blocks
 	time_t		_mtime;			// modification time
 
 	DirInfo *	_parent;		// pointer to the parent entry
 	FileInfo *	_next;			// pointer to the next entry
-	DirTree  *	_tree;			// pointer to the parent tree
-	
+	DirTree	 *	_tree;			// pointer to the parent tree
+
     };	// class FileInfo
 
+
+    typedef QList<FileInfo *> FileInfoList;
 
 
     //----------------------------------------------------------------------
     //			       Static Functions
     //----------------------------------------------------------------------
 
-    
+
     /**
      * Format a file / subtree size human readable, i.e. in "GB" / "MB"
      * etc. rather than huge numbers of digits.
@@ -602,7 +593,7 @@ namespace QDirStat
      *
      *	   logDebug() << "Size: " << x->totalSize() << endl;
      **/
-    QString formatSize ( KFileSize lSize );
+    QString formatSize ( FileSize lSize );
 
 
     /**
@@ -613,7 +604,7 @@ namespace QDirStat
 	if ( info )
 	    stream << info->debugUrl();
 	else
-	    stream << "<NULL>";
+	    stream << "<NULL FileInfo *>";
 
 	return stream;
     }
@@ -622,7 +613,7 @@ namespace QDirStat
     /**
      * Human-readable output of a file size in a debug stream.
      **/
-    inline QTextStream & operator<< ( QTextStream & stream, KFileSize lSize )
+    inline QTextStream & operator<< ( QTextStream & stream, FileSize lSize )
     {
 	stream << formatSize( lSize );
 

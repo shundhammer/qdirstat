@@ -1,7 +1,7 @@
 /*
  *   File name:	DirSaver.cpp
  *   Summary:	Utility object to save current working directory
- *   License:   GPL V2 - See file LICENSE for details.
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -29,8 +29,8 @@ void DirSaver::cd( const QString & newPath )
 {
     if ( newPath.isEmpty() )
     {
-        logWarning() << "Empty path" << endl;
-        return;
+	logWarning() << "Empty path" << endl;
+	return;
     }
 
     chdir( newPath.toLocal8Bit() );

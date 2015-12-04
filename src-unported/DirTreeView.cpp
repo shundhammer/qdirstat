@@ -60,17 +60,17 @@ DirTreeView::DirTreeView( QWidget * parent )
     setRootIsDecorated( false );
 
     int numCol = 0;
-    addColumn( i18n( "Name"			) ); _nameCol		= numCol;
+    addColumn( tr( "Name"			) ); _nameCol		= numCol;
     _iconCol = numCol++;
-    addColumn( i18n( "Subtree Percentage" 	) ); _percentBarCol	= numCol++;
-    addColumn( i18n( "Percentage"		) ); _percentNumCol	= numCol++;
-    addColumn( i18n( "Subtree Total"		) ); _totalSizeCol	= numCol++;
+    addColumn( tr( "Subtree Percentage" 	) ); _percentBarCol	= numCol++;
+    addColumn( tr( "Percentage"		) ); _percentNumCol	= numCol++;
+    addColumn( tr( "Subtree Total"		) ); _totalSizeCol	= numCol++;
     _workingStatusCol = _totalSizeCol;
-    addColumn( i18n( "Own Size"			) ); _ownSizeCol	= numCol++;
-    addColumn( i18n( "Items"			) ); _totalItemsCol	= numCol++;
-    addColumn( i18n( "Files"			) ); _totalFilesCol	= numCol++;
-    addColumn( i18n( "Subdirs"			) ); _totalSubDirsCol	= numCol++;
-    addColumn( i18n( "Last Change"		) ); _latestMtimeCol	= numCol++;
+    addColumn( tr( "Own Size"			) ); _ownSizeCol	= numCol++;
+    addColumn( tr( "Items"			) ); _totalItemsCol	= numCol++;
+    addColumn( tr( "Files"			) ); _totalFilesCol	= numCol++;
+    addColumn( tr( "Subdirs"			) ); _totalSubDirsCol	= numCol++;
+    addColumn( tr( "Last Change"		) ); _latestMtimeCol	= numCol++;
 
 #if ! SEPARATE_READ_JOBS_COL
     _readJobsCol = _percentBarCol;
@@ -165,7 +165,7 @@ DirTreeView::busyDisplay()
     if ( _readJobsCol < 0 )
     {
 	_readJobsCol = header()->count();
-	addColumn( i18n( "Read Jobs" ) );
+	addColumn( tr( "Read Jobs" ) );
 	setColumnAlignment( _readJobsCol, AlignRight );
     }
 #else
@@ -458,7 +458,7 @@ DirTreeView::updateSummary()
 void
 DirTreeView::slotFinished()
 {
-    emit progressInfo( i18n( "Finished. Elapsed time: %1" )
+    emit progressInfo( tr( "Finished. Elapsed time: %1" )
 		       .arg( formatTime( _stopWatch.elapsed(), true ) ) );
 
     if ( _updateTimer )
@@ -500,7 +500,7 @@ DirTreeView::slotFinished()
 void
 DirTreeView::slotAborted()
 {
-    emit progressInfo( i18n( "Aborted. Elapsed time: %1" )
+    emit progressInfo( tr( "Aborted. Elapsed time: %1" )
 		       .arg( formatTime( _stopWatch.elapsed(), true ) ) );
 
     if ( _updateTimer )
@@ -536,11 +536,11 @@ DirTreeView::sendProgressInfo( const QString & newCurrentDir )
     _currentDir = newCurrentDir;
 
 #if VERBOSE_PROGRESS_INFO
-    emit progressInfo( i18n( "Elapsed time: %1   reading directory %2" )
+    emit progressInfo( tr( "Elapsed time: %1   reading directory %2" )
 		       .arg( formatTime( _stopWatch.elapsed() ) )
 		       .arg( _currentDir ) );
 #else
-    emit progressInfo( i18n( "Elapsed time: %1" )
+    emit progressInfo( tr( "Elapsed time: %1" )
 		       .arg( formatTime( _stopWatch.elapsed() ) ) );
 #endif
 }
@@ -809,11 +809,11 @@ DirTreeView::popupContextMenu( QListViewItem *	listViewItem,
 
 	    if ( rule )
 	    {
-		text = i18n( "Matching exclude rule:   %1" ).arg( rule->regexp().pattern() );
+		text = tr( "Matching exclude rule:   %1" ).arg( rule->regexp().pattern() );
 	    }
 	    else
 	    {
-		text = i18n( "<Unknown exclude rule>" );
+		text = tr( "<Unknown exclude rule>" );
 	    }
 
 	    popupContextInfo( pos, text );
@@ -843,7 +843,7 @@ DirTreeView::popupContextMenu( QListViewItem *	listViewItem,
 
 	    if ( orig->isSparseFile() )
 	    {
-		text = i18n( "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)" )
+		text = tr( "Sparse file: %1 (%2 Bytes) -- allocated: %3 (%4 Bytes)" )
 		    .arg( formatSize( orig->byteSize() ) )
 		    .arg( formatSizeLong( orig->byteSize()  ) )
 		    .arg( formatSize( orig->allocatedSize() ) )
@@ -851,7 +851,7 @@ DirTreeView::popupContextMenu( QListViewItem *	listViewItem,
 	    }
 	    else
 	    {
-		text = i18n( "%1 (%2 Bytes) with %3 hard links => effective size: %4 (%5 Bytes)" )
+		text = tr( "%1 (%2 Bytes) with %3 hard links => effective size: %4 (%5 Bytes)" )
 		    .arg( formatSize( orig->byteSize() ) )
 		    .arg( formatSizeLong( orig->byteSize() ) )
 		    .arg( orig->links() )
@@ -893,11 +893,11 @@ DirTreeView::popupContextSizeInfo( const QPoint &	pos,
 
     if ( size < 1024 )
     {
-	info = formatSizeLong( size ) + " " + i18n( "Bytes" );
+	info = formatSizeLong( size ) + " " + tr( "Bytes" );
     }
     else
     {
-	info = i18n( "%1 (%2 Bytes)" )
+	info = tr( "%1 (%2 Bytes)" )
 	    .arg( formatSize( size ) )
 	    .arg( formatSizeLong( size ) );
     }
@@ -1001,14 +1001,14 @@ DirTreeView::sendMailToOwner()
 	return;
     }
 
-    QString owner = KioDirReadJob::owner( fixedUrl( _selection->orig()->url() ) );
-    QString subject = i18n( "Disk Usage" );
+    QString owner = KioDirReadJob::owner( QDir::cleanPath( _selection->orig()->url() ) );
+    QString subject = tr( "Disk Usage" );
     QString body =
-	i18n("Please check your disk usage and clean up if you can. Thank you." )
+	tr("Please check your disk usage and clean up if you can. Thank you." )
 	+ "\n\n"
 	+ _selection->asciiDump()
 	+ "\n\n"
-	+ i18n( "Disk usage report generated by QDirStat" );
+	+ tr( "Disk usage report generated by QDirStat" );
 
     // logDebug() << "owner: "   << owner   << endl;
     // logDebug() << "subject: " << subject << endl;
@@ -1070,7 +1070,7 @@ DirTreeViewItem::init( DirTreeView *		view,
 
     if ( _orig->isDotEntry() )
     {
-       setText( view->nameCol(), i18n( "<Files>" ) );
+       setText( view->nameCol(), tr( "<Files>" ) );
        QListViewItem::setOpen ( false );
     }
     else
@@ -1085,14 +1085,14 @@ DirTreeViewItem::init( DirTreeView *		view,
 	    {
 		if ( _orig->isSparseFile() )
 		{
-		    text = i18n( "%1 / %2 Links (allocated: %3)" )
+		    text = tr( "%1 / %2 Links (allocated: %3)" )
 			.arg( formatSize( _orig->byteSize() ) )
 			.arg( formatSize( _orig->links() ) )
 			.arg( formatSize( _orig->allocatedSize() ) );
 		}
 		else
 		{
-		    text = i18n( "%1 / %2 Links" )
+		    text = tr( "%1 / %2 Links" )
 			.arg( formatSize( _orig->byteSize() ) )
 			.arg( _orig->links() );
 		}
@@ -1101,7 +1101,7 @@ DirTreeViewItem::init( DirTreeView *		view,
 	    {
 		if ( _orig->isSparseFile() )
 		{
-		    text = i18n( "%1 (allocated: %2)" )
+		    text = tr( "%1 (allocated: %2)" )
 			.arg( formatSize( _orig->byteSize() ) )
 			.arg( formatSize( _orig->allocatedSize() ) );
 		}
@@ -1120,7 +1120,7 @@ DirTreeViewItem::init( DirTreeView *		view,
 
 	    if ( _orig->isExcluded() )
 	    {
-		setText( _view->percentBarCol(), i18n( "[excluded]" ) );
+		setText( _view->percentBarCol(), tr( "[excluded]" ) );
 	    }
 #endif
 	}
@@ -1251,7 +1251,7 @@ DirTreeViewItem::updateSummary()
 
 	    if ( jobs > 0 )
 	    {
-		text = i18n( "[%1 Read Jobs]" ).arg( formatCount( _orig->pendingReadJobs(), true ) );
+		text = tr( "[%1 Read Jobs]" ).arg( formatCount( _orig->pendingReadJobs(), true ) );
 	    }
 
 	    setText( _view->readJobsCol(), text );
@@ -1264,7 +1264,7 @@ DirTreeViewItem::updateSummary()
 	setText( _view->totalSubDirsCol(),	" " + formatCount( _orig->totalSubDirs() ) );
 
 	if ( _orig->isExcluded() )
-	    setText( _view->percentBarCol(),	i18n( "[excluded]" ) );
+	    setText( _view->percentBarCol(),	tr( "[excluded]" ) );
     }
 
 

@@ -1,7 +1,7 @@
 /*
  *   File name: SignalBlocker.h
  *   Summary:	Helper class to block undesired Qt signals
- *   License:   GPL V2 - See file LICENSE for details.
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -21,15 +21,15 @@ class SignalBlocker
 {
 public:
     SignalBlocker( QObject *obj ):
-        _obj( obj )
+	_obj( obj )
     {
-        _oldBlocked = obj->signalsBlocked();
-        obj->blockSignals( true );
+	_oldBlocked = obj->signalsBlocked();
+	obj->blockSignals( true );
     }
 
     ~SignalBlocker()
     {
-        _obj->blockSignals( _oldBlocked );
+	_obj->blockSignals( _oldBlocked );
     }
 
 private:

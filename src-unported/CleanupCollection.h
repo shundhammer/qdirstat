@@ -19,11 +19,11 @@ class KActionCollection;
 
 namespace QDirStat
 {
-    typedef QDict<Cleanup>		KCleanupDict;
-    typedef QDictIterator<Cleanup>	KCleanupDictIterator;
+    typedef QDict<Cleanup>		CleanupDict;
+    typedef QDictIterator<Cleanup>	CleanupDictIterator;
 
-    typedef QPtrList<Cleanup>		KCleanupList;
-    typedef QPtrListIterator<Cleanup>	KCleanupListIterator;
+    typedef QPtrList<Cleanup>		CleanupList;
+    typedef QPtrListIterator<Cleanup>	CleanupListIterator;
 
     
     /**

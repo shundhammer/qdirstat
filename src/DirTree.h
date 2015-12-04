@@ -1,7 +1,7 @@
 /*
  *   File name: DirTree.h
  *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -68,7 +68,7 @@ namespace QDirStat
 	 * constructor must return before any signals are sent, i.e. before
 	 * anything is read.
 	 **/
-	void startReading( const KURL & url );
+	void startReading( const QString & path );
 
 	/**
 	 * Forcefully stop a running read process.
@@ -320,9 +320,9 @@ namespace QDirStat
 	 **/
 	void progressInfo( const QString &infoLine );
 
-	
+
     protected slots:
-    
+
 	/**
 	 * Read some parameters from the global @ref KConfig object.
 	 **/
@@ -334,16 +334,16 @@ namespace QDirStat
 	 **/
 	void slotFinished();
 
-	
+
     protected:
 
-	FileInfo *		_root;
-	FileInfo *		_selection;
-	DirReadJobQueue	_jobQueue;
-	bool			_crossFileSystems;
-	bool			_enableLocalDirReader;
-	bool			_isBusy;
-	
+	FileInfo *	_root;
+	FileInfo *	_selection;
+	DirReadJobQueue _jobQueue;
+	bool		_crossFileSystems;
+	bool		_enableLocalDirReader;
+	bool		_isBusy;
+
     };	// class DirTree
 
 }	// namespace QDirStat

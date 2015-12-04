@@ -61,7 +61,7 @@ namespace QDirStat
 	 * not for general use. In particular, DO NOT connect an object thus
 	 * constructed with signals. The results will be undefined (at best).
 	 **/
-	Cleanup( const KCleanup &src );
+	Cleanup( const Cleanup &src );
 
 	/**
 	 * Assignment operator.
@@ -70,7 +70,7 @@ namespace QDirStat
 	 * members. Just like the copy constructor, this is intended for
 	 * save/restore operations, not for general use.
 	 **/
-	Cleanup &	operator= ( const KCleanup &src );
+	Cleanup &	operator= ( const Cleanup &src );
 
 	/**
 	 * Return the ID (name) of this cleanup action as used for setup files

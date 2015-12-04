@@ -10,6 +10,7 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 
+#include <QDir>
 #include "QDirStatApp.h"
 
 
@@ -90,7 +91,7 @@ int main(int argc, char *argv[])
 	{
 	    // Process command line arguments as URLs or paths to scan
 
-	    KURL url = fixedUrl( args->arg( 0 ) );
+	    QString url = QDir::cleanPath( args->arg( 0 ) );
 	    // logDebug() << "Opening " << url.url() << endl;
 	    kdirstat->openURL( url );
 	}

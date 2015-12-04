@@ -33,7 +33,7 @@ CleanupCollection::CleanupCollection( KActionCollection * actionCollection )
 }
 
 
-CleanupCollection::CleanupCollection( const KCleanupCollection &src )
+CleanupCollection::CleanupCollection( const CleanupCollection &src )
     : QObject()
 {
     deepCopy( src );
@@ -226,14 +226,14 @@ CleanupCollection::addUserCleanups( int number )
 
 	if ( _nextUserCleanupNo <= 9 )
 	    // Provide a keyboard shortcut for cleanup #0..#9
-	    title=i18n( "User Defined Cleanup #&%1" ).arg(_nextUserCleanupNo);
+	    title=tr( "User Defined Cleanup #&%1" ).arg(_nextUserCleanupNo);
 	else
 	    // No keyboard shortcuts for cleanups #10.. - they would be duplicates
-	    title=i18n( "User Defined Cleanup #%1" ).arg(_nextUserCleanupNo);
+	    title=tr( "User Defined Cleanup #%1" ).arg(_nextUserCleanupNo);
 
 	_nextUserCleanupNo++;
 	
-	Cleanup *cleanup = new KCleanup( id, "", title, _actionCollection );
+	Cleanup *cleanup = new Cleanup( id, "", title, _actionCollection );
 	CHECK_PTR( cleanup );
 	cleanup->setEnabled( false );
 

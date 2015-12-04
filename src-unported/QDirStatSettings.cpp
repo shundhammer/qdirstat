@@ -38,7 +38,7 @@ using namespace QDirStat;
 
 SettingsDialog::KSettingsDialog( QDirStatApp *mainWin )
     : KDialogBase( Tabbed,					// dialogFace
-		   i18n( "Settings" ),				// caption
+		   tr( "Settings" ),				// caption
 		   Ok | Apply | Default | Cancel | Help,	// buttonMask
 		   Ok,						// defaultButton
 		   0,						// parent
@@ -67,19 +67,19 @@ SettingsDialog::KSettingsDialog( QDirStatApp *mainWin )
 
     QWidget * page;
 
-    page = addVBoxPage( i18n( "&Cleanups" ) );
+    page = addVBoxPage( tr( "&Cleanups" ) );
     _cleanupsPageIndex = pageIndex( page );
     new CleanupPage( this, page, _mainWin );
 
-    page = addVBoxPage( i18n( "&Tree Colors" ) );
+    page = addVBoxPage( tr( "&Tree Colors" ) );
     _treeColorsPageIndex = pageIndex( page );
     new TreeColorsPage( this, page, _mainWin );
 
-    page = addVBoxPage( i18n( "Tree&map" ) );
+    page = addVBoxPage( tr( "Tree&map" ) );
     _treemapPageIndex = pageIndex( page );
     new KTreemapPage( this, page, _mainWin );
 
-    page = addVBoxPage( i18n( "&General" ) );
+    page = addVBoxPage( tr( "&General" ) );
     _generalSettingsPageIndex = pageIndex( page );
     new GeneralSettingsPage( this, page, _mainWin );
 
@@ -105,10 +105,10 @@ void
 SettingsDialog::slotDefault()
 {
     if ( KMessageBox::warningContinueCancel( this,
-					     i18n( "Really revert all settings to their default values?\n"
+					     tr( "Really revert all settings to their default values?\n"
 						   "You will lose all changes you ever made!" ),
-					     i18n( "Please Confirm" ),			// caption
-					     i18n( "&Really Revert to Defaults" )	// continueButton
+					     tr( "Please Confirm" ),			// caption
+					     tr( "&Really Revert to Defaults" )	// continueButton
 					     ) == KMessageBox::Continue )
     {
 	emit defaultClicked();
@@ -194,7 +194,7 @@ TreeColorsPage::KTreeColorsPage( SettingsDialog *	dialog,
     {
 	QString labelText;
 
-	labelText=i18n( "Tree Level %1" ).arg(i+1);
+	labelText=tr( "Tree Level %1" ).arg(i+1);
 	_colorLabel[i] = new QLabel( labelText, this );
 	grid->addWidget( _colorLabel [i], i, 0 );
 
@@ -530,7 +530,7 @@ CleanupPropertiesPage::CleanupPropertiesPage( QWidget *	parent,
 
     // The topmost check box: "Enabled".
 
-    _enabled = new QCheckBox( i18n( "&Enabled" ), this );
+    _enabled = new QCheckBox( tr( "&Enabled" ), this );
     outerBox->addWidget( _enabled, 0 );
     outerBox->addSpacing( 7 );
     outerBox->addStretch();
@@ -567,41 +567,41 @@ CleanupPropertiesPage::CleanupPropertiesPage( QWidget *	parent,
     QLabel *label;
     _title	= new QLineEdit( _fields );					grid->addWidget( _title,   0, 1 );
     _command	= new QLineEdit( _fields );					grid->addWidget( _command, 1, 1 );
-    label	= new QLabel( _title,	i18n( "&Title:"		), _fields );	grid->addWidget( label,	   0, 0 );
-    label	= new QLabel( _command, i18n( "&Command Line:"	), _fields );	grid->addWidget( label,	   1, 0 );
+    label	= new QLabel( _title,	tr( "&Title:"		), _fields );	grid->addWidget( label,	   0, 0 );
+    label	= new QLabel( _command, tr( "&Command Line:"	), _fields );	grid->addWidget( label,	   1, 0 );
 
-    label = new QLabel( i18n( "%p Full Path" ), _fields );
+    label = new QLabel( tr( "%p Full Path" ), _fields );
     grid->addWidget( label, 2, 1 );
 
-    label = new QLabel( i18n( "%n File / Directory Name Without Path" ), _fields );
+    label = new QLabel( tr( "%n File / Directory Name Without Path" ), _fields );
     grid->addWidget( label, 3, 1 );
 
-    label = new QLabel( i18n( "%t KDE Trash Directory" ), _fields );
+    label = new QLabel( tr( "%t KDE Trash Directory" ), _fields );
     grid->addWidget( label, 4, 1 );
 
 
     // "Recurse into subdirs" check box
 
-    _recurse = new QCheckBox( i18n( "&Recurse into Subdirectories" ), _fields );
+    _recurse = new QCheckBox( tr( "&Recurse into Subdirectories" ), _fields );
     grid->addWidget( _recurse, 5, 1 );
 
     // "Ask for confirmation" check box
 
-    _askForConfirmation = new QCheckBox( i18n( "&Ask for Confirmation" ), _fields );
+    _askForConfirmation = new QCheckBox( tr( "&Ask for Confirmation" ), _fields );
     grid->addWidget( _askForConfirmation, 6, 1 );
 
 
     // The "Works for..." check boxes, grouped together in a button group.
 
-    QButtonGroup *worksFor = new QButtonGroup( i18n( "Works for..." ), _fields );
+    QButtonGroup *worksFor = new QButtonGroup( tr( "Works for..." ), _fields );
     QVBoxLayout *worksForBox = new QVBoxLayout( worksFor, 15, 2 );
     fieldsBox->addWidget( worksFor, 0 );
     fieldsBox->addSpacing( 5 );
     fieldsBox->addStretch();
 
-    _worksForDir	= new QCheckBox( i18n( "&Directories"		), worksFor );
-    _worksForFile	= new QCheckBox( i18n( "&Files"			), worksFor );
-    _worksForDotEntry	= new QCheckBox( i18n( "<Files> P&seudo Entries"), worksFor );
+    _worksForDir	= new QCheckBox( tr( "&Directories"		), worksFor );
+    _worksForFile	= new QCheckBox( tr( "&Files"			), worksFor );
+    _worksForDotEntry	= new QCheckBox( tr( "<Files> P&seudo Entries"), worksFor );
 
     worksForBox->addWidget( _worksForDir	, 1 );
     worksForBox->addWidget( _worksForFile	, 1 );
@@ -611,8 +611,8 @@ CleanupPropertiesPage::CleanupPropertiesPage( QWidget *	parent,
     _worksForProtocols = new QComboBox( false, worksFor );
     worksForBox->addWidget( _worksForProtocols, 1 );
 
-    _worksForProtocols->insertItem( i18n( "On Local Machine Only ('file:/' Protocol)" ) );
-    _worksForProtocols->insertItem( i18n( "Network Transparent (ftp, smb, tar, ...)" ) );
+    _worksForProtocols->insertItem( tr( "On Local Machine Only ('file:/' Protocol)" ) );
+    _worksForProtocols->insertItem( tr( "Network Transparent (ftp, smb, tar, ...)" ) );
 
 
     // Grid layout for combo boxes at the bottom
@@ -632,7 +632,7 @@ CleanupPropertiesPage::CleanupPropertiesPage( QWidget *	parent,
     _refreshPolicy = new QComboBox( false, _fields );
     grid->addWidget( _refreshPolicy, row, 1 );
 
-    label = new QLabel( _refreshPolicy, i18n( "Refresh &Policy:" ), _fields );
+    label = new QLabel( _refreshPolicy, tr( "Refresh &Policy:" ), _fields );
     grid->addWidget( label, row++, 0 );
 
 
@@ -643,10 +643,10 @@ CleanupPropertiesPage::CleanupPropertiesPage( QWidget *	parent,
     // than mere numeric IDs. One of these days I'm going to rewrite this
     // thing!
 
-    _refreshPolicy->insertItem( i18n( "No Refresh"			) );
-    _refreshPolicy->insertItem( i18n( "Refresh This Entry"		) );
-    _refreshPolicy->insertItem( i18n( "Refresh This Entry's Parent"	) );
-    _refreshPolicy->insertItem( i18n( "Assume Entry Has Been Deleted"	) );
+    _refreshPolicy->insertItem( tr( "No Refresh"			) );
+    _refreshPolicy->insertItem( tr( "Refresh This Entry"		) );
+    _refreshPolicy->insertItem( tr( "Refresh This Entry's Parent"	) );
+    _refreshPolicy->insertItem( tr( "Assume Entry Has Been Deleted"	) );
 
 
     outerBox->activate();
@@ -715,37 +715,37 @@ GeneralSettingsPage::KGeneralSettingsPage( SettingsDialog *	dialog,
     QVBoxLayout * layout	= new QVBoxLayout( this, 5,			// border
 						   dialog->spacingHint() );	// spacing
 
-    QVGroupBox * gbox		= new QVGroupBox( i18n( "Directory Reading" ), this );
+    QVGroupBox * gbox		= new QVGroupBox( tr( "Directory Reading" ), this );
     layout->addWidget( gbox );
 
 
 
-    _crossFileSystems		= new QCheckBox( i18n( "Cross &File System Boundaries" ), gbox );
-    _enableLocalDirReader	= new QCheckBox( i18n( "Use Optimized &Local Directory Read Methods" ), gbox );
+    _crossFileSystems		= new QCheckBox( tr( "Cross &File System Boundaries" ), gbox );
+    _enableLocalDirReader	= new QCheckBox( tr( "Use Optimized &Local Directory Read Methods" ), gbox );
 
     connect( _enableLocalDirReader,	SIGNAL( stateChanged( int ) ),
 	     this,			SLOT  ( checkEnabledState() ) );
 
     layout->addSpacing( 10 );
 
-    gbox			= new QVGroupBox( i18n( "Animation" ), this );
+    gbox			= new QVGroupBox( tr( "Animation" ), this );
     layout->addWidget( gbox );
 
-    _enableToolBarAnimation	= new QCheckBox( i18n( "P@cM@n Animation in Tool &Bar" ), gbox );
-    _enableTreeViewAnimation	= new QCheckBox( i18n( "P@cM@n Animation in Directory &Tree" ), gbox );
+    _enableToolBarAnimation	= new QCheckBox( tr( "P@cM@n Animation in Tool &Bar" ), gbox );
+    _enableTreeViewAnimation	= new QCheckBox( tr( "P@cM@n Animation in Directory &Tree" ), gbox );
     layout->addSpacing( 10 );
     
-    QVGroupBox * excludeBox	= new QVGroupBox( i18n( "&Exclude Rules" ), this );
+    QVGroupBox * excludeBox	= new QVGroupBox( tr( "&Exclude Rules" ), this );
     layout->addWidget( excludeBox );
     
     _excludeRulesListView	= new QListView( excludeBox );
-    _excludeRulesListView->addColumn( i18n( "Exclude Rule (Regular Expression)" ), 300 );
+    _excludeRulesListView->addColumn( tr( "Exclude Rule (Regular Expression)" ), 300 );
     _excludeRuleContextMenu	= 0;
 
     QGroupBox * buttonBox	= new QHGroupBox( excludeBox );
-    _addExcludeRuleButton	= new QPushButton( i18n( "&Add"    ), buttonBox );
-    _editExcludeRuleButton	= new QPushButton( i18n( "&Edit"   ), buttonBox );
-    _deleteExcludeRuleButton	= new QPushButton( i18n( "&Delete" ), buttonBox );
+    _addExcludeRuleButton	= new QPushButton( tr( "&Add"    ), buttonBox );
+    _editExcludeRuleButton	= new QPushButton( tr( "&Edit"   ), buttonBox );
+    _deleteExcludeRuleButton	= new QPushButton( tr( "&Delete" ), buttonBox );
     
     connect( _excludeRulesListView,	SIGNAL( rightButtonClicked        ( QListViewItem *, const QPoint &, int ) ),
 	     this,			SLOT  ( showExcludeRuleContextMenu( QListViewItem *, const QPoint &, int ) ) );
@@ -777,8 +777,8 @@ GeneralSettingsPage::showExcludeRuleContextMenu( QListViewItem *, const QPoint &
     if ( ! _excludeRuleContextMenu )
     {
 	_excludeRuleContextMenu = new QPopupMenu( 0 );
-	_excludeRuleContextMenu->insertItem( i18n( "&Edit"   ), this, SLOT( editExcludeRule  () ) );
-	_excludeRuleContextMenu->insertItem( i18n( "&Delete" ), this, SLOT( deleteExcludeRule() ) );
+	_excludeRuleContextMenu->insertItem( tr( "&Edit"   ), this, SLOT( editExcludeRule  () ) );
+	_excludeRuleContextMenu->insertItem( tr( "&Delete" ), this, SLOT( deleteExcludeRule() ) );
     }
 
     if ( _excludeRuleContextMenu && _excludeRulesListView->currentItem() )
@@ -881,8 +881,8 @@ void
 GeneralSettingsPage::addExcludeRule()
 {
     bool ok;
-    QString text = QInputDialog::getText( i18n( "New exclude rule" ),
-					  i18n( "Regular expression for new exclude rule:" ),
+    QString text = QInputDialog::getText( tr( "New exclude rule" ),
+					  tr( "Regular expression for new exclude rule:" ),
 					  QLineEdit::Normal,
 					  QString::null,
 					  &ok,
@@ -905,8 +905,8 @@ GeneralSettingsPage::editExcludeRule()
     if ( item )
     {
 	bool ok;
-	QString text = QInputDialog::getText( i18n( "Edit exclude rule" ),
-					      i18n( "Exclude rule (regular expression):" ),
+	QString text = QInputDialog::getText( tr( "Edit exclude rule" ),
+					      tr( "Exclude rule (regular expression):" ),
 					      QLineEdit::Normal,
 					      item->text(0),
 					      &ok,
@@ -933,8 +933,8 @@ GeneralSettingsPage::deleteExcludeRule()
     {
 	QString excludeRule  = item->text(0);
 	int result = KMessageBox::questionYesNo( this,
-						 i18n( "Really delete exclude rule \"%1\"?" ).arg( excludeRule ),
-						 i18n( "Delete?" ) ); // Window title
+						 tr( "Really delete exclude rule \"%1\"?" ).arg( excludeRule ),
+						 tr( "Delete?" ) ); // Window title
 	if ( result == KMessageBox::Yes )
 	{
 	    _excludeRulesListView->removeItem( item );
@@ -962,18 +962,18 @@ KTreemapPage::KTreemapPage( SettingsDialog *	dialog,
     vbox->setSpacing( dialog->spacingHint() );
     layout->addWidget( vbox );
 
-    _squarify		= new QCheckBox( i18n( "S&quarify Treemap"	), vbox );
-    _doCushionShading	= new QCheckBox( i18n( "Use C&ushion Shading"	), vbox );
+    _squarify		= new QCheckBox( tr( "S&quarify Treemap"	), vbox );
+    _doCushionShading	= new QCheckBox( tr( "Use C&ushion Shading"	), vbox );
 
 
     // Cushion parameters
 
-    QVGroupBox * gbox	= new QVGroupBox( i18n( "Cushion Parameters" ), vbox );
+    QVGroupBox * gbox	= new QVGroupBox( tr( "Cushion Parameters" ), vbox );
     _cushionParams	= gbox;
     gbox->addSpace( 7 );
     gbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
 
-    QLabel * label	= new QLabel( i18n( "Ambient &Light" ), gbox );
+    QLabel * label	= new QLabel( tr( "Ambient &Light" ), gbox );
     QHBox * hbox	= new QHBox( gbox );
     _ambientLight	= new QSlider ( MinAmbientLight, MaxAmbientLight, 10,	// min, max, pageStep
 					DefaultAmbientLight, Horizontal, hbox );
@@ -983,7 +983,7 @@ KTreemapPage::KTreemapPage( SettingsDialog *	dialog,
     label->setBuddy( _ambientLightSB );
 
     gbox->addSpace( 7 );
-    label		= new QLabel( i18n( "&Height Scale" ), gbox );
+    label		= new QLabel( tr( "&Height Scale" ), gbox );
     hbox		= new QHBox( gbox );
     _heightScalePercent = new QSlider( MinHeightScalePercent, MaxHeightScalePercent, 10,   // min, max, pageStep
 				       DefaultHeightScalePercent, Horizontal, hbox );
@@ -993,14 +993,14 @@ KTreemapPage::KTreemapPage( SettingsDialog *	dialog,
     label->setBuddy( _heightScalePercentSB );
 
     gbox->addSpace( 10 );
-    _ensureContrast	= new QCheckBox( i18n( "Draw Lines if Lo&w Contrast"	), gbox );
+    _ensureContrast	= new QCheckBox( tr( "Draw Lines if Lo&w Contrast"	), gbox );
 
 
     hbox		= new QHBox( gbox );
-    _forceCushionGrid	= new QCheckBox( i18n( "Always Draw &Grid"		), hbox );
+    _forceCushionGrid	= new QCheckBox( tr( "Always Draw &Grid"		), hbox );
     addHStretch( hbox );
 
-    _cushionGridColorL	= new QLabel( "	   " + i18n( "Gr&id Color: " ), hbox );
+    _cushionGridColorL	= new QLabel( "	   " + tr( "Gr&id Color: " ), hbox );
     _cushionGridColor	= new KColorButton( hbox );
     _cushionGridColorL->setBuddy( _cushionGridColor );
     _cushionGridColorL->setAlignment( AlignRight | AlignVCenter );
@@ -1010,20 +1010,20 @@ KTreemapPage::KTreemapPage( SettingsDialog *	dialog,
 
     // Plain treemaps parameters
 
-    _plainTileParams	= new QHGroupBox( i18n( "Colors for Plain Treemaps" ), vbox );
+    _plainTileParams	= new QHGroupBox( tr( "Colors for Plain Treemaps" ), vbox );
 
     _plainTileParams->addSpace( 7 );
-    label		= new QLabel( i18n( "&Files: " ), _plainTileParams );
+    label		= new QLabel( tr( "&Files: " ), _plainTileParams );
     _fileFillColor	= new KColorButton( _plainTileParams );
     label->setBuddy( _fileFillColor );
     label->setAlignment( AlignRight | AlignVCenter );
 
-    label		= new QLabel( "	   " + i18n( "&Directories: " ), _plainTileParams );
+    label		= new QLabel( "	   " + tr( "&Directories: " ), _plainTileParams );
     _dirFillColor	= new KColorButton( _plainTileParams );
     label->setBuddy( _dirFillColor );
     label->setAlignment( AlignRight | AlignVCenter );
 
-    label		= new QLabel( i18n( "Gr&id: " ), _plainTileParams );
+    label		= new QLabel( tr( "Gr&id: " ), _plainTileParams );
     _outlineColor	= new KColorButton( _plainTileParams );
     label->setBuddy( _outlineColor );
     label->setAlignment( AlignRight | AlignVCenter );
@@ -1037,7 +1037,7 @@ KTreemapPage::KTreemapPage( SettingsDialog *	dialog,
     grid->setColStretch( 1, 0 ); // don't stretch
     grid->setColStretch( 2, 1 ); // stretch this as you like
 
-    label		= new QLabel( i18n( "Hi&ghlight R&ectangle: " ), gridBox );
+    label		= new QLabel( tr( "Hi&ghlight R&ectangle: " ), gridBox );
     _highlightColor	= new KColorButton( gridBox );
     label->setBuddy( _highlightColor );
 
@@ -1045,14 +1045,14 @@ KTreemapPage::KTreemapPage( SettingsDialog *	dialog,
     grid->addWidget( _highlightColor,	0, 1 );
 
 
-    label		= new QLabel( i18n( "Minim&um Treemap Tile Size: " ), gridBox );
+    label		= new QLabel( tr( "Minim&um Treemap Tile Size: " ), gridBox );
     _minTileSize	= new QSpinBox( 0, 30, 1, gridBox ); // min, max, step, parent
     label->setBuddy( _minTileSize );
 
     grid->addWidget( label,		1, 0 );
     grid->addWidget( _minTileSize,	1, 1 );
 
-    _autoResize		= new QCheckBox( i18n( "Auto-&Resize Treemap" ), vbox );
+    _autoResize		= new QCheckBox( tr( "Auto-&Resize Treemap" ), vbox );
 
 
 

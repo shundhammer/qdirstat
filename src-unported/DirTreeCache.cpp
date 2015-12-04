@@ -400,7 +400,7 @@ CacheReader::addItem()
     if ( strcasecmp( type, "D" ) == 0 )
     {
 	// logDebug() << "Creating DirInfo  for " << name << endl;
-	DirInfo * dir = new KDirInfo( _tree, parent, name,
+	DirInfo * dir = new DirInfo( _tree, parent, name,
 				       mode, size, mtime );
 	dir->setReadState( KDirCached );
 	_lastDir = dir;
@@ -441,7 +441,7 @@ CacheReader::addItem()
 	{
 	    // logDebug() << "Creating FileInfo for " << parent->debugUrl() << "/" << name << endl;
 
-	    FileInfo * item = new KFileInfo( _tree, parent, name,
+	    FileInfo * item = new FileInfo( _tree, parent, name,
 					      mode, size, mtime,
 					      blocks, links );
 	    parent->insertChild( item );

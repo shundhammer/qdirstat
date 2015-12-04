@@ -1,7 +1,7 @@
 /*
  *   File name: MainWindow.h
  *   Summary:	QDirStat main window
- *   License:   GPL V2 - See file LICENSE for details.
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -35,8 +35,8 @@ protected:
     virtual void closeEvent( QCloseEvent *event );
 
 private:
-    Ui::MainWindow *    _ui;
-    bool                _modified;
+    Ui::MainWindow *	_ui;
+    bool		_modified;
 };
 
 #endif // MainWindow_H

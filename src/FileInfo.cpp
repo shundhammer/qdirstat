@@ -1,7 +1,7 @@
 /*
- *   File name:	FileInfo.cpp
+ *   File name: FileInfo.cpp
  *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -14,6 +14,7 @@
 #include "FileInfo.h"
 #include "DirInfo.h"
 #include "DirSaver.h"
+#include "Exception.h"
 
 // Some file systems (NTFS seems to be among them) may handle block fragments well.
 // Don't report files as "sparse" files if the block size is only a few bytes
@@ -25,29 +26,29 @@
 using namespace QDirStat;
 
 
-FileInfo::KFileInfo( DirTree   *	tree,
-                     DirInfo   *	parent,
-                     const char *	name )
+FileInfo::FileInfo( DirTree    * tree,
+		     DirInfo	* parent,
+		     const char * name )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
 {
-    _isLocalFile	= true;
-    _isSparseFile	= false;
-    _name	 	= name ? name : "";
-    _device	 	= 0;
-    _mode	 	= 0;
-    _links	 	= 0;
-    _size	 	= 0;
-    _blocks	 	= 0;
-    _mtime	 	= 0;
+    _isLocalFile  = true;
+    _isSparseFile = false;
+    _name	  = name ? name : "";
+    _device	  = 0;
+    _mode	  = 0;
+    _links	  = 0;
+    _size	  = 0;
+    _blocks	  = 0;
+    _mtime	  = 0;
 }
 
 
-FileInfo::KFileInfo( const QString &	filenameWithoutPath,
-                     struct stat *	statInfo,
-                     DirTree    *	tree,
-                     DirInfo	  *	parent )
+FileInfo::FileInfo( const QString & filenameWithoutPath,
+		     struct stat   * statInfo,
+		     DirTree	   * tree,
+		     DirInfo	   * parent )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -64,25 +65,25 @@ FileInfo::KFileInfo( const QString &	filenameWithoutPath,
 
     if ( isSpecial() )
     {
-	_size	 	= 0;
-	_blocks	 	= 0;
+	_size		= 0;
+	_blocks		= 0;
 	_isSparseFile	= false;
     }
     else
     {
-	_size	 	= statInfo->st_size;
-	_blocks	 	= statInfo->st_blocks;
+	_size		= statInfo->st_size;
+	_blocks		= statInfo->st_blocks;
 	_isSparseFile	= isFile()
 	    && _blocks > 0				// if file system can't report blocks
-	    && allocatedSize() + FRAGMENT_SIZE < _size;	// allow for intelligent fragment handling
+	    && allocatedSize() + FRAGMENT_SIZE < _size; // allow for intelligent fragment handling
 
 	if ( _isSparseFile )
 	{
 	    logDebug() << "Found sparse file: " << this
-                       << "    Byte size: " << formatSize( byteSize() )
-                       << "  Allocated: " << formatSize( allocatedSize() )
-                       << " (" << (int) _blocks << " blocks)"
-                       << endl;
+		       << "    Byte size: " << formatSize( byteSize() )
+		       << "  Allocated: " << formatSize( allocatedSize() )
+		       << " (" << (int) _blocks << " blocks)"
+		       << endl;
 	}
 
 #if 0
@@ -101,14 +102,14 @@ FileInfo::KFileInfo( const QString &	filenameWithoutPath,
 
 
 
-FileInfo::KFileInfo( DirTree * 	tree,
-                     DirInfo * 	parent,
-                     const QString &	filenameWithoutPath,
-                     mode_t	   	mode,
-                     KFileSize	   	size,
-                     time_t	   	mtime,
-                     KFileSize	   	blocks,
-                     nlink_t	   	links )
+FileInfo::FileInfo( DirTree *  tree,
+		     DirInfo *	parent,
+		     const QString &	filenameWithoutPath,
+		     mode_t		mode,
+		     FileSize		size,
+		     time_t		mtime,
+		     FileSize		blocks,
+		     nlink_t		links )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -116,9 +117,9 @@ FileInfo::KFileInfo( DirTree * 	tree,
     _name		= filenameWithoutPath;
     _isLocalFile	= true;
     _mode		= mode;
-    _size	 	= size;
-    _mtime	 	= mtime;
-    _links	 	= links;
+    _size		= size;
+    _mtime		= mtime;
+    _links		= links;
 
     if ( blocks < 0 )
     {
@@ -138,7 +139,7 @@ FileInfo::KFileInfo( DirTree * 	tree,
 }
 
 
-FileInfo::~KFileInfo()
+FileInfo::~FileInfo()
 {
     // NOP
 
@@ -156,17 +157,17 @@ FileInfo::~KFileInfo()
 }
 
 
-KFileSize
+FileSize
 FileInfo::allocatedSize() const
 {
     return blocks() * blockSize();
 }
 
 
-KFileSize
+FileSize
 FileInfo::size() const
 {
-    KFileSize sz = _isSparseFile ? allocatedSize() : _size;
+    FileSize sz = _isSparseFile ? allocatedSize() : _size;
 
     if ( _links > 1 )
 	sz /= _links;
@@ -209,8 +210,8 @@ FileInfo::urlPart( int targetLevel ) const
 
     if ( level < targetLevel )
     {
-	logError() << k_funcinfo << "URL level " << targetLevel
-                   << " requested, this is level " << level << endl;
+	logError() << "URL level " << targetLevel
+		   << " requested, this is level " << level << endl;
 	return "";
     }
 
@@ -256,7 +257,7 @@ FileInfo::hasChildren() const
 
 
 bool
-FileInfo::isInSubtree( const KFileInfo *subtree ) const
+FileInfo::isInSubtree( const FileInfo *subtree ) const
 {
     const FileInfo * ancestor = this;
 
@@ -322,7 +323,7 @@ FileInfo::locate( QString url, bool findDotEntries )
 	// if the rest of the URL consists of several pathname components.
 
 	if ( dotEntry() &&
-	     url.find ( "/" ) < 0 )	// No (more) "/" in this URL
+	     url.contains( "/" ) < 0 )	   // No (more) "/" in this URL
 	{
 	    return dotEntry()->locate( url, findDotEntries );
 	}
@@ -333,53 +334,25 @@ FileInfo::locate( QString url, bool findDotEntries )
 
 
 
-
-
-
-QString
-QDirStat::formatSize( KFileSize lSize )
+QString QDirStat::formatSize( FileSize lSize )
 {
-    QString	sizeString;
-    double	size;
-    QString	unit;
+    QString	 sizeString;
+    double	 size;
+    unsigned	 unitIndex = 0;
+    const char * units[] = { "Bytes", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
     if ( lSize < 1024 )
     {
-        sizeString.setNum( (long) lSize );
-
-        unit = i18n( "Bytes" );
+	sizeString.sprintf( "%lld %s", lSize, units[ unitIndex ] );
     }
     else
     {
-        size = lSize / 1024.0;		// kB
+	while ( size >= 1024.0 && ++unitIndex < sizeof( units ) - 1)
+	{
+	    size /= 1024.0;
+	}
 
-        if ( size < 1024.0 )
-        {
-            sizeString.sprintf( "%.1f", size );
-            unit = i18n( "kB" );
-        }
-        else
-        {
-            size /= 1024.0;		// MB
-
-            if ( size < 1024.0 )
-            {
-                sizeString.sprintf( "%.1f", size );
-                unit = i18n ( "MB" );
-            }
-            else
-            {
-                size /= 1024.0;		// GB - we won't go any further...
-
-                sizeString.sprintf( "%.2f", size );
-                unit = i18n ( "GB" );
-            }
-        }
-    }
-
-    if ( ! unit.isEmpty() )
-    {
-        sizeString += " " + unit;
+	sizeString.sprintf( "%.2f %s", size, units[ unitIndex ] );
     }
 
     return sizeString;

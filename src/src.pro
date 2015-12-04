@@ -11,7 +11,7 @@
 
 TEMPLATE	     = app
 
-QT                  += widgets
+QT		    += widgets
 CONFIG		    += debug
 DEPENDPATH	    += .
 MOC_DIR		     = .moc
@@ -19,27 +19,32 @@ OBJECTS_DIR	     = .obj
 
 TARGET	  = qdirstat
 
-SOURCES	  = main.cpp                    \
-            DirInfo.cpp                 \
-            DirSaver.cpp                \
-            DirTree.cpp                 \
-            DirTreeIterators.cpp        \
-            FileInfo.cpp                \
-            Logger.cpp                  \
-            MainWindow.cpp              \
+SOURCES	  = main.cpp			\
+	    DirInfo.cpp			\
+	    DirSaver.cpp		\
+            DirTreeIterator.cpp         \
+	    FileInfo.cpp		\
+	    Exception.cpp		\
+	    Logger.cpp			\
+	    MainWindow.cpp		\
 
 
-HEADERS   = \
-            DirInfo.h                   \
-            DirSaver.h                  \
-            DirTree.h                   \
-            DirTreeIterators.h          \
-            FileInfo.h                  \
-            Logger.h                    \
-            MainWindow.h                \
-            SignalBlocker.h             \
+#	    DirTree.cpp			\
 
 
-FORMS     = main-window.ui
+HEADERS	  = \
+	    DirInfo.h			\
+	    DirSaver.h			\
+	    DirTreeIterator.h		\
+	    FileInfo.h			\
+	    Exception.h			\
+	    Logger.h			\
+	    MainWindow.h		\
+	    SignalBlocker.h		\
+
+
+#	    DirTree.h			\
+
+FORMS	  = main-window.ui
 
 RESOURCES = icons.qrc

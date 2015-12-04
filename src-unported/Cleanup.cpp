@@ -26,7 +26,7 @@
 using namespace QDirStat;
 
 
-Cleanup::KCleanup( QString		id,
+Cleanup::Cleanup( QString		id,
 		    QString		command,
 		    QString		title,
 		    KActionCollection *	parent	)
@@ -54,7 +54,7 @@ Cleanup::KCleanup( QString		id,
 }
 
 
-Cleanup::KCleanup( const KCleanup &src )
+Cleanup::Cleanup( const Cleanup &src )
     : KAction()
 {
     copy( src );
@@ -62,7 +62,7 @@ Cleanup::KCleanup( const KCleanup &src )
 
 
 Cleanup &
-Cleanup::operator= ( const KCleanup &src )
+Cleanup::operator= ( const Cleanup &src )
 {
     copy( src );
     
@@ -71,7 +71,7 @@ Cleanup::operator= ( const KCleanup &src )
 
 
 void
-Cleanup::copy( const KCleanup &src )
+Cleanup::copy( const Cleanup &src )
 {
     setTitle( src.title() );
     _selection		= src.selection();
@@ -164,17 +164,17 @@ Cleanup::confirmation( FileInfo * item )
 
     if ( item->isDir() || item->isDotEntry() )
     {
-	msg = i18n( "%1\nin directory %2" ).arg( cleanTitle() ).arg( item->url() );
+	msg = tr( "%1\nin directory %2" ).arg( cleanTitle() ).arg( item->url() );
     }
     else
     {
-	msg = i18n( "%1\nfor file %2" ).arg( cleanTitle() ).arg( item->url() );
+	msg = tr( "%1\nfor file %2" ).arg( cleanTitle() ).arg( item->url() );
     }
 
     if ( KMessageBox::warningContinueCancel( 0,				// parentWidget
 					     msg,			// message
-					     i18n( "Please Confirm" ),	// caption
-					     i18n( "Confirm" )		// confirmButtonLabel
+					     tr( "Please Confirm" ),	// caption
+					     tr( "Confirm" )		// confirmButtonLabel
 					     ) == KMessageBox::Continue )
 	return true;
     else
