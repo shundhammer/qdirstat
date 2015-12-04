@@ -57,7 +57,7 @@ namespace QDirStat
      *
      * Notice: This class contains pure virtuals - you cannot use it
      * directly. Derive your own class from it or use one of
-     * @ref KLocalDirReadJob or @ref KioDirReadJob.
+     * @ref KLocalDirReadJob or @ref KCacheReadJob.
      *
      * @short Abstract base class for directory reading.
      **/
@@ -228,81 +228,6 @@ namespace QDirStat
 	DIR * _diskDir;
 
     };	// KLocalDirReadJob
-
-
-
-    /**
-     * Generic impementation of the abstract @ref KDirReadJob class, using
-     * KDE's network transparent KIO methods.
-     *
-     * This is much more generic than @ref KLocalDirReadJob since it supports
-     * protocols like 'ftp', 'http', 'smb', 'tar' etc., too. Its only drawback
-     * is that is cannot be prevented from crossing file system boundaries -
-     * which makes it pretty useless for figuring out the cause of a 'file
-     * system full' error.
-     *
-     * @short Generic directory reader that reads one directory, remote or local.
-     **/
-    class KioDirReadJob: public KObjDirReadJob
-    {
-	Q_OBJECT
-
-    public:
-	/**
-	 * Constructor.
-	 **/
-	KioDirReadJob( KDirTree * tree, KDirInfo * dir );
-
-	/**
-	 * Destructor.
-	 **/
-	virtual ~KioDirReadJob();
-
-	/**
-	 * Obtain information about the URL specified and create a new @ref
-	 * KFileInfo or a @ref KDirInfo (whatever is appropriate) from that
-	 * information. Use @ref KFileInfo::isDirInfo() to find out which.
-	 * Returns 0 if such information cannot be obtained (i.e. the
-	 * appropriate stat() call fails).
-	 **/
-	static KFileInfo *	stat( const KURL &	url,
-				      KDirTree	*	tree,
-				      KDirInfo *	parent = 0 );
-
-	/**
-	 * Obtain the owner of the URL specified.
-	 *
-	 * This is a moderately expensive operation since it involves a network
-	 * transparent stat() call.
-	 **/
-	static QString		owner( KURL url );
-
-
-    protected slots:
-	/**
-	 * Receive directory entries from a KIO job.
-	 **/
-	void entries( KIO::Job *		job,
-		      const KIO::UDSEntryList & entryList );
-
-	/**
-	 * KIO job is finished.
-	 **/
-	void finished( KIO::Job * job );
-
-    protected:
-	
-	/**
-	 * Start reading the directory. Prior to this nothing happens.
-	 *
-	 * Inherited and reimplemented from @ref KDirReadJob.
-	 **/
-	virtual void startReading();
-
-
-	KIO::ListJob *	_job;
-
-    };	// KioDirReadJob
 
 
 

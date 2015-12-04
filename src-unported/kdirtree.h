@@ -38,18 +38,6 @@ namespace QDirStat
 
 
     /**
-     * Directory read methods.
-     **/
-    typedef enum
-    {
-	KDirReadUnknown,	// Unknown (yet)
-	KDirReadLocal,		// Use opendir() and lstat()
-	KDirReadKIO		// Use KDE's KIO network transparent methods
-    } KDirReadMethod;
-
-
-
-    /**
      * This class provides some infrastructure as well as global data for a
      * directory tree. It acts as the glue that holds things together: The root
      * item from which to descend into the subtree, the read queue and some
@@ -176,13 +164,6 @@ namespace QDirStat
 	void addJob( KDirReadJob * job );
 
 	/**
-	 * Obtain the directory read method for this tree:
-	 *    KDirReadLocal		use opendir() and lstat()
-	 *    KDirReadKDirLister	use KDE 2.x's KDirLister
-	 **/
-	KDirReadMethod readMethod() const { return _readMethod; }
-
-	/**
 	 * Should directory scans cross file systems?
 	 *
 	 * Notice: This can only be avoided with local directories where the
@@ -263,12 +244,6 @@ namespace QDirStat
 	 * Send a @ref aborted() signal.
 	 **/
 	void sendAborted();
-
-	/**
-	 * Returns 'true' if this tree uses the 'file:/' protocol (regardless
-	 * of local or network transparent directory reader).
-	 **/
-	bool isFileProtocol()	{ return _isFileProtocol; }
 
 	/**
 	 * Returns 'true' if directory reading is in progress in this tree.
@@ -373,10 +348,8 @@ namespace QDirStat
 	KFileInfo *		_root;
 	KFileInfo *		_selection;
 	KDirReadJobQueue	_jobQueue;
-	KDirReadMethod		_readMethod;
 	bool			_crossFileSystems;
 	bool			_enableLocalDirReader;
-	bool			_isFileProtocol;
 	bool			_isBusy;
 	
     };	// class KDirTree

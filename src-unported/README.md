@@ -14,6 +14,8 @@ waiting to be ported to QDirStat.
 
 - KActivityTracker
 
+- KioDirReadJob
+
 
 KPacMan looked out of place pretty soon after it got to KDirStat. I know that
 it does have its fans, but unless a graphics designer joins the project who can
@@ -37,6 +39,11 @@ it? Shove a pop-up up your face covering the stuff you are interesting in with
 their self-loving marketing bullshit? -- KActivityTracker was made to avoid
 exactly this: Ask the user only once you know that he actually used the program
 for a while.
+
+KioDirReadJob depended on KIO slaves to read directories on remote servers -
+FTP, HTTP, even Fish (ssh-based). This functionality is gone without
+KDE. That's a pity, but this is a little price to be paid to avoid the rest of
+the hassle with using the KDE libs.
 
 
 ## To Do

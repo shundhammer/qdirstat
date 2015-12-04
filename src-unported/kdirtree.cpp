@@ -26,9 +26,7 @@ KDirTree::KDirTree()
 {
     _root		= 0;
     _selection		= 0;
-    _isFileProtocol	= false;
     _isBusy		= false;
-    _readMethod		= KDirReadUnknown;
 
     readConfig();
 
@@ -115,22 +113,9 @@ KDirTree::startReading( const KURL & url )
 
     setRoot( 0 );
     readConfig();
-    _isFileProtocol = url.isLocalFile();
 
-    if ( _isFileProtocol && _enableLocalDirReader )
-    {
-	// kdDebug() << "Using local directory reader for " << url.url() << endl;
-	_readMethod	= KDirReadLocal;
-	_root		= KLocalDirReadJob::stat( url, this );
-    }
-    else
-    {
-	// kdDebug() << "Using KIO methods for " << url.url() << endl;
-	KURL cleanUrl( url );
-	cleanUrl.cleanPath();	// Resolve relative paths, get rid of multiple '/'
-	_readMethod	= KDirReadKIO;
-	_root 		= KioDirReadJob::stat( cleanUrl, this );
-    }
+    _root = KLocalDirReadJob::stat( url, this );
+    Q_CHECK_PTR( _root );
 
     if ( _root )
     {
@@ -139,11 +124,7 @@ KDirTree::startReading( const KURL & url )
 	if ( _root->isDir() )
 	{
 	    KDirInfo *dir = (KDirInfo *) _root;
-
-	    if ( _readMethod == KDirReadLocal )
-		addJob( new KLocalDirReadJob( this, dir ) );
-	    else
-		addJob( new KioDirReadJob( this, dir ) );
+            addJob( new KLocalDirReadJob( this, dir ) );
 	}
 	else
 	{
@@ -214,8 +195,7 @@ KDirTree::refresh( KFileInfo *subtree )
 	
 	// Create new subtree root.
 
-	subtree = ( _readMethod == KDirReadLocal ) ?
-	    KLocalDirReadJob::stat( url, this, parent ) : KioDirReadJob::stat( url, this, parent );
+	subtree = KLocalDirReadJob::stat( url, this, parent );
 
 	// kdDebug() << "New subtree: " << subtree << endl;
 
@@ -231,11 +211,7 @@ KDirTree::refresh( KFileInfo *subtree )
 		// Prepare reading this subtree's contents.
 
 		KDirInfo *dir = (KDirInfo *) subtree;
-
-		if ( _readMethod == KDirReadLocal )
-		    addJob( new KLocalDirReadJob( this, dir ) );
-		else
-		    addJob( new KioDirReadJob( this, dir ) );
+                addJob( new KLocalDirReadJob( this, dir ) );
 	    }
 	    else
 	    {
