@@ -19,9 +19,9 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include "kdirtree.h"
-#include "ktreemapview.h"
-#include "ktreemaptile.h"
+#include "DirTree.h"
+#include "KTreeMapView.h"
+#include "KTreeMapTile.h"
 
 
 using namespace QDirStat;

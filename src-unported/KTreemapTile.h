@@ -17,7 +17,7 @@
 
 #include <qcanvas.h>
 #include <qrect.h>
-#include "kdirtreeiterators.h"
+#include "DirTreeIterators.h"
 
 
 namespace QDirStat

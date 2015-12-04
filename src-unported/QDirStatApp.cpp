@@ -30,18 +30,18 @@
 #include <kstdaction.h>
 #include <kurlrequesterdlg.h>
 
-#include "kdirstatapp.h"
-#include "kcleanupcollection.h"
-#include "kdirtree.h"
+#include "QDirStatApp.h"
+#include "CleanupCollection.h"
+#include "DirTree.h"
 #include "kpacman.h"
-#include "ktreemapview.h"
-#include "ktreemaptile.h"
-#include "kcleanupcollection.h"
+#include "KTreeMapView.h"
+#include "KTreeMapTile.h"
+#include "CleanupCollection.h"
 #include "kactivitytracker.h"
-#include "kdirtreeview.h"
-#include "kdirstatsettings.h"
-#include "kdirtreecache.h"
-#include "kexcluderules.h"
+#include "DirTreeView.h"
+#include "QDirStatSettings.h"
+#include "DirTreeCache.h"
+#include "ExcludeRules.h"
 
 
 #define	USER_CLEANUPS	10	// Number of user cleanup actions

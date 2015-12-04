@@ -12,7 +12,7 @@
 #endif
 
 #include "Logger.h"
-#include "kexcluderules.h"
+#include "ExcludeRules.h"
 
 #define VERBOSE_EXCLUDE_MATCHES	1
 

@@ -19,7 +19,7 @@
 #include <qlistview.h>
 #include <qpixmap.h>
 #include <klistview.h>
-#include "kdirtree.h"
+#include "DirTree.h"
 
 #define DEBUG_COUNTERS		10
 

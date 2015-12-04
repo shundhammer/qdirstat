@@ -15,7 +15,7 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 
-#include "kdirstatapp.h"
+#include "QDirStatApp.h"
 
 
 static const char *description =

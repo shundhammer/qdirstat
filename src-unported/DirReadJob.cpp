@@ -22,10 +22,10 @@
 #include <kio/job.h>
 #include <kio/netaccess.h>
 
-#include "kdirtree.h"
-#include "kdirreadjob.h"
-#include "kdirtreecache.h"
-#include "kexcluderules.h"
+#include "DirTree.h"
+#include "DirReadJob.h"
+#include "DirTreeCache.h"
+#include "ExcludeRules.h"
 
 
 using namespace QDirStat;

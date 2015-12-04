@@ -12,9 +12,9 @@
 #endif
 
 #include <klocale.h>
-#include "kcleanup.h"
-#include "kstdcleanup.h"
-#include "kcleanupcollection.h"
+#include "Cleanup.h"
+#include "StdCleanup.h"
+#include "CleanupCollection.h"
 
 
 using namespace QDirStat;

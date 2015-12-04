@@ -17,9 +17,9 @@
 
 #include <qlistbox.h>
 #include <kdialogbase.h>
-#include "kcleanup.h"
-#include "kcleanupcollection.h"
-#include "kdirstatapp.h"
+#include "Cleanup.h"
+#include "CleanupCollection.h"
+#include "QDirStatApp.h"
 
 
 class QCheckBox;

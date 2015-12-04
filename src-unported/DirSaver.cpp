@@ -13,7 +13,7 @@
 
 #include <unistd.h>
 #include "Logger.h"
-#include "kdirsaver.h"
+#include "DirSaver.h"
 
 
 DirSaver::KDirSaver( const QString & newPath )

@@ -20,10 +20,10 @@
 #include <qimage.h>
 #include <qpainter.h>
 
-#include "ktreemaptile.h"
-#include "ktreemapview.h"
-#include "kdirtreeiterators.h"
-#include "kdirtreeview.h"
+#include "KTreeMapTile.h"
+#include "KTreeMapView.h"
+#include "DirTreeIterators.h"
+#include "DirTreeView.h"
 
 
 using namespace QDirStat;

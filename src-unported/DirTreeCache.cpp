@@ -14,9 +14,9 @@
 #include <ctype.h>
 #include <errno.h>
 #include "Logger.h"
-#include "kdirtreecache.h"
-#include "kdirtree.h"
-#include "kexcluderules.h"
+#include "DirTreeCache.h"
+#include "DirTree.h"
+#include "ExcludeRules.h"
 
 #define KB 1024
 #define MB (1024*1024)

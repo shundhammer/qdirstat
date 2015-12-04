@@ -17,7 +17,7 @@
 
 #include <stdio.h>
 #include <zlib.h>
-#include "kdirtree.h"
+#include "DirTree.h"
 
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )

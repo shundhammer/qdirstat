@@ -20,8 +20,8 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include "Logger.h"
-#include "kdirinfo.h"
-#include "kdirreadjob.h"
+#include "DirInfo.h"
+#include "DirReadJob.h"
 
 #ifndef NOT_USED
 #    define NOT_USED(PARAM)	( (void) (PARAM) )

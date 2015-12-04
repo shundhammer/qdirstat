@@ -19,7 +19,7 @@
 #include <qintdict.h>
 #include <kaction.h>
 #include "Logger.h"
-#include "kdirtree.h"
+#include "DirTree.h"
 
 
 namespace QDirStat

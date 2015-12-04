@@ -13,9 +13,9 @@
 
 #include <kapp.h>
 #include <kconfig.h>
-#include "kdirtree.h"
-#include "kdirreadjob.h"
-#include "kdirtreecache.h"
+#include "DirTree.h"
+#include "DirReadJob.h"
+#include "DirTreeCache.h"
 
 using namespace QDirStat;
 

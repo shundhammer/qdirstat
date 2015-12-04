@@ -27,9 +27,9 @@
 #include <kiconloader.h>
 #include <kexcluderules.h>
 
-#include "kdirtreeview.h"
-#include "kdirreadjob.h"
-#include "kdirtreeiterators.h"
+#include "DirTreeView.h"
+#include "DirReadJob.h"
+#include "DirTreeIterators.h"
 #include "kpacman.h"
 
 #define SEPARATE_READ_JOBS_COL	0

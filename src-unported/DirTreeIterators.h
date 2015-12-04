@@ -15,7 +15,7 @@
 #   include <config.h>
 #endif
 
-#include "kdirtree.h"
+#include "DirTree.h"
 
 
 namespace QDirStat

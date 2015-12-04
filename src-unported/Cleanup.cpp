@@ -22,8 +22,8 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 
-#include "kcleanup.h"
-#include "kdirsaver.h"
+#include "Cleanup.h"
+#include "DirSaver.h"
 
 #define VERBOSE_RUN_COMMAND	1
 #define SIMULATE_COMMAND	0

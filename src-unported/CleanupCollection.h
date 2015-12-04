@@ -15,7 +15,7 @@
 #   include <config.h>
 #endif
 
-#include "kcleanup.h"
+#include "Cleanup.h"
 
 // Forward declarations
 class KActionCollection;

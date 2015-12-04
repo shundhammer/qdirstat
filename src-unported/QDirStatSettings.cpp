@@ -32,10 +32,10 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "kdirtreeview.h"
-#include "ktreemapview.h"
-#include "kdirstatsettings.h"
-#include "kexcluderules.h"
+#include "DirTreeView.h"
+#include "KTreeMapView.h"
+#include "QDirStatSettings.h"
+#include "ExcludeRules.h"
 
 
 using namespace QDirStat;

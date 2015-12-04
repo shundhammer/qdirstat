@@ -17,7 +17,7 @@
 
 #include <kapp.h>
 #include <kmainwindow.h>
-#include "kdirtree.h"
+#include "DirTree.h"
 
 
 // Forward declarations
