@@ -1,14 +1,14 @@
 /*
  *   File name:	kdirstatsettings.h
- *   Summary:	Settings dialog for KDirStat
+ *   Summary:	Settings dialog for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
  */
 
 
-#ifndef KDirStatSettings_h
-#define KDirStatSettings_h
+#ifndef QDirStatSettings_h
+#define QDirStatSettings_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -38,10 +38,10 @@ class QPopupMenu;
 class KColorButton;
 
 
-#define KDirStatSettingsMaxColorButton	12
+#define QDirStatSettingsMaxColorButton	12
 
 
-namespace KDirStat
+namespace QDirStat
 {
     class KCleanupListBox;
     class KCleanupPropertiesPage;
@@ -50,9 +50,9 @@ namespace KDirStat
 
 
     /**
-     * Settings dialog for KDirStat
+     * Settings dialog for QDirStat
      *
-     * @short Settings dialog for KDirStat
+     * @short Settings dialog for QDirStat
      **/
     class KSettingsDialog: public KDialogBase
     {
@@ -68,7 +68,7 @@ namespace KDirStat
 	 * is always 0 since this is a dialog.
 	 **/
 
-	KSettingsDialog( KDirStatApp * mainWin );
+	KSettingsDialog( QDirStatApp * mainWin );
 
 	/**
 	 * Destructor.
@@ -121,7 +121,7 @@ namespace KDirStat
 
     protected:
 
-	KDirStatApp *	_mainWin;
+	QDirStatApp *	_mainWin;
 	int		_cleanupsPageIndex;
 	int		_treeColorsPageIndex;
 	int		_treemapPageIndex;
@@ -226,7 +226,7 @@ namespace KDirStat
 	 **/
 	KTreeColorsPage( KSettingsDialog *	dialog,
 			 QWidget *		parent,
-			 KDirStatApp *		mainWin );
+			 QDirStatApp *		mainWin );
 
 	/**
 	 * Destructor
@@ -269,11 +269,11 @@ namespace KDirStat
     protected:
 
 
-	KDirStatApp *		_mainWin;
+	QDirStatApp *		_mainWin;
 	KDirTreeView *		_treeView;
 	QSlider *		_slider;
-	KColorButton *		_colorButton [ KDirStatSettingsMaxColorButton ];
-	QLabel *		_colorLabel  [ KDirStatSettingsMaxColorButton ];
+	KColorButton *		_colorButton [ QDirStatSettingsMaxColorButton ];
+	QLabel *		_colorLabel  [ QDirStatSettingsMaxColorButton ];
 
 	int			_maxButtons;
 
@@ -304,7 +304,7 @@ namespace KDirStat
 	 **/
 	KCleanupPage( KSettingsDialog *	dialog,
 		      QWidget *		parent,
-		      KDirStatApp *	mainWin );
+		      QDirStatApp *	mainWin );
 
 	/**
 	 * Destructor
@@ -379,7 +379,7 @@ namespace KDirStat
 
 	KCleanupListBox *		_listBox;
 	KCleanupPropertiesPage *	_props;
-	KDirStatApp *			_mainWin;
+	QDirStatApp *			_mainWin;
 
 	KCleanupCollection		_workCleanupCollection;
 	KCleanup *			_currentCleanup;
@@ -515,7 +515,7 @@ namespace KDirStat
 	 * Constructor
 	 **/
 	KCleanupPropertiesPage( QWidget *	parent,
-				KDirStatApp *	mainWin );
+				QDirStatApp *	mainWin );
 
 	/**
 	 * Retrieve the page's fields' values and store them in the cleanup
@@ -554,7 +554,7 @@ namespace KDirStat
 	QComboBox *		_worksForProtocols;
 	QComboBox *		_refreshPolicy;
 
-	KDirStatApp *		_mainWin;
+	QDirStatApp *		_mainWin;
 
     }; // class KCleanupPropertiesPage
 
@@ -574,7 +574,7 @@ namespace KDirStat
 	 **/
 	KGeneralSettingsPage( KSettingsDialog *	dialog,
 			      QWidget *		parent,
-			      KDirStatApp *	mainWin );
+			      QDirStatApp *	mainWin );
 
 	/**
 	 * Destructor
@@ -638,7 +638,7 @@ namespace KDirStat
 
 	// Data members
 
-	KDirStatApp *	_mainWin;
+	QDirStatApp *	_mainWin;
 	KDirTreeView *	_treeView;
 
 	QCheckBox *	_crossFileSystems;
@@ -671,7 +671,7 @@ namespace KDirStat
 	 **/
 	KTreemapPage( KSettingsDialog *	dialog,
 		      QWidget *		parent,
-		      KDirStatApp *	mainWin );
+		      QDirStatApp *	mainWin );
 
 	/**
 	 * Destructor
@@ -726,7 +726,7 @@ namespace KDirStat
 
 	// Data members
 
-	KDirStatApp *		_mainWin;
+	QDirStatApp *		_mainWin;
 
 	
 	// Widgets
@@ -752,7 +752,7 @@ namespace KDirStat
 	
     }; // class KTreemapPage
 
-} // namespace KDirStat
+} // namespace QDirStat
 
 
 /**
@@ -767,7 +767,7 @@ void addVStretch( QWidget * parent );
 
 
 
-#endif // ifndef KDirStatSettings_h
+#endif // ifndef QDirStatSettings_h
 
 
 // EOF

@@ -1,6 +1,6 @@
 /*
  *   File name:	kdirstatapp.cpp
- *   Summary:	The KDirStat application - menu bar, tool bar, ...
+ *   Summary:	The QDirStat application - menu bar, tool bar, ...
  *   License:   GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
@@ -57,10 +57,10 @@
 #define FEEDBACK_REMINDER_INTERVAL	1000L
 
 
-using namespace KDirStat;
+using namespace QDirStat;
 
 
-KDirStatApp::KDirStatApp( QWidget* , const char* name )
+QDirStatApp::QDirStatApp( QWidget* , const char* name )
     : KMainWindow( 0, name )
 {
     // Simple inits
@@ -136,7 +136,7 @@ KDirStatApp::KDirStatApp( QWidget* , const char* name )
 }
 
 
-KDirStatApp::~KDirStatApp()
+QDirStatApp::~QDirStatApp()
 {
     delete _cleanupCollection;
 }
@@ -144,7 +144,7 @@ KDirStatApp::~KDirStatApp()
 
 
 void
-KDirStatApp::initActions()
+QDirStatApp::initActions()
 {
     _fileAskOpenDir	= KStdAction::open		( this, SLOT( fileAskOpenDir() ), 		actionCollection() );
 
@@ -250,7 +250,7 @@ KDirStatApp::initActions()
 
 
 void
-KDirStatApp::initCleanups()
+QDirStatApp::initCleanups()
 {
     _cleanupCollection = new KCleanupCollection( actionCollection() );
     CHECK_PTR( _cleanupCollection );
@@ -270,7 +270,7 @@ KDirStatApp::initCleanups()
 
 
 void
-KDirStatApp::revertCleanupsToDefaults()
+QDirStatApp::revertCleanupsToDefaults()
 {
     KCleanupCollection defaultCollection;
     defaultCollection.addStdCleanups();
@@ -280,7 +280,7 @@ KDirStatApp::revertCleanupsToDefaults()
 
 
 void
-KDirStatApp::initPacMan( bool enablePacMan )
+QDirStatApp::initPacMan( bool enablePacMan )
 {
     if ( enablePacMan )
     {
@@ -318,14 +318,14 @@ KDirStatApp::initPacMan( bool enablePacMan )
 
 
 void
-KDirStatApp::initStatusBar()
+QDirStatApp::initStatusBar()
 {
     statusBar()->insertItem( i18n( "Ready." ), ID_STATUS_MSG );
 }
 
 
 void
-KDirStatApp::initActivityTracker()
+QDirStatApp::initActivityTracker()
 {
     if ( ! doFeedbackReminder() )
 	return;
@@ -345,7 +345,7 @@ KDirStatApp::initActivityTracker()
 
 
 void
-KDirStatApp::openURL( const KURL& url )
+QDirStatApp::openURL( const KURL& url )
 {
     statusMsg( i18n( "Opening directory..." ) );
 
@@ -358,7 +358,7 @@ KDirStatApp::openURL( const KURL& url )
 }
 
 
-void KDirStatApp::readMainWinConfig()
+void QDirStatApp::readMainWinConfig()
 {
 
     KConfig * config = kapp->config();
@@ -407,7 +407,7 @@ void KDirStatApp::readMainWinConfig()
 
 
 void
-KDirStatApp::saveMainWinConfig()
+QDirStatApp::saveMainWinConfig()
 {
     KConfig * config = kapp->config();
 
@@ -425,7 +425,7 @@ KDirStatApp::saveMainWinConfig()
 
 
 void
-KDirStatApp::saveProperties( KConfig *config )
+QDirStatApp::saveProperties( KConfig *config )
 {
     (void) config;
     // TODO
@@ -433,7 +433,7 @@ KDirStatApp::saveProperties( KConfig *config )
 
 
 void
-KDirStatApp::readProperties( KConfig *config )
+QDirStatApp::readProperties( KConfig *config )
 {
     (void) config;
     // TODO
@@ -441,13 +441,13 @@ KDirStatApp::readProperties( KConfig *config )
 
 
 bool
-KDirStatApp::queryClose()
+QDirStatApp::queryClose()
 {
     return true;
 }
 
 bool
-KDirStatApp::queryExit()
+QDirStatApp::queryExit()
 {
     emit saveConfig();
 
@@ -461,7 +461,7 @@ KDirStatApp::queryExit()
 
 
 void
-KDirStatApp::fileAskOpenDir()
+QDirStatApp::fileAskOpenDir()
 {
     statusMsg( i18n( "Opening directory..." ) );
 
@@ -475,7 +475,7 @@ KDirStatApp::fileAskOpenDir()
 
 
 void
-KDirStatApp::fileAskOpenUrl()
+QDirStatApp::fileAskOpenUrl()
 {
     statusMsg( i18n( "Opening URL..." ) );
 
@@ -490,7 +490,7 @@ KDirStatApp::fileAskOpenUrl()
 
 
 void
-KDirStatApp::fileOpenRecent( const KURL& url )
+QDirStatApp::fileOpenRecent( const KURL& url )
 {
     statusMsg( i18n( "Opening directory..." ) );
 
@@ -502,7 +502,7 @@ KDirStatApp::fileOpenRecent( const KURL& url )
 
 
 void
-KDirStatApp::fileCloseDir()
+QDirStatApp::fileCloseDir()
 {
     statusMsg( i18n( "Closing directory..." ) );
 
@@ -515,7 +515,7 @@ KDirStatApp::fileCloseDir()
 
 
 void
-KDirStatApp::refreshAll()
+QDirStatApp::refreshAll()
 {
     statusMsg( i18n( "Refreshing directory tree..." ) );
     _treeView->refreshAll();
@@ -524,7 +524,7 @@ KDirStatApp::refreshAll()
 
 
 void
-KDirStatApp::refreshSelected()
+QDirStatApp::refreshSelected()
 {
     if ( ! _treeView->selection() )
 	return;
@@ -536,14 +536,14 @@ KDirStatApp::refreshSelected()
 
 
 void
-KDirStatApp::stopReading()
+QDirStatApp::stopReading()
 {
     _treeView->abortReading();
 }
 
 
 void
-KDirStatApp::askWriteCache()
+QDirStatApp::askWriteCache()
 {
     QString file_name;
 
@@ -585,7 +585,7 @@ KDirStatApp::askWriteCache()
 
 
 void
-KDirStatApp::askReadCache()
+QDirStatApp::askReadCache()
 {
     QString file_name =
 	KFileDialog::getOpenFileName( DEFAULT_CACHE_NAME,		// startDir
@@ -605,7 +605,7 @@ KDirStatApp::askReadCache()
 
 
 void
-KDirStatApp::editCopy()
+QDirStatApp::editCopy()
 {
     if ( _treeView->selection() )
 	kapp->clipboard()->setText( QString::fromLocal8Bit(_treeView->selection()->orig()->url()) );
@@ -619,7 +619,7 @@ KDirStatApp::editCopy()
 
 
 void
-KDirStatApp::cleanupOpenWith()
+QDirStatApp::cleanupOpenWith()
 {
     if ( ! _treeView->selection() )
 	return;
@@ -635,7 +635,7 @@ KDirStatApp::cleanupOpenWith()
 
 
 void
-KDirStatApp::selectionChanged( KFileInfo *selection )
+QDirStatApp::selectionChanged( KFileInfo *selection )
 {
     if ( selection )
     {
@@ -670,7 +670,7 @@ KDirStatApp::selectionChanged( KFileInfo *selection )
 
 
 void
-KDirStatApp::updateActions()
+QDirStatApp::updateActions()
 {
     _treemapZoomIn->setEnabled ( _treemapView && _treemapView->canZoomIn() );
     _treemapZoomOut->setEnabled( _treemapView && _treemapView->canZoomOut() );
@@ -685,7 +685,7 @@ KDirStatApp::updateActions()
 
 
 void
-KDirStatApp::treemapZoomIn()
+QDirStatApp::treemapZoomIn()
 {
     if ( _treemapView )
     {
@@ -696,7 +696,7 @@ KDirStatApp::treemapZoomIn()
 
 
 void
-KDirStatApp::treemapZoomOut()
+QDirStatApp::treemapZoomOut()
 {
     if ( _treemapView )
     {
@@ -707,7 +707,7 @@ KDirStatApp::treemapZoomOut()
 
 
 void
-KDirStatApp::treemapSelectParent()
+QDirStatApp::treemapSelectParent()
 {
     if ( _treemapView )
     {
@@ -718,7 +718,7 @@ KDirStatApp::treemapSelectParent()
 
 
 void
-KDirStatApp::treemapRebuild()
+QDirStatApp::treemapRebuild()
 {
     if ( _treemapView )
     {
@@ -729,14 +729,14 @@ KDirStatApp::treemapRebuild()
 
 
 void
-KDirStatApp::treemapHelp()
+QDirStatApp::treemapHelp()
 {
     kapp->invokeHelp( "treemap_intro" );
 }
 
 
 void
-KDirStatApp::toggleTreemapView()
+QDirStatApp::toggleTreemapView()
 {
     if   ( _showTreemapView->isChecked() )
     {
@@ -752,11 +752,11 @@ KDirStatApp::toggleTreemapView()
 
 
 void
-KDirStatApp::preferences()
+QDirStatApp::preferences()
 {
     if ( ! _settingsDialog )
     {
-	_settingsDialog = new KDirStat::KSettingsDialog( this );
+	_settingsDialog = new QDirStat::KSettingsDialog( this );
 	CHECK_PTR( _settingsDialog );
     }
 
@@ -766,7 +766,7 @@ KDirStatApp::preferences()
 
 
 void
-KDirStatApp::askForFeedback()
+QDirStatApp::askForFeedback()
 {
     if ( ! doFeedbackReminder() )
 	return;
@@ -812,7 +812,7 @@ KDirStatApp::askForFeedback()
 
 
 void
-KDirStatApp::feedbackMailSent()
+QDirStatApp::feedbackMailSent()
 {
     KConfig * config = kapp->config();
     config->setGroup( "Feedback" );
@@ -822,7 +822,7 @@ KDirStatApp::feedbackMailSent()
 
 
 bool
-KDirStatApp::doFeedbackReminder()
+QDirStatApp::doFeedbackReminder()
 {
     KConfig * config = kapp->config();
     config->setGroup( "Feedback" );
@@ -836,7 +836,7 @@ KDirStatApp::doFeedbackReminder()
 
 
 void
-KDirStatApp::statusMsg( const QString &text )
+QDirStatApp::statusMsg( const QString &text )
 {
     // Change status message permanently
 
@@ -846,7 +846,7 @@ KDirStatApp::statusMsg( const QString &text )
 
 
 void
-KDirStatApp::contextMenu( KDirTreeViewItem * item, const QPoint &pos )
+QDirStatApp::contextMenu( KDirTreeViewItem * item, const QPoint &pos )
 {
     NOT_USED( item );
 
@@ -856,7 +856,7 @@ KDirStatApp::contextMenu( KDirTreeViewItem * item, const QPoint &pos )
 
 
 void
-KDirStatApp::contextMenu( KTreemapTile * tile, const QPoint &pos )
+QDirStatApp::contextMenu( KTreemapTile * tile, const QPoint &pos )
 {
     NOT_USED( tile );
 
@@ -866,14 +866,14 @@ KDirStatApp::contextMenu( KTreemapTile * tile, const QPoint &pos )
 
 
 void
-KDirStatApp::createTreemapViewDelayed()
+QDirStatApp::createTreemapViewDelayed()
 {
     QTimer::singleShot( 0, this, SLOT( createTreemapView() ) );
 }
 
 
 void
-KDirStatApp::createTreemapView()
+QDirStatApp::createTreemapView()
 {
     if ( ! _showTreemapView->isChecked() || ! _treeView->tree() )
 	return;
@@ -907,7 +907,7 @@ KDirStatApp::createTreemapView()
 
 
 void
-KDirStatApp::deleteTreemapView()
+QDirStatApp::deleteTreemapView()
 {
     if ( _treemapView )
     {

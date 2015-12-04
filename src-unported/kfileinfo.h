@@ -1,6 +1,6 @@
 /*
  *   File name: kfileinfo.h
- *   Summary:	Support classes for KDirStat
+ *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -28,7 +28,7 @@
 // already - all names that would even remotely match are already used up,
 // yet the resprective classes don't quite fit the purposes required here.
 
-namespace KDirStat
+namespace QDirStat
 {
     // With today's hard disks, the 2 GB we could sum up with 'long' (or 4 GB
     // with 'unsigned long') are definitely not enough. So we have to go for
@@ -68,7 +68,7 @@ namespace KDirStat
      * can also be obtained by @ref KIO::KDirListJob, but not all: The device
      * this file resides on is something none of KIO's many classes will tell
      * (since of course this only makes sense for local files) - yet this had
-     * been _the_ single most requested feature of KDirStat <1.0: Stay on one
+     * been _the_ single most requested feature of QDirStat <1.0: Stay on one
      * filesystem. To facilitate this, information about the device is
      * required, thus we'll do lstat() sys calls ourselves for local
      * files. This is what the classes in this file are all about.
@@ -650,7 +650,7 @@ namespace KDirStat
 	return stream;
     }
 
-}	// namespace KDirStat
+}	// namespace QDirStat
 
 
 #endif // ifndef KFileInfo_h

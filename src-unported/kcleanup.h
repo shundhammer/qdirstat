@@ -1,6 +1,6 @@
 /*
  *   File name:	kcleanup.h
- *   Summary:	Support classes for KDirStat
+ *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -22,12 +22,12 @@
 #include "kdirtree.h"
 
 
-namespace KDirStat
+namespace QDirStat
 {
     /**
      * Cleanup action to be performed for @ref KDirTree items.
      *
-     * @short KDirStat cleanup action
+     * @short QDirStat cleanup action
      **/
 
     class KCleanup: public KAction
@@ -47,7 +47,7 @@ namespace KDirStat
 	 *
 	 * Most applications will want to pass KMainWindow::actionCollection()
 	 * for 'parent' so the menus and toolbars can be created using the XML
-	 * UI description ('kdirstatui.rc' for KDirStat).
+	 * UI description ('kdirstatui.rc' for QDirStat).
 	 **/
 	KCleanup( QString		id		= "",
 		  QString		command 	= "",
@@ -135,7 +135,7 @@ namespace KDirStat
 	bool worksForFile()		const { return _worksForFile; }
 
 	/**
-	 * Return whether or not this cleanup action works for KDirStat's
+	 * Return whether or not this cleanup action works for QDirStat's
 	 * special 'Dot Entry' items, i.e. the pseudo nodes created in most
 	 * directories that hold the plain files.
 	 **/
@@ -348,7 +348,7 @@ namespace KDirStat
 	
 	return stream;
     }
-}	// namespace KDirStat
+}	// namespace QDirStat
 
 
 #endif // ifndef KCleanup_h

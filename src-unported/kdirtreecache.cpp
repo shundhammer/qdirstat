@@ -1,6 +1,6 @@
 /*
  *   File name:	kdirtreecache.cpp
- *   Summary:	KDirStat cache reader / writer
+ *   Summary:	QDirStat cache reader / writer
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -23,7 +23,7 @@
 #define GB (1024*1024*1024)
 
 
-using namespace KDirStat;
+using namespace QDirStat;
 
 
 KCacheWriter::KCacheWriter( const QString & fileName, KDirTree *tree )

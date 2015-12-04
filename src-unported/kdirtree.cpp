@@ -1,6 +1,6 @@
 /*
  *   File name:	kdirtree.cpp
- *   Summary:	Support classes for KDirStat
+ *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -17,7 +17,7 @@
 #include "kdirreadjob.h"
 #include "kdirtreecache.h"
 
-using namespace KDirStat;
+using namespace QDirStat;
 
 
 

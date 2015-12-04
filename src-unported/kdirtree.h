@@ -1,6 +1,6 @@
 /*
  *   File name: kdirtree.h
- *   Summary:	Support classes for KDirStat
+ *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -31,7 +31,7 @@
 // already - all names that would even remotely match are already used up,
 // yet the resprective classes don't quite fit the purposes required here.
 
-namespace KDirStat
+namespace QDirStat
 {
     // Forward declarations
     class KDirReadJob;
@@ -187,7 +187,7 @@ namespace KDirStat
 	 *
 	 * Notice: This can only be avoided with local directories where the
 	 * device number a file resides on can be obtained.
-	 * Remember, that's what this KDirStat business is all about.  ;-)
+	 * Remember, that's what this QDirStat business is all about.  ;-)
 	 **/
 	bool	crossFileSystems() const { return _crossFileSystems; }
 
@@ -381,7 +381,7 @@ namespace KDirStat
 	
     };	// class KDirTree
 
-}	// namespace KDirStat
+}	// namespace QDirStat
 
 
 #endif // ifndef KDirTree_h

@@ -1,6 +1,6 @@
 /*
  *   File name: kdirreadjob.h
- *   Summary:	Support classes for KDirStat
+ *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -29,7 +29,7 @@
 // already - all names that would even remotely match are already used up,
 // yet the resprective classes don't quite fit the purposes required here.
 
-namespace KDirStat
+namespace QDirStat
 {
     // Forward declarations
     class KFileInfo;
@@ -473,7 +473,7 @@ namespace KDirStat
     };
 
 
-}	// namespace KDirStat
+}	// namespace QDirStat
 
 
 #endif // ifndef KDirReadJob_h

@@ -1,6 +1,6 @@
 /*
  *   File name:	kdirtreeview.h
- *   Summary:	High level classes for KDirStat
+ *   Summary:	High level classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -37,7 +37,7 @@ class KPacManAnimation;
 // already - all names that would even remotely match are already used up,
 // yet the resprective classes don't quite fit the purposes required here.
 
-namespace KDirStat
+namespace QDirStat
 {
 #define KDirTreeViewMaxFillColor	16
 
@@ -891,7 +891,7 @@ namespace KDirStat
     QColor contrastingColor ( const QColor &desiredColor,
 			      const QColor &contrastColor );
 
-}	// namespace KDirStat
+}	// namespace QDirStat
 
 
 #endif // ifndef KDirTreeView_h

@@ -1,6 +1,6 @@
 /*
  *   File name:	kdirtreeiterators.h
- *   Summary:	Support classes for KDirStat - KDirTree iterator classes
+ *   Summary:	Support classes for QDirStat - KDirTree iterator classes
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -15,7 +15,7 @@
 #include "kdirtree.h"
 
 
-using namespace KDirStat;
+using namespace QDirStat;
 
 
 KFileInfoIterator::KFileInfoIterator( KFileInfo *	parent,

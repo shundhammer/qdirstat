@@ -1,6 +1,6 @@
 /*
  *   File name:	kdirtreeiterators.h
- *   Summary:	Support classes for KDirStat - KDirTree iterators
+ *   Summary:	Support classes for QDirStat - KDirTree iterators
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -18,7 +18,7 @@
 #include "kdirtree.h"
 
 
-namespace KDirStat
+namespace QDirStat
 {
     /**
      * Policies how to treat a "dot entry" for iterator objects.
@@ -376,7 +376,7 @@ namespace KDirStat
 	else 				return  1;
     }
 
-}	// namespace KDirStat
+}	// namespace QDirStat
 
 
 #endif // ifndef KDirTreeIterators_h

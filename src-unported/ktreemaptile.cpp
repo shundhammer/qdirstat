@@ -1,6 +1,6 @@
 /*
  *   File name:	ktreemaptile.cpp
- *   Summary:	High level classes for KDirStat
+ *   Summary:	High level classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -26,7 +26,7 @@
 #include "kdirtreeview.h"
 
 
-using namespace KDirStat;
+using namespace QDirStat;
 using std::max;
 using std::min;
 

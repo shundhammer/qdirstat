@@ -1,6 +1,6 @@
 /*
  *   File name:	ktreemaptile.h
- *   Summary:	High level classes for KDirStat
+ *   Summary:	High level classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -20,7 +20,7 @@
 #include "kdirtreeiterators.h"
 
 
-namespace KDirStat
+namespace QDirStat
 {
     class KFileInfo;
     class KTreemapView;
@@ -301,7 +301,7 @@ namespace KDirStat
 
     }; // class KTreemapTile
 
-}	// namespace KDirStat
+}	// namespace QDirStat
 
 
 

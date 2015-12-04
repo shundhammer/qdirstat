@@ -1,6 +1,6 @@
 /*
  *   File name:	kfileinfo.cpp
- *   Summary:	Support classes for KDirStat
+ *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -28,7 +28,7 @@
 #define FRAGMENT_SIZE	2048
 
 
-using namespace KDirStat;
+using namespace QDirStat;
 
 
 KFileInfo::KFileInfo( KDirTree   *	tree,
@@ -386,7 +386,7 @@ KFileInfo::locate( QString url, bool findDotEntries )
 
 
 KURL
-KDirStat::fixedUrl( const QString & dirtyUrl )
+QDirStat::fixedUrl( const QString & dirtyUrl )
 {
     KURL url = dirtyUrl;
 
@@ -428,7 +428,7 @@ KDirStat::fixedUrl( const QString & dirtyUrl )
 
 
 QString
-KDirStat::formatSize( KFileSize lSize )
+QDirStat::formatSize( KFileSize lSize )
 {
    QString	sizeString;
    double	size;

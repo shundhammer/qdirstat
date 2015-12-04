@@ -1,6 +1,6 @@
 /*
  *   File name: kdirstatsettings.cpp
- *   Summary:	Settings dialog for KDirStat
+ *   Summary:	Settings dialog for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -38,10 +38,10 @@
 #include "kexcluderules.h"
 
 
-using namespace KDirStat;
+using namespace QDirStat;
 
 
-KSettingsDialog::KSettingsDialog( KDirStatApp *mainWin )
+KSettingsDialog::KSettingsDialog( QDirStatApp *mainWin )
     : KDialogBase( Tabbed,					// dialogFace
 		   i18n( "Settings" ),				// caption
 		   Ok | Apply | Default | Cancel | Help,	// buttonMask
@@ -169,11 +169,11 @@ KSettingsPage::~KSettingsPage()
 
 KTreeColorsPage::KTreeColorsPage( KSettingsDialog *	dialog,
 				  QWidget *		parent,
-				  KDirStatApp *		mainWin )
+				  QDirStatApp *		mainWin )
     : KSettingsPage( dialog, parent )
     , _mainWin( mainWin )
     , _treeView( mainWin->treeView() )
-    , _maxButtons( KDirStatSettingsMaxColorButton )
+    , _maxButtons( QDirStatSettingsMaxColorButton )
 {
     // Outer layout box
 
@@ -284,7 +284,7 @@ KTreeColorsPage::enableColors( int maxColors )
 
 KCleanupPage::KCleanupPage( KSettingsDialog *	dialog,
 			    QWidget *		parent,
-			    KDirStatApp *	mainWin )
+			    QDirStatApp *	mainWin )
     : KSettingsPage( dialog, parent )
     , _mainWin( mainWin )
     , _currentCleanup( 0 )
@@ -527,7 +527,7 @@ KCleanupListBoxItem::updateTitle()
 
 
 KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
-						KDirStatApp *	mainWin )
+						QDirStatApp *	mainWin )
    : QWidget( parent )
    , _mainWin( mainWin )
 {
@@ -710,7 +710,7 @@ KCleanupPropertiesPage::fields() const
 
 KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
 					    QWidget *		parent,
-					    KDirStatApp *	mainWin )
+					    QDirStatApp *	mainWin )
     : KSettingsPage( dialog, parent )
     , _mainWin( mainWin )
     , _treeView( mainWin->treeView() )
@@ -955,7 +955,7 @@ KGeneralSettingsPage::deleteExcludeRule()
 
 KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
 					    QWidget *		parent,
-					    KDirStatApp *	mainWin )
+					    QDirStatApp *	mainWin )
     : KSettingsPage( dialog, parent )
     , _mainWin( mainWin )
 {

@@ -1,6 +1,6 @@
 /*
  *   File name: kdirtreecache.h
- *   Summary:	KDirStat cache reader / writer
+ *   Summary:	QDirStat cache reader / writer
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -29,7 +29,7 @@
 #define MAX_FIELDS_PER_LINE	32
 
 
-namespace KDirStat
+namespace QDirStat
 {
     class KCacheWriter
     {
@@ -196,7 +196,7 @@ namespace KDirStat
     protected:
 
 	/**
-	 * Check this cache's header (see if it is a KDirStat cache at all)
+	 * Check this cache's header (see if it is a QDirStat cache at all)
 	 **/
 	bool checkHeader();
 
@@ -247,7 +247,7 @@ namespace KDirStat
 	QString		_lastExcludedDirUrl;
     };
 
-}	// namespace KDirStat
+}	// namespace QDirStat
 
 
 #endif // ifndef KDirTreeCache_h

@@ -1,6 +1,6 @@
 /*
  *   File name:	kcleanupcollection.h
- *   Summary:	Support classes for KDirStat
+ *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -21,7 +21,7 @@
 class KActionCollection;
 
 
-namespace KDirStat
+namespace QDirStat
 {
     typedef QDict<KCleanup>		KCleanupDict;
     typedef QDictIterator<KCleanup>	KCleanupDictIterator;
@@ -38,7 +38,7 @@ namespace KDirStat
      * an assignment operator and various methods to directly access individual
      * cleanups.
      *
-     * @short KDirStat cleanup action collection
+     * @short QDirStat cleanup action collection
      **/
 
     class KCleanupCollection: public QObject
@@ -52,7 +52,7 @@ namespace KDirStat
 	 *
 	 * Most applications will want to pass KMainWindow::actionCollection()
 	 * for 'actionCollection' so the menus and toolbars can be created
-	 * using the XML UI description ('kdirstatui.rc' for KDirStat).
+	 * using the XML UI description ('kdirstatui.rc' for QDirStat).
 	 *
 	 * All @ref KCleanup actions ever added to this collection will get
 	 * this as their parent.
@@ -214,7 +214,7 @@ namespace KDirStat
 	KCleanupList		_cleanupList;
 	KCleanupDict		_cleanupDict;
     };
-}	// namespace KDirStat
+}	// namespace QDirStat
 
 
 #endif // ifndef KCleanupCollection_h

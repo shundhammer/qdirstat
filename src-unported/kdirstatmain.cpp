@@ -1,6 +1,6 @@
 /*
  *   File name:	kdirstatmain.cpp
- *   Summary:	Main program for KDirStat
+ *   Summary:	Main program for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
@@ -21,7 +21,7 @@
 
 
 static const char *description =
-	I18N_NOOP("KDirStat - Directory statistics.\n"
+	I18N_NOOP("QDirStat - Directory statistics.\n"
 		  "\n"
 		  "Shows where all your disk space has gone\n"
 		  "and helps you clean it up."
@@ -43,7 +43,7 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData( "kdirstat", "KDirStat",
+    KAboutData aboutData( "kdirstat", "QDirStat",
 			  VERSION, description, KAboutData::License_GPL,
 			  "(c) 1999-2008 Stefan Hundhammer", 0, 0,
 			  "Stefan.Hundhammer@gmx.de" );
@@ -84,11 +84,11 @@ int main(int argc, char *argv[])
     
     if ( app.isRestored() )
     {
-	RESTORE( KDirStatApp );
+	RESTORE( QDirStatApp );
     }
     else
     {
-	KDirStatApp *kdirstat = new KDirStatApp();
+	QDirStatApp *kdirstat = new QDirStatApp();
 	kdirstat->show();
 
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

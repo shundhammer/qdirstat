@@ -1,6 +1,6 @@
 /*
  *   File name:	kdirstatapp.h
- *   Summary:	The KDirStat application - menu bar, tool bar, ...
+ *   Summary:	The QDirStat application - menu bar, tool bar, ...
  *   License:   GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
@@ -9,8 +9,8 @@
  */
 
 
-#ifndef KDirStatApp_h
-#define KDirStatApp_h
+#ifndef QDirStatApp_h
+#define QDirStatApp_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -36,7 +36,7 @@ class KPacMan;
 class KRecentFilesAction;
 class KToggleAction;
 
-namespace KDirStat
+namespace QDirStat
 {
     class KCleanupCollection;
     class KDirTreeView;
@@ -47,14 +47,14 @@ namespace KDirStat
     class KTreemapTile;
 }
 
-using namespace KDirStat;
+using namespace QDirStat;
 
 
 /**
-  * The base class for KDirStat application windows. It sets up the main window
+  * The base class for QDirStat application windows. It sets up the main window
   * and reads the config file as well as providing a menubar, toolbar and
-  * statusbar. An instance of KDirStatView creates your center view, which is
-  * connected to the window's Doc object.  KDirStatApp reimplements the methods
+  * statusbar. An instance of QDirStatView creates your center view, which is
+  * connected to the window's Doc object.  QDirStatApp reimplements the methods
   * that KMainWindow provides for main window handling and supports full
   * session management as well as using KActions.
   *
@@ -67,22 +67,22 @@ using namespace KDirStat;
   *
   * @version KDevelop version 1.2 code generation
   **/
-class KDirStatApp : public KMainWindow
+class QDirStatApp : public KMainWindow
 {
     Q_OBJECT
 
 public:
 
     /**
-     * Construtor of KDirStatApp, calls all init functions to create the
+     * Construtor of QDirStatApp, calls all init functions to create the
      * application.
      **/
-    KDirStatApp( QWidget* parent=0, const char* name=0 );
+    QDirStatApp( QWidget* parent=0, const char* name=0 );
 
     /**
      * Destructor.
      **/
-    virtual ~KDirStatApp();
+    virtual ~QDirStatApp();
 
     /**
      * Open an URL specified by command line argument.
@@ -386,7 +386,7 @@ protected:
     QWidget *			_pacManDelimiter;
     QPopupMenu *		_treeViewContextMenu;
     QPopupMenu *		_treemapContextMenu;
-    KDirStat::KSettingsDialog *	_settingsDialog;
+    QDirStat::KSettingsDialog *	_settingsDialog;
     KFeedbackDialog *		_feedbackDialog;
     KActivityTracker *		_activityTracker;
 
@@ -425,4 +425,4 @@ protected:
 };
 
 
-#endif // KDirStatApp_h
+#endif // QDirStatApp_h

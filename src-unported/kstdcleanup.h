@@ -1,6 +1,6 @@
 /*
  *   File name:	kstdcleanup.h
- *   Summary:	Support classes for KDirStat
+ *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -19,7 +19,7 @@
 class KActionCollection;
 
 
-namespace KDirStat
+namespace QDirStat
 {
     /**
      * Predefined standard @ref KCleanup actions to be performed on
@@ -29,10 +29,10 @@ namespace KDirStat
      * only.
      * 
      * For details about what each individual method does, refer to the help
-     * file. Use the old (KDirStat 0.86) help file in case the current help
+     * file. Use the old (QDirStat 0.86) help file in case the current help
      * file isn't available yet.
      *
-     * @short KDirStat standard cleanup actions
+     * @short QDirStat standard cleanup actions
      **/
     
     class KStdCleanup
@@ -54,7 +54,7 @@ namespace KDirStat
 	~KStdCleanup()	{}
     };
 
-}	// namespace KDirStat
+}	// namespace QDirStat
 
 
 #endif // ifndef KStdCleanup_h

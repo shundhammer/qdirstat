@@ -1,6 +1,6 @@
 /*
  *   File name:	kcleanup.cpp
- *   Summary:	Support classes for KDirStat
+ *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -28,7 +28,7 @@
 #define VERBOSE_RUN_COMMAND	1
 #define SIMULATE_COMMAND	0
 
-using namespace KDirStat;
+using namespace QDirStat;
 
 
 KCleanup::KCleanup( QString		id,

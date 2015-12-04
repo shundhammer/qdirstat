@@ -1,6 +1,6 @@
 /*
  *   File name:	ktreemapview.h
- *   Summary:	High level classes for KDirStat
+ *   Summary:	High level classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -34,7 +34,7 @@
 class QMouseEvent;
 class KConfig;
 
-namespace KDirStat
+namespace QDirStat
 {
     class KTreemapTile;
     class KTreemapSelectionRect;
@@ -437,7 +437,7 @@ namespace KDirStat
 
     }; // class KTreemapSelectionRect
 
-}	// namespace KDirStat
+}	// namespace QDirStat
 
 
 #endif // ifndef KTreemapView_h

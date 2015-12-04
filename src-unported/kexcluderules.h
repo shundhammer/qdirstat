@@ -1,6 +1,6 @@
 /*
  *   File name: kexcluderules.h
- *   Summary:	Support classes for KDirStat
+ *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -20,7 +20,7 @@
 #include <qptrlist.h>
 
 
-namespace KDirStat
+namespace QDirStat
 {
     /**
      * One single exclude rule to check text (file names) against.
@@ -166,7 +166,7 @@ namespace KDirStat
 	QPtrList<KExcludeRule>    _rules;
     };
 
-}	// namespace KDirStat
+}	// namespace QDirStat
 
 
 #endif // ifndef KExcludeRules_h
