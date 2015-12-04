@@ -15,7 +15,6 @@
 #include <algorithm>
 
 #include <kapp.h>
-#include <klocale.h>
 #include <kglobal.h>
 #include <qimage.h>
 #include <qpainter.h>

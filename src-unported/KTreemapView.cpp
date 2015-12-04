@@ -17,7 +17,6 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include <kglobal.h>
-#include <klocale.h>
 
 #include "DirTree.h"
 #include "KTreeMapView.h"

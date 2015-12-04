@@ -11,7 +11,6 @@
 #   include <config.h>
 #endif
 
-#include <klocale.h>
 #include "Cleanup.h"
 #include "StdCleanup.h"
 

@@ -20,7 +20,6 @@
 #include <qpopupmenu.h>
 
 #include <kapp.h>
-#include <klocale.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kicontheme.h>

@@ -22,7 +22,6 @@
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
-#include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <krun.h>

@@ -17,7 +17,6 @@
 
 #include <stdio.h>
 #include <sys/errno.h>
-#include <klocale.h>
 #include <kapp.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>

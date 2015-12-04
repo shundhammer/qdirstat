@@ -19,7 +19,6 @@
 #include <kprocess.h>
 #include "Logger.h"
 #include <kmessagebox.h>
-#include <klocale.h>
 #include <kglobalsettings.h>
 
 #include "Cleanup.h"

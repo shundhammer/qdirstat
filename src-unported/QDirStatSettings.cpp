@@ -29,7 +29,6 @@
 #include <qmessagebox.h>
 
 #include <kcolorbutton.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 
 #include "DirTreeView.h"
