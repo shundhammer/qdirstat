@@ -13,7 +13,7 @@
 
 #include <ctype.h>
 #include <errno.h>
-#include <kdebug.h>
+#include "Logger.h"
 #include "kdirtreecache.h"
 #include "kdirtree.h"
 #include "kexcluderules.h"

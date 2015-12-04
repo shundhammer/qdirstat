@@ -11,7 +11,7 @@
 #   include <config.h>
 #endif
 
-#include <kdebug.h>
+#include "Logger.h"
 #include "kexcluderules.h"
 
 #define VERBOSE_EXCLUDE_MATCHES	1

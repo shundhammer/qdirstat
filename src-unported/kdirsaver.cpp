@@ -12,7 +12,7 @@
 #endif
 
 #include <unistd.h>
-#include <kdebug.h>
+#include "Logger.h"
 #include "kdirsaver.h"
 
 

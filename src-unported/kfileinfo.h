@@ -17,7 +17,7 @@
 
 #include <sys/types.h>
 #include <limits.h>
-#include <kdebug.h>
+#include "Logger.h"
 #include <kfileitem.h>
 
 #ifndef NOT_USED

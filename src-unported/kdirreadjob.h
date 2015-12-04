@@ -18,7 +18,7 @@
 #include <dirent.h>
 #include <qptrlist.h>
 #include <qtimer.h>
-#include <kdebug.h>
+#include "Logger.h"
 #include <kio/jobclasses.h>
 
 #ifndef NOT_USED

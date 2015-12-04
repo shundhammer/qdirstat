@@ -19,7 +19,7 @@
 #include <limits.h>
 #include <dirent.h>
 #include <stdlib.h>
-#include <kdebug.h>
+#include "Logger.h"
 #include "kdirinfo.h"
 #include "kdirreadjob.h"
 

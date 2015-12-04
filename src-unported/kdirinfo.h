@@ -20,7 +20,7 @@
 #include <limits.h>
 #endif
 
-#include <kdebug.h>
+#include "Logger.h"
 #include <kfileitem.h>
 #include "kfileinfo.h"
 

@@ -17,7 +17,7 @@
 #include <qpopupmenu.h>
 #include <qsplitter.h>
 
-#include <kdebug.h>
+#include "Logger.h"
 #include <kaccel.h>
 #include <kaction.h>
 #include <kapp.h>

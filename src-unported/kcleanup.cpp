@@ -17,7 +17,7 @@
 
 #include <kapp.h>
 #include <kprocess.h>
-#include <kdebug.h>
+#include "Logger.h"
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kglobalsettings.h>

@@ -18,7 +18,7 @@
 #include <qdict.h>
 #include <qintdict.h>
 #include <kaction.h>
-#include <kdebug.h>
+#include "Logger.h"
 #include "kdirtree.h"
 
 
