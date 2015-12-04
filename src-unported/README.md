@@ -91,13 +91,16 @@ for a while.
 - Filename cleanup. Files should be named like the class they contain, not all
   lowercase: ExcludeRules.cpp instead of kexcluderules.cpp.
 
-- Get rid of the "Updated" header in all source files. Git keeps track of that
-  stuff.
-
 - Move the file from src-unported/ to src/ when it gets ported. The state of
   this directory should reflect the things already done. The goal is to get
   the src-unported/ directory empty.
 
 - When only single functions get ported, remove the original from its
   src-unported/ counterpart. This will hopefully avoid duplicate work.
+
+
+### Done
+
+- Get rid of the "Updated" header in all source files. Git keeps track of that
+  stuff.
 
