@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 	    // Process command line arguments as URLs or paths to scan
 
 	    KURL url = fixedUrl( args->arg( 0 ) );
-	    // kdDebug() << "Opening " << url.url() << endl;
+	    // logDebug() << "Opening " << url.url() << endl;
 	    kdirstat->openURL( url );
 	}
 	else
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 	args->clear();
     }
 
-    // kdDebug() << "Entering main loop" << endl;
+    // logDebug() << "Entering main loop" << endl;
 
     return app.exec();
 }

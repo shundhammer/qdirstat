@@ -83,7 +83,7 @@ DirReadJob::finished()
     if ( _queue )
 	_queue->jobFinishedNotify( this );
     else
-	kdError() << "No job queue for " << _dir << endl;
+	logError() << "No job queue for " << _dir << endl;
 }
 
 
@@ -162,7 +162,7 @@ LocalDirReadJob::startReading()
 			    }
 			    else	// The subdirectory we just found is a mount point.
 			    {
-				// kdDebug() << "Found mount point " << subDir << endl;
+				// logDebug() << "Found mount point " << subDir << endl;
 				subDir->setMountPoint();
 
 				if ( _tree->crossFileSystems() )
@@ -193,7 +193,7 @@ LocalDirReadJob::startReading()
 
 			    if ( firstDirInCache == dirName )	// Does this cache file match this directory?
 			    {
-				kdDebug() << "Using cache file " << fullName << " for " << dirName << endl;
+				logDebug() << "Using cache file " << fullName << " for " << dirName << endl;
 
 				cacheReadJob->reader()->rewind();	// Read offset was moved by firstDir()
 				_tree->addJob( cacheReadJob );	// Job queue will assume ownership of cacheReadJob
@@ -214,7 +214,7 @@ LocalDirReadJob::startReading()
 			    }
 			    else
 			    {
-				kdDebug() << "NOT using cache file " << fullName
+				logDebug() << "NOT using cache file " << fullName
 					  << " with dir " << firstDirInCache
 					  << " for " << dirName
 					  << endl;
@@ -232,7 +232,7 @@ LocalDirReadJob::startReading()
 		}
 		else			// lstat() error
 		{
-		    kdWarning() << "lstat(" << fullName << ") failed: " << strerror( errno ) << endl;
+		    logWarning() << "lstat(" << fullName << ") failed: " << strerror( errno ) << endl;
 
 		    /*
 		     * Not much we can do when lstat() didn't work; let's at
@@ -247,7 +247,7 @@ LocalDirReadJob::startReading()
 	}
 
 	closedir( _diskDir );
-	// kdDebug() << "Finished reading " << _dir << endl;
+	// logDebug() << "Finished reading " << _dir << endl;
 	_dir->setReadState( KDirFinished );
 	_tree->sendFinalizeLocal( _dir );
 	_dir->finalizeLocal();
@@ -257,7 +257,7 @@ LocalDirReadJob::startReading()
 	_dir->setReadState( KDirError );
 	_tree->sendFinalizeLocal( _dir );
 	_dir->finalizeLocal();
-	// kdWarning() << k_funcinfo << "opendir(" << dirName << ") failed" << endl;
+	// logWarning() << k_funcinfo << "opendir(" << dirName << ") failed" << endl;
 	// opendir() doesn't set 'errno' according to POSIX  :-(
     }
 
@@ -361,13 +361,13 @@ CacheReadJob::read()
     if ( ! _reader )
 	finished();
 
-    // kdDebug() << "Reading 1000 cache lines" << endl;
+    // logDebug() << "Reading 1000 cache lines" << endl;
     _reader->read( 1000 );
     _tree->sendProgressInfo( "" );
 
     if ( _reader->eof() || ! _reader->ok() )
     {
-	// kdDebug() << "Cache reading finished - ok: " << _reader->ok() << endl;
+	// logDebug() << "Cache reading finished - ok: " << _reader->ok() << endl;
 	finished();
     }
 }
@@ -402,7 +402,7 @@ DirReadJobQueue::enqueue( DirReadJob * job )
 
 	if ( ! _timer.isActive() )
 	{
-	    // kdDebug() << "First job queued" << endl;
+	    // logDebug() << "First job queued" << endl;
 	    emit startingReading();
 	    _timer.start( 0 );
 	}
@@ -466,7 +466,7 @@ DirReadJobQueue::killAll( DirInfo * subtree )
     {
 	if ( job->dir() && job->dir()->isInSubtree( subtree ) )
 	{
-	    // kdDebug() << "Killing read job " << job->dir() << endl;
+	    // logDebug() << "Killing read job " << job->dir() << endl;
 	    
 	    _queue.remove();	// remove current() and move current() to next
 	    delete job;
@@ -500,7 +500,7 @@ DirReadJobQueue::jobFinishedNotify( DirReadJob *job )
     if ( _queue.isEmpty() )	// No new job available - we're done.
     {
 	_timer.stop();
-	// kdDebug() << "No more jobs - finishing" << endl;
+	// logDebug() << "No more jobs - finishing" << endl;
 	emit finished();
     }
 }

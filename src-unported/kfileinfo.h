@@ -165,7 +165,7 @@ namespace QDirStat
 	 * Notice: You can simply use the @ref kdbgstream operator<< to
 	 * output exactly this:
 	 *
-	 * kdDebug() << "Found fileInfo " << info << endl;
+	 * logDebug() << "Found fileInfo " << info << endl;
 	 **/
 	QString			debugUrl()		const;
 
@@ -619,9 +619,9 @@ namespace QDirStat
      * Format a file / subtree size human readable, i.e. in "GB" / "MB"
      * etc. rather than huge numbers of digits.
      *
-     * Note: For kdDebug() etc., operator<< is overwritten to do exactly that:
+     * Note: For logDebug() etc., operator<< is overwritten to do exactly that:
      *
-     *	   kdDebug() << "Size: " << x->totalSize() << endl;
+     *	   logDebug() << "Size: " << x->totalSize() << endl;
      **/
     QString formatSize ( KFileSize lSize );
 

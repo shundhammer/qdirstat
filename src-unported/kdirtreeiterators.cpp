@@ -74,7 +74,7 @@ void FileInfoIterator::next()
 	}
 	else
 	{
-	    // kdDebug() << k_funcinfo << " direct child " << _current << endl;
+	    // logDebug() << k_funcinfo << " direct child " << _current << endl;
 	}
     }
     else	// _directChildrenProcessed
@@ -92,7 +92,7 @@ void FileInfoIterator::next()
 	    }
 	    else
 	    {
-		// kdDebug() << k_funcinfo << " dot entry " << _current << endl;
+		// logDebug() << k_funcinfo << " dot entry " << _current << endl;
 	    }
 	}
 	else	// Dot entry already processed or processing it not desired
@@ -113,7 +113,7 @@ void FileInfoIterator::next()
 		    }
 		    else
 		    {
-			// kdDebug() << k_funcinfo << " dot entry child " << _current << endl;
+			// logDebug() << k_funcinfo << " dot entry child " << _current << endl;
 		    }
 		}
 		else	// _policy != KDotEntryTransparent

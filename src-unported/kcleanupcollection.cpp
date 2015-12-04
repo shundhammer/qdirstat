@@ -68,7 +68,7 @@ CleanupCollection::operator= ( const CleanupCollection &src )
 	 * new ones with the Cleanup copy constructor.
 	 **/
 	
-	// kdDebug() << k_funcinfo << "Sizes different - deep copy" << endl;
+	// logDebug() << k_funcinfo << "Sizes different - deep copy" << endl;
 	
 	deepCopy( src );
     }
@@ -114,7 +114,7 @@ CleanupCollection::operator= ( const CleanupCollection &src )
 	 * thus maintaining consistency with the user interface is guaranteed.
 	 **/
 	
-	// kdDebug() << k_funcinfo << "Same sizes - individual assignment" << endl;
+	// logDebug() << k_funcinfo << "Same sizes - individual assignment" << endl;
 	
 	CleanupList srcList = src.cleanupList();
 	CleanupListIterator srcIt( srcList );
@@ -122,7 +122,7 @@ CleanupCollection::operator= ( const CleanupCollection &src )
 
 	while ( *srcIt && *destIt )
 	{
-	    // kdDebug() << "Assigning " << *srcIt << endl;
+	    // logDebug() << "Assigning " << *srcIt << endl;
 	    **destIt = **srcIt;
 	    ++srcIt;
 	    ++destIt;
@@ -153,7 +153,7 @@ CleanupCollection::deepCopy( const CleanupCollection &src )
 
     while ( *it )
     {
-	// kdDebug() << k_funcinfo << "Creating new " << *it << endl;
+	// logDebug() << k_funcinfo << "Creating new " << *it << endl;
 	
 	add( new Cleanup( **it ) );
 	++it;

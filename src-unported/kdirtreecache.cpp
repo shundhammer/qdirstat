@@ -48,7 +48,7 @@ CacheWriter::writeCache( const QString & fileName, DirTree *tree )
 
     if ( cache == 0 )
     {
-	kdError() << "Can't open " << fileName << ": " << strerror( errno ) << endl;
+	logError() << "Can't open " << fileName << ": " << strerror( errno ) << endl;
 	return false;
     }
 
@@ -208,13 +208,13 @@ CacheReader::KCacheReader( const QString &	fileName,
 
     if ( _cache == 0 )
     {
-	kdError() << "Can't open " << fileName << ": " << strerror( errno ) << endl;
+	logError() << "Can't open " << fileName << ": " << strerror( errno ) << endl;
 	_ok = false;
 	emit error();
 	return;
     }
 
-    // kdDebug() << "Opening " << fileName << " OK" << endl;
+    // logDebug() << "Opening " << fileName << " OK" << endl;
     checkHeader();
 }
 
@@ -224,7 +224,7 @@ CacheReader::~KCacheReader()
     if ( _cache )
 	gzclose( _cache );
 
-    // kdDebug() << "Cache reading finished" << endl;
+    // logDebug() << "Cache reading finished" << endl;
 
     if ( _toplevel )
 	_toplevel->finalizeAll();
@@ -367,7 +367,7 @@ CacheReader::addItem()
     {
 	if ( path.startsWith( _lastExcludedDirUrl ) )
 	{
-	    // kdDebug() << "Excluding " << path << "/" << name << endl;
+	    // logDebug() << "Excluding " << path << "/" << name << endl;
 	    return;
 	}
     }
@@ -393,7 +393,7 @@ CacheReader::addItem()
 	if ( ! parent )	// Still nothing?
 	{
 #if 0
-	    kdError() << _fileName << ":" << _lineNo << ": "
+	    logError() << _fileName << ":" << _lineNo << ": "
 		      << "Could not locate parent " << path << endl;
 #endif
 
@@ -403,7 +403,7 @@ CacheReader::addItem()
 
     if ( strcasecmp( type, "D" ) == 0 )
     {
-	// kdDebug() << "Creating DirInfo  for " << name << endl;
+	// logDebug() << "Creating DirInfo  for " << name << endl;
 	DirInfo * dir = new KDirInfo( _tree, parent, name,
 				       mode, size, mtime );
 	dir->setReadState( KDirCached );
@@ -427,7 +427,7 @@ CacheReader::addItem()
 	{
 	    if ( ExcludeRules::excludeRules()->match( dir->url() ) )
 	    {
-		// kdDebug() << "Excluding " << name << endl;
+		// logDebug() << "Excluding " << name << endl;
 		dir->setExcluded();
 		dir->setReadState( KDirOnRequestOnly );
 		_tree->sendFinalizeLocal( dir );
@@ -443,7 +443,7 @@ CacheReader::addItem()
     {
 	if ( parent )
 	{
-	    // kdDebug() << "Creating FileInfo for " << parent->debugUrl() << "/" << name << endl;
+	    // logDebug() << "Creating FileInfo for " << parent->debugUrl() << "/" << name << endl;
 
 	    FileInfo * item = new KFileInfo( _tree, parent, name,
 					      mode, size, mtime,
@@ -453,7 +453,7 @@ CacheReader::addItem()
 	}
 	else
 	{
-	    kdError() << _fileName << ":" << _lineNo << ": "
+	    logError() << _fileName << ":" << _lineNo << ": "
 		      << "No parent for item " << name << endl;
 	}
     }
@@ -501,7 +501,7 @@ CacheReader::checkHeader()
     if ( ! _ok || ! readLine() )
 	return false;
 
-    // kdDebug() << "Checking cache file header" << endl;
+    // logDebug() << "Checking cache file header" << endl;
     QString line( _line );
     splitLine();
 
@@ -516,7 +516,7 @@ CacheReader::checkHeader()
 	     strcmp( field( 3 ), "file]"     ) != 0 )
 	{
 	    _ok = false;
-	    kdError() << _fileName << ":" << _lineNo
+	    logError() << _fileName << ":" << _lineNo
 		      << ": Unknown file format" << endl;
 	}
     }
@@ -529,11 +529,11 @@ CacheReader::checkHeader()
 	// for future use
 
 	if ( ! _ok )
-	    kdError() << _fileName << ":" << _lineNo
+	    logError() << _fileName << ":" << _lineNo
 		      << ": Incompatible cache file version" << endl;
     }
 
-    // kdDebug() << "Cache file header check OK: " << _ok << endl;
+    // logDebug() << "Cache file header check OK: " << _ok << endl;
 
     if ( ! _ok )
 	emit error();
@@ -562,7 +562,7 @@ CacheReader::readLine()
 	    if ( ! gzeof( _cache ) )
 	    {
 		_ok = false;
-		kdError() << _fileName << ":" << _lineNo << ": Read error" << endl;
+		logError() << _fileName << ":" << _lineNo << ": Read error" << endl;
 		emit error();
 	    }
 
@@ -572,7 +572,7 @@ CacheReader::readLine()
 	_line = skipWhiteSpace( _buffer );
 	killTrailingWhiteSpace( _line );
 
-	// kdDebug() << "line[ " << _lineNo << "]: \"" << _line<< "\"" << endl;
+	// logDebug() << "line[ " << _lineNo << "]: \"" << _line<< "\"" << endl;
 
     } while ( ! gzeof( _cache ) &&
 	      ( *_line == 0   ||	// empty line

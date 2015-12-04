@@ -135,7 +135,7 @@ namespace QDirStat
 	 *
 	 *	while ( *it )
 	 *	{
-	 *	    kdDebug() << "Found cleanup " << *it << endl;
+	 *	    logDebug() << "Found cleanup " << *it << endl;
 	 *	    ++it;
 	 *	}
 	 **/

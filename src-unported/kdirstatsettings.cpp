@@ -132,7 +132,7 @@ SettingsDialog::slotHelp()
     else if ( activePageIndex() == _treemapPageIndex	)	helpTopic = "treemap_settings";
     else if ( activePageIndex() == _generalSettingsPageIndex)	helpTopic = "general_settings";
 
-    // kdDebug() << "Help topic: " << helpTopic << endl;
+    // logDebug() << "Help topic: " << helpTopic << endl;
     kapp->invokeHelp( helpTopic );
 }
 
@@ -820,7 +820,7 @@ GeneralSettingsPage::apply()
     {
 	QString ruleText = item->text(0);
 	excludeRulesStringList.append( ruleText );
-	// kdDebug() << "Adding exclude rule " << ruleText << endl;
+	// logDebug() << "Adding exclude rule " << ruleText << endl;
 	ExcludeRules::excludeRules()->add( new ExcludeRule( QRegExp( ruleText ) ) );
 	item = item->nextSibling();
     }
@@ -959,7 +959,7 @@ KTreemapPage::KTreemapPage( SettingsDialog *	dialog,
     : SettingsPage( dialog, parent )
     , _mainWin( mainWin )
 {
-    // kdDebug() << k_funcinfo << endl;
+    // logDebug() << k_funcinfo << endl;
 
     QVBoxLayout * layout = new QVBoxLayout( this, 0, 0 ); // parent, border, spacing
 

@@ -37,7 +37,7 @@ KTreemapView::KTreemapView( DirTree * tree, QWidget * parent, const QSize & init
     , _selectedTile( 0 )
     , _selectionRect( 0 )
 {
-    // kdDebug() << k_funcinfo << endl;
+    // logDebug() << k_funcinfo << endl;
 
     readConfig();
 
@@ -176,7 +176,7 @@ KTreemapView::tileAt( QPoint pos )
 void
 KTreemapView::contentsMousePressEvent( QMouseEvent * event )
 {
-    // kdDebug() << k_funcinfo << endl;
+    // logDebug() << k_funcinfo << endl;
 
     KTreemapTile * tile = tileAt( event->pos() );
 
@@ -245,7 +245,7 @@ KTreemapView::contentsMousePressEvent( QMouseEvent * event )
 void
 KTreemapView::contentsMouseDoubleClickEvent( QMouseEvent * event )
 {
-    // kdDebug() << k_funcinfo << endl;
+    // logDebug() << k_funcinfo << endl;
 
     KTreemapTile * tile = tileAt( event->pos() );
 
@@ -384,7 +384,7 @@ KTreemapView::rebuildTreemap()
 
     if ( ! _savedRootUrl.isEmpty() )
     {
-	// kdDebug() << "Restoring old treemap with root " << _savedRootUrl << endl;
+	// logDebug() << "Restoring old treemap with root " << _savedRootUrl << endl;
 
 	root = _tree->locate( _savedRootUrl, true );	// node, findDotEntries
     }
@@ -401,7 +401,7 @@ void
 KTreemapView::rebuildTreemap( FileInfo *	newRoot,
 			      const QSize &	newSz )
 {
-    // kdDebug() << k_funcinfo << endl;
+    // logDebug() << k_funcinfo << endl;
 
     QSize newSize = newSz;
 
@@ -449,7 +449,7 @@ KTreemapView::rebuildTreemap( FileInfo *	newRoot,
     }
     else
     {
-	// kdDebug() << "Too small - suppressing treemap contents" << endl;
+	// logDebug() << "Too small - suppressing treemap contents" << endl;
     }
 
     emit treemapChanged();
@@ -507,20 +507,20 @@ KTreemapView::resizeEvent( QResizeEvent * event )
 
 	if ( tooSmall && _rootTile )
 	{
-	    // kdDebug() << "Suppressing treemap contents" << endl;
+	    // logDebug() << "Suppressing treemap contents" << endl;
 	    rebuildTreemap( _rootTile->orig() );
 	}
 	else if ( ! tooSmall && ! _rootTile )
 	{
 	    if ( _tree->root() )
 	    {
-		// kdDebug() << "Redisplaying suppressed treemap contents" << endl;
+		// logDebug() << "Redisplaying suppressed treemap contents" << endl;
 		rebuildTreemap( _tree->root() );
 	    }
 	}
 	else if ( _rootTile )
 	{
-	    // kdDebug() << "Auto-resizing treemap" << endl;
+	    // logDebug() << "Auto-resizing treemap" << endl;
 	    rebuildTreemap( _rootTile->orig() );
 	}
     }
@@ -530,7 +530,7 @@ KTreemapView::resizeEvent( QResizeEvent * event )
 void
 KTreemapView::selectTile( KTreemapTile * tile )
 {
-    // kdDebug() << k_funcinfo << endl;
+    // logDebug() << k_funcinfo << endl;
 
     KTreemapTile * oldSelection = _selectedTile;
     _selectedTile = tile;

@@ -57,7 +57,7 @@ namespace QDirStat
      *
      *    while ( *it )
      *    {
-     *       kdDebug() << *it << ":\t" << (*it)->totalSize() << endl;
+     *       logDebug() << *it << ":\t" << (*it)->totalSize() << endl;
      *       ++it;
      *    }
      *

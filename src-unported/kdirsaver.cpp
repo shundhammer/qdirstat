@@ -36,7 +36,7 @@ DirSaver::KDirSaver( const KURL & url )
     }
     else
     {
-	kdError() << k_funcinfo << "Can't change dir to remote location " << url.url() << endl;
+	logError() << k_funcinfo << "Can't change dir to remote location " << url.url() << endl;
     }
 }
 

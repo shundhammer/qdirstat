@@ -96,16 +96,16 @@ DirTree::clear( bool sendSignals )
 void
 DirTree::startReading( const KURL & url )
 {
-    // kdDebug() << k_funcinfo << " " << url.url() << endl;
+    // logDebug() << k_funcinfo << " " << url.url() << endl;
 
 #if 0
-    kdDebug() << "url: "		<< url.url()		<< endl;
-    kdDebug() << "path: "		<< url.path()		<< endl;
-    kdDebug() << "filename: "		<< url.filename() 	<< endl;
-    kdDebug() << "protocol: "		<< url.protocol() 	<< endl;
-    kdDebug() << "isValid: "		<< url.isValid() 	<< endl;
-    kdDebug() << "isMalformed: "	<< url.isMalformed() 	<< endl;
-    kdDebug() << "isLocalFile: "	<< url.isLocalFile() 	<< endl;
+    logDebug() << "url: "		<< url.url()		<< endl;
+    logDebug() << "path: "		<< url.path()		<< endl;
+    logDebug() << "filename: "		<< url.filename() 	<< endl;
+    logDebug() << "protocol: "		<< url.protocol() 	<< endl;
+    logDebug() << "isValid: "		<< url.isValid() 	<< endl;
+    logDebug() << "isMalformed: "	<< url.isMalformed() 	<< endl;
+    logDebug() << "isLocalFile: "	<< url.isLocalFile() 	<< endl;
 #endif
 
     _isBusy = true;
@@ -134,7 +134,7 @@ DirTree::startReading( const KURL & url )
     }
     else	// stat() failed
     {
-	// kdWarning() << "stat(" << url.url() << ") failed" << endl;
+	// logWarning() << "stat(" << url.url() << ") failed" << endl;
 	_isBusy = false;
 	emit finished();
 	emit finalizeLocal( 0 );
@@ -175,7 +175,7 @@ DirTree::refresh( FileInfo *subtree )
 
 	emit deletingChild( subtree );
 
-	// kdDebug() << "Deleting subtree " << subtree << endl;
+	// logDebug() << "Deleting subtree " << subtree << endl;
 
 	/**
 	 * This may sound stupid, but the parent must be told to unlink its
@@ -197,7 +197,7 @@ DirTree::refresh( FileInfo *subtree )
 
 	subtree = LocalDirReadJob::stat( url, this, parent );
 
-	// kdDebug() << "New subtree: " << subtree << endl;
+	// logDebug() << "New subtree: " << subtree << endl;
 
 	if ( subtree )
 	{
@@ -280,7 +280,7 @@ DirTree::childDeletedNotify()
 void
 DirTree::deleteSubtree( FileInfo *subtree )
 {
-    // kdDebug() << "Deleting subtree " << subtree << endl;
+    // logDebug() << "Deleting subtree " << subtree << endl;
     DirInfo *parent = subtree->parent();
 
     if ( parent )
@@ -305,7 +305,7 @@ DirTree::deleteSubtree( FileInfo *subtree )
 	    {
 		if ( parent->parent()->isFinished() )
 		{
-		    // kdDebug() << "Removing empty dot entry " << parent << endl;
+		    // logDebug() << "Removing empty dot entry " << parent << endl;
 
 		    deletingChildNotify( parent );
 		    parent->parent()->setDotEntry( 0 );
@@ -315,7 +315,7 @@ DirTree::deleteSubtree( FileInfo *subtree )
 	    }
 	    else	// no parent - this should never happen (?)
 	    {
-		kdError() << "Internal error: Killing dot entry without parent " << parent << endl;
+		logError() << "Internal error: Killing dot entry without parent " << parent << endl;
 
 		// Better leave that dot entry alone - we shouldn't have come
 		// here in the first place. Who knows what will happen if this
@@ -389,9 +389,9 @@ DirTree::selectItem( FileInfo *newSelection )
 
 #if 0
     if ( newSelection )
-	kdDebug() << k_funcinfo << " selecting " << newSelection << endl;
+	logDebug() << k_funcinfo << " selecting " << newSelection << endl;
     else
-	kdDebug() << k_funcinfo << " selecting nothing" << endl;
+	logDebug() << k_funcinfo << " selecting nothing" << endl;
 #endif
 
     _selection = newSelection;

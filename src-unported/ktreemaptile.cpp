@@ -92,7 +92,7 @@ KTreemapTile::init()
 
     show();	// QCanvasItems are invisible by default!
 
-    // kdDebug() << "Creating treemap tile for " << _orig
+    // logDebug() << "Creating treemap tile for " << _orig
     //           << " size " << formatSize( _orig->totalSize() ) << endl;
 }
 
@@ -172,7 +172,7 @@ KTreemapTile::createSquarifiedChildren( const QRect & rect )
 {
     if ( _orig->totalSize() == 0 )
     {
-	kdError() << k_funcinfo << "Zero totalSize()" << endl;
+	logError() << k_funcinfo << "Zero totalSize()" << endl;
 	return;
     }
 
@@ -203,14 +203,14 @@ KTreemapTile::squarify( const QRect & 			rect,
 			double				scale,
 			FileInfoSortedBySizeIterator & it   )
 {
-    // kdDebug() << "squarify() " << _orig << " " << rect << endl;
+    // logDebug() << "squarify() " << _orig << " " << rect << endl;
 
     FileInfoList row;
     int length = max( rect.width(), rect.height() );
 
     if ( length == 0 )	// Sanity check
     {
-	kdWarning() << k_funcinfo << "Zero length" << endl;
+	logWarning() << k_funcinfo << "Zero length" << endl;
 
 	if ( *it )	// Prevent endless loop in case of error:
 	    ++it;	// Advance iterator.
@@ -249,13 +249,13 @@ KTreemapTile::squarify( const QRect & 			rect,
 
 	if ( improvingAspectRatio )
 	{
-	    // kdDebug() << "Adding " << *it << " size " << (*it)->totalSize() << endl;
+	    // logDebug() << "Adding " << *it << " size " << (*it)->totalSize() << endl;
 	    row.append( *it );
 	    ++it;
 	}
 	else
 	{
-	    // kdDebug() << "Getting worse after adding " << *it << " size " << (*it)->totalSize() << endl;
+	    // logDebug() << "Getting worse after adding " << *it << " size " << (*it)->totalSize() << endl;
 	}
     }
 
@@ -345,7 +345,7 @@ KTreemapTile::layoutRow( const QRect &		rect,
     else
 	newRect = QRect( rect.x() + secondary, rect.y(), rect.width() - secondary, rect.height() );
 
-    // kdDebug() << "Left over:" << " " << newRect << " " << _orig << endl;
+    // logDebug() << "Left over:" << " " << newRect << " " << _orig << endl;
 
     return newRect;
 }
@@ -354,7 +354,7 @@ KTreemapTile::layoutRow( const QRect &		rect,
 void
 KTreemapTile::drawShape( QPainter & painter )
 {
-    // kdDebug() << "drawShape() " << _orig << endl;
+    // logDebug() << "drawShape() " << _orig << endl;
 
     QSize size = rect().size();
 
@@ -418,7 +418,7 @@ KTreemapTile::renderCushion()
     if ( rect.width() < 1 || rect.height() < 1 )
 	return QPixmap();
 
-    // kdDebug() << k_funcinfo << endl;
+    // logDebug() << k_funcinfo << endl;
 
     double 	nx;
     double 	ny;

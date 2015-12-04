@@ -398,11 +398,11 @@ void QDirStatApp::readMainWinConfig()
     {
 	QString ruleText = *it;
 	ExcludeRules::excludeRules()->add( new ExcludeRule( QRegExp( ruleText ) ) );
-	kdDebug() << "Adding exclude rule: " << ruleText << endl;
+	logDebug() << "Adding exclude rule: " << ruleText << endl;
     }
 
     if ( excludeRules.size() == 0 )
-	kdDebug() << "No exclude rules defined" << endl;
+	logDebug() << "No exclude rules defined" << endl;
 }
 
 
@@ -881,7 +881,7 @@ QDirStatApp::createTreemapView()
     if ( _treemapView )
 	delete _treemapView;
 
-    // kdDebug() << "Creating KTreemapView" << endl;
+    // logDebug() << "Creating KTreemapView" << endl;
     _treemapView = new KTreemapView( _treeView->tree(), _splitter,
 				     QSize( _splitter->width(), _treemapViewHeight ) );
     CHECK_PTR( _treemapView );
@@ -911,7 +911,7 @@ QDirStatApp::deleteTreemapView()
 {
     if ( _treemapView )
     {
-	// kdDebug() << "Deleting KTreemapView" << endl;
+	// logDebug() << "Deleting KTreemapView" << endl;
 	_treemapViewHeight = _treemapView->height();
 
 	delete _treemapView;
