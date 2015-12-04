@@ -2,8 +2,8 @@
  *   File name:	kdirtreecache.cpp
  *   Summary:	QDirStat cache reader / writer
  *   License:   GPL V2 - See file LICENSE for details.
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 

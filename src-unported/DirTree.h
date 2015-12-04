@@ -2,8 +2,8 @@
  *   File name: kdirtree.h
  *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
