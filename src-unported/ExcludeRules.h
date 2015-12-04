@@ -1,5 +1,5 @@
 /*
- *   File name: kexcluderules.h
+ *   File name: ExcludeRules.h
  *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *

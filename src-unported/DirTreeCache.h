@@ -1,5 +1,5 @@
 /*
- *   File name: kdirtreecache.h
+ *   File name: DirTreeCache.h
  *   Summary:	QDirStat cache reader / writer
  *   License:   GPL V2 - See file LICENSE for details.
  *

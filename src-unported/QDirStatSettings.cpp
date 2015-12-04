@@ -1,5 +1,5 @@
 /*
- *   File name: kdirstatsettings.cpp
+ *   File name: QDirStatSettings.cpp
  *   Summary:	Settings dialog for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *

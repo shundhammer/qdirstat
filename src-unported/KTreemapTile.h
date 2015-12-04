@@ -1,5 +1,5 @@
 /*
- *   File name:	ktreemaptile.h
+ *   File name:	KTreemapTile.h
  *   Summary:	High level classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *

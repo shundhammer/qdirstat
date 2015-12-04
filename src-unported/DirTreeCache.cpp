@@ -1,5 +1,5 @@
 /*
- *   File name:	kdirtreecache.cpp
+ *   File name:	DirTreeCache.cpp
  *   Summary:	QDirStat cache reader / writer
  *   License:   GPL V2 - See file LICENSE for details.
  *

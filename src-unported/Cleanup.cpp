@@ -1,5 +1,5 @@
 /*
- *   File name:	kcleanup.cpp
+ *   File name:	Cleanup.cpp
  *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *

@@ -1,5 +1,5 @@
 /*
- *   File name:	kdirstatapp.cpp
+ *   File name:	QDirStatApp.cpp
  *   Summary:	The QDirStat application - menu bar, tool bar, ...
  *   License:   GPL V2 - See file LICENSE for details.
  *

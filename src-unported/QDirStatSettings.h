@@ -1,5 +1,5 @@
 /*
- *   File name:	kdirstatsettings.h
+ *   File name:	QDirStatSettings.h
  *   Summary:	Settings dialog for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *

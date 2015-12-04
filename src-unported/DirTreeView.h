@@ -1,5 +1,5 @@
 /*
- *   File name:	kdirtreeview.h
+ *   File name:	DirTreeView.h
  *   Summary:	High level classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *

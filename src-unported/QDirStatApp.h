@@ -1,5 +1,5 @@
 /*
- *   File name:	kdirstatapp.h
+ *   File name:	QDirStatApp.h
  *   Summary:	The QDirStat application - menu bar, tool bar, ...
  *   License:   GPL V2 - See file LICENSE for details.
  *

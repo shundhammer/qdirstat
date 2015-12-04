@@ -1,5 +1,5 @@
 /*
- *   File name:	kdirsaver.h
+ *   File name:	DirSaver.h
  *   Summary:	Utility object to save current working directory
  *   License:   GPL V2 - See file LICENSE for details.
  *

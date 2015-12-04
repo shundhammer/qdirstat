@@ -1,5 +1,5 @@
 /*
- *   File name:	kdirreadjob.cpp
+ *   File name:	DirReadJob.cpp
  *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *

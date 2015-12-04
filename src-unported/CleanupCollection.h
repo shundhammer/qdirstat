@@ -1,5 +1,5 @@
 /*
- *   File name:	kcleanupcollection.h
+ *   File name:	CleanupCollection.h
  *   Summary:	Support classes for QDirStat
  *   License:   GPL V2 - See file LICENSE for details.
  *
