@@ -7,10 +7,6 @@
  */
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include <kapp.h>
 #include <kconfig.h>
 #include "DirTree.h"

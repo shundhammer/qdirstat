@@ -7,10 +7,6 @@
  */
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include "Cleanup.h"
 #include "StdCleanup.h"
 #include "CleanupCollection.h"

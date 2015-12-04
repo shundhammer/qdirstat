@@ -11,10 +11,6 @@
 #define CleanupCollection_h
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include "Cleanup.h"
 
 // Forward declarations

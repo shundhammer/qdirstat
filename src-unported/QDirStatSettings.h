@@ -11,10 +11,6 @@
 #define QDirStatSettings_h
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include <qlistbox.h>
 #include <kdialogbase.h>
 #include "Cleanup.h"

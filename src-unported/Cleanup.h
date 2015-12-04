@@ -11,10 +11,6 @@
 #define Cleanup_h
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include <qdict.h>
 #include <qintdict.h>
 #include <kaction.h>

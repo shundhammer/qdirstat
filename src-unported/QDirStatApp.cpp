@@ -7,10 +7,6 @@
  */
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include <qclipboard.h>
 #include <qpopupmenu.h>
 #include <qsplitter.h>

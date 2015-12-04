@@ -11,10 +11,6 @@
 #define DirReadJob_h
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include <dirent.h>
 #include <qptrlist.h>
 #include <qtimer.h>

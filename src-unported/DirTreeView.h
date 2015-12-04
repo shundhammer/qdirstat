@@ -11,10 +11,6 @@
 #define DirTreeView_h
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include <qdatetime.h>
 #include <qlistview.h>
 #include <qpixmap.h>

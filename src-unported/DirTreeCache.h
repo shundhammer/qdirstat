@@ -11,10 +11,6 @@
 #define DirTreeCache_h
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include <stdio.h>
 #include <zlib.h>
 #include "DirTree.h"

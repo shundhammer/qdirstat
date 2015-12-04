@@ -11,10 +11,6 @@
 #define DirTree_h
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include <sys/types.h>
 #include <limits.h>
 #include <dirent.h>

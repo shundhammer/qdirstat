@@ -11,10 +11,6 @@
 #define QDirStatApp_h
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include <kapp.h>
 #include <kmainwindow.h>
 #include "DirTree.h"

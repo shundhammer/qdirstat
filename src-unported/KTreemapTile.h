@@ -11,10 +11,6 @@
 #define KTreemapTile_h
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include <qcanvas.h>
 #include <qrect.h>
 #include "DirTreeIterators.h"
