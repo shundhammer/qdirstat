@@ -985,8 +985,8 @@ DirTreeView::logActivity( int points )
 void
 DirTreeView::columnResized( int column, int oldSize, int newSize )
 {
-    NOT_USED( oldSize );
-    NOT_USED( newSize );
+    Q_UNUSED( oldSize );
+    Q_UNUSED( newSize );
 
     if ( column == _percentBarCol )
 	triggerUpdate();

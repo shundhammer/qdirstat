@@ -10,9 +10,7 @@
 #ifndef DirSaver_h
 #define DirSaver_h
 
-
-#include <kurl.h>
-#include <qdir.h>
+#include <QDir>
 
 
 /**
@@ -32,12 +30,6 @@ public:
     DirSaver( const QString & newPath = "" );
 
     /**
-     * Constructor from a KURL. Will issue error messages on stdout for
-     * non-local objects.
-     **/
-    DirSaver( const KURL & url );
-    
-    /**
      * Destructor. Restores the original working directory.
      **/
     virtual ~DirSaver();
@@ -49,12 +41,14 @@ public:
      **/
     void cd( const QString & newPath );
 
+#if 0
     /**
      * Obtain the current working directory's absolute path.
      * This is useful for resolving/simplifying relative paths.
      **/
     QString currentDirPath() const;
-    
+#endif
+
     /**
      * (Prematurely) restore the working directory. Unnecessary when this
      * object will be destroyed anyway since the destructor does exactly that.
@@ -62,10 +56,7 @@ public:
     void restore();
 
 protected:
-    QDir oldWorkingDir;
+    QString _oldWorkingDir;
 };
 
 #endif // DirSaver_h
-
-
-// EOF

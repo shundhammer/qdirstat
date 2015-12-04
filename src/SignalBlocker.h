@@ -38,3 +38,4 @@ private:
 };
 
 #endif // SignalBlocker_h
+

@@ -841,7 +841,7 @@ QDirStatApp::statusMsg( const QString &text )
 void
 QDirStatApp::contextMenu( DirTreeViewItem * item, const QPoint &pos )
 {
-    NOT_USED( item );
+    Q_UNUSED( item );
 
     if ( _treeViewContextMenu )
 	_treeViewContextMenu->popup( pos );
@@ -851,7 +851,7 @@ QDirStatApp::contextMenu( DirTreeViewItem * item, const QPoint &pos )
 void
 QDirStatApp::contextMenu( KTreemapTile * tile, const QPoint &pos )
 {
-    NOT_USED( tile );
+    Q_UNUSED( tile );
 
     if ( _treemapContextMenu )
 	_treemapContextMenu->popup( pos );

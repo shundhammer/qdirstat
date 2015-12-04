@@ -17,15 +17,11 @@
 #include <stdlib.h>
 #include "Logger.h"
 #include "DirInfo.h"
-#include "DirReadJob.h"
 
-#ifndef NOT_USED
-#    define NOT_USED(PARAM)	( (void) (PARAM) )
+#if 0
+#include "DirReadJob.h"
 #endif
 
-// Open a new name space since KDE's name space is pretty much cluttered
-// already - all names that would even remotely match are already used up,
-// yet the resprective classes don't quite fit the purposes required here.
 
 namespace QDirStat
 {
@@ -355,5 +351,3 @@ namespace QDirStat
 
 #endif // ifndef DirTree_h
 
-
-// EOF

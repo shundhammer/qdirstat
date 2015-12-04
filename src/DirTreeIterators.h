@@ -377,5 +377,3 @@ namespace QDirStat
 
 #endif // ifndef DirTreeIterators_h
 
-
-// EOF

@@ -15,11 +15,6 @@
 #include <zlib.h>
 #include "DirTree.h"
 
-#ifndef NOT_USED
-#    define NOT_USED(PARAM)	( (void) (PARAM) )
-#endif
-
-
 #define DEFAULT_CACHE_NAME	".kdirstat.cache.gz"
 #define MAX_CACHE_LINE_LEN	1024
 #define MAX_FIELDS_PER_LINE	32

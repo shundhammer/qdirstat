@@ -17,13 +17,6 @@
 #include "Logger.h"
 #include <kio/jobclasses.h>
 
-#ifndef NOT_USED
-#    define NOT_USED(PARAM)	( (void) (PARAM) )
-#endif
-
-// Open a new name space since KDE's name space is pretty much cluttered
-// already - all names that would even remotely match are already used up,
-// yet the resprective classes don't quite fit the purposes required here.
 
 namespace QDirStat
 {

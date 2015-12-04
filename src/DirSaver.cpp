@@ -12,59 +12,41 @@
 #include "DirSaver.h"
 
 
-DirSaver::KDirSaver( const QString & newPath )
+DirSaver::DirSaver( const QString & newPath )
 {
-    /*
-     * No need to actually save the current working directory: This object
-     * includes a QDir whose default constructor constructs a directory object
-     * that contains the current working directory. Just what is needed here.
-     */
-
+    _oldWorkingDir = QDir::currentPath();
     cd( newPath );
 }
 
 
-DirSaver::KDirSaver( const KURL & url )
-{
-    if ( url.isLocalFile() )
-    {
-	cd( url.path() );
-    }
-    else
-    {
-	logError() << k_funcinfo << "Can't change dir to remote location " << url.url() << endl;
-    }
-}
-
-
-DirSaver::~KDirSaver()
+DirSaver::~DirSaver()
 {
     restore();
 }
 
 
-void
-DirSaver::cd( const QString & newPath )
+void DirSaver::cd( const QString & newPath )
 {
-    if ( ! newPath.isEmpty() )
+    if ( newPath.isEmpty() )
     {
-	chdir( newPath );
+        logWarning() << "Empty path" << endl;
+        return;
     }
+
+    chdir( newPath.toLocal8Bit() );
 }
 
 
-QString
-DirSaver::currentDirPath() const
+#if 0
+QString DirSaver::currentDirPath() const
 {
-    return QDir::currentDirPath();
+    return QDir::currentPath();
 }
+#endif
 
 
-void
-DirSaver::restore()
+void DirSaver::restore()
 {
-    chdir( oldWorkingDir.path() );
+    cd( _oldWorkingDir );
 }
 
-
-// EOF

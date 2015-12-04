@@ -7,11 +7,12 @@
  */
 
 
-#include <kapp.h>
-#include <kconfig.h>
 #include "DirTree.h"
+
+#if 0
 #include "DirReadJob.h"
 #include "DirTreeCache.h"
+#endif
 
 using namespace QDirStat;
 

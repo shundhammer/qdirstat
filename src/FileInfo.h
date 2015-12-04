@@ -12,7 +12,11 @@
 
 
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <limits.h>
+
+#include <QTextStream>
+
 #include "Logger.h"
 
 
@@ -406,7 +410,7 @@ namespace QDirStat
 	 *
 	 * This default implementation does nothing.
 	 **/
-	virtual void	insertChild( FileInfo *newChild ) { NOT_USED( newChild ); }
+	virtual void	insertChild( FileInfo *newChild ) { Q_UNUSED( newChild ); }
 
 	/**
 	 * Return the "Dot Entry" for this node if there is one (or 0
@@ -424,7 +428,7 @@ namespace QDirStat
 	 *
 	 * This default implementation does nothing.
 	 **/
-	virtual void	setDotEntry( FileInfo *newDotEntry ) { NOT_USED( newDotEntry ); }
+	virtual void	setDotEntry( FileInfo *newDotEntry ) { Q_UNUSED( newDotEntry ); }
 
 	/**
 	 * Returns true if this is a "Dot Entry".
@@ -448,7 +452,7 @@ namespace QDirStat
 	 *
 	 * This default implementation does nothing.
 	 **/
-	virtual void	childAdded( FileInfo *newChild ) { NOT_USED( newChild ); }
+	virtual void	childAdded( FileInfo *newChild ) { Q_UNUSED( newChild ); }
 
 	/**
 	 * Remove a child from the children list.
@@ -461,13 +465,13 @@ namespace QDirStat
 	 * This default implementation does nothing.
 	 * Derived classes that can handle children should overwrite this.
 	 **/
-	virtual void	unlinkChild( FileInfo *deletedChild ) { NOT_USED( deletedChild ); }
+	virtual void	unlinkChild( FileInfo *deletedChild ) { Q_UNUSED( deletedChild ); }
 
 	/**
 	 * Notification that a child is about to be deleted somewhere in the
 	 * subtree.
 	 **/
-	virtual void	deletingChild( FileInfo *deletedChild ) { NOT_USED( deletedChild ); }
+	virtual void	deletingChild( FileInfo *deletedChild ) { Q_UNUSED( deletedChild ); }
 
 	/**
 	 * Get the current state of the directory reading process:
@@ -604,7 +608,7 @@ namespace QDirStat
     /**
      * Print the debugUrl() of a @ref FileInfo in a debug stream.
      **/
-    inline kdbgstream & operator<< ( kdbgstream & stream, const FileInfo * info )
+    inline QTextStream & operator<< ( QTextStream & stream, const FileInfo * info )
     {
 	if ( info )
 	    stream << info->debugUrl();
@@ -618,7 +622,7 @@ namespace QDirStat
     /**
      * Human-readable output of a file size in a debug stream.
      **/
-    inline kdbgstream & operator<< ( kdbgstream & stream, KFileSize lSize )
+    inline QTextStream & operator<< ( QTextStream & stream, KFileSize lSize )
     {
 	stream << formatSize( lSize );
 
@@ -630,5 +634,3 @@ namespace QDirStat
 
 #endif // ifndef FileInfo_h
 
-
-// EOF

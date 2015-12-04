@@ -195,3 +195,4 @@ QTextStream & operator<<( QTextStream &str, bool val );
 
 
 #endif // Logger_h
+
