@@ -11,22 +11,10 @@
 #define FileInfo_h
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include <sys/types.h>
 #include <limits.h>
 #include "Logger.h"
-#include <kfileitem.h>
 
-#ifndef NOT_USED
-#    define NOT_USED(PARAM)	( (void) (PARAM) )
-#endif
-
-// Open a new name space since KDE's name space is pretty much cluttered
-// already - all names that would even remotely match are already used up,
-// yet the resprective classes don't quite fit the purposes required here.
 
 namespace QDirStat
 {
@@ -100,13 +88,6 @@ namespace QDirStat
 		   struct stat *	statInfo,
 		   DirTree    *	tree,
 		   DirInfo    *	parent = 0 );
-
-	/**
-	 * Constructor from a KFileItem, i.e. from a @ref KIO::StatJob
-	 **/
-	FileInfo( const KFileItem *	fileItem,
-		   DirTree *		tree,
-		   DirInfo *		parent = 0 );
 
 	/**
 	 * Constructor from the bare neccessary fields
@@ -388,7 +369,7 @@ namespace QDirStat
 	 * Derived classes might want to overwrite this.
 	 **/
 	virtual void	setFirstChild( FileInfo *newFirstChild )
-	    { NOT_USED( newFirstChild ); }
+	    { Q_UNUSED( newFirstChild ); }
 
 	/**
 	 * Returns true if this entry has any children.
@@ -608,13 +589,7 @@ namespace QDirStat
     //			       Static Functions
     //----------------------------------------------------------------------
 
-    /**
-     * Make a valid, fixed and cleaned URL from a (possibly dirty) URL or maybe
-     * a path.
-     **/
-    KURL fixedUrl( const QString & dirtyUrl );
-
-
+    
     /**
      * Format a file / subtree size human readable, i.e. in "GB" / "MB"
      * etc. rather than huge numbers of digits.

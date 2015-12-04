@@ -7,19 +7,13 @@
  */
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <klocale.h>
-
-#include "kfileinfo.h"
-#include "kdirinfo.h"
-#include "kdirsaver.h"
+#include "FileInfo.h"
+#include "DirInfo.h"
+#include "DirSaver.h"
 
 // Some file systems (NTFS seems to be among them) may handle block fragments well.
 // Don't report files as "sparse" files if the block size is only a few bytes
@@ -32,8 +26,8 @@ using namespace QDirStat;
 
 
 FileInfo::KFileInfo( DirTree   *	tree,
-		      DirInfo   *	parent,
-		      const char *	name )
+                     DirInfo   *	parent,
+                     const char *	name )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -51,9 +45,9 @@ FileInfo::KFileInfo( DirTree   *	tree,
 
 
 FileInfo::KFileInfo( const QString &	filenameWithoutPath,
-		      struct stat *	statInfo,
-		      DirTree    *	tree,
-		      DirInfo	  *	parent )
+                     struct stat *	statInfo,
+                     DirTree    *	tree,
+                     DirInfo	  *	parent )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -85,10 +79,10 @@ FileInfo::KFileInfo( const QString &	filenameWithoutPath,
 	if ( _isSparseFile )
 	{
 	    logDebug() << "Found sparse file: " << this
-		      << "    Byte size: " << formatSize( byteSize() )
-		      << "  Allocated: " << formatSize( allocatedSize() )
-		      << " (" << (int) _blocks << " blocks)"
-		      << endl;
+                       << "    Byte size: " << formatSize( byteSize() )
+                       << "  Allocated: " << formatSize( allocatedSize() )
+                       << " (" << (int) _blocks << " blocks)"
+                       << endl;
 	}
 
 #if 0
@@ -106,58 +100,15 @@ FileInfo::KFileInfo( const QString &	filenameWithoutPath,
 }
 
 
-FileInfo::KFileInfo(  const KFileItem	* fileItem,
-		       DirTree    	* tree,
-		       DirInfo		* parent )
-    : _parent( parent )
-    , _next( 0 )
-    , _tree( tree )
-{
-    CHECK_PTR( fileItem );
-
-    _isLocalFile = fileItem->isLocalFile();
-    _name	 = parent ? fileItem->name() : fileItem->url().url();
-    _device	 = 0;
-    _mode	 = fileItem->mode();
-    _links	 = 1;
-
-
-    if ( isSpecial() )
-    {
-	_size	 	= 0;
-	_blocks	 	= 0;
-	_isSparseFile 	= false;
-    }
-    else
-    {
-	_size	 = fileItem->size();
-
-	// Since KFileItem does not return any information about allocated disk
-	// blocks, calculate that information artificially so callers don't
-	// need to bother with special cases depending on how this object was
-	// constructed.
-
-	_blocks	 = _size / blockSize();
-
-	if ( ( _size % blockSize() ) > 0 )
-	    _blocks++;
-
-	// There is no way to find out via FileInfo if this is a sparse file.
-	_isSparseFile = false;
-    }
-
-    _mtime	 = fileItem->time( KIO::UDS_MODIFICATION_TIME );
-}
-
 
 FileInfo::KFileInfo( DirTree * 	tree,
-		      DirInfo * 	parent,
-		      const QString &	filenameWithoutPath,
-		      mode_t	   	mode,
-		      KFileSize	   	size,
-		      time_t	   	mtime,
-		      KFileSize	   	blocks,
-		      nlink_t	   	links )
+                     DirInfo * 	parent,
+                     const QString &	filenameWithoutPath,
+                     mode_t	   	mode,
+                     KFileSize	   	size,
+                     time_t	   	mtime,
+                     KFileSize	   	blocks,
+                     nlink_t	   	links )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -259,7 +210,7 @@ FileInfo::urlPart( int targetLevel ) const
     if ( level < targetLevel )
     {
 	logError() << k_funcinfo << "URL level " << targetLevel
-		  << " requested, this is level " << level << endl;
+                   << " requested, this is level " << level << endl;
 	return "";
     }
 
@@ -385,97 +336,52 @@ FileInfo::locate( QString url, bool findDotEntries )
 
 
 
-KURL
-QDirStat::fixedUrl( const QString & dirtyUrl )
-{
-    KURL url = dirtyUrl;
-
-    if ( ! url.isValid() )		// Maybe it's just a path spec?
-    {
-	url = KURL();			// Start over with an empty, but valid URL
-	url.setPath( dirtyUrl );	// and use just the path part.
-    }
-    else
-    {
-	url.cleanPath();	// Resolve relative paths, get rid of multiple slashes.
-    }
-
-
-    // Strip off the rightmost slash - some kioslaves (e.g. 'tar') can't handle that.
-
-    QString path = url.path();
-
-    if ( path.length() > 1 && path.right(1) == "/" )
-    {
-	path = path.left( path.length()-1 );
-	url.setPath( path );
-    }
-
-    if ( url.isLocalFile() )
-    {
-	// Make a relative path an absolute path
-
-	DirSaver dir( url.path() );
-	url.setPath( dir.currentDirPath() );
-    }
-
-    return url;
-}
-
-
-
-
-
-
 QString
 QDirStat::formatSize( KFileSize lSize )
 {
-   QString	sizeString;
-   double	size;
-   QString	unit;
+    QString	sizeString;
+    double	size;
+    QString	unit;
 
-   if ( lSize < 1024 )
-   {
-      sizeString.setNum( (long) lSize );
+    if ( lSize < 1024 )
+    {
+        sizeString.setNum( (long) lSize );
 
-      unit = i18n( "Bytes" );
-   }
-   else
-   {
-      size = lSize / 1024.0;		// kB
+        unit = i18n( "Bytes" );
+    }
+    else
+    {
+        size = lSize / 1024.0;		// kB
 
-      if ( size < 1024.0 )
-      {
-	 sizeString.sprintf( "%.1f", size );
-	 unit = i18n( "kB" );
-      }
-      else
-      {
-	 size /= 1024.0;		// MB
+        if ( size < 1024.0 )
+        {
+            sizeString.sprintf( "%.1f", size );
+            unit = i18n( "kB" );
+        }
+        else
+        {
+            size /= 1024.0;		// MB
 
-	 if ( size < 1024.0 )
-	 {
-	    sizeString.sprintf( "%.1f", size );
-	    unit = i18n ( "MB" );
-	 }
-	 else
-	 {
-	    size /= 1024.0;		// GB - we won't go any further...
+            if ( size < 1024.0 )
+            {
+                sizeString.sprintf( "%.1f", size );
+                unit = i18n ( "MB" );
+            }
+            else
+            {
+                size /= 1024.0;		// GB - we won't go any further...
 
-	    sizeString.sprintf( "%.2f", size );
-	    unit = i18n ( "GB" );
-	 }
-      }
-   }
+                sizeString.sprintf( "%.2f", size );
+                unit = i18n ( "GB" );
+            }
+        }
+    }
 
-   if ( ! unit.isEmpty() )
-   {
-      sizeString += " " + unit;
-   }
+    if ( ! unit.isEmpty() )
+    {
+        sizeString += " " + unit;
+    }
 
-   return sizeString;
+    return sizeString;
 }
 
-
-
-// EOF

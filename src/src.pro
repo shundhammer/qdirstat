@@ -20,10 +20,14 @@ OBJECTS_DIR	     = .obj
 TARGET	  = qdirstat
 
 SOURCES	  = main.cpp                    \
+            FileInfo.cpp                \
+            DirInfo.cpp                 \
             MainWindow.cpp              \
             Logger.cpp
 
 HEADERS   = MainWindow.h                \
+            FileInfo.h                  \
+            DirInfo.h                   \
             Logger.h                    \
             SignalBlocker.h
 

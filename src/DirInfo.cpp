@@ -7,17 +7,10 @@
  */
 
 
-#ifdef HAVE_CONFIG_H
-#   include <config.h>
-#endif
-
-#include <kapp.h>
-#include <klocale.h>
-#include "kdirinfo.h"
-#include "kdirtreeiterators.h"
+#include "DirInfo.h"
+#include "DirTreeIterators.h"
 
 using namespace QDirStat;
-
 
 
 DirInfo::KDirInfo( DirTree *	tree,
