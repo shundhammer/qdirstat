@@ -2,7 +2,7 @@
  *   File name:	kdirstatsettings.h
  *   Summary:	Settings dialog for KDirStat
  *   License:	GPL - See file COPYING for details.
- *   Author:	Stefan Hundhammer <sh@suse.de>
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
  */
 
@@ -213,7 +213,7 @@ namespace KDirStat
      * colors), it will wrap around to the first color.
      *
      * @short settings page for tree colors
-     * @author Stefan Hundhammer <sh@suse.de>
+     * @author Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
      **/
     class KTreeColorsPage: public KSettingsPage
     {

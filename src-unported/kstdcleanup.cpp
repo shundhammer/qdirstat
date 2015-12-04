@@ -2,7 +2,7 @@
  *   File name:	kstdcleanup.cpp
  *   Summary:	Support classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
- *   Author:	Stefan Hundhammer <sh@suse.de>
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
  */
 

@@ -2,7 +2,7 @@
  *   File name:	kdirtreeview.cpp
  *   Summary:	High level classes for KDirStat
  *   License:	LGPL - See file COPYING.LIB for details.
- *   Author:	Stefan Hundhammer <sh@suse.de>
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
  */
 
@@ -1987,7 +1987,7 @@ KDirStat::formatTimeDate( time_t rawTime )
      * Payback time - though luck, folks.
      * ;-)
      *
-     * Stefan Hundhammer <sh@suse.de>	2001-05-28
+     * Stefan Hundhammer <Stefan.Hundhammer@gmx.de>	2001-05-28
      * (in quite some fit of frustration)
      */
     timeDateString.sprintf( "%4d-%02d-%02d  %02d:%02d:%02d",

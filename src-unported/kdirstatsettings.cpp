@@ -2,7 +2,7 @@
  *   File name: kdirstatsettings.cpp
  *   Summary:	Settings dialog for KDirStat
  *   License:	GPL - See file COPYING for details.
- *   Author:	Stefan Hundhammer <sh@suse.de>
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
  */
 

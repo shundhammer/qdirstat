@@ -2,7 +2,7 @@
  *   File name:	kdirsaver.h
  *   Summary:	Utility object to save current working directory
  *   License:	LGPL - See file COPYING.LIB for details.
- *   Author:	Stefan Hundhammer <sh@suse.de>
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
  */
 
