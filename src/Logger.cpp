@@ -1,3 +1,12 @@
+/*
+ *   File name: Logger.cpp
+ *   Summary:	Logger class for QDirstat
+ *   License:   GPL V2 - See file LICENSE for details.
+ *
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ */
+
+
 #include "Logger.h"
 
 #include <QFile>

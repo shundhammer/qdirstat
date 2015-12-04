@@ -1,3 +1,12 @@
+/*
+ *   File name: SignalBlocker.h
+ *   Summary:	Helper class to block undesired Qt signals
+ *   License:   GPL V2 - See file LICENSE for details.
+ *
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ */
+
+
 #ifndef SignalBlocker_h
 #define SignalBlocker_h
 

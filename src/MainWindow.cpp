@@ -1,3 +1,11 @@
+/*
+ *   File name: MainWindow.cpp
+ *   Summary:	QDirStat main window
+ *   License:   GPL V2 - See file LICENSE for details.
+ *
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ */
+
 
 #include "MainWindow.h"
 #include "Logger.h"

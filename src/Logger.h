@@ -1,3 +1,12 @@
+/*
+ *   File name: Logger.h
+ *   Summary:	Logger class for QDirstat
+ *   License:   GPL V2 - See file LICENSE for details.
+ *
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ */
+
+
 #ifndef Logger_h
 #define Logger_h
 
