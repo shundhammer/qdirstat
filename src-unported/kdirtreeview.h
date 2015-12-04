@@ -1,7 +1,7 @@
 /*
  *   File name:	kdirtreeview.h
  *   Summary:	High level classes for KDirStat
- *   License:	LGPL - See file COPYING.LIB for details.
+ *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
  */

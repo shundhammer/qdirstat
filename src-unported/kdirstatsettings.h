@@ -1,7 +1,7 @@
 /*
  *   File name:	kdirstatsettings.h
  *   Summary:	Settings dialog for KDirStat
- *   License:	GPL - See file COPYING for details.
+ *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
  */
