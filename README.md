@@ -288,5 +288,6 @@ minimizing that pain.
 
 Original KDirStat:
 
-https://github.com/shundhammer/kdirstat
+Sources: https://github.com/shundhammer/kdirstat
 
+Home page: http://kdirstat.sourceforge.net/
