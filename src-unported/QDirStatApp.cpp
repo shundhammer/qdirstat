@@ -914,6 +914,3 @@ QDirStatApp::deleteTreemapView()
     updateActions();
 }
 
-
-
-// EOF

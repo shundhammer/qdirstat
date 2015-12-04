@@ -1208,5 +1208,3 @@ addVStretch( QWidget * parent )
 					 1 ) );				// vstretch
 }
 
-
-// EOF

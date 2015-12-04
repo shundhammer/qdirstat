@@ -659,6 +659,3 @@ CacheReader::killTrailingWhiteSpace( char * cptr )
 	*cptr-- = 0;
 }
 
-
-
-// EOF

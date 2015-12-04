@@ -399,5 +399,3 @@ namespace QDirStat
 
 #endif // ifndef DirReadJob_h
 
-
-// EOF

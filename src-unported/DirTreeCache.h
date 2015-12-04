@@ -248,5 +248,3 @@ namespace QDirStat
 
 #endif // ifndef DirTreeCache_h
 
-
-// EOF

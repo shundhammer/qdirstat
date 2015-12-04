@@ -601,6 +601,3 @@ KCushionSurface::linearRidge( double linearCoefficient, double height, int x1, i
 }
 
 
-
-
-// EOF

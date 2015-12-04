@@ -55,5 +55,3 @@ namespace QDirStat
 
 #endif // ifndef StdCleanup_h
 
-
-// EOF

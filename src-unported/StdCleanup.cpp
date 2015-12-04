@@ -142,7 +142,4 @@ StdCleanup::hardDelete( KActionCollection *parent )
 
     return cleanup;
 }
-	
 
-
-// EOF

@@ -742,6 +742,3 @@ KTreemapSelectionRect::highlight( KTreemapTile * tile )
     }
 }
 
-
-
-// EOF

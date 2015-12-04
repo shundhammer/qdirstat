@@ -167,6 +167,3 @@ namespace QDirStat
 
 #endif // ifndef ExcludeRules_h
 
-
-// EOF
-

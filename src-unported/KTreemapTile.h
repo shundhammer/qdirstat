@@ -314,5 +314,3 @@ inline kdbgstream & operator<< ( kdbgstream & stream, const QRect & rect )
 
 #endif // ifndef KTreemapTile_h
 
-
-// EOF

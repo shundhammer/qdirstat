@@ -500,7 +500,3 @@ DirReadJobQueue::jobFinishedNotify( DirReadJob *job )
     }
 }
 
-
-
-
-// EOF

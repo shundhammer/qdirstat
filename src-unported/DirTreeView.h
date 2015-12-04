@@ -892,5 +892,3 @@ namespace QDirStat
 
 #endif // ifndef DirTreeView_h
 
-
-// EOF

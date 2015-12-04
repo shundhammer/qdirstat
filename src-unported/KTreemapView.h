@@ -438,5 +438,3 @@ namespace QDirStat
 
 #endif // ifndef KTreemapView_h
 
-
-// EOF

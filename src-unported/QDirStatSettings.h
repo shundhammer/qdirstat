@@ -765,5 +765,3 @@ void addVStretch( QWidget * parent );
 
 #endif // ifndef QDirStatSettings_h
 
-
-// EOF

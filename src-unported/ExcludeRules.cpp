@@ -122,5 +122,3 @@ ExcludeRules::matchingRule( const QString & text )
     return 0;
 }
 
-
-// EOF

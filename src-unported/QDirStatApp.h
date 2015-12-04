@@ -420,3 +420,4 @@ protected:
 
 
 #endif // QDirStatApp_h
+

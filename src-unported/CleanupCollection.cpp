@@ -277,5 +277,3 @@ CleanupCollection::cleanupExecuted()
     emit userActivity( 10 );
 }
 
-
-// EOF

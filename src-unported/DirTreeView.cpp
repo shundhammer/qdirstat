@@ -2028,8 +2028,3 @@ QDirStat::contrastingColor( const QColor &desiredColor,
     }
 }
 
-
-
-
-
-// EOF

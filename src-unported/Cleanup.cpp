@@ -426,5 +426,3 @@ Cleanup::saveConfig() const
     config->writeEntry( "refreshPolicy",	(int) _refreshPolicy	);
 }
 
-
-// EOF
