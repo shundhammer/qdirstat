@@ -38,11 +38,11 @@ class KToggleAction;
 
 namespace QDirStat
 {
-    class KCleanupCollection;
-    class KDirTreeView;
-    class KDirTreeViewItem;
-    class KFileInfo;
-    class KSettingsDialog;
+    class CleanupCollection;
+    class DirTreeView;
+    class DirTreeViewItem;
+    class FileInfo;
+    class SettingsDialog;
     class KTreemapView;
     class KTreemapTile;
 }
@@ -90,9 +90,9 @@ public:
     void openURL( const KURL & url );
 
     /**
-     * Return the main window's @ref KDirTreeView.
+     * Return the main window's @ref DirTreeView.
      **/
-    KDirTreeView * treeView() const { return _treeView; }
+    DirTreeView * treeView() const { return _treeView; }
 
     /**
      * Returns the main window's @ref KTreemapView or 0 if there is none.
@@ -150,7 +150,7 @@ public slots:
      * Notification that the view's selection has changed.
      * Enable/disable user actions as appropriate.
      **/
-    void selectionChanged( KFileInfo *selection );
+    void selectionChanged( FileInfo *selection );
 
     /**
      * Ask user what application to open a file or directory with
@@ -203,7 +203,7 @@ public slots:
     /**
      * Opens a context menu for tree view items.
      **/
-    void contextMenu( KDirTreeViewItem * item, const QPoint &pos );
+    void contextMenu( DirTreeViewItem * item, const QPoint &pos );
 
     /**
      * Opens a context menu for treemap tiles.
@@ -249,7 +249,7 @@ public slots:
     /**
      * For the settings dialog only: Return the internal cleanup collection.
      **/
-    KCleanupCollection * cleanupCollection() { return _cleanupCollection; }
+    CleanupCollection * cleanupCollection() { return _cleanupCollection; }
 
     /**
      * Initialize @ref KPacMan animation in the tool bar.
@@ -314,7 +314,7 @@ protected:
     void initActions();
 
     /**
-     * Initialize @ref KCleanup actions.
+     * Initialize @ref Cleanup actions.
      **/
     void initCleanups();
 
@@ -380,13 +380,13 @@ protected:
     // Widgets
 
     QSplitter *			_splitter;
-    KDirTreeView *		    _treeView;
+    DirTreeView *		    _treeView;
     KTreemapView *		    _treemapView;
     KPacMan *			_pacMan;
     QWidget *			_pacManDelimiter;
     QPopupMenu *		_treeViewContextMenu;
     QPopupMenu *		_treemapContextMenu;
-    QDirStat::KSettingsDialog *	_settingsDialog;
+    QDirStat::SettingsDialog *	_settingsDialog;
     KFeedbackDialog *		_feedbackDialog;
     KActivityTracker *		_activityTracker;
 
@@ -416,7 +416,7 @@ protected:
     KAction *			_helpSendFeedbackMail;
     KToggleAction * 		_showTreemapView;
 
-    KCleanupCollection *	_cleanupCollection;
+    CleanupCollection *	_cleanupCollection;
 
 
     // Misc

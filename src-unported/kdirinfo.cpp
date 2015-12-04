@@ -20,10 +20,10 @@ using namespace QDirStat;
 
 
 
-KDirInfo::KDirInfo( KDirTree *	tree,
-		    KDirInfo *	parent,
+DirInfo::KDirInfo( DirTree *	tree,
+		    DirInfo *	parent,
 		    bool	asDotEntry )
-    : KFileInfo( tree, parent )
+    : FileInfo( tree, parent )
 {
     init();
 
@@ -36,44 +36,44 @@ KDirInfo::KDirInfo( KDirTree *	tree,
     else
     {
 	_isDotEntry	= false;
-	_dotEntry	= new KDirInfo( tree, this, true );
+	_dotEntry	= new DirInfo( tree, this, true );
     }
 }
 
 
-KDirInfo::KDirInfo( const QString &	filenameWithoutPath,
+DirInfo::KDirInfo( const QString &	filenameWithoutPath,
 		    struct stat	*	statInfo,
-		    KDirTree    *	tree,
-		    KDirInfo	*	parent )
-    : KFileInfo( filenameWithoutPath,
+		    DirTree    *	tree,
+		    DirInfo	*	parent )
+    : FileInfo( filenameWithoutPath,
 		 statInfo,
 		 tree,
 		 parent )
 {
     init();
-    _dotEntry	= new KDirInfo( tree, this, true );
+    _dotEntry	= new DirInfo( tree, this, true );
 }
 
 
-KDirInfo::KDirInfo( const KFileItem	* fileItem,
-		    KDirTree 		* tree,
-		    KDirInfo		* parent )
-    : KFileInfo( fileItem,
+DirInfo::KDirInfo( const KFileItem	* fileItem,
+		    DirTree 		* tree,
+		    DirInfo		* parent )
+    : FileInfo( fileItem,
 		 tree,
 		 parent )
 {
     init();
-    _dotEntry	= new KDirInfo( tree, this, true );
+    _dotEntry	= new DirInfo( tree, this, true );
 }
 
 
-KDirInfo::KDirInfo( KDirTree * 		tree,
-		    KDirInfo * 		parent,
+DirInfo::KDirInfo( DirTree * 		tree,
+		    DirInfo * 		parent,
 		    const QString &	filenameWithoutPath,
 		    mode_t	 	mode,
 		    KFileSize	 	size,
 		    time_t	 	mtime )
-    : KFileInfo( tree,
+    : FileInfo( tree,
 		 parent,
 		 filenameWithoutPath,
 		 mode,
@@ -81,12 +81,12 @@ KDirInfo::KDirInfo( KDirTree * 		tree,
 		 mtime )
 {
     init();
-    _dotEntry	= new KDirInfo( tree, this, true );
+    _dotEntry	= new DirInfo( tree, this, true );
 }
 
 
 void
-KDirInfo::init()
+DirInfo::init()
 {
     _isDotEntry		= false;
     _pendingReadJobs	= 0;
@@ -106,17 +106,17 @@ KDirInfo::init()
 }
 
 
-KDirInfo::~KDirInfo()
+DirInfo::~KDirInfo()
 {
     _beingDestroyed	= true;
-    KFileInfo	*child	= _firstChild;
+    FileInfo	*child	= _firstChild;
 
 
     // Recursively delete all children.
 
     while ( child )
     {
-	KFileInfo * nextChild = child->next();
+	FileInfo * nextChild = child->next();
 	delete child;
 	child = nextChild;
     }
@@ -132,7 +132,7 @@ KDirInfo::~KDirInfo()
 
 
 void
-KDirInfo::recalc()
+DirInfo::recalc()
 {
     // kdDebug() << k_funcinfo << this << endl;
 
@@ -143,7 +143,7 @@ KDirInfo::recalc()
     _totalFiles		= 0;
     _latestMtime	= _mtime;
 
-    KFileInfoIterator it( this, KDotEntryAsSubDir );
+    FileInfoIterator it( this, KDotEntryAsSubDir );
 
     while ( *it )
     {
@@ -172,14 +172,14 @@ KDirInfo::recalc()
 
 
 void
-KDirInfo::setMountPoint( bool isMountPoint )
+DirInfo::setMountPoint( bool isMountPoint )
 {
     _isMountPoint = isMountPoint;
 }
 
 
 KFileSize
-KDirInfo::totalSize()
+DirInfo::totalSize()
 {
     if ( _summaryDirty )
 	recalc();
@@ -189,7 +189,7 @@ KDirInfo::totalSize()
 
 
 KFileSize
-KDirInfo::totalBlocks()
+DirInfo::totalBlocks()
 {
     if ( _summaryDirty )
 	recalc();
@@ -199,7 +199,7 @@ KDirInfo::totalBlocks()
 
 
 int
-KDirInfo::totalItems()
+DirInfo::totalItems()
 {
     if ( _summaryDirty )
 	recalc();
@@ -209,7 +209,7 @@ KDirInfo::totalItems()
 
 
 int
-KDirInfo::totalSubDirs()
+DirInfo::totalSubDirs()
 {
     if ( _summaryDirty )
 	recalc();
@@ -219,7 +219,7 @@ KDirInfo::totalSubDirs()
 
 
 int
-KDirInfo::totalFiles()
+DirInfo::totalFiles()
 {
     if ( _summaryDirty )
 	recalc();
@@ -229,7 +229,7 @@ KDirInfo::totalFiles()
 
 
 time_t
-KDirInfo::latestMtime()
+DirInfo::latestMtime()
 {
     if ( _summaryDirty )
 	recalc();
@@ -239,13 +239,13 @@ KDirInfo::latestMtime()
 
 
 bool
-KDirInfo::isFinished()
+DirInfo::isFinished()
 {
     return ! isBusy();
 }
 
 
-void KDirInfo::setReadState( KDirReadState newReadState )
+void DirInfo::setReadState( KDirReadState newReadState )
 {
     // "aborted" has higher priority than "finished"
 
@@ -257,7 +257,7 @@ void KDirInfo::setReadState( KDirReadState newReadState )
 
 
 bool
-KDirInfo::isBusy()
+DirInfo::isBusy()
 {
     if ( _pendingReadJobs > 0 && _readState != KDirAborted )
 	return true;
@@ -271,7 +271,7 @@ KDirInfo::isBusy()
 
 
 void
-KDirInfo::insertChild( KFileInfo *newChild )
+DirInfo::insertChild( FileInfo *newChild )
 {
     CHECK_PTR( newChild );
 
@@ -310,7 +310,7 @@ KDirInfo::insertChild( KFileInfo *newChild )
 
 
 void
-KDirInfo::childAdded( KFileInfo *newChild )
+DirInfo::childAdded( FileInfo *newChild )
 {
     if ( ! _summaryDirty )
     {
@@ -346,7 +346,7 @@ KDirInfo::childAdded( KFileInfo *newChild )
 
 
 void
-KDirInfo::deletingChild( KFileInfo *deletedChild )
+DirInfo::deletingChild( FileInfo *deletedChild )
 {
     /**
      * When children are deleted, things go downhill: Marking the summary
@@ -381,7 +381,7 @@ KDirInfo::deletingChild( KFileInfo *deletedChild )
 
 
 void
-KDirInfo::unlinkChild( KFileInfo *deletedChild )
+DirInfo::unlinkChild( FileInfo *deletedChild )
 {
     if ( deletedChild->parent() != this )
     {
@@ -397,7 +397,7 @@ KDirInfo::unlinkChild( KFileInfo *deletedChild )
 	return;
     }
 
-    KFileInfo *child = firstChild();
+    FileInfo *child = firstChild();
 
     while ( child )
     {
@@ -418,7 +418,7 @@ KDirInfo::unlinkChild( KFileInfo *deletedChild )
 
 
 void
-KDirInfo::readJobAdded()
+DirInfo::readJobAdded()
 {
     _pendingReadJobs++;
 
@@ -428,7 +428,7 @@ KDirInfo::readJobAdded()
 
 
 void
-KDirInfo::readJobFinished()
+DirInfo::readJobFinished()
 {
     _pendingReadJobs--;
 
@@ -438,7 +438,7 @@ KDirInfo::readJobFinished()
 
 
 void
-KDirInfo::readJobAborted()
+DirInfo::readJobAborted()
 {
     _readState = KDirAborted;
 
@@ -448,23 +448,23 @@ KDirInfo::readJobAborted()
 
 
 void
-KDirInfo::finalizeLocal()
+DirInfo::finalizeLocal()
 {
     cleanupDotEntries();
 }
 
 
 void
-KDirInfo::finalizeAll()
+DirInfo::finalizeAll()
 {
     if ( _isDotEntry )
 	return;
 
-    KFileInfo *child = firstChild();
+    FileInfo *child = firstChild();
 
     while ( child )
     {
-	KDirInfo * dir = dynamic_cast<KDirInfo *> (child);
+	DirInfo * dir = dynamic_cast<KDirInfo *> (child);
 
 	if ( dir && ! dir->isDotEntry() )
 	    dir->finalizeAll();
@@ -487,7 +487,7 @@ KDirInfo::finalizeAll()
 
 
 KDirReadState
-KDirInfo::readState() const
+DirInfo::readState() const
 {
     if ( _isDotEntry && _parent )
 	return _parent->readState();
@@ -497,7 +497,7 @@ KDirInfo::readState() const
 
 
 void
-KDirInfo::cleanupDotEntries()
+DirInfo::cleanupDotEntries()
 {
     if ( ! _dotEntry || _isDotEntry )
 	return;
@@ -508,7 +508,7 @@ KDirInfo::cleanupDotEntries()
     {
 	// kdDebug() << "Reparenting children of solo dot entry " << this << endl;
 
-	KFileInfo *child = _dotEntry->firstChild();
+	FileInfo *child = _dotEntry->firstChild();
 	_firstChild = child;		// Move the entire children chain here.
 	_dotEntry->setFirstChild( 0 );	// _dotEntry will be deleted below.
 

@@ -7,8 +7,8 @@
  */
 
 
-#ifndef KExcludeRules_h
-#define KExcludeRules_h
+#ifndef ExcludeRules_h
+#define ExcludeRules_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -27,19 +27,19 @@ namespace QDirStat
      * It can be enabled or disabled. Only enabled rules can ever match; a
      * disabled exclude rule will never exclude anything.
      **/
-    class KExcludeRule
+    class ExcludeRule
     {
     public:
 
 	/**
 	 * Constructor.
 	 **/
-	KExcludeRule( const QRegExp & regexp );
+	ExcludeRule( const QRegExp & regexp );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KExcludeRule();
+	virtual ~ExcludeRule();
 
 	/**
 	 * Check a string (usually a file name) against this exclude rule.
@@ -85,14 +85,14 @@ namespace QDirStat
      *
      * Normal usage:
      *
-     *     KExcludeRules::excludeRules()->add( new KExcludeRule( ... ) );
+     *     ExcludeRules::excludeRules()->add( new ExcludeRule( ... ) );
      *     ...
-     *     if ( KExcludeRules::excludeRules()->match( filename ) )
+     *     if ( ExcludeRules::excludeRules()->match( filename ) )
      *	   {
      *         // exclude this file
      *     }
      **/
-    class KExcludeRules
+    class ExcludeRules
     {
     public:
 
@@ -102,25 +102,25 @@ namespace QDirStat
 	 * Most applications will want to use excludeRules() instead to create
 	 * and use a singleton object of this class.
 	 **/
-	KExcludeRules();
+	ExcludeRules();
 
 	/**
 	 * Destructor.
 	 **/
-	~KExcludeRules();
+	~ExcludeRules();
 
 	/**
 	 * Return the singleton object of this class.
 	 * This will create one if there is none yet.
 	 **/
-	static KExcludeRules * excludeRules();
+	static ExcludeRules * excludeRules();
 
 	/**
 	 * Add an exclude rule to this rule set.
 	 * This transfers ownership of that rule to this rule set;
 	 * it will be destroyed with 'delete' after use.
 	 **/
-	void add( KExcludeRule * rule );
+	void add( ExcludeRule * rule );
 
 	/**
 	 * Check a string against the exclude rules.
@@ -136,25 +136,25 @@ namespace QDirStat
 	 *
 	 * This is intended to explain to the user which rule matched.
 	 **/
-	const KExcludeRule * matchingRule( const QString & text );
+	const ExcludeRule * matchingRule( const QString & text );
 
 	/**
 	 * Returns the first exclude rule of this rule set
 	 * or 0 if there is none.
 	 **/
-	KExcludeRule * first() { return _rules.first(); }
+	ExcludeRule * first() { return _rules.first(); }
 	
 	/**
 	 * Returns the next exclude rule (after first() or next() )
 	 * of this rule set or 0 if there is no more.
 	 **/
-	KExcludeRule * next() { return _rules.next(); }
+	ExcludeRule * next() { return _rules.next(); }
 	
 	/**
 	 * Returns the current exclude rule of this rule set
 	 * or 0 if there is none.
 	 **/
-	KExcludeRule * current() { return _rules.current(); }
+	ExcludeRule * current() { return _rules.current(); }
 
 	/**
 	 * Clear (delete) all exclude rules.
@@ -163,13 +163,13 @@ namespace QDirStat
 
     private:
 
-	QPtrList<KExcludeRule>    _rules;
+	QPtrList<ExcludeRule>    _rules;
     };
 
 }	// namespace QDirStat
 
 
-#endif // ifndef KExcludeRules_h
+#endif // ifndef ExcludeRules_h
 
 
 // EOF

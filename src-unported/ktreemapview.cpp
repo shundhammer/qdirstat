@@ -30,7 +30,7 @@ using namespace QDirStat;
 
 
 
-KTreemapView::KTreemapView( KDirTree * tree, QWidget * parent, const QSize & initialSize )
+KTreemapView::KTreemapView( DirTree * tree, QWidget * parent, const QSize & initialSize )
     : QCanvasView( parent )
     , _tree( tree )
     , _rootTile( 0 )
@@ -69,14 +69,14 @@ KTreemapView::KTreemapView( KDirTree * tree, QWidget * parent, const QSize & ini
 	}
     }
 
-    connect( this,	SIGNAL( selectionChanged( KFileInfo * ) ),
-	     tree,	SLOT  ( selectItem	( KFileInfo * ) ) );
+    connect( this,	SIGNAL( selectionChanged( FileInfo * ) ),
+	     tree,	SLOT  ( selectItem	( FileInfo * ) ) );
 
-    connect( tree,	SIGNAL( selectionChanged( KFileInfo * ) ),
-	     this,	SLOT  ( selectTile	( KFileInfo * ) ) );
+    connect( tree,	SIGNAL( selectionChanged( FileInfo * ) ),
+	     this,	SLOT  ( selectTile	( FileInfo * ) ) );
 
-    connect( tree,	SIGNAL( deletingChild	( KFileInfo * )	),
-	     this,	SLOT  ( deleteNotify	( KFileInfo * ) ) );
+    connect( tree,	SIGNAL( deletingChild	( FileInfo * )	),
+	     this,	SLOT  ( deleteNotify	( FileInfo * ) ) );
 
     connect( tree,	SIGNAL( childDeleted()	 ),
 	     this,	SLOT  ( rebuildTreemap() ) );
@@ -300,7 +300,7 @@ KTreemapView::zoomIn()
 
     if ( newRootTile )
     {
-	KFileInfo * newRoot = newRootTile->orig();
+	FileInfo * newRoot = newRootTile->orig();
 
 	if ( newRoot->isDir() || newRoot->isDotEntry() )
 	    rebuildTreemap( newRoot );
@@ -313,7 +313,7 @@ KTreemapView::zoomOut()
 {
     if ( _rootTile )
     {
-	KFileInfo * root = _rootTile->orig();
+	FileInfo * root = _rootTile->orig();
 
 	if ( root->parent() )
 	    root = root->parent();
@@ -350,7 +350,7 @@ KTreemapView::canZoomIn() const
 
     if ( newRootTile )
     {
-	KFileInfo * newRoot = newRootTile->orig();
+	FileInfo * newRoot = newRootTile->orig();
 
 	if ( newRoot->isDir() || newRoot->isDotEntry() )
 	    return true;
@@ -380,7 +380,7 @@ KTreemapView::canSelectParent() const
 void
 KTreemapView::rebuildTreemap()
 {
-    KFileInfo * root = 0;
+    FileInfo * root = 0;
 
     if ( ! _savedRootUrl.isEmpty() )
     {
@@ -398,7 +398,7 @@ KTreemapView::rebuildTreemap()
 
 
 void
-KTreemapView::rebuildTreemap( KFileInfo *	newRoot,
+KTreemapView::rebuildTreemap( FileInfo *	newRoot,
 			      const QSize &	newSz )
 {
     // kdDebug() << k_funcinfo << endl;
@@ -457,7 +457,7 @@ KTreemapView::rebuildTreemap( KFileInfo *	newRoot,
 
 
 void
-KTreemapView::deleteNotify( KFileInfo * )
+KTreemapView::deleteNotify( FileInfo * )
 {
     if ( _rootTile )
     {
@@ -557,7 +557,7 @@ KTreemapView::selectTile( KTreemapTile * tile )
 
 
 void
-KTreemapView::selectTile( KFileInfo * node )
+KTreemapView::selectTile( FileInfo * node )
 {
     selectTile( findTile( node ) );
 }
@@ -565,7 +565,7 @@ KTreemapView::selectTile( KFileInfo * node )
 
 
 KTreemapTile *
-KTreemapView::findTile( KFileInfo * node )
+KTreemapView::findTile( FileInfo * node )
 {
     if ( ! node )
 	return 0;
@@ -607,7 +607,7 @@ KTreemapView::visibleSize()
 
 
 QColor
-KTreemapView::tileColor( KFileInfo * file )
+KTreemapView::tileColor( FileInfo * file )
 {
     if ( file )
     {

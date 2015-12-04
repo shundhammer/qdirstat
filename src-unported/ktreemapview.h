@@ -38,8 +38,8 @@ namespace QDirStat
 {
     class KTreemapTile;
     class KTreemapSelectionRect;
-    class KDirTree;
-    class KFileInfo;
+    class DirTree;
+    class FileInfo;
 
     class KTreemapView:	public QCanvasView
     {
@@ -49,7 +49,7 @@ namespace QDirStat
 	/**
 	 * Constructor.
 	 **/
-	KTreemapView( KDirTree * 	tree,
+	KTreemapView( DirTree * 	tree,
 		      QWidget * 	parent 		= 0,
 		      const QSize &	initialSize 	= QSize() );
 
@@ -83,24 +83,24 @@ namespace QDirStat
 	KTreemapTile * rootTile() const { return _rootTile; }
 
 	/**
-	 * Returns this treemap view's @ref KDirTree.
+	 * Returns this treemap view's @ref DirTree.
 	 **/
-	KDirTree * tree() const { return _tree; }
+	DirTree * tree() const { return _tree; }
 
 	/**
 	 * Search the treemap for a tile that corresponds to the specified
-	 * KFileInfo node. Returns 0 if there is none.
+	 * FileInfo node. Returns 0 if there is none.
 	 *
 	 * Notice: This is an expensive operation since all treemap tiles need
 	 * to be searched.
 	 **/
-	KTreemapTile * findTile( KFileInfo * node );
+	KTreemapTile * findTile( FileInfo * node );
 
 	/**
 	 * Returns a suitable color for 'file' based on a set of internal rules
 	 * (according to filename extension, MIME type or permissions).
 	 **/
-	QColor tileColor( KFileInfo * file );
+	QColor tileColor( FileInfo * file );
 
 
     public slots:
@@ -113,11 +113,11 @@ namespace QDirStat
         void selectTile( KTreemapTile * tile );
 
 	/**
-	 * Search the treemap for a tile with the specified KFileInfo node and
+	 * Search the treemap for a tile with the specified FileInfo node and
 	 * select that tile if it is found. If nothing is found or if 'node' is
 	 * 0, the previously selected tile is deselected.
 	 **/
-        void selectTile( KFileInfo * node );
+        void selectTile( FileInfo * node );
 
 	/**
 	 * Zoom in one level towards the currently selected treemap tile:
@@ -127,7 +127,7 @@ namespace QDirStat
 	void zoomIn();
 
 	/**
-	 * Zoom out one level: The parent (if there is any) KFileInfo node of
+	 * Zoom out one level: The parent (if there is any) FileInfo node of
 	 * the current treemap root becomes the new root. This usually works
 	 * only after zoomIn().
 	 **/
@@ -164,7 +164,7 @@ namespace QDirStat
 	/**
 	 * Notification that a dir tree node has been deleted.
 	 **/
-	void deleteNotify( KFileInfo * node );
+	void deleteNotify( FileInfo * node );
 
 	/**
 	 * Read some parameters from the global @ref KConfig object.
@@ -177,7 +177,7 @@ namespace QDirStat
 	 * Rebuild the treemap with 'newRoot' as the new root and the specified
 	 * size. If 'newSize' is (0, 0), visibleSize() is used.
 	 **/
-	void rebuildTreemap( KFileInfo * 	newRoot,
+	void rebuildTreemap( FileInfo * 	newRoot,
 			     const QSize &	newSize = QSize() );
 
 	/**
@@ -320,7 +320,7 @@ namespace QDirStat
 	 * Emitted when the currently selected item changes.
 	 * Caution: 'item' may be 0 when the selection is cleared.
 	 **/
-	void selectionChanged( KFileInfo * item );
+	void selectionChanged( FileInfo * item );
 
 	/**
 	 * Emitted when the treemap changes, e.g. is rebuilt, zoomed in, or
@@ -378,7 +378,7 @@ namespace QDirStat
 
 	// Data members
 
-	KDirTree *		_tree;
+	DirTree *		_tree;
 	KTreemapTile *		_rootTile;
 	KTreemapTile * 		_selectedTile;
 	KTreemapSelectionRect *	_selectionRect;

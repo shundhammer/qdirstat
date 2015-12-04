@@ -7,8 +7,8 @@
  */
 
 
-#ifndef KDirReadJob_h
-#define KDirReadJob_h
+#ifndef DirReadJob_h
+#define DirReadJob_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -32,11 +32,11 @@
 namespace QDirStat
 {
     // Forward declarations
-    class KFileInfo;
-    class KDirInfo;
-    class KDirTree;
-    class KCacheReader;
-    class KDirReadJobQueue;
+    class FileInfo;
+    class DirInfo;
+    class DirTree;
+    class CacheReader;
+    class DirReadJobQueue;
 
 
     /**
@@ -47,21 +47,21 @@ namespace QDirStat
      *
      * Objects of this kind are transient by nature: They live only as long as
      * the job is queued or executed. When it is done, the data is contained in
-     * the corresponding @ref KDirInfo subtree of the corresponding @ref
-     * KDirTree.
+     * the corresponding @ref DirInfo subtree of the corresponding @ref
+     * DirTree.
      *
-     * For each entry automatically a @ref KFileInfo or @ref KDirInfo will be
-     * created and added to the parent @ref KDirInfo. For each directory a new
-     * @ref KDirReadJob will be created and added to the @ref KDirTree 's job
+     * For each entry automatically a @ref FileInfo or @ref DirInfo will be
+     * created and added to the parent @ref DirInfo. For each directory a new
+     * @ref DirReadJob will be created and added to the @ref DirTree 's job
      * queue.
      *
      * Notice: This class contains pure virtuals - you cannot use it
      * directly. Derive your own class from it or use one of
-     * @ref KLocalDirReadJob or @ref KCacheReadJob.
+     * @ref LocalDirReadJob or @ref CacheReadJob.
      *
      * @short Abstract base class for directory reading.
      **/
-    class KDirReadJob
+    class DirReadJob
     {
     public:
 
@@ -70,12 +70,12 @@ namespace QDirStat
 	 *
 	 * This does not read anything yet. Call read() for that.
 	 **/
-	KDirReadJob( KDirTree *tree, KDirInfo *dir = 0 );
+	DirReadJob( DirTree *tree, DirInfo *dir = 0 );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KDirReadJob();
+	virtual ~DirReadJob();
 
 	/**
 	 * Read the next couple of items from the directory.
@@ -88,25 +88,25 @@ namespace QDirStat
 	virtual void read();
 
 	/**
-	 * Returns the corresponding @ref KDirInfo item.
+	 * Returns the corresponding @ref DirInfo item.
 	 * Caution: This may be 0.
 	 **/
-	virtual KDirInfo * dir() { return _dir; }
+	virtual DirInfo * dir() { return _dir; }
 
 	/**
-	 * Set the corresponding @ref KDirInfo item.
+	 * Set the corresponding @ref DirInfo item.
 	 **/
-	virtual void setDir( KDirInfo * dir );
+	virtual void setDir( DirInfo * dir );
 
 	/**
 	 * Return the job queue this job is in or 0 if it isn't queued.
 	 **/
-	KDirReadJobQueue * queue() const { return _queue; }
+	DirReadJobQueue * queue() const { return _queue; }
 
 	/**
 	 * Set the job queue this job is in.
 	 **/
-	void setQueue( KDirReadJobQueue * queue ) { _queue = queue; }
+	void setQueue( DirReadJobQueue * queue ) { _queue = queue; }
 
 
     protected:
@@ -122,22 +122,22 @@ namespace QDirStat
 	 * Notification that a new child has been added.
 	 *
 	 * Derived classes are required to call this whenever a new child is
-	 * added so this notification can be passed up to the @ref KDirTree
+	 * added so this notification can be passed up to the @ref DirTree
 	 * which in turn emits a corresponding signal.
 	 **/
-	void childAdded( KFileInfo *newChild );
+	void childAdded( FileInfo *newChild );
 
 	/**
 	 * Notification that a child is about to be deleted.
 	 *
 	 * Derived classes are required to call this just before a child is
-	 * deleted so this notification can be passed up to the @ref KDirTree
+	 * deleted so this notification can be passed up to the @ref DirTree
 	 * which in turn emits a corresponding signal.
 	 *
 	 * Derived classes are not required to handle child deletion at all,
 	 * but if they do, calling this method is required.
 	 **/
-	void deletingChild( KFileInfo *deletedChild );
+	void deletingChild( FileInfo *deletedChild );
 
 	/**
 	 * Send job finished notification to the associated tree.
@@ -146,40 +146,40 @@ namespace QDirStat
 	void finished();
 
 
-	KDirTree *		_tree;
-	KDirInfo *		_dir;
-	KDirReadJobQueue *	_queue;
+	DirTree *		_tree;
+	DirInfo *		_dir;
+	DirReadJobQueue *	_queue;
 	bool			_started;
 
-    };	// class KDirReadJob
+    };	// class DirReadJob
 
 
 
     /**
-     * Wrapper class between KDirReadJob and QObject
+     * Wrapper class between DirReadJob and QObject
      **/
-    class KObjDirReadJob: public QObject, public KDirReadJob
+    class ObjDirReadJob: public QObject, public DirReadJob
     {
 	Q_OBJECT
 
     public:
 
-	KObjDirReadJob( KDirTree *tree, KDirInfo *dir = 0 )
-	    : QObject(), KDirReadJob( tree, dir ) {};
-	virtual ~KObjDirReadJob() {}
+	ObjDirReadJob( DirTree *tree, DirInfo *dir = 0 )
+	    : QObject(), DirReadJob( tree, dir ) {};
+	virtual ~ObjDirReadJob() {}
 
     protected slots:
 
-	void slotChildAdded   ( KFileInfo *child )	{ childAdded( child ); }
-	void slotDeletingChild( KFileInfo *child )	{ deletingChild( child ); }
+	void slotChildAdded   ( FileInfo *child )	{ childAdded( child ); }
+	void slotDeletingChild( FileInfo *child )	{ deletingChild( child ); }
 	void slotFinished()				{ finished(); }
 
-    };	// KObjDirReadJob
+    };	// ObjDirReadJob
 
 
 
     /**
-     * Impementation of the abstract @ref KDirReadJob class that reads a local
+     * Impementation of the abstract @ref DirReadJob class that reads a local
      * directory.
      *
      * This will use lstat() system calls rather than KDE's network transparent
@@ -191,47 +191,47 @@ namespace QDirStat
      *
      * @short Directory reader that reads one local directory.
      **/
-    class KLocalDirReadJob: public KDirReadJob
+    class LocalDirReadJob: public DirReadJob
     {
     public:
 	/**
 	 * Constructor.
 	 **/
-	KLocalDirReadJob( KDirTree * tree, KDirInfo * dir );
+	LocalDirReadJob( DirTree * tree, DirInfo * dir );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KLocalDirReadJob();
+	virtual ~LocalDirReadJob();
 
 	/**
 	 * Obtain information about the URL specified and create a new @ref
-	 * KFileInfo or a @ref KDirInfo (whatever is appropriate) from that
-	 * information. Use @ref KFileInfo::isDirInfo() to find out which.
+	 * FileInfo or a @ref DirInfo (whatever is appropriate) from that
+	 * information. Use @ref FileInfo::isDirInfo() to find out which.
 	 * Returns 0 if such information cannot be obtained (i.e. the
 	 * appropriate stat() call fails).
 	 **/
-	static KFileInfo * stat( const KURL &	url,
-				 KDirTree  *	tree,
-				 KDirInfo *	parent = 0 );
+	static FileInfo * stat( const KURL &	url,
+				 DirTree  *	tree,
+				 DirInfo *	parent = 0 );
 
     protected:
 	
 	/**
 	 * Read the directory. Prior to this nothing happens.
 	 *
-	 * Inherited and reimplemented from @ref KDirReadJob.
+	 * Inherited and reimplemented from @ref DirReadJob.
 	 **/
 	virtual void startReading();
 
 
 	DIR * _diskDir;
 
-    };	// KLocalDirReadJob
+    };	// LocalDirReadJob
 
 
 
-    class KCacheReadJob: public KObjDirReadJob
+    class CacheReadJob: public ObjDirReadJob
     {
 	Q_OBJECT
 
@@ -240,16 +240,16 @@ namespace QDirStat
 	/**
 	 * Constructor for a cache reader that is already open.
 	 *
-	 * The KCacheReadJob takes over ownership of the KCacheReader. In
-	 * particular, the KCacheReader will be destroyed with 'delete' when
+	 * The CacheReadJob takes over ownership of the CacheReader. In
+	 * particular, the CacheReader will be destroyed with 'delete' when
 	 * the read job is done.
 	 *
 	 * If 'parent' is 0, the content of the cache file will replace all
 	 * current tree items.
 	 **/
-	KCacheReadJob( KDirTree *	tree,
-		       KDirInfo *	parent,
-		       KCacheReader *	reader );
+	CacheReadJob( DirTree *	tree,
+		       DirInfo *	parent,
+		       CacheReader *	reader );
 
 	/**
 	 * Constructor that uses a cache file that is not open yet.
@@ -257,26 +257,26 @@ namespace QDirStat
 	 * If 'parent' is 0, the content of the cache file will replace all
 	 * current tree items.
 	 **/
-	KCacheReadJob( KDirTree *	tree,
-		       KDirInfo *	parent,
+	CacheReadJob( DirTree *	tree,
+		       DirInfo *	parent,
 		       const QString &	cacheFileName );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KCacheReadJob();
+	virtual ~CacheReadJob();
 
 	/**
 	 * Start reading the cache. Prior to this nothing happens.
 	 *
-	 * Inherited and reimplemented from @ref KDirReadJob.
+	 * Inherited and reimplemented from @ref DirReadJob.
 	 **/
 	virtual void read();
 
 	/**
 	 * Return the associated cache reader.
 	 **/
-	KCacheReader * reader() const { return _reader; }
+	CacheReader * reader() const { return _reader; }
 
 
     protected:
@@ -287,9 +287,9 @@ namespace QDirStat
 	void init();
 
 
-	KCacheReader * _reader;
+	CacheReader * _reader;
 
-    };	// class KCacheReadJob
+    };	// class CacheReadJob
 
 
 
@@ -298,7 +298,7 @@ namespace QDirStat
      *
      * Handles time-sliced reading automatically.
      **/
-    class KDirReadJobQueue: public QObject
+    class DirReadJobQueue: public QObject
     {
 	Q_OBJECT
 
@@ -307,28 +307,28 @@ namespace QDirStat
 	/**
 	 * Constructor.
 	 **/
-	KDirReadJobQueue();
+	DirReadJobQueue();
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KDirReadJobQueue();
+	virtual ~DirReadJobQueue();
 
 	/**
 	 * Add a job to the end of the queue. Begin time-sliced reading if not
 	 * in progress yet.
 	 **/
-	void enqueue( KDirReadJob * job );
+	void enqueue( DirReadJob * job );
 
 	/**
 	 * Remove the head of the queue and return it.
 	 **/
-	KDirReadJob * dequeue();
+	DirReadJob * dequeue();
 
 	/**
 	 * Get the head of the queue (the next job that is due for processing).
 	 **/
-	KDirReadJob * head()	const	{ return _queue.getFirst();	}
+	DirReadJob * head()	const	{ return _queue.getFirst();	}
 
 	/**
 	 * Count the number of pending jobs in the queue.
@@ -353,14 +353,14 @@ namespace QDirStat
 	/**
 	 * Delete all jobs for a subtree.
 	 **/
-	void killAll( KDirInfo * subtree );
+	void killAll( DirInfo * subtree );
 
 	/**
 	 * Notification that a job is finished.
 	 * This takes that job out of the queue and deletes it.
 	 * Read jobs are required to call this when they are finished.
 	 **/
-	void jobFinishedNotify( KDirReadJob *job );
+	void jobFinishedNotify( DirReadJob *job );
 
     signals:
 
@@ -393,7 +393,7 @@ namespace QDirStat
 
     protected:
 
-	QPtrList<KDirReadJob>	_queue;
+	QPtrList<DirReadJob>	_queue;
 	QTimer			_timer;
     };
 
@@ -401,7 +401,7 @@ namespace QDirStat
 }	// namespace QDirStat
 
 
-#endif // ifndef KDirReadJob_h
+#endif // ifndef DirReadJob_h
 
 
 // EOF

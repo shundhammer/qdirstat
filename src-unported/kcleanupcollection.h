@@ -7,8 +7,8 @@
  */
 
 
-#ifndef KCleanupCollection_h
-#define KCleanupCollection_h
+#ifndef CleanupCollection_h
+#define CleanupCollection_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -23,15 +23,15 @@ class KActionCollection;
 
 namespace QDirStat
 {
-    typedef QDict<KCleanup>		KCleanupDict;
-    typedef QDictIterator<KCleanup>	KCleanupDictIterator;
+    typedef QDict<Cleanup>		KCleanupDict;
+    typedef QDictIterator<Cleanup>	KCleanupDictIterator;
 
-    typedef QPtrList<KCleanup>		KCleanupList;
-    typedef QPtrListIterator<KCleanup>	KCleanupListIterator;
+    typedef QPtrList<Cleanup>		KCleanupList;
+    typedef QPtrListIterator<Cleanup>	KCleanupListIterator;
 
     
     /**
-     * Set of @ref KCleanup actions to be performed for @ref KDirTree items,
+     * Set of @ref Cleanup actions to be performed for @ref DirTree items,
      * consisting of a number of predefined and a number of user-defined
      * cleanups. The prime purpose of this is to make save/restore operations
      * with a number of cleanups easier. Thus, it provides a copy constructor,
@@ -41,7 +41,7 @@ namespace QDirStat
      * @short QDirStat cleanup action collection
      **/
 
-    class KCleanupCollection: public QObject
+    class CleanupCollection: public QObject
     {
 	Q_OBJECT
 
@@ -54,23 +54,23 @@ namespace QDirStat
 	 * for 'actionCollection' so the menus and toolbars can be created
 	 * using the XML UI description ('kdirstatui.rc' for QDirStat).
 	 *
-	 * All @ref KCleanup actions ever added to this collection will get
+	 * All @ref Cleanup actions ever added to this collection will get
 	 * this as their parent.
 	 **/
-	KCleanupCollection( KActionCollection *	actionCollection = 0 );
+	CleanupCollection( KActionCollection *	actionCollection = 0 );
 
 	/**
 	 * Copy Constructor.
 	 *
 	 * Makes a deep copy of this collection with 'actionCollection' set to
 	 * 0 for all copied cleanups. Please note that since there is no
-	 * complete copy constructor for @ref KCleanup, all restrictions to the
-	 * @ref KCleanup copy constructor apply to the KCleanupCollection, too:
+	 * complete copy constructor for @ref Cleanup, all restrictions to the
+	 * @ref Cleanup copy constructor apply to the CleanupCollection, too:
 	 * This copy constructor is intended for save/restore operations only,
 	 * not for general use.  In particular, DO NOT connect an object thus
 	 * constructed with signals. The results will be undefined (at best).
 	 **/
-	KCleanupCollection( const KCleanupCollection &src );
+	CleanupCollection( const CleanupCollection &src );
 
 	/**
 	 * Assignment operator.
@@ -81,12 +81,12 @@ namespace QDirStat
 	 *
 	 * For details, see the extensive comments in the source file.
 	 **/
-	KCleanupCollection &	operator= ( const KCleanupCollection &src );
+	CleanupCollection &	operator= ( const CleanupCollection &src );
 
 	/**
 	 * Destructor
 	 **/
-	virtual ~KCleanupCollection();
+	virtual ~CleanupCollection();
 
 	/**
 	 * Add the standard cleanups to this collection.
@@ -102,19 +102,19 @@ namespace QDirStat
 	 * Add one single cleanup to this collection. The collection assumes
 	 * ownerwhip of this cleanup - don't delete it!
 	 **/
-	void add( KCleanup *cleanup );
+	void add( Cleanup *cleanup );
 
 	/**
 	 * Retrieve a cleanup by its ID (internal name).
 	 * Returns 0 if there is no such cleanup.
 	 **/
-	KCleanup * cleanup( const QString & id );
+	Cleanup * cleanup( const QString & id );
 
 	/**
 	 * An alias to @ref cleanup() for convenience: Thus, you can use
 	 * collection[ "cleanup_id" ] to access any particular cleanup.
 	 **/
-	KCleanup * operator[] ( const QString & id )
+	Cleanup * operator[] ( const QString & id )
 	    { return cleanup( id ); }
 	
 	/**
@@ -125,13 +125,13 @@ namespace QDirStat
 	/**
 	 * Return (a shallow copy of) the internal cleanup list.
 	 *
-	 * Use this and a KCleanupListIterator to iterate over all cleanups in
+	 * Use this and a CleanupListIterator to iterate over all cleanups in
 	 * this collection. Remember to keep the list until you no longer need
 	 * the iterator! 
 	 *
-	 *	KCleanupCollection *coll = ...
-	 *	KCleanupList cleanup_list = coll->cleanupList();
-	 *	KCleanupListIterator it( cleanup_list );
+	 *	CleanupCollection *coll = ...
+	 *	CleanupList cleanup_list = coll->cleanupList();
+	 *	CleanupListIterator it( cleanup_list );
 	 *
 	 *	while ( *it )
 	 *	{
@@ -139,7 +139,7 @@ namespace QDirStat
 	 *	    ++it;
 	 *	}
 	 **/
-	KCleanupList cleanupList() const { return _cleanupList; }
+	CleanupList cleanupList() const { return _cleanupList; }
 
 	/**
 	 * Return the number of cleanup actions in this collection.
@@ -170,7 +170,7 @@ namespace QDirStat
 	 * selectionChanged() signal to have the cleanup collection pass this
 	 * signal to its cleanups.
 	 **/
-	void selectionChanged( KFileInfo *item );
+	void selectionChanged( FileInfo *item );
 
         /**
 	 * Read collection for all cleanups.
@@ -204,20 +204,20 @@ namespace QDirStat
 	 * Internal implementation of copy constructor and assignment operator:
 	 * Make a deep copy of the collection.
 	 **/
-	void deepCopy( const KCleanupCollection &src );
+	void deepCopy( const CleanupCollection &src );
 
 	
 	// Data members
 	
         KActionCollection *	_actionCollection;
 	int			_nextUserCleanupNo;
-	KCleanupList		_cleanupList;
-	KCleanupDict		_cleanupDict;
+	CleanupList		_cleanupList;
+	CleanupDict		_cleanupDict;
     };
 }	// namespace QDirStat
 
 
-#endif // ifndef KCleanupCollection_h
+#endif // ifndef CleanupCollection_h
 
 
 // EOF

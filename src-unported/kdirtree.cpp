@@ -21,7 +21,7 @@ using namespace QDirStat;
 
 
 
-KDirTree::KDirTree()
+DirTree::KDirTree()
     : QObject()
 {
     _root		= 0;
@@ -35,7 +35,7 @@ KDirTree::KDirTree()
 }
 
 
-KDirTree::~KDirTree()
+DirTree::~KDirTree()
 {
     selectItem( 0 );
 
@@ -45,7 +45,7 @@ KDirTree::~KDirTree()
 
 
 void
-KDirTree::readConfig()
+DirTree::readConfig()
 {
     KConfig * config = kapp->config();
     config->setGroup( "Directory Reading" );
@@ -56,7 +56,7 @@ KDirTree::readConfig()
 
 
 void
-KDirTree::setRoot( KFileInfo *newRoot )
+DirTree::setRoot( FileInfo *newRoot )
 {
     if ( _root )
     {
@@ -71,7 +71,7 @@ KDirTree::setRoot( KFileInfo *newRoot )
 
 
 void
-KDirTree::clear( bool sendSignals )
+DirTree::clear( bool sendSignals )
 {
     _jobQueue.clear();
 
@@ -94,7 +94,7 @@ KDirTree::clear( bool sendSignals )
 
 
 void
-KDirTree::startReading( const KURL & url )
+DirTree::startReading( const KURL & url )
 {
     // kdDebug() << k_funcinfo << " " << url.url() << endl;
 
@@ -114,7 +114,7 @@ KDirTree::startReading( const KURL & url )
     setRoot( 0 );
     readConfig();
 
-    _root = KLocalDirReadJob::stat( url, this );
+    _root = LocalDirReadJob::stat( url, this );
     Q_CHECK_PTR( _root );
 
     if ( _root )
@@ -123,8 +123,8 @@ KDirTree::startReading( const KURL & url )
 
 	if ( _root->isDir() )
 	{
-	    KDirInfo *dir = (KDirInfo *) _root;
-            addJob( new KLocalDirReadJob( this, dir ) );
+	    DirInfo *dir = (KDirInfo *) _root;
+            addJob( new LocalDirReadJob( this, dir ) );
 	}
 	else
 	{
@@ -143,7 +143,7 @@ KDirTree::startReading( const KURL & url )
 
 
 void
-KDirTree::refresh( KFileInfo *subtree )
+DirTree::refresh( FileInfo *subtree )
 {
     if ( ! _root )
 	return;
@@ -157,7 +157,7 @@ KDirTree::refresh( KFileInfo *subtree )
 	// Save some values from the old subtree.
 
 	KURL url		= subtree->url();
-	KDirInfo * parent	= subtree->parent();
+	DirInfo * parent	= subtree->parent();
 
 
 	// Select nothing if the current selection is to be deleted
@@ -195,7 +195,7 @@ KDirTree::refresh( KFileInfo *subtree )
 	
 	// Create new subtree root.
 
-	subtree = KLocalDirReadJob::stat( url, this, parent );
+	subtree = LocalDirReadJob::stat( url, this, parent );
 
 	// kdDebug() << "New subtree: " << subtree << endl;
 
@@ -210,8 +210,8 @@ KDirTree::refresh( KFileInfo *subtree )
 	    {
 		// Prepare reading this subtree's contents.
 
-		KDirInfo *dir = (KDirInfo *) subtree;
-                addJob( new KLocalDirReadJob( this, dir ) );
+		DirInfo *dir = (KDirInfo *) subtree;
+                addJob( new LocalDirReadJob( this, dir ) );
 	    }
 	    else
 	    {
@@ -224,7 +224,7 @@ KDirTree::refresh( KFileInfo *subtree )
 
 
 void
-KDirTree::abortReading()
+DirTree::abortReading()
 {
     if ( _jobQueue.isEmpty() )
 	return;
@@ -237,7 +237,7 @@ KDirTree::abortReading()
 
 
 void
-KDirTree::slotFinished()
+DirTree::slotFinished()
 {
     _isBusy = false;
     emit finished();
@@ -245,7 +245,7 @@ KDirTree::slotFinished()
 
 
 void
-KDirTree::childAddedNotify( KFileInfo *newChild )
+DirTree::childAddedNotify( FileInfo *newChild )
 {
     emit childAdded( newChild );
 
@@ -255,7 +255,7 @@ KDirTree::childAddedNotify( KFileInfo *newChild )
 
 
 void
-KDirTree::deletingChildNotify( KFileInfo *deletedChild )
+DirTree::deletingChildNotify( FileInfo *deletedChild )
 {
     emit deletingChild( deletedChild );
 
@@ -271,17 +271,17 @@ KDirTree::deletingChildNotify( KFileInfo *deletedChild )
 
 
 void
-KDirTree::childDeletedNotify()
+DirTree::childDeletedNotify()
 {
     emit childDeleted();
 }
 
 
 void
-KDirTree::deleteSubtree( KFileInfo *subtree )
+DirTree::deleteSubtree( FileInfo *subtree )
 {
     // kdDebug() << "Deleting subtree " << subtree << endl;
-    KDirInfo *parent = subtree->parent();
+    DirInfo *parent = subtree->parent();
 
     if ( parent )
     {
@@ -340,49 +340,49 @@ KDirTree::deleteSubtree( KFileInfo *subtree )
 
 
 void
-KDirTree::addJob( KDirReadJob * job )
+DirTree::addJob( DirReadJob * job )
 {
     _jobQueue.enqueue( job );
 }
 
 
 void
-KDirTree::sendProgressInfo( const QString &infoLine )
+DirTree::sendProgressInfo( const QString &infoLine )
 {
     emit progressInfo( infoLine );
 }
 
 
 void
-KDirTree::sendFinalizeLocal( KDirInfo *dir )
+DirTree::sendFinalizeLocal( DirInfo *dir )
 {
     emit finalizeLocal( dir );
 }
 
 
 void
-KDirTree::sendStartingReading()
+DirTree::sendStartingReading()
 {
     emit startingReading();
 }
 
 
 void
-KDirTree::sendFinished()
+DirTree::sendFinished()
 {
     emit finished();
 }
 
 
 void
-KDirTree::sendAborted()
+DirTree::sendAborted()
 {
     emit aborted();
 }
 
 
 void
-KDirTree::selectItem( KFileInfo *newSelection )
+DirTree::selectItem( FileInfo *newSelection )
 {
     if ( newSelection == _selection )
 	return;
@@ -400,19 +400,19 @@ KDirTree::selectItem( KFileInfo *newSelection )
 
 
 bool
-KDirTree::writeCache( const QString & cacheFileName )
+DirTree::writeCache( const QString & cacheFileName )
 {
-    KCacheWriter writer( cacheFileName, this );
+    CacheWriter writer( cacheFileName, this );
     return writer.ok();
 }
 
 
 void
-KDirTree::readCache( const QString & cacheFileName )
+DirTree::readCache( const QString & cacheFileName )
 {
     _isBusy = true;
     emit startingReading();
-    addJob( new KCacheReadJob( this, 0, cacheFileName ) );
+    addJob( new CacheReadJob( this, 0, cacheFileName ) );
 }
 
 

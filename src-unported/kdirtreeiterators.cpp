@@ -1,6 +1,6 @@
 /*
  *   File name:	kdirtreeiterators.h
- *   Summary:	Support classes for QDirStat - KDirTree iterator classes
+ *   Summary:	Support classes for QDirStat - DirTree iterator classes
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
@@ -18,7 +18,7 @@
 using namespace QDirStat;
 
 
-KFileInfoIterator::KFileInfoIterator( KFileInfo *	parent,
+FileInfoIterator::FileInfoIterator( KFileInfo *	parent,
 				      KDotEntryPolicy	dotEntryPolicy )
 {
     init( parent,
@@ -27,7 +27,7 @@ KFileInfoIterator::KFileInfoIterator( KFileInfo *	parent,
 }
 
 
-KFileInfoIterator::KFileInfoIterator( KFileInfo *	parent,
+FileInfoIterator::FileInfoIterator( KFileInfo *	parent,
 				      KDotEntryPolicy	dotEntryPolicy,
 				      bool		callNext )
 {
@@ -36,7 +36,7 @@ KFileInfoIterator::KFileInfoIterator( KFileInfo *	parent,
 
 
 void
-KFileInfoIterator::init( KFileInfo *		parent,
+FileInfoIterator::init( FileInfo *		parent,
 			 KDotEntryPolicy	dotEntryPolicy,
 			 bool			callNext )
 {
@@ -53,13 +53,13 @@ KFileInfoIterator::init( KFileInfo *		parent,
 }
 
 
-KFileInfoIterator::~KFileInfoIterator()
+FileInfoIterator::~FileInfoIterator()
 {
     // NOP
 }
 
 
-void KFileInfoIterator::next()
+void FileInfoIterator::next()
 {
     if ( ! _directChildrenProcessed )
     {
@@ -128,13 +128,13 @@ void KFileInfoIterator::next()
 
 
 int
-KFileInfoIterator::count()
+FileInfoIterator::count()
 {
     int cnt = 0;
 
     // Count direct children
 
-    KFileInfo *child = _parent->firstChild();
+    FileInfo *child = _parent->firstChild();
 
     while ( child )
     {
@@ -177,11 +177,11 @@ KFileInfoIterator::count()
 
 
 
-KFileInfoSortedIterator::KFileInfoSortedIterator( KFileInfo *		parent,
+FileInfoSortedIterator::FileInfoSortedIterator( KFileInfo *		parent,
 						  KDotEntryPolicy	dotEntryPolicy,
-						  KFileInfoSortOrder	sortOrder,
+						  FileInfoSortOrder	sortOrder,
 						  bool			ascending )
-    : KFileInfoIterator( parent, dotEntryPolicy, false )
+    : FileInfoIterator( parent, dotEntryPolicy, false )
 {
     _sortOrder			= sortOrder;
     _ascending			= ascending;
@@ -192,9 +192,9 @@ KFileInfoSortedIterator::KFileInfoSortedIterator( KFileInfo *		parent,
 
 
 void
-KFileInfoSortedIterator::delayedInit()
+FileInfoSortedIterator::delayedInit()
 {
-    _childrenList = new KFileInfoList( _sortOrder, _ascending );
+    _childrenList = new FileInfoList( _sortOrder, _ascending );
     CHECK_PTR( _childrenList );
 
     if ( _sortOrder == KSortByName )
@@ -211,18 +211,18 @@ KFileInfoSortedIterator::delayedInit()
 }
 
 
-KFileInfoSortedIterator::~KFileInfoSortedIterator()
+FileInfoSortedIterator::~FileInfoSortedIterator()
 {
     if ( _childrenList )
 	delete _childrenList;
 }
 
 
-void KFileInfoSortedIterator::makeDefaultOrderChildrenList()
+void FileInfoSortedIterator::makeDefaultOrderChildrenList()
 {
     // Fill children list with direct children
 
-    KFileInfo *child = _parent->firstChild();
+    FileInfo *child = _parent->firstChild();
 
     while ( child )
     {
@@ -246,7 +246,7 @@ void KFileInfoSortedIterator::makeDefaultOrderChildrenList()
     {
 	// Create a temporary list for the dot entry children
 
-	KFileInfoList dotEntryChildrenList( _sortOrder, _ascending );
+	FileInfoList dotEntryChildrenList( _sortOrder, _ascending );
 	child = _parent->dotEntry()->firstChild();
 
 	while ( child )
@@ -272,9 +272,9 @@ void KFileInfoSortedIterator::makeDefaultOrderChildrenList()
 
 
 void
-KFileInfoSortedIterator::makeChildrenList()
+FileInfoSortedIterator::makeChildrenList()
 {
-    KFileInfoIterator it( _parent, _policy );
+    FileInfoIterator it( _parent, _policy );
 
     while ( *it )
     {
@@ -286,8 +286,8 @@ KFileInfoSortedIterator::makeChildrenList()
 }
 
 
-KFileInfo *
-KFileInfoSortedIterator::current()
+FileInfo *
+FileInfoSortedIterator::current()
 {
     if ( ! _initComplete )
 	delayedInit();
@@ -296,7 +296,7 @@ KFileInfoSortedIterator::current()
 }
 
 
-void KFileInfoSortedIterator::next()
+void FileInfoSortedIterator::next()
 {
     if ( ! _initComplete )
 	delayedInit();
@@ -306,7 +306,7 @@ void KFileInfoSortedIterator::next()
 
 
 bool
-KFileInfoSortedIterator::finished()
+FileInfoSortedIterator::finished()
 {
     if ( ! _initComplete )
 	delayedInit();
@@ -319,20 +319,20 @@ KFileInfoSortedIterator::finished()
 
 
 
-KFileInfoSortedBySizeIterator::KFileInfoSortedBySizeIterator( KFileInfo *		parent,
+FileInfoSortedBySizeIterator::FileInfoSortedBySizeIterator( KFileInfo *		parent,
 							      KFileSize			minSize,
 							      KDotEntryPolicy		dotEntryPolicy,
 							      bool			ascending )
-    : KFileInfoSortedIterator( parent, dotEntryPolicy, KSortByTotalSize, ascending )
+    : FileInfoSortedIterator( parent, dotEntryPolicy, KSortByTotalSize, ascending )
     , _minSize( minSize )
 {
 }
 
 
 void
-KFileInfoSortedBySizeIterator::makeChildrenList()
+FileInfoSortedBySizeIterator::makeChildrenList()
 {
-    KFileInfoIterator it( _parent, _policy );
+    FileInfoIterator it( _parent, _policy );
 
     while ( *it )
     {
@@ -350,15 +350,15 @@ KFileInfoSortedBySizeIterator::makeChildrenList()
 
 
 
-KFileInfoList::KFileInfoList( KFileInfoSortOrder sortOrder, bool ascending )
-    : QPtrList<KFileInfo>()
+FileInfoList::FileInfoList( KFileInfoSortOrder sortOrder, bool ascending )
+    : QPtrList<FileInfo>()
 {
     _sortOrder	= sortOrder;
     _ascending	= ascending;
 }
 
 
-KFileInfoList::~KFileInfoList()
+FileInfoList::~FileInfoList()
 {
     // NOP
 }
@@ -366,10 +366,10 @@ KFileInfoList::~KFileInfoList()
 
 
 KFileSize
-KFileInfoList::sumTotalSizes()
+FileInfoList::sumTotalSizes()
 {
     KFileSize sum = 0;
-    KFileInfoListIterator it( *this );
+    FileInfoListIterator it( *this );
     
     while ( *it )
     {
@@ -383,13 +383,13 @@ KFileInfoList::sumTotalSizes()
 
 
 int
-KFileInfoList::compareItems( QCollection::Item it1, QCollection::Item it2 )
+FileInfoList::compareItems( QCollection::Item it1, QCollection::Item it2 )
 {
     if ( it1 == it2 )
 	return 0;
 
-    KFileInfo *file1 = (KFileInfo *) it1;
-    KFileInfo *file2 = (KFileInfo *) it2;
+    FileInfo *file1 = (KFileInfo *) it1;
+    FileInfo *file2 = (KFileInfo *) it2;
 
     int result = 0;
 

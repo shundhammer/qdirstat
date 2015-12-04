@@ -41,7 +41,7 @@
 using namespace QDirStat;
 
 
-KSettingsDialog::KSettingsDialog( QDirStatApp *mainWin )
+SettingsDialog::KSettingsDialog( QDirStatApp *mainWin )
     : KDialogBase( Tabbed,					// dialogFace
 		   i18n( "Settings" ),				// caption
 		   Ok | Apply | Default | Cancel | Help,	// buttonMask
@@ -66,7 +66,7 @@ KSettingsDialog::KSettingsDialog( QDirStatApp *mainWin )
      * dumb for any kind of geometry management - it cannot even handle one
      * single child right. So, let's have KDialogBase create something more
      * intelligent: A QVBox (which is derived from QFrame anyway). This QVBox
-     * gets only one child - the KSettingsPage. This KSettingsPage handles its
+     * gets only one child - the SettingsPage. This KSettingsPage handles its
      * own layout.
      **/
 
@@ -74,11 +74,11 @@ KSettingsDialog::KSettingsDialog( QDirStatApp *mainWin )
 
     page = addVBoxPage( i18n( "&Cleanups" ) );
     _cleanupsPageIndex = pageIndex( page );
-    new KCleanupPage( this, page, _mainWin );
+    new CleanupPage( this, page, _mainWin );
 
     page = addVBoxPage( i18n( "&Tree Colors" ) );
     _treeColorsPageIndex = pageIndex( page );
-    new KTreeColorsPage( this, page, _mainWin );
+    new TreeColorsPage( this, page, _mainWin );
 
     page = addVBoxPage( i18n( "Tree&map" ) );
     _treemapPageIndex = pageIndex( page );
@@ -86,20 +86,20 @@ KSettingsDialog::KSettingsDialog( QDirStatApp *mainWin )
 
     page = addVBoxPage( i18n( "&General" ) );
     _generalSettingsPageIndex = pageIndex( page );
-    new KGeneralSettingsPage( this, page, _mainWin );
+    new GeneralSettingsPage( this, page, _mainWin );
 
     // resize( sizeHint() );
 }
 
 
-KSettingsDialog::~KSettingsDialog()
+SettingsDialog::~KSettingsDialog()
 {
     // NOP
 }
 
 
 void
-KSettingsDialog::show()
+SettingsDialog::show()
 {
     emit aboutToShow();
     KDialogBase::show();
@@ -107,7 +107,7 @@ KSettingsDialog::show()
 
 
 void
-KSettingsDialog::slotDefault()
+SettingsDialog::slotDefault()
 {
     if ( KMessageBox::warningContinueCancel( this,
 					     i18n( "Really revert all settings to their default values?\n"
@@ -123,7 +123,7 @@ KSettingsDialog::slotDefault()
 
 
 void
-KSettingsDialog::slotHelp()
+SettingsDialog::slotHelp()
 {
     QString helpTopic = "";
 
@@ -140,7 +140,7 @@ KSettingsDialog::slotHelp()
 /*--------------------------------------------------------------------------*/
 
 
-KSettingsPage::KSettingsPage( KSettingsDialog * dialog,
+SettingsPage::KSettingsPage( SettingsDialog * dialog,
 			      QWidget *		parent )
     : QWidget( parent )
 {
@@ -158,7 +158,7 @@ KSettingsPage::KSettingsPage( KSettingsDialog * dialog,
 }
 
 
-KSettingsPage::~KSettingsPage()
+SettingsPage::~KSettingsPage()
 {
     // NOP
 }
@@ -167,10 +167,10 @@ KSettingsPage::~KSettingsPage()
 /*--------------------------------------------------------------------------*/
 
 
-KTreeColorsPage::KTreeColorsPage( KSettingsDialog *	dialog,
+TreeColorsPage::KTreeColorsPage( SettingsDialog *	dialog,
 				  QWidget *		parent,
 				  QDirStatApp *		mainWin )
-    : KSettingsPage( dialog, parent )
+    : SettingsPage( dialog, parent )
     , _mainWin( mainWin )
     , _treeView( mainWin->treeView() )
     , _maxButtons( QDirStatSettingsMaxColorButton )
@@ -226,14 +226,14 @@ KTreeColorsPage::KTreeColorsPage( KSettingsDialog *	dialog,
 }
 
 
-KTreeColorsPage::~KTreeColorsPage()
+TreeColorsPage::~KTreeColorsPage()
 {
     // NOP
 }
 
 
 void
-KTreeColorsPage::apply()
+TreeColorsPage::apply()
 {
     _treeView->setUsedFillColors( _slider->value() );
 
@@ -247,7 +247,7 @@ KTreeColorsPage::apply()
 
 
 void
-KTreeColorsPage::revertToDefaults()
+TreeColorsPage::revertToDefaults()
 {
     _treeView->setDefaultFillColors();
     setup();
@@ -255,7 +255,7 @@ KTreeColorsPage::revertToDefaults()
 
 
 void
-KTreeColorsPage::setup()
+TreeColorsPage::setup()
 {
     for ( int i=0; i < _maxButtons; i++ )
     {
@@ -268,7 +268,7 @@ KTreeColorsPage::setup()
 
 
 void
-KTreeColorsPage::enableColors( int maxColors )
+TreeColorsPage::enableColors( int maxColors )
 {
     for ( int i=0; i < _maxButtons; i++ )
     {
@@ -282,10 +282,10 @@ KTreeColorsPage::enableColors( int maxColors )
 
 
 
-KCleanupPage::KCleanupPage( KSettingsDialog *	dialog,
+CleanupPage::CleanupPage( SettingsDialog *	dialog,
 			    QWidget *		parent,
 			    QDirStatApp *	mainWin )
-    : KSettingsPage( dialog, parent )
+    : SettingsPage( dialog, parent )
     , _mainWin( mainWin )
     , _currentCleanup( 0 )
 {
@@ -298,8 +298,8 @@ KCleanupPage::KCleanupPage( KSettingsDialog *	dialog,
     QHBoxLayout * layout = new QHBoxLayout( this,
 					    0,				// border
 					    dialog->spacingHint() );	// spacing
-    _listBox	= new KCleanupListBox( this );
-    _props	= new KCleanupPropertiesPage( this, mainWin );
+    _listBox	= new CleanupListBox( this );
+    _props	= new CleanupPropertiesPage( this, mainWin );
 
 
     // Connect list box signals to reflect changes in the list
@@ -307,8 +307,8 @@ KCleanupPage::KCleanupPage( KSettingsDialog *	dialog,
     // clicks on a different cleanup in the list, the properties page
     // will display that cleanup's values.
 
-    connect( _listBox, SIGNAL( selectCleanup( KCleanup * ) ),
-	     this,     SLOT  ( changeCleanup( KCleanup * ) ) );
+    connect( _listBox, SIGNAL( selectCleanup( Cleanup * ) ),
+	     this,     SLOT  ( changeCleanup( Cleanup * ) ) );
 
 
     // Fill list box so it can determine a reasonable startup geometry - that
@@ -325,14 +325,14 @@ KCleanupPage::KCleanupPage( KSettingsDialog *	dialog,
 }
 
 
-KCleanupPage::~KCleanupPage()
+CleanupPage::~CleanupPage()
 {
     // NOP
 }
 
 
 void
-KCleanupPage::changeCleanup( KCleanup * newCleanup )
+CleanupPage::changeCleanup( Cleanup * newCleanup )
 {
     if ( _currentCleanup && newCleanup != _currentCleanup )
     {
@@ -345,14 +345,14 @@ KCleanupPage::changeCleanup( KCleanup * newCleanup )
 
 
 void
-KCleanupPage::apply()
+CleanupPage::apply()
 {
     exportCleanups();
 }
 
 
 void
-KCleanupPage::revertToDefaults()
+CleanupPage::revertToDefaults()
 {
     _mainWin->revertCleanupsToDefaults();
     setup();
@@ -360,15 +360,15 @@ KCleanupPage::revertToDefaults()
 
 
 void
-KCleanupPage::setup()
+CleanupPage::setup()
 {
     importCleanups();
 
     // Fill the list box.
 
     _listBox->clear();
-    KCleanupList cleanupList = _workCleanupCollection.cleanupList();
-    KCleanupListIterator it( cleanupList );
+    CleanupList cleanupList = _workCleanupCollection.cleanupList();
+    CleanupListIterator it( cleanupList );
 
     while ( *it )
     {
@@ -385,7 +385,7 @@ KCleanupPage::setup()
 
 
 void
-KCleanupPage::importCleanups()
+CleanupPage::importCleanups()
 {
     // Copy the main window's cleanup collecton to _workCleanupCollection.
 
@@ -399,7 +399,7 @@ KCleanupPage::importCleanups()
 
 
 void
-KCleanupPage::exportCleanups()
+CleanupPage::exportCleanups()
 {
     // Retrieve any pending changes from the properties page and store
     // them in the current cleanup.
@@ -415,7 +415,7 @@ KCleanupPage::exportCleanups()
 
 
 void
-KCleanupPage::storeProps( KCleanup * cleanup )
+CleanupPage::storeProps( Cleanup * cleanup )
 {
     if ( cleanup )
     {
@@ -434,7 +434,7 @@ KCleanupPage::storeProps( KCleanup * cleanup )
 /*--------------------------------------------------------------------------*/
 
 
-KCleanupListBox::KCleanupListBox( QWidget *parent )
+CleanupListBox::CleanupListBox( QWidget *parent )
    : QListBox( parent )
 {
     _selection = 0;
@@ -446,7 +446,7 @@ KCleanupListBox::KCleanupListBox( QWidget *parent )
 
 
 QSize
-KCleanupListBox::sizeHint() const
+CleanupListBox::sizeHint() const
 {
     // FIXME: Is this still needed with Qt 2.x?
 
@@ -468,20 +468,20 @@ KCleanupListBox::sizeHint() const
 
 
 void
-KCleanupListBox::insert( KCleanup * cleanup )
+CleanupListBox::insert( Cleanup * cleanup )
 {
     // Create a new listbox item - this will insert itself (!) automatically.
     // It took me half an afternoon to figure _this_ out. Not too intuitive
     // when there is an insertItem() method, too, eh?
 
-    new KCleanupListBoxItem( this, cleanup );
+    new CleanupListBoxItem( this, cleanup );
 }
 
 
 void
-KCleanupListBox::selectCleanup( QListBoxItem * listBoxItem )
+CleanupListBox::selectCleanup( QListBoxItem * listBoxItem )
 {
-    KCleanupListBoxItem * item = (KCleanupListBoxItem *) listBoxItem;
+    CleanupListBoxItem * item = (CleanupListBoxItem *) listBoxItem;
 
     _selection = item->cleanup();
     emit selectCleanup( _selection );
@@ -489,16 +489,16 @@ KCleanupListBox::selectCleanup( QListBoxItem * listBoxItem )
 
 
 void
-KCleanupListBox::updateTitle( KCleanup * cleanup )
+CleanupListBox::updateTitle( Cleanup * cleanup )
 {
-    KCleanupListBoxItem * item = (KCleanupListBoxItem *) firstItem();
+    CleanupListBoxItem * item = (CleanupListBoxItem *) firstItem();
 
     while ( item )
     {
 	if ( ! cleanup || item->cleanup() == cleanup )
 	    item->updateTitle();
 
-	item = (KCleanupListBoxItem *) item->next();
+	item = (CleanupListBoxItem *) item->next();
     }
 }
 
@@ -506,8 +506,8 @@ KCleanupListBox::updateTitle( KCleanup * cleanup )
 /*--------------------------------------------------------------------------*/
 
 
-KCleanupListBoxItem::KCleanupListBoxItem( KCleanupListBox *	listBox,
-					  KCleanup *		cleanup )
+CleanupListBoxItem::CleanupListBoxItem( CleanupListBox *	listBox,
+					  Cleanup *		cleanup )
     : QListBoxText( listBox )
     , _cleanup( cleanup )
 {
@@ -517,7 +517,7 @@ KCleanupListBoxItem::KCleanupListBoxItem( KCleanupListBox *	listBox,
 
 
 void
-KCleanupListBoxItem::updateTitle()
+CleanupListBoxItem::updateTitle()
 {
     setText( _cleanup->cleanTitle() );
 }
@@ -526,7 +526,7 @@ KCleanupListBoxItem::updateTitle()
 /*--------------------------------------------------------------------------*/
 
 
-KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
+CleanupPropertiesPage::CleanupPropertiesPage( QWidget *	parent,
 						QDirStatApp *	mainWin )
    : QWidget( parent )
    , _mainWin( mainWin )
@@ -660,14 +660,14 @@ KCleanupPropertiesPage::KCleanupPropertiesPage( QWidget *	parent,
 
 
 void
-KCleanupPropertiesPage::enableFields( bool active )
+CleanupPropertiesPage::enableFields( bool active )
 {
     _fields->setEnabled( active );
 }
 
 
 void
-KCleanupPropertiesPage::setFields( const KCleanup * cleanup )
+CleanupPropertiesPage::setFields( const Cleanup * cleanup )
 {
     _id = cleanup->id();
     _enabled->setChecked		( cleanup->enabled()		);
@@ -685,10 +685,10 @@ KCleanupPropertiesPage::setFields( const KCleanup * cleanup )
 }
 
 
-KCleanup
-KCleanupPropertiesPage::fields() const
+Cleanup
+CleanupPropertiesPage::fields() const
 {
-    KCleanup cleanup( _id );
+    Cleanup cleanup( _id );
 
     cleanup.setEnabled			( _enabled->isChecked()		   );
     cleanup.setTitle			( _title->text()		   );
@@ -699,7 +699,7 @@ KCleanupPropertiesPage::fields() const
     cleanup.setWorksForFile		( _worksForFile->isChecked()	   );
     cleanup.setWorksLocalOnly		( _worksForProtocols->currentItem() == 0 ? true : false );
     cleanup.setWorksForDotEntry		( _worksForDotEntry->isChecked()   );
-    cleanup.setRefreshPolicy		( (KCleanup::RefreshPolicy) _refreshPolicy->currentItem() );
+    cleanup.setRefreshPolicy		( (Cleanup::RefreshPolicy) _refreshPolicy->currentItem() );
 
     return cleanup;
 }
@@ -708,10 +708,10 @@ KCleanupPropertiesPage::fields() const
 /*--------------------------------------------------------------------------*/
 
 
-KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
+GeneralSettingsPage::KGeneralSettingsPage( SettingsDialog *	dialog,
 					    QWidget *		parent,
 					    QDirStatApp *	mainWin )
-    : KSettingsPage( dialog, parent )
+    : SettingsPage( dialog, parent )
     , _mainWin( mainWin )
     , _treeView( mainWin->treeView() )
 {
@@ -769,7 +769,7 @@ KGeneralSettingsPage::KGeneralSettingsPage( KSettingsDialog *	dialog,
 }
 
 
-KGeneralSettingsPage::~KGeneralSettingsPage()
+GeneralSettingsPage::~KGeneralSettingsPage()
 {
     if ( _excludeRuleContextMenu )
 	delete _excludeRuleContextMenu;
@@ -777,7 +777,7 @@ KGeneralSettingsPage::~KGeneralSettingsPage()
 
 
 void
-KGeneralSettingsPage::showExcludeRuleContextMenu( QListViewItem *, const QPoint &pos, int )
+GeneralSettingsPage::showExcludeRuleContextMenu( QListViewItem *, const QPoint &pos, int )
 {
     if ( ! _excludeRuleContextMenu )
     {
@@ -795,7 +795,7 @@ KGeneralSettingsPage::showExcludeRuleContextMenu( QListViewItem *, const QPoint 
 
 
 void
-KGeneralSettingsPage::apply()
+GeneralSettingsPage::apply()
 {
     KConfig * config = kapp->config();
 
@@ -813,7 +813,7 @@ KGeneralSettingsPage::apply()
     config->setGroup( "Exclude" );
     
     QStringList excludeRulesStringList;
-    KExcludeRules::excludeRules()->clear();
+    ExcludeRules::excludeRules()->clear();
     QListViewItem * item = _excludeRulesListView->firstChild();
     
     while ( item )
@@ -821,7 +821,7 @@ KGeneralSettingsPage::apply()
 	QString ruleText = item->text(0);
 	excludeRulesStringList.append( ruleText );
 	// kdDebug() << "Adding exclude rule " << ruleText << endl;
-	KExcludeRules::excludeRules()->add( new KExcludeRule( QRegExp( ruleText ) ) );
+	ExcludeRules::excludeRules()->add( new ExcludeRule( QRegExp( ruleText ) ) );
 	item = item->nextSibling();
     }
 
@@ -830,7 +830,7 @@ KGeneralSettingsPage::apply()
 
 
 void
-KGeneralSettingsPage::revertToDefaults()
+GeneralSettingsPage::revertToDefaults()
 {
     _crossFileSystems->setChecked( false );
     _enableLocalDirReader->setChecked( true );
@@ -845,7 +845,7 @@ KGeneralSettingsPage::revertToDefaults()
 
 
 void
-KGeneralSettingsPage::setup()
+GeneralSettingsPage::setup()
 {
     KConfig * config = kapp->config();
     config->setGroup( "Directory Reading" );
@@ -857,13 +857,13 @@ KGeneralSettingsPage::setup()
     _enableTreeViewAnimation->setChecked( _treeView->doPacManAnimation() );
 
     _excludeRulesListView->clear();
-    KExcludeRule * excludeRule = KExcludeRules::excludeRules()->first();
+    ExcludeRule * excludeRule = ExcludeRules::excludeRules()->first();
 
     while ( excludeRule )
     {
 	// _excludeRulesListView->insertItem();
 	new QListViewItem( _excludeRulesListView, excludeRule->regexp().pattern() );
-	excludeRule = KExcludeRules::excludeRules()->next();
+	excludeRule = ExcludeRules::excludeRules()->next();
     }
     
     checkEnabledState();
@@ -871,7 +871,7 @@ KGeneralSettingsPage::setup()
 
 
 void
-KGeneralSettingsPage::checkEnabledState()
+GeneralSettingsPage::checkEnabledState()
 {
     _crossFileSystems->setEnabled( _enableLocalDirReader->isChecked() );
 
@@ -883,7 +883,7 @@ KGeneralSettingsPage::checkEnabledState()
 
 
 void
-KGeneralSettingsPage::addExcludeRule()
+GeneralSettingsPage::addExcludeRule()
 {
     bool ok;
     QString text = QInputDialog::getText( i18n( "New exclude rule" ),
@@ -903,7 +903,7 @@ KGeneralSettingsPage::addExcludeRule()
 
 
 void
-KGeneralSettingsPage::editExcludeRule()
+GeneralSettingsPage::editExcludeRule()
 {
     QListViewItem * item = _excludeRulesListView->currentItem();
 
@@ -930,7 +930,7 @@ KGeneralSettingsPage::editExcludeRule()
 
 
 void
-KGeneralSettingsPage::deleteExcludeRule()
+GeneralSettingsPage::deleteExcludeRule()
 {
     QListViewItem * item = _excludeRulesListView->currentItem();
 
@@ -953,10 +953,10 @@ KGeneralSettingsPage::deleteExcludeRule()
 /*--------------------------------------------------------------------------*/
 
 
-KTreemapPage::KTreemapPage( KSettingsDialog *	dialog,
+KTreemapPage::KTreemapPage( SettingsDialog *	dialog,
 					    QWidget *		parent,
 					    QDirStatApp *	mainWin )
-    : KSettingsPage( dialog, parent )
+    : SettingsPage( dialog, parent )
     , _mainWin( mainWin )
 {
     // kdDebug() << k_funcinfo << endl;

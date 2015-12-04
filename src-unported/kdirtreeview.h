@@ -7,8 +7,8 @@
  */
 
 
-#ifndef KDirTreeView_h
-#define KDirTreeView_h
+#ifndef DirTreeView_h
+#define DirTreeView_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -39,21 +39,21 @@ class KPacManAnimation;
 
 namespace QDirStat
 {
-#define KDirTreeViewMaxFillColor	16
+#define DirTreeViewMaxFillColor	16
 
 
 #if USE_KLISTVIEW
-#   define KDirTreeViewParentClass		KListView
+#   define DirTreeViewParentClass		KListView
 #else
-#   define KDirTreeViewParentClass		QListView
+#   define DirTreeViewParentClass		QListView
 #endif
 
-    class KDirTreeViewItem;
+    class DirTreeViewItem;
 
 
-    class KDirTreeView:	public QListView
+    class DirTreeView:	public QListView
     // Using
-    //		class KDirTreeView: public KDirTreeViewParentClass
+    //		class DirTreeView: public DirTreeViewParentClass
     // or some other 'ifdef' ... construct seems to confuse "moc".
     {
 	Q_OBJECT
@@ -62,12 +62,12 @@ namespace QDirStat
 	/**
 	 * Default constructor.
 	 **/
-	KDirTreeView( QWidget * parent = 0 );
+	DirTreeView( QWidget * parent = 0 );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KDirTreeView();
+	virtual ~DirTreeView();
 
 	/**
 	 * Locate the counterpart to an original tree item "wanted" somewhere
@@ -76,7 +76,7 @@ namespace QDirStat
 	 * "doClone" specifies whether or not to (deferred) clone nodes that
 	 * are not cloned yet. This is only used if "lazy" is false.
 	 **/
-	KDirTreeViewItem *	locate( KFileInfo *	wanted,
+	DirTreeViewItem *	locate( FileInfo *	wanted,
 					bool		lazy	= true,
 					bool		doClone	= true );
 
@@ -85,13 +85,13 @@ namespace QDirStat
 	 * Use the child's next() method to get the next child.
 	 * Reimplemented from @ref QListView.
 	 **/
-	KDirTreeViewItem *	firstChild() const
-	    { return (KDirTreeViewItem *) KDirTreeViewParentClass::firstChild(); }
+	DirTreeViewItem *	firstChild() const
+	    { return (DirTreeViewItem *) DirTreeViewParentClass::firstChild(); }
 
 	/**
 	 * Return the currently selected item or 0, if none is selected.
 	 **/
-	KDirTreeViewItem *	selection() const { return _selection; }
+	DirTreeViewItem *	selection() const { return _selection; }
 
 	/**
 	 * Returns the default level until which items are opened by default
@@ -131,13 +131,13 @@ namespace QDirStat
 
 	/**
 	 * Very much like @ref fillColor(), but doesn't wrap around at @ref
-	 * usedFillColors(), but at KDirTreeViewMaxFillColor.
+	 * usedFillColors(), but at DirTreeViewMaxFillColor.
 	 **/
 	const QColor &	rawFillColor( int level ) const;
 
 	/**
 	 * Set the fill color of percentage bars of the specified directory
-	 * level (0..KDirTreeViewMaxFillColor-1).
+	 * level (0..DirTreeViewMaxFillColor-1).
 	 *
 	 * Calling repaint() after setting all desired colors is the
 	 * caller's responsibility.
@@ -151,7 +151,7 @@ namespace QDirStat
 
 	/**
 	 * Set the number of used percentage bar fill colors
-	 * (1..KDirTreeViewMaxFillColor).
+	 * (1..DirTreeViewMaxFillColor).
 	 **/
 	void setUsedFillColors( int usedFillColors );
 
@@ -205,12 +205,12 @@ namespace QDirStat
 	virtual void setSorting( int column, bool increasing = TRUE );
 
 	/**
-	 * Returns the internal @ref KDirTree this view works on.
+	 * Returns the internal @ref DirTree this view works on.
 	 * Handle with caution: This might be short-lived information.
 	 * The view might choose to create a new tree shortly after returning
 	 * this, so don't store this pointer internally.
 	 **/
-	KDirTree *tree()			{ return _tree; }
+	DirTree *tree()			{ return _tree; }
 
 	int	nameCol()		const	{ return _nameCol;		}
 	int	iconCol()		const	{ return _iconCol;		}
@@ -289,13 +289,13 @@ namespace QDirStat
 	 * Select an item. Triggers selectionChanged() signals.
 	 * Overloaded for convenience.
 	 **/
-        void selectItem( KDirTreeViewItem *item ) { selectItem( (QListViewItem *) item ); }
+        void selectItem( DirTreeViewItem *item ) { selectItem( (QListViewItem *) item ); }
 
 	/**
-	 * Select a KDirTree item. Used for connecting the @ref
-	 * KDirTree::selectionChanged() signal.
+	 * Select a DirTree item. Used for connecting the @ref
+	 * DirTree::selectionChanged() signal.
 	 **/
-	void selectItem( KFileInfo *item );
+	void selectItem( FileInfo *item );
 
 	/**
 	 * Clear the current selection. Triggers selectionChanged() signals.
@@ -305,7 +305,7 @@ namespace QDirStat
 	/**
 	 * Close all tree branches except the one specified.
 	 **/
-	void closeAllExcept( KDirTreeViewItem *except );
+	void closeAllExcept( DirTreeViewItem *except );
 
 	/**
 	 * Send a standardized mail to the owner of the selected branch.
@@ -364,12 +364,12 @@ namespace QDirStat
 	 * Add a child as a clone of original tree item "newChild" to this view
 	 * tree.
 	 **/
-	void	addChild	( KFileInfo *newChild );
+	void	addChild	( FileInfo *newChild );
 
 	/**
 	 * Delete a cloned child.
 	 **/
-	void	deleteChild	( KFileInfo *newChild );
+	void	deleteChild	( FileInfo *newChild );
 
 	/**
 	 * Recursively update the visual representation of the summary fields.
@@ -394,7 +394,7 @@ namespace QDirStat
 	 * Signal end of one read job at this level and finalize display of
 	 * this level.
 	 **/
-	void	finalizeLocal( KDirInfo *dir );
+	void	finalizeLocal( DirInfo *dir );
 
 	/**
 	 * Display progress information in the status bar. Automatically adds
@@ -486,13 +486,13 @@ namespace QDirStat
 	 * Emitted when the currently selected item changes.
 	 * Caution: 'item' may be 0 when the selection is cleared.
 	 **/
-	void selectionChanged( KDirTreeViewItem *item );
+	void selectionChanged( DirTreeViewItem *item );
 
 	/**
 	 * Emitted when the currently selected item changes.
 	 * Caution: 'item' may be 0 when the selection is cleared.
 	 **/
-	void selectionChanged( KFileInfo *item );
+	void selectionChanged( FileInfo *item );
 
 	/**
 	 * Emitted when a context menu for this item should be opened.
@@ -505,7 +505,7 @@ namespace QDirStat
 	 * The context menu may not open on a right click on every column,
 	 * usually only in the nameCol().
 	 **/
-	void contextMenu( KDirTreeViewItem *item, const QPoint &pos );
+	void contextMenu( DirTreeViewItem *item, const QPoint &pos );
 
 	/**
 	 * Emitted at user activity. Some interactive actions are assigned an
@@ -528,11 +528,11 @@ namespace QDirStat
 	// Data members
 	//
 
-	KDirTree *		_tree;
+	DirTree *		_tree;
 	QTimer *		_updateTimer;
 	QTime			_stopWatch;
 	QString			_currentDir;
-	KDirTreeViewItem *	_selection;
+	DirTreeViewItem *	_selection;
 	QPopupMenu *		_contextInfo;
 	int			_idContextInfo;
 
@@ -541,7 +541,7 @@ namespace QDirStat
 	bool	_doPacManAnimation;
 	int	_updateInterval;	// millisec
 	int	_usedFillColors;
-	QColor	_fillColor [ KDirTreeViewMaxFillColor ];
+	QColor	_fillColor [ DirTreeViewMaxFillColor ];
 	QColor	_treeBackground;
 	QColor	_percentageBarBackground;
 
@@ -586,26 +586,26 @@ namespace QDirStat
 
 
 
-    class KDirTreeViewItem: public QListViewItem
+    class DirTreeViewItem: public QListViewItem
     {
     public:
 	/**
 	 * Constructor for the root item.
 	 **/
-	KDirTreeViewItem	( KDirTreeView *	view,
-				  KFileInfo *		orig );
+	DirTreeViewItem	( DirTreeView *	view,
+				  FileInfo *		orig );
 
 	/**
 	 * Constructor for all other items.
 	 **/
-	KDirTreeViewItem	( KDirTreeView *	view,
-				  KDirTreeViewItem *	parent,
-				  KFileInfo *		orig );
+	DirTreeViewItem	( DirTreeView *	view,
+				  DirTreeViewItem *	parent,
+				  FileInfo *		orig );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KDirTreeViewItem();
+	virtual ~DirTreeViewItem();
 
 	/**
 	 * Locate the counterpart to an original tree item "wanted" somewhere
@@ -617,7 +617,7 @@ namespace QDirStat
 	 * "Level" is just a hint for the current tree level for better
 	 * performance. It will be calculated automatically if omitted.
 	 **/
-	KDirTreeViewItem *	locate( KFileInfo *	wanted,
+	DirTreeViewItem *	locate( FileInfo *	wanted,
 					bool 		lazy	= true,
 					bool		doClone	= true,
 					int 		level	= -1 );
@@ -645,34 +645,34 @@ namespace QDirStat
 	/**
 	 * Returns the corresponding view.
 	 **/
-	KDirTreeView *		view()		{ return _view; 	}
+	DirTreeView *		view()		{ return _view; 	}
 
 
 	/**
 	 * Returns the parent view item or 0 if this is the root.
 	 **/
-	KDirTreeViewItem *	parent()	{ return _parent;	}
+	DirTreeViewItem *	parent()	{ return _parent;	}
 
 	/**
 	 * Returns the corresponding original item of the "real" (vs. view)
 	 * tree where all the important information resides.
 	 **/
-	KFileInfo *		orig()		{ return _orig;	}
+	FileInfo *		orig()		{ return _orig;	}
 
 	/**
 	 * Returns the first child of this item or 0 if there is none.
 	 * Use the child's next() method to get the next child.
 	 * Reimplemented from @ref QListViewItem.
 	 **/
-	KDirTreeViewItem * 	firstChild() const
-	    { return (KDirTreeViewItem *) QListViewItem::firstChild(); }
+	DirTreeViewItem * 	firstChild() const
+	    { return (DirTreeViewItem *) QListViewItem::firstChild(); }
 
 	/**
 	 * Returns the next sibling of this item or 0 if there is none.
 	 * (Kind of) reimplemented from @ref QListViewItem.
 	 **/
-	KDirTreeViewItem * 	next() const
-	    { return (KDirTreeViewItem *) QListViewItem::nextSibling(); }
+	DirTreeViewItem * 	next() const
+	    { return (DirTreeViewItem *) QListViewItem::nextSibling(); }
 
 	/**
 	 * Comparison function used for sorting the list.
@@ -754,7 +754,7 @@ namespace QDirStat
 	 *
 	 * Returns 0 if there is no dot entry clone.
 	 **/
-	KDirTreeViewItem * findDotEntry() const;
+	DirTreeViewItem * findDotEntry() const;
 
 
 	/**
@@ -797,17 +797,17 @@ namespace QDirStat
 	/**
 	 * Initializations common to all constructors.
 	 **/
-	void init	( KDirTreeView *	view,
-			  KDirTreeViewItem *	parent,
-			  KFileInfo *		orig );
+	void init	( DirTreeView *	view,
+			  DirTreeViewItem *	parent,
+			  FileInfo *		orig );
 
     protected:
 
 	// Data members
 
-	KDirTreeView *		_view;
-	KDirTreeViewItem *	_parent;
-	KFileInfo *		_orig;
+	DirTreeView *		_view;
+	DirTreeViewItem *	_parent;
+	FileInfo *		_orig;
 	KPacManAnimation *	_pacMan;
 	float			_percent;
 	int			_openCount;
@@ -815,7 +815,7 @@ namespace QDirStat
     };
 
 
-    inline kdbgstream & operator<< ( kdbgstream & stream, KDirTreeViewItem * item )
+    inline kdbgstream & operator<< ( kdbgstream & stream, DirTreeViewItem * item )
     {
 	if ( item )
 	{
@@ -894,7 +894,7 @@ namespace QDirStat
 }	// namespace QDirStat
 
 
-#endif // ifndef KDirTreeView_h
+#endif // ifndef DirTreeView_h
 
 
 // EOF

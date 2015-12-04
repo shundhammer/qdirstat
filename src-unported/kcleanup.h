@@ -7,8 +7,8 @@
  */
 
 
-#ifndef KCleanup_h
-#define KCleanup_h
+#ifndef Cleanup_h
+#define Cleanup_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -25,12 +25,12 @@
 namespace QDirStat
 {
     /**
-     * Cleanup action to be performed for @ref KDirTree items.
+     * Cleanup action to be performed for @ref DirTree items.
      *
      * @short QDirStat cleanup action
      **/
 
-    class KCleanup: public KAction
+    class Cleanup: public KAction
     {
 	Q_OBJECT
 
@@ -49,7 +49,7 @@ namespace QDirStat
 	 * for 'parent' so the menus and toolbars can be created using the XML
 	 * UI description ('kdirstatui.rc' for QDirStat).
 	 **/
-	KCleanup( QString		id		= "",
+	Cleanup( QString		id		= "",
 		  QString		command 	= "",
 		  QString		title 		= "",
 		  KActionCollection *	parent		= 0 );
@@ -61,20 +61,20 @@ namespace QDirStat
 	 * there is no KAction copy constructor, the inherited KAction members
 	 * will be constructed with the KAction default constructor. Thus, an
 	 * object created with this copy constructor can rely only on its
-	 * KCleanup members. This is intended for save/restore operations only,
+	 * Cleanup members. This is intended for save/restore operations only,
 	 * not for general use. In particular, DO NOT connect an object thus
 	 * constructed with signals. The results will be undefined (at best).
 	 **/
-	KCleanup( const KCleanup &src );
+	Cleanup( const KCleanup &src );
 
 	/**
 	 * Assignment operator.
 	 *
-	 * This will not modify the KAction members, just the KCleanup
+	 * This will not modify the KAction members, just the Cleanup
 	 * members. Just like the copy constructor, this is intended for
 	 * save/restore operations, not for general use.
 	 **/
-	KCleanup &	operator= ( const KCleanup &src );
+	Cleanup &	operator= ( const KCleanup &src );
 
 	/**
 	 * Return the ID (name) of this cleanup action as used for setup files
@@ -85,7 +85,7 @@ namespace QDirStat
    
 	/**
 	 * Return the command line that will be executed upon calling @ref
-	 * KCleanup::execute(). This command line may contain %p for the
+	 * Cleanup::execute(). This command line may contain %p for the
 	 * complete path of the directory or file concerned or %n for the pure
 	 * file or directory name without path.
 	 **/
@@ -110,21 +110,21 @@ namespace QDirStat
 	bool enabled()			const { return _enabled; }
 
 	/**
-	 * Return this cleanup's internally stored @ref KDirTree
+	 * Return this cleanup's internally stored @ref DirTree
 	 * selection. Important only for copy constructor etc.
 	 **/
-	KFileInfo * selection()		const { return _selection; }
+	FileInfo * selection()		const { return _selection; }
 
 	/**
 	 * Return whether or not this cleanup action works for this particular
-	 * KFileInfo. Checks all the other conditions (enabled(),
+	 * FileInfo. Checks all the other conditions (enabled(),
 	 * worksForDir(), worksForFile(), ...) accordingly.
 	 **/
-	bool worksFor( KFileInfo *item ) const;
+	bool worksFor( FileInfo *item ) const;
 
 	/**
 	 * Return whether or not this cleanup action works for directories,
-	 * i.e. whether or not @ref KCleanup::execute() will be successful if
+	 * i.e. whether or not @ref Cleanup::execute() will be successful if
 	 * the object passed is a directory.
 	 **/
 	bool worksForDir()		const { return _worksForDir; }
@@ -151,7 +151,7 @@ namespace QDirStat
 
 	/**
 	 * Return whether or not the cleanup action should be performed
-	 * recursively in subdirectories of the initial KFileInfo.
+	 * recursively in subdirectories of the initial FileInfo.
 	 **/
 	bool recurse()			const { return _recurse; }
 
@@ -167,28 +167,28 @@ namespace QDirStat
 
 	/**
 	 * Return the refresh policy of this cleanup action - i.e. the action
-	 * to perform after each call to KCleanup::execute(). This is supposed
-	 * to bring the corresponding KDirTree back into sync after the cleanup
+	 * to perform after each call to Cleanup::execute(). This is supposed
+	 * to bring the corresponding DirTree back into sync after the cleanup
 	 * action - the underlying file tree might have changed due to that
 	 * cleanup action.
 	 *
 	 * noRefresh: Don't refresh anything. Assume nothing has changed.
 	 * This is the default.
 	 *
-	 * refreshThis: Refresh the KDirTree from the item on that was passed
-	 * to KCleanup::execute().
+	 * refreshThis: Refresh the DirTree from the item on that was passed
+	 * to Cleanup::execute().
 	 *
-	 * refreshParent: Refresh the KDirTree from the parent of the item on
-	 * that was passed to KCleanup::execute(). If there is no such parent,
+	 * refreshParent: Refresh the DirTree from the parent of the item on
+	 * that was passed to Cleanup::execute(). If there is no such parent,
 	 * refresh the entire tree.
 	 *
-	 * assumeDeleted: Do not actually refresh the KDirTree.  Instead,
+	 * assumeDeleted: Do not actually refresh the DirTree.  Instead,
 	 * blindly assume the cleanup action has deleted the item that was
-	 * passed to KCleanup::execute() and delete the corresponding subtree
-	 * in the KDirTree accordingly. This will work well for most deleting
+	 * passed to Cleanup::execute() and delete the corresponding subtree
+	 * in the DirTree accordingly. This will work well for most deleting
 	 * actions as long as they can be performed without problems. If there
-	 * are any problems, however, the KDirTree might easily run out of sync
-	 * with the directory tree: The KDirTree will show the subtree as
+	 * are any problems, however, the DirTree might easily run out of sync
+	 * with the directory tree: The DirTree will show the subtree as
 	 * deleted (i.e. it will not show it any more), but it still exists on
 	 * disk. This is the tradeoff to a very quick response. On the other
 	 * hand, the user can easily at any time hit one of the explicit
@@ -213,13 +213,13 @@ namespace QDirStat
     public slots:
 
 	/**
-	 * The heart of the matter: Perform the cleanup with the KFileInfo
+	 * The heart of the matter: Perform the cleanup with the FileInfo
 	 * specified.
 	 **/
-        void execute( KFileInfo *item );
+        void execute( FileInfo *item );
 
 	/**
-	 * Perform the cleanup with the current KDirTree selection if there is
+	 * Perform the cleanup with the current DirTree selection if there is
 	 * any.
 	 **/
 	void executeWithSelection();
@@ -229,7 +229,7 @@ namespace QDirStat
 	 * store 'selection' - this will also be used upon calling
 	 * @ref executeWithSelection() . '0' means "nothing selected".
 	 **/
-	void selectionChanged( KFileInfo *selection );
+	void selectionChanged( FileInfo *selection );
 
         /**
 	 * Read configuration.
@@ -268,18 +268,18 @@ namespace QDirStat
 	/**
 	 * Recursively perform the cleanup.
 	 **/
-	void executeRecursive( KFileInfo *item );
+	void executeRecursive( FileInfo *item );
 
 	/**
 	 * Ask user for confirmation to execute this cleanup action for
 	 * 'item'. Returns 'true' if user accepts, 'false' otherwise.
 	 **/
-	bool confirmation( KFileInfo *item );
+	bool confirmation( FileInfo *item );
 	
 	/**
-	 * Retrieve the directory part of a KFileInfo's path.
+	 * Retrieve the directory part of a FileInfo's path.
 	 **/
-	const QString itemDir( const KFileInfo *item ) const;
+	const QString itemDir( const FileInfo *item ) const;
 
 	/**
 	 * Expand some variables in string 'unexpanded' to information from
@@ -304,27 +304,27 @@ namespace QDirStat
 	 * "kfmclient openURL %p"
 	 * "tar czvf %{name}.tgz && rm -rf %{name}"
 	 **/
-	QString	expandVariables ( const KFileInfo *	item,
+	QString	expandVariables ( const FileInfo *	item,
 				  const QString &	unexpanded ) const;
 
 	/**
 	 * Run a command with 'item' as base to expand variables.
 	 **/
-	void	runCommand	( const KFileInfo *	item,
+	void	runCommand	( const FileInfo *	item,
 				  const QString &	command ) const;
 
 	/**
 	 * Internal implementation of the copy constructor and assignment
 	 * operator: Copy all data members from 'src'.
 	 **/
-	void	copy		( const KCleanup &src );
+	void	copy		( const Cleanup &src );
 
 
 	//
 	// Data members
 	//
 	
-	KFileInfo *		_selection;
+	FileInfo *		_selection;
 	QString			_id;
 	QString			_command;
 	QString			_title;
@@ -339,7 +339,7 @@ namespace QDirStat
     };
 
 
-    inline kdbgstream & operator<< ( kdbgstream & stream, const KCleanup * cleanup )
+    inline kdbgstream & operator<< ( kdbgstream & stream, const Cleanup * cleanup )
     {
 	if ( cleanup )
 	    stream << cleanup->id();
@@ -351,7 +351,7 @@ namespace QDirStat
 }	// namespace QDirStat
 
 
-#endif // ifndef KCleanup_h
+#endif // ifndef Cleanup_h
 
 
 // EOF

@@ -22,7 +22,7 @@
 
 namespace QDirStat
 {
-    class KFileInfo;
+    class FileInfo;
     class KTreemapView;
 
     enum KOrientation
@@ -142,7 +142,7 @@ namespace QDirStat
 	 **/
 	KTreemapTile( KTreemapView *		parentView,
 		      KTreemapTile *		parentTile,
-		      KFileInfo *		orig,
+		      FileInfo *		orig,
 		      const QRect &		rect,
 		      KOrientation		orientation = KTreemapAuto );
 
@@ -154,7 +154,7 @@ namespace QDirStat
 	 **/
 	KTreemapTile( KTreemapView *		parentView,
 		      KTreemapTile *		parentTile,
-		      KFileInfo *		orig,
+		      FileInfo *		orig,
 		      const QRect &		rect,
 		      const KCushionSurface &	cushionSurface,
 		      KOrientation		orientation = KTreemapAuto );
@@ -167,10 +167,10 @@ namespace QDirStat
 
 
 	/**
-	 * Returns the original @ref KFileInfo item that corresponds to this
+	 * Returns the original @ref FileInfo item that corresponds to this
 	 * treemap tile.
 	 **/
-	KFileInfo * orig() const { return _orig; }
+	FileInfo * orig() const { return _orig; }
 
 	/**
 	 * Returns the parent @ref KTreemapView.
@@ -243,9 +243,9 @@ namespace QDirStat
 	 *
 	 * 'scale' is the scaling factor between file sizes and pixels.
 	 **/
-	KFileInfoList squarify( const QRect & 			rect,
+	FileInfoList squarify( const QRect & 			rect,
 				double				scale,
-				KFileInfoSortedBySizeIterator & it   );
+				FileInfoSortedBySizeIterator & it   );
 
 	/**
 	 * Lay out all members of 'row' within 'rect' along its longer side.
@@ -253,7 +253,7 @@ namespace QDirStat
 	 **/
 	QRect layoutRow( const QRect &		rect,
 			 double			scale,
-			 KFileInfoList & 	row );
+			 FileInfoList & 	row );
 
 	/**
 	 * Draw the tile.
@@ -295,7 +295,7 @@ namespace QDirStat
 
 	KTreemapView *	_parentView;
 	KTreemapTile *	_parentTile;
-	KFileInfo *	_orig;
+	FileInfo *	_orig;
 	KCushionSurface	_cushionSurface;
 	QPixmap		_cushion;
 

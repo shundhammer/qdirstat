@@ -7,8 +7,8 @@
  */
 
 
-#ifndef KFileInfo_h
-#define KFileInfo_h
+#ifndef FileInfo_h
+#define FileInfo_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -40,8 +40,8 @@ namespace QDirStat
 #define KFileSizeMax 9223372036854775807LL
 
     // Forward declarations
-    class KDirInfo;
-    class KDirTree;
+    class DirInfo;
+    class DirTree;
 
 
     /**
@@ -61,7 +61,7 @@ namespace QDirStat
 
     
     /**
-     * The most basic building block of a @ref KDirTree:
+     * The most basic building block of a @ref DirTree:
      *
      * Information about one single directory entry. This is the type of info
      * typically obtained by stat() / lstat() or similar calls.	 Most of this
@@ -83,30 +83,30 @@ namespace QDirStat
      *
      * @short Basic file information (like obtained by the lstat() sys call)
      **/
-    class KFileInfo
+    class FileInfo
     {
     public:
 	/**
 	 * Default constructor.
 	 **/
-	KFileInfo( KDirTree   * tree,
-		   KDirInfo   * parent = 0,
+	FileInfo( DirTree   * tree,
+		   DirInfo   * parent = 0,
 		   const char * name   = 0 );
 
 	/**
 	 * Constructor from a stat buffer (i.e. based on an lstat() call).
 	 **/
-	KFileInfo( const QString &	filenameWithoutPath,
+	FileInfo( const QString &	filenameWithoutPath,
 		   struct stat *	statInfo,
-		   KDirTree    *	tree,
-		   KDirInfo    *	parent = 0 );
+		   DirTree    *	tree,
+		   DirInfo    *	parent = 0 );
 
 	/**
 	 * Constructor from a KFileItem, i.e. from a @ref KIO::StatJob
 	 **/
-	KFileInfo( const KFileItem *	fileItem,
-		   KDirTree *		tree,
-		   KDirInfo *		parent = 0 );
+	FileInfo( const KFileItem *	fileItem,
+		   DirTree *		tree,
+		   DirInfo *		parent = 0 );
 
 	/**
 	 * Constructor from the bare neccessary fields
@@ -114,8 +114,8 @@ namespace QDirStat
 	 *
 	 * If 'blocks' is -1, it will be calculated from 'size'.
 	 **/
-	KFileInfo( KDirTree *		tree,
-		   KDirInfo *		parent,
+	FileInfo( DirTree *		tree,
+		   DirInfo *		parent,
 		   const QString &	filenameWithoutPath,
 		   mode_t		mode,
 		   KFileSize		size,
@@ -126,10 +126,10 @@ namespace QDirStat
 	/**
 	 * Destructor.
 	 *
-	 * Don't forget to call @ref KFileInfo::unlinkChild() when deleting
+	 * Don't forget to call @ref FileInfo::unlinkChild() when deleting
 	 * objects of this class!
 	 **/
-	virtual ~KFileInfo();
+	virtual ~FileInfo();
 
 	/**
 	 * Returns whether or not this is a local file (protocol "file:").
@@ -160,7 +160,7 @@ namespace QDirStat
 	QString			url()			const;
 
 	/**
-	 * Very much like @ref KFileInfo::url(), but with "/<Files>" appended
+	 * Very much like @ref FileInfo::url(), but with "/<Files>" appended
 	 * if this is a dot entry. Useful for debugging.
 	 * Notice: You can simply use the @ref kdbgstream operator<< to
 	 * output exactly this:
@@ -346,31 +346,31 @@ namespace QDirStat
 	//
 
 	/**
-	 * Returns a pointer to the @ref KDirTree this entry belongs to.
+	 * Returns a pointer to the @ref DirTree this entry belongs to.
 	 **/
-	KDirTree *	tree()			const { return _tree; }
+	DirTree *	tree()			const { return _tree; }
 
 	/**
 	 * Returns a pointer to this entry's parent entry or 0 if there is
 	 * none.
 	 **/
-	KDirInfo *	parent()		const { return _parent; }
+	DirInfo *	parent()		const { return _parent; }
 
 	/**
 	 * Set the "parent" pointer.
 	 **/
-	void		setParent( KDirInfo *newParent ) { _parent = newParent; }
+	void		setParent( DirInfo *newParent ) { _parent = newParent; }
 
 	/**
 	 * Returns a pointer to the next entry on the same level
 	 * or 0 if there is none.
 	 **/
-	KFileInfo *	next()			const { return _next;	}
+	FileInfo *	next()			const { return _next;	}
 
 	/**
 	 * Set the "next" pointer.
 	 **/
-	void		setNext( KFileInfo *newNext ) { _next = newNext; }
+	void		setNext( FileInfo *newNext ) { _next = newNext; }
 
 	/**
 	 * Returns the first child of this item or 0 if there is none.
@@ -378,7 +378,7 @@ namespace QDirStat
 	 *
 	 * This default implementation always returns 0.
 	 **/
-	virtual KFileInfo * firstChild()	const { return 0;	}
+	virtual FileInfo * firstChild()	const { return 0;	}
 
 	/**
 	 * Set this entry's first child.
@@ -387,7 +387,7 @@ namespace QDirStat
 	 * This default implementation does nothing.
 	 * Derived classes might want to overwrite this.
 	 **/
-	virtual void	setFirstChild( KFileInfo *newFirstChild )
+	virtual void	setFirstChild( FileInfo *newFirstChild )
 	    { NOT_USED( newFirstChild ); }
 
 	/**
@@ -399,7 +399,7 @@ namespace QDirStat
 	 * Returns true if this entry is in subtree 'subtree', i.e. if this is
 	 * a child or grandchild etc. of 'subtree'.
 	 **/
-	bool isInSubtree( const KFileInfo *subtree ) const;
+	bool isInSubtree( const FileInfo *subtree ) const;
 
 	/**
 	 * Locate a child somewhere in this subtree whose URL (i.e. complete
@@ -415,7 +415,7 @@ namespace QDirStat
 	 * 'findDotEntries' specifies if locating "dot entries" (".../<Files>")
 	 * is desired.
 	 **/
-	virtual KFileInfo * locate( QString url, bool findDotEntries = false );
+	virtual FileInfo * locate( QString url, bool findDotEntries = false );
 
 	/**
 	 * Insert a child into the children list.
@@ -425,7 +425,7 @@ namespace QDirStat
 	 *
 	 * This default implementation does nothing.
 	 **/
-	virtual void	insertChild( KFileInfo *newChild ) { NOT_USED( newChild ); }
+	virtual void	insertChild( FileInfo *newChild ) { NOT_USED( newChild ); }
 
 	/**
 	 * Return the "Dot Entry" for this node if there is one (or 0
@@ -436,14 +436,14 @@ namespace QDirStat
 	 *
 	 * This default implementation always returns 0.
 	 **/
-	virtual KFileInfo *dotEntry()	const { return 0; }
+	virtual FileInfo *dotEntry()	const { return 0; }
 
 	/**
 	 * Set a "Dot Entry". This makes sense for directories only.
 	 *
 	 * This default implementation does nothing.
 	 **/
-	virtual void	setDotEntry( KFileInfo *newDotEntry ) { NOT_USED( newDotEntry ); }
+	virtual void	setDotEntry( FileInfo *newDotEntry ) { NOT_USED( newDotEntry ); }
 
 	/**
 	 * Returns true if this is a "Dot Entry".
@@ -467,7 +467,7 @@ namespace QDirStat
 	 *
 	 * This default implementation does nothing.
 	 **/
-	virtual void	childAdded( KFileInfo *newChild ) { NOT_USED( newChild ); }
+	virtual void	childAdded( FileInfo *newChild ) { NOT_USED( newChild ); }
 
 	/**
 	 * Remove a child from the children list.
@@ -480,13 +480,13 @@ namespace QDirStat
 	 * This default implementation does nothing.
 	 * Derived classes that can handle children should overwrite this.
 	 **/
-	virtual void	unlinkChild( KFileInfo *deletedChild ) { NOT_USED( deletedChild ); }
+	virtual void	unlinkChild( FileInfo *deletedChild ) { NOT_USED( deletedChild ); }
 
 	/**
 	 * Notification that a child is about to be deleted somewhere in the
 	 * subtree.
 	 **/
-	virtual void	deletingChild( KFileInfo *deletedChild ) { NOT_USED( deletedChild ); }
+	virtual void	deletingChild( FileInfo *deletedChild ) { NOT_USED( deletedChild ); }
 
 	/**
 	 * Get the current state of the directory reading process:
@@ -497,14 +497,14 @@ namespace QDirStat
 	virtual KDirReadState readState() const { return KDirFinished; }
 
 	/**
-	 * Returns true if this is a @ref KDirInfo object.
+	 * Returns true if this is a @ref DirInfo object.
 	 *
 	 * Don't confuse this with @ref isDir() which tells whether or not this
 	 * is a disk directory! Both should return the same, but you'll never
 	 * know - better be safe than sorry!
 	 *
 	 * This default implementation always returns 'false'. Derived classes
-	 * (in particular, those derived from @ref KDirInfo) should overwrite this.
+	 * (in particular, those derived from @ref DirInfo) should overwrite this.
 	 **/
 	virtual bool isDirInfo() const { return false; }
 
@@ -596,11 +596,11 @@ namespace QDirStat
 	KFileSize	_blocks;		// 512 bytes blocks
 	time_t		_mtime;			// modification time
 
-	KDirInfo *	_parent;		// pointer to the parent entry
-	KFileInfo *	_next;			// pointer to the next entry
-	KDirTree  *	_tree;			// pointer to the parent tree
+	DirInfo *	_parent;		// pointer to the parent entry
+	FileInfo *	_next;			// pointer to the next entry
+	DirTree  *	_tree;			// pointer to the parent tree
 	
-    };	// class KFileInfo
+    };	// class FileInfo
 
 
 
@@ -627,9 +627,9 @@ namespace QDirStat
 
 
     /**
-     * Print the debugUrl() of a @ref KFileInfo in a debug stream.
+     * Print the debugUrl() of a @ref FileInfo in a debug stream.
      **/
-    inline kdbgstream & operator<< ( kdbgstream & stream, const KFileInfo * info )
+    inline kdbgstream & operator<< ( kdbgstream & stream, const FileInfo * info )
     {
 	if ( info )
 	    stream << info->debugUrl();
@@ -653,7 +653,7 @@ namespace QDirStat
 }	// namespace QDirStat
 
 
-#endif // ifndef KFileInfo_h
+#endif // ifndef FileInfo_h
 
 
 // EOF

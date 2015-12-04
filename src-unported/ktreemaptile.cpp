@@ -33,7 +33,7 @@ using std::min;
 
 KTreemapTile::KTreemapTile( KTreemapView *	parentView,
 			    KTreemapTile *	parentTile,
-			    KFileInfo *		orig,
+			    FileInfo *		orig,
 			    const QRect &	rect,
 			    KOrientation	orientation )
     : QCanvasRectangle( rect, parentView->canvas() )
@@ -52,7 +52,7 @@ KTreemapTile::KTreemapTile( KTreemapView *	parentView,
 
 KTreemapTile::KTreemapTile( KTreemapView *		parentView,
 			    KTreemapTile *		parentTile,
-			    KFileInfo *			orig,
+			    FileInfo *			orig,
 			    const QRect &		rect,
 			    const KCushionSurface &	cushionSurface,
 			    KOrientation		orientation )
@@ -132,7 +132,7 @@ KTreemapTile::createChildrenSimple( const QRect &	rect,
 
     _cushionSurface.addRidge( childDir, _cushionSurface.height(), rect );
 
-    KFileInfoSortedBySizeIterator it( _orig,
+    FileInfoSortedBySizeIterator it( _orig,
 				      (KFileSize) ( _parentView->minTileSize() / scale ),
 				      KDotEntryAsSubDir );
 
@@ -187,25 +187,25 @@ KTreemapTile::createSquarifiedChildren( const QRect & rect )
     }
 #endif
 
-    KFileInfoSortedBySizeIterator it( _orig, minSize, KDotEntryAsSubDir );
+    FileInfoSortedBySizeIterator it( _orig, minSize, KDotEntryAsSubDir );
     QRect childrenRect = rect;
 
     while ( *it )
     {
-	KFileInfoList row = squarify( childrenRect, scale, it );
+	FileInfoList row = squarify( childrenRect, scale, it );
 	childrenRect = layoutRow( childrenRect, scale, row );
     }
 }
 
 
-KFileInfoList
+FileInfoList
 KTreemapTile::squarify( const QRect & 			rect,
 			double				scale,
-			KFileInfoSortedBySizeIterator & it   )
+			FileInfoSortedBySizeIterator & it   )
 {
     // kdDebug() << "squarify() " << _orig << " " << rect << endl;
 
-    KFileInfoList row;
+    FileInfoList row;
     int length = max( rect.width(), rect.height() );
 
     if ( length == 0 )	// Sanity check
@@ -267,7 +267,7 @@ KTreemapTile::squarify( const QRect & 			rect,
 QRect
 KTreemapTile::layoutRow( const QRect &		rect,
 			 double			scale,
-			 KFileInfoList & 	row )
+			 FileInfoList & 	row )
 {
     if ( row.isEmpty() )
 	return rect;
@@ -303,7 +303,7 @@ KTreemapTile::layoutRow( const QRect &		rect,
 
     int offset = 0;
     int remaining = primary;
-    KFileInfoListIterator it( row );
+    FileInfoListIterator it( row );
 
     while ( *it )
     {

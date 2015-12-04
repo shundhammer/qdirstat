@@ -7,8 +7,8 @@
  */
 
 
-#ifndef KDirInfo_h
-#define KDirInfo_h
+#ifndef DirInfo_h
+#define DirInfo_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -35,18 +35,18 @@
 namespace QDirStat
 {
     // Forward declarations
-    class KDirTree;
+    class DirTree;
 
 
     /**
-     * A more specialized version of @ref KFileInfo: This class can actually
-     * manage children. The base class (@ref KFileInfo) has only stubs for the
+     * A more specialized version of @ref FileInfo: This class can actually
+     * manage children. The base class (@ref FileInfo) has only stubs for the
      * respective methods to integrate seamlessly with the abstraction of a
      * file / directory tree; this class fills those stubs with life.
      *
-     * @short directory item within a @ref KDirTree.
+     * @short directory item within a @ref DirTree.
      **/
-    class KDirInfo: public KFileInfo
+    class DirInfo: public FileInfo
     {
     public:
 	/**
@@ -57,31 +57,31 @@ namespace QDirStat
 	 * non-directory children. This is the only way to create a "dot
 	 * entry"!
 	 **/
-	KDirInfo( KDirTree  *	tree,
-		  KDirInfo *	parent		= 0,
+	DirInfo( DirTree  *	tree,
+		  DirInfo *	parent		= 0,
 		  bool		asDotEntry	= false );
 
 	/**
 	 * Constructor from a stat buffer (i.e. based on an lstat() call).
 	 **/
-	KDirInfo( const QString & filenameWithoutPath,
+	DirInfo( const QString & filenameWithoutPath,
 		  struct stat	* statInfo,
-		  KDirTree	* tree,
-		  KDirInfo	* parent = 0 );
+		  DirTree	* tree,
+		  DirInfo	* parent = 0 );
 
 	/**
 	 * Constructor from a KFileItem, i.e. from a @ref KIO::StatJob
 	 **/
-	KDirInfo( const KFileItem	* fileItem,
-		  KDirTree		* tree,
-		  KDirInfo		* parent = 0 );
+	DirInfo( const KFileItem	* fileItem,
+		  DirTree		* tree,
+		  DirInfo		* parent = 0 );
 
 	/**
 	 * Constructor from the bare neccessary fields
 	 * for use from a cache file reader
 	 **/
-	KDirInfo( KDirTree *		tree,
-		  KDirInfo *		parent,
+	DirInfo( DirTree *		tree,
+		  DirInfo *		parent,
 		  const QString &	filenameWithoutPath,
 		  mode_t		mode,
 		  KFileSize		size,
@@ -90,27 +90,27 @@ namespace QDirStat
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KDirInfo();
+	virtual ~DirInfo();
 
 
 	/**
 	 * Returns the total size in bytes of this subtree.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual KFileSize	totalSize();
 
 	/**
 	 * Returns the total size in blocks of this subtree.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual KFileSize	totalBlocks();
 
 	/**
 	 * Returns the total number of children in this subtree, excluding this item.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual int		totalItems();
 
@@ -118,7 +118,7 @@ namespace QDirStat
 	 * Returns the total number of subdirectories in this subtree,
 	 * excluding this item. Dot entries and "." or ".." are not counted.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual int		totalSubDirs();
 
@@ -126,14 +126,14 @@ namespace QDirStat
 	 * Returns the total number of plain file children in this subtree,
 	 * excluding this item.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual int		totalFiles();
 
 	/**
 	 * Returns the latest modification time of this subtree.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual time_t		latestMtime();
 
@@ -153,7 +153,7 @@ namespace QDirStat
 	 * This will return 'false' only if this information can be obtained at
 	 * all, i.e. if local directory reading methods are used.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual bool		isMountPoint()	{ return _isMountPoint; }
 
@@ -161,14 +161,14 @@ namespace QDirStat
 	 * Sets the mount point state, i.e. whether or not this is a mount
 	 * point.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual void		setMountPoint( bool isMountPoint = true );
 
 	/**
 	 * Returns true if this subtree is finished reading.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual bool		isFinished();
 
@@ -176,7 +176,7 @@ namespace QDirStat
 	 * Returns true if this subtree is busy, i.e. it is not finished
 	 * reading yet.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual bool		isBusy();
 
@@ -184,7 +184,7 @@ namespace QDirStat
 	 * Returns the number of pending read jobs in this subtree. When this
 	 * number reaches zero, the entire subtree is done.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual int		pendingReadJobs()	{ return _pendingReadJobs;  }
 
@@ -192,15 +192,15 @@ namespace QDirStat
 	 * Returns the first child of this item or 0 if there is none.
 	 * Use the child's next() method to get the next child.
 	 **/
-	virtual KFileInfo * firstChild() const { return _firstChild;	}
+	virtual FileInfo * firstChild() const { return _firstChild;	}
 
 	/**
 	 * Set this entry's first child.
 	 * Use this method only if you know exactly what you are doing.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual void	setFirstChild( KFileInfo *newfirstChild )
+	virtual void	setFirstChild( FileInfo *newfirstChild )
 	    { _firstChild = newfirstChild; }
 
 	/**
@@ -209,7 +209,7 @@ namespace QDirStat
 	 * The order of children in this list is absolutely undefined;
 	 * don't rely on any implementation-specific order.
 	 **/
-	virtual void insertChild( KFileInfo *newChild );
+	virtual void insertChild( FileInfo *newChild );
 
 	/**
 	 * Get the "Dot Entry" for this node if there is one (or 0 otherwise):
@@ -218,27 +218,27 @@ namespace QDirStat
 	 * user can easily tell which summary fields belong to the directory
 	 * itself and which are the accumulated values of the entire subtree.
 	 **/
-	virtual KFileInfo * dotEntry()	const { return _dotEntry; }
+	virtual FileInfo * dotEntry()	const { return _dotEntry; }
 
 	/**
 	 * Set a "Dot Entry". This makes sense for directories only.
 	 **/
-	virtual void setDotEntry( KFileInfo *newDotEntry ) { _dotEntry = newDotEntry; }
+	virtual void setDotEntry( FileInfo *newDotEntry ) { _dotEntry = newDotEntry; }
 
 	/**
 	 * Returns true if this is a "Dot Entry". See @ref dotEntry() for
 	 * details.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual bool isDotEntry() const { return _isDotEntry; }
 
 	/**
 	 * Notification that a child has been added somewhere in the subtree.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual void childAdded( KFileInfo *newChild );
+	virtual void childAdded( FileInfo *newChild );
 
 	/**
 	 * Remove a child from the children list.
@@ -248,17 +248,17 @@ namespace QDirStat
 	 * destructor: Important parts of the object might already be destroyed
 	 * (e.g., the virtual table - no more virtual methods).
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual void unlinkChild( KFileInfo *deletedChild );
+	virtual void unlinkChild( FileInfo *deletedChild );
 
 	/**
 	 * Notification that a child is about to be deleted somewhere in the
 	 * subtree.
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual void deletingChild( KFileInfo *deletedChild );
+	virtual void deletingChild( FileInfo *deletedChild );
 
 	/**
 	 * Notification of a new directory read job somewhere in the subtree.
@@ -301,7 +301,7 @@ namespace QDirStat
 	 *    KDirAborted	reading aborted upon user request
 	 *    KDirError		error while reading
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual KDirReadState readState() const;
 
@@ -312,13 +312,13 @@ namespace QDirStat
 	void setReadState( KDirReadState newReadState );
 
 	/**
-	 * Returns true if this is a @ref KDirInfo object.
+	 * Returns true if this is a @ref DirInfo object.
 	 *
 	 * Don't confuse this with @ref isDir() which tells whether or not this
 	 * is a disk directory! Both should return the same, but you'll never
 	 * know - better be safe than sorry!
 	 *
-	 * Reimplemented - inherited from @ref KFileInfo.
+	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
 	virtual bool isDirInfo() const { return true; }
 
@@ -353,8 +353,8 @@ namespace QDirStat
 
 	// Children management
 
-	KFileInfo *	_firstChild;		// pointer to the first child
-	KFileInfo *	_dotEntry;		// pseudo entry to hold non-dir children
+	FileInfo *	_firstChild;		// pointer to the first child
+	FileInfo *	_dotEntry;		// pseudo entry to hold non-dir children
 
 	// Some cached values
 
@@ -374,12 +374,12 @@ namespace QDirStat
 
 	void init();
 
-    };	// class KDirInfo
+    };	// class DirInfo
 
 }	// namespace QDirStat
 
 
-#endif // ifndef KDirInfo_h
+#endif // ifndef DirInfo_h
 
 
 // EOF

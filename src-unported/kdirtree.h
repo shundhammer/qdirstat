@@ -7,8 +7,8 @@
  */
 
 
-#ifndef KDirTree_h
-#define KDirTree_h
+#ifndef DirTree_h
+#define DirTree_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -34,7 +34,7 @@
 namespace QDirStat
 {
     // Forward declarations
-    class KDirReadJob;
+    class DirReadJob;
 
 
     /**
@@ -46,7 +46,7 @@ namespace QDirStat
      *
      * @short Directory tree global data and infrastructure
      **/
-    class KDirTree: public QObject
+    class DirTree: public QObject
     {
 	Q_OBJECT
 
@@ -57,12 +57,12 @@ namespace QDirStat
 	 * Remember to call @ref startReading() after the constructor and
 	 * setting up connections.
 	 **/
-	KDirTree();
+	DirTree();
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KDirTree();
+	virtual ~DirTree();
 
 
      public slots:
@@ -94,7 +94,7 @@ namespace QDirStat
 	 * When 0 is passed, the entire tree will be refreshed, i.e. from the
 	 * root element on.
 	 **/
-	void refresh( KFileInfo *subtree = 0 );
+	void refresh( FileInfo *subtree = 0 );
 
 	/**
 	 * Select some other item in this tree. Triggers the @ref
@@ -103,12 +103,12 @@ namespace QDirStat
 	 *
 	 * Select nothing if '0' is passed.
 	 **/
-	void selectItem( KFileInfo *newSelection );
+	void selectItem( FileInfo *newSelection );
 
 	/**
 	 * Delete a subtree.
 	 **/
-	void deleteSubtree( KFileInfo *subtree );
+	void deleteSubtree( FileInfo *subtree );
 
 
     public:
@@ -118,12 +118,12 @@ namespace QDirStat
 	 *
 	 * Currently, there can only be one single root item for each tree.
 	 */
-	KFileInfo *	root() const { return _root; }
+	FileInfo *	root() const { return _root; }
 
 	/**
 	 * Sets the root item of this tree.
 	 **/
-	void setRoot( KFileInfo *newRoot );
+	void setRoot( FileInfo *newRoot );
 
 	/**
 	 * Clear all items of this tree.
@@ -144,9 +144,9 @@ namespace QDirStat
 	 * is desired.
 	 *
 	 * This is just a convenience method that maps to
-	 *    KDirTree::root()->locate( url, findDotEntries )
+	 *    DirTree::root()->locate( url, findDotEntries )
 	 **/
-	KFileInfo *	locate( QString url, bool findDotEntries = false )
+	FileInfo *	locate( QString url, bool findDotEntries = false )
 	    { return _root ? _root->locate( url, findDotEntries ) : 0; }
 
 #if 0
@@ -155,13 +155,13 @@ namespace QDirStat
 	 * All read jobs are required to call this upon (successful or
 	 * unsuccessful) completion.
 	 **/
-	void jobFinishedNotify( KDirReadJob *job );
+	void jobFinishedNotify( DirReadJob *job );
 #endif
 
 	/**
 	 * Add a new directory read job to the queue.
 	 **/
-	void addJob( KDirReadJob * job );
+	void addJob( DirReadJob * job );
 
 	/**
 	 * Should directory scans cross file systems?
@@ -180,16 +180,16 @@ namespace QDirStat
 	/**
 	 * Return the tree's current selection.
 	 *
-	 * Even though the KDirTree by itself doesn't have a visual
+	 * Even though the DirTree by itself doesn't have a visual
 	 * representation, it supports the concept of one single selected
 	 * item. Views can use this to transparently keep track of this single
-	 * selected item, notifying the KDirTree and thus other views with @ref
-	 * KDirTree::selectItem() . Attached views should connect to the @ref
+	 * selected item, notifying the DirTree and thus other views with @ref
+	 * DirTree::selectItem() . Attached views should connect to the @ref
 	 * selectionChanged() signal to be notified when the selection changes.
 	 *
 	 * NOTE: This method returns 0 if nothing is selected.
 	 **/
-	KFileInfo *	selection() const { return _selection; }
+	FileInfo *	selection() const { return _selection; }
 
 	/**
 	 * Notification that a child has been added.
@@ -197,7 +197,7 @@ namespace QDirStat
 	 * Directory read jobs are required to call this for each child added
 	 * so the tree can emit the corresponding @ref childAdded() signal.
 	 **/
-	virtual void childAddedNotify( KFileInfo *newChild );
+	virtual void childAddedNotify( FileInfo *newChild );
 
 	/**
 	 * Notification that a child is about to be deleted.
@@ -205,7 +205,7 @@ namespace QDirStat
 	 * Directory read jobs are required to call this for each deleted child
 	 * so the tree can emit the corresponding @ref deletingChild() signal.
 	 **/
-	virtual void deletingChildNotify( KFileInfo *deletedChild );
+	virtual void deletingChildNotify( FileInfo *deletedChild );
 
 	/**
 	 * Notification that one or more children have been deleted.
@@ -228,7 +228,7 @@ namespace QDirStat
 	 * finalize the display of this directory level - e.g. clean up dot
 	 * entries, set the final "expandable" state etc.
 	 **/
-	void sendFinalizeLocal( KDirInfo *dir );
+	void sendFinalizeLocal( DirInfo *dir );
 
 	/**
 	 * Send a @ref startingReading() signal.
@@ -268,12 +268,12 @@ namespace QDirStat
 	/**
 	 * Emitted when a child has been added.
 	 **/
-	void childAdded( KFileInfo *newChild );
+	void childAdded( FileInfo *newChild );
 
 	/**
 	 * Emitted when a child is about to be deleted.
 	 **/
-	void deletingChild( KFileInfo *deletedChild );
+	void deletingChild( FileInfo *deletedChild );
 
 	/**
 	 * Emitted after a child is deleted. If you are interested which child
@@ -307,10 +307,10 @@ namespace QDirStat
 	 * WARNING: 'dir' may be 0 if the the tree's root could not be read.
 	 *
 	 * Use this signal to do similar cleanups like
-	 * @ref KDirInfo::finalizeLocal(), e.g. cleaning up unused / undesired
-	 * dot entries like in @ref KDirInfo::cleanupDotEntries().
+	 * @ref DirInfo::finalizeLocal(), e.g. cleaning up unused / undesired
+	 * dot entries like in @ref DirInfo::cleanupDotEntries().
 	 **/
-	void finalizeLocal( KDirInfo *dir );
+	void finalizeLocal( DirInfo *dir );
 
 	/**
 	 * Emitted when the current selection has changed, i.e. whenever some
@@ -319,7 +319,7 @@ namespace QDirStat
 	 *
 	 * NOTE: 'newSelection' may be 0 if nothing is selected.
 	 **/
-	void selectionChanged( KFileInfo *newSelection );
+	void selectionChanged( FileInfo *newSelection );
 
 	/**
 	 * Single line progress information, emitted when the read status
@@ -345,19 +345,19 @@ namespace QDirStat
 	
     protected:
 
-	KFileInfo *		_root;
-	KFileInfo *		_selection;
-	KDirReadJobQueue	_jobQueue;
+	FileInfo *		_root;
+	FileInfo *		_selection;
+	DirReadJobQueue	_jobQueue;
 	bool			_crossFileSystems;
 	bool			_enableLocalDirReader;
 	bool			_isBusy;
 	
-    };	// class KDirTree
+    };	// class DirTree
 
 }	// namespace QDirStat
 
 
-#endif // ifndef KDirTree_h
+#endif // ifndef DirTree_h
 
 
 // EOF

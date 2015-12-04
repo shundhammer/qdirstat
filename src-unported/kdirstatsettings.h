@@ -43,9 +43,9 @@ class KColorButton;
 
 namespace QDirStat
 {
-    class KCleanupListBox;
-    class KCleanupPropertiesPage;
-    class KDirTreeView;
+    class CleanupListBox;
+    class CleanupPropertiesPage;
+    class DirTreeView;
     class KTreemapView;
 
 
@@ -54,7 +54,7 @@ namespace QDirStat
      *
      * @short Settings dialog for QDirStat
      **/
-    class KSettingsDialog: public KDialogBase
+    class SettingsDialog: public KDialogBase
     {
 	Q_OBJECT
 
@@ -68,12 +68,12 @@ namespace QDirStat
 	 * is always 0 since this is a dialog.
 	 **/
 
-	KSettingsDialog( QDirStatApp * mainWin );
+	SettingsDialog( QDirStatApp * mainWin );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KSettingsDialog();
+	virtual ~SettingsDialog();
 
 
 	/**
@@ -127,7 +127,7 @@ namespace QDirStat
 	int		_treemapPageIndex;
 	int		_generalSettingsPageIndex;
 
-    }; // class KSettingsDialog
+    }; // class SettingsDialog
 
 
 
@@ -139,7 +139,7 @@ namespace QDirStat
      * Note: This class contains pure virtuals - it cannot be
      * instantiated. Rather, derive your own classes from this one.
      **/
-    class KSettingsPage: public QWidget
+    class SettingsPage: public QWidget
     {
 	Q_OBJECT
 
@@ -151,13 +151,13 @@ namespace QDirStat
 	 * Sets up standard connections to the methods defined in this class,
 	 * e.g., apply(), setup(), revertToDefaults().
 	 **/
-	KSettingsPage( KSettingsDialog *	dialog,
+	SettingsPage( SettingsDialog *	dialog,
 		       QWidget *		parent );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KSettingsPage();
+	virtual ~SettingsPage();
 
 
     public slots:
@@ -197,7 +197,7 @@ namespace QDirStat
 
 	int _pageIndex;
 
-    }; // class KSettingsPage
+    }; // class SettingsPage
 
 
 
@@ -215,7 +215,7 @@ namespace QDirStat
      * @short settings page for tree colors
      * @author Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
      **/
-    class KTreeColorsPage: public KSettingsPage
+    class TreeColorsPage: public SettingsPage
     {
 	Q_OBJECT
 
@@ -224,14 +224,14 @@ namespace QDirStat
 	/**
 	 * Constructor
 	 **/
-	KTreeColorsPage( KSettingsDialog *	dialog,
+	TreeColorsPage( SettingsDialog *	dialog,
 			 QWidget *		parent,
 			 QDirStatApp *		mainWin );
 
 	/**
 	 * Destructor
 	 **/
-	virtual ~KTreeColorsPage();
+	virtual ~TreeColorsPage();
 
 
     public slots:
@@ -239,21 +239,21 @@ namespace QDirStat
 	/**
 	 * Apply the changes.
 	 *
-	 * Inherited from @ref KSettingsPage.
+	 * Inherited from @ref SettingsPage.
 	 **/
         virtual void apply();
 
 	/**
 	 * Revert all values to their defaults.
 	 *
-	 * Inherited from @ref KSettingsPage.
+	 * Inherited from @ref SettingsPage.
 	 **/
 	virtual void revertToDefaults();
 
 	/**
 	 * Set up all fields prior to displaying the dialog.
 	 *
-	 * Inherited from @ref KSettingsPage.
+	 * Inherited from @ref SettingsPage.
 	 **/
 	virtual void setup();
 
@@ -270,22 +270,22 @@ namespace QDirStat
 
 
 	QDirStatApp *		_mainWin;
-	KDirTreeView *		_treeView;
+	DirTreeView *		_treeView;
 	QSlider *		_slider;
 	KColorButton *		_colorButton [ QDirStatSettingsMaxColorButton ];
 	QLabel *		_colorLabel  [ QDirStatSettingsMaxColorButton ];
 
 	int			_maxButtons;
 
-    }; // class KTreeColorsPage
+    }; // class TreeColorsPage
 
 
 
     /**
      * Settings tab page for cleanup actions.
      *
-     * Uses a KCleanupListBox for selection of one cleanup action and a
-     * KCleanupPropertiesPage for editing this cleanup action's
+     * Uses a CleanupListBox for selection of one cleanup action and a
+     * CleanupPropertiesPage for editing this cleanup action's
      * properties. This class handles just the switching between the individual
      * cleanups. It copies the cleanup actions inserted and works with the
      * copies only until it is requested to save the changes or revert all
@@ -293,7 +293,7 @@ namespace QDirStat
      *
      * @short settings page for cleanup actions
      **/
-    class KCleanupPage: public KSettingsPage
+    class CleanupPage: public SettingsPage
     {
 	Q_OBJECT
 
@@ -302,21 +302,21 @@ namespace QDirStat
 	/**
 	 * Constructor
 	 **/
-	KCleanupPage( KSettingsDialog *	dialog,
+	CleanupPage( SettingsDialog *	dialog,
 		      QWidget *		parent,
 		      QDirStatApp *	mainWin );
 
 	/**
 	 * Destructor
 	 **/
-	virtual ~KCleanupPage();
+	virtual ~CleanupPage();
 
 	/**
 	 * Insert an entry for a cleanup action. This is the original value
 	 * that will be changed only when receiving the apply() or
 	 * defaultValues() signals.
 	 **/
-	void insert( KCleanup *cleanup );
+	void insert( Cleanup *cleanup );
 
 	/**
 	 * Import all cleanup actions from the originals (from the main
@@ -337,21 +337,21 @@ namespace QDirStat
 	/**
 	 * Apply the changes.
 	 *
-	 * Inherited from @ref KSettingsPage.
+	 * Inherited from @ref SettingsPage.
 	 **/
         virtual void apply();
 
 	/**
 	 * Revert all values to their defaults.
 	 *
-	 * Inherited from @ref KSettingsPage.
+	 * Inherited from @ref SettingsPage.
 	 **/
 	virtual void revertToDefaults();
 
 	/**
 	 * Set up all fields prior to displaying the dialog.
 	 *
-	 * Inherited from @ref KSettingsPage.
+	 * Inherited from @ref SettingsPage.
 	 **/
 	virtual void setup();
 
@@ -361,7 +361,7 @@ namespace QDirStat
 	 * properties page with the cleanup specified. Store the old
 	 * properties page contents in the working copies of the cleanups.
 	 **/
-	void changeCleanup( KCleanup * cleanup );
+	void changeCleanup( Cleanup * cleanup );
 
 
     protected:
@@ -370,21 +370,21 @@ namespace QDirStat
 	 * Retrieve any pending changes from the properties page and store
 	 * them in the cleanup specified.
 	 **/
-	void storeProps( KCleanup * cleanup );
+	void storeProps( Cleanup * cleanup );
 
 
 	//
 	// Data members
 	//
 
-	KCleanupListBox *		_listBox;
-	KCleanupPropertiesPage *	_props;
+	CleanupListBox *		_listBox;
+	CleanupPropertiesPage *	_props;
 	QDirStatApp *			_mainWin;
 
-	KCleanupCollection		_workCleanupCollection;
-	KCleanup *			_currentCleanup;
+	CleanupCollection		_workCleanupCollection;
+	Cleanup *			_currentCleanup;
 
-    }; // class KCleanupPage
+    }; // class CleanupPage
 
 
 
@@ -401,7 +401,7 @@ namespace QDirStat
      *
      * @short cleanup list box
      **/
-    class KCleanupListBox: public QListBox
+    class CleanupListBox: public QListBox
     {
 	Q_OBJECT
 
@@ -410,12 +410,12 @@ namespace QDirStat
 	/**
 	 * Constructor.
 	 **/
-	KCleanupListBox( QWidget * parent = 0 );
+	CleanupListBox( QWidget * parent = 0 );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KCleanupListBox() {};
+	virtual ~CleanupListBox() {};
 
 	/**
 	 * Reimplemented so we can make sure all items are visible at all times
@@ -428,18 +428,18 @@ namespace QDirStat
 	 * Insert an entry for a cleanup action into the list box. Uses the
 	 * cleanup action's internally stored title for display.
 	 **/
-	void insert( KCleanup * cleanup );
+	void insert( Cleanup * cleanup );
 
 	/**
 	 * Returns the currently selected cleanup of 0 if nothing is selected.
 	 **/
-	KCleanup * selection()	{ return _selection; }
+	Cleanup * selection()	{ return _selection; }
 
 	/**
 	 * Update the list item's text that corresponds to 'cleanup' - the user
 	 * may have entered a new cleanup name. '0' means "check all items".
 	 **/
-	void updateTitle( KCleanup * cleanup = 0 );
+	void updateTitle( Cleanup * cleanup = 0 );
 
 
     signals:
@@ -447,7 +447,7 @@ namespace QDirStat
 	/**
 	 * Emitted when the user selects a list item, i.e. a cleanup action.
 	 **/
-	void selectCleanup( KCleanup * cleanup );
+	void selectCleanup( Cleanup * cleanup );
 
 
     protected slots:
@@ -460,29 +460,29 @@ namespace QDirStat
 
     protected:
 
-	KCleanup * _selection;
+	Cleanup * _selection;
 
-    }; // class KCleanupListBox
+    }; // class CleanupListBox
 
 
 
     /**
-     * List box item for a KCleanupListBox.
+     * List box item for a CleanupListBox.
      **/
-    class KCleanupListBoxItem: public QListBoxText
+    class CleanupListBoxItem: public QListBoxText
     {
     public:
 
 	/**
 	 * Constructor.
 	 **/
-	KCleanupListBoxItem( KCleanupListBox *	listBox,
-			     KCleanup *	 	cleanup );
+	CleanupListBoxItem( CleanupListBox *	listBox,
+			     Cleanup *	 	cleanup );
 
 	/**
 	 * Returns the corresponding cleanup.
 	 **/
-	KCleanup * cleanup() { return _cleanup; }
+	Cleanup * cleanup() { return _cleanup; }
 
 	/**
 	 * Update the list box display with the cleanup's name which may have
@@ -496,16 +496,16 @@ namespace QDirStat
 
 	// Data members
 
-	KCleanup * _cleanup;
+	Cleanup * _cleanup;
 
-    }; // class KCleanupListBoxItem
+    }; // class CleanupListBoxItem
 
 
 
     /**
      * Properties page for one cleanup action.
      **/
-    class KCleanupPropertiesPage: public QWidget
+    class CleanupPropertiesPage: public QWidget
     {
 	Q_OBJECT
 
@@ -514,14 +514,14 @@ namespace QDirStat
 	/**
 	 * Constructor
 	 **/
-	KCleanupPropertiesPage( QWidget *	parent,
+	CleanupPropertiesPage( QWidget *	parent,
 				QDirStatApp *	mainWin );
 
 	/**
 	 * Retrieve the page's fields' values and store them in the cleanup
 	 * action.
 	 **/
-	KCleanup fields( void ) const;
+	Cleanup fields( void ) const;
 
 
     public slots:
@@ -530,7 +530,7 @@ namespace QDirStat
 	 * Set the page's fields' values with the cleanup action's
 	 * contents.
 	 **/
-	void setFields( const KCleanup * cleanup );
+	void setFields( const Cleanup * cleanup );
 
 	/**
 	 * Enable / disable all of the properties page's fields except the
@@ -556,14 +556,14 @@ namespace QDirStat
 
 	QDirStatApp *		_mainWin;
 
-    }; // class KCleanupPropertiesPage
+    }; // class CleanupPropertiesPage
 
 
 
     /**
      * Settings tab page for general/misc settings.
      **/
-    class KGeneralSettingsPage: public KSettingsPage
+    class GeneralSettingsPage: public SettingsPage
     {
 	Q_OBJECT
 
@@ -572,14 +572,14 @@ namespace QDirStat
 	/**
 	 * Constructor
 	 **/
-	KGeneralSettingsPage( KSettingsDialog *	dialog,
+	GeneralSettingsPage( SettingsDialog *	dialog,
 			      QWidget *		parent,
 			      QDirStatApp *	mainWin );
 
 	/**
 	 * Destructor
 	 **/
-	virtual ~KGeneralSettingsPage();
+	virtual ~GeneralSettingsPage();
 
 
     public slots:
@@ -587,21 +587,21 @@ namespace QDirStat
 	/**
 	 * Apply the changes.
 	 *
-	 * Inherited from @ref KSettingsPage.
+	 * Inherited from @ref SettingsPage.
 	 **/
         virtual void apply();
 
 	/**
 	 * Revert all values to their defaults.
 	 *
-	 * Inherited from @ref KSettingsPage.
+	 * Inherited from @ref SettingsPage.
 	 **/
 	virtual void revertToDefaults();
 
 	/**
 	 * Set up all fields prior to displaying the dialog.
 	 *
-	 * Inherited from @ref KSettingsPage.
+	 * Inherited from @ref SettingsPage.
 	 **/
 	virtual void setup();
 
@@ -639,7 +639,7 @@ namespace QDirStat
 	// Data members
 
 	QDirStatApp *	_mainWin;
-	KDirTreeView *	_treeView;
+	DirTreeView *	_treeView;
 
 	QCheckBox *	_crossFileSystems;
 	QCheckBox *	_enableLocalDirReader;
@@ -653,14 +653,14 @@ namespace QDirStat
 	QPushButton *	_deleteExcludeRuleButton;
 	QPopupMenu *	_excludeRuleContextMenu;
 
-    }; // class KGeneralSettingsPage
+    }; // class GeneralSettingsPage
 
 
 
     /**
      * Settings tab page for treemap settings.
      **/
-    class KTreemapPage: public KSettingsPage
+    class KTreemapPage: public SettingsPage
     {
 	Q_OBJECT
 
@@ -669,7 +669,7 @@ namespace QDirStat
 	/**
 	 * Constructor
 	 **/
-	KTreemapPage( KSettingsDialog *	dialog,
+	KTreemapPage( SettingsDialog *	dialog,
 		      QWidget *		parent,
 		      QDirStatApp *	mainWin );
 
@@ -684,21 +684,21 @@ namespace QDirStat
 	/**
 	 * Apply the changes.
 	 *
-	 * Inherited from @ref KSettingsPage.
+	 * Inherited from @ref SettingsPage.
 	 **/
         virtual void apply();
 
 	/**
 	 * Revert all values to their defaults.
 	 *
-	 * Inherited from @ref KSettingsPage.
+	 * Inherited from @ref SettingsPage.
 	 **/
 	virtual void revertToDefaults();
 
 	/**
 	 * Set up all fields prior to displaying the dialog.
 	 *
-	 * Inherited from @ref KSettingsPage.
+	 * Inherited from @ref SettingsPage.
 	 **/
 	virtual void setup();
 

@@ -31,8 +31,8 @@
 using namespace QDirStat;
 
 
-KFileInfo::KFileInfo( KDirTree   *	tree,
-		      KDirInfo   *	parent,
+FileInfo::KFileInfo( DirTree   *	tree,
+		      DirInfo   *	parent,
 		      const char *	name )
     : _parent( parent )
     , _next( 0 )
@@ -50,10 +50,10 @@ KFileInfo::KFileInfo( KDirTree   *	tree,
 }
 
 
-KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
+FileInfo::KFileInfo( const QString &	filenameWithoutPath,
 		      struct stat *	statInfo,
-		      KDirTree    *	tree,
-		      KDirInfo	  *	parent )
+		      DirTree    *	tree,
+		      DirInfo	  *	parent )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -106,9 +106,9 @@ KFileInfo::KFileInfo( const QString &	filenameWithoutPath,
 }
 
 
-KFileInfo::KFileInfo(  const KFileItem	* fileItem,
-		       KDirTree    	* tree,
-		       KDirInfo		* parent )
+FileInfo::KFileInfo(  const KFileItem	* fileItem,
+		       DirTree    	* tree,
+		       DirInfo		* parent )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -142,7 +142,7 @@ KFileInfo::KFileInfo(  const KFileItem	* fileItem,
 	if ( ( _size % blockSize() ) > 0 )
 	    _blocks++;
 
-	// There is no way to find out via KFileInfo if this is a sparse file.
+	// There is no way to find out via FileInfo if this is a sparse file.
 	_isSparseFile = false;
     }
 
@@ -150,8 +150,8 @@ KFileInfo::KFileInfo(  const KFileItem	* fileItem,
 }
 
 
-KFileInfo::KFileInfo( KDirTree * 	tree,
-		      KDirInfo * 	parent,
+FileInfo::KFileInfo( DirTree * 	tree,
+		      DirInfo * 	parent,
 		      const QString &	filenameWithoutPath,
 		      mode_t	   	mode,
 		      KFileSize	   	size,
@@ -183,11 +183,11 @@ KFileInfo::KFileInfo( KDirTree * 	tree,
 	_blocks		= blocks;
     }
 
-    // kdDebug() << "Created KFileInfo " << this << endl;
+    // kdDebug() << "Created FileInfo " << this << endl;
 }
 
 
-KFileInfo::~KFileInfo()
+FileInfo::~KFileInfo()
 {
     // NOP
 
@@ -206,14 +206,14 @@ KFileInfo::~KFileInfo()
 
 
 KFileSize
-KFileInfo::allocatedSize() const
+FileInfo::allocatedSize() const
 {
     return blocks() * blockSize();
 }
 
 
 KFileSize
-KFileInfo::size() const
+FileInfo::size() const
 {
     KFileSize sz = _isSparseFile ? allocatedSize() : _size;
 
@@ -225,7 +225,7 @@ KFileInfo::size() const
 
 
 QString
-KFileInfo::url() const
+FileInfo::url() const
 {
     if ( _parent )
     {
@@ -245,14 +245,14 @@ KFileInfo::url() const
 
 
 QString
-KFileInfo::debugUrl() const
+FileInfo::debugUrl() const
 {
     return url() + ( isDotEntry() ? "/<Files>" : "" );
 }
 
 
 QString
-KFileInfo::urlPart( int targetLevel ) const
+FileInfo::urlPart( int targetLevel ) const
 {
     int level = treeLevel();	// Cache this - it's expensive!
 
@@ -263,7 +263,7 @@ KFileInfo::urlPart( int targetLevel ) const
 	return "";
     }
 
-    const KFileInfo *item = this;
+    const FileInfo *item = this;
 
     while ( level > targetLevel )
     {
@@ -276,10 +276,10 @@ KFileInfo::urlPart( int targetLevel ) const
 
 
 int
-KFileInfo::treeLevel() const
+FileInfo::treeLevel() const
 {
     int		level	= 0;
-    KFileInfo *	parent	= _parent;
+    FileInfo *	parent	= _parent;
 
     while ( parent )
     {
@@ -298,16 +298,16 @@ KFileInfo::treeLevel() const
 
 
 bool
-KFileInfo::hasChildren() const
+FileInfo::hasChildren() const
 {
     return firstChild() || dotEntry();
 }
 
 
 bool
-KFileInfo::isInSubtree( const KFileInfo *subtree ) const
+FileInfo::isInSubtree( const KFileInfo *subtree ) const
 {
-    const KFileInfo * ancestor = this;
+    const FileInfo * ancestor = this;
 
     while ( ancestor )
     {
@@ -321,8 +321,8 @@ KFileInfo::isInSubtree( const KFileInfo *subtree ) const
 }
 
 
-KFileInfo *
-KFileInfo::locate( QString url, bool findDotEntries )
+FileInfo *
+FileInfo::locate( QString url, bool findDotEntries )
 {
     if ( ! url.startsWith( _name ) )
 	return 0;
@@ -345,11 +345,11 @@ KFileInfo::locate( QString url, bool findDotEntries )
 
 	// Search all children
 
-	KFileInfo *child = firstChild();
+	FileInfo *child = firstChild();
 
 	while ( child )
 	{
-	    KFileInfo *foundChild = child->locate( url, findDotEntries );
+	    FileInfo *foundChild = child->locate( url, findDotEntries );
 
 	    if ( foundChild )
 		return foundChild;
@@ -415,7 +415,7 @@ QDirStat::fixedUrl( const QString & dirtyUrl )
     {
 	// Make a relative path an absolute path
 
-	KDirSaver dir( url.path() );
+	DirSaver dir( url.path() );
 	url.setPath( dir.currentDirPath() );
     }
 

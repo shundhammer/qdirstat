@@ -7,8 +7,8 @@
  */
 
 
-#ifndef KDirSaver_h
-#define KDirSaver_h
+#ifndef DirSaver_h
+#define DirSaver_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -25,7 +25,7 @@
  *
  * @short Directory changer with automatic restore
  **/
-class KDirSaver
+class DirSaver
 {
 public:
     /**
@@ -33,18 +33,18 @@ public:
      * path supplied. The old working directory will be restored when this
      * object is destroyed.
      **/
-    KDirSaver( const QString & newPath = "" );
+    DirSaver( const QString & newPath = "" );
 
     /**
      * Constructor from a KURL. Will issue error messages on stdout for
      * non-local objects.
      **/
-    KDirSaver( const KURL & url );
+    DirSaver( const KURL & url );
     
     /**
      * Destructor. Restores the original working directory.
      **/
-    virtual ~KDirSaver();
+    virtual ~DirSaver();
 
     /**
      * Change directory. Unlike @ref QDir::cd(), this method really performs a
@@ -69,7 +69,7 @@ protected:
     QDir oldWorkingDir;
 };
 
-#endif // KDirSaver_h
+#endif // DirSaver_h
 
 
 // EOF

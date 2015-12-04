@@ -91,16 +91,16 @@ QDirStatApp::QDirStatApp( QWidget* , const char* name )
     _splitter = new QSplitter( QSplitter::Vertical, this );
     setCentralWidget( _splitter );
 
-    _treeView = new KDirTreeView( _splitter );
+    _treeView = new DirTreeView( _splitter );
 
     connect( _treeView, SIGNAL( progressInfo( const QString & ) ),
 	     this,      SLOT  ( statusMsg   ( const QString & ) ) );
 
-    connect( _treeView, SIGNAL( selectionChanged( KFileInfo * ) ),
-	     this,      SLOT  ( selectionChanged( KFileInfo * ) ) );
+    connect( _treeView, SIGNAL( selectionChanged( FileInfo * ) ),
+	     this,      SLOT  ( selectionChanged( FileInfo * ) ) );
 
-    connect( _treeView, SIGNAL( contextMenu( KDirTreeViewItem *, const QPoint & ) ),
-	     this,      SLOT  ( contextMenu( KDirTreeViewItem *, const QPoint & ) ) );
+    connect( _treeView, SIGNAL( contextMenu( DirTreeViewItem *, const QPoint & ) ),
+	     this,      SLOT  ( contextMenu( DirTreeViewItem *, const QPoint & ) ) );
 
     connect( this,	SIGNAL( readConfig() 		), _treeView,	SLOT  ( readConfig() ) );
     connect( this,	SIGNAL( saveConfig() 		), _treeView,	SLOT  ( saveConfig() ) );
@@ -252,14 +252,14 @@ QDirStatApp::initActions()
 void
 QDirStatApp::initCleanups()
 {
-    _cleanupCollection = new KCleanupCollection( actionCollection() );
+    _cleanupCollection = new CleanupCollection( actionCollection() );
     CHECK_PTR( _cleanupCollection );
     _cleanupCollection->addStdCleanups();
     _cleanupCollection->addUserCleanups( USER_CLEANUPS );
     _cleanupCollection->slotReadConfig();
 
-    connect( _treeView,          SIGNAL( selectionChanged( KFileInfo * ) ),
-	     _cleanupCollection, SIGNAL( selectionChanged( KFileInfo * ) ) );
+    connect( _treeView,          SIGNAL( selectionChanged( FileInfo * ) ),
+	     _cleanupCollection, SIGNAL( selectionChanged( FileInfo * ) ) );
 
     connect( this,               SIGNAL( readConfig( void ) ),
 	     _cleanupCollection, SIGNAL( readConfig( void ) ) );
@@ -272,7 +272,7 @@ QDirStatApp::initCleanups()
 void
 QDirStatApp::revertCleanupsToDefaults()
 {
-    KCleanupCollection defaultCollection;
+    CleanupCollection defaultCollection;
     defaultCollection.addStdCleanups();
     defaultCollection.addUserCleanups( USER_CLEANUPS );
     *_cleanupCollection = defaultCollection;
@@ -392,12 +392,12 @@ void QDirStatApp::readMainWinConfig()
 
     config->setGroup( "Exclude" );
     QStringList excludeRules = config->readListEntry ( "ExcludeRules" );
-    KExcludeRules::excludeRules()->clear();
+    ExcludeRules::excludeRules()->clear();
     
     for ( QStringList::Iterator it = excludeRules.begin(); it != excludeRules.end(); ++it )
     {
 	QString ruleText = *it;
-	KExcludeRules::excludeRules()->add( new KExcludeRule( QRegExp( ruleText ) ) );
+	ExcludeRules::excludeRules()->add( new ExcludeRule( QRegExp( ruleText ) ) );
 	kdDebug() << "Adding exclude rule: " << ruleText << endl;
     }
 
@@ -624,7 +624,7 @@ QDirStatApp::cleanupOpenWith()
     if ( ! _treeView->selection() )
 	return;
 
-    KFileInfo * sel = _treeView->selection()->orig();
+    FileInfo * sel = _treeView->selection()->orig();
 
     if ( sel->isDotEntry() )
 	return;
@@ -635,7 +635,7 @@ QDirStatApp::cleanupOpenWith()
 
 
 void
-QDirStatApp::selectionChanged( KFileInfo *selection )
+QDirStatApp::selectionChanged( FileInfo *selection )
 {
     if ( selection )
     {
@@ -756,7 +756,7 @@ QDirStatApp::preferences()
 {
     if ( ! _settingsDialog )
     {
-	_settingsDialog = new QDirStat::KSettingsDialog( this );
+	_settingsDialog = new QDirStat::SettingsDialog( this );
 	CHECK_PTR( _settingsDialog );
     }
 
@@ -846,7 +846,7 @@ QDirStatApp::statusMsg( const QString &text )
 
 
 void
-QDirStatApp::contextMenu( KDirTreeViewItem * item, const QPoint &pos )
+QDirStatApp::contextMenu( DirTreeViewItem * item, const QPoint &pos )
 {
     NOT_USED( item );
 
@@ -892,8 +892,8 @@ QDirStatApp::createTreemapView()
     connect( _treemapView,	SIGNAL( treemapChanged()	),
 	     this,		SLOT  ( updateActions()	) 	);
 
-    connect( _treemapView,	SIGNAL( selectionChanged( KFileInfo * ) ),
-	     this,      	SLOT  ( selectionChanged( KFileInfo * ) ) );
+    connect( _treemapView,	SIGNAL( selectionChanged( FileInfo * ) ),
+	     this,      	SLOT  ( selectionChanged( FileInfo * ) ) );
 
     if ( _activityTracker )
     {

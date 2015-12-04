@@ -7,8 +7,8 @@
  */
 
 
-#ifndef KStdCleanup_h
-#define KStdCleanup_h
+#ifndef StdCleanup_h
+#define StdCleanup_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -22,8 +22,8 @@ class KActionCollection;
 namespace QDirStat
 {
     /**
-     * Predefined standard @ref KCleanup actions to be performed on
-     * @ref KDirTree items.
+     * Predefined standard @ref Cleanup actions to be performed on
+     * @ref DirTree items.
      *
      * This class is not meant to be ever instantiated - use the static methods
      * only.
@@ -35,29 +35,29 @@ namespace QDirStat
      * @short QDirStat standard cleanup actions
      **/
     
-    class KStdCleanup
+    class StdCleanup
     {
     public:
-	static KCleanup *openInKonqueror	( KActionCollection *parent = 0 );
-	static KCleanup *openInTerminal		( KActionCollection *parent = 0 );
-	static KCleanup *compressSubtree	( KActionCollection *parent = 0 );
-	static KCleanup *makeClean		( KActionCollection *parent = 0 );
-	static KCleanup *deleteTrash		( KActionCollection *parent = 0 );
-	static KCleanup *moveToTrashBin		( KActionCollection *parent = 0 );
-	static KCleanup *hardDelete		( KActionCollection *parent = 0 );
+	static Cleanup *openInKonqueror	( KActionCollection *parent = 0 );
+	static Cleanup *openInTerminal		( KActionCollection *parent = 0 );
+	static Cleanup *compressSubtree	( KActionCollection *parent = 0 );
+	static Cleanup *makeClean		( KActionCollection *parent = 0 );
+	static Cleanup *deleteTrash		( KActionCollection *parent = 0 );
+	static Cleanup *moveToTrashBin		( KActionCollection *parent = 0 );
+	static Cleanup *hardDelete		( KActionCollection *parent = 0 );
 	
     private:
 	/**
 	 * Prevent instances of this class - private constructor / destructor.
 	 **/
-	KStdCleanup()	{}
-	~KStdCleanup()	{}
+	StdCleanup()	{}
+	~StdCleanup()	{}
     };
 
 }	// namespace QDirStat
 
 
-#endif // ifndef KStdCleanup_h
+#endif // ifndef StdCleanup_h
 
 
 // EOF

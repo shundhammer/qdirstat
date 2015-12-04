@@ -38,8 +38,8 @@
 using namespace QDirStat;
 
 
-KDirTreeView::KDirTreeView( QWidget * parent )
-    : KDirTreeViewParentClass( parent )
+DirTreeView::DirTreeView( QWidget * parent )
+    : DirTreeViewParentClass( parent )
 {
     _tree		= 0;
     _updateTimer	= 0;
@@ -53,11 +53,11 @@ KDirTreeView::KDirTreeView( QWidget * parent )
     for ( int i=0; i < DEBUG_COUNTERS; i++ )
 	_debugCount[i]	= 0;
 
-    setDebugFunc( 1, "KDirTreeViewItem::init()" );
-    setDebugFunc( 2, "KDirTreeViewItem::updateSummary()" );
-    setDebugFunc( 3, "KDirTreeViewItem::deferredClone()" );
-    setDebugFunc( 4, "KDirTreeViewItem::compare()" );
-    setDebugFunc( 5, "KDirTreeViewItem::paintCell()" );
+    setDebugFunc( 1, "DirTreeViewItem::init()" );
+    setDebugFunc( 2, "DirTreeViewItem::updateSummary()" );
+    setDebugFunc( 3, "DirTreeViewItem::deferredClone()" );
+    setDebugFunc( 4, "DirTreeViewItem::compare()" );
+    setDebugFunc( 5, "DirTreeViewItem::paintCell()" );
 
 #if SEPARATE_READ_JOBS_COL
     _readJobsCol	= -1;
@@ -135,7 +135,7 @@ KDirTreeView::KDirTreeView( QWidget * parent )
 }
 
 
-KDirTreeView::~KDirTreeView()
+DirTreeView::~DirTreeView()
 {
     if ( _tree )
 	delete _tree;
@@ -148,7 +148,7 @@ KDirTreeView::~KDirTreeView()
 
 
 void
-KDirTreeView::setDebugFunc( int i, const QString & functionName )
+DirTreeView::setDebugFunc( int i, const QString & functionName )
 {
     if ( i > 0 && i < DEBUG_COUNTERS )
 	_debugFunc[i] = functionName;
@@ -156,7 +156,7 @@ KDirTreeView::setDebugFunc( int i, const QString & functionName )
 
 
 void
-KDirTreeView::incDebugCount( int i )
+DirTreeView::incDebugCount( int i )
 {
     if ( i > 0 && i < DEBUG_COUNTERS )
 	_debugCount[i]++;
@@ -164,7 +164,7 @@ KDirTreeView::incDebugCount( int i )
 
 
 void
-KDirTreeView::busyDisplay()
+DirTreeView::busyDisplay()
 {
 #if SEPARATE_READ_JOBS_COL
     if ( _readJobsCol < 0 )
@@ -180,7 +180,7 @@ KDirTreeView::busyDisplay()
 
 
 void
-KDirTreeView::idleDisplay()
+DirTreeView::idleDisplay()
 {
 #if SEPARATE_READ_JOBS_COL
     if ( _readJobsCol >= 0 )
@@ -211,7 +211,7 @@ KDirTreeView::idleDisplay()
 
 
 void
-KDirTreeView::openURL( KURL url )
+DirTreeView::openURL( KURL url )
 {
     clear();
     _tree->clear();
@@ -224,7 +224,7 @@ KDirTreeView::openURL( KURL url )
 
 
 void
-KDirTreeView::createTree()
+DirTreeView::createTree()
 {
     // Clean up any old leftovers
 
@@ -237,7 +237,7 @@ KDirTreeView::createTree()
 
     // Create new (empty) dir tree
 
-    _tree = new KDirTree();
+    _tree = new DirTree();
 
 
     // Connect signals
@@ -245,11 +245,11 @@ KDirTreeView::createTree()
     connect( _tree, SIGNAL( progressInfo    ( const QString & ) ),
 	     this,  SLOT  ( sendProgressInfo( const QString & ) ) );
 
-    connect( _tree, SIGNAL( childAdded( KFileInfo * ) ),
-	     this,  SLOT  ( addChild  ( KFileInfo * ) ) );
+    connect( _tree, SIGNAL( childAdded( FileInfo * ) ),
+	     this,  SLOT  ( addChild  ( FileInfo * ) ) );
 
-    connect( _tree, SIGNAL( deletingChild( KFileInfo * ) ),
-	     this,  SLOT  ( deleteChild  ( KFileInfo * ) ) );
+    connect( _tree, SIGNAL( deletingChild( FileInfo * ) ),
+	     this,  SLOT  ( deleteChild  ( FileInfo * ) ) );
 
     connect( _tree, SIGNAL( startingReading() ),
 	     this,  SLOT  ( prepareReading()  ) );
@@ -260,19 +260,19 @@ KDirTreeView::createTree()
     connect( _tree, SIGNAL( aborted()     ),
 	     this,  SLOT  ( slotAborted() ) );
 
-    connect( _tree, SIGNAL( finalizeLocal( KDirInfo * ) ),
-	     this,  SLOT  ( finalizeLocal( KDirInfo * ) ) );
+    connect( _tree, SIGNAL( finalizeLocal( DirInfo * ) ),
+	     this,  SLOT  ( finalizeLocal( DirInfo * ) ) );
 
-    connect( this,  SIGNAL( selectionChanged( KFileInfo * ) ),
-	     _tree, SLOT  ( selectItem      ( KFileInfo * ) ) );
+    connect( this,  SIGNAL( selectionChanged( FileInfo * ) ),
+	     _tree, SLOT  ( selectItem      ( FileInfo * ) ) );
 
-    connect( _tree, SIGNAL( selectionChanged( KFileInfo * ) ),
-	     this,  SLOT  ( selectItem      ( KFileInfo * ) ) );
+    connect( _tree, SIGNAL( selectionChanged( FileInfo * ) ),
+	     this,  SLOT  ( selectItem      ( FileInfo * ) ) );
 }
 
 
 void
-KDirTreeView::prepareReading()
+DirTreeView::prepareReading()
 {
     // Prepare cyclic update
 
@@ -303,7 +303,7 @@ KDirTreeView::prepareReading()
 
 
 void
-KDirTreeView::refreshAll()
+DirTreeView::refreshAll()
 {
     if ( _tree && _tree->root() )
     {
@@ -315,7 +315,7 @@ KDirTreeView::refreshAll()
 
 
 void
-KDirTreeView::refreshSelected()
+DirTreeView::refreshSelected()
 {
     if ( _tree && _tree->root() && _selection )
     {
@@ -328,7 +328,7 @@ KDirTreeView::refreshSelected()
 
 
 void
-KDirTreeView::abortReading()
+DirTreeView::abortReading()
 {
     if ( _tree )
 	_tree->abortReading();
@@ -336,10 +336,10 @@ KDirTreeView::abortReading()
 
 
 void
-KDirTreeView::clear()
+DirTreeView::clear()
 {
     clearSelection();
-    KDirTreeViewParentClass::clear();
+    DirTreeViewParentClass::clear();
 
     for ( int i=0; i < DEBUG_COUNTERS; i++ )
 	_debugCount[i]	= 0;
@@ -347,7 +347,7 @@ KDirTreeView::clear()
 
 
 bool
-KDirTreeView::writeCache( const QString & cacheFileName )
+DirTreeView::writeCache( const QString & cacheFileName )
 {
     if ( _tree )
 	return _tree->writeCache( cacheFileName );
@@ -357,7 +357,7 @@ KDirTreeView::writeCache( const QString & cacheFileName )
 
 
 void
-KDirTreeView::readCache( const QString & cacheFileName )
+DirTreeView::readCache( const QString & cacheFileName )
 {
     clear();
     _tree->clear();
@@ -366,11 +366,11 @@ KDirTreeView::readCache( const QString & cacheFileName )
 
 
 void
-KDirTreeView::addChild( KFileInfo *newChild )
+DirTreeView::addChild( FileInfo *newChild )
 {
     if ( newChild->parent() )
     {
-	KDirTreeViewItem *cloneParent = locate( newChild->parent(),
+	DirTreeViewItem *cloneParent = locate( newChild->parent(),
 						_doLazyClone,		// lazy
 						true );			// doClone
 
@@ -379,7 +379,7 @@ KDirTreeView::addChild( KFileInfo *newChild )
 	    if ( isOpen( cloneParent ) || ! _doLazyClone )
 	    {
 		// kdDebug() << "Immediately cloning " << newChild << endl;
-		new KDirTreeViewItem( this, cloneParent, newChild );
+		new DirTreeViewItem( this, cloneParent, newChild );
 	    }
 	}
 	else	// Error
@@ -394,18 +394,18 @@ KDirTreeView::addChild( KFileInfo *newChild )
     else	// No parent - top level item
     {
 	// kdDebug() << "Immediately top level cloning " << newChild << endl;
-	new KDirTreeViewItem( this, newChild );
+	new DirTreeViewItem( this, newChild );
     }
 }
 
 
 void
-KDirTreeView::deleteChild( KFileInfo *child )
+DirTreeView::deleteChild( FileInfo *child )
 {
-    KDirTreeViewItem *clone = locate( child,
+    DirTreeViewItem *clone = locate( child,
 				      false,	// lazy
 				      false );	// doClone
-    KDirTreeViewItem *nextSelection = 0;
+    DirTreeViewItem *nextSelection = 0;
 
     if ( clone )
     {
@@ -416,7 +416,7 @@ KDirTreeView::deleteChild( KFileInfo *child )
 	     * so there is still something selected: Preferably the next item
 	     * or the parent if there is no next. This cannot be done from
 	     * outside because the order of items is not known to the outside;
-	     * it might appear very random if the next item in the KFileInfo
+	     * it might appear very random if the next item in the FileInfo
 	     * list would be selected. The order of that list is definitely
 	     * different than the order of this view - which is what the user
 	     * sees. So let's give the user a reasonable next selection so he
@@ -432,7 +432,7 @@ KDirTreeView::deleteChild( KFileInfo *child )
 	    // kdDebug() << k_funcinfo << " Next selection: " << nextSelection << endl;
 	}
 
-	KDirTreeViewItem *parent = clone->parent();
+	DirTreeViewItem *parent = clone->parent();
 	delete clone;
 
 	while ( parent )
@@ -448,9 +448,9 @@ KDirTreeView::deleteChild( KFileInfo *child )
 
 
 void
-KDirTreeView::updateSummary()
+DirTreeView::updateSummary()
 {
-    KDirTreeViewItem *child = firstChild();
+    DirTreeViewItem *child = firstChild();
 
     while ( child )
     {
@@ -461,7 +461,7 @@ KDirTreeView::updateSummary()
 
 
 void
-KDirTreeView::slotFinished()
+DirTreeView::slotFinished()
 {
     emit progressInfo( i18n( "Finished. Elapsed time: %1" )
 		       .arg( formatTime( _stopWatch.elapsed(), true ) ) );
@@ -503,7 +503,7 @@ KDirTreeView::slotFinished()
 
 
 void
-KDirTreeView::slotAborted()
+DirTreeView::slotAborted()
 {
     emit progressInfo( i18n( "Aborted. Elapsed time: %1" )
 		       .arg( formatTime( _stopWatch.elapsed(), true ) ) );
@@ -522,11 +522,11 @@ KDirTreeView::slotAborted()
 
 
 void
-KDirTreeView::finalizeLocal( KDirInfo *dir )
+DirTreeView::finalizeLocal( DirInfo *dir )
 {
     if ( dir )
     {
-	KDirTreeViewItem *clone = locate( dir,
+	DirTreeViewItem *clone = locate( dir,
 					  false,	// lazy
 					  false );	// doClone
 	if ( clone )
@@ -536,7 +536,7 @@ KDirTreeView::finalizeLocal( KDirInfo *dir )
 
 
 void
-KDirTreeView::sendProgressInfo( const QString & newCurrentDir )
+DirTreeView::sendProgressInfo( const QString & newCurrentDir )
 {
     _currentDir = newCurrentDir;
 
@@ -551,14 +551,14 @@ KDirTreeView::sendProgressInfo( const QString & newCurrentDir )
 }
 
 
-KDirTreeViewItem *
-KDirTreeView::locate( KFileInfo *wanted, bool lazy, bool doClone )
+DirTreeViewItem *
+DirTreeView::locate( FileInfo *wanted, bool lazy, bool doClone )
 {
-    KDirTreeViewItem *child = firstChild();
+    DirTreeViewItem *child = firstChild();
 
     while ( child )
     {
-	KDirTreeViewItem *wantedChild = child->locate( wanted, lazy, doClone, 0 );
+	DirTreeViewItem *wantedChild = child->locate( wanted, lazy, doClone, 0 );
 
 	if ( wantedChild )
 	    return wantedChild;
@@ -572,10 +572,10 @@ KDirTreeView::locate( KFileInfo *wanted, bool lazy, bool doClone )
 
 
 int
-KDirTreeView::openCount()
+DirTreeView::openCount()
 {
     int count = 0;
-    KDirTreeViewItem *child = firstChild();
+    DirTreeViewItem *child = firstChild();
 
     while ( child )
     {
@@ -588,9 +588,9 @@ KDirTreeView::openCount()
 
 
 void
-KDirTreeView::selectItem( QListViewItem *listViewItem )
+DirTreeView::selectItem( QListViewItem *listViewItem )
 {
-    _selection = dynamic_cast<KDirTreeViewItem *>( listViewItem );
+    _selection = dynamic_cast<DirTreeViewItem *>( listViewItem );
 
     if ( _selection )
     {
@@ -605,15 +605,15 @@ KDirTreeView::selectItem( QListViewItem *listViewItem )
 
 
     emit selectionChanged( _selection );
-    emit selectionChanged( _selection ? _selection->orig() : (KFileInfo *) 0 );
+    emit selectionChanged( _selection ? _selection->orig() : (FileInfo *) 0 );
 }
 
 
 void
-KDirTreeView::selectItem( KFileInfo *newSelection )
+DirTreeView::selectItem( FileInfo *newSelection )
 {
     // Short-circuit for the most common case: The signal has been triggered by
-    // this view, and the KDirTree has sent it right back.
+    // this view, and the DirTree has sent it right back.
 
     if ( _selection && _selection->orig() == newSelection )
 	return;
@@ -640,19 +640,19 @@ KDirTreeView::selectItem( KFileInfo *newSelection )
 
 
 void
-KDirTreeView::clearSelection()
+DirTreeView::clearSelection()
 {
     // kdDebug() << k_funcinfo << endl;
     _selection = 0;
     QListView::clearSelection();
 
-    emit selectionChanged( (KDirTreeViewItem *) 0 );
-    emit selectionChanged( (KFileInfo *) 0 );
+    emit selectionChanged( (DirTreeViewItem *) 0 );
+    emit selectionChanged( (FileInfo *) 0 );
 }
 
 
 void
-KDirTreeView::closeAllExcept( KDirTreeViewItem *except )
+DirTreeView::closeAllExcept( DirTreeViewItem *except )
 {
     if ( ! except )
     {
@@ -665,7 +665,7 @@ KDirTreeView::closeAllExcept( KDirTreeViewItem *except )
 
 
 const QColor &
-KDirTreeView::fillColor( int level ) const
+DirTreeView::fillColor( int level ) const
 {
     if ( level < 0 )
     {
@@ -678,41 +678,41 @@ KDirTreeView::fillColor( int level ) const
 
 
 const QColor &
-KDirTreeView::rawFillColor( int level ) const
+DirTreeView::rawFillColor( int level ) const
 {
-    if ( level < 0 || level > KDirTreeViewMaxFillColor )
+    if ( level < 0 || level > DirTreeViewMaxFillColor )
     {
 	level = 0;
 	kdWarning() << k_funcinfo << "Invalid argument: " << level << endl;
     }
 
-    return _fillColor [ level % KDirTreeViewMaxFillColor ];
+    return _fillColor [ level % DirTreeViewMaxFillColor ];
 }
 
 
 void
-KDirTreeView::setFillColor( int			level,
+DirTreeView::setFillColor( int			level,
 			    const QColor &	color )
 {
-    if ( level >= 0 && level < KDirTreeViewMaxFillColor )
+    if ( level >= 0 && level < DirTreeViewMaxFillColor )
 	_fillColor[ level ] = color;
 }
 
 
 
 void
-KDirTreeView::setUsedFillColors( int usedFillColors )
+DirTreeView::setUsedFillColors( int usedFillColors )
 {
     if ( usedFillColors < 1 )
     {
 	kdWarning() << k_funcinfo << "Invalid argument: "<< usedFillColors << endl;
 	usedFillColors = 1;
     }
-    else if ( usedFillColors >= KDirTreeViewMaxFillColor )
+    else if ( usedFillColors >= DirTreeViewMaxFillColor )
     {
 	kdWarning() << k_funcinfo << "Invalid argument: "<< usedFillColors
-		    << " (max: " << KDirTreeViewMaxFillColor-1 << ")" << endl;
-	usedFillColors = KDirTreeViewMaxFillColor-1;
+		    << " (max: " << DirTreeViewMaxFillColor-1 << ")" << endl;
+	usedFillColors = DirTreeViewMaxFillColor-1;
     }
 
     _usedFillColors = usedFillColors;
@@ -720,11 +720,11 @@ KDirTreeView::setUsedFillColors( int usedFillColors )
 
 
 void
-KDirTreeView::setDefaultFillColors()
+DirTreeView::setDefaultFillColors()
 {
     int i;
 
-    for ( i=0; i < KDirTreeViewMaxFillColor; i++ )
+    for ( i=0; i < DirTreeViewMaxFillColor; i++ )
     {
 	_fillColor[i] = blue;
     }
@@ -748,7 +748,7 @@ KDirTreeView::setDefaultFillColors()
 
 
 void
-KDirTreeView::setTreeBackground( const QColor &color )
+DirTreeView::setTreeBackground( const QColor &color )
 {
     _treeBackground = color;
     _percentageBarBackground = _treeBackground.dark( 115 );
@@ -760,7 +760,7 @@ KDirTreeView::setTreeBackground( const QColor &color )
 
 
 void
-KDirTreeView::ensureContrast()
+DirTreeView::ensureContrast()
 {
     if ( colorGroup().base() == white ||
 	 colorGroup().base() == black   )
@@ -775,7 +775,7 @@ KDirTreeView::ensureContrast()
 
 
 void
-KDirTreeView::paletteChanged()
+DirTreeView::paletteChanged()
 {
     setTreeBackground( KGlobalSettings::baseColor() );
     ensureContrast();
@@ -783,16 +783,16 @@ KDirTreeView::paletteChanged()
 
 
 void
-KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
+DirTreeView::popupContextMenu( QListViewItem *	listViewItem,
 				const QPoint &	pos,
 				int 		column )
 {
-    KDirTreeViewItem *item = (KDirTreeViewItem *) listViewItem;
+    DirTreeViewItem *item = (DirTreeViewItem *) listViewItem;
 
     if ( ! item )
 	return;
 
-    KFileInfo * orig = item->orig();
+    FileInfo * orig = item->orig();
 
     if ( ! orig )
     {
@@ -808,7 +808,7 @@ KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
 	{
 	    // Show with exclude rule caused the exclusion
 
-	    const KExcludeRule * rule = KExcludeRules::excludeRules()->matchingRule( orig->url() );
+	    const ExcludeRule * rule = ExcludeRules::excludeRules()->matchingRule( orig->url() );
 
 	    QString text;
 
@@ -891,7 +891,7 @@ KDirTreeView::popupContextMenu( QListViewItem *	listViewItem,
 
 
 void
-KDirTreeView::popupContextSizeInfo( const QPoint &	pos,
+DirTreeView::popupContextSizeInfo( const QPoint &	pos,
 				    KFileSize		size )
 {
     QString info;
@@ -912,7 +912,7 @@ KDirTreeView::popupContextSizeInfo( const QPoint &	pos,
 
 
 void
-KDirTreeView::popupContextInfo( const QPoint  &	pos,
+DirTreeView::popupContextInfo( const QPoint  &	pos,
 				const QString & info )
 {
     _contextInfo->changeItem( info, _idContextInfo );
@@ -921,7 +921,7 @@ KDirTreeView::popupContextInfo( const QPoint  &	pos,
 
 
 void
-KDirTreeView::readConfig()
+DirTreeView::readConfig()
 {
     KConfig *config = kapp->config();
     KConfigGroupSaver saver( config, "Tree Colors" );
@@ -942,7 +942,7 @@ KDirTreeView::readConfig()
 
 	QColor defaultColor( blue );
 
-	for ( int i=0; i < KDirTreeViewMaxFillColor; i++ )
+	for ( int i=0; i < DirTreeViewMaxFillColor; i++ )
 	{
 	    QString name;
 	    name.sprintf( "fillColor_%02d", i );
@@ -956,14 +956,14 @@ KDirTreeView::readConfig()
 
 
 void
-KDirTreeView::saveConfig() const
+DirTreeView::saveConfig() const
 {
     KConfig *config = kapp->config();
     KConfigGroupSaver saver( config, "Tree Colors" );
 
     config->writeEntry( "usedFillColors", _usedFillColors );
 
-    for ( int i=0; i < KDirTreeViewMaxFillColor; i++ )
+    for ( int i=0; i < DirTreeViewMaxFillColor; i++ )
     {
 	QString name;
 	name.sprintf( "fillColor_%02d", i );
@@ -973,7 +973,7 @@ KDirTreeView::saveConfig() const
 
 
 void
-KDirTreeView::setSorting( int column, bool increasing )
+DirTreeView::setSorting( int column, bool increasing )
 {
     _sortCol = column;
     QListView::setSorting( column, increasing );
@@ -981,14 +981,14 @@ KDirTreeView::setSorting( int column, bool increasing )
 
 
 void
-KDirTreeView::logActivity( int points )
+DirTreeView::logActivity( int points )
 {
     emit userActivity( points );
 }
 
 
 void
-KDirTreeView::columnResized( int column, int oldSize, int newSize )
+DirTreeView::columnResized( int column, int oldSize, int newSize )
 {
     NOT_USED( oldSize );
     NOT_USED( newSize );
@@ -998,7 +998,7 @@ KDirTreeView::columnResized( int column, int oldSize, int newSize )
 }
 
 void
-KDirTreeView::sendMailToOwner()
+DirTreeView::sendMailToOwner()
 {
     if ( ! _selection )
     {
@@ -1040,17 +1040,17 @@ KDirTreeView::sendMailToOwner()
 
 
 
-KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
-				    KFileInfo *		orig )
+DirTreeViewItem::DirTreeViewItem( DirTreeView *	view,
+				    FileInfo *		orig )
     : QListViewItem( view )
 {
     init( view, 0, orig );
 }
 
 
-KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
-				    KDirTreeViewItem *	parent,
-				    KFileInfo *		orig )
+DirTreeViewItem::DirTreeViewItem( DirTreeView *	view,
+				    DirTreeViewItem *	parent,
+				    FileInfo *		orig )
     : QListViewItem( parent )
 {
     CHECK_PTR( parent );
@@ -1059,9 +1059,9 @@ KDirTreeViewItem::KDirTreeViewItem( KDirTreeView *	view,
 
 
 void
-KDirTreeViewItem::init( KDirTreeView *		view,
-			KDirTreeViewItem *	parent,
-			KFileInfo *		orig )
+DirTreeViewItem::init( DirTreeView *		view,
+			DirTreeViewItem *	parent,
+			FileInfo *		orig )
 {
     _view 	= view;
     _parent	= parent;
@@ -1071,7 +1071,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
     _openCount	= 0;
 
     // _view->incDebugCount(1);
-    // kdDebug() << "new KDirTreeViewItem for " << orig << endl;
+    // kdDebug() << "new DirTreeViewItem for " << orig << endl;
 
     if ( _orig->isDotEntry() )
     {
@@ -1132,8 +1132,8 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 
 	QListViewItem::setOpen ( _orig->treeLevel() < _view->openLevel() );
 	/*
-	 * Don't use KDirTreeViewItem::setOpen() here since this might call
-	 * KDirTreeViewItem::deferredClone() which would confuse bookkeeping
+	 * Don't use DirTreeViewItem::setOpen() here since this might call
+	 * DirTreeViewItem::deferredClone() which would confuse bookkeeping
 	 * with addChild() signals that might arrive, too - resulting in double
 	 * dot entries.
 	 */
@@ -1173,7 +1173,7 @@ KDirTreeViewItem::init( KDirTreeView *		view,
 }
 
 
-KDirTreeViewItem::~KDirTreeViewItem()
+DirTreeViewItem::~DirTreeViewItem()
 {
     if ( _pacMan )
 	delete _pacMan;
@@ -1184,7 +1184,7 @@ KDirTreeViewItem::~KDirTreeViewItem()
 
 
 void
-KDirTreeViewItem::setIcon()
+DirTreeViewItem::setIcon()
 {
     QPixmap icon;
 
@@ -1226,7 +1226,7 @@ KDirTreeViewItem::setIcon()
 
 
 void
-KDirTreeViewItem::updateSummary()
+DirTreeViewItem::updateSummary()
 {
     // _view->incDebugCount(2);
 
@@ -1304,7 +1304,7 @@ KDirTreeViewItem::updateSummary()
 
     // Update all children
 
-    KDirTreeViewItem *child = firstChild();
+    DirTreeViewItem *child = firstChild();
 
     while ( child )
     {
@@ -1314,8 +1314,8 @@ KDirTreeViewItem::updateSummary()
 }
 
 
-KDirTreeViewItem *
-KDirTreeViewItem::locate( KFileInfo *	wanted,
+DirTreeViewItem *
+DirTreeViewItem::locate( FileInfo *	wanted,
 			  bool		lazy,
 			  bool		doClone,
 			  int 		level )
@@ -1355,7 +1355,7 @@ KDirTreeViewItem::locate( KFileInfo *	wanted,
     {
 	// Search all children
 
-	KDirTreeViewItem *child = firstChild();
+	DirTreeViewItem *child = firstChild();
 
 	if ( ! child && _orig->hasChildren() && doClone )
 	{
@@ -1366,7 +1366,7 @@ KDirTreeViewItem::locate( KFileInfo *	wanted,
 
 	while ( child )
 	{
-	    KDirTreeViewItem *foundChild = child->locate( wanted, lazy, doClone, level+1 );
+	    DirTreeViewItem *foundChild = child->locate( wanted, lazy, doClone, level+1 );
 
 	    if ( foundChild )
 		return foundChild;
@@ -1380,7 +1380,7 @@ KDirTreeViewItem::locate( KFileInfo *	wanted,
 
 
 void
-KDirTreeViewItem::deferredClone()
+DirTreeViewItem::deferredClone()
 {
     // _view->incDebugCount(3);
 
@@ -1397,7 +1397,7 @@ KDirTreeViewItem::deferredClone()
 
     int level		 = _orig->treeLevel();
     bool startingClean	 = ! firstChild();
-    KFileInfo *origChild = _orig->firstChild();
+    FileInfo *origChild = _orig->firstChild();
 
     while ( origChild )
     {
@@ -1408,7 +1408,7 @@ KDirTreeViewItem::deferredClone()
 		       level ) )
 	{
 	    // kdDebug() << "Deferred cloning " << origChild << endl;
-	    new KDirTreeViewItem( _view, this, origChild );
+	    new DirTreeViewItem( _view, this, origChild );
 	}
 
 	origChild = origChild->next();
@@ -1427,13 +1427,13 @@ KDirTreeViewItem::deferredClone()
 	 )
     {
 	// kdDebug() << "Deferred cloning dot entry for " << _orig << endl;
-	new KDirTreeViewItem( _view, this, _orig->dotEntry() );
+	new DirTreeViewItem( _view, this, _orig->dotEntry() );
     }
 }
 
 
 void
-KDirTreeViewItem::finalizeLocal()
+DirTreeViewItem::finalizeLocal()
 {
     // kdDebug() << k_funcinfo << _orig << endl;
     cleanupDotEntries();
@@ -1448,12 +1448,12 @@ KDirTreeViewItem::finalizeLocal()
 
 
 void
-KDirTreeViewItem::cleanupDotEntries()
+DirTreeViewItem::cleanupDotEntries()
 {
     if ( ! _orig->dotEntry() )
 	return;
 
-    KDirTreeViewItem *dotEntry = findDotEntry();
+    DirTreeViewItem *dotEntry = findDotEntry();
 
     if ( ! dotEntry )
 	return;
@@ -1464,11 +1464,11 @@ KDirTreeViewItem::cleanupDotEntries()
     if ( ! _orig->firstChild() )
     {
 	// kdDebug() << "Removing solo dot entry clone " << _orig << endl;
-	KDirTreeViewItem *child = dotEntry->firstChild();
+	DirTreeViewItem *child = dotEntry->firstChild();
 
 	while ( child )
 	{
-	    KDirTreeViewItem *nextChild = child->next();
+	    DirTreeViewItem *nextChild = child->next();
 
 
 	    // Reparent this child
@@ -1506,10 +1506,10 @@ KDirTreeViewItem::cleanupDotEntries()
 }
 
 
-KDirTreeViewItem *
-KDirTreeViewItem::findDotEntry() const
+DirTreeViewItem *
+DirTreeViewItem::findDotEntry() const
 {
-    KDirTreeViewItem *child = firstChild();
+    DirTreeViewItem *child = firstChild();
 
     while ( child )
     {
@@ -1524,7 +1524,7 @@ KDirTreeViewItem::findDotEntry() const
 
 
 void
-KDirTreeViewItem::setOpen( bool open )
+DirTreeViewItem::setOpen( bool open )
 {
     if ( open && _view->doLazyClone() )
     {
@@ -1550,7 +1550,7 @@ KDirTreeViewItem::setOpen( bool open )
 
 
 void
-KDirTreeViewItem::openNotify( bool open )
+DirTreeViewItem::openNotify( bool open )
 {
     if ( open )
 	_openCount++;
@@ -1563,7 +1563,7 @@ KDirTreeViewItem::openNotify( bool open )
 
 
 void
-KDirTreeViewItem::openSubtree()
+DirTreeViewItem::openSubtree()
 {
     if ( parent() )
 	parent()->setOpen( true );
@@ -1573,13 +1573,13 @@ KDirTreeViewItem::openSubtree()
 
 
 void
-KDirTreeViewItem::closeSubtree()
+DirTreeViewItem::closeSubtree()
 {
     setOpen( false );
 
     if ( _openCount > 0 )
     {
-	KDirTreeViewItem * child = firstChild();
+	DirTreeViewItem * child = firstChild();
 
 	while ( child )
 	{
@@ -1593,9 +1593,9 @@ KDirTreeViewItem::closeSubtree()
 
 
 void
-KDirTreeViewItem::closeAllExceptThis()
+DirTreeViewItem::closeAllExceptThis()
 {
-    KDirTreeViewItem *sibling = _parent ?
+    DirTreeViewItem *sibling = _parent ?
 	_parent->firstChild() : _view->firstChild();
 
     while ( sibling )
@@ -1614,7 +1614,7 @@ KDirTreeViewItem::closeAllExceptThis()
 
 
 QString
-KDirTreeViewItem::asciiDump()
+DirTreeViewItem::asciiDump()
 {
     QString dump;
 
@@ -1624,7 +1624,7 @@ KDirTreeViewItem::asciiDump()
 
     if ( isOpen() )
     {
-	KDirTreeViewItem *child = firstChild();
+	DirTreeViewItem *child = firstChild();
 
 	while ( child )
 	{
@@ -1645,16 +1645,16 @@ KDirTreeViewItem::asciiDump()
  * +1 if this >	 other
  **/
 int
-KDirTreeViewItem::compare( QListViewItem *	otherListViewItem,
+DirTreeViewItem::compare( QListViewItem *	otherListViewItem,
 			   int			column,
 			   bool			ascending ) const
 {
     // _view->incDebugCount(4);
-    KDirTreeViewItem * other = dynamic_cast<KDirTreeViewItem *> (otherListViewItem);
+    DirTreeViewItem * other = dynamic_cast<DirTreeViewItem *> (otherListViewItem);
 
     if ( other )
     {
-	KFileInfo * otherOrig = other->orig();
+	FileInfo * otherOrig = other->orig();
 
 #if ! SEPARATE_READ_JOBS_COL
 	if ( column == _view->readJobsCol() )		return - compare( _orig->pendingReadJobs(), otherOrig->pendingReadJobs() );
@@ -1684,7 +1684,7 @@ KDirTreeViewItem::compare( QListViewItem *	otherListViewItem,
 
 
 void
-KDirTreeViewItem::paintCell( QPainter *			painter,
+DirTreeViewItem::paintCell( QPainter *			painter,
 			     const QColorGroup &	colorGroup,
 			     int			column,
 			     int			width,
@@ -1756,7 +1756,7 @@ KDirTreeViewItem::paintCell( QPainter *			painter,
 
 
 void
-KDirTreeViewItem::paintPercentageBar( float		percent,
+DirTreeViewItem::paintPercentageBar( float		percent,
 				      QPainter *	painter,
 				      int		indent,
 				      int		width,

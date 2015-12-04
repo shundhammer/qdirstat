@@ -1,14 +1,14 @@
 /*
  *   File name:	kdirtreeiterators.h
- *   Summary:	Support classes for QDirStat - KDirTree iterators
+ *   Summary:	Support classes for QDirStat - DirTree iterators
  *   License:   GPL V2 - See file LICENSE for details.
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *
  */
 
 
-#ifndef KDirTreeIterators_h
-#define KDirTreeIterators_h
+#ifndef DirTreeIterators_h
+#define DirTreeIterators_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -22,7 +22,7 @@ namespace QDirStat
 {
     /**
      * Policies how to treat a "dot entry" for iterator objects.
-     * See @ref KFileInfoIterator for details.
+     * See @ref FileInfoIterator for details.
      **/
     typedef enum
     {
@@ -38,22 +38,22 @@ namespace QDirStat
 	KSortByName,
 	KSortByTotalSize,
 	KSortByLatestMtime
-    } KFileInfoSortOrder;
+    } FileInfoSortOrder;
 
 
     // Forward declarations
-    class KFileInfoList;
+    class FileInfoList;
 
 
     /**
-     * Iterator class for children of a @ref KFileInfo object. For optimum
+     * Iterator class for children of a @ref FileInfo object. For optimum
      * performance, this iterator class does NOT return children in any
-     * specific sort order. If you need that, use @ref KFileInfoSortedIterator
+     * specific sort order. If you need that, use @ref FileInfoSortedIterator
      * instead.
      *
      * Sample usage:
      *
-     *    KFileInfoIterator it( node, KDotEntryTransparent );
+     *    FileInfoIterator it( node, KDotEntryTransparent );
      *
      *    while ( *it )
      *    {
@@ -65,9 +65,9 @@ namespace QDirStat
      * subdirectory child and each (direct) file child of 'node'.
      * Notice: This does not recurse into subdirectories!
      *
-     * @short (unsorted) iterator for @ref KFileInfo children.
+     * @short (unsorted) iterator for @ref FileInfo children.
      **/
-    class KFileInfoIterator
+    class FileInfoIterator
     {
     public:
 	/**
@@ -98,7 +98,7 @@ namespace QDirStat
 	 * children.
 	 *
 	 **/
-	KFileInfoIterator( KFileInfo *		parent,
+	FileInfoIterator( FileInfo *		parent,
 			   KDotEntryPolicy	dotEntryPolicy = KDotEntryTransparent );
 
     protected:
@@ -106,7 +106,7 @@ namespace QDirStat
 	 * Alternate constructor to be called from derived classes: Those can
 	 * choose not to call next() in the constructor.
 	 **/
-	KFileInfoIterator	( KFileInfo *		parent,
+	FileInfoIterator	( FileInfo *		parent,
 				  KDotEntryPolicy	dotEntryPolicy,
 				  bool			callNext );
 
@@ -114,7 +114,7 @@ namespace QDirStat
 	/**
 	 * Internal initialization called from any constructor.
 	 **/
-	void init		( KFileInfo *		parent,
+	void init		( FileInfo *		parent,
 				  KDotEntryPolicy	dotEntryPolicy,
 				  bool			callNext );
 
@@ -123,19 +123,19 @@ namespace QDirStat
 	/**
 	 * Destructor.
 	 **/
-	virtual 	~KFileInfoIterator();
+	virtual 	~FileInfoIterator();
 
 	/**
 	 * Return the current child object or 0 if there is no more.
 	 * Same as @ref operator*() .
 	 **/
-	virtual KFileInfo * current()	{ return _current; }
+	virtual FileInfo * current()	{ return _current; }
 
 	/**
 	 * Return the current child object or 0 if there is no more.
 	 * Same as @ref current().
 	 **/
-	KFileInfo *	operator*()	{ return current(); }
+	FileInfo *	operator*()	{ return current(); }
 
 	/**
 	 * Advance to the next child. Same as @ref operator++().
@@ -154,16 +154,16 @@ namespace QDirStat
 
 	/**
 	 * Check whether or not the current child is a directory, i.e. can be
-	 * cast to @ref KDirInfo * .
+	 * cast to @ref DirInfo * .
 	 **/
 	bool		currentIsDir() { return _current && _current->isDirInfo(); }
 
 	/**
-	 * Return the current child object cast to @ref KDirInfo * or 0 if
+	 * Return the current child object cast to @ref DirInfo * or 0 if
 	 * there either is no more or it isn't a directory. Check with @ref
 	 * currentIsDir() before using this!
 	 **/
-	KDirInfo *	currentDir() { return currentIsDir() ? (KDirInfo *) _current : 0; }
+	DirInfo *	currentDir() { return currentIsDir() ? (KDirInfo *) _current : 0; }
 
 	/**
 	 * Return the number of items that will be processed.
@@ -174,64 +174,64 @@ namespace QDirStat
 
     protected:
 
-	KFileInfo *	_parent;
+	FileInfo *	_parent;
 	KDotEntryPolicy	_policy;
-	KFileInfo *	_current;
+	FileInfo *	_current;
 	bool		_directChildrenProcessed;
 	bool		_dotEntryProcessed;
 	bool		_dotEntryChildrenProcessed;
 
-    };	// class KFileInfoIterator
+    };	// class FileInfoIterator
 
 
 
     /**
-     * Iterator class for children of a @ref KFileInfo object. This iterator
+     * Iterator class for children of a @ref FileInfo object. This iterator
      * returns children sorted by name: Subdirectories first, then the dot
      * entry (if desired - depending on policy), then file children (if
      * desired). Note: If you don't need the sorting feature, you might want to
      * use @ref KFileItemIterator instead which has better performance.
      *
-     * @short sorted iterator for @ref KFileInfo children.
+     * @short sorted iterator for @ref FileInfo children.
      **/
-    class KFileInfoSortedIterator: public KFileInfoIterator
+    class FileInfoSortedIterator: public FileInfoIterator
     {
     public:
 	/**
 	 * Constructor. Specify the sorting order with 'sortOrder' and 'ascending'.
-	 * See @ref KFileInfoIterator for more details.
+	 * See @ref FileInfoIterator for more details.
 	 **/
-	KFileInfoSortedIterator( KFileInfo *		parent,
+	FileInfoSortedIterator( FileInfo *		parent,
 				 KDotEntryPolicy	dotEntryPolicy	= KDotEntryTransparent,
-				 KFileInfoSortOrder	sortOrder	= KSortByName,
+				 FileInfoSortOrder	sortOrder	= KSortByName,
 				 bool			ascending	= true );
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KFileInfoSortedIterator();
+	virtual ~FileInfoSortedIterator();
 
 	/**
 	 * Return the current child object or 0 if there is no more.
 	 *
-	 * Inherited from @ref KFileInfoIterator.
+	 * Inherited from @ref FileInfoIterator.
 	 * Overwritten to overcome some shortcomings of C++:
 	 * Virtual methods cannot be used in the constructor.
 	 **/
-	virtual KFileInfo * current();
+	virtual FileInfo * current();
 
 	/**
 	 * Advance to the next child. Same as @ref operator++().
 	 * Sort by name, sub directories first, then the dot entry (if
 	 * desired), then files (if desired).
 	 *
-	 * Inherited from @ref KFileInfoIterator.
+	 * Inherited from @ref FileInfoIterator.
 	 **/
 	virtual void next();
 
 	/**
 	 * Returns 'true' if this iterator is finished and 'false' if not.
 	 *
-	 * Inherited from @ref KFileInfoIterator.
+	 * Inherited from @ref FileInfoIterator.
 	 **/
 	virtual bool finished();
 
@@ -264,17 +264,17 @@ namespace QDirStat
 	
 	// Data members
 
-	KFileInfoList *		_childrenList;
-	KFileInfoSortOrder	_sortOrder;
+	FileInfoList *		_childrenList;
+	FileInfoSortOrder	_sortOrder;
 	bool			_ascending;
 	bool			_initComplete;
 
-    };	// class KFileInfoSortedIterator
+    };	// class FileInfoSortedIterator
 
 
 
     /**
-     * Specialized KFileInfo iterator that sorts by (total) size, yet
+     * Specialized FileInfo iterator that sorts by (total) size, yet
      * disregards children below a minimum size. This can considerably improve
      * performance if the number of children that need to be sorted decreases
      * dramatically.
@@ -285,14 +285,14 @@ namespace QDirStat
      * get a individual visual representation anyway, so they may as well be
      * omitted right away - no need for expensive list sorting operations.
      **/
-    class KFileInfoSortedBySizeIterator: public KFileInfoSortedIterator
+    class FileInfoSortedBySizeIterator: public FileInfoSortedIterator
     {
     public:
 
 	/**
 	 * Constructor. Children below 'minSize' will be ignored by this iterator.
 	 **/
-	KFileInfoSortedBySizeIterator( KFileInfo *	parent,
+	FileInfoSortedBySizeIterator( FileInfo *	parent,
 				       KFileSize	minSize		= 0,
 				       KDotEntryPolicy	dotEntryPolicy	= KDotEntryTransparent,
 				       bool		ascending 	= false );
@@ -300,14 +300,14 @@ namespace QDirStat
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KFileInfoSortedBySizeIterator() {};
+	virtual ~FileInfoSortedBySizeIterator() {};
 
 
     protected:
 
 	/**
 	 * Create the (sorted) children list. Disregard children below minSize.
-	 * Reimplemented from KFileInfoSortedIterator.
+	 * Reimplemented from FileInfoSortedIterator.
 	 **/
 	virtual void makeChildrenList();
 
@@ -316,27 +316,27 @@ namespace QDirStat
 	
 	KFileSize	_minSize;
 
-    }; // class KFileInfoSortedBySizeIterator
+    }; // class FileInfoSortedBySizeIterator
 
 
 
     /**
      * Internal helper class for sorting iterators.
      **/
-    class KFileInfoList: public QPtrList<KFileInfo>
+    class FileInfoList: public QPtrList<FileInfo>
     {
     public:
 
 	/**
 	 * Constructor.
 	 **/
-	KFileInfoList( KFileInfoSortOrder sortOrder = KSortByName,
+	FileInfoList( FileInfoSortOrder sortOrder = KSortByName,
 		       bool ascending = true );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KFileInfoList();
+	virtual ~FileInfoList();
 
 	/**
 	 * Returns the sum of all the total sizes in the list.
@@ -350,12 +350,12 @@ namespace QDirStat
 	 **/
 	virtual int compareItems( QCollection::Item it1, QCollection::Item it2 );
 
-	KFileInfoSortOrder 	_sortOrder;
+	FileInfoSortOrder 	_sortOrder;
 	bool			_ascending;
     };
 
 
-    typedef QPtrListIterator<KFileInfo> KFileInfoListIterator;
+    typedef QPtrListIterator<FileInfo> FileInfoListIterator;
 
 
 
@@ -379,7 +379,7 @@ namespace QDirStat
 }	// namespace QDirStat
 
 
-#endif // ifndef KDirTreeIterators_h
+#endif // ifndef DirTreeIterators_h
 
 
 // EOF

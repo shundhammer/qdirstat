@@ -16,7 +16,7 @@
 #include "kdirsaver.h"
 
 
-KDirSaver::KDirSaver( const QString & newPath )
+DirSaver::KDirSaver( const QString & newPath )
 {
     /*
      * No need to actually save the current working directory: This object
@@ -28,7 +28,7 @@ KDirSaver::KDirSaver( const QString & newPath )
 }
 
 
-KDirSaver::KDirSaver( const KURL & url )
+DirSaver::KDirSaver( const KURL & url )
 {
     if ( url.isLocalFile() )
     {
@@ -41,14 +41,14 @@ KDirSaver::KDirSaver( const KURL & url )
 }
 
 
-KDirSaver::~KDirSaver()
+DirSaver::~KDirSaver()
 {
     restore();
 }
 
 
 void
-KDirSaver::cd( const QString & newPath )
+DirSaver::cd( const QString & newPath )
 {
     if ( ! newPath.isEmpty() )
     {
@@ -58,14 +58,14 @@ KDirSaver::cd( const QString & newPath )
 
 
 QString
-KDirSaver::currentDirPath() const
+DirSaver::currentDirPath() const
 {
     return QDir::currentDirPath();
 }
 
 
 void
-KDirSaver::restore()
+DirSaver::restore()
 {
     chdir( oldWorkingDir.path() );
 }

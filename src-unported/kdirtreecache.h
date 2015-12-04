@@ -7,8 +7,8 @@
  */
 
 
-#ifndef KDirTreeCache_h
-#define KDirTreeCache_h
+#ifndef DirTreeCache_h
+#define DirTreeCache_h
 
 
 #ifdef HAVE_CONFIG_H
@@ -31,7 +31,7 @@
 
 namespace QDirStat
 {
-    class KCacheWriter
+    class CacheWriter
     {
     public:
 
@@ -40,12 +40,12 @@ namespace QDirStat
 	 *
 	 * Check CacheWriter::ok() to see if writing the cache file went OK.
 	 **/
-	KCacheWriter( const QString & fileName, KDirTree *tree );
+	CacheWriter( const QString & fileName, DirTree *tree );
 
 	/**
 	 * Destructor
 	 **/
-	virtual ~KCacheWriter();
+	virtual ~CacheWriter();
 
 	/**
 	 * Returns true if writing the cache file went OK.
@@ -66,19 +66,19 @@ namespace QDirStat
 	 * Write cache file in gzip format.
 	 * Returns 'true' if OK, 'false' upon error.
 	 **/
-	bool writeCache( const QString & fileName, KDirTree *tree );
+	bool writeCache( const QString & fileName, DirTree *tree );
 
 	/**
 	 * Write 'item' recursively to cache file 'cache'.
 	 * Uses zlib to write gzip-compressed files.
 	 **/
-	void writeTree( gzFile cache, KFileInfo * item );
+	void writeTree( gzFile cache, FileInfo * item );
 
 	/**
 	 * Write 'item' to cache file 'cache' without recursion.
 	 * Uses zlib to write gzip-compressed files.
 	 **/
-	void writeItem( gzFile cache, KFileInfo * item );
+	void writeItem( gzFile cache, FileInfo * item );
 
 	//
 	// Data members
@@ -89,7 +89,7 @@ namespace QDirStat
 
 
 
-    class KCacheReader: public QObject
+    class CacheReader: public QObject
     {
 	Q_OBJECT
 
@@ -99,14 +99,14 @@ namespace QDirStat
 	 * Begin reading cache file 'fileName'. The cache file remains open
 	 * until this object is destroyed.
 	 **/
-	KCacheReader( const QString &	fileName,
-		      KDirTree *	tree,
-		      KDirInfo *	parent = 0 );
+	CacheReader( const QString &	fileName,
+		      DirTree *	tree,
+		      DirInfo *	parent = 0 );
 
 	/**
 	 * Destructor
 	 **/
-	virtual ~KCacheReader();
+	virtual ~CacheReader();
 
 	/**
 	 * Read at most maxLines from the cache file (check with eof() if the
@@ -150,7 +150,7 @@ namespace QDirStat
 	/**
 	 * Returns the tree associated with this reader.
 	 **/
-	KDirTree * tree() const { return _tree; }
+	DirTree * tree() const { return _tree; }
 
 	/**
 	 * Skip leading whitespace from a string.
@@ -180,7 +180,7 @@ namespace QDirStat
 	/**
 	 * Emitted when a child has been added.
 	 **/
-	void childAdded( KFileInfo *newChild );
+	void childAdded( FileInfo *newChild );
 
 	/**
 	 * Emitted when reading this cache is finished.
@@ -232,7 +232,7 @@ namespace QDirStat
 	// Data members
 	//
 
-	KDirTree *	_tree;
+	DirTree *	_tree;
 	gzFile		_cache;
 	char		_buffer[ MAX_CACHE_LINE_LEN ];
 	char *		_line;
@@ -241,16 +241,16 @@ namespace QDirStat
 	char *		_fields[ MAX_FIELDS_PER_LINE ];
 	int		_fieldsCount;
 	bool		_ok;
-	KDirInfo *	_toplevel;
-	KDirInfo * 	_lastDir;
-	KDirInfo *	_lastExcludedDir;
+	DirInfo *	_toplevel;
+	DirInfo * 	_lastDir;
+	DirInfo *	_lastExcludedDir;
 	QString		_lastExcludedDirUrl;
     };
 
 }	// namespace QDirStat
 
 
-#endif // ifndef KDirTreeCache_h
+#endif // ifndef DirTreeCache_h
 
 
 // EOF

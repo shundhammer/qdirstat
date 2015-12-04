@@ -26,20 +26,20 @@
 using namespace QDirStat;
 
 
-KCacheWriter::KCacheWriter( const QString & fileName, KDirTree *tree )
+CacheWriter::KCacheWriter( const QString & fileName, DirTree *tree )
 {
     _ok = writeCache( fileName, tree );
 }
 
 
-KCacheWriter::~KCacheWriter()
+CacheWriter::~KCacheWriter()
 {
     // NOP
 }
 
 
 bool
-KCacheWriter::writeCache( const QString & fileName, KDirTree *tree )
+CacheWriter::writeCache( const QString & fileName, DirTree *tree )
 {
     if ( ! tree || ! tree->root() )
 	return false;
@@ -67,7 +67,7 @@ KCacheWriter::writeCache( const QString & fileName, KDirTree *tree )
 
 
 void
-KCacheWriter::writeTree( gzFile cache, KFileInfo * item )
+CacheWriter::writeTree( gzFile cache, FileInfo * item )
 {
     if ( ! item )
 	return;
@@ -90,7 +90,7 @@ KCacheWriter::writeTree( gzFile cache, KFileInfo * item )
     // Recurse through subdirectories
     //
 
-    KFileInfo * child = item->firstChild();
+    FileInfo * child = item->firstChild();
 
     while ( child )
     {
@@ -101,7 +101,7 @@ KCacheWriter::writeTree( gzFile cache, KFileInfo * item )
 
 
 void
-KCacheWriter::writeItem( gzFile cache, KFileInfo * item )
+CacheWriter::writeItem( gzFile cache, FileInfo * item )
 {
     if ( ! item )
 	return;
@@ -157,7 +157,7 @@ KCacheWriter::writeItem( gzFile cache, KFileInfo * item )
 
 
 QString
-KCacheWriter::formatSize( KFileSize size )
+CacheWriter::formatSize( KFileSize size )
 {
     QString str;
 
@@ -189,9 +189,9 @@ KCacheWriter::formatSize( KFileSize size )
 
 
 
-KCacheReader::KCacheReader( const QString &	fileName,
-			    KDirTree *		tree,
-			    KDirInfo *		parent )
+CacheReader::KCacheReader( const QString &	fileName,
+			    DirTree *		tree,
+			    DirInfo *		parent )
     : QObject()
 {
     _fileName		= fileName;
@@ -219,7 +219,7 @@ KCacheReader::KCacheReader( const QString &	fileName,
 }
 
 
-KCacheReader::~KCacheReader()
+CacheReader::~KCacheReader()
 {
     if ( _cache )
 	gzclose( _cache );
@@ -234,7 +234,7 @@ KCacheReader::~KCacheReader()
 
 
 void
-KCacheReader::rewind()
+CacheReader::rewind()
 {
     if ( _cache )
     {
@@ -245,7 +245,7 @@ KCacheReader::rewind()
 
 
 bool
-KCacheReader::read( int maxLines )
+CacheReader::read( int maxLines )
 {
     while ( ! gzeof( _cache )
 	    && _ok
@@ -263,7 +263,7 @@ KCacheReader::read( int maxLines )
 
 
 void
-KCacheReader::addItem()
+CacheReader::addItem()
 {
     if ( fieldsCount() < 4 )
     {
@@ -374,20 +374,20 @@ KCacheReader::addItem()
 
     // Find parent in tree
     
-    KDirInfo * parent = _lastDir;
+    DirInfo * parent = _lastDir;
 
     if ( ! parent && _tree->root() )
     {
 	// Try the easy way first - the starting point of this cache
 
 	if ( _toplevel )
-	    parent = dynamic_cast<KDirInfo *> ( _toplevel->locate( path ) );
+	    parent = dynamic_cast<DirInfo *> ( _toplevel->locate( path ) );
 
 
 	// Fallback: Search the entire tree
 
 	if ( ! parent )
-	    parent = dynamic_cast<KDirInfo *> ( _tree->locate( path ) );
+	    parent = dynamic_cast<DirInfo *> ( _tree->locate( path ) );
 
 
 	if ( ! parent )	// Still nothing?
@@ -403,8 +403,8 @@ KCacheReader::addItem()
 
     if ( strcasecmp( type, "D" ) == 0 )
     {
-	// kdDebug() << "Creating KDirInfo  for " << name << endl;
-	KDirInfo * dir = new KDirInfo( _tree, parent, name,
+	// kdDebug() << "Creating DirInfo  for " << name << endl;
+	DirInfo * dir = new KDirInfo( _tree, parent, name,
 				       mode, size, mtime );
 	dir->setReadState( KDirCached );
 	_lastDir = dir;
@@ -425,7 +425,7 @@ KCacheReader::addItem()
 
 	if ( dir != _toplevel )
 	{
-	    if ( KExcludeRules::excludeRules()->match( dir->url() ) )
+	    if ( ExcludeRules::excludeRules()->match( dir->url() ) )
 	    {
 		// kdDebug() << "Excluding " << name << endl;
 		dir->setExcluded();
@@ -443,9 +443,9 @@ KCacheReader::addItem()
     {
 	if ( parent )
 	{
-	    // kdDebug() << "Creating KFileInfo for " << parent->debugUrl() << "/" << name << endl;
+	    // kdDebug() << "Creating FileInfo for " << parent->debugUrl() << "/" << name << endl;
 
-	    KFileInfo * item = new KFileInfo( _tree, parent, name,
+	    FileInfo * item = new KFileInfo( _tree, parent, name,
 					      mode, size, mtime,
 					      blocks, links );
 	    parent->insertChild( item );
@@ -461,7 +461,7 @@ KCacheReader::addItem()
 
 
 bool
-KCacheReader::eof()
+CacheReader::eof()
 {
     if ( ! _ok || ! _cache )
 	return true;
@@ -471,7 +471,7 @@ KCacheReader::eof()
 
 
 QString
-KCacheReader::firstDir()
+CacheReader::firstDir()
 {
     while ( ! gzeof( _cache ) && _ok )
     {
@@ -496,7 +496,7 @@ KCacheReader::firstDir()
 
 
 bool
-KCacheReader::checkHeader()
+CacheReader::checkHeader()
 {
     if ( ! _ok || ! readLine() )
 	return false;
@@ -543,7 +543,7 @@ KCacheReader::checkHeader()
 
 
 bool
-KCacheReader::readLine()
+CacheReader::readLine()
 {
     if ( ! _ok || ! _cache )
 	return false;
@@ -583,7 +583,7 @@ KCacheReader::readLine()
 
 
 void
-KCacheReader::splitLine()
+CacheReader::splitLine()
 {
     _fieldsCount = 0;
 
@@ -614,7 +614,7 @@ KCacheReader::splitLine()
 
 
 char *
-KCacheReader::field( int no )
+CacheReader::field( int no )
 {
     if ( no >= 0 && no < _fieldsCount )
 	return _fields[ no ];
@@ -624,7 +624,7 @@ KCacheReader::field( int no )
 
 
 char *
-KCacheReader::skipWhiteSpace( char * cptr )
+CacheReader::skipWhiteSpace( char * cptr )
 {
     if ( cptr == 0 )
 	return 0;
@@ -637,7 +637,7 @@ KCacheReader::skipWhiteSpace( char * cptr )
 
 
 char *
-KCacheReader::findNextWhiteSpace( char * cptr )
+CacheReader::findNextWhiteSpace( char * cptr )
 {
     if ( cptr == 0 )
 	return 0;
@@ -650,7 +650,7 @@ KCacheReader::findNextWhiteSpace( char * cptr )
 
 
 void
-KCacheReader::killTrailingWhiteSpace( char * cptr )
+CacheReader::killTrailingWhiteSpace( char * cptr )
 {
     char * start = cptr;
 

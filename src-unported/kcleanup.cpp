@@ -31,7 +31,7 @@
 using namespace QDirStat;
 
 
-KCleanup::KCleanup( QString		id,
+Cleanup::KCleanup( QString		id,
 		    QString		command,
 		    QString		title,
 		    KActionCollection *	parent	)
@@ -59,15 +59,15 @@ KCleanup::KCleanup( QString		id,
 }
 
 
-KCleanup::KCleanup( const KCleanup &src )
+Cleanup::KCleanup( const KCleanup &src )
     : KAction()
 {
     copy( src );
 }
 
 
-KCleanup &
-KCleanup::operator= ( const KCleanup &src )
+Cleanup &
+Cleanup::operator= ( const KCleanup &src )
 {
     copy( src );
     
@@ -76,7 +76,7 @@ KCleanup::operator= ( const KCleanup &src )
 
 
 void
-KCleanup::copy( const KCleanup &src )
+Cleanup::copy( const KCleanup &src )
 {
     setTitle( src.title() );
     _selection		= src.selection();
@@ -94,7 +94,7 @@ KCleanup::copy( const KCleanup &src )
 
 
 void
-KCleanup::setTitle( const QString &title )
+Cleanup::setTitle( const QString &title )
 {
     _title = title;
     KAction::setText( _title );
@@ -102,7 +102,7 @@ KCleanup::setTitle( const QString &title )
 
 
 bool
-KCleanup::worksFor( KFileInfo *item ) const
+Cleanup::worksFor( FileInfo *item ) const
 {
     if ( ! _enabled || ! item )
 	return false;
@@ -118,7 +118,7 @@ KCleanup::worksFor( KFileInfo *item ) const
 
 
 void
-KCleanup::selectionChanged( KFileInfo *selection )
+Cleanup::selectionChanged( FileInfo *selection )
 {
     bool enabled = false;
     _selection = selection;
@@ -155,7 +155,7 @@ KCleanup::selectionChanged( KFileInfo *selection )
 
 
 void
-KCleanup::executeWithSelection()
+Cleanup::executeWithSelection()
 {
     if ( _selection )
 	execute( _selection );
@@ -163,7 +163,7 @@ KCleanup::executeWithSelection()
 
 
 bool
-KCleanup::confirmation( KFileInfo * item )
+Cleanup::confirmation( FileInfo * item )
 {
     QString msg;
 
@@ -188,14 +188,14 @@ KCleanup::confirmation( KFileInfo * item )
 
 
 void
-KCleanup::execute( KFileInfo *item )
+Cleanup::execute( FileInfo *item )
 {
     if ( worksFor( item ) )
     {
 	if ( _askForConfirmation && ! confirmation( item ) )
 	    return;
 	    
-	KDirTree  * tree = item->tree();
+	DirTree  * tree = item->tree();
 	
 	executeRecursive( item );
 	
@@ -219,7 +219,7 @@ KCleanup::execute( KFileInfo *item )
 	    case assumeDeleted:
 
 		// Assume the cleanup action has deleted the item.
-		// Modify the KDirTree accordingly.
+		// Modify the DirTree accordingly.
 
 		tree->deleteSubtree( item );
 
@@ -227,7 +227,7 @@ KCleanup::execute( KFileInfo *item )
 		// views have to do that while handling the subtree
 		// deletion. Only the views have any knowledge about a
 		// reasonable strategy for choosing a next selection. Unlike
-		// the view items, the KFileInfo items don't have an order that
+		// the view items, the FileInfo items don't have an order that
 		// makes any sense to the user.
 
 		break;
@@ -239,7 +239,7 @@ KCleanup::execute( KFileInfo *item )
 
 
 void
-KCleanup::executeRecursive( KFileInfo *item )
+Cleanup::executeRecursive( FileInfo *item )
 {
     if ( worksFor( item ) )
     {
@@ -247,7 +247,7 @@ KCleanup::executeRecursive( KFileInfo *item )
 	{
 	    // Recurse into all subdirectories.
 
-	    KFileInfo * subdir = item->firstChild();
+	    FileInfo * subdir = item->firstChild();
 
 	    while ( subdir )
 	    {
@@ -275,7 +275,7 @@ KCleanup::executeRecursive( KFileInfo *item )
 
 
 const QString
-KCleanup::itemDir( const KFileInfo *item ) const
+Cleanup::itemDir( const FileInfo *item ) const
 {
     QString dir = item->url();
 
@@ -289,7 +289,7 @@ KCleanup::itemDir( const KFileInfo *item ) const
 
 
 QString
-KCleanup::cleanTitle() const
+Cleanup::cleanTitle() const
 {
     // Use the cleanup action's title, if possible.
    
@@ -309,7 +309,7 @@ KCleanup::cleanTitle() const
 
 
 QString
-KCleanup::expandVariables( const KFileInfo *	item,
+Cleanup::expandVariables( const FileInfo *	item,
 			   const QString &	unexpanded ) const
 {
     QString expanded = unexpanded;
@@ -329,11 +329,11 @@ KCleanup::expandVariables( const KFileInfo *	item,
 
 #include <qtextcodec.h>
 void
-KCleanup::runCommand ( const KFileInfo *	item,
+Cleanup::runCommand ( const FileInfo *	item,
 		       const QString &		command ) const
 {
     KProcess	proc;
-    KDirSaver	dir( itemDir( item ) );
+    DirSaver	dir( itemDir( item ) );
     QString	cmd( expandVariables( item, command ));
 
 #if VERBOSE_RUN_COMMAND
@@ -382,7 +382,7 @@ KCleanup::runCommand ( const KFileInfo *	item,
 
 
 void
-KCleanup::readConfig()
+Cleanup::readConfig()
 {
     KConfig *config = kapp->config();
     KConfigGroupSaver saver( config, _id );
@@ -406,14 +406,14 @@ KCleanup::readConfig()
 	_worksLocalOnly		= config->readBoolEntry ( "worksLocalOnly"	);
 	_recurse		= config->readBoolEntry ( "recurse"		, false	);
 	_askForConfirmation	= config->readBoolEntry ( "askForConfirmation"	, false	);
-	_refreshPolicy		= (KCleanup::RefreshPolicy) config->readNumEntry( "refreshPolicy" );
+	_refreshPolicy		= (Cleanup::RefreshPolicy) config->readNumEntry( "refreshPolicy" );
 	setTitle( config->readEntry( "title" ) );
     }
 }
 
 
 void
-KCleanup::saveConfig() const
+Cleanup::saveConfig() const
 {
     KConfig *config = kapp->config();
     KConfigGroupSaver saver( config, _id );

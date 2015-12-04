@@ -19,7 +19,7 @@
 using namespace QDirStat;
 
 
-KExcludeRule::KExcludeRule( const QRegExp & regexp )
+ExcludeRule::KExcludeRule( const QRegExp & regexp )
     : _regexp( regexp )
     , _enabled( true )
 {
@@ -27,14 +27,14 @@ KExcludeRule::KExcludeRule( const QRegExp & regexp )
 }
 
 
-KExcludeRule::~KExcludeRule()
+ExcludeRule::~KExcludeRule()
 {
     // NOP
 }
 
 
 bool
-KExcludeRule::match( const QString & text )
+ExcludeRule::match( const QString & text )
 {
     if ( text.isEmpty() || ! _enabled )
 	return false;
@@ -44,34 +44,34 @@ KExcludeRule::match( const QString & text )
 
 
 
-KExcludeRules::KExcludeRules()
+ExcludeRules::ExcludeRules()
 {
     // Make the rules list automatically delete
     _rules.setAutoDelete( true );
 }
 
 
-KExcludeRules::~KExcludeRules()
+ExcludeRules::~ExcludeRules()
 {
     // Do not try to delete the rules here: The rules list will automatically
     // do that since it has autoDelete enabled.
 }
 
 
-KExcludeRules * KExcludeRules::excludeRules()
+ExcludeRules * ExcludeRules::excludeRules()
 {
-    static KExcludeRules * singleton = 0;
+    static ExcludeRules * singleton = 0;
 
     if ( ! singleton )
     {
-	singleton = new KExcludeRules();
+	singleton = new ExcludeRules();
     }
 
     return singleton;
 }
 
 
-void KExcludeRules::add( KExcludeRule * rule )
+void ExcludeRules::add( ExcludeRule * rule )
 {
     if ( rule )
 	_rules.append( rule );
@@ -79,12 +79,12 @@ void KExcludeRules::add( KExcludeRule * rule )
 
 
 bool
-KExcludeRules::match( const QString & text )
+ExcludeRules::match( const QString & text )
 {
     if ( text.isEmpty() )
 	return false;
 
-    KExcludeRule * rule = _rules.first();
+    ExcludeRule * rule = _rules.first();
 
     while ( rule )
     {
@@ -107,13 +107,13 @@ KExcludeRules::match( const QString & text )
 }
 
 
-const KExcludeRule *
-KExcludeRules::matchingRule( const QString & text )
+const ExcludeRule *
+ExcludeRules::matchingRule( const QString & text )
 {
     if ( text.isEmpty() )
 	return false;
 
-    KExcludeRule * rule = _rules.first();
+    ExcludeRule * rule = _rules.first();
 
     while ( rule )
     {
