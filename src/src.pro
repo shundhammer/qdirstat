@@ -16,7 +16,7 @@ CONFIG		    += debug
 DEPENDPATH	    += .
 MOC_DIR		     = .moc
 OBJECTS_DIR	     = .obj
-LIBS                += -lz
+LIBS		    += -lz
 
 TARGET	  = qdirstat
 
@@ -24,27 +24,25 @@ SOURCES	  = main.cpp			\
 	    DirInfo.cpp			\
 	    DirReadJob.cpp		\
 	    DirSaver.cpp		\
+	    DirTreeCache.cpp		\
 	    DirTree.cpp			\
-	    DirTreeCache.cpp            \
 	    DirTreeIterator.cpp		\
 	    Exception.cpp		\
-            ExcludeRules.cpp            \
+	    ExcludeRules.cpp		\
 	    FileInfo.cpp		\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
 
 
-
-
-HEADERS	  = \
+HEADERS	  =				\
 	    DirInfo.h			\
-	    DirReadJob.cpp		\
+	    DirReadJob.h		\
 	    DirSaver.h			\
+	    DirTreeCache.h		\
 	    DirTree.h			\
-	    DirTreeCache.h              \
 	    DirTreeIterator.h		\
 	    Exception.h			\
-            ExcludeRules.h              \
+	    ExcludeRules.h		\
 	    FileInfo.h			\
 	    Logger.h			\
 	    MainWindow.h		\
@@ -55,3 +53,6 @@ HEADERS	  = \
 FORMS	  = main-window.ui
 
 RESOURCES = icons.qrc
+
+
+
