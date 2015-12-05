@@ -1,7 +1,7 @@
 /*
- *   File name:	DirReadJob.cpp
+ *   File name: DirReadJob.cpp
  *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -10,28 +10,26 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
 #include <stdio.h>
 #include <sys/errno.h>
-#include <kapp.h>
-#include <kio/job.h>
-#include <kio/netaccess.h>
+
+#include <QMutableListIterator>
 
 #include "DirTree.h"
 #include "DirReadJob.h"
 #include "DirTreeCache.h"
 #include "ExcludeRules.h"
+#include "Exception.h"
 
 
 using namespace QDirStat;
 
 
-DirReadJob::KDirReadJob( DirTree * tree,
-			  DirInfo * dir  )
+DirReadJob::DirReadJob( DirTree * tree,
+			DirInfo * dir  )
     : _tree( tree )
     , _dir( dir )
 {
-    _queue	= 0;
     _started	= false;
 
     if ( _dir )
@@ -39,7 +37,7 @@ DirReadJob::KDirReadJob( DirTree * tree,
 }
 
 
-DirReadJob::~KDirReadJob()
+DirReadJob::~DirReadJob()
 {
     if ( _dir )
 	_dir->readJobFinished();
@@ -59,8 +57,8 @@ DirReadJob::read()
 	_started = true;
 	startReading();
 
- 	// Don't do anything after startReading() - startReading() might call
- 	// finished() which in turn makes the queue destroy this object
+	// Don't do anything after startReading() - startReading() might call
+	// finished() which in turn makes the queue destroy this object
     }
 }
 
@@ -99,15 +97,15 @@ DirReadJob::deletingChild( FileInfo *deletedChild )
 
 
 
-LocalDirReadJob::KLocalDirReadJob( DirTree *	tree,
-				    DirInfo *	dir )
+LocalDirReadJob::LocalDirReadJob( DirTree * tree,
+				  DirInfo * dir )
     : DirReadJob( tree, dir )
     , _diskDir( 0 )
 {
 }
 
 
-LocalDirReadJob::~KLocalDirReadJob()
+LocalDirReadJob::~LocalDirReadJob()
 {
 }
 
@@ -120,10 +118,10 @@ LocalDirReadJob::startReading()
     QString		dirName		 = _dir->url();
     QString		defaultCacheName = DEFAULT_CACHE_NAME;
 
-    if ( ( _diskDir = opendir( dirName ) ) )
+    if ( ( _diskDir = opendir( dirName.toLocal8Bit() ) ) )
     {
 	_tree->sendProgressInfo( dirName );
-	_dir->setReadState( KDirReading );
+	_dir->setReadState( DirReading );
 
 	while ( ( entry = readdir( _diskDir ) ) )
 	{
@@ -134,7 +132,7 @@ LocalDirReadJob::startReading()
 	    {
 		QString fullName = dirName + "/" + entryName;
 
-		if ( lstat( fullName, &statInfo ) == 0 )	// lstat() OK
+		if ( lstat( fullName.toLocal8Bit(), &statInfo ) == 0 )	      // lstat() OK
 		{
 		    if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
 		    {
@@ -145,7 +143,7 @@ LocalDirReadJob::startReading()
 			if ( ExcludeRules::excludeRules()->match( fullName ) )
 			{
 			    subDir->setExcluded();
-			    subDir->setReadState( KDirOnRequestOnly );
+			    subDir->setReadState( DirOnRequestOnly );
 			    _tree->sendFinalizeLocal( subDir );
 			    subDir->finalizeLocal();
 			}
@@ -166,7 +164,7 @@ LocalDirReadJob::startReading()
 				}
 				else
 				{
-				    subDir->setReadState( KDirOnRequestOnly );
+				    subDir->setReadState( DirOnRequestOnly );
 				    _tree->sendFinalizeLocal( subDir );
 				    subDir->finalizeLocal();
 				}
@@ -181,8 +179,8 @@ LocalDirReadJob::startReading()
 			    // Read content of this subdirectory from cache file
 			    //
 
-			    
-			    CacheReadJob * cacheReadJob = new KCacheReadJob( _tree, _dir->parent(), fullName );
+
+			    CacheReadJob * cacheReadJob = new CacheReadJob( _tree, _dir->parent(), fullName );
 			    CHECK_PTR( cacheReadJob );
 			    QString firstDirInCache = cacheReadJob->reader()->firstDir();
 
@@ -197,7 +195,7 @@ LocalDirReadJob::startReading()
 				// Clean up partially read directory content
 				//
 
-				DirTree * tree = _tree;	// Copy data members to local variables:
+				DirTree * tree = _tree; // Copy data members to local variables:
 				DirInfo * dir  = _dir;		// This object will be deleted soon by killAll()
 
 				_queue->killAll( dir );		// Will delete this job as well!
@@ -210,9 +208,9 @@ LocalDirReadJob::startReading()
 			    else
 			    {
 				logDebug() << "NOT using cache file " << fullName
-					  << " with dir " << firstDirInCache
-					  << " for " << dirName
-					  << endl;
+					   << " with dir " << firstDirInCache
+					   << " for " << dirName
+					   << endl;
 
 				delete cacheReadJob;
 			    }
@@ -234,7 +232,7 @@ LocalDirReadJob::startReading()
 		     * least create an (almost empty) entry as a placeholder.
 		     */
 		    DirInfo *child = new DirInfo( _tree, _dir, entry->d_name );
-		    child->setReadState( KDirError );
+		    child->setReadState( DirError );
 		    _dir->insertChild( child );
 		    childAdded( child );
 		}
@@ -243,13 +241,13 @@ LocalDirReadJob::startReading()
 
 	closedir( _diskDir );
 	// logDebug() << "Finished reading " << _dir << endl;
-	_dir->setReadState( KDirFinished );
+	_dir->setReadState( DirFinished );
 	_tree->sendFinalizeLocal( _dir );
 	_dir->finalizeLocal();
     }
     else
     {
-	_dir->setReadState( KDirError );
+	_dir->setReadState( DirError );
 	_tree->sendFinalizeLocal( _dir );
 	_dir->finalizeLocal();
 	// logWarning() << k_funcinfo << "opendir(" << dirName << ") failed" << endl;
@@ -263,17 +261,17 @@ LocalDirReadJob::startReading()
 
 
 FileInfo *
-LocalDirReadJob::stat( const KURL & 	url,
-			DirTree  *	tree,
-			DirInfo * 	parent )
+LocalDirReadJob::stat( const QUrl & url,
+		       DirTree    * tree,
+		       DirInfo    * parent )
 {
     struct stat statInfo;
 
-    if ( lstat( url.path(), &statInfo ) == 0 )		// lstat() OK
+    if ( lstat( url.toLocalFile().toLocal8Bit(), &statInfo ) == 0 ) // lstat() OK
     {
-	QString name = parent ? url.filename() : url.path();
+	QString name = parent ? url.fileName() : url.path();
 
-	if ( S_ISDIR( statInfo.st_mode ) )		// directory?
+	if ( S_ISDIR( statInfo.st_mode ) )	// directory?
 	{
 	    DirInfo * dir = new DirInfo( name, &statInfo, tree, parent );
 
@@ -282,11 +280,13 @@ LocalDirReadJob::stat( const KURL & 	url,
 
 	    return dir;
 	}
-	else						// no directory
+	else					// no directory
 	    return new FileInfo( name, &statInfo, tree, parent );
     }
-    else	// lstat() failed
+    else // lstat() failed
+    {
 	return 0;
+    }
 }
 
 
@@ -294,9 +294,9 @@ LocalDirReadJob::stat( const KURL & 	url,
 
 
 
-CacheReadJob::KCacheReadJob( DirTree *	tree,
-			      DirInfo *	parent,
-			      CacheReader *	reader )
+CacheReadJob::CacheReadJob( DirTree	* tree,
+			    DirInfo	* parent,
+			    CacheReader * reader )
     : ObjDirReadJob( tree, parent )
     , _reader( reader )
 {
@@ -307,9 +307,9 @@ CacheReadJob::KCacheReadJob( DirTree *	tree,
 }
 
 
-CacheReadJob::KCacheReadJob( DirTree *	tree,
-			      DirInfo *	parent,
-			      const QString &	cacheFileName )
+CacheReadJob::CacheReadJob( DirTree	  * tree,
+			    DirInfo	  * parent,
+			    const QString & cacheFileName )
     : ObjDirReadJob( tree, parent )
 {
     _reader = new CacheReader( cacheFileName, tree, parent );
@@ -338,7 +338,7 @@ CacheReadJob::init()
 }
 
 
-CacheReadJob::~KCacheReadJob()
+CacheReadJob::~CacheReadJob()
 {
     if ( _reader )
 	delete _reader;
@@ -374,8 +374,6 @@ CacheReadJob::read()
 DirReadJobQueue::DirReadJobQueue()
     : QObject()
 {
-    _queue.setAutoDelete( false );
-
     connect( &_timer, SIGNAL( timeout() ),
 	     this,    SLOT  ( timeSlicedRead() ) );
 }
@@ -408,7 +406,7 @@ DirReadJobQueue::enqueue( DirReadJob * job )
 DirReadJob *
 DirReadJobQueue::dequeue()
 {
-    DirReadJob * job = _queue.getFirst();
+    DirReadJob * job = _queue.first();
     _queue.removeFirst();
 
     if ( job )
@@ -421,31 +419,21 @@ DirReadJobQueue::dequeue()
 void
 DirReadJobQueue::clear()
 {
-    _queue.first();		// set _queue.current() to the first position
-
-    while ( DirReadJob * job = _queue.current() )
-    {
-	_queue.remove();	// remove current() and move current() to next
-	delete job;
-
-	_queue.next();		// move current() on
-    }
+    qDeleteAll( _queue );
+    _queue.clear();
 }
 
 
 void
 DirReadJobQueue::abort()
 {
-    while ( ! _queue.isEmpty() )
+    foreach ( DirReadJob * job, _queue )
     {
-	DirReadJob * job = _queue.getFirst();
-
 	if ( job->dir() )
 	    job->dir()->readJobAborted();
-
-	_queue.removeFirst();
-	delete job;
     }
+
+    clear();
 }
 
 
@@ -454,21 +442,18 @@ DirReadJobQueue::killAll( DirInfo * subtree )
 {
     if ( ! subtree )
 	return;
-    
-    _queue.first();		// set _queue.current() to the first position
 
-    while ( DirReadJob * job = _queue.current() )
+    QMutableListIterator<DirReadJob *> it( _queue );
+
+    while ( it.hasNext() )
     {
+	DirReadJob * job = it.next();
 	if ( job->dir() && job->dir()->isInSubtree( subtree ) )
 	{
 	    // logDebug() << "Killing read job " << job->dir() << endl;
-	    
-	    _queue.remove();	// remove current() and move current() to next
+
+	    it.remove();
 	    delete job;
-	}
-	else
-	{
-	    _queue.next();	// move current() on
 	}
     }
 }
@@ -478,7 +463,7 @@ void
 DirReadJobQueue::timeSlicedRead()
 {
     if ( ! _queue.isEmpty() )
-	_queue.getFirst()->read();
+	_queue.first()->read();
 }
 
 
@@ -487,10 +472,10 @@ DirReadJobQueue::jobFinishedNotify( DirReadJob *job )
 {
     // Get rid of the old (finished) job.
 
-    _queue.removeFirst();
+    _queue.removeOne( job );
     delete job;
 
-    // Look for a new job.
+    // The timer will start a new job when it fires.
 
     if ( _queue.isEmpty() )	// No new job available - we're done.
     {

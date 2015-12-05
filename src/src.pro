@@ -21,29 +21,35 @@ TARGET	  = qdirstat
 
 SOURCES	  = main.cpp			\
 	    DirInfo.cpp			\
+	    DirReadJob.cpp		\
 	    DirSaver.cpp		\
-            DirTreeIterator.cpp         \
-	    FileInfo.cpp		\
+	    DirTree.cpp			\
+	    DirTreeCache.cpp            \
+	    DirTreeIterator.cpp		\
 	    Exception.cpp		\
+            ExcludeRules.cpp            \
+	    FileInfo.cpp		\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
 
 
-#	    DirTree.cpp			\
 
 
 HEADERS	  = \
 	    DirInfo.h			\
+	    DirReadJob.cpp		\
 	    DirSaver.h			\
+	    DirTree.h			\
+	    DirTreeCache.h              \
 	    DirTreeIterator.h		\
-	    FileInfo.h			\
 	    Exception.h			\
+            ExcludeRules.h              \
+	    FileInfo.h			\
 	    Logger.h			\
 	    MainWindow.h		\
 	    SignalBlocker.h		\
 
 
-#	    DirTree.h			\
 
 FORMS	  = main-window.ui
 

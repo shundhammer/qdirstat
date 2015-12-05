@@ -62,7 +62,7 @@ my $scan_mounted	= 0;
 my $verbose		= 0;
 my $debug		= 0;
 
-my $default_cache_file_name	= ".qdirstat.cache.gz";
+my $default_cache_file_name = ".qdirstat.cache.gz";
 
 my $toplevel_device	= undef;
 my $unsafe_chars	= "\x00-\x20%";

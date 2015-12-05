@@ -1,7 +1,7 @@
 /*
  *   File name:	ExcludeRules.cpp
  *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -15,7 +15,7 @@
 using namespace QDirStat;
 
 
-ExcludeRule::KExcludeRule( const QRegExp & regexp )
+ExcludeRule::ExcludeRule( const QRegExp & regexp )
     : _regexp( regexp )
     , _enabled( true )
 {
@@ -23,7 +23,7 @@ ExcludeRule::KExcludeRule( const QRegExp & regexp )
 }
 
 
-ExcludeRule::~KExcludeRule()
+ExcludeRule::~ExcludeRule()
 {
     // NOP
 }
@@ -42,16 +42,14 @@ ExcludeRule::match( const QString & text )
 
 ExcludeRules::ExcludeRules()
 {
-    // Make the rules list automatically delete
-    _rules.setAutoDelete( true );
 }
 
 
 ExcludeRules::~ExcludeRules()
 {
-    // Do not try to delete the rules here: The rules list will automatically
-    // do that since it has autoDelete enabled.
+    clear();
 }
+
 
 
 ExcludeRules * ExcludeRules::excludeRules()
@@ -64,6 +62,13 @@ ExcludeRules * ExcludeRules::excludeRules()
     }
 
     return singleton;
+}
+
+
+void ExcludeRules::clear()
+{
+    qDeleteAll( _rules );
+    _rules.clear();
 }
 
 
@@ -80,14 +85,12 @@ ExcludeRules::match( const QString & text )
     if ( text.isEmpty() )
 	return false;
 
-    ExcludeRule * rule = _rules.first();
-
-    while ( rule )
+    foreach ( ExcludeRule * rule, _rules )
     {
 	if ( rule->match( text ) )
 	{
 #if VERBOSE_EXCLUDE_MATCHES
-	    
+
 	    logDebug() << text << " matches exclude rule "
 		      << rule->regexp().pattern()
 		      << endl;
@@ -95,8 +98,6 @@ ExcludeRules::match( const QString & text )
 #endif
 	    return true;
 	}
-
-	rule = _rules.next();
     }
 
     return false;
@@ -109,14 +110,10 @@ ExcludeRules::matchingRule( const QString & text )
     if ( text.isEmpty() )
 	return false;
 
-    ExcludeRule * rule = _rules.first();
-
-    while ( rule )
+    foreach ( ExcludeRule * rule, _rules )
     {
 	if ( rule->match( text ) )
 	    return rule;
-
-	rule = _rules.next();
     }
 
     return 0;

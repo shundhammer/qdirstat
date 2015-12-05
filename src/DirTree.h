@@ -15,12 +15,10 @@
 #include <limits.h>
 #include <dirent.h>
 #include <stdlib.h>
+
 #include "Logger.h"
 #include "DirInfo.h"
-
-#if 0
 #include "DirReadJob.h"
-#endif
 
 
 namespace QDirStat

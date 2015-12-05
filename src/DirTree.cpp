@@ -1,5 +1,5 @@
 /*
- *   File name:	DirTree.cpp
+ *   File name: DirTree.cpp
  *   Summary:	Support classes for QDirStat
  *   License:	GPL V2 - See file LICENSE for details.
  *
@@ -7,12 +7,11 @@
  */
 
 
-#include "DirTree.h"
+#include <QDir>
 
-#if 0
-#include "DirReadJob.h"
+#include "DirTree.h"
+#include "Exception.h"
 #include "DirTreeCache.h"
-#endif
 
 using namespace QDirStat;
 
@@ -21,9 +20,9 @@ using namespace QDirStat;
 DirTree::DirTree()
     : QObject()
 {
-    _root		= 0;
-    _selection		= 0;
-    _isBusy		= false;
+    _root      = 0;
+    _selection = 0;
+    _isBusy    = false;
 
     readConfig();
 
@@ -44,11 +43,20 @@ DirTree::~DirTree()
 void
 DirTree::readConfig()
 {
+#if 0
+    // FIXME
+    // FIXME
     KConfig * config = kapp->config();
     config->setGroup( "Directory Reading" );
 
     _crossFileSystems		= config->readBoolEntry( "CrossFileSystems",	 false );
     _enableLocalDirReader	= config->readBoolEntry( "EnableLocalDirReader", true  );
+    // FIXME
+    // FIXME
+#else
+    _crossFileSystems		= false;
+    _enableLocalDirReader	= true;
+#endif
 }
 
 
@@ -110,7 +118,7 @@ DirTree::startReading( const QString & url )
 
 	if ( _root->isDir() )
 	{
-	    DirInfo *dir = (KDirInfo *) _root;
+	    DirInfo *dir = (DirInfo *) _root;
 	    addJob( new LocalDirReadJob( this, dir ) );
 	}
 	else
@@ -197,7 +205,7 @@ DirTree::refresh( FileInfo *subtree )
 	    {
 		// Prepare reading this subtree's contents.
 
-		DirInfo *dir = (KDirInfo *) subtree;
+		DirInfo *dir = (DirInfo *) subtree;
 		addJob( new LocalDirReadJob( this, dir ) );
 	    }
 	    else
@@ -374,11 +382,11 @@ DirTree::selectItem( FileInfo *newSelection )
     if ( newSelection == _selection )
 	return;
 
-#if 0
+#if 1
     if ( newSelection )
-	logDebug() << k_funcinfo << " selecting " << newSelection << endl;
+	logDebug() << " selecting " << newSelection << endl;
     else
-	logDebug() << k_funcinfo << " selecting nothing" << endl;
+	logDebug() << " selecting nothing" << endl;
 #endif
 
     _selection = newSelection;
@@ -389,7 +397,7 @@ DirTree::selectItem( FileInfo *newSelection )
 bool
 DirTree::writeCache( const QString & cacheFileName )
 {
-    CacheWriter writer( cacheFileName, this );
+    CacheWriter writer( cacheFileName.toLocal8Bit(), this );
     return writer.ok();
 }
 

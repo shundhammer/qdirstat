@@ -1,7 +1,7 @@
 /*
  *   File name: DirReadJob.h
  *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -12,10 +12,10 @@
 
 
 #include <dirent.h>
-#include <qptrlist.h>
-#include <qtimer.h>
+#include <QTimer>
+#include <QUrl>
+
 #include "Logger.h"
-#include <kio/jobclasses.h>
 
 
 namespace QDirStat
@@ -135,10 +135,10 @@ namespace QDirStat
 	void finished();
 
 
-	DirTree *		_tree;
-	DirInfo *		_dir;
-	DirReadJobQueue *	_queue;
-	bool			_started;
+	DirTree *	   _tree;
+	DirInfo *	   _dir;
+	DirReadJobQueue *  _queue;
+	bool		   _started;
 
     };	// class DirReadJob
 
@@ -159,9 +159,9 @@ namespace QDirStat
 
     protected slots:
 
-	void slotChildAdded   ( FileInfo *child )	{ childAdded( child ); }
-	void slotDeletingChild( FileInfo *child )	{ deletingChild( child ); }
-	void slotFinished()				{ finished(); }
+	void slotChildAdded   ( FileInfo *child ) { childAdded( child ); }
+	void slotDeletingChild( FileInfo *child ) { deletingChild( child ); }
+	void slotFinished()			  { finished(); }
 
     };	// ObjDirReadJob
 
@@ -200,12 +200,12 @@ namespace QDirStat
 	 * Returns 0 if such information cannot be obtained (i.e. the
 	 * appropriate stat() call fails).
 	 **/
-	static FileInfo * stat( const KURL &	url,
-				 DirTree  *	tree,
-				 DirInfo *	parent = 0 );
+	static FileInfo * stat( const QUrl & url,
+				DirTree	   * tree,
+				DirInfo	   * parent = 0 );
 
     protected:
-	
+
 	/**
 	 * Read the directory. Prior to this nothing happens.
 	 *
@@ -236,9 +236,9 @@ namespace QDirStat
 	 * If 'parent' is 0, the content of the cache file will replace all
 	 * current tree items.
 	 **/
-	CacheReadJob( DirTree *	tree,
-		       DirInfo *	parent,
-		       CacheReader *	reader );
+	CacheReadJob( DirTree	  * tree,
+		      DirInfo	  * parent,
+		      CacheReader * reader );
 
 	/**
 	 * Constructor that uses a cache file that is not open yet.
@@ -246,9 +246,9 @@ namespace QDirStat
 	 * If 'parent' is 0, the content of the cache file will replace all
 	 * current tree items.
 	 **/
-	CacheReadJob( DirTree *	tree,
-		       DirInfo *	parent,
-		       const QString &	cacheFileName );
+	CacheReadJob( DirTree *	       tree,
+		      DirInfo *	       parent,
+		      const QString &  cacheFileName );
 
 	/**
 	 * Destructor.
@@ -317,17 +317,17 @@ namespace QDirStat
 	/**
 	 * Get the head of the queue (the next job that is due for processing).
 	 **/
-	DirReadJob * head()	const	{ return _queue.getFirst();	}
+	DirReadJob * head() const { return _queue.first();}
 
 	/**
 	 * Count the number of pending jobs in the queue.
 	 **/
-	int count()		const	{ return _queue.count();	}
+	int count() const   { return _queue.count(); }
 
 	/**
 	 * Check if the queue is empty.
 	 **/
-	bool isEmpty()		const	{ return _queue.isEmpty();	}
+	bool isEmpty() const { return _queue.isEmpty(); }
 
 	/**
 	 * Clear the queue: Remove all pending jobs from the queue and destroy them.
@@ -382,8 +382,8 @@ namespace QDirStat
 
     protected:
 
-	QPtrList<DirReadJob>	_queue;
-	QTimer			_timer;
+	QList<DirReadJob *>  _queue;
+	QTimer		     _timer;
     };
 
 
