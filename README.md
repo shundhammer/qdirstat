@@ -50,6 +50,9 @@ little own infrastructure. The KDE libs are just not worth the hassle anymore.
 
 ## Current Development Status
 
+- 2015-12-05  Imported and ported directory tree data classes.
+              Hammered through the compiler, but nothing usable so far.
+
 - 2015-11-28  Project is being set up. Nothing usable so far.
 
 
@@ -73,7 +76,7 @@ Make sure you have a working Qt 5 build environment installed. This includes:
 
 Install the required packages for building:
 
-    sudo apt-get install build-essential qtbase5-dev
+    sudo apt-get install build-essential qtbase5-dev zlib1g-dev
 
 Dependent packages will be added automatically.
 

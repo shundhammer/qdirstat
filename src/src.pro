@@ -16,6 +16,7 @@ CONFIG		    += debug
 DEPENDPATH	    += .
 MOC_DIR		     = .moc
 OBJECTS_DIR	     = .obj
+LIBS                += -lz
 
 TARGET	  = qdirstat
 
