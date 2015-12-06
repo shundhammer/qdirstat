@@ -108,7 +108,7 @@ namespace QDirStat
 	 *
 	 * Currently, there can only be one single root item for each tree.
 	 */
-	FileInfo *	root() const { return _root; }
+	FileInfo * root() const { return _root; }
 
 	/**
 	 * Sets the root item of this tree.
@@ -118,7 +118,9 @@ namespace QDirStat
 	/**
 	 * Clear all items of this tree.
 	 *
-	 * 'sendSignals' indicates whether or not to send deletingChild() and childDeleted() signals.
+	 * 'sendSignals' indicates whether or not to send deletingChild() and
+	 * childDeleted() signals.
+         *
 	 * A selectionChanged() signal will be sent in any case if there was a selected item.
 	 **/
 	void clear( bool sendSignals = false );

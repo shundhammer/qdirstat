@@ -73,21 +73,22 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual FileSize totalSize();
+	virtual FileSize totalSize() Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns the total size in blocks of this subtree.
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual FileSize totalBlocks();
+	virtual FileSize totalBlocks() Q_DECL_OVERRIDE;
 
 	/**
-	 * Returns the total number of children in this subtree, excluding this item.
+	 * Returns the total number of children in this subtree, excluding this
+	 * item.
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual int totalItems();
+	virtual int totalItems() Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns the total number of subdirectories in this subtree,
@@ -95,7 +96,7 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual int totalSubDirs();
+	virtual int totalSubDirs() Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns the total number of plain file children in this subtree,
@@ -103,24 +104,26 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual int totalFiles();
+	virtual int totalFiles() Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns the latest modification time of this subtree.
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual time_t latestMtime();
+	virtual time_t latestMtime() Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns 'true' if this had been excluded while reading.
 	 **/
-	virtual bool isExcluded() const { return _isExcluded; }
+	virtual bool isExcluded() const Q_DECL_OVERRIDE
+	    { return _isExcluded; }
 
 	/**
 	 * Set the 'excluded' status.
 	 **/
-	virtual void setExcluded( bool excl =true ) { _isExcluded = excl; }
+	virtual void setExcluded( bool excl =true ) Q_DECL_OVERRIDE
+	    { _isExcluded = excl; }
 
 	/**
 	 * Returns whether or not this is a mount point.
@@ -130,7 +133,8 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual bool isMountPoint() { return _isMountPoint; }
+	virtual bool isMountPoint() const  Q_DECL_OVERRIDE
+	    { return _isMountPoint; }
 
 	/**
 	 * Sets the mount point state, i.e. whether or not this is a mount
@@ -138,14 +142,14 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual void setMountPoint( bool isMountPoint = true );
+	virtual void setMountPoint( bool isMountPoint = true ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns true if this subtree is finished reading.
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual bool isFinished();
+	virtual bool isFinished() Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns true if this subtree is busy, i.e. it is not finished
@@ -153,7 +157,7 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual bool isBusy();
+	virtual bool isBusy() Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns the number of pending read jobs in this subtree. When this
@@ -161,13 +165,15 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual int pendingReadJobs() { return _pendingReadJobs;  }
+	virtual int pendingReadJobs() Q_DECL_OVERRIDE
+	    { return _pendingReadJobs;	}
 
 	/**
 	 * Returns the first child of this item or 0 if there is none.
 	 * Use the child's next() method to get the next child.
 	 **/
-	virtual FileInfo * firstChild() const { return _firstChild;	}
+	virtual FileInfo * firstChild() const Q_DECL_OVERRIDE
+	    { return _firstChild;	}
 
 	/**
 	 * Set this entry's first child.
@@ -175,7 +181,7 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual void setFirstChild( FileInfo *newfirstChild )
+	virtual void setFirstChild( FileInfo *newfirstChild ) Q_DECL_OVERRIDE
 	    { _firstChild = newfirstChild; }
 
 	/**
@@ -184,7 +190,7 @@ namespace QDirStat
 	 * The order of children in this list is absolutely undefined;
 	 * don't rely on any implementation-specific order.
 	 **/
-	virtual void insertChild( FileInfo *newChild );
+	virtual void insertChild( FileInfo *newChild ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Get the "Dot Entry" for this node if there is one (or 0 otherwise):
@@ -193,12 +199,14 @@ namespace QDirStat
 	 * user can easily tell which summary fields belong to the directory
 	 * itself and which are the accumulated values of the entire subtree.
 	 **/
-	virtual FileInfo * dotEntry() const { return _dotEntry; }
+	virtual FileInfo * dotEntry() const Q_DECL_OVERRIDE
+	    { return _dotEntry; }
 
 	/**
 	 * Set a "Dot Entry". This makes sense for directories only.
 	 **/
-	virtual void setDotEntry( FileInfo *newDotEntry ) { _dotEntry = newDotEntry; }
+	virtual void setDotEntry( FileInfo *newDotEntry ) Q_DECL_OVERRIDE
+	    { _dotEntry = newDotEntry; }
 
 	/**
 	 * Returns true if this is a "Dot Entry". See @ref dotEntry() for
@@ -206,14 +214,15 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual bool isDotEntry() const { return _isDotEntry; }
+	virtual bool isDotEntry() const Q_DECL_OVERRIDE
+	    { return _isDotEntry; }
 
 	/**
 	 * Notification that a child has been added somewhere in the subtree.
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual void childAdded( FileInfo *newChild );
+	virtual void childAdded( FileInfo *newChild ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Remove a child from the children list.
@@ -225,7 +234,7 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual void unlinkChild( FileInfo *deletedChild );
+	virtual void unlinkChild( FileInfo *deletedChild ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Notification that a child is about to be deleted somewhere in the
@@ -233,7 +242,7 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual void deletingChild( FileInfo *deletedChild );
+	virtual void deletingChild( FileInfo *deletedChild ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Notification of a new directory read job somewhere in the subtree.
@@ -278,7 +287,7 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual DirReadState readState() const;
+	virtual DirReadState readState() const Q_DECL_OVERRIDE;
 
 	/**
 	 * Set the state of the directory reading process.
@@ -295,7 +304,8 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/
-	virtual bool isDirInfo() const { return true; }
+	virtual bool isDirInfo() const Q_DECL_OVERRIDE
+	    { return true; }
 
 
     protected:

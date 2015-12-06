@@ -200,6 +200,10 @@ namespace QDirStat
 	 **/
 	virtual void setSorting( int column, bool increasing = TRUE );
 
+	int	workingStatusCol()	const	{ return _workingStatusCol;	}
+	int	readJobsCol()		const	{ return _readJobsCol;		}
+	int	sortCol()		const   { return _sortCol;		}
+#if PORTED
 	/**
 	 * Returns the internal @ref DirTree this view works on.
 	 * Handle with caution: This might be short-lived information.
@@ -213,14 +217,11 @@ namespace QDirStat
 	int	percentBarCol()		const	{ return _percentBarCol;	}
 	int	percentNumCol()		const	{ return _percentNumCol;	}
 	int	totalSizeCol()		const	{ return _totalSizeCol;		}
-	int	workingStatusCol()	const	{ return _workingStatusCol;	}
 	int	ownSizeCol()		const	{ return _ownSizeCol;		}
 	int	totalItemsCol()		const	{ return _totalItemsCol;	}
 	int	totalFilesCol()		const	{ return _totalFilesCol;	}
 	int	totalSubDirsCol()	const	{ return _totalSubDirsCol;	}
 	int	latestMtimeCol()	const	{ return _latestMtimeCol;	}
-	int	readJobsCol()		const	{ return _readJobsCol;		}
-	int	sortCol()		const   { return _sortCol;		}
 
 	QPixmap	openDirIcon()		const	{ return _openDirIcon;		}
 	QPixmap	closedDirIcon()		const	{ return _closedDirIcon;	}
@@ -236,6 +237,7 @@ namespace QDirStat
 	QPixmap stopIcon()		const 	{ return _stopIcon;		}
 	QPixmap	workingIcon()		const	{ return _workingIcon;		}
 	QPixmap	readyIcon()		const	{ return _readyIcon;		}
+#endif
 
 
 	/**
@@ -251,10 +253,17 @@ namespace QDirStat
 
     public slots:
 
+#if PORTED
 	/**
 	 * Open a directory URL. Assume "file:" protocol unless otherwise specified.
 	 **/
 	void openURL( KURL url );
+
+	/**
+	 * Clear this view's contents.
+	 **/
+	void clear();
+#endif
 
 	/**
 	 * Refresh (i.e. re-read from disk) the entire tree.
@@ -270,11 +279,6 @@ namespace QDirStat
 	 * Forcefully stop a running read process.
 	 **/
 	void abortReading();
-
-	/**
-	 * Clear this view's contents.
-	 **/
-	void clear();
 
         /**
 	 * Select a (QListViewItem) item. Triggers selectionChanged() signals.
@@ -515,6 +519,7 @@ namespace QDirStat
 
     protected:
 
+#if PORTED
 	/**
 	 * Create a new tree (and delete the old one if there is one)
 	 **/
@@ -525,6 +530,7 @@ namespace QDirStat
 	//
 
 	DirTree *		_tree;
+#endif
 	QTimer *		_updateTimer;
 	QTime			_stopWatch;
 	QString			_currentDir;
@@ -542,6 +548,7 @@ namespace QDirStat
 	QColor	_percentageBarBackground;
 
 
+#if PORTED
 	// The various columns in which to display information
 
 	int	_nameCol;
@@ -549,19 +556,22 @@ namespace QDirStat
 	int	_percentNumCol;
 	int	_percentBarCol;
 	int	_totalSizeCol;
-	int	_workingStatusCol;
 	int	_ownSizeCol;
 	int	_totalItemsCol;
 	int	_totalFilesCol;
 	int	_totalSubDirsCol;
 	int	_latestMtimeCol;
 	int	_readJobsCol;
+#endif
+
+	int	_workingStatusCol;
 	int	_sortCol;
 
 	int 	_debugCount[ DEBUG_COUNTERS ];
 	QString	_debugFunc [ DEBUG_COUNTERS ];
 
 
+#if PORTED
 	// The various icons
 
 	QPixmap	_openDirIcon;
@@ -578,6 +588,7 @@ namespace QDirStat
 	QPixmap _stopIcon;
 	QPixmap	_workingIcon;
 	QPixmap	_readyIcon;
+#endif
     };
 
 

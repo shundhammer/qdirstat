@@ -30,6 +30,7 @@ SOURCES	  = main.cpp			\
 	    DirTreeCache.cpp		\
 	    DirTree.cpp			\
 	    DirTreeIterator.cpp		\
+	    DirTreeModel.cpp		\
 	    Exception.cpp		\
 	    ExcludeRules.cpp		\
 	    FileInfo.cpp		\
@@ -44,6 +45,7 @@ HEADERS	  =				\
 	    DirTreeCache.h		\
 	    DirTree.h			\
 	    DirTreeIterator.h		\
+	    DirTreeModel.h              \
 	    Exception.h			\
 	    ExcludeRules.h		\
 	    FileInfo.h			\

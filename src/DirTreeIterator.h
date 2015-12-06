@@ -33,8 +33,7 @@ namespace QDirStat
     /**
      * Iterator class for children of a @ref FileInfo object. For optimum
      * performance, this iterator class does NOT return children in any
-     * specific sort order. If you need that, use @ref FileInfoSortedIterator
-     * instead.
+     * specific sort order.
      *
      * Sample usage:
      *

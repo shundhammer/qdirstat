@@ -13,9 +13,11 @@
 #include <QMainWindow>
 #include <QString>
 
+#include "DirTreeModel.h"
 #include "ui_main-window.h"
 
 class QCloseEvent;
+class DirTreeModel;
 
 
 class MainWindow: public QMainWindow
@@ -35,8 +37,9 @@ protected:
     virtual void closeEvent( QCloseEvent *event );
 
 private:
-    Ui::MainWindow *	_ui;
-    bool		_modified;
+    Ui::MainWindow *	     _ui;
+    QDirStat::DirTreeModel * _dirTreeModel;
+    bool		     _modified;
 };
 
 #endif // MainWindow_H

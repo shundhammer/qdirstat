@@ -7,14 +7,12 @@
  */
 
 
+#include <QApplication>
+#include <QCloseEvent>
+#include <QMessageBox>
+
 #include "MainWindow.h"
 #include "Logger.h"
-
-#include <QApplication>
-#include <QMessageBox>
-#include <QStatusBar>
-#include <QCloseEvent>
-#include <QDebug>
 
 
 MainWindow::MainWindow():
@@ -23,10 +21,13 @@ MainWindow::MainWindow():
     _modified( false )
 {
     _ui->setupUi( this );
+    _dirTreeModel = new QDirStat::DirTreeModel( this );
+    _ui->dirTreeView->setModel( _dirTreeModel );
 
     connect( _ui->actionQuit,		SIGNAL( triggered() ),
 	     qApp,			SLOT  ( quit()	   ) );
 
+    _dirTreeModel->openUrl( ".." );
 }
 
 

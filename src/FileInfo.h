@@ -277,7 +277,7 @@ namespace QDirStat
 	 * Returns whether or not this is a mount point.
 	 * Derived classes may want to overwrite this.
 	 **/
-	virtual bool isMountPoint()  { return false; }
+	virtual bool isMountPoint() const  { return false; }
 
 	/**
 	 * Sets the mount point state, i.e. whether or not this is a mount

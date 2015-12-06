@@ -27,8 +27,8 @@ using namespace QDirStat;
 
 
 FileInfo::FileInfo( DirTree    * tree,
-		     DirInfo	* parent,
-		     const char * name )
+		    DirInfo    * parent,
+		    const char * name )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -46,9 +46,9 @@ FileInfo::FileInfo( DirTree    * tree,
 
 
 FileInfo::FileInfo( const QString & filenameWithoutPath,
-		     struct stat   * statInfo,
-		     DirTree	   * tree,
-		     DirInfo	   * parent )
+		     struct stat  * statInfo,
+		     DirTree	  * tree,
+		     DirInfo	  * parent )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -102,14 +102,14 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
 
 
 
-FileInfo::FileInfo( DirTree *  tree,
-		     DirInfo *	parent,
-		     const QString &	filenameWithoutPath,
-		     mode_t		mode,
-		     FileSize		size,
-		     time_t		mtime,
-		     FileSize		blocks,
-		     nlink_t		links )
+FileInfo::FileInfo( DirTree *	    tree,
+		    DirInfo *	    parent,
+		    const QString & filenameWithoutPath,
+		    mode_t	    mode,
+		    FileSize	    size,
+		    time_t	    mtime,
+		    FileSize	    blocks,
+		    nlink_t	    links )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -339,6 +339,8 @@ QString QDirStat::formatSize( FileSize lSize )
     QString	 sizeString;
     double	 size;
     unsigned	 unitIndex = 0;
+
+    //	TO DO: translate units
     const char * units[] = { "Bytes", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
     if ( lSize < 1024 )
