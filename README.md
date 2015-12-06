@@ -5,6 +5,9 @@ Qt-based directory statistics: KDirStat without any KDE -- from the original KDi
 
 License: GPL V2
 
+Updated: 2015-12-06
+
+
 ## Overview
 
 This is a Qt-only port of the old Qt3/KDE3-based KDirStat, now based on the
@@ -49,6 +52,9 @@ little own infrastructure. The KDE libs are just not worth the hassle anymore.
 
 
 ## Current Development Status
+
+- 2015-12-06  Created tree model based on QAbstractItemModel.
+              Compiles, but dumps core so far.
 
 - 2015-12-05  Imported and ported directory tree data classes.
               Hammered through the compiler, but nothing usable so far.

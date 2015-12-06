@@ -1,6 +1,6 @@
 # QDirStat src-unported
 
-Updated: 2015-12-04
+Updated: 2015-12-06
 
 This directory contains source files from the old KDirStat project that are
 waiting to be ported to QDirStat.
@@ -78,6 +78,10 @@ the hassle with using the KDE libs.
     switching my entire desktop and shell environment to English or the POSIX
     locale.
 
+  - Config dialog page for exclude rules
+
+  - Config dialog page for treemap colors: Map MIME types to colors
+
 
 - Cleanup Actions - not that hard, just work to do
 
@@ -86,17 +90,9 @@ the hassle with using the KDE libs.
 
 ### To Do Everywhere
 
-- Namespace cleanup. The old classes all live in a namespace KDirStat. Not sure
-  if that's really a good idea. Back then (in the early 2000s) I thought it
-  might become a lib some day to be used from various apps, but that never
-  happened.
-
 - Get rid of the K prefix for everything - classes as well as files. It's not
   KDE any more. At the same time, replacing it with Q might be bad idea since
   Qt itself uses that everywhere.
-
-- Filename cleanup. Files should be named like the class they contain, not all
-  lowercase: ExcludeRules.cpp instead of kexcluderules.cpp.
 
 - Move the file from src-unported/ to src/ when it gets ported. The state of
   this directory should reflect the things already done. The goal is to get
@@ -111,3 +107,8 @@ the hassle with using the KDE libs.
 - Get rid of the "Updated" header in all source files. Git keeps track of that
   stuff.
 
+- Filename cleanup. Files are now named like the class they contain, and not be
+  all lowercase: ExcludeRules.cpp instead of kexcluderules.cpp.
+
+- Tree model based on QAbstractItemModel. This can be connected to a number of
+  Qt's view classes, in particular QTreeView.
