@@ -108,7 +108,7 @@ const ExcludeRule *
 ExcludeRules::matchingRule( const QString & text )
 {
     if ( text.isEmpty() )
-	return false;
+	return 0;
 
     foreach ( ExcludeRule * rule, _rules )
     {
