@@ -18,7 +18,10 @@ MOC_DIR		     = .moc
 OBJECTS_DIR	     = .obj
 LIBS		    += -lz
 
-TARGET	  = qdirstat
+TARGET	             = qdirstat
+TARGET.files         = qdirstat
+TARGET.path          = /usr/bin
+INSTALLS            += TARGET
 
 SOURCES	  = main.cpp			\
 	    DirInfo.cpp			\

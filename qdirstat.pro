@@ -8,4 +8,5 @@
 
 TEMPLATE = subdirs
 CONFIG  += ordered
-SUBDIRS  = src
+
+SUBDIRS  = src scripts doc
