@@ -360,8 +360,6 @@ QString QDirStat::formatSize( FileSize lSize )
 	      << QObject::tr( "EB" )
 	      << QObject::tr( "ZB" )
 	      << QObject::tr( "YB" );
-
-	logDebug() << "Units: " << units << endl;
     }
 
     if ( lSize < 1024 )
@@ -373,9 +371,10 @@ QString QDirStat::formatSize( FileSize lSize )
     {
 	double size = lSize;
 
-	while ( size >= 1024.0 && ++unitIndex < units.size() - 1 )
+	while ( size >= 1024.0 && unitIndex < units.size() - 1 )
 	{
 	    size /= 1024.0;
+	    ++unitIndex;
 	}
 
 	sizeString.sprintf( "%.2f ", size );
