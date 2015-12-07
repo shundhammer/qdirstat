@@ -1,5 +1,5 @@
 /*
- *   File name: DirTreeIterators.cpp
+ *   File name: FileInfoIterators.cpp
  *   Summary:	Support classes for QDirStat - DirTree iterator classes
  *   License:	GPL V2 - See file LICENSE for details.
  *
@@ -7,7 +7,7 @@
  */
 
 
-#include "DirTreeIterator.h"
+#include "FileInfoIterator.h"
 #include "Exception.h"
 
 

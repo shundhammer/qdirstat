@@ -27,13 +27,13 @@ SOURCES	  = main.cpp			\
 	    DirInfo.cpp			\
 	    DirReadJob.cpp		\
 	    DirSaver.cpp		\
-	    DirTreeCache.cpp		\
 	    DirTree.cpp			\
-	    DirTreeIterator.cpp		\
+	    DirTreeCache.cpp		\
 	    DirTreeModel.cpp		\
 	    Exception.cpp		\
 	    ExcludeRules.cpp		\
 	    FileInfo.cpp		\
+	    FileInfoIterator.cpp	\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
 
@@ -42,13 +42,13 @@ HEADERS	  =				\
 	    DirInfo.h			\
 	    DirReadJob.h		\
 	    DirSaver.h			\
-	    DirTreeCache.h		\
 	    DirTree.h			\
-	    DirTreeIterator.h		\
+	    DirTreeCache.h		\
 	    DirTreeModel.h              \
 	    Exception.h			\
 	    ExcludeRules.h		\
 	    FileInfo.h			\
+	    FileInfoIterator.h		\
 	    Logger.h			\
 	    MainWindow.h		\
 	    SignalBlocker.h		\

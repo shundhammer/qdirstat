@@ -9,7 +9,7 @@
 
 #include "DirTreeModel.h"
 #include "DirTree.h"
-#include "DirTreeIterator.h"
+#include "FileInfoIterator.h"
 #include "Logger.h"
 #include "Exception.h"
 

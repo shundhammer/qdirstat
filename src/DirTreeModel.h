@@ -13,7 +13,7 @@
 #include <QAbstractItemModel>
 #include <QPixmap>
 
-#include "DirTreeIterator.h"
+#include "FileInfoIterator.h"
 
 
 namespace QDirStat

@@ -9,7 +9,7 @@
 
 #include "DirInfo.h"
 #include "DirTree.h"
-#include "DirTreeIterator.h"
+#include "FileInfoIterator.h"
 #include "Exception.h"
 
 using namespace QDirStat;
