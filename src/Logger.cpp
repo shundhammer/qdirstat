@@ -222,10 +222,12 @@ static void qt_logger( QtMsgType msgType,
     switch ( msgType )
     {
 	case QtDebugMsg:    severity = LogSeverityVerbose; break;
-	case QtInfoMsg:     severity = LogSeverityDebug;   break;
 	case QtWarningMsg:  severity = LogSeverityWarning; break;
 	case QtCriticalMsg: severity = LogSeverityError;   break;
 	case QtFatalMsg:    severity = LogSeverityError;   break;
+#if QT_VERSION >= 0x050500
+	case QtInfoMsg:     severity = LogSeverityDebug;   break;
+#endif
     }
 
     Logger::log( 0, // use default logger
