@@ -301,7 +301,7 @@ QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
 	return QModelIndex();
 
     FileInfo * child = static_cast<FileInfo*>( index.internalPointer() );
-    Q_CHECK_PTR( child );
+    CHECK_PTR( child );
     FileInfo * parent = child->parent();
 
     if ( ! parent )

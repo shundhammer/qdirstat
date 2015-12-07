@@ -181,7 +181,7 @@ LocalDirReadJob::startReading()
 
 
 			    CacheReadJob * cacheReadJob = new CacheReadJob( _tree, _dir->parent(), fullName );
-			    CHECK_PTR( cacheReadJob );
+			    CHECK_NEW( cacheReadJob );
 			    QString firstDirInCache = cacheReadJob->reader()->firstDir();
 
 			    if ( firstDirInCache == dirName )	// Does this cache file match this directory?
@@ -313,7 +313,7 @@ CacheReadJob::CacheReadJob( DirTree	  * tree,
     : ObjDirReadJob( tree, parent )
 {
     _reader = new CacheReader( cacheFileName, tree, parent );
-    CHECK_PTR( _reader );
+    CHECK_NEW( _reader );
 
     init();
 }

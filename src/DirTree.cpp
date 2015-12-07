@@ -110,7 +110,7 @@ DirTree::startReading( const QString & url )
     readConfig();
 
     _root = LocalDirReadJob::stat( url, this );
-    CHECK_PTR( _root );
+    CHECK_NEW( _root );
 
     if ( _root )
     {
