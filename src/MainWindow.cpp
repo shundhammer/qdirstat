@@ -13,6 +13,10 @@
 
 #include "MainWindow.h"
 #include "Logger.h"
+#include "ExcludeRules.h"
+
+
+using namespace QDirStat;
 
 
 MainWindow::MainWindow():
@@ -26,6 +30,15 @@ MainWindow::MainWindow():
 
     connect( _ui->actionQuit,		SIGNAL( triggered() ),
 	     qApp,			SLOT  ( quit()	   ) );
+
+    // DEBUG
+    // DEBUG
+    // DEBUG
+    QRegExp regexp( ".git", Qt::CaseSensitive, QRegExp::FixedString );
+    ExcludeRules::excludeRules()->add( new ExcludeRule( regexp ) );
+    // DEBUG
+    // DEBUG
+    // DEBUG
 
     _dirTreeModel->openUrl( ".." );
 }

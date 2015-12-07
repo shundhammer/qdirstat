@@ -117,7 +117,7 @@ DirInfo::~DirInfo()
 void
 DirInfo::recalc()
 {
-    // logDebug() << k_funcinfo << this << endl;
+    logDebug() << this << endl;
 
     _totalSize    = _size;
     _totalBlocks  = _blocks;
@@ -375,7 +375,7 @@ DirInfo::unlinkChild( FileInfo *deletedChild )
 
     if ( deletedChild == _firstChild )
     {
-        // logDebug() << "Unlinking first child " << deletedChild << endl;
+        logDebug() << "Unlinking first child " << deletedChild << endl;
         _firstChild = deletedChild->next();
         return;
     }
@@ -386,7 +386,7 @@ DirInfo::unlinkChild( FileInfo *deletedChild )
     {
         if ( child->next() == deletedChild )
         {
-            // logDebug() << "Unlinking " << deletedChild << endl;
+            logDebug() << "Unlinking " << deletedChild << endl;
             child->setNext( deletedChild->next() );
 
             return;
@@ -489,7 +489,7 @@ DirInfo::cleanupDotEntries()
 
     if ( ! _firstChild )
     {
-        // logDebug() << "Reparenting children of solo dot entry " << this << endl;
+        logDebug() << "Reparenting children of solo dot entry " << this << endl;
 
         FileInfo *child = _dotEntry->firstChild();
         _firstChild = child;            // Move the entire children chain here.
@@ -507,7 +507,7 @@ DirInfo::cleanupDotEntries()
 
     if ( ! _dotEntry->firstChild() )
     {
-        // logDebug() << "Removing empty dot entry " << this << endl;
+        logDebug() << "Removing empty dot entry " << this << endl;
 
         delete _dotEntry;
         _dotEntry = 0;

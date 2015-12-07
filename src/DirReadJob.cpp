@@ -118,6 +118,8 @@ LocalDirReadJob::startReading()
     QString		dirName		 = _dir->url();
     QString		defaultCacheName = DEFAULT_CACHE_NAME;
 
+    logDebug() << _dir << endl;
+
     if ( ( _diskDir = opendir( dirName.toUtf8() ) ) )
     {
 	_tree->sendProgressInfo( dirName );
@@ -155,7 +157,7 @@ LocalDirReadJob::startReading()
 			    }
 			    else	// The subdirectory we just found is a mount point.
 			    {
-				// logDebug() << "Found mount point " << subDir << endl;
+				logDebug() << "Found mount point " << subDir << endl;
 				subDir->setMountPoint();
 
 				if ( _tree->crossFileSystems() )
@@ -173,8 +175,10 @@ LocalDirReadJob::startReading()
 		    }
 		    else		// non-directory child
 		    {
-			if ( entryName == defaultCacheName )	// .kdirstat.cache.gz found?
+			if ( entryName == defaultCacheName )	// .qdirstat.cache.gz found?
 			{
+			    logDebug() << "Found " << defaultCacheName << endl;
+
 			    //
 			    // Read content of this subdirectory from cache file
 			    //
@@ -240,7 +244,7 @@ LocalDirReadJob::startReading()
 	}
 
 	closedir( _diskDir );
-	// logDebug() << "Finished reading " << _dir << endl;
+	logDebug() << "Finished reading " << _dir << endl;
 	_dir->setReadState( DirFinished );
 	_tree->sendFinalizeLocal( _dir );
 	_dir->finalizeLocal();
@@ -250,7 +254,7 @@ LocalDirReadJob::startReading()
 	_dir->setReadState( DirError );
 	_tree->sendFinalizeLocal( _dir );
 	_dir->finalizeLocal();
-	// logWarning() << k_funcinfo << "opendir(" << dirName << ") failed" << endl;
+	logWarning() << "opendir(" << dirName << ") failed" << endl;
 	// opendir() doesn't set 'errno' according to POSIX  :-(
     }
 

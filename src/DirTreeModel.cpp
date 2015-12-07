@@ -367,6 +367,8 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
 void DirTreeModel::readingFinished()
 {
+    beginResetModel();
+    endResetModel();
     // DEBUG
     // DEBUG
     // DEBUG
