@@ -5,7 +5,7 @@ Qt-based directory statistics: KDirStat without any KDE -- from the original KDi
 
 License: GPL V2
 
-Updated: 2015-12-06
+Updated: 2015-12-07
 
 
 ## Overview
@@ -100,9 +100,12 @@ http://askubuntu.com/questions/508503/whats-the-development-package-for-qt5-in-1
 Install the required packages for building:
 
     sudo zypper install -t pattern devel_C_C++
-    sudo zypper install libqt5-qtbase-common-devel libqt5-qttools-devel
+    sudo zypper install libQt5Widgets-devel libqt5-qttools zlib-devel
 
-**FIXME:** Untested. This needs to be tested and verified.
+If you also have a Qt4 development environment installed, make sure that the
+Qt5 version of 'qmake' is the first in your $PATH:
+
+    export PATH=/usr/lib64/qt5/bin:$PATH
 
 
 ### Compiling
