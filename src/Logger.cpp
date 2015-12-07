@@ -222,6 +222,7 @@ static void qt_logger( QtMsgType msgType,
     switch ( msgType )
     {
 	case QtDebugMsg:    severity = LogSeverityVerbose; break;
+	case QtInfoMsg:     severity = LogSeverityDebug;   break;
 	case QtWarningMsg:  severity = LogSeverityWarning; break;
 	case QtCriticalMsg: severity = LogSeverityError;   break;
 	case QtFatalMsg:    severity = LogSeverityError;   break;
