@@ -345,7 +345,6 @@ QString FileInfo::dotEntryName()
 QString QDirStat::formatSize( FileSize lSize )
 {
     QString sizeString;
-    double  size;
     int     unitIndex = 0;
 
     static QStringList units;
@@ -361,20 +360,26 @@ QString QDirStat::formatSize( FileSize lSize )
 	      << QObject::tr( "EB" )
 	      << QObject::tr( "ZB" )
 	      << QObject::tr( "YB" );
+
+	logDebug() << "Units: " << units << endl;
     }
 
     if ( lSize < 1024 )
     {
-	sizeString.sprintf( "%lld ", lSize ) + units.at( unitIndex );
+	sizeString.sprintf( "%lld ", lSize );
+	sizeString += units.at( unitIndex );
     }
     else
     {
+	double size = lSize;
+
 	while ( size >= 1024.0 && ++unitIndex < units.size() - 1 )
 	{
 	    size /= 1024.0;
 	}
 
-	sizeString.sprintf( "%.2f ", size ) + units.at( unitIndex );
+	sizeString.sprintf( "%.2f ", size );
+	sizeString += units.at( unitIndex );
     }
 
     return sizeString;

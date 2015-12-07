@@ -46,7 +46,6 @@ namespace QDirStat
 
 	// Not yet handled:
 	//   WorkingStatusCol,
-	//   ReadJobsCol,
 	//   SortCol
 
 	/**
@@ -215,10 +214,10 @@ namespace QDirStat
 	void readingAborted();
 
 	/**
-	 * Process notification of end of one read job at this level and
-	 * finalize display of this level.
+	 * Process notification of that reading 'dir' is finished.
+	 * Other read jobs might still be pending.
 	 **/
-	void finalizeLocal( DirInfo *dir );
+	void readingFinished( DirInfo *dir );
 
 
     protected:
@@ -243,9 +242,14 @@ namespace QDirStat
 	int mappedCol( unsigned viewCol ) const;
 
 	/**
-	 * Return the text for (model) column 'col' for dir tree item 'item'.
+	 * Return the text for (model) column 'col' for 'item'.
 	 **/
 	QVariant columnText( FileInfo * item, int col ) const;
+
+	/**
+	 * Return the text for the own size column for 'item'
+	 **/
+	QVariant ownSizeColText( FileInfo * item ) const;
 
 
 	//
@@ -255,6 +259,7 @@ namespace QDirStat
 	DirTree *	_tree;
 	DotEntryPolicy	_dotEntryPolicy;
 	QList<Column>	_colMapping;
+	int		_readJobsCol;
 
 	// The various icons
 

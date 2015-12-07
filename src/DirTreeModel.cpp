@@ -20,7 +20,8 @@ using namespace QDirStat;
 DirTreeModel::DirTreeModel( QObject * parent ):
     QAbstractItemModel( parent ),
     _tree(0),
-    _dotEntryPolicy( DotEntryIsSubDir )
+    _dotEntryPolicy( DotEntryIsSubDir ),
+    _readJobsCol( PercentBarCol )
 {
     loadIcons();
     _colMapping << NameCol
@@ -46,9 +47,9 @@ void DirTreeModel::clear()
 {
     if ( _tree )
     {
+	beginResetModel();
 	delete _tree;
-
-	// TO DO: Send model signals
+	endResetModel();
     }
 }
 
@@ -72,8 +73,8 @@ void DirTreeModel::createTree()
     connect( _tree, SIGNAL( aborted()	      ),
 	     this,  SLOT  ( readingAborted()  ) );
 
-    connect( _tree, SIGNAL( finalizeLocal( DirInfo * ) ),
-	     this,  SLOT  ( finalizeLocal( DirInfo * ) ) );
+    connect( _tree, SIGNAL( finalizeLocal  ( DirInfo * ) ),
+	     this,  SLOT  ( readingFinished( DirInfo * ) ) );
 }
 
 
@@ -96,8 +97,9 @@ void DirTreeModel::loadIcons()
 
 void DirTreeModel::setColumns( QList<Column> columns )
 {
+    beginResetModel();
     _colMapping = columns;
-    // TO DO: reset view and send signals
+    endResetModel();
 }
 
 
@@ -336,36 +338,69 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 {
     CHECK_PTR( item );
 
+    if ( col == _readJobsCol && item->isBusy() )
+    {
+	return tr( "[%1 Read Jobs]" ).arg( item->pendingReadJobs() );
+    }
+
     switch ( col )
     {
-	case NameCol:
-	    {
-		if ( item->isDotEntry() )
-		    return FileInfo::dotEntryName();
-		else
-		    return item->name();
-	    }
-
-#if TODO
-	    // TO DO
-	    // TO DO
-	    // TO DO
-	    // Check out src-unported/DirTreeView.cpp
-
+	case NameCol:		return item->name();
 	case PercentBarCol:	return QVariant();
+	case OwnSizeCol:	return ownSizeColText( item );
+
+#if 0
 	case PercentNumCol:	return "TO DO";
 	case TotalSizeCol:	return "TO DO";
-	case OwnSizeCol:	return "TO DO";
 	case TotalItemsCol:	return "TO DO";
 	case TotalFilesCol:	return "TO DO";
 	case TotalSubDirsCol:	return "TO DO";
 	case LatestMTimeCol:	return "TO DO";
-	    // TO DO
-	    // TO DO
-	    // TO DO
 #endif
+
 	default: return QVariant();
     }
+}
+
+
+QVariant DirTreeModel::ownSizeColText( FileInfo * item ) const
+{
+    if ( item->isDevice() )
+	return QVariant();
+
+    QString text;
+
+    if ( item->isFile() && ( item->links() > 1 ) ) // Regular file with multiple links
+    {
+	if ( item->isSparseFile() )
+	{
+	    text = tr( "%1 / %2 Links (allocated: %3)" )
+		.arg( formatSize( item->byteSize() ) )
+		.arg( formatSize( item->links() ) )
+		.arg( formatSize( item->allocatedSize() ) );
+	}
+	else
+	{
+	    text = tr( "%1 / %2 Links" )
+		.arg( formatSize( item->byteSize() ) )
+		.arg( item->links() );
+	}
+    }
+    else // No multiple links or no regular file
+    {
+	if ( item->isSparseFile() )
+	{
+	    text = tr( "%1 (allocated: %2)" )
+		.arg( formatSize( item->byteSize() ) )
+		.arg( formatSize( item->allocatedSize() ) );
+	}
+	else
+	{
+	    text = formatSize( item->size() );
+	}
+    }
+
+    return text;
 }
 
 
@@ -398,8 +433,11 @@ void DirTreeModel::readingAborted()
 }
 
 
-void DirTreeModel::finalizeLocal( DirInfo * dir )
+void DirTreeModel::readingFinished( DirInfo * dir )
 {
+    if ( ! dir )
+	return;
+
     FileInfoIterator it( dir, _dotEntryPolicy );
 
     if ( dir->hasChildren() )

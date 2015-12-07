@@ -24,14 +24,14 @@ DirInfo::DirInfo( DirTree * tree,
 
     if ( asDotEntry )
     {
-        _isDotEntry     = true;
-        _dotEntry       = 0;
-        _name           = ".";
+        _isDotEntry = true;
+        _dotEntry   = 0;
+        _name       = dotEntryName();
     }
     else
     {
-        _isDotEntry     = false;
-        _dotEntry       = new DirInfo( tree, this, true );
+        _isDotEntry = false;
+        _dotEntry   = new DirInfo( tree, this, true );
     }
 }
 
@@ -46,7 +46,7 @@ DirInfo::DirInfo( const QString & filenameWithoutPath,
                 parent )
 {
     init();
-    _dotEntry   = new DirInfo( tree, this, true );
+    _dotEntry = new DirInfo( tree, this, true );
 }
 
 
@@ -491,17 +491,17 @@ DirInfo::cleanupDotEntries()
     {
         FileInfo *child = _dotEntry->firstChild();
 
-	if ( child )
-	{
-	    logDebug() << "Reparenting children of solo dot entry " << this << endl;
-	    _firstChild = child;            // Move the entire children chain here.
-	    _dotEntry->setFirstChild( 0 );  // _dotEntry will be deleted below.
+        if ( child )
+        {
+            logDebug() << "Reparenting children of solo dot entry " << this << endl;
+            _firstChild = child;            // Move the entire children chain here.
+            _dotEntry->setFirstChild( 0 );  // _dotEntry will be deleted below.
 
-	    while ( child )
-	    {
-		child->setParent( this );
-		child = child->next();
-	    }
+            while ( child )
+            {
+                child->setParent( this );
+                child = child->next();
+            }
         }
     }
 
