@@ -34,7 +34,7 @@ MainWindow::MainWindow():
     // DEBUG
     // DEBUG
     // DEBUG
-    QRegExp regexp( ".git", Qt::CaseSensitive, QRegExp::FixedString );
+    QRegExp regexp( ".*/\\.git$" );
     ExcludeRules::excludeRules()->add( new ExcludeRule( regexp ) );
     // DEBUG
     // DEBUG
