@@ -11,6 +11,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <QDateTime>
+
 #include "FileInfo.h"
 #include "DirInfo.h"
 #include "DirSaver.h"
@@ -384,6 +386,12 @@ QString QDirStat::formatSize( FileSize lSize )
     return sizeString;
 }
 
+
+QString QDirStat::formatTime( time_t rawTime )
+{
+    QDateTime time = QDateTime::fromTime_t( rawTime );
+    return time.toString( Qt::DefaultLocaleShortDate );
+}
 
 
 QString QDirStat::baseName( const QString & fileName )

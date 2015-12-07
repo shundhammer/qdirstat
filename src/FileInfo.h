@@ -601,6 +601,11 @@ namespace QDirStat
     QString formatSize ( FileSize lSize );
 
     /**
+     * Format a timestamp (like the latestMTime()) human-readable.
+     **/
+    QString formatTime( time_t rawTime );
+
+    /**
      * Return the last pathname component of a file name.
      *
      * Examples:

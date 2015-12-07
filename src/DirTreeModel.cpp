@@ -348,6 +348,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	case NameCol:		return item->name();
 	case PercentBarCol:	return QVariant();
 	case OwnSizeCol:	return ownSizeColText( item );
+	case LatestMTimeCol:	return formatTime( item->latestMtime() );
 
 #if 0
 	case PercentNumCol:	return "TO DO";
@@ -355,7 +356,6 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	case TotalItemsCol:	return "TO DO";
 	case TotalFilesCol:	return "TO DO";
 	case TotalSubDirsCol:	return "TO DO";
-	case LatestMTimeCol:	return "TO DO";
 #endif
 
 	default: return QVariant();
