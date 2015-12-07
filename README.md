@@ -53,6 +53,8 @@ little own infrastructure. The KDE libs are just not worth the hassle anymore.
 
 ## Current Development Status
 
+- 2015-12-07  First working DirTreeModel -- still minimalistic, but working.
+
 - 2015-12-06  Created tree model based on QAbstractItemModel.
               Compiles, but dumps core so far.
 
