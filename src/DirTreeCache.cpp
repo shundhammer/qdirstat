@@ -43,7 +43,7 @@ CacheWriter::writeCache( const QString & fileName, DirTree *tree )
     if ( ! tree || ! tree->root() )
 	return false;
 
-    gzFile cache = gzopen( (const char *) fileName.toLocal8Bit(), "w" );
+    gzFile cache = gzopen( (const char *) fileName.toUtf8(), "w" );
 
     if ( cache == 0 )
     {
@@ -136,7 +136,7 @@ CacheWriter::writeItem( gzFile cache, FileInfo * item )
 
     // Write size
 
-    gzprintf( cache, "\t%s", formatSize( item->size() ).toLocal8Bit().data() );
+    gzprintf( cache, "\t%s", formatSize( item->size() ).toUtf8().data() );
 
 
     // Write mtime
@@ -209,7 +209,7 @@ CacheReader::CacheReader( const QString & fileName,
     _lastDir		= 0;
     _lastExcludedDir	= 0;
 
-    _cache = gzopen( fileName.toLocal8Bit(), "r" );
+    _cache = gzopen( fileName.toUtf8(), "r" );
 
     if ( _cache == 0 )
     {

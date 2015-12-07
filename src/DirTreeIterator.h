@@ -24,7 +24,7 @@ namespace QDirStat
     typedef enum
     {
 	DotEntryTransparent,	// Flatten hierarchy - move dot entry children up
-	DotEntryAsSubDir,	// Treat dot entry as ordinary subdirectory
+	DotEntryIsSubDir,	// Treat dot entry as ordinary subdirectory
 	DotEntryIgnore		// Ignore dot entry and its children completely
     } DotEntryPolicy;
 

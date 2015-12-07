@@ -428,6 +428,11 @@ namespace QDirStat
 	virtual bool isDotEntry() const { return false; }
 
 	/**
+	 * (Translated) user-visible string for a "Dot Entry" ("<Files>").
+	 **/
+	static QString dotEntryName();
+
+	/**
 	 * Returns the tree level (depth) of this item.
 	 * The topmost level is 0.
 	 *
@@ -594,6 +599,18 @@ namespace QDirStat
      *	   logDebug() << "Size: " << x->totalSize() << endl;
      **/
     QString formatSize ( FileSize lSize );
+
+    /**
+     * Return the last pathname component of a file name.
+     *
+     * Examples:
+     *
+     *     "/home/bob/foo.txt"	-> "foo.txt"
+     *     "foo.txt" 		-> "foo.txt"
+     *	   "/usr/bin"		-> "bin"
+     *     "/usr/bin/"		-> "bin"
+     **/
+    QString baseName( const QString & fileName );
 
 
     /**

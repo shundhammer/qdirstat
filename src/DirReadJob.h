@@ -13,7 +13,6 @@
 
 #include <dirent.h>
 #include <QTimer>
-#include <QUrl>
 
 #include "Logger.h"
 
@@ -200,9 +199,9 @@ namespace QDirStat
 	 * Returns 0 if such information cannot be obtained (i.e. the
 	 * appropriate stat() call fails).
 	 **/
-	static FileInfo * stat( const QUrl & url,
-				DirTree	   * tree,
-				DirInfo	   * parent = 0 );
+	static FileInfo * stat( const QString & url,
+				DirTree	      * tree,
+				DirInfo	      * parent = 0 );
 
     protected:
 

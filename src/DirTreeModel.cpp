@@ -19,7 +19,8 @@ using namespace QDirStat;
 
 DirTreeModel::DirTreeModel( QObject * parent ):
     QAbstractItemModel( parent ),
-    _tree(0)
+    _tree(0),
+    _dotEntryPolicy( DotEntryIsSubDir )
 {
     loadIcons();
     _colMapping << NameCol
@@ -105,7 +106,7 @@ int DirTreeModel::mappedCol( unsigned viewCol ) const
 
 FileInfo * DirTreeModel::findChild( FileInfo * parent, int childNo ) const
 {
-    FileInfoIterator it( parent );
+    FileInfoIterator it( parent, _dotEntryPolicy );
     int index = 0;
 
     while ( *it && index != childNo )
@@ -123,7 +124,7 @@ int DirTreeModel::childIndex( FileInfo * child ) const
     if ( ! child->parent() )
 	return 0;
 
-    FileInfoIterator it( child->parent() );
+    FileInfoIterator it( child->parent(), _dotEntryPolicy );
     int index = 0;
 
     while ( *it )
@@ -135,6 +136,9 @@ int DirTreeModel::childIndex( FileInfo * child ) const
 	++it;
     }
 
+    if ( child == child->parent()->dotEntry() )
+	return index;
+
     // Not found
     logError() << "Child \"" << child << "\" not found in \""
 	       << child->parent() << "\"" << endl;
@@ -144,7 +148,7 @@ int DirTreeModel::childIndex( FileInfo * child ) const
 
 int DirTreeModel::countDirectChildren( FileInfo * parent ) const
 {
-    FileInfoIterator it( parent );
+    FileInfoIterator it( parent, _dotEntryPolicy );
 
     return it.count();
 }
@@ -324,7 +328,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
         case NameCol:
             {
                 if ( item->isDotEntry() )
-                    return tr( "<Files>" );
+                    return FileInfo::dotEntryName();
                 else
                     return item->name();
             }

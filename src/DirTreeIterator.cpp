@@ -80,7 +80,7 @@ void FileInfoIterator::next()
 	{
 	    // Process dot entry
 
-	    _current = _policy == DotEntryAsSubDir ? _parent->dotEntry() : 0;
+	    _current = _policy == DotEntryIsSubDir ? _parent->dotEntry() : 0;
 	    _dotEntryProcessed = true;
 
 	    if ( ! _current )
@@ -157,7 +157,7 @@ FileInfoIterator::count()
 	    }
 	    break;
 
-	case DotEntryAsSubDir:		// The dot entry counts as one item.
+	case DotEntryIsSubDir:		// The dot entry counts as one item.
 	    if ( _parent->dotEntry() )
 		cnt++;
 	    break;

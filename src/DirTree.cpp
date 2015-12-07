@@ -8,6 +8,7 @@
 
 
 #include <QDir>
+#include <QFileInfo>
 
 #include "DirTree.h"
 #include "Exception.h"
@@ -99,9 +100,12 @@ DirTree::clear( bool sendSignals )
 
 
 void
-DirTree::startReading( const QString & url )
+DirTree::startReading( const QString & rawUrl )
 {
-    logDebug() << "startReading" << url << endl;
+    QFileInfo fileInfo( rawUrl );
+    QString url = fileInfo.absoluteFilePath();
+    logDebug() << "rawUrl: \"" << rawUrl
+	       << "\" url: \"" << url << "\"" << endl;
 
     _isBusy = true;
     emit startingReading();
@@ -110,7 +114,7 @@ DirTree::startReading( const QString & url )
     readConfig();
 
     _root = LocalDirReadJob::stat( url, this );
-    CHECK_NEW( _root );
+    CHECK_PTR( _root );
 
     if ( _root )
     {
@@ -397,7 +401,7 @@ DirTree::selectItem( FileInfo *newSelection )
 bool
 DirTree::writeCache( const QString & cacheFileName )
 {
-    CacheWriter writer( cacheFileName.toLocal8Bit(), this );
+    CacheWriter writer( cacheFileName.toUtf8(), this );
     return writer.ok();
 }
 

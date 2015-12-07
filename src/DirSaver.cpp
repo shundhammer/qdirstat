@@ -33,7 +33,7 @@ void DirSaver::cd( const QString & newPath )
 	return;
     }
 
-    chdir( newPath.toLocal8Bit() );
+    chdir( newPath.toUtf8() );
 }
 
 

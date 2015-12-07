@@ -118,7 +118,7 @@ LocalDirReadJob::startReading()
     QString		dirName		 = _dir->url();
     QString		defaultCacheName = DEFAULT_CACHE_NAME;
 
-    if ( ( _diskDir = opendir( dirName.toLocal8Bit() ) ) )
+    if ( ( _diskDir = opendir( dirName.toUtf8() ) ) )
     {
 	_tree->sendProgressInfo( dirName );
 	_dir->setReadState( DirReading );
@@ -132,7 +132,7 @@ LocalDirReadJob::startReading()
 	    {
 		QString fullName = dirName + "/" + entryName;
 
-		if ( lstat( fullName.toLocal8Bit(), &statInfo ) == 0 )	      // lstat() OK
+		if ( lstat( fullName.toUtf8(), &statInfo ) == 0 )	      // lstat() OK
 		{
 		    if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
 		    {
@@ -261,19 +261,21 @@ LocalDirReadJob::startReading()
 
 
 FileInfo *
-LocalDirReadJob::stat( const QUrl & url,
-		       DirTree    * tree,
-		       DirInfo    * parent )
+LocalDirReadJob::stat( const QString & url,
+		       DirTree       * tree,
+		       DirInfo       * parent )
 {
     struct stat statInfo;
+    logDebug() << "url: \"" << url << "\"" << endl;
 
-    if ( lstat( url.toLocalFile().toLocal8Bit(), &statInfo ) == 0 ) // lstat() OK
+    if ( lstat( url.toUtf8(), &statInfo ) == 0 ) // lstat() OK
     {
-	QString name = parent ? url.fileName() : url.path();
+	QString name = parent ? baseName( url ) : url;
 
 	if ( S_ISDIR( statInfo.st_mode ) )	// directory?
 	{
 	    DirInfo * dir = new DirInfo( name, &statInfo, tree, parent );
+	    CHECK_NEW( dir );
 
 	    if ( dir && parent && dir->device() != parent->device() )
 		dir->setMountPoint();
@@ -285,6 +287,7 @@ LocalDirReadJob::stat( const QUrl & url,
     }
     else // lstat() failed
     {
+	logError() << "lstat() failed for \"" << url << "\"" << endl;
 	return 0;
     }
 }

@@ -199,7 +199,7 @@ FileInfo::url() const
 QString
 FileInfo::debugUrl() const
 {
-    return url() + ( isDotEntry() ? "/<Files>" : "" );
+    return url() + ( isDotEntry() ? ( QString( "/" ) + dotEntryName() ) : "" );
 }
 
 
@@ -312,7 +312,7 @@ FileInfo::locate( QString url, bool findDotEntries )
 
 	// Special case: The dot entry is requested.
 
-	if ( findDotEntries && dotEntry() && url == "<Files>" )
+	if ( findDotEntries && dotEntry() && url == dotEntryName() )
 	    return dotEntry();
 
 	// Search the dot entry if there is one - but only if there is no more
@@ -333,30 +333,58 @@ FileInfo::locate( QString url, bool findDotEntries )
 }
 
 
+QString FileInfo::dotEntryName()
+{
+    return QObject::tr( "<Files>" );
+}
+
+
+//---------------------------------------------------------------------------
+
 
 QString QDirStat::formatSize( FileSize lSize )
 {
-    QString	 sizeString;
-    double	 size;
-    unsigned	 unitIndex = 0;
+    QString sizeString;
+    double  size;
+    int     unitIndex = 0;
 
-    //	TO DO: translate units
-    const char * units[] = { "Bytes", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+    static QStringList units;
+
+    if ( units.isEmpty() )
+    {
+	units << QObject::tr( "Bytes" )
+	      << QObject::tr( "kB" )
+	      << QObject::tr( "MB" )
+	      << QObject::tr( "GB" )
+	      << QObject::tr( "TB" )
+	      << QObject::tr( "PB" )
+	      << QObject::tr( "EB" )
+	      << QObject::tr( "ZB" )
+	      << QObject::tr( "YB" );
+    }
 
     if ( lSize < 1024 )
     {
-	sizeString.sprintf( "%lld %s", lSize, units[ unitIndex ] );
+	sizeString.sprintf( "%lld ", lSize ) + units.at( unitIndex );
     }
     else
     {
-	while ( size >= 1024.0 && ++unitIndex < sizeof( units ) - 1)
+	while ( size >= 1024.0 && ++unitIndex < units.size() - 1 )
 	{
 	    size /= 1024.0;
 	}
 
-	sizeString.sprintf( "%.2f %s", size, units[ unitIndex ] );
+	sizeString.sprintf( "%.2f ", size ) + units.at( unitIndex );
     }
 
     return sizeString;
+}
+
+
+
+QString QDirStat::baseName( const QString & fileName )
+{
+    QStringList segments = fileName.split( '/', QString::SkipEmptyParts );
+    return segments.isEmpty() ? "" : segments.last();
 }
 

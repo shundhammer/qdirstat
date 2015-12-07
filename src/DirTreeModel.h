@@ -9,8 +9,11 @@
 #ifndef DirTreeModel_h
 #define DirTreeModel_h
 
+
 #include <QAbstractItemModel>
 #include <QPixmap>
+
+#include "DirTreeIterator.h"
 
 
 namespace QDirStat
@@ -229,6 +232,7 @@ namespace QDirStat
 	//
 
 	DirTree *	_tree;
+	DotEntryPolicy	_dotEntryPolicy;
 	QList<Column>	_colMapping;
 
 	// The various icons
