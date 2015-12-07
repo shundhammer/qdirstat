@@ -94,6 +94,12 @@ See also
 
 http://askubuntu.com/questions/508503/whats-the-development-package-for-qt5-in-14-04
 
+If you also have a Qt4 development environment installed, select the desired
+one via _qtchooser_:
+
+    sudo apt-get install qtchooser
+    export QT_SELECT="qt5"
+
 
 #### SUSE
 
@@ -128,7 +134,7 @@ or
 
 ## Contributing
 
-Once the project setup is complete, contributions will be welcome.
+The project is still in its early stages, but contributions are welcome.
 
 
 ### Contribution Guide Lines
