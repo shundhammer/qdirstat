@@ -489,16 +489,19 @@ DirInfo::cleanupDotEntries()
 
     if ( ! _firstChild )
     {
-        logDebug() << "Reparenting children of solo dot entry " << this << endl;
-
         FileInfo *child = _dotEntry->firstChild();
-        _firstChild = child;            // Move the entire children chain here.
-        _dotEntry->setFirstChild( 0 );  // _dotEntry will be deleted below.
 
-        while ( child )
-        {
-            child->setParent( this );
-            child = child->next();
+	if ( child )
+	{
+	    logDebug() << "Reparenting children of solo dot entry " << this << endl;
+	    _firstChild = child;            // Move the entire children chain here.
+	    _dotEntry->setFirstChild( 0 );  // _dotEntry will be deleted below.
+
+	    while ( child )
+	    {
+		child->setParent( this );
+		child = child->next();
+	    }
         }
     }
 

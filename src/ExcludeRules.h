@@ -28,9 +28,14 @@ namespace QDirStat
     public:
 
         /**
-         * Constructor.
+         * Constructor from a QRegExp.
          **/
         ExcludeRule( const QRegExp & regexp );
+
+	/**
+	 * Constructor from a QString. The string will be used as a regexp.
+	 **/
+        ExcludeRule( const QString & regexp );
 
         /**
          * Destructor.
@@ -75,19 +80,19 @@ namespace QDirStat
         bool    _enabled;
     };
 
-    
+
     typedef QList<ExcludeRule *> ExcludeRuleList;
     typedef ExcludeRuleList::const_iterator ExcludeRuleListIterator;
-    
+
 
     /**
      * Container for multiple exclude rules.
      *
      * Normal usage:
      *
-     *     ExcludeRules::excludeRules()->add( new ExcludeRule( ... ) );
+     *     ExcludeRules::instance()->add( new ExcludeRule( ... ) );
      *     ...
-     *     if ( ExcludeRules::excludeRules()->match( filename ) )
+     *     if ( ExcludeRules::instance()->match( filename ) )
      *     {
      *         // exclude this file
      *     }
@@ -113,7 +118,7 @@ namespace QDirStat
          * Return the singleton object of this class.
          * This will create one if there is none yet.
          **/
-        static ExcludeRules * excludeRules();
+        static ExcludeRules * instance();
 
         /**
          * Add an exclude rule to this rule set.
@@ -121,6 +126,12 @@ namespace QDirStat
          * it will be destroyed with 'delete' after use.
          **/
         void add( ExcludeRule * rule );
+
+	/**
+	 * Create a new rule with 'regexp' and add it to this rule set.
+	 **/
+        static void add( const QRegExp & regexp );
+        static void add( const QString & regexp );
 
         /**
          * Check a string against the exclude rules.
@@ -138,6 +149,12 @@ namespace QDirStat
          **/
         const ExcludeRule * matchingRule( const QString & text );
 
+	/**
+	 * Return the last matching rule or 0 if there was none.
+	 * Each call to match() will reset this.
+	 **/
+	ExcludeRule * lastMatchingRule() const { return _lastMatchingRule; }
+
         /**
          * Clear (delete) all exclude rules.
          **/
@@ -153,7 +170,7 @@ namespace QDirStat
          * Return a const iterator for the first exclude rule.
          **/
         ExcludeRuleListIterator begin() { return _rules.constBegin(); }
-        
+
         /**
          * Return a const iterator for the last exclude rule.
          **/
@@ -162,7 +179,22 @@ namespace QDirStat
     private:
 
         ExcludeRuleList _rules;
+	ExcludeRule *   _lastMatchingRule;
     };
+
+
+    /**
+     * Print the regexp of a @ref FileInfo in a debug stream.
+     **/
+    inline QTextStream & operator<< ( QTextStream & stream, const ExcludeRule * rule )
+    {
+	if ( rule )
+	    stream << "<ExcludeRule \"" << rule->regexp().pattern() << "\">";
+	else
+	    stream << "<NULL ExcludeRule *>";
+
+	return stream;
+    }
 
 }       // namespace QDirStat
 

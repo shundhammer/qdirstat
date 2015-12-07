@@ -34,8 +34,7 @@ MainWindow::MainWindow():
     // DEBUG
     // DEBUG
     // DEBUG
-    QRegExp regexp( ".*/\\.git$" );
-    ExcludeRules::excludeRules()->add( new ExcludeRule( regexp ) );
+    ExcludeRules::add( ".*/\\.git$" );
     // DEBUG
     // DEBUG
     // DEBUG

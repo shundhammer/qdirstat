@@ -373,13 +373,13 @@ void DirTreeModel::readingFinished()
     // DEBUG
     // DEBUG
 
-    FileInfoIterator it( _tree->root() );
+    FileInfoIterator it( _tree->root(), _dotEntryPolicy );
     logDebug() << "Root children:" << endl;
 
     while ( *it )
     {
 	logDebug() << "--> " << *it << endl;
-	it.next();
+	++it;
     }
 
     // DEBUG
@@ -396,12 +396,20 @@ void DirTreeModel::readingAborted()
 
 void DirTreeModel::finalizeLocal( DirInfo * dir )
 {
-    FileInfoIterator it( dir );
-    logDebug() << "Children of " << dir << endl;
+    FileInfoIterator it( dir, _dotEntryPolicy );
 
-    while ( *it )
+    if ( dir->hasChildren() )
     {
-	logDebug() << "--> " << *it << endl;
-	it.next();
+	logDebug() << "Children of " << dir << endl;
+
+	while ( *it )
+	{
+	    logDebug() << "--> " << *it << endl;
+	    ++it;
+	}
+    }
+    else
+    {
+	logDebug() << "No children in " << dir << endl;
     }
 }

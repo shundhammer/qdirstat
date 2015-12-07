@@ -142,7 +142,7 @@ LocalDirReadJob::startReading()
 			_dir->insertChild( subDir );
 			childAdded( subDir );
 
-			if ( ExcludeRules::excludeRules()->match( fullName ) )
+			if ( ExcludeRules::instance()->match( fullName ) )
 			{
 			    subDir->setExcluded();
 			    subDir->setReadState( DirOnRequestOnly );
@@ -151,7 +151,7 @@ LocalDirReadJob::startReading()
 			}
 			else // No exclude rule matched
 			{
-			    if ( _dir->device() == subDir->device()	)	// normal case
+			    if ( _dir->device() == subDir->device() )	// normal case
 			    {
 				_tree->addJob( new LocalDirReadJob( _tree, subDir ) );
 			    }

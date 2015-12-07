@@ -58,7 +58,7 @@ namespace QDirStat
 	 * Constructor: Initialize an iterator object to iterate over the
 	 * children of 'parent' (unsorted!), depending on 'dotEntryPolicy':
 	 *
-	 * DotEntryTransparent (default):
+	 * DotEntryTransparent:
 	 *
 	 * Treat the dot entry as if it wasn't there - pretend to move all its
 	 * children up to the real parent. This makes a directory look very
@@ -83,7 +83,7 @@ namespace QDirStat
 	 *
 	 **/
 	FileInfoIterator( FileInfo *	 parent,
-			  DotEntryPolicy dotEntryPolicy = DotEntryTransparent );
+			  DotEntryPolicy dotEntryPolicy = DotEntryIsSubDir );
 
     protected:
 	/**

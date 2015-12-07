@@ -23,6 +23,14 @@ ExcludeRule::ExcludeRule( const QRegExp & regexp )
 }
 
 
+ExcludeRule::ExcludeRule( const QString & regexp )
+    : _regexp( QRegExp( regexp ) )
+    , _enabled( true )
+{
+    // NOP
+}
+
+
 ExcludeRule::~ExcludeRule()
 {
     // NOP
@@ -42,6 +50,7 @@ ExcludeRule::match( const QString & text )
 
 ExcludeRules::ExcludeRules()
 {
+    _lastMatchingRule = 0;
 }
 
 
@@ -52,7 +61,7 @@ ExcludeRules::~ExcludeRules()
 
 
 
-ExcludeRules * ExcludeRules::excludeRules()
+ExcludeRules * ExcludeRules::instance()
 {
     static ExcludeRules * singleton = 0;
 
@@ -69,6 +78,7 @@ void ExcludeRules::clear()
 {
     qDeleteAll( _rules );
     _rules.clear();
+    _lastMatchingRule = 0;
 }
 
 
@@ -79,9 +89,23 @@ void ExcludeRules::add( ExcludeRule * rule )
 }
 
 
+void ExcludeRules::add( const QRegExp & regexp )
+{
+    ExcludeRule * rule = new ExcludeRule( regexp );
+    instance()->add( rule );
+}
+
+
+void ExcludeRules::add( const QString & regexp )
+{
+    add( QRegExp( regexp ) );
+}
+
+
 bool
 ExcludeRules::match( const QString & text )
 {
+    _lastMatchingRule = 0;
     if ( text.isEmpty() )
 	return false;
 
@@ -89,11 +113,10 @@ ExcludeRules::match( const QString & text )
     {
 	if ( rule->match( text ) )
 	{
+	    _lastMatchingRule = rule;
 #if VERBOSE_EXCLUDE_MATCHES
 
-	    logDebug() << text << " matches exclude rule "
-		      << rule->regexp().pattern()
-		      << endl;
+	    logDebug() << text << " matches " << rule << endl;
 
 #endif
 	    return true;

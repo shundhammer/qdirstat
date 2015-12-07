@@ -430,9 +430,9 @@ CacheReader::addItem()
 
         if ( dir != _toplevel )
         {
-            if ( ExcludeRules::excludeRules()->match( dir->url() ) )
+            if ( ExcludeRules::instance()->match( dir->url() ) )
             {
-                // logDebug() << "Excluding " << name << endl;
+                logDebug() << "Excluding " << name << endl;
                 dir->setExcluded();
                 dir->setReadState( DirOnRequestOnly );
                 _tree->sendFinalizeLocal( dir );
