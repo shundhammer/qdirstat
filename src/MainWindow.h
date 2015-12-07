@@ -17,6 +17,7 @@
 #include "ui_main-window.h"
 
 class QCloseEvent;
+class QSortFilterProxyModel;
 class DirTreeModel;
 
 
@@ -39,6 +40,7 @@ protected:
 private:
     Ui::MainWindow *	     _ui;
     QDirStat::DirTreeModel * _dirTreeModel;
+    QSortFilterProxyModel  * _sortModel;
     bool		     _modified;
 };
 

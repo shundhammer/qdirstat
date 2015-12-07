@@ -206,6 +206,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 	case Qt::DisplayRole:
 	    {
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+		// no need for CHECK_PTR( item ); - columnText() does that
 		return columnText( item, col );
 	    }
 
@@ -228,6 +229,43 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 			return Qt::AlignLeft;
 		}
 	    }
+
+	case SortRole: // Custom QDirStat role: Raw types for sorting
+	    {
+		// Together with a QSortProxyFilterModel that uses this custom
+		// role as its sortRole, this takes care of sorting: The
+		// QSortProxyFilterModel queries this model for data for the
+		// sort column and uses QVariant and its known types and their
+		// operator<() (in its lessThan() function). Since all columns
+		// we use are either strings or simple numeric values, all we
+		// need to do is to return the corresponding string or numeric
+		// value for each column. Notice that we don't even have to
+		// calculate any percentages here since for the purpose of
+		// sorting, the percentage behaves exactly like the totalSize.
+
+		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+		CHECK_PTR( item );
+
+		logDebug() << "SortRole col " << col << " for " << item << endl;
+
+		if ( col == _readJobsCol && item->isBusy() )
+		    return item->pendingReadJobs();
+
+		switch ( col )
+		{
+		    case NameCol:	  return item->name();
+		    case PercentBarCol:	  // FALLTHRU
+		    case PercentNumCol:	  // FALLTHRU
+		    case TotalSizeCol:	  return item->totalSize();
+		    case OwnSizeCol:	  return item->size();
+		    case TotalItemsCol:	  return item->totalItems();
+		    case TotalFilesCol:	  return item->totalFiles();
+		    case TotalSubDirsCol: return item->totalSubDirs();
+		    case LatestMTimeCol:  return (qulonglong) item->latestMtime();
+		    default:		  return QVariant();
+		}
+	    }
+
 
 	default:
 	    return QVariant();
@@ -346,7 +384,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     switch ( col )
     {
 	case NameCol:		return item->name();
-	case PercentBarCol:	return QVariant();
+	case PercentBarCol:	return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
 	case OwnSizeCol:	return ownSizeColText( item );
 	case LatestMTimeCol:	return formatTime( item->latestMtime() );
 

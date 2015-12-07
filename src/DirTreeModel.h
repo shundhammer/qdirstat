@@ -21,6 +21,12 @@ namespace QDirStat
     class DirTree;
     class FileInfo;
 
+    enum CustomRoles
+    {
+	SortRole = Qt::UserRole
+    };
+
+
     class DirTreeModel: public QAbstractItemModel
     {
 	Q_OBJECT

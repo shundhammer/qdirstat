@@ -10,6 +10,7 @@
 #include <QApplication>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QSortFilterProxyModel>
 
 #include "MainWindow.h"
 #include "Logger.h"
@@ -26,7 +27,17 @@ MainWindow::MainWindow():
 {
     _ui->setupUi( this );
     _dirTreeModel = new QDirStat::DirTreeModel( this );
-    _ui->dirTreeView->setModel( _dirTreeModel );
+    _sortModel = new QSortFilterProxyModel( this );
+    _sortModel->setSourceModel( _dirTreeModel );
+    _sortModel->setSortRole( QDirStat::SortRole );
+
+    _ui->dirTreeView->setModel( _sortModel );
+    _ui->dirTreeView->setSortingEnabled( true );
+
+    connect( _ui->dirTreeView->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ),
+	     _ui->dirTreeView,		 SLOT  ( sortByColumn	     ( int, Qt::SortOrder ) ) );
+    _ui->dirTreeView->header()->setSortIndicator( QDirStat::DirTreeModel::NameCol, Qt::AscendingOrder );
+
 
     connect( _ui->actionQuit,		SIGNAL( triggered() ),
 	     qApp,			SLOT  ( quit()	   ) );
