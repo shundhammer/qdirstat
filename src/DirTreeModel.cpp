@@ -271,18 +271,22 @@ QVariant DirTreeModel::headerData( int		   section,
 Qt::ItemFlags DirTreeModel::flags( const QModelIndex &index ) const
 {
     if ( ! index.isValid() )
+    {
+	logWarning() << "Invalid ModelIndex" << endl;
 	return Qt::NoItemFlags;
+    }
 
-    switch ( mappedCol( index.column() ) )
+    int col = mappedCol( index.column() );
+    switch ( col )
     {
 	case NameCol:
-	    return Qt::ItemIsUserCheckable & Qt::ItemIsSelectable & Qt::ItemIsEnabled;
+	    return Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 
 	case PercentBarCol:
 	    return Qt::ItemIsEnabled;
 
 	default:
-	    return Qt::ItemIsSelectable & Qt::ItemIsEnabled;
+	    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     }
 }
 
