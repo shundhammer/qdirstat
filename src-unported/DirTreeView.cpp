@@ -249,6 +249,7 @@ DirTreeView::createTree()
     connect( _tree, SIGNAL( startingReading() ),
 	     this,  SLOT  ( prepareReading()  ) );
 
+#if PORTED
     connect( _tree, SIGNAL( finished()     ),
 	     this,  SLOT  ( slotFinished() ) );
 
@@ -257,6 +258,7 @@ DirTreeView::createTree()
 
     connect( _tree, SIGNAL( finalizeLocal( DirInfo * ) ),
 	     this,  SLOT  ( finalizeLocal( DirInfo * ) ) );
+#endif
 
     connect( this,  SIGNAL( selectionChanged( FileInfo * ) ),
 	     _tree, SLOT  ( selectItem      ( FileInfo * ) ) );

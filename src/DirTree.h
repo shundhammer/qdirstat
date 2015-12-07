@@ -120,8 +120,9 @@ namespace QDirStat
 	 *
 	 * 'sendSignals' indicates whether or not to send deletingChild() and
 	 * childDeleted() signals.
-         *
-	 * A selectionChanged() signal will be sent in any case if there was a selected item.
+	 *
+	 * A selectionChanged() signal will be sent in any case if there was a
+	 * selected item.
 	 **/
 	void clear( bool sendSignals = false );
 
@@ -138,7 +139,7 @@ namespace QDirStat
 	 * This is just a convenience method that maps to
 	 *    DirTree::root()->locate( url, findDotEntries )
 	 **/
-	FileInfo *	locate( QString url, bool findDotEntries = false )
+	FileInfo * locate( QString url, bool findDotEntries = false )
 	    { return _root ? _root->locate( url, findDotEntries ) : 0; }
 
 #if 0
@@ -162,12 +163,12 @@ namespace QDirStat
 	 * device number a file resides on can be obtained.
 	 * Remember, that's what this QDirStat business is all about.  ;-)
 	 **/
-	bool	crossFileSystems() const { return _crossFileSystems; }
+	bool crossFileSystems() const { return _crossFileSystems; }
 
 	/**
 	 * Set or unset the "cross file systems" flag.
 	 **/
-	void	setCrossFileSystems( bool doCross ) { _crossFileSystems = doCross; }
+	void setCrossFileSystems( bool doCross ) { _crossFileSystems = doCross; }
 
 	/**
 	 * Return the tree's current selection.
@@ -181,7 +182,7 @@ namespace QDirStat
 	 *
 	 * NOTE: This method returns 0 if nothing is selected.
 	 **/
-	FileInfo *	selection() const { return _selection; }
+	FileInfo * selection() const { return _selection; }
 
 	/**
 	 * Notification that a child has been added.

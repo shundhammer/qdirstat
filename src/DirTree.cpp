@@ -50,13 +50,13 @@ DirTree::readConfig()
     KConfig * config = kapp->config();
     config->setGroup( "Directory Reading" );
 
-    _crossFileSystems		= config->readBoolEntry( "CrossFileSystems",	 false );
-    _enableLocalDirReader	= config->readBoolEntry( "EnableLocalDirReader", true  );
+    _crossFileSystems	  = config->readBoolEntry( "CrossFileSystems",	   false );
+    _enableLocalDirReader = config->readBoolEntry( "EnableLocalDirReader", true	 );
     // FIXME
     // FIXME
 #else
-    _crossFileSystems		= false;
-    _enableLocalDirReader	= true;
+    _crossFileSystems	  = false;
+    _enableLocalDirReader = true;
 #endif
 }
 

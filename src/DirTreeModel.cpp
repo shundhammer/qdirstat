@@ -65,6 +65,15 @@ void DirTreeModel::createTree()
     clear();
     _tree = new DirTree();
     CHECK_NEW( _tree );
+
+    connect( _tree, SIGNAL( finished()	      ),
+	     this,  SLOT  ( readingFinished() ) );
+
+    connect( _tree, SIGNAL( aborted()	      ),
+	     this,  SLOT  ( readingAborted()  ) );
+
+    connect( _tree, SIGNAL( finalizeLocal( DirInfo * ) ),
+	     this,  SLOT  ( finalizeLocal( DirInfo * ) ) );
 }
 
 
@@ -195,7 +204,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 	case Qt::DisplayRole:
 	    {
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-                return columnText( item, col );
+		return columnText( item, col );
 	    }
 
 	case Qt::TextAlignmentRole:
@@ -322,35 +331,75 @@ QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
 QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 {
     CHECK_PTR( item );
-    
+
     switch ( col )
     {
-        case NameCol:
-            {
-                if ( item->isDotEntry() )
-                    return FileInfo::dotEntryName();
-                else
-                    return item->name();
-            }
+	case NameCol:
+	    {
+		if ( item->isDotEntry() )
+		    return FileInfo::dotEntryName();
+		else
+		    return item->name();
+	    }
 
 #if TODO
-            // TO DO
-            // TO DO
-            // TO DO
-            // Check out src-unported/DirTreeView.cpp
-            
-        case PercentBarCol:	return QVariant();
-        case PercentNumCol:	return "TO DO";
-        case TotalSizeCol:	return "TO DO";
-        case OwnSizeCol:	return "TO DO";
-        case TotalItemsCol:	return "TO DO";
-        case TotalFilesCol:	return "TO DO";
-        case TotalSubDirsCol:   return "TO DO";
-        case LatestMTimeCol:    return "TO DO";
-            // TO DO
-            // TO DO
-            // TO DO
+	    // TO DO
+	    // TO DO
+	    // TO DO
+	    // Check out src-unported/DirTreeView.cpp
+
+	case PercentBarCol:	return QVariant();
+	case PercentNumCol:	return "TO DO";
+	case TotalSizeCol:	return "TO DO";
+	case OwnSizeCol:	return "TO DO";
+	case TotalItemsCol:	return "TO DO";
+	case TotalFilesCol:	return "TO DO";
+	case TotalSubDirsCol:	return "TO DO";
+	case LatestMTimeCol:	return "TO DO";
+	    // TO DO
+	    // TO DO
+	    // TO DO
 #endif
-        default: return QVariant();
+	default: return QVariant();
+    }
+}
+
+
+void DirTreeModel::readingFinished()
+{
+    // DEBUG
+    // DEBUG
+    // DEBUG
+
+    FileInfoIterator it( _tree->root() );
+    logDebug() << "Root children:" << endl;
+
+    while ( *it )
+    {
+	logDebug() << "--> " << *it << endl;
+	it.next();
+    }
+
+    // DEBUG
+    // DEBUG
+    // DEBUG
+}
+
+
+void DirTreeModel::readingAborted()
+{
+    // TO DO
+}
+
+
+void DirTreeModel::finalizeLocal( DirInfo * dir )
+{
+    FileInfoIterator it( dir );
+    logDebug() << "Children of " << dir << endl;
+
+    while ( *it )
+    {
+	logDebug() << "--> " << *it << endl;
+	it.next();
     }
 }

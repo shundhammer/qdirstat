@@ -110,34 +110,34 @@ namespace QDirStat
 
     public:
 
-        // Mapping of tree items to model rows and vice versa.
-        //
-        // This is in the model and not in the FileInfo class to encapsulate
-        // handling of the "dot entry". In this case, it is handled as a
-        // separate subdirectory. But this might change in the future, or it
-        // might even become configurable.
+	// Mapping of tree items to model rows and vice versa.
+	//
+	// This is in the model and not in the FileInfo class to encapsulate
+	// handling of the "dot entry". In this case, it is handled as a
+	// separate subdirectory. But this might change in the future, or it
+	// might even become configurable.
 
-        /**
-         * Find the child number 'childNo' among the children of 'parent'.
-         * Return 0 if not found.
-         **/
-        FileInfo * findChild( FileInfo * parent, int childNo ) const;
+	/**
+	 * Find the child number 'childNo' among the children of 'parent'.
+	 * Return 0 if not found.
+	 **/
+	FileInfo * findChild( FileInfo * parent, int childNo ) const;
 
-        /**
-         * Find the index (the number, starting with 0) of 'child' among its
-         * parent's children.
-         **/
-        int childIndex( FileInfo * child ) const;
+	/**
+	 * Find the index (the number, starting with 0) of 'child' among its
+	 * parent's children.
+	 **/
+	int childIndex( FileInfo * child ) const;
 
-        /**
-         * Count the direct children (including the "dot entry") of 'parent'.
-         **/
-        int countDirectChildren( FileInfo * parent ) const;
+	/**
+	 * Count the direct children (including the "dot entry") of 'parent'.
+	 **/
+	int countDirectChildren( FileInfo * parent ) const;
 
 
-        //
-        // Icons
-        //
+	//
+	// Icons
+	//
 
 	QPixmap	openDirIcon()		const	{ return _openDirIcon;		}
 	QPixmap	closedDirIcon()		const	{ return _closedDirIcon;	}
@@ -157,47 +157,68 @@ namespace QDirStat
 	// Reimplented from QAbstractItemModel:
 	//
 
-        /**
-         * Return the number of rows (direct tree children) for 'parent'.
-         **/
+	/**
+	 * Return the number of rows (direct tree children) for 'parent'.
+	 **/
 	virtual int rowCount   ( const QModelIndex & parent ) const Q_DECL_OVERRIDE;
 
-        /**
-         * Return the number of columns for 'parent'.
-         **/
+	/**
+	 * Return the number of columns for 'parent'.
+	 **/
 	virtual int columnCount( const QModelIndex & parent ) const Q_DECL_OVERRIDE;
 
-        /**
-         * Return data to be displayed for the specified model index and role.
-         **/
+	/**
+	 * Return data to be displayed for the specified model index and role.
+	 **/
 	virtual QVariant data  ( const QModelIndex & index, int role ) const Q_DECL_OVERRIDE;
 
-        /**
-         * Return header data (in this case: column header texts) for the
-         * specified section (column number).
-         **/
-	virtual QVariant headerData( int             section,
-                                     Qt::Orientation orientation,
-                                     int             role ) const Q_DECL_OVERRIDE;
+	/**
+	 * Return header data (in this case: column header texts) for the
+	 * specified section (column number).
+	 **/
+	virtual QVariant headerData( int	     section,
+				     Qt::Orientation orientation,
+				     int	     role ) const Q_DECL_OVERRIDE;
 
-        /**
-         * Return item flags for the specified model index. This specifies if
-         * the item can be selected, edited etc.
-         **/
+	/**
+	 * Return item flags for the specified model index. This specifies if
+	 * the item can be selected, edited etc.
+	 **/
 	virtual Qt::ItemFlags flags( const QModelIndex &index ) const Q_DECL_OVERRIDE;
 
-        /**
-         * Return the model index for the specified row (direct tree child
-         * number) and column of item 'parent'.
-         **/
-        virtual QModelIndex index( int row,
-                                   int column,
-                                   const QModelIndex & parent = QModelIndex() ) const Q_DECL_OVERRIDE;
+	/**
+	 * Return the model index for the specified row (direct tree child
+	 * number) and column of item 'parent'.
+	 **/
+	virtual QModelIndex index( int row,
+				   int column,
+				   const QModelIndex & parent = QModelIndex() ) const Q_DECL_OVERRIDE;
 
-        /**
-         * Return the parent model index of item 'index'.
-         **/
-        virtual QModelIndex parent( const QModelIndex & index ) const Q_DECL_OVERRIDE;
+	/**
+	 * Return the parent model index of item 'index'.
+	 **/
+	virtual QModelIndex parent( const QModelIndex & index ) const Q_DECL_OVERRIDE;
+
+
+    protected slots:
+
+	/**
+	 * Process notification that reading the dir tree is completely
+	 * finished.
+	 **/
+	void readingFinished();
+
+	/**
+	 * Process notification that reading the dir tree was aborted by the
+	 * user.
+	 **/
+	void readingAborted();
+
+	/**
+	 * Process notification of end of one read job at this level and
+	 * finalize display of this level.
+	 **/
+	void finalizeLocal( DirInfo *dir );
 
 
     protected:
@@ -221,10 +242,10 @@ namespace QDirStat
 	 **/
 	int mappedCol( unsigned viewCol ) const;
 
-        /**
-         * Return the text for (model) column 'col' for dir tree item 'item'.
-         **/
-        QVariant columnText( FileInfo * item, int col ) const;
+	/**
+	 * Return the text for (model) column 'col' for dir tree item 'item'.
+	 **/
+	QVariant columnText( FileInfo * item, int col ) const;
 
 
 	//
