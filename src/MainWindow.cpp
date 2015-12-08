@@ -34,6 +34,7 @@ MainWindow::MainWindow():
     _ui->dirTreeView->setModel( _sortModel );
     _ui->dirTreeView->setSortingEnabled( true );
     _ui->dirTreeView->setRootIsDecorated( true );
+    _ui->dirTreeView->expandToDepth( 2 ); // TO DO
 
 #if 0
     connect( _ui->dirTreeView->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ),
