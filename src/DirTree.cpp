@@ -62,7 +62,7 @@ DirTree::readConfig()
 
 
 void
-DirTree::setRoot( FileInfo *newRoot )
+DirTree::setRoot( DirInfo *newRoot )
 {
     if ( _root )
     {
@@ -73,6 +73,20 @@ DirTree::setRoot( FileInfo *newRoot )
     }
 
     _root = newRoot;
+}
+
+
+FileInfo *
+DirTree::firstToplevel() const
+{
+    return _root ? _root->firstChild() : 0;
+}
+
+
+bool
+DirTree::isToplevel( FileInfo *item ) const
+{
+    return item && item->parent() && ! item->parent()->parent();
 }
 
 
@@ -104,25 +118,28 @@ DirTree::startReading( const QString & rawUrl )
 {
     QFileInfo fileInfo( rawUrl );
     QString url = fileInfo.absoluteFilePath();
-    logDebug() << "rawUrl: \"" << rawUrl
-	       << "\" url: \"" << url << "\"" << endl;
+    logDebug() << "rawUrl: \"" << rawUrl << "\"" << endl;
+    logDebug() << "   url: \"" << url    << "\"" << endl;
 
     _isBusy = true;
     emit startingReading();
 
-    setRoot( 0 );
+    DirInfo * newRoot = new DirInfo( this );
+    CHECK_NEW( newRoot );
+    setRoot( newRoot );
     readConfig();
 
-    _root = LocalDirReadJob::stat( url, this );
-    CHECK_PTR( _root );
+    FileInfo * item = LocalDirReadJob::stat( url, this, _root );
+    CHECK_PTR( item );
 
-    if ( _root )
+    if ( item )
     {
-	childAddedNotify( _root );
+	childAddedNotify( item );
 
-	if ( _root->isDir() )
+	if ( item->isDir() )
 	{
-	    DirInfo *dir = (DirInfo *) _root;
+	    DirInfo * dir = dynamic_cast<DirInfo *>( item );
+	    CHECK_PTR( dir );
 	    addJob( new LocalDirReadJob( this, dir ) );
 	}
 	else
@@ -149,7 +166,7 @@ DirTree::refresh( FileInfo *subtree )
 
     if ( ! subtree || ! subtree->parent() )	// Refresh all (from root)
     {
-	startReading( QDir::cleanPath( _root->url() ) );
+	startReading( QDir::cleanPath( firstToplevel()->url() ) );
     }
     else	// Refresh subtree
     {

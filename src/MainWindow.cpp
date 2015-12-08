@@ -35,8 +35,10 @@ MainWindow::MainWindow():
     _ui->dirTreeView->setSortingEnabled( true );
     _ui->dirTreeView->setRootIsDecorated( true );
 
+#if 0
     connect( _ui->dirTreeView->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ),
 	     _ui->dirTreeView,		 SLOT  ( sortByColumn	     ( int, Qt::SortOrder ) ) );
+#endif
     _ui->dirTreeView->header()->setSortIndicator( QDirStat::DirTreeModel::NameCol, Qt::AscendingOrder );
 
 

@@ -30,9 +30,13 @@ namespace QDirStat
     /**
      * This class provides some infrastructure as well as global data for a
      * directory tree. It acts as the glue that holds things together: The root
-     * item from which to descend into the subtree, the read queue and some
+     * item from which to descend into the subtrees, the read queue and some
      * global policies (like whether or not to cross file systems while reading
      * directories).
+     *
+     * Notice that this class uses a "pseudo root" to better conform with Qt's
+     * notion of tree views and the corresponding data models: They use an
+     * invisible root item to support multiple toplevel items.
      *
      * @short Directory tree global data and infrastructure
      **/
@@ -104,16 +108,27 @@ namespace QDirStat
     public:
 
 	/**
-	 * Returns the root item of this tree.
-	 *
-	 * Currently, there can only be one single root item for each tree.
-	 */
-	FileInfo * root() const { return _root; }
+	 * Return the root item of this tree. Notice that this is a pseudo
+	 * root that doesn not really correspond to a filesystem object.
+	 **/
+	DirInfo * root() const { return _root; }
 
 	/**
 	 * Sets the root item of this tree.
 	 **/
-	void setRoot( FileInfo *newRoot );
+	void setRoot( DirInfo *newRoot );
+
+	/**
+	 * Return the first toplevel item of this tree or 0 if there is
+	 * none. This is the logical root item.
+	 **/
+	FileInfo * firstToplevel() const;
+
+	/**
+	 * Return 'true' if 'item' is a toplevel item, i.e. a direct child of
+	 * the root item.
+	 **/
+	bool isToplevel( FileInfo *item ) const;
 
 	/**
 	 * Clear all items of this tree.
@@ -338,7 +353,7 @@ namespace QDirStat
 
     protected:
 
-	FileInfo *	_root;
+	DirInfo *	_root;
 	FileInfo *	_selection;
 	DirReadJobQueue _jobQueue;
 	bool		_crossFileSystems;

@@ -48,9 +48,9 @@ FileInfo::FileInfo( DirTree    * tree,
 
 
 FileInfo::FileInfo( const QString & filenameWithoutPath,
-		     struct stat  * statInfo,
-		     DirTree	  * tree,
-		     DirInfo	  * parent )
+		    struct stat   * statInfo,
+		    DirTree	  * tree,
+		    DirInfo	  * parent )
     : _parent( parent )
     , _next( 0 )
     , _tree( tree )
@@ -188,7 +188,7 @@ FileInfo::url() const
 	if ( isDotEntry() )	// don't append "/." for dot entries
 	    return parentUrl;
 
-	if ( ! parentUrl.endsWith( "/" ) ) // avoid duplicating slashes
+	if ( ! parentUrl.endsWith( "/" ) && ! _name.startsWith( "/" ) )
 	    parentUrl += "/";
 
 	return parentUrl + _name;

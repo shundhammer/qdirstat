@@ -274,20 +274,28 @@ LocalDirReadJob::stat( const QString & url,
 
     if ( lstat( url.toUtf8(), &statInfo ) == 0 ) // lstat() OK
     {
-	QString name = parent ? baseName( url ) : url;
-
 	if ( S_ISDIR( statInfo.st_mode ) )	// directory?
 	{
-	    DirInfo * dir = new DirInfo( name, &statInfo, tree, parent );
+	    DirInfo * dir = new DirInfo( url, &statInfo, tree, parent );
 	    CHECK_NEW( dir );
 
-	    if ( dir && parent && dir->device() != parent->device() )
+	    if ( parent )
+		parent->insertChild( dir );
+
+	    if ( dir && parent && tree->isToplevel( dir ) && dir->device() != parent->device() )
 		dir->setMountPoint();
 
 	    return dir;
 	}
 	else					// no directory
-	    return new FileInfo( name, &statInfo, tree, parent );
+	{
+	    FileInfo * file = new FileInfo( url, &statInfo, tree, parent );
+
+	    if ( parent )
+		parent->insertChild( file );
+
+	    return file;
+	}
     }
     else // lstat() failed
     {

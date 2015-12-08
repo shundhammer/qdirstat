@@ -25,13 +25,11 @@ DirInfo::DirInfo( DirTree * tree,
     if ( asDotEntry )
     {
         _isDotEntry = true;
-        _dotEntry   = 0;
         _name       = dotEntryName();
     }
     else
     {
-        _isDotEntry = false;
-        _dotEntry   = new DirInfo( tree, this, true );
+	_readState  = DirFinished;
     }
 }
 
