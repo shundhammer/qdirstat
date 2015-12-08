@@ -188,10 +188,10 @@ FileInfo::url() const
 	if ( isDotEntry() )	// don't append "/." for dot entries
 	    return parentUrl;
 
-	if ( parentUrl == "/" ) // avoid duplicating slashes
-	    return parentUrl + _name;
-	else
-	    return parentUrl + "/" + _name;
+	if ( ! parentUrl.endsWith( "/" ) ) // avoid duplicating slashes
+	    parentUrl += "/";
+
+	return parentUrl + _name;
     }
     else
 	return _name;
@@ -202,30 +202,6 @@ QString
 FileInfo::debugUrl() const
 {
     return url() + ( isDotEntry() ? ( QString( "/" ) + dotEntryName() ) : "" );
-}
-
-
-QString
-FileInfo::urlPart( int targetLevel ) const
-{
-    int level = treeLevel();	// Cache this - it's expensive!
-
-    if ( level < targetLevel )
-    {
-	logError() << "URL level " << targetLevel
-		   << " requested, this is level " << level << endl;
-	return "";
-    }
-
-    const FileInfo *item = this;
-
-    while ( level > targetLevel )
-    {
-	level--;
-	item = item->parent();
-    }
-
-    return item->name();
 }
 
 

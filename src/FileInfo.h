@@ -144,14 +144,6 @@ namespace QDirStat
 	QString debugUrl() const;
 
 	/**
-	 * Returns part no. "level" of this object's URL, i.e. traverses up the
-	 * tree until this tree level is reached and returns this predecessor's
-	 * @ref name() . This is useful for tree searches in symmetrical trees
-	 * to find an item's counterpart in the other tree.
-	 **/
-	QString urlPart( int level ) const;
-
-	/**
 	 * Returns the major and minor device numbers of the device this file
 	 * resides on or 0 if this is a remote file.
 	 **/
