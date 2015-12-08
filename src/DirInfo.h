@@ -279,11 +279,11 @@ namespace QDirStat
 	/**
 	 * Get the current state of the directory reading process:
 	 *
-	 *    DirQueued	waiting in the directory read queue
-	 *    DirReading	reading in progress
-	 *    DirFinished	reading finished and OK
-	 *    DirAborted	reading aborted upon user request
-	 *    DirError		error while reading
+	 *    DirQueued	   waiting in the directory read queue
+	 *    DirReading   reading in progress
+	 *    DirFinished  reading finished and OK
+	 *    DirAborted   reading aborted upon user request
+	 *    DirError	   error while reading
 	 *
 	 * Reimplemented - inherited from @ref FileInfo.
 	 **/

@@ -335,6 +335,20 @@ FileInfo::locate( QString url, bool findDotEntries )
 }
 
 
+float FileInfo::subtreePercent()
+{
+    if ( ! parent()                      ||	// only if there is a parent as calculation base
+	 parent()->pendingReadJobs() > 0 ||	// not before subtree is finished reading
+	 parent()->totalSize() == 0      ||	// avoid division by zero
+	 isExcluded() )				// not if this is an excluded object (dir)
+    {
+	return -1.0;
+    }
+
+    return ( 100.0 * totalSize() ) / (float) parent()->totalSize();
+}
+
+
 QString FileInfo::dotEntryName()
 {
     return QObject::tr( "<Files>" );

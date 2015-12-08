@@ -257,6 +257,12 @@ namespace QDirStat
 	 **/
 	QVariant ownSizeColText( FileInfo * item ) const;
 
+	/**
+	 * Format a percentage value as string if it is non-negative.
+	 * Return QVariant() if it is negative.
+	 **/
+	QVariant formatPercent( float percent ) const;
+
 
 	//
 	// Data members

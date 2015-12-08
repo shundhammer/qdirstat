@@ -246,8 +246,6 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
 		CHECK_PTR( item );
 
-		logDebug() << "SortRole col " << col << " for " << item << endl;
-
 		if ( col == _readJobsCol && item->isBusy() )
 		    return item->pendingReadJobs();
 
@@ -386,18 +384,24 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	case NameCol:		return item->name();
 	case PercentBarCol:	return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
 	case OwnSizeCol:	return ownSizeColText( item );
+	case PercentNumCol:	return formatPercent( item->subtreePercent() );
 	case LatestMTimeCol:	return formatTime( item->latestMtime() );
-
-#if 0
-	case PercentNumCol:	return "TO DO";
-	case TotalSizeCol:	return "TO DO";
-	case TotalItemsCol:	return "TO DO";
-	case TotalFilesCol:	return "TO DO";
-	case TotalSubDirsCol:	return "TO DO";
-#endif
-
-	default: return QVariant();
     }
+
+    if ( item->isDir() || item->isDotEntry() )
+    {
+	QString prefix = item->readState() == DirAborted ? ">" : "";
+
+	switch ( col )
+	{
+	    case TotalSizeCol:	  return prefix + formatSize( item->totalSize() );
+	    case TotalItemsCol:	  return prefix + QString( "%1" ).arg( item->totalItems() );
+	    case TotalFilesCol:	  return prefix + QString( "%1" ).arg( item->totalFiles() );
+	    case TotalSubDirsCol: return prefix + QString( "%1" ).arg( item->totalSubDirs() );
+	}
+    }
+
+    return QVariant();
 }
 
 
@@ -493,3 +497,16 @@ void DirTreeModel::readingFinished( DirInfo * dir )
 	logDebug() << "No children in " << dir << endl;
     }
 }
+
+
+QVariant DirTreeModel::formatPercent( float percent ) const
+{
+    if ( percent < 0.0 )	// Invalid percentage?
+	return QVariant();
+
+    QString text;
+    text.sprintf( "%.1f%%", percent );
+
+    return text;
+}
+

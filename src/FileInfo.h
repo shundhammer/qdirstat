@@ -234,7 +234,8 @@ namespace QDirStat
 	virtual FileSize totalBlocks() { return _blocks; }
 
 	/**
-	 * Returns the total number of children in this subtree, excluding this item.
+	 * Returns the total number of children in this subtree, excluding this
+	 * item.
 	 * Derived classes that have children should overwrite this.
 	 **/
 	virtual int totalItems() { return 0; }
@@ -258,6 +259,16 @@ namespace QDirStat
 	 * Derived classes that have children should overwrite this.
 	 **/
 	virtual time_t latestMtime() { return _mtime; }
+
+	/**
+	 * Return the percentage of this subtree in regard to its parent
+	 * (0.0..100.0). Return a negative value if for any reason this cannot
+	 * be calculated or it would not make any sense.
+	 *
+	 * Derived classes are free to overwrite this, but this default
+	 * implementation should work well enough.
+	 **/
+	virtual float subtreePercent();
 
 	/**
 	 * Returns 'true' if this had been excluded while reading.
