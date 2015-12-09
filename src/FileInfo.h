@@ -568,7 +568,6 @@ namespace QDirStat
 	// Keep this short in order to use as little memory as possible -
 	// there will be a _lot_ of entries of this kind!
 
-	qint32		_magic;
 	QString		_name;			// the file name (without path!)
 	bool		_isLocalFile  :1;	// flag: local or remote file?
 	bool		_isSparseFile :1;	// (cache) flag: sparse file (file with "holes")?
