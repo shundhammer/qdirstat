@@ -82,16 +82,21 @@ DirInfo::init()
     _isMountPoint       = false;
     _isExcluded         = false;
     _summaryDirty       = false;
-    _beingDestroyed     = false;
+    _deletingAll        = false;
     _readState          = DirQueued;
 }
 
 
 DirInfo::~DirInfo()
 {
-    _beingDestroyed = true;
-    FileInfo *child = _firstChild;
+    clear();
+}
 
+
+void DirInfo::clear()
+{
+    _deletingAll = true;
+    FileInfo *child = _firstChild;
 
     // Recursively delete all children.
 
@@ -102,12 +107,15 @@ DirInfo::~DirInfo()
         child = nextChild;
     }
 
+    _firstChild = 0;
+
 
     // Delete the dot entry.
 
     if ( _dotEntry )
     {
         delete _dotEntry;
+        _dotEntry = 0;
     }
 }
 
@@ -347,13 +355,13 @@ DirInfo::deletingChild( FileInfo *deletedChild )
     if ( _parent )
         _parent->deletingChild( deletedChild );
 
-    if ( ! _beingDestroyed && deletedChild->parent() == this )
+    if ( ! _deletingAll && deletedChild->parent() == this )
     {
         /**
          * Unlink the child from the children's list - but only if this doesn't
-         * happen recursively in the destructor of this object: No use
-         * bothering about the validity of the children's list if this will all
-         * be history anyway in a moment.
+         * happen recursively for all children of this object: No use bothering
+         * about the validity of the children's list if this will all be
+         * history anyway in a moment.
          **/
 
         unlinkChild( deletedChild );

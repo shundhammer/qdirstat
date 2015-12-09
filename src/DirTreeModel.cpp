@@ -33,6 +33,7 @@ DirTreeModel::DirTreeModel( QObject * parent ):
 		<< TotalFilesCol
 		<< TotalSubDirsCol
 		<< LatestMTimeCol;
+    createTree();
 }
 
 
@@ -43,27 +44,8 @@ DirTreeModel::~DirTreeModel()
 }
 
 
-void DirTreeModel::clear()
-{
-    if ( _tree )
-    {
-	beginResetModel();
-	delete _tree;
-	endResetModel();
-    }
-}
-
-
-void DirTreeModel::openUrl( const QString &url )
-{
-    createTree();
-    _tree->startReading( url );
-}
-
-
 void DirTreeModel::createTree()
 {
-    clear();
     _tree = new DirTree();
     CHECK_NEW( _tree );
 
@@ -75,6 +57,27 @@ void DirTreeModel::createTree()
 
     connect( _tree, SIGNAL( finished	   ( DirInfo * ) ),
 	     this,  SLOT  ( readingFinished( DirInfo * ) ) );
+}
+
+
+void DirTreeModel::clear()
+{
+    if ( _tree )
+    {
+	beginResetModel();
+	delete _tree;
+        createTree();
+	endResetModel();
+    }
+}
+
+
+void DirTreeModel::openUrl( const QString &url )
+{
+    if ( _tree && _tree->root() &&  _tree->root()->hasChildren() )
+        clear();
+
+    _tree->startReading( url );
 }
 
 
@@ -439,7 +442,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	case LatestMTimeCol:	return formatTime( item->latestMtime() );
     }
 
-    if ( item->isDir() || item->isDotEntry() )
+    if ( item->isDirInfo() || item->isDotEntry() )
     {
 	QString prefix = item->readState() == DirAborted ? ">" : "";
 
@@ -564,7 +567,7 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 
     while ( *it )
     {
-	if ( (*it)->isDir() &&
+	if ( (*it)->isDirInfo() &&
 	     (*it)->readState() != DirReading &&
 	     (*it)->readState() != DirQueued	)
 	{

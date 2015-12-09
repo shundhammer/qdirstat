@@ -67,7 +67,6 @@ namespace QDirStat
 	 **/
 	virtual ~DirInfo();
 
-
 	/**
 	 * Returns the total size in bytes of this subtree.
 	 *
@@ -295,6 +294,11 @@ namespace QDirStat
 	 **/
 	void setReadState( DirReadState newReadState );
 
+        /**
+         * Recursively delete all children, including the dot entry.
+         **/
+        void clear();
+
 	/**
 	 * Returns true if this is a @ref DirInfo object.
 	 *
@@ -351,7 +355,7 @@ namespace QDirStat
 	time_t		_latestMtime;
 
 	bool		_summaryDirty:1;	// dirty flag for the cached values
-	bool		_beingDestroyed:1;
+	bool		_deletingAll:1;
 	DirReadState	_readState;
 
 

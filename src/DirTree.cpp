@@ -21,9 +21,10 @@ using namespace QDirStat;
 DirTree::DirTree()
     : QObject()
 {
-    _root      = 0;
     _selection = 0;
     _isBusy    = false;
+    _root      = new DirInfo( this );
+    CHECK_NEW( _root );
 
     readConfig();
 
@@ -98,15 +99,7 @@ DirTree::clear( bool sendSignals )
     if ( _root )
     {
 	selectItem( 0 );
-
-	if ( sendSignals )
-	    emit deletingChild( _root );
-
-	delete _root;
-	_root = 0;
-
-	if ( sendSignals )
-	    emit childDeleted();
+        _root->clear();
     }
 
     _isBusy = false;
@@ -122,11 +115,10 @@ DirTree::startReading( const QString & rawUrl )
     logDebug() << "   url: \"" << url    << "\"" << endl;
 
     _isBusy = true;
-    emit startingReading();
 
-    DirInfo * newRoot = new DirInfo( this );
-    CHECK_NEW( newRoot );
-    setRoot( newRoot );
+    if ( _root->hasChildren() )
+        clear();
+    emit startingReading();
     readConfig();
 
     FileInfo * item = LocalDirReadJob::stat( url, this, _root );
