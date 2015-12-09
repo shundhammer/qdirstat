@@ -92,7 +92,7 @@ DirTree::isToplevel( FileInfo *item ) const
 
 
 void
-DirTree::clear( bool sendSignals )
+DirTree::clear()
 {
     _jobQueue.clear();
 

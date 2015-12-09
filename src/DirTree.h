@@ -132,14 +132,8 @@ namespace QDirStat
 
 	/**
 	 * Clear all items of this tree.
-	 *
-	 * 'sendSignals' indicates whether or not to send deletingChild() and
-	 * childDeleted() signals.
-	 *
-	 * A selectionChanged() signal will be sent in any case if there was a
-	 * selected item.
 	 **/
-	void clear( bool sendSignals = false );
+	void clear();
 
 	/**
 	 * Locate a child somewhere in the tree whose URL (i.e. complete path)
