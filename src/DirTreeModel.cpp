@@ -175,17 +175,21 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
     if ( ! _tree )
 	return 0;
 
-    FileInfo * parentItem;
+    int count = 0;
+    FileInfo * parentItem = 0;
 
     if ( parentIndex.isValid() )
 	parentItem = static_cast<FileInfo *>( parentIndex.internalPointer() );
     else
 	parentItem = _tree->root();
 
+    QString parentName = parentItem == _tree->root() ? "<root>" : parentItem->name();
+
     switch ( parentItem->readState() )
     {
 	case DirQueued:
-	    return 0; // Nothing yet
+            count = 0;  // Nothing yet
+	    break;
 
 	case DirReading:
 
@@ -201,20 +205,24 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 	    //
 	    // Better keep it simple: Don't report any children until they
 	    // are complete.
-	    return 0;
+            count = 0;
+            break;
 
 	case DirFinished:
 	case DirOnRequestOnly:
 	case DirCached:
 	case DirAborted:
 	case DirError:
-	    return countDirectChildren( parentItem );
+	    count = countDirectChildren( parentItem );
+            break;
 
 	// intentionally omitting 'default' case so the compiler can report
 	// missing enum values
     }
 
-    return 0;
+    logDebug() << parentName << ": " << count << endl;
+
+    return count;
 }
 
 
@@ -541,7 +549,11 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 	logDebug() << "Notifying view about " << count << " new children of" << dir << endl;
 	dumpChildren( dir );
 
+        DirReadState saved = dir->readState();
+        dir->setReadState( DirReading ); // Make sure rowCount() returns 0 for this dir
+
 	beginInsertRows( parentIndex, 0, count - 1 );
+        dir->setReadState( saved );
 	endInsertRows();
     }
 
@@ -565,6 +577,11 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 
 void DirTreeModel::readingFinished()
 {
+#if 0
+    beginResetModel();
+    endResetModel();
+#endif
+
     // TO DO: Finalize display
 
     dumpChildren( _tree->root(), "root" );
