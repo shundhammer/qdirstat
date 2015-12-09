@@ -139,6 +139,8 @@ LocalDirReadJob::startReading()
 		    if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
 		    {
 			DirInfo *subDir = new DirInfo( entryName, &statInfo, _tree, _dir );
+                        CHECK_NEW( subDir );
+
 			_dir->insertChild( subDir );
 			childAdded( subDir );
 
@@ -154,7 +156,9 @@ LocalDirReadJob::startReading()
 			{
 			    if ( _dir->device() == subDir->device() )	// normal case
 			    {
-				_tree->addJob( new LocalDirReadJob( _tree, subDir ) );
+                                LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
+                                CHECK_NEW( job );
+				_tree->addJob( job );
 			    }
 			    else	// The subdirectory we just found is a mount point.
 			    {
@@ -163,7 +167,9 @@ LocalDirReadJob::startReading()
 
 				if ( _tree->crossFileSystems() )
 				{
-				    _tree->addJob( new LocalDirReadJob( _tree, subDir ) );
+                                    LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
+                                    CHECK_NEW( job );
+				    _tree->addJob( job );
 				}
 				else
 				{
@@ -224,6 +230,7 @@ LocalDirReadJob::startReading()
 			else
 			{
 			    FileInfo *child = new FileInfo( entryName, &statInfo, _tree, _dir );
+                            CHECK_NEW( child );
 			    _dir->insertChild( child );
 			    childAdded( child );
 			}
@@ -238,6 +245,7 @@ LocalDirReadJob::startReading()
 		     * least create an (almost empty) entry as a placeholder.
 		     */
 		    DirInfo *child = new DirInfo( _tree, _dir, entry->d_name );
+                    CHECK_NEW( child );
 		    child->setReadState( DirError );
 		    _dir->insertChild( child );
 		    childAdded( child );
@@ -292,14 +300,20 @@ LocalDirReadJob::stat( const QString & url,
 	    if ( parent )
 		parent->insertChild( dir );
 
-	    if ( dir && parent && tree->isToplevel( dir ) && dir->device() != parent->device() )
+	    if ( dir && parent &&
+                 ! tree->isToplevel( dir )
+                 && dir->device() != parent->device() )
+            {
+                logDebug() << dir << " is a mount point" << endl;
 		dir->setMountPoint();
+            }
 
 	    return dir;
 	}
 	else					// no directory
 	{
 	    FileInfo * file = new FileInfo( url, &statInfo, tree, parent );
+            CHECK_NEW( file );
 
 	    if ( parent )
 		parent->insertChild( file );
