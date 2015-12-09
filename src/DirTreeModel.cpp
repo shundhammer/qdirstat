@@ -377,10 +377,10 @@ QModelIndex DirTreeModel::index( int row, int column, const QModelIndex & parent
 
     FileInfo *parent;
 
-    if ( ! parentIndex.isValid() )
-	parent = _tree->root();
-    else
+    if ( parentIndex.isValid() )
 	parent = static_cast<FileInfo *>( parentIndex.internalPointer() );
+    else
+	parent = _tree->root();
 
     FileInfo * child = findChild( parent, row );
 
@@ -413,10 +413,13 @@ QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
 
 QModelIndex DirTreeModel::modelIndex( FileInfo * item, int column ) const
 {
-    if ( ( _tree ) && _tree->root() && item )
-	return createIndex( childIndex( item ), column, item );
+    CHECK_PTR( _tree );
+    CHECK_PTR( _tree->root() );
+
+    if (  ! item || item == _tree->root() )
+        return QModelIndex();
     else
-	return QModelIndex();
+	return createIndex( childIndex( item ), column, item );
 }
 
 
@@ -602,7 +605,7 @@ QVariant DirTreeModel::formatPercent( float percent ) const
 }
 
 
-void DirTreeModel::dumpChildren( DirInfo * dir, const QString & dirName ) const
+void DirTreeModel::dumpChildren( FileInfo * dir, const QString & dirName ) const
 {
     if ( ! dir )
 	return;

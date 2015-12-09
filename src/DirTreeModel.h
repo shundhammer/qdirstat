@@ -277,9 +277,9 @@ namespace QDirStat
 	QVariant formatPercent( float percent ) const;
 
 	/**
-	 * For debugging: Dump direct children of 'dir' to the log.
+	 * For debugging: Dump direct children of 'item' to the log.
 	 **/
-	void dumpChildren( DirInfo * dir, const QString & dirName = QString() ) const;
+	void dumpChildren( FileInfo * item, const QString & dirName = QString() ) const;
 
 
 	//
