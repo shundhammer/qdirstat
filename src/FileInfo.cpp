@@ -95,11 +95,6 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
 	}
 #endif
     }
-
-#if 0
-#warning Debug mode: Huge sizes
-    _size <<= 10;
-#endif
 }
 
 
@@ -170,7 +165,7 @@ FileInfo::size() const
 {
     FileSize sz = _isSparseFile ? allocatedSize() : _size;
 
-    if ( _links > 1 )
+    if ( _links > 1 && ! isDir() )
 	sz /= _links;
 
     return sz;
