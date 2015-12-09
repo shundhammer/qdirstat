@@ -238,7 +238,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 	case Qt::DisplayRole:
 	    {
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-		// no need for CHECK_PTR( item ); - columnText() does that
+		// No need for CHECK_PTR( item ): columnText() does that.
 		return columnText( item, col );
 	    }
 
@@ -362,7 +362,7 @@ Qt::ItemFlags DirTreeModel::flags( const QModelIndex &index ) const
 
 QModelIndex DirTreeModel::index( int row, int column, const QModelIndex & parentIndex ) const
 {
-    if ( ( ! _tree ) || ! hasIndex( row, column, parentIndex ) )
+    if ( ! _tree  || ! _tree->root() || ! hasIndex( row, column, parentIndex ) )
 	return QModelIndex();
 
     FileInfo *parent;
@@ -390,7 +390,7 @@ QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
     CHECK_PTR( child );
     FileInfo * parent = child->parent();
 
-    if ( ! parent )
+    if ( ! parent || parent == _tree->root() )
 	return QModelIndex();
 
     int row = childIndex( parent );
