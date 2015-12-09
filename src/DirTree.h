@@ -225,20 +225,7 @@ namespace QDirStat
 	 **/
 	virtual void childDeletedNotify();
 
-	/**
-	 * Send a @ref progressInfo() signal to keep the user entertained while
-	 * directories are being read.
-	 **/
-	void sendProgressInfo( const QString &infoLine );
-
-	/**
-	 * Send a @ref finalizeLocal() signal to give views a chance to
-	 * finalize the display of this directory level - e.g. clean up dot
-	 * entries, set the final "expandable" state etc.
-	 **/
-	void sendFinalizeLocal( DirInfo *dir );
-
-	/**
+        /**
 	 * Send a @ref startingReading() signal.
 	 **/
 	void sendStartingReading();
@@ -252,6 +239,29 @@ namespace QDirStat
 	 * Send a @ref aborted() signal.
 	 **/
 	void sendAborted();
+
+	/**
+	 * Send a @ref progressInfo() signal to keep the user entertained while
+	 * directories are being read.
+	 **/
+	void sendProgressInfo( const QString &infoLine );
+
+        /**
+         * Send a @ref startingReading( DirInfo * ) signal.
+         **/
+        void sendStartingReading( DirInfo * dir );
+
+        /**
+         * Send a @ref finished( DirInfo * ) signal.
+         **/
+        void sendFinished( DirInfo * dir );
+
+	/**
+	 * Send a @ref finalizeLocal() signal to give views a chance to
+	 * finalize the display of this directory level - e.g. clean up dot
+	 * entries, set the final "expandable" state etc.
+	 **/
+	void sendFinalizeLocal( DirInfo *dir );
 
 	/**
 	 * Returns 'true' if directory reading is in progress in this tree.
@@ -298,7 +308,7 @@ namespace QDirStat
 	void startingReading();
 
 	/**
-	 * Emitted when reading this directory tree is finished.
+	 * Emitted when reading this directory tree is completely finished.
 	 **/
 	void finished();
 
@@ -306,6 +316,17 @@ namespace QDirStat
 	 * Emitted when reading this directory tree has been aborted.
 	 **/
 	void aborted();
+
+        /**
+         * Emitted when reading the specified directory is started.
+         **/
+        void startingReading( DirInfo * dir );
+
+        /**
+         * Emitted when reading the specified directory has been finished.
+         * This is sent AFTER finalizeLocal( DirInfo * dir ).
+         **/
+        void finished( DirInfo * dir );
 
 	/**
 	 * Emitted when reading a directory is finished.
@@ -317,6 +338,9 @@ namespace QDirStat
 	 * Use this signal to do similar cleanups like
 	 * @ref DirInfo::finalizeLocal(), e.g. cleaning up unused / undesired
 	 * dot entries like in @ref DirInfo::cleanupDotEntries().
+	 *
+	 * Notice that the dot entry might be removed and its children reparented
+	 * after this signal.
 	 **/
 	void finalizeLocal( DirInfo *dir );
 

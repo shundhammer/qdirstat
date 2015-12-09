@@ -30,6 +30,7 @@ public:
     virtual ~MainWindow();
 
 protected slots:
+    void expandTree();
     void notImplemented();
 
 protected:

@@ -148,6 +148,7 @@ LocalDirReadJob::startReading()
 			    subDir->setReadState( DirOnRequestOnly );
 			    _tree->sendFinalizeLocal( subDir );
 			    subDir->finalizeLocal();
+			    _tree->sendFinished( subDir );
 			}
 			else // No exclude rule matched
 			{
@@ -169,6 +170,7 @@ LocalDirReadJob::startReading()
 				    subDir->setReadState( DirOnRequestOnly );
 				    _tree->sendFinalizeLocal( subDir );
 				    subDir->finalizeLocal();
+				    _tree->sendFinished( subDir );
 				}
 			    }
 			}
@@ -244,18 +246,15 @@ LocalDirReadJob::startReading()
 	}
 
 	closedir( _diskDir );
-	logDebug() << "Finished reading " << _dir << endl;
 	_dir->setReadState( DirFinished );
-	_tree->sendFinalizeLocal( _dir );
-	_dir->finalizeLocal();
+	finishReading();
     }
     else
     {
 	_dir->setReadState( DirError );
-	_tree->sendFinalizeLocal( _dir );
-	_dir->finalizeLocal();
 	logWarning() << "opendir(" << dirName << ") failed" << endl;
 	// opendir() doesn't set 'errno' according to POSIX  :-(
+	finishReading();
     }
 
     finished();
@@ -263,11 +262,22 @@ LocalDirReadJob::startReading()
 }
 
 
+void
+LocalDirReadJob::finishReading()
+{
+    logDebug() << _dir << endl;
+
+    _tree->sendFinalizeLocal( _dir );
+    _dir->finalizeLocal();
+    _tree->sendFinished( _dir );
+}
+
+
 
 FileInfo *
 LocalDirReadJob::stat( const QString & url,
-		       DirTree       * tree,
-		       DirInfo       * parent )
+		       DirTree	     * tree,
+		       DirInfo	     * parent )
 {
     struct stat statInfo;
     logDebug() << "url: \"" << url << "\"" << endl;

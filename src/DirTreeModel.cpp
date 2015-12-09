@@ -71,9 +71,9 @@ void DirTreeModel::createTree()
 	     this,  SLOT  ( readingFinished() ) );
 
     connect( _tree, SIGNAL( aborted()	      ),
-	     this,  SLOT  ( readingAborted()  ) );
+	     this,  SLOT  ( readingFinished() ) );
 
-    connect( _tree, SIGNAL( finalizeLocal  ( DirInfo * ) ),
+    connect( _tree, SIGNAL( finished	   ( DirInfo * ) ),
 	     this,  SLOT  ( readingFinished( DirInfo * ) ) );
 }
 
@@ -103,15 +103,15 @@ void DirTreeModel::setColumns( QList<Column> columns )
 }
 
 
-int DirTreeModel::mappedCol( unsigned viewCol ) const
+int DirTreeModel::mappedCol( int viewCol ) const
 {
-    if ( (int) viewCol >= colCount() )
+    if ( viewCol < 0 || viewCol >= colCount() )
     {
-	logError() << "Invalid view column no.: " << viewCol << endl;
+	// logError() << "Invalid view column no.: " << viewCol << endl;
 	return 0;
     }
 
-    return _colMapping.at( (int) viewCol );
+    return _colMapping.at( viewCol );
 }
 
 
@@ -182,7 +182,39 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
     else
 	parentItem = _tree->root();
 
-    return countDirectChildren( parentItem );
+    switch ( parentItem->readState() )
+    {
+	case DirQueued:
+	    return 0; // Nothing yet
+
+	case DirReading:
+
+	    // Don't mess with directories that are currently being read:
+	    // If we tell our view about them, the view might begin fetching
+	    // model indexes for them, and when the tree later sends the
+	    // readingFinished() signal, the beginInsertRows() call in our
+	    // readingFinished() slot will confuse the view; it would assume
+	    // that the number of children reported in that beginInsertRows()
+	    // call needs to be added to the number reported here. We'd have to
+	    // keep track how many children we already reported, and how many
+	    // new ones to report later.
+	    //
+	    // Better keep it simple: Don't report any children until they
+	    // are complete.
+	    return 0;
+
+	case DirFinished:
+	case DirOnRequestOnly:
+	case DirCached:
+	case DirAborted:
+	case DirError:
+	    return countDirectChildren( parentItem );
+
+	// intentionally omitting 'default' case so the compiler can report
+	// missing enum values
+    }
+
+    return 0;
 }
 
 
@@ -310,7 +342,6 @@ Qt::ItemFlags DirTreeModel::flags( const QModelIndex &index ) const
 {
     if ( ! index.isValid() )
     {
-	logWarning() << "Invalid ModelIndex" << endl;
 	return Qt::NoItemFlags;
     }
 
@@ -363,11 +394,21 @@ QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
 	return QModelIndex();
 
     int row = childIndex( parent );
-    return createIndex( row, 0, parent );
+    return createIndex( row, 0, child );
 }
 
 
 //---------------------------------------------------------------------------
+
+
+QModelIndex DirTreeModel::modelIndex( FileInfo * item, int column ) const
+{
+    if ( ( _tree ) && _tree->root() && item )
+	return createIndex( childIndex( item ), column, item );
+    else
+	return QModelIndex();
+}
+
 
 
 QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
@@ -381,7 +422,9 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
     switch ( col )
     {
-	case NameCol:		return item->name();
+	case NameCol:
+	    logDebug() << "data() fetched name of " << item << endl;
+	    return item->name();
 	case PercentBarCol:	return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
 	case OwnSizeCol:	return ownSizeColText( item );
 	case PercentNumCol:	return formatPercent( item->subtreePercent() );
@@ -446,56 +489,85 @@ QVariant DirTreeModel::ownSizeColText( FileInfo * item ) const
 }
 
 
-void DirTreeModel::readingFinished()
-{
-    beginResetModel();
-    endResetModel();
-    // DEBUG
-    // DEBUG
-    // DEBUG
-
-    FileInfoIterator it( _tree->root(), _dotEntryPolicy );
-    logDebug() << "Root children:" << endl;
-
-    while ( *it )
-    {
-	logDebug() << "--> " << *it << endl;
-	++it;
-    }
-
-    // DEBUG
-    // DEBUG
-    // DEBUG
-}
-
-
-void DirTreeModel::readingAborted()
-{
-    // TO DO
-}
-
-
 void DirTreeModel::readingFinished( DirInfo * dir )
 {
-    if ( ! dir )
-	return;
+    logDebug() << ( dir == _tree->root() ? "<root>" : dir->url() ) << endl;
 
-    FileInfoIterator it( dir, _dotEntryPolicy );
-
-    if ( dir->hasChildren() )
+    if ( anyAncestorBusy( dir ) )
     {
-	logDebug() << "Children of " << dir << endl;
-
-	while ( *it )
-	{
-	    logDebug() << "--> " << *it << endl;
-	    ++it;
-	}
+	logDebug() << "Ancestor busy - ignoring readingFinished for "
+		   << dir << endl;
     }
     else
     {
-	logDebug() << "No children in " << dir << endl;
+	newChildrenNotify( dir );
     }
+}
+
+
+bool DirTreeModel::anyAncestorBusy( FileInfo * item ) const
+{
+    while ( item )
+    {
+	if ( item->readState() == DirQueued ||
+	     item->readState() == DirReading )
+	{
+	    return true;
+	}
+
+	item = item->parent();
+    }
+
+    return false;
+}
+
+
+void DirTreeModel::newChildrenNotify( DirInfo * dir )
+{
+    logDebug() << ( dir == _tree->root() ? "<root>" : dir->url() ) << endl;
+
+    if ( ! dir )
+    {
+	logError() << "NULL DirInfo *" << endl;
+	return;
+    }
+
+    QModelIndex parentIndex = modelIndex( dir->parent() );
+    int count = countDirectChildren( dir );
+    dumpChildren( dir ); // DEBUG
+
+    if ( count > 0 )
+    {
+	logDebug() << "Notifying view about " << count << " new children of" << dir << endl;
+	dumpChildren( dir );
+
+	beginInsertRows( parentIndex, 0, count - 1 );
+	endInsertRows();
+    }
+
+    // If any readingFinished signals were ignored because a parent was not
+    // finished yet, now is the time to notify the view about those children,
+    // too.
+    FileInfoIterator it( dir, _dotEntryPolicy );
+
+    while ( *it )
+    {
+	if ( (*it)->isDir() &&
+	     (*it)->readState() != DirReading &&
+	     (*it)->readState() != DirQueued	)
+	{
+	    newChildrenNotify( static_cast<DirInfo *>(*it) );
+	}
+	++it;
+    }
+}
+
+
+void DirTreeModel::readingFinished()
+{
+    // TO DO: Finalize display
+
+    dumpChildren( _tree->root(), "root" );
 }
 
 
@@ -509,4 +581,35 @@ QVariant DirTreeModel::formatPercent( float percent ) const
 
     return text;
 }
+
+
+void DirTreeModel::dumpChildren( DirInfo * dir, const QString & dirName ) const
+{
+    if ( ! dir )
+	return;
+
+    QString name = dirName.isEmpty() ? dir->name() : dirName;
+
+    if ( name.isEmpty() && dir == _tree->root() )
+	name = "<root>";
+
+    FileInfoIterator it( dir, _dotEntryPolicy );
+
+    if ( dir->hasChildren() )
+    {
+	logDebug() << "\tChildren of " << name << endl;
+	int count = 0;
+
+	while ( *it )
+	{
+	    logDebug() << "\t	 #" << count++ << ": " << *it << endl;
+	    ++it;
+	}
+    }
+    else
+    {
+	logDebug() << "\t\tNo children in " << name << endl;
+    }
+}
+
 

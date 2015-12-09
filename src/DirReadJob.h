@@ -212,6 +212,12 @@ namespace QDirStat
 	 **/
 	virtual void startReading();
 
+	/**
+	 * Finish reading the directory: Send signals and finalize the
+	 * directory (clean up dot entries etc.).
+	 **/
+	void finishReading();
+
 
 	DIR * _diskDir;
 

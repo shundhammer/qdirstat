@@ -48,7 +48,7 @@ FileInfo::FileInfo( DirTree    * tree,
 
 
 FileInfo::FileInfo( const QString & filenameWithoutPath,
-		    struct stat   * statInfo,
+		    struct stat	  * statInfo,
 		    DirTree	  * tree,
 		    DirInfo	  * parent )
     : _parent( parent )
@@ -116,12 +116,12 @@ FileInfo::FileInfo( DirTree *	    tree,
     , _next( 0 )
     , _tree( tree )
 {
-    _name		= filenameWithoutPath;
-    _isLocalFile	= true;
-    _mode		= mode;
-    _size		= size;
-    _mtime		= mtime;
-    _links		= links;
+    _name	 = filenameWithoutPath;
+    _isLocalFile = true;
+    _mode	 = mode;
+    _size	 = size;
+    _mtime	 = mtime;
+    _links	 = links;
 
     if ( blocks < 0 )
     {
@@ -144,7 +144,6 @@ FileInfo::FileInfo( DirTree *	    tree,
 FileInfo::~FileInfo()
 {
     // NOP
-
 
     /**
      * The destructor should also take care about unlinking this object from
@@ -313,9 +312,9 @@ FileInfo::locate( QString url, bool findDotEntries )
 
 float FileInfo::subtreePercent()
 {
-    if ( ! parent()                      ||	// only if there is a parent as calculation base
+    if ( ! parent()			 ||	// only if there is a parent as calculation base
 	 parent()->pendingReadJobs() > 0 ||	// not before subtree is finished reading
-	 parent()->totalSize() == 0      ||	// avoid division by zero
+	 parent()->totalSize() == 0	 ||	// avoid division by zero
 	 isExcluded() )				// not if this is an excluded object (dir)
     {
 	return -1.0;
@@ -337,7 +336,7 @@ QString FileInfo::dotEntryName()
 QString QDirStat::formatSize( FileSize lSize )
 {
     QString sizeString;
-    int     unitIndex = 0;
+    int	    unitIndex = 0;
 
     static QStringList units;
 

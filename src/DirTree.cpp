@@ -141,10 +141,12 @@ DirTree::startReading( const QString & rawUrl )
 	    DirInfo * dir = dynamic_cast<DirInfo *>( item );
 	    CHECK_PTR( dir );
 	    addJob( new LocalDirReadJob( this, dir ) );
+	    emit finished( _root );
 	}
 	else
 	{
 	    _isBusy = false;
+	    emit finished( _root );
 	    emit finished();
 	}
     }
@@ -395,6 +397,23 @@ DirTree::sendAborted()
 {
     emit aborted();
 }
+
+
+void
+DirTree::sendStartingReading( DirInfo * dir )
+{
+    emit startingReading( dir );
+}
+
+
+void
+DirTree::sendFinished( DirInfo * dir )
+{
+    logDebug() << dir << endl;
+    emit finished( dir );
+}
+
+
 
 
 void

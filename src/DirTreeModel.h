@@ -208,22 +208,16 @@ namespace QDirStat
     protected slots:
 
 	/**
-	 * Process notification that reading the dir tree is completely
-	 * finished.
-	 **/
-	void readingFinished();
-
-	/**
-	 * Process notification that reading the dir tree was aborted by the
-	 * user.
-	 **/
-	void readingAborted();
-
-	/**
 	 * Process notification of that reading 'dir' is finished.
 	 * Other read jobs might still be pending.
 	 **/
 	void readingFinished( DirInfo *dir );
+
+	/**
+	 * Process notification that reading the dir tree is completely
+	 * finished.
+	 **/
+	void readingFinished();
 
 
     protected:
@@ -238,6 +232,11 @@ namespace QDirStat
 	void loadIcons();
 
 	/**
+	 * Return a model index for 'item' and 'column'.
+	 **/
+	QModelIndex modelIndex( FileInfo * item, int column = 0 ) const;
+
+	/**
 	 * Look up a column in the view in the column mapping to get the
 	 * corresponding model column: Column #3 in the view might or might not
 	 * be TotalSizeCol, depending on how the model is configured (what
@@ -245,7 +244,21 @@ namespace QDirStat
 	 *
 	 * See also setColumns().
 	 **/
-	int mappedCol( unsigned viewCol ) const;
+	int mappedCol( int viewCol ) const;
+
+	/**
+	 * Notify the view (with beginInsertRows() and endInsertRows()) about
+	 * new children (all the children of 'dir'). This might become
+	 * recursive if any of those children in turn are already finished.
+	 **/
+	void newChildrenNotify( DirInfo * dir );
+
+	/**
+	 * Return 'true' if 'item' or any ancestor (parent or parent's parent
+	 * etc.) is still busy, i.e. the read job for the directory itself (not
+	 * any children!) is still queued or currently reading.
+	 **/
+	bool anyAncestorBusy( FileInfo * item ) const;
 
 	/**
 	 * Return the text for (model) column 'col' for 'item'.
@@ -262,6 +275,11 @@ namespace QDirStat
 	 * Return QVariant() if it is negative.
 	 **/
 	QVariant formatPercent( float percent ) const;
+
+	/**
+	 * For debugging: Dump direct children of 'dir' to the log.
+	 **/
+	void dumpChildren( DirInfo * dir, const QString & dirName = QString() ) const;
 
 
 	//

@@ -41,14 +41,6 @@ public:
      **/
     void cd( const QString & newPath );
 
-#if 0
-    /**
-     * Obtain the current working directory's absolute path.
-     * This is useful for resolving/simplifying relative paths.
-     **/
-    QString currentDirPath() const;
-#endif
-
     /**
      * (Prematurely) restore the working directory. Unnecessary when this
      * object will be destroyed anyway since the destructor does exactly that.

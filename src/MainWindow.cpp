@@ -15,6 +15,7 @@
 #include "MainWindow.h"
 #include "Logger.h"
 #include "ExcludeRules.h"
+#include "DirTree.h"
 
 
 using namespace QDirStat;
@@ -27,24 +28,27 @@ MainWindow::MainWindow():
 {
     _ui->setupUi( this );
     _dirTreeModel = new QDirStat::DirTreeModel( this );
+#if 1
     _sortModel = new QSortFilterProxyModel( this );
     _sortModel->setSourceModel( _dirTreeModel );
     _sortModel->setSortRole( QDirStat::SortRole );
 
     _ui->dirTreeView->setModel( _sortModel );
+#else
+    _ui->dirTreeView->setModel( _dirTreeModel );
+#endif
     _ui->dirTreeView->setSortingEnabled( true );
     _ui->dirTreeView->setRootIsDecorated( true );
-    _ui->dirTreeView->expandToDepth( 2 ); // TO DO
 
-#if 0
-    connect( _ui->dirTreeView->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ),
-	     _ui->dirTreeView,		 SLOT  ( sortByColumn	     ( int, Qt::SortOrder ) ) );
-#endif
     _ui->dirTreeView->header()->setSortIndicator( QDirStat::DirTreeModel::NameCol, Qt::AscendingOrder );
+    _dirTreeModel->openUrl( ".." );
+
+    connect( _dirTreeModel->tree(),	SIGNAL( finished()   ),
+	     this,			SLOT  ( expandTree() ) );
 
 
     connect( _ui->actionQuit,		SIGNAL( triggered() ),
-	     qApp,			SLOT  ( quit()	   ) );
+	     qApp,			SLOT  ( quit()	    ) );
 
     // DEBUG
     // DEBUG
@@ -54,7 +58,6 @@ MainWindow::MainWindow():
     // DEBUG
     // DEBUG
 
-    _dirTreeModel->openUrl( ".." );
 }
 
 
@@ -98,3 +101,9 @@ void MainWindow::notImplemented()
     QMessageBox::warning( this, tr( "Error" ), tr( "Not implemented!" ) );
 }
 
+
+void MainWindow::expandTree()
+{
+    logDebug() << "Expanding tree" << endl;
+    _ui->dirTreeView->expandToDepth( 3 ); // TO DO
+}
