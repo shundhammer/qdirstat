@@ -58,7 +58,7 @@ CacheWriter::writeCache( const QString & fileName, DirTree *tree )
 	     "# Type\tpath\t\tsize\tmtime\t\t<optional fields>\n"
 	     "\n" );
 
-    writeTree( cache, tree->root() );
+    writeTree( cache, tree->root()->firstChild() );
     gzclose( cache );
 
     return true;
