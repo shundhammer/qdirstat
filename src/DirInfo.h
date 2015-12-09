@@ -338,6 +338,8 @@ namespace QDirStat
 	bool		_isDotEntry:1;		// Flag: is this entry a "dot entry"?
 	bool		_isMountPoint:1;	// Flag: is this a mount point?
 	bool		_isExcluded:1;		// Flag: was this directory excluded?
+	bool		_summaryDirty:1;	// dirty flag for the cached values
+	bool		_deletingAll:1;
 	int		_pendingReadJobs;	// number of open directories in this subtree
 
 	// Children management
@@ -354,8 +356,6 @@ namespace QDirStat
 	int		_totalFiles;
 	time_t		_latestMtime;
 
-	bool		_summaryDirty:1;	// dirty flag for the cached values
-	bool		_deletingAll:1;
 	DirReadState	_readState;
 
 
