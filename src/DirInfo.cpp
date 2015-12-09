@@ -97,6 +97,7 @@ void DirInfo::clear()
 {
     _deletingAll = true;
     FileInfo *child = _firstChild;
+    _firstChild = 0;
 
     // Recursively delete all children.
 
@@ -106,8 +107,6 @@ void DirInfo::clear()
         delete child;
         child = nextChild;
     }
-
-    _firstChild = 0;
 
 
     // Delete the dot entry.

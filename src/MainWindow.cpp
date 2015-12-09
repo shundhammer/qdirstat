@@ -16,6 +16,7 @@
 #include "Logger.h"
 #include "ExcludeRules.h"
 #include "DirTree.h"
+#include "DirTreeCache.h"
 
 
 using namespace QDirStat;
@@ -104,6 +105,9 @@ void MainWindow::notImplemented()
 
 void MainWindow::expandTree()
 {
+    QString cacheName( "/tmp/qdirstat.cache.gz" );
+    CacheWriter writer( cacheName, _dirTreeModel->tree() );
+    logDebug() << "Cache file written to " << cacheName << " ok: " << writer.ok() << endl;
     logDebug() << "Expanding tree" << endl;
     _ui->dirTreeView->expandToDepth( 3 ); // TO DO
 }

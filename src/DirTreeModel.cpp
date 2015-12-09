@@ -223,8 +223,7 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 	// missing enum values
     }
 
-    logDebug() << parentName << ": " << count << endl;
-
+    // logDebug() << parentName << ": " << count << endl;
     return count;
 }
 
@@ -434,7 +433,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     switch ( col )
     {
 	case NameCol:
-	    logDebug() << "data() fetched name of " << item << endl;
+	    // logDebug() << "data() fetched name of " << item << endl;
 	    return item->name();
 	case PercentBarCol:	return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
 	case OwnSizeCol:	return ownSizeColText( item );
