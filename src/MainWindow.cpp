@@ -29,14 +29,19 @@ MainWindow::MainWindow():
 {
     _ui->setupUi( this );
     _dirTreeModel = new QDirStat::DirTreeModel( this );
-#if 0
+#if 1
     _sortModel = new QSortFilterProxyModel( this );
     _sortModel->setSourceModel( _dirTreeModel );
     _sortModel->setSortRole( QDirStat::SortRole );
 
     _ui->dirTreeView->setModel( _sortModel );
     _ui->dirTreeView->setSortingEnabled( true );
-    _ui->dirTreeView->header()->setSortIndicator( QDirStat::DirTreeModel::NameCol, Qt::AscendingOrder );
+    QHeaderView * header = _ui->dirTreeView->header();
+    header->setSortIndicator( QDirStat::DirTreeModel::NameCol, Qt::AscendingOrder );
+    header->setStretchLastSection( false );
+
+    // TO DO: This is too strict. But it's better than the brain-dead defaults.
+    header->setSectionResizeMode( QHeaderView::ResizeToContents );
 #else
     logDebug() << "No sort model" << endl;
     _ui->dirTreeView->setModel( _dirTreeModel );
@@ -116,7 +121,7 @@ void MainWindow::expandTree()
 
 #if 1
     logDebug() << "Expanding tree" << endl;
-    _ui->dirTreeView->expandToDepth( 4 ); // TO DO
+    _ui->dirTreeView->expandToDepth( 2 ); // TO DO
 #endif
 
     // dumpModelTree( QModelIndex(), "" );
@@ -127,19 +132,38 @@ void MainWindow::itemClicked( const QModelIndex & index )
 {
     if ( index.isValid() )
     {
-        FileInfo * item = (FileInfo *) index.internalPointer();
-
         logDebug() << "Clicked row #" << index.row()
                    << " col #" << index.column()
-                   << " item: " << item
-            // << " parent: " << (void *) item->parent()
-                   << " data(0): " << _dirTreeModel->data( index, 0 ).toString()
+                   << " data(0): " << index.model()->data( index, 0 ).toString()
                    << endl;
+        logDebug() << "Ancestors: " << ancestors( index ).join( " -> " ) << endl;
     }
     else
     {
         logDebug() << "Invalid model index" << endl;
     }
+}
+
+
+QStringList MainWindow::ancestors( const QModelIndex & index )
+{
+    QStringList parents;
+    QModelIndex parent = index;
+
+    while ( parent.isValid() )
+    {
+        QVariant data = index.model()->data( parent, 0 );
+
+        if ( data.isValid() )
+        {
+            logDebug() << data.toString() << endl;
+            parents.prepend( data.toString() );
+        }
+
+        parent = index.model()->parent( parent );
+    }
+
+    return parents;
 }
 
 

@@ -261,13 +261,6 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
 		// No need for CHECK_PTR( item ): columnText() does that.
 		QVariant result = columnText( item, col );
-#if 0
-		logDebug() << "DisplayRole for row #" << index.row()
-			   << " col #" << index.column()
-			   << " item " << item
-			   << " -> " << result.toString()
-			   << endl;
-#endif
 		return result;
 	    }
 
@@ -324,7 +317,6 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		    default:		  return QVariant();
 		}
 	    }
-
 
 	default:
 	    return QVariant();
@@ -431,6 +423,8 @@ QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
 	return QModelIndex();
 
     int row = childIndex( parent );
+    // logDebug() << "Parent of " << child << " is " << parent << " #" << row << endl;
+
     return createIndex( row, 0, parent );
 }
 
