@@ -29,7 +29,7 @@ MainWindow::MainWindow():
 {
     _ui->setupUi( this );
     _dirTreeModel = new QDirStat::DirTreeModel( this );
-#if 1
+#if 0
     _sortModel = new QSortFilterProxyModel( this );
     _sortModel->setSourceModel( _dirTreeModel );
     _sortModel->setSortRole( QDirStat::SortRole );
@@ -132,9 +132,8 @@ void MainWindow::itemClicked( const QModelIndex & index )
         logDebug() << "Clicked row #" << index.row()
                    << " col #" << index.column()
                    << " item: " << item
-                   << " parent: " << (void *) item->parent()
-                   << " root: " << (void *) item->tree()->root()
-            // << " data(0): " << _dirTreeModel->data( index, 0 ).toString()
+            // << " parent: " << (void *) item->parent()
+                   << " data(0): " << _dirTreeModel->data( index, 0 ).toString()
                    << endl;
     }
     else

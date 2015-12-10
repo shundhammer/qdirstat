@@ -464,12 +464,15 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	return tr( "[%1 Read Jobs]" ).arg( item->pendingReadJobs() );
     }
 
+    QString prefix = item->readState() == DirAborted ? ">" : "";
+
     switch ( col )
     {
 	case NameCol:
 	    // logDebug() << "data() fetched name of " << item << endl;
 	    return item->name();
 	case PercentBarCol:	return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
+        case TotalSizeCol:	return prefix + formatSize( item->totalSize() );
 	case OwnSizeCol:	return ownSizeColText( item );
 	case PercentNumCol:	return formatPercent( item->subtreePercent() );
 	case LatestMTimeCol:	return formatTime( item->latestMtime() );
@@ -477,11 +480,8 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
     if ( item->isDirInfo() || item->isDotEntry() )
     {
-	QString prefix = item->readState() == DirAborted ? ">" : "";
-
 	switch ( col )
 	{
-	    case TotalSizeCol:	  return prefix + formatSize( item->totalSize() );
 	    case TotalItemsCol:	  return prefix + QString( "%1" ).arg( item->totalItems() );
 	    case TotalFilesCol:	  return prefix + QString( "%1" ).arg( item->totalFiles() );
 	    case TotalSubDirsCol: return prefix + QString( "%1" ).arg( item->totalSubDirs() );
@@ -544,9 +544,7 @@ void DirTreeModel::readJobFinished( DirInfo * dir )
     }
     else
     {
-#if 0
 	newChildrenNotify( dir );
-#endif
     }
 }
 
@@ -612,7 +610,7 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 
 void DirTreeModel::readingFinished()
 {
-#if 1
+#if 0
     beginResetModel();
     endResetModel();
 #endif
