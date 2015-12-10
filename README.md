@@ -5,7 +5,7 @@ Qt-based directory statistics: KDirStat without any KDE -- from the original KDi
 
 License: GPL V2
 
-Updated: 2015-12-07
+Updated: 2015-12-10
 
 
 ## Overview

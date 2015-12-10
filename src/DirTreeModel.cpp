@@ -431,7 +431,7 @@ QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
 	return QModelIndex();
 
     int row = childIndex( parent );
-    return createIndex( row, 0, child );
+    return createIndex( row, 0, parent );
 }
 
 
@@ -544,7 +544,9 @@ void DirTreeModel::readJobFinished( DirInfo * dir )
     }
     else
     {
+#if 0
 	newChildrenNotify( dir );
+#endif
     }
 }
 
@@ -610,7 +612,7 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 
 void DirTreeModel::readingFinished()
 {
-#if 0
+#if 1
     beginResetModel();
     endResetModel();
 #endif

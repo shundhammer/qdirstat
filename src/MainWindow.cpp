@@ -29,7 +29,7 @@ MainWindow::MainWindow():
 {
     _ui->setupUi( this );
     _dirTreeModel = new QDirStat::DirTreeModel( this );
-#if 0
+#if 1
     _sortModel = new QSortFilterProxyModel( this );
     _sortModel->setSourceModel( _dirTreeModel );
     _sortModel->setSortRole( QDirStat::SortRole );
@@ -108,29 +108,39 @@ void MainWindow::notImplemented()
 
 void MainWindow::expandTree()
 {
+#if 1
     QString cacheName( "/tmp/test-qdirstat.cache.gz" );
     CacheWriter writer( cacheName, _dirTreeModel->tree() );
     logDebug() << "Cache file written to " << cacheName << " ok: " << writer.ok() << endl;
-
-#if 0
-    logDebug() << "Setting model" << endl;
-    _ui->dirTreeView->setModel( _dirTreeModel );
 #endif
 
+#if 1
     logDebug() << "Expanding tree" << endl;
-    _ui->dirTreeView->expandToDepth( 3 ); // TO DO
+    _ui->dirTreeView->expandToDepth( 4 ); // TO DO
+#endif
 
-    dumpModelTree( QModelIndex(), "" );
+    // dumpModelTree( QModelIndex(), "" );
 }
 
 
 void MainWindow::itemClicked( const QModelIndex & index )
 {
-    logDebug() << "Clicked row #" << index.row()
-	       << " col #" << index.column()
-	       << " item " << (FileInfo *) index.internalPointer()
-	       << " data(0): " << _dirTreeModel->data( index, 0 ).toString()
-	       << endl;
+    if ( index.isValid() )
+    {
+        FileInfo * item = (FileInfo *) index.internalPointer();
+
+        logDebug() << "Clicked row #" << index.row()
+                   << " col #" << index.column()
+                   << " item: " << item
+                   << " parent: " << (void *) item->parent()
+                   << " root: " << (void *) item->tree()->root()
+            // << " data(0): " << _dirTreeModel->data( index, 0 ).toString()
+                   << endl;
+    }
+    else
+    {
+        logDebug() << "Invalid model index" << endl;
+    }
 }
 
 
