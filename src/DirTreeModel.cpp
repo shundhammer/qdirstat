@@ -186,9 +186,20 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
     else
 	parentItem = _tree->root();
 
-    QString parentName = parentItem == _tree->root() ? "<root>" : parentItem->name();
+    if ( ! parentItem->isDirInfo() )
+        return 0;
 
-    switch ( parentItem->readState() )
+    DirInfo * dir = dynamic_cast<DirInfo *>( parentItem );
+    CHECK_DYNAMIC_CAST( dir, "DirInfo *");
+    QString dirName = dir == _tree->root() ? "<root>" : dir->debugUrl();
+
+    if ( dir->isLocked() )
+    {
+        logDebug() << dirName << " is locked - returning 0" << endl;
+        return 0;
+    }
+
+    switch ( dir->readState() )
     {
 	case DirQueued:
 	    count = 0;	// Nothing yet
@@ -216,14 +227,14 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 	case DirCached:
 	case DirAborted:
 	case DirError:
-	    count = countDirectChildren( parentItem );
+	    count = countDirectChildren( dir );
 	    break;
 
 	// intentionally omitting 'default' case so the compiler can report
 	// missing enum values
     }
 
-    // logDebug() << parentName << ": " << count << endl;
+    // logDebug() << dirName << ": " << count << endl;
     return count;
 }
 
@@ -397,6 +408,7 @@ QModelIndex DirTreeModel::index( int row, int column, const QModelIndex & parent
 	parent = _tree->root();
 
     FileInfo * child = findChild( parent, row );
+    CHECK_PTR( child );
 
     if ( child )
 	return createIndex( row, column, child );
@@ -571,13 +583,10 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
     if ( count > 0 )
     {
 	logDebug() << "Notifying view about " << count << " new children of" << dir << endl;
-	dumpChildren( dir );
 
-	DirReadState saved = dir->readState();
-	dir->setReadState( DirReading ); // Make sure rowCount() returns 0 for this dir
-
+        dir->lock();
 	beginInsertRows( parentIndex, 0, count - 1 );
-	dir->setReadState( saved );
+	dir->unlock();
 	endInsertRows();
     }
 

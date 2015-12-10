@@ -36,6 +36,9 @@ protected slots:
 
 protected:
 
+    void dumpModelTree( const QModelIndex & index, const QString & indent );
+
+
     // Window close event ([x] icon in the top right window)
     virtual void closeEvent( QCloseEvent *event );
 

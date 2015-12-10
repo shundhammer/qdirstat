@@ -84,6 +84,7 @@ DirInfo::init()
     _summaryDirty       = false;
     _deletingAll        = false;
     _readState          = DirQueued;
+    _locked             = false;
 }
 
 

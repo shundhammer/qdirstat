@@ -295,6 +295,23 @@ namespace QDirStat
 	void setReadState( DirReadState newReadState );
 
         /**
+         * Check if this directory is locked. This is purely a user lock
+         * that can be used by the application. The DirInfo does not care
+         * about it at all.
+         **/
+        bool isLocked() const { return _locked; }
+
+        /**
+         * Set the user lock.
+         **/
+        void lock() { _locked = true; }
+
+        /**
+         * Unlock the user lock.
+         **/
+        void unlock() { _locked = false; }
+
+        /**
          * Recursively delete all children, including the dot entry.
          **/
         void clear();
@@ -339,7 +356,8 @@ namespace QDirStat
 	bool		_isMountPoint:1;	// Flag: is this a mount point?
 	bool		_isExcluded:1;		// Flag: was this directory excluded?
 	bool		_summaryDirty:1;	// dirty flag for the cached values
-	bool		_deletingAll:1;
+	bool		_deletingAll:1;         // Deleting complete children tree?
+        bool            _locked:1;              // User lock
 	int		_pendingReadJobs;	// number of open directories in this subtree
 
 	// Children management

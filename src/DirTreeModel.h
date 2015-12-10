@@ -175,7 +175,7 @@ namespace QDirStat
 	/**
 	 * Return data to be displayed for the specified model index and role.
 	 **/
-	virtual QVariant data  ( const QModelIndex & index, int role ) const Q_DECL_OVERRIDE;
+	virtual QVariant data( const QModelIndex & index, int role ) const Q_DECL_OVERRIDE;
 
 	/**
 	 * Return header data (in this case: column header texts) for the
