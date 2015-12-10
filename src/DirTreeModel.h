@@ -208,10 +208,10 @@ namespace QDirStat
     protected slots:
 
 	/**
-	 * Process notification of that reading 'dir' is finished.
+	 * Process notification that the read job for 'dir' is finished.
 	 * Other read jobs might still be pending.
 	 **/
-	void readingFinished( DirInfo *dir );
+	void readJobFinished( DirInfo *dir );
 
 	/**
 	 * Process notification that reading the dir tree is completely

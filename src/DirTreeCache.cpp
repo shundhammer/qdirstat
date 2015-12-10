@@ -437,7 +437,7 @@ CacheReader::addItem()
                 dir->setReadState( DirOnRequestOnly );
                 _tree->sendFinalizeLocal( dir );
                 dir->finalizeLocal();
-                _tree->sendFinished( dir );
+                _tree->sendReadJobFinished( dir );
 
                 _lastExcludedDir    = dir;
                 _lastExcludedDirUrl = _lastExcludedDir->url();

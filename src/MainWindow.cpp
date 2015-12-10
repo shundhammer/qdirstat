@@ -29,27 +29,32 @@ MainWindow::MainWindow():
 {
     _ui->setupUi( this );
     _dirTreeModel = new QDirStat::DirTreeModel( this );
-#if 1
+#if 0
     _sortModel = new QSortFilterProxyModel( this );
     _sortModel->setSourceModel( _dirTreeModel );
     _sortModel->setSortRole( QDirStat::SortRole );
 
     _ui->dirTreeView->setModel( _sortModel );
 #else
+    logDebug() << "No sort model" << endl;
     _ui->dirTreeView->setModel( _dirTreeModel );
 #endif
     _ui->dirTreeView->setSortingEnabled( true );
     _ui->dirTreeView->setRootIsDecorated( true );
 
     _ui->dirTreeView->header()->setSortIndicator( QDirStat::DirTreeModel::NameCol, Qt::AscendingOrder );
-    _dirTreeModel->openUrl( ".." );
 
     connect( _dirTreeModel->tree(),	SIGNAL( finished()   ),
 	     this,			SLOT  ( expandTree() ) );
 
+    connect( _ui->dirTreeView,		SIGNAL( clicked	   ( QModelIndex ) ),
+	     this,			SLOT  ( itemClicked( QModelIndex ) ) );
+
 
     connect( _ui->actionQuit,		SIGNAL( triggered() ),
 	     qApp,			SLOT  ( quit()	    ) );
+
+    _dirTreeModel->openUrl( ".." );
 
     // DEBUG
     // DEBUG
@@ -105,9 +110,25 @@ void MainWindow::notImplemented()
 
 void MainWindow::expandTree()
 {
-    QString cacheName( "/tmp/qdirstat.cache.gz" );
+    QString cacheName( "/tmp/test-qdirstat.cache.gz" );
     CacheWriter writer( cacheName, _dirTreeModel->tree() );
     logDebug() << "Cache file written to " << cacheName << " ok: " << writer.ok() << endl;
+
+#if 0
+    logDebug() << "Setting model" << endl;
+    _ui->dirTreeView->setModel( _dirTreeModel );
+#endif
+
     logDebug() << "Expanding tree" << endl;
-    _ui->dirTreeView->expandToDepth( 3 ); // TO DO
+    // _ui->dirTreeView->expandToDepth( 3 ); // TO DO
+}
+
+
+void MainWindow::itemClicked( const QModelIndex & index )
+{
+    logDebug() << "Clicked row #" << index.row()
+	       << " col #" << index.column()
+	       << " item " << (FileInfo *) index.internalPointer()
+	       << " data(0): " << _dirTreeModel->data( index, 0 ).toString()
+	       << endl;
 }

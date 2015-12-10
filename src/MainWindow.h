@@ -32,6 +32,7 @@ public:
 protected slots:
     void expandTree();
     void notImplemented();
+    void itemClicked( const QModelIndex & index );
 
 protected:
 

@@ -148,9 +148,7 @@ LocalDirReadJob::startReading()
 			{
 			    subDir->setExcluded();
 			    subDir->setReadState( DirOnRequestOnly );
-			    _tree->sendFinalizeLocal( subDir );
-			    subDir->finalizeLocal();
-			    _tree->sendFinished( subDir );
+			    finishReading( subDir );
 			}
 			else // No exclude rule matched
 			{
@@ -174,9 +172,7 @@ LocalDirReadJob::startReading()
 				else
 				{
 				    subDir->setReadState( DirOnRequestOnly );
-				    _tree->sendFinalizeLocal( subDir );
-				    subDir->finalizeLocal();
-				    _tree->sendFinished( subDir );
+				    finishReading( subDir );
 				}
 			    }
 			}
@@ -255,14 +251,14 @@ LocalDirReadJob::startReading()
 
 	closedir( _diskDir );
 	_dir->setReadState( DirFinished );
-	finishReading();
+	finishReading( _dir );
     }
     else
     {
 	_dir->setReadState( DirError );
 	logWarning() << "opendir(" << dirName << ") failed" << endl;
 	// opendir() doesn't set 'errno' according to POSIX  :-(
-	finishReading();
+	finishReading( _dir );
     }
 
     finished();
@@ -271,13 +267,13 @@ LocalDirReadJob::startReading()
 
 
 void
-LocalDirReadJob::finishReading()
+LocalDirReadJob::finishReading( DirInfo * dir )
 {
-    logDebug() << _dir << endl;
+    logDebug() << dir << endl;
 
-    _tree->sendFinalizeLocal( _dir );
+    _tree->sendFinalizeLocal( dir );
     _dir->finalizeLocal();
-    _tree->sendFinished( _dir );
+    _tree->sendReadJobFinished( dir );
 }
 
 

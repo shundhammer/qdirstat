@@ -246,9 +246,9 @@ namespace QDirStat
         void sendStartingReading( DirInfo * dir );
 
         /**
-         * Send a @ref finished( DirInfo * ) signal.
+         * Send a @ref readJobFinished( DirInfo * ) signal.
          **/
-        void sendFinished( DirInfo * dir );
+        void sendReadJobFinished( DirInfo * dir );
 
 	/**
 	 * Send a @ref finalizeLocal() signal to give views a chance to
@@ -320,7 +320,7 @@ namespace QDirStat
          * Emitted when reading the specified directory has been finished.
          * This is sent AFTER finalizeLocal( DirInfo * dir ).
          **/
-        void finished( DirInfo * dir );
+        void readJobFinished( DirInfo * dir );
 
 	/**
 	 * Emitted when reading a directory is finished.

@@ -216,7 +216,7 @@ namespace QDirStat
 	 * Finish reading the directory: Send signals and finalize the
 	 * directory (clean up dot entries etc.).
 	 **/
-	void finishReading();
+	void finishReading( DirInfo * dir );
 
 
 	DIR * _diskDir;

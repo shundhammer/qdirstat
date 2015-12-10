@@ -438,7 +438,15 @@ DirInfo::readJobAborted()
 void
 DirInfo::finalizeLocal()
 {
+#if 0
+    // DEBUG
+    // DEBUG
+    // DEBUG
     cleanupDotEntries();
+    // DEBUG
+    // DEBUG
+    // DEBUG
+#endif
 }
 
 
