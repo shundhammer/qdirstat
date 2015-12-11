@@ -128,11 +128,9 @@ DirTree::startReading( const QString & rawUrl )
     {
 	childAddedNotify( item );
 
-	if ( item->isDir() )
+	if ( item->isDirInfo() )
 	{
-	    DirInfo * dir = dynamic_cast<DirInfo *>( item );
-	    CHECK_PTR( dir );
-	    addJob( new LocalDirReadJob( this, dir ) );
+	    addJob( new LocalDirReadJob( this, item->toDirInfo() ) );
 	    emit readJobFinished( _root );
 	}
 	else
@@ -216,12 +214,10 @@ DirTree::refresh( FileInfo *subtree )
 	    parent->insertChild( subtree );
 	    childAddedNotify( subtree );
 
-	    if ( subtree->isDir() )
+	    if ( subtree->isDirInfo() )
 	    {
 		// Prepare reading this subtree's contents.
-
-		DirInfo *dir = (DirInfo *) subtree;
-		addJob( new LocalDirReadJob( this, dir ) );
+		addJob( new LocalDirReadJob( this, subtree->toDirInfo() ) );
 	    }
 	    else
 	    {

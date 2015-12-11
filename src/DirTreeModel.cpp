@@ -179,27 +179,25 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 	return 0;
 
     int count = 0;
-    FileInfo * parentItem = 0;
+    FileInfo * item = 0;
 
     if ( parentIndex.isValid() )
-	parentItem = static_cast<FileInfo *>( parentIndex.internalPointer() );
+	item = static_cast<FileInfo *>( parentIndex.internalPointer() );
     else
-	parentItem = _tree->root();
+	item = _tree->root();
 
-    if ( ! parentItem->isDirInfo() )
+    if ( ! item->isDirInfo() )
         return 0;
 
-    DirInfo * dir = dynamic_cast<DirInfo *>( parentItem );
-    CHECK_DYNAMIC_CAST( dir, "DirInfo *");
-    QString dirName = dir == _tree->root() ? "<root>" : dir->debugUrl();
+    QString dirName = item == _tree->root() ? "<root>" : item->debugUrl();
 
-    if ( dir->isLocked() )
+    if ( item->toDirInfo()->isLocked() )
     {
         logDebug() << dirName << " is locked - returning 0" << endl;
         return 0;
     }
 
-    switch ( dir->readState() )
+    switch ( item->readState() )
     {
 	case DirQueued:
 	    count = 0;	// Nothing yet
@@ -219,7 +217,7 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 	    //
 	    // Better keep it simple: Don't report any children until they
 	    // are complete.
-            logError() << "ERROR: DirReading " << dir << " - we shouldn't ever get here " << endl;
+            logError() << "ERROR: DirReading " << item << " - we shouldn't ever get here " << endl;
 	    count = 0;
 	    break;
 
@@ -228,7 +226,7 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 	case DirCached:
 	case DirAborted:
 	case DirError:
-	    count = countDirectChildren( dir );
+	    count = countDirectChildren( item );
 	    break;
 
 	// intentionally omitting 'default' case so the compiler can report
@@ -596,7 +594,7 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 	     (*it)->readState() != DirReading &&
 	     (*it)->readState() != DirQueued	)
 	{
-	    newChildrenNotify( static_cast<DirInfo *>(*it) );
+	    newChildrenNotify( (*it)->toDirInfo() );
 	}
 	++it;
     }

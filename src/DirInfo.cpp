@@ -461,10 +461,10 @@ DirInfo::finalizeAll()
 
     while ( child )
     {
-        DirInfo * dir = dynamic_cast<DirInfo *> (child);
-
-        if ( dir && ! dir->isDotEntry() )
-            dir->finalizeAll();
+        if ( child->isDirInfo() && ! child->isDotEntry() )
+        {
+            child->toDirInfo()->finalizeAll();
+        }
 
         child = child->next();
     }

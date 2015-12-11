@@ -370,6 +370,14 @@ QString QDirStat::formatSize( FileSize lSize )
     return sizeString;
 }
 
+DirInfo * FileInfo::toDirInfo()
+{
+    DirInfo * dirInfo = dynamic_cast<DirInfo *>( this );
+    CHECK_DYNAMIC_CAST( dirInfo, "DirInfo *" );
+
+    return dirInfo;
+}
+
 
 QString QDirStat::formatTime( time_t rawTime )
 {

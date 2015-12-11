@@ -491,6 +491,12 @@ namespace QDirStat
 	virtual bool isDirInfo() const { return false; }
 
 	/**
+	 * Try to convert this to a @ref DirInfo pointer. This might throw a
+	 * DynamicCastException if the dynamic_cast fails.
+	 **/
+	DirInfo * toDirInfo();
+
+	/**
 	 * Returns true if this is a sparse file, i.e. if this file has
 	 * actually fewer disk blocks allocated than its byte size would call
 	 * for.
