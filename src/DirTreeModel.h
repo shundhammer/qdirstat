@@ -156,7 +156,6 @@ namespace QDirStat
 	QPixmap charDevIcon()		const	{ return _charDevIcon;		}
 	QPixmap fifoIcon()		const	{ return _fifoIcon;		}
 	QPixmap stopIcon()		const	{ return _stopIcon;		}
-	QPixmap	workingIcon()		const	{ return _workingIcon;		}
 
 	//
 	// Reimplented from QAbstractItemModel:
@@ -276,11 +275,6 @@ namespace QDirStat
 	 **/
 	QVariant formatPercent( float percent ) const;
 
-	/**
-	 * For debugging: Dump direct children of 'item' to the log.
-	 **/
-	void dumpChildren( FileInfo * item, const QString & dirName = QString() ) const;
-
 
 	//
 	// Data members
@@ -305,7 +299,6 @@ namespace QDirStat
 	QPixmap _charDevIcon;
 	QPixmap _fifoIcon;
 	QPixmap _stopIcon;
-	QPixmap	_workingIcon;
 
     };	// class DirTreeModel
 

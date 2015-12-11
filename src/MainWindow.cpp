@@ -17,6 +17,7 @@
 #include "ExcludeRules.h"
 #include "DirTree.h"
 #include "DirTreeCache.h"
+#include "DebugHelpers.h"
 
 
 using namespace QDirStat;
@@ -124,7 +125,7 @@ void MainWindow::expandTree()
     _ui->dirTreeView->expandToDepth( 2 ); // TO DO
 #endif
 
-    // dumpModelTree( QModelIndex(), "" );
+    Debug::dumpModelTree( QModelIndex(), "" );
 }
 
 
@@ -136,7 +137,7 @@ void MainWindow::itemClicked( const QModelIndex & index )
                    << " col #" << index.column()
                    << " data(0): " << index.model()->data( index, 0 ).toString()
                    << endl;
-        logDebug() << "Ancestors: " << ancestors( index ).join( " -> " ) << endl;
+        logDebug() << "Ancestors: " << Debug::modelTreeAncestors( index ).join( " -> " ) << endl;
     }
     else
     {
@@ -144,51 +145,3 @@ void MainWindow::itemClicked( const QModelIndex & index )
     }
 }
 
-
-QStringList MainWindow::ancestors( const QModelIndex & index )
-{
-    QStringList parents;
-    QModelIndex parent = index;
-
-    while ( parent.isValid() )
-    {
-        QVariant data = index.model()->data( parent, 0 );
-
-        if ( data.isValid() )
-        {
-            logDebug() << data.toString() << endl;
-            parents.prepend( data.toString() );
-        }
-
-        parent = index.model()->parent( parent );
-    }
-
-    return parents;
-}
-
-
-void MainWindow::dumpModelTree( const QModelIndex & index, const QString & indent )
-{
-    QAbstractItemModel * model = _dirTreeModel;
-
-    int rowCount = model->rowCount( index );
-    QVariant data = model->data( index, Qt::DisplayRole );
-
-    if ( data.isValid() )
-    {
-	if ( rowCount > 0 )
-	    logDebug() << indent << data.toString() << ": " << rowCount << " rows" << endl;
-	else
-	    logDebug() << indent << data.toString() << endl;
-    }
-    else
-    {
-	logDebug() << "<No data> " << rowCount << " rows" << endl;
-    }
-
-    for ( int row=0; row < rowCount; row++ )
-    {
-	QModelIndex childIndex = model->index( row, 0, index );
-	dumpModelTree( childIndex, indent + "	 " );
-    }
-}

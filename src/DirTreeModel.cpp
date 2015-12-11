@@ -12,6 +12,7 @@
 #include "FileInfoIterator.h"
 #include "Logger.h"
 #include "Exception.h"
+#include "DebugHelpers.h"
 
 
 using namespace QDirStat;
@@ -571,7 +572,7 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 
     QModelIndex parentIndex = modelIndex( dir->parent() );
     int count = countDirectChildren( dir );
-    dumpChildren( dir ); // DEBUG
+    Debug::dumpDirectChildren( dir ); // DEBUG
 
     if ( count > 0 )
     {
@@ -610,7 +611,7 @@ void DirTreeModel::readingFinished()
 
     // TO DO: Finalize display
 
-    dumpChildren( _tree->root(), "root" );
+    Debug::dumpDirectChildren( _tree->root(), "root" );
 }
 
 
@@ -623,36 +624,6 @@ QVariant DirTreeModel::formatPercent( float percent ) const
     text.sprintf( "%.1f%%", percent );
 
     return text;
-}
-
-
-void DirTreeModel::dumpChildren( FileInfo * dir, const QString & dirName ) const
-{
-    if ( ! dir )
-	return;
-
-    QString name = dirName.isEmpty() ? dir->debugUrl() : dirName;
-
-    if ( name.isEmpty() && dir == _tree->root() )
-	name = "<root>";
-
-    FileInfoIterator it( dir, _dotEntryPolicy );
-
-    if ( dir->hasChildren() )
-    {
-	logDebug() << "Children of " << name << endl;
-	int count = 0;
-
-	while ( *it )
-	{
-	    logDebug() << "    #" << count++ << ": " << *it << endl;
-	    ++it;
-	}
-    }
-    else
-    {
-	logDebug() << "\t\tNo children in " << name << endl;
-    }
 }
 
 
