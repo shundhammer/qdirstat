@@ -129,10 +129,10 @@ namespace QDirStat
 	FileInfo * findChild( FileInfo * parent, int childNo ) const;
 
 	/**
-	 * Find the index (the number, starting with 0) of 'child' among its
-	 * parent's children.
+	 * Find the row number (the index, starting with 0) of 'child' among
+	 * its parent's children.
 	 **/
-	int childIndex( FileInfo * child ) const;
+	int rowNumber( FileInfo * child ) const;
 
 	/**
 	 * Count the direct children (including the "dot entry") of 'parent'.

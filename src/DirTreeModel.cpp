@@ -133,25 +133,25 @@ FileInfo * DirTreeModel::findChild( FileInfo * parent, int childNo ) const
 }
 
 
-int DirTreeModel::childIndex( FileInfo * child ) const
+int DirTreeModel::rowNumber( FileInfo * child ) const
 {
     if ( ! child->parent() )
 	return 0;
 
     FileInfoIterator it( child->parent(), _dotEntryPolicy );
-    int index = 0;
+    int row = 0;
 
     while ( *it )
     {
 	if ( *it == child )
-	    return index;
+	    return row;
 
-	++index;
+	++row;
 	++it;
     }
 
     if ( child == child->parent()->dotEntry() )
-	return index;
+	return row;
 
     // Not found
     logError() << "Child \"" << child << "\" not found in \""
@@ -219,6 +219,7 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 	    //
 	    // Better keep it simple: Don't report any children until they
 	    // are complete.
+            logError() << "ERROR: DirReading " << dir << " - we shouldn't ever get here " << endl;
 	    count = 0;
 	    break;
 
@@ -422,7 +423,7 @@ QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
     if ( ! parent || parent == _tree->root() )
 	return QModelIndex();
 
-    int row = childIndex( parent );
+    int row = rowNumber( parent );
     // logDebug() << "Parent of " << child << " is " << parent << " #" << row << endl;
 
     return createIndex( row, 0, parent );
@@ -441,7 +442,7 @@ QModelIndex DirTreeModel::modelIndex( FileInfo * item, int column ) const
 	return QModelIndex();
     else
     {
-	int row = childIndex( item );
+	int row = rowNumber( item );
 	logDebug() << item << " is row #" << row << " of " << item->parent() << endl;
 	return createIndex( row, column, item );
     }
