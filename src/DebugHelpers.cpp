@@ -16,7 +16,7 @@ namespace Debug
 {
     using namespace QDirStat;
 
-    void dumpDirectChildren( FileInfo * dir, const QString & dirName = QString() )
+    void dumpDirectChildren( FileInfo * dir, const QString & dirName )
     {
         if ( ! dir )
             return;
