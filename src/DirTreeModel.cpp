@@ -194,7 +194,7 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 
     if ( item->toDirInfo()->isLocked() )
     {
-        logDebug() << dirName << " is locked - returning 0" << endl;
+        // logDebug() << dirName << " is locked - returning 0" << endl;
         return 0;
     }
 
@@ -442,7 +442,7 @@ QModelIndex DirTreeModel::modelIndex( FileInfo * item, int column ) const
     else
     {
 	int row = rowNumber( item );
-	logDebug() << item << " is row #" << row << " of " << item->parent() << endl;
+	// logDebug() << item << " is row #" << row << " of " << item->parent() << endl;
 	return createIndex( row, column, item );
     }
 }
@@ -454,19 +454,12 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     CHECK_PTR( item );
 
     if ( col == _readJobsCol && item->isBusy() )
-    {
 	return tr( "[%1 Read Jobs]" ).arg( item->pendingReadJobs() );
-    }
-
-    QString prefix = item->readState() == DirAborted ? ">" : "";
 
     switch ( col )
     {
-	case NameCol:
-	    // logDebug() << "data() fetched name of " << item << endl;
-	    return item->name();
+	case NameCol:           return item->name();
 	case PercentBarCol:	return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
-        case TotalSizeCol:	return prefix + formatSize( item->totalSize() );
 	case OwnSizeCol:	return ownSizeColText( item );
 	case PercentNumCol:	return formatPercent( item->subtreePercent() );
 	case LatestMTimeCol:	return formatTime( item->latestMtime() );
@@ -474,8 +467,11 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
     if ( item->isDirInfo() || item->isDotEntry() )
     {
-	switch ( col )
+        QString prefix = item->readState() == DirAborted ? ">" : "";
+
+        switch ( col )
 	{
+            case TotalSizeCol:	  return prefix + formatSize( item->totalSize() );
 	    case TotalItemsCol:	  return prefix + QString( "%1" ).arg( item->totalItems() );
 	    case TotalFilesCol:	  return prefix + QString( "%1" ).arg( item->totalFiles() );
 	    case TotalSubDirsCol: return prefix + QString( "%1" ).arg( item->totalSubDirs() );
@@ -576,16 +572,16 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 	return;
     }
 
-    QModelIndex parentIndex = modelIndex( dir );
+    QModelIndex index = modelIndex( dir );
     int count = countDirectChildren( dir );
-    Debug::dumpDirectChildren( dir ); // DEBUG
+    // Debug::dumpDirectChildren( dir );
 
     if ( count > 0 )
     {
 	logDebug() << "Notifying view about " << count << " new children of " << dirName << endl;
 
         dir->lock();
-	beginInsertRows( parentIndex, 0, count - 1 );
+	beginInsertRows( index, 0, count - 1 );
 	dir->unlock();
 	endInsertRows();
     }
@@ -623,7 +619,7 @@ void DirTreeModel::readingFinished()
 
     // TO DO: Finalize display
 
-    Debug::dumpDirectChildren( _tree->root(), "root" );
+    // Debug::dumpDirectChildren( _tree->root(), "root" );
 }
 
 

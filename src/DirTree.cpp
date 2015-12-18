@@ -111,7 +111,7 @@ DirTree::startReading( const QString & rawUrl )
 {
     QFileInfo fileInfo( rawUrl );
     QString url = fileInfo.absoluteFilePath();
-    logDebug() << "rawUrl: \"" << rawUrl << "\"" << endl;
+    // logDebug() << "rawUrl: \"" << rawUrl << "\"" << endl;
     logDebug() << "   url: \"" << url    << "\"" << endl;
 
     _isBusy = true;
@@ -397,7 +397,7 @@ DirTree::sendStartingReading( DirInfo * dir )
 void
 DirTree::sendReadJobFinished( DirInfo * dir )
 {
-    logDebug() << dir << endl;
+    // logDebug() << dir << endl;
     emit readJobFinished( dir );
 }
 

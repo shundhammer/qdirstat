@@ -83,10 +83,7 @@ namespace Debug
             QVariant data = index.model()->data( parent, 0 );
 
             if ( data.isValid() )
-            {
-                logDebug() << data.toString() << endl;
                 parents.prepend( data.toString() );
-            }
 
             parent = index.model()->parent( parent );
         }
