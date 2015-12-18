@@ -30,6 +30,7 @@ MainWindow::MainWindow():
     QMainWindow(),
     _ui( new Ui::MainWindow ),
     _modified( false ),
+    _statusBarTimeOut( 3000 ), // millisec
     _treeLevelMapper(0)
 {
     _ui->setupUi( this );
@@ -56,8 +57,17 @@ MainWindow::MainWindow():
     _ui->dirTreeView->setRootIsDecorated( true );
 
 
-    connect( _dirTreeModel->tree(),	SIGNAL( finished()   ),
-	     this,			SLOT  ( expandTree() ) );
+    connect( _dirTreeModel->tree(),	SIGNAL( finished()        ),
+	     this,			SLOT  ( readingFinished() ) );
+
+    connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
+	     this,			SLOT  ( enableActions()   ) );
+
+    connect( _dirTreeModel->tree(),	SIGNAL( finished()        ),
+	     this,			SLOT  ( enableActions()   ) );
+
+    connect( _dirTreeModel->tree(),	SIGNAL( aborted()         ),
+	     this,			SLOT  ( enableActions()   ) );
 
     connect( _ui->dirTreeView,		SIGNAL( clicked	   ( QModelIndex ) ),
 	     this,			SLOT  ( itemClicked( QModelIndex ) ) );
@@ -71,6 +81,8 @@ MainWindow::MainWindow():
     // DEBUG
     // DEBUG
     // DEBUG
+
+    enableActions();
 }
 
 
@@ -87,6 +99,15 @@ void MainWindow::connectActions()
 
     connect( _ui->actionOpen,		SIGNAL( triggered()  ),
 	     this,			SLOT  ( askOpenUrl() ) );
+
+    connect( _ui->actionStopReading,    SIGNAL( triggered()   ),
+             this,                      SLOT  ( stopReading() ) );
+
+    connect( _ui->actionAskWriteCache,  SIGNAL( triggered()     ),
+             this,                      SLOT  ( askWriteCache() ) );
+
+    connect( _ui->actionAskReadCache,   SIGNAL( triggered()     ),
+             this,                      SLOT  ( askReadCache()  ) );
 
     connect( _ui->actionQuit,		SIGNAL( triggered() ),
 	     qApp,			SLOT  ( quit()	    ) );
@@ -126,6 +147,7 @@ void MainWindow::mapTreeExpandAction( QAction * action, int level )
 void MainWindow::openUrl( const QString & url )
 {
     _dirTreeModel->openUrl( url );
+    enableActions();
 }
 
 
@@ -144,6 +166,55 @@ void MainWindow::expandTreeToLevel( int level )
         _ui->dirTreeView->collapseAll();
     else
         _ui->dirTreeView->expandToDepth( level - 1 );
+}
+
+
+void MainWindow::stopReading()
+{
+    if ( _dirTreeModel->tree()->isBusy() )
+    {
+        _dirTreeModel->tree()->abortReading();
+        _ui->statusBar->showMessage( tr( "Reading aborted." ) );
+    }
+}
+
+
+void MainWindow::askReadCache()
+{
+    QString fileName = QFileDialog::getOpenFileName( this, // parent
+                                                     tr( "Select QDirStat cache file" ),
+                                                     DEFAULT_CACHE_NAME );
+    if ( ! fileName.isEmpty() )
+    {
+        _dirTreeModel->clear();
+        _dirTreeModel->tree()->readCache( fileName );
+    }
+}
+
+
+void MainWindow::askWriteCache()
+{
+    QString fileName = QFileDialog::getSaveFileName( this, // parent
+                                                     tr( "Enter name for QDirStat cache file"),
+                                                     DEFAULT_CACHE_NAME );
+    if ( ! fileName.isEmpty() )
+    {
+        bool ok = _dirTreeModel->tree()->writeCache( fileName );
+
+        QString msg = ok ? tr( "Directory tree written to file %1" ).arg( fileName ) :
+                           tr( "ERROR writing cache file %1").arg( fileName );
+        _ui->statusBar->showMessage( msg, _statusBarTimeOut );
+    }
+}
+
+
+void MainWindow::enableActions()
+{
+    bool reading = _dirTreeModel->tree()->isBusy();
+
+    _ui->actionStopReading->setEnabled( reading );
+    _ui->actionAskReadCache->setEnabled ( ! reading );
+    _ui->actionAskWriteCache->setEnabled( ! reading );
 }
 
 
@@ -183,18 +254,11 @@ void MainWindow::notImplemented()
 }
 
 
-void MainWindow::expandTree()
+void MainWindow::readingFinished()
 {
-#if 1
-    QString cacheName( "/tmp/test-qdirstat.cache.gz" );
-    CacheWriter writer( cacheName, _dirTreeModel->tree() );
-    logDebug() << "Cache file written to " << cacheName << " ok: " << writer.ok() << endl;
-#endif
-
-#if 1
-    logDebug() << "Expanding tree" << endl;
-    _ui->dirTreeView->expandToDepth( 1 ); // TO DO
-#endif
+    logDebug() << endl;
+    _ui->statusBar->showMessage( tr( "Ready.") );
+    expandTreeToLevel( 1 );
 
     // Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );
 }

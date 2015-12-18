@@ -42,6 +42,23 @@ public slots:
     void askOpenUrl();
 
     /**
+     * Stop reading if reading is in process.
+     **/
+    void stopReading();
+
+    /**
+     * Open a file selection dialog to ask for a cache file, clear the
+     * current tree and replace it with the content of the cache file.
+     **/
+    void askReadCache();
+
+    /**
+     * Open a file selection dialog and save the current tree to the selected
+     * file.
+     **/
+    void askWriteCache();
+
+    /**
      * Expand the directory tree's branches to depth 'level'.
      **/
     void expandTreeToLevel( int level );
@@ -49,8 +66,24 @@ public slots:
 
 protected slots:
 
-    void expandTree();
+    /**
+     * Finalize display after reading is finished.
+     **/
+    void readingFinished();
+
+    /**
+     * Enable or disable actions depending on current status.
+     **/
+    void enableActions();
+
+    /**
+     * Open a popup dialog with a message that this feature is not implemented.
+     **/
     void notImplemented();
+
+    /**
+     * Debug: Item clicked in the tree widget.
+     **/
     void itemClicked( const QModelIndex & index );
 
 
@@ -79,6 +112,7 @@ private:
     QDirStat::DirTreeModel * _dirTreeModel;
     QSortFilterProxyModel  * _sortModel;
     bool		     _modified;
+    int                      _statusBarTimeOut; // millisec
     QSignalMapper          * _treeLevelMapper;
 };
 

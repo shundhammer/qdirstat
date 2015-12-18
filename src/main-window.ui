@@ -39,6 +39,10 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionStopReading"/>
+    <addaction name="separator"/>
+    <addaction name="actionAskWriteCache"/>
+    <addaction name="actionAskReadCache"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -48,7 +52,7 @@
     </property>
     <widget class="QMenu" name="menuExpandTreeToLevel">
      <property name="title">
-      <string>E&amp;xpand tree to level</string>
+      <string>E&amp;xpand Tree To Level</string>
      </property>
      <addaction name="actionExpandTreeLevel0"/>
      <addaction name="actionExpandTreeLevel1"/>
@@ -92,7 +96,7 @@
   </action>
   <action name="actionCloseAllTreeLevels">
    <property name="text">
-    <string>&amp;Close all tree levels</string>
+    <string>&amp;Close All Tree Levels</string>
    </property>
    <property name="toolTip">
     <string>Close all branches of the directory tree.</string>
@@ -206,6 +210,33 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+9</string>
+   </property>
+  </action>
+  <action name="actionStopReading">
+   <property name="text">
+    <string>&amp;Stop Reading</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop reading directories.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionAskWriteCache">
+   <property name="text">
+    <string>&amp;Write To Cache File...</string>
+   </property>
+   <property name="toolTip">
+    <string>Write the current directory tree to a cache file.</string>
+   </property>
+  </action>
+  <action name="actionAskReadCache">
+   <property name="text">
+    <string>&amp;Read Cache File...</string>
+   </property>
+   <property name="toolTip">
+    <string>Read a directory tree from a cache file.</string>
    </property>
   </action>
  </widget>
