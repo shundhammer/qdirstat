@@ -272,7 +272,7 @@ LocalDirReadJob::finishReading( DirInfo * dir )
     logDebug() << dir << endl;
 
     _tree->sendFinalizeLocal( dir );
-    _dir->finalizeLocal();
+    dir->finalizeLocal();
     _tree->sendReadJobFinished( dir );
 }
 

@@ -163,7 +163,7 @@ int DirTreeModel::rowNumber( FileInfo * child ) const
 
 int DirTreeModel::countDirectChildren( FileInfo * parent ) const
 {
-    FileInfoIterator it( parent, DotEntryIsSubDir );
+    FileInfoIterator it( parent, _dotEntryPolicy );
 
     return it.count();
 }
@@ -527,11 +527,6 @@ void DirTreeModel::readJobFinished( DirInfo * dir )
 {
     logDebug() << ( dir == _tree->root() ? "<root>" : dir->url() ) << endl;
 
-    if ( dir->isDotEntry() )
-    {
-        logDebug() << "Ignoring dot entry " << dir << endl;
-    }
-
     if ( anyAncestorBusy( dir ) )
     {
 	logDebug() << "Ancestor busy - ignoring readJobFinished for "
@@ -586,16 +581,10 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 	endInsertRows();
     }
 
-    if ( dir->dotEntry() )
-    {
-        logDebug() << "Notifying view about dot entry children of " << dirName << endl;
-        newChildrenNotify( dir->dotEntry() );
-    }
-
     // If any readJobFinished signals were ignored because a parent was not
     // finished yet, now is the time to notify the view about those children,
     // too.
-    FileInfoIterator it( dir, DotEntryIgnore );
+    FileInfoIterator it( dir, _dotEntryPolicy );
 
     while ( *it )
     {

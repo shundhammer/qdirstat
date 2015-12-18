@@ -449,6 +449,7 @@ DirInfo::readJobAborted()
 void
 DirInfo::finalizeLocal()
 {
+    logDebug() << this << endl;
     cleanupDotEntries();
 }
 
@@ -509,7 +510,7 @@ DirInfo::cleanupDotEntries()
 
         if ( child )
         {
-            logDebug() << "Reparenting children of solo dot entry " << this << endl;
+            // logDebug() << "Reparenting children of solo dot entry " << this << endl;
             _firstChild = child;            // Move the entire children chain here.
             _dotEntry->setFirstChild( 0 );  // _dotEntry will be deleted below.
 
@@ -526,7 +527,7 @@ DirInfo::cleanupDotEntries()
 
     if ( ! _dotEntry->firstChild() )
     {
-        logDebug() << "Removing empty dot entry " << this << endl;
+        // logDebug() << "Removing empty dot entry " << this << endl;
 
         delete _dotEntry;
         _dotEntry = 0;
