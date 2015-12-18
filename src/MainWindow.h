@@ -29,22 +29,33 @@ public:
     MainWindow();
     virtual ~MainWindow();
 
+public slots:
     /**
      * Open an URL (start reading that directory).
      **/
     void openUrl( const QString & url );
 
+    /**
+     * Open a directory selection dialog and open the selected URL.
+     **/
+    void askOpenUrl();
+
+
 protected slots:
+
     void expandTree();
     void notImplemented();
     void itemClicked( const QModelIndex & index );
+
 
 protected:
 
     // Window close event ([x] icon in the top right window)
     virtual void closeEvent( QCloseEvent *event );
 
+
 private:
+
     Ui::MainWindow *	     _ui;
     QDirStat::DirTreeModel * _dirTreeModel;
     QSortFilterProxyModel  * _sortModel;

@@ -10,6 +10,7 @@
 #include <QApplication>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QFileDialog>
 #include <QSortFilterProxyModel>
 
 #include "MainWindow.h"
@@ -60,6 +61,9 @@ MainWindow::MainWindow():
 	     this,			SLOT  ( itemClicked( QModelIndex ) ) );
 
 
+    connect( _ui->actionOpen,		SIGNAL( triggered()  ),
+	     this,			SLOT  ( askOpenUrl() ) );
+
     connect( _ui->actionQuit,		SIGNAL( triggered() ),
 	     qApp,			SLOT  ( quit()	    ) );
 
@@ -81,6 +85,15 @@ MainWindow::~MainWindow()
 void MainWindow::openUrl( const QString & url )
 {
     _dirTreeModel->openUrl( url );
+}
+
+
+void MainWindow::askOpenUrl()
+{
+    QString url = QFileDialog::getExistingDirectory( this, // parent
+                                                     tr("Select directory to scan") );
+    if ( ! url.isEmpty() )
+        openUrl( url );
 }
 
 
