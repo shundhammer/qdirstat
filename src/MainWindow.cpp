@@ -125,7 +125,7 @@ void MainWindow::expandTree()
     _ui->dirTreeView->expandToDepth( 2 ); // TO DO
 #endif
 
-    Debug::dumpModelTree( QModelIndex(), "" );
+    Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );
 }
 
 

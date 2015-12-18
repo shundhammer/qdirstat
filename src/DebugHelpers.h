@@ -15,6 +15,8 @@
 
 #include "FileInfo.h"
 
+class QAbstractItemModel;
+
 
 namespace Debug
 {
@@ -33,7 +35,9 @@ namespace Debug
      * Indent each line with 'indent' (typically a string consisting of
      * blanks).
      **/
-    void dumpModelTree( const QModelIndex & index, const QString & indent );
+    void dumpModelTree( const QAbstractItemModel * model,
+                        const QModelIndex        & index,
+                        const QString            & indent );
 
     /**
      * Return a string list of data(0) of the tree ancestors of 'index'.

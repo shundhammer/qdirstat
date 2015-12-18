@@ -46,10 +46,10 @@ namespace Debug
     }
 
 
-    void dumpModelTree( const QModelIndex & index, const QString & indent )
+    void dumpModelTree( const QAbstractItemModel * model,
+                        const QModelIndex        & index,
+                        const QString            & indent )
     {
-        const QAbstractItemModel * model = index.model();
-
         int rowCount = model->rowCount( index );
         QVariant data = model->data( index, Qt::DisplayRole );
 
@@ -68,7 +68,7 @@ namespace Debug
         for ( int row=0; row < rowCount; row++ )
         {
             QModelIndex childIndex = model->index( row, 0, index );
-            Debug::dumpModelTree( childIndex, indent + QString( 4, ' ' ) );
+            Debug::dumpModelTree( model, childIndex, indent + QString( 4, ' ' ) );
         }
     }
 
