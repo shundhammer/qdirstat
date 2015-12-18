@@ -163,7 +163,7 @@ int DirTreeModel::rowNumber( FileInfo * child ) const
 
 int DirTreeModel::countDirectChildren( FileInfo * parent ) const
 {
-    FileInfoIterator it( parent, _dotEntryPolicy );
+    FileInfoIterator it( parent, DotEntryIsSubDir );
 
     return it.count();
 }
@@ -531,6 +531,11 @@ void DirTreeModel::readJobFinished( DirInfo * dir )
 {
     logDebug() << ( dir == _tree->root() ? "<root>" : dir->url() ) << endl;
 
+    if ( dir->isDotEntry() )
+    {
+        logDebug() << "Ignoring dot entry " << dir << endl;
+    }
+
     if ( anyAncestorBusy( dir ) )
     {
 	logDebug() << "Ancestor busy - ignoring readJobFinished for "
@@ -562,7 +567,8 @@ bool DirTreeModel::anyAncestorBusy( FileInfo * item ) const
 
 void DirTreeModel::newChildrenNotify( DirInfo * dir )
 {
-    logDebug() << ( dir == _tree->root() ? "<root>" : dir->url() ) << endl;
+    QString dirName = dir == _tree->root() ? "<root>" : dir->debugUrl();
+    logDebug() << dirName << endl;
 
     if ( ! dir )
     {
@@ -570,13 +576,13 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 	return;
     }
 
-    QModelIndex parentIndex = modelIndex( dir->parent() );
+    QModelIndex parentIndex = modelIndex( dir );
     int count = countDirectChildren( dir );
     Debug::dumpDirectChildren( dir ); // DEBUG
 
     if ( count > 0 )
     {
-	logDebug() << "Notifying view about " << count << " new children of" << dir << endl;
+	logDebug() << "Notifying view about " << count << " new children of " << dirName << endl;
 
         dir->lock();
 	beginInsertRows( parentIndex, 0, count - 1 );
@@ -584,10 +590,16 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 	endInsertRows();
     }
 
+    if ( dir->dotEntry() )
+    {
+        logDebug() << "Notifying view about dot entry children of " << dirName << endl;
+        newChildrenNotify( dir->dotEntry() );
+    }
+
     // If any readJobFinished signals were ignored because a parent was not
     // finished yet, now is the time to notify the view about those children,
     // too.
-    FileInfoIterator it( dir, _dotEntryPolicy );
+    FileInfoIterator it( dir, DotEntryIgnore );
 
     while ( *it )
     {

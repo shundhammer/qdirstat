@@ -260,6 +260,16 @@ DirInfo::isBusy()
 
 
 void
+DirInfo::setDotEntry( FileInfo *newDotEntry )
+{
+    if ( newDotEntry )
+        _dotEntry = newDotEntry->toDirInfo();
+    else
+        _dotEntry = 0;
+}
+
+
+void
 DirInfo::insertChild( FileInfo *newChild )
 {
     CHECK_PTR( newChild );

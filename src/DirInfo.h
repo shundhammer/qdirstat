@@ -198,14 +198,13 @@ namespace QDirStat
 	 * user can easily tell which summary fields belong to the directory
 	 * itself and which are the accumulated values of the entire subtree.
 	 **/
-	virtual FileInfo * dotEntry() const Q_DECL_OVERRIDE
+	virtual DirInfo * dotEntry() const Q_DECL_OVERRIDE
 	    { return _dotEntry; }
 
 	/**
 	 * Set a "Dot Entry". This makes sense for directories only.
 	 **/
-	virtual void setDotEntry( FileInfo *newDotEntry ) Q_DECL_OVERRIDE
-	    { _dotEntry = newDotEntry; }
+	virtual void setDotEntry( FileInfo *newDotEntry ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns true if this is a "Dot Entry". See @ref dotEntry() for
@@ -363,7 +362,7 @@ namespace QDirStat
 	// Children management
 
 	FileInfo *	_firstChild;		// pointer to the first child
-	FileInfo *	_dotEntry;		// pseudo entry to hold non-dir children
+	DirInfo  *	_dotEntry;		// pseudo entry to hold non-dir children
 
 	// Some cached values
 
