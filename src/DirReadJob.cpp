@@ -139,7 +139,7 @@ LocalDirReadJob::startReading()
 		    if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
 		    {
 			DirInfo *subDir = new DirInfo( entryName, &statInfo, _tree, _dir );
-                        CHECK_NEW( subDir );
+			CHECK_NEW( subDir );
 
 			_dir->insertChild( subDir );
 			childAdded( subDir );
@@ -154,8 +154,8 @@ LocalDirReadJob::startReading()
 			{
 			    if ( _dir->device() == subDir->device() )	// normal case
 			    {
-                                LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
-                                CHECK_NEW( job );
+				LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
+				CHECK_NEW( job );
 				_tree->addJob( job );
 			    }
 			    else	// The subdirectory we just found is a mount point.
@@ -165,8 +165,8 @@ LocalDirReadJob::startReading()
 
 				if ( _tree->crossFileSystems() )
 				{
-                                    LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
-                                    CHECK_NEW( job );
+				    LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
+				    CHECK_NEW( job );
 				    _tree->addJob( job );
 				}
 				else
@@ -196,19 +196,20 @@ LocalDirReadJob::startReading()
 			    {
 				logDebug() << "Using cache file " << fullName << " for " << dirName << endl;
 
-				cacheReadJob->reader()->rewind();	// Read offset was moved by firstDir()
-				_tree->addJob( cacheReadJob );	// Job queue will assume ownership of cacheReadJob
+				cacheReadJob->reader()->rewind();  // Read offset was moved by firstDir()
+				_tree->addJob( cacheReadJob );	   // Job queue will assume ownership of cacheReadJob
 
 				//
 				// Clean up partially read directory content
 				//
 
-				DirTree * tree = _tree; // Copy data members to local variables:
-				DirInfo * dir  = _dir;		// This object will be deleted soon by killAll()
+				DirTree * tree = _tree;	 // Copy data members to local variables:
+				DirInfo * dir  = _dir;	 // This object will be deleted soon by killAll()
 
-				_queue->killAll( dir );		// Will delete this job as well!
+				_queue->killAll( _dir, cacheReadJob );	// Will delete this job as well!
 				// All data members of this object are invalid from here on!
 
+                                logDebug() << "Deleting subtree " << dir << endl;
 				tree->deleteSubtree( dir );
 
 				return;
@@ -226,7 +227,7 @@ LocalDirReadJob::startReading()
 			else
 			{
 			    FileInfo *child = new FileInfo( entryName, &statInfo, _tree, _dir );
-                            CHECK_NEW( child );
+			    CHECK_NEW( child );
 			    _dir->insertChild( child );
 			    childAdded( child );
 			}
@@ -241,7 +242,7 @@ LocalDirReadJob::startReading()
 		     * least create an (almost empty) entry as a placeholder.
 		     */
 		    DirInfo *child = new DirInfo( _tree, _dir, entry->d_name );
-                    CHECK_NEW( child );
+		    CHECK_NEW( child );
 		    child->setReadState( DirError );
 		    _dir->insertChild( child );
 		    childAdded( child );
@@ -297,19 +298,19 @@ LocalDirReadJob::stat( const QString & url,
 		parent->insertChild( dir );
 
 	    if ( dir && parent &&
-                 ! tree->isToplevel( dir )
-                 && dir->device() != parent->device() )
-            {
-                logDebug() << dir << " is a mount point" << endl;
+		 ! tree->isToplevel( dir )
+		 && dir->device() != parent->device() )
+	    {
+		logDebug() << dir << " is a mount point" << endl;
 		dir->setMountPoint();
-            }
+	    }
 
 	    return dir;
 	}
 	else					// no directory
 	{
 	    FileInfo * file = new FileInfo( url, &statInfo, tree, parent );
-            CHECK_NEW( file );
+	    CHECK_NEW( file );
 
 	    if ( parent )
 		parent->insertChild( file );
@@ -473,7 +474,7 @@ DirReadJobQueue::abort()
 
 
 void
-DirReadJobQueue::killAll( DirInfo * subtree )
+DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 {
     if ( ! subtree )
 	return;
@@ -483,10 +484,16 @@ DirReadJobQueue::killAll( DirInfo * subtree )
     while ( it.hasNext() )
     {
 	DirReadJob * job = it.next();
+
+	if ( exceptJob && job == exceptJob )
+        {
+            logDebug() << "NOT killing read job " << job->dir() << endl;
+	    continue;
+        }
+
 	if ( job->dir() && job->dir()->isInSubtree( subtree ) )
 	{
-	    // logDebug() << "Killing read job " << job->dir() << endl;
-
+	    logDebug() << "Killing read job " << job->dir() << endl;
 	    it.remove();
 	    delete job;
 	}

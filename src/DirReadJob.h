@@ -345,9 +345,9 @@ namespace QDirStat
 	void abort();
 
 	/**
-	 * Delete all jobs for a subtree.
+	 * Delete all jobs for a subtree except 'exceptJob'.
 	 **/
-	void killAll( DirInfo * subtree );
+	void killAll( DirInfo * subtree, DirReadJob * exceptJob = 0 );
 
 	/**
 	 * Notification that a job is finished.
