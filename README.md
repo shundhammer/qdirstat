@@ -53,6 +53,12 @@ little own infrastructure. The KDE libs are just not worth the hassle anymore.
 
 ## Current Development Status
 
+- 2015-12-18  Found the crippling bugs that made the DirTreeModel do crazy things.
+              None of the Qt classes proved to be helpful to find that - 
+              they just happily do the crazy things. That's what I call poor design.
+              Now there is a first working QDirStat with a useful display tree,
+              including icons (but no percentage bar graph yet).
+
 - 2015-12-07  First working DirTreeModel -- still minimalistic, but working.
 
 - 2015-12-06  Created tree model based on QAbstractItemModel.
