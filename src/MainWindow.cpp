@@ -14,6 +14,7 @@
 
 #include "MainWindow.h"
 #include "Logger.h"
+#include "Exception.h"
 #include "ExcludeRules.h"
 #include "DirTree.h"
 #include "DirTreeCache.h"
@@ -30,23 +31,25 @@ MainWindow::MainWindow():
 {
     _ui->setupUi( this );
     _dirTreeModel = new QDirStat::DirTreeModel( this );
-#if 1
+    CHECK_NEW( _dirTreeModel );
+
     _sortModel = new QSortFilterProxyModel( this );
+    CHECK_NEW( _sortModel );
+
     _sortModel->setSourceModel( _dirTreeModel );
     _sortModel->setSortRole( QDirStat::SortRole );
 
     _ui->dirTreeView->setModel( _sortModel );
     _ui->dirTreeView->setSortingEnabled( true );
+
     QHeaderView * header = _ui->dirTreeView->header();
+    CHECK_PTR( header );
+
     header->setSortIndicator( QDirStat::DirTreeModel::NameCol, Qt::AscendingOrder );
     header->setStretchLastSection( false );
 
     // TO DO: This is too strict. But it's better than the brain-dead defaults.
     header->setSectionResizeMode( QHeaderView::ResizeToContents );
-#else
-    logDebug() << "No sort model" << endl;
-    _ui->dirTreeView->setModel( _dirTreeModel );
-#endif
     _ui->dirTreeView->setRootIsDecorated( true );
 
 
@@ -133,15 +136,15 @@ void MainWindow::itemClicked( const QModelIndex & index )
 {
     if ( index.isValid() )
     {
-        logDebug() << "Clicked row #" << index.row()
-                   << " col #" << index.column()
-                   << " data(0): " << index.model()->data( index, 0 ).toString()
-                   << endl;
-        logDebug() << "Ancestors: " << Debug::modelTreeAncestors( index ).join( " -> " ) << endl;
+	logDebug() << "Clicked row #" << index.row()
+		   << " col #" << index.column()
+		   << " data(0): " << index.model()->data( index, 0 ).toString()
+		   << endl;
+	logDebug() << "Ancestors: " << Debug::modelTreeAncestors( index ).join( " -> " ) << endl;
     }
     else
     {
-        logDebug() << "Invalid model index" << endl;
+	logDebug() << "Invalid model index" << endl;
     }
 }
 

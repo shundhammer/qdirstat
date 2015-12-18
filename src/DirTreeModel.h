@@ -141,23 +141,6 @@ namespace QDirStat
 
 
 	//
-	// Icons
-	//
-
-	QPixmap	openDirIcon()		const	{ return _openDirIcon;		}
-	QPixmap	closedDirIcon()		const	{ return _closedDirIcon;	}
-	QPixmap	openDotEntryIcon()	const	{ return _openDotEntryIcon;	}
-	QPixmap	closedDotEntryIcon()	const	{ return _closedDotEntryIcon;	}
-	QPixmap	unreadableDirIcon()	const	{ return _unreadableDirIcon;	}
-	QPixmap mountPointIcon()	const	{ return _mountPointIcon;	}
-	QPixmap	fileIcon()		const	{ return _fileIcon;		}
-	QPixmap	symLinkIcon()		const	{ return _symLinkIcon;		}
-	QPixmap blockDevIcon()		const	{ return _blockDevIcon;		}
-	QPixmap charDevIcon()		const	{ return _charDevIcon;		}
-	QPixmap fifoIcon()		const	{ return _fifoIcon;		}
-	QPixmap stopIcon()		const	{ return _stopIcon;		}
-
-	//
 	// Reimplented from QAbstractItemModel:
 	//
 
@@ -265,6 +248,11 @@ namespace QDirStat
 	QVariant columnText( FileInfo * item, int col ) const;
 
 	/**
+	 * Return the icon for (model) column 'col' for 'item'.
+	 **/
+	QVariant columnIcon( FileInfo * item, int col ) const;
+
+	/**
 	 * Return the text for the own size column for 'item'
 	 **/
 	QVariant ownSizeColText( FileInfo * item ) const;
@@ -287,18 +275,13 @@ namespace QDirStat
 
 	// The various icons
 
-	QPixmap	_openDirIcon;
-	QPixmap	_closedDirIcon;
-	QPixmap	_openDotEntryIcon;
-	QPixmap	_closedDotEntryIcon;
+	QPixmap	_dirIcon;
+	QPixmap	_dotEntryIcon;
 	QPixmap	_unreadableDirIcon;
 	QPixmap _mountPointIcon;
 	QPixmap	_fileIcon;
-	QPixmap	_symLinkIcon;
-	QPixmap _blockDevIcon;
-	QPixmap _charDevIcon;
-	QPixmap _fifoIcon;
 	QPixmap _stopIcon;
+	QPixmap _excludedIcon;
 
     };	// class DirTreeModel
 

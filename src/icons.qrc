@@ -1,5 +1,12 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/qdirstat.png</file>
+        <file>icons/dir.png</file>
+        <file>icons/dot-entry.png</file>
+        <file>icons/excluded.png</file>
+        <file>icons/file.png</file>
+        <file>icons/mount-point.png</file>
+        <file>icons/stop.png</file>
+        <file>icons/unreadable-dir.png</file>
     </qresource>
 </RCC>

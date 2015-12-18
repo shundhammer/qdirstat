@@ -84,18 +84,13 @@ void DirTreeModel::openUrl( const QString &url )
 
 void DirTreeModel::loadIcons()
 {
-    _openDirIcon	= QPixmap( ":/icons/open-dir.png"	  );
-    _closedDirIcon	= QPixmap( ":/icons/closed-dir.png"	  );
-    _openDotEntryIcon	= QPixmap( ":/icons/open-dot-entry.png"	  );
-    _closedDotEntryIcon = QPixmap( ":/icons/closed-dot-entry.png" );
-    _unreadableDirIcon	= QPixmap( ":/icons/unreadable-dir.png"	  );
-    _mountPointIcon	= QPixmap( ":/icons/mount-point.png"	  );
-    _fileIcon		= QPixmap( ":/icons/file.png"		  );
-    _symLinkIcon	= QPixmap( ":/icons/sym-link.png"	  );
-    _blockDevIcon	= QPixmap( ":/icons/block-dev.png"	  );
-    _charDevIcon	= QPixmap( ":/icons/char-dev.png"	  );
-    _fifoIcon		= QPixmap( ":/icons/fifo.png"		  );
-    _stopIcon		= QPixmap( ":/icons/stop.png"		  );
+    _dirIcon	       = QPixmap( ":/icons/dir.png"	       );
+    _fileIcon	       = QPixmap( ":/icons/file.png"	       );
+    _dotEntryIcon      = QPixmap( ":/icons/dot-entry.png"      );
+    _unreadableDirIcon = QPixmap( ":/icons/unreadable-dir.png" );
+    _mountPointIcon    = QPixmap( ":/icons/mount-point.png"    );
+    _stopIcon	       = QPixmap( ":/icons/stop.png"	       );
+    _excludedIcon      = QPixmap( ":/icons/excluded.png"       );
 }
 
 
@@ -188,14 +183,14 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 	item = _tree->root();
 
     if ( ! item->isDirInfo() )
-        return 0;
+	return 0;
 
     QString dirName = item == _tree->root() ? "<root>" : item->debugUrl();
 
     if ( item->toDirInfo()->isLocked() )
     {
-        // logDebug() << dirName << " is locked - returning 0" << endl;
-        return 0;
+	// logDebug() << dirName << " is locked - returning 0" << endl;
+	return 0;
     }
 
     switch ( item->readState() )
@@ -218,7 +213,7 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 	    //
 	    // Better keep it simple: Don't report any children until they
 	    // are complete.
-            logError() << "ERROR: DirReading " << item << " - we shouldn't ever get here " << endl;
+	    logError() << "ERROR: DirReading " << item << " - we shouldn't ever get here " << endl;
 	    count = 0;
 	    break;
 
@@ -259,13 +254,21 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 	case Qt::DisplayRole:
 	    {
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-		// No need for CHECK_PTR( item ): columnText() does that.
 		QVariant result = columnText( item, col );
+		return result;
+	    }
+
+	case Qt::DecorationRole:
+	    {
+		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+		QVariant result = columnIcon( item, col );
 		return result;
 	    }
 
 	case Qt::TextAlignmentRole:
 	    {
+		int alignment = Qt::AlignVCenter;
+
 		switch ( col )
 		{
 		    case PercentNumCol:
@@ -274,14 +277,18 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		    case TotalItemsCol:
 		    case TotalFilesCol:
 		    case TotalSubDirsCol:
-			return Qt::AlignRight;
+			alignment |= Qt::AlignRight;
+			break;
 
 		    case NameCol:
 		    case PercentBarCol:
 		    case LatestMTimeCol:
 		    default:
-			return Qt::AlignLeft;
+			alignment |= Qt::AlignLeft;
+			break;
 		}
+
+		return alignment;
 	    }
 
 	case SortRole: // Custom QDirStat role: Raw types for sorting
@@ -458,7 +465,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
     switch ( col )
     {
-	case NameCol:           return item->name();
+	case NameCol:		return item->name();
 	case PercentBarCol:	return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
 	case OwnSizeCol:	return ownSizeColText( item );
 	case PercentNumCol:	return formatPercent( item->subtreePercent() );
@@ -467,11 +474,11 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
     if ( item->isDirInfo() || item->isDotEntry() )
     {
-        QString prefix = item->readState() == DirAborted ? ">" : "";
+	QString prefix = item->readState() == DirAborted ? ">" : "";
 
-        switch ( col )
+	switch ( col )
 	{
-            case TotalSizeCol:	  return prefix + formatSize( item->totalSize() );
+	    case TotalSizeCol:	  return prefix + formatSize( item->totalSize() );
 	    case TotalItemsCol:	  return prefix + QString( "%1" ).arg( item->totalItems() );
 	    case TotalFilesCol:	  return prefix + QString( "%1" ).arg( item->totalFiles() );
 	    case TotalSubDirsCol: return prefix + QString( "%1" ).arg( item->totalSubDirs() );
@@ -520,6 +527,35 @@ QVariant DirTreeModel::ownSizeColText( FileInfo * item ) const
     }
 
     return text;
+}
+
+
+QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
+{
+    if ( col != NameCol )
+	return QVariant();
+
+    QPixmap icon;
+
+    if	    ( item->isDotEntry() )  icon = _dotEntryIcon;
+    else if ( item->isExcluded() )  icon = _excludedIcon;
+    else if ( item->isDir()	 )
+    {
+	if	( item->readState() == DirAborted )   icon = _stopIcon;
+	else if ( item->readState() == DirError	  )   icon = _unreadableDirIcon;
+	else if ( item->isMountPoint()		  )   icon = _mountPointIcon;
+	else					      icon = _dirIcon;
+    }
+    else // ! item->isDir()
+    {
+	if	( item->isFile()	)  icon = _fileIcon;
+	else if ( item->isSymLink()	)  icon = _fileIcon; // TO DO: Find a better icon
+	else if ( item->isBlockDevice() )  icon = _fileIcon; // TO DO: Find a better icon
+	else if ( item->isCharDevice()	)  icon = _fileIcon; // TO DO: Find a better icon
+	else if ( item->isSpecial()	)  icon = _fileIcon; // TO DO: Find a better icon
+    }
+
+    return icon.isNull() ? QVariant() : icon;
 }
 
 
@@ -575,7 +611,7 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
     {
 	logDebug() << "Notifying view about " << count << " new children of " << dirName << endl;
 
-        dir->lock();
+	dir->lock();
 	beginInsertRows( index, 0, count - 1 );
 	dir->unlock();
 	endInsertRows();
