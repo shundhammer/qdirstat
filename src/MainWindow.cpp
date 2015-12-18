@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSortFilterProxyModel>
+#include <QSignalMapper>
 
 #include "MainWindow.h"
 #include "Logger.h"
@@ -28,7 +29,8 @@ using namespace QDirStat;
 MainWindow::MainWindow():
     QMainWindow(),
     _ui( new Ui::MainWindow ),
-    _modified( false )
+    _modified( false ),
+    _treeLevelMapper(0)
 {
     _ui->setupUi( this );
     _dirTreeModel = new QDirStat::DirTreeModel( this );
@@ -60,12 +62,7 @@ MainWindow::MainWindow():
     connect( _ui->dirTreeView,		SIGNAL( clicked	   ( QModelIndex ) ),
 	     this,			SLOT  ( itemClicked( QModelIndex ) ) );
 
-
-    connect( _ui->actionOpen,		SIGNAL( triggered()  ),
-	     this,			SLOT  ( askOpenUrl() ) );
-
-    connect( _ui->actionQuit,		SIGNAL( triggered() ),
-	     qApp,			SLOT  ( quit()	    ) );
+    connectActions();
 
     // DEBUG
     // DEBUG
@@ -82,6 +79,50 @@ MainWindow::~MainWindow()
 }
 
 
+void MainWindow::connectActions()
+{
+    //
+    // "File" menu
+    //
+
+    connect( _ui->actionOpen,		SIGNAL( triggered()  ),
+	     this,			SLOT  ( askOpenUrl() ) );
+
+    connect( _ui->actionQuit,		SIGNAL( triggered() ),
+	     qApp,			SLOT  ( quit()	    ) );
+
+    //
+    // "View" menu
+    //
+
+    _treeLevelMapper = new QSignalMapper( this );
+
+    connect( _treeLevelMapper, SIGNAL( mapped           ( int ) ),
+             this,             SLOT  ( expandTreeToLevel( int ) ) );
+
+    mapTreeExpandAction( _ui->actionExpandTreeLevel0, 0 );
+    mapTreeExpandAction( _ui->actionExpandTreeLevel1, 1 );
+    mapTreeExpandAction( _ui->actionExpandTreeLevel2, 2 );
+    mapTreeExpandAction( _ui->actionExpandTreeLevel3, 3 );
+    mapTreeExpandAction( _ui->actionExpandTreeLevel4, 4 );
+    mapTreeExpandAction( _ui->actionExpandTreeLevel5, 5 );
+    mapTreeExpandAction( _ui->actionExpandTreeLevel6, 6 );
+    mapTreeExpandAction( _ui->actionExpandTreeLevel7, 7 );
+    mapTreeExpandAction( _ui->actionExpandTreeLevel8, 8 );
+    mapTreeExpandAction( _ui->actionExpandTreeLevel9, 9 );
+
+    mapTreeExpandAction( _ui->actionCloseAllTreeLevels, 0 );
+}
+
+
+void MainWindow::mapTreeExpandAction( QAction * action, int level )
+{
+    connect( action,           SIGNAL( triggered() ),
+             _treeLevelMapper, SLOT  ( map()       ) );
+    _treeLevelMapper->setMapping( action, level );
+}
+
+
 void MainWindow::openUrl( const QString & url )
 {
     _dirTreeModel->openUrl( url );
@@ -94,6 +135,15 @@ void MainWindow::askOpenUrl()
                                                      tr("Select directory to scan") );
     if ( ! url.isEmpty() )
         openUrl( url );
+}
+
+
+void MainWindow::expandTreeToLevel( int level )
+{
+    if ( level < 1 )
+        _ui->dirTreeView->collapseAll();
+    else
+        _ui->dirTreeView->expandToDepth( level - 1 );
 }
 
 

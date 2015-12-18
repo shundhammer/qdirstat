@@ -18,6 +18,7 @@
 
 class QCloseEvent;
 class QSortFilterProxyModel;
+class QSignalMapper;
 class DirTreeModel;
 
 
@@ -40,6 +41,11 @@ public slots:
      **/
     void askOpenUrl();
 
+    /**
+     * Expand the directory tree's branches to depth 'level'.
+     **/
+    void expandTreeToLevel( int level );
+
 
 protected slots:
 
@@ -50,8 +56,21 @@ protected slots:
 
 protected:
 
-    // Window close event ([x] icon in the top right window)
-    virtual void closeEvent( QCloseEvent *event );
+    /**
+     * Set up QObject connections to the actions from the .ui file
+     **/
+    void connectActions();
+
+    /**
+     * Set up the _treeLevelMapper to map an "expand tree to level x" action to
+     * the correct slot.
+     **/
+    void mapTreeExpandAction( QAction * action, int level );
+
+    /**
+     * Window close event ([x] icon in the top right window)
+     **/
+    virtual void closeEvent( QCloseEvent *event ) Q_DECL_OVERRIDE;
 
 
 private:
@@ -60,6 +79,7 @@ private:
     QDirStat::DirTreeModel * _dirTreeModel;
     QSortFilterProxyModel  * _sortModel;
     bool		     _modified;
+    QSignalMapper          * _treeLevelMapper;
 };
 
 #endif // MainWindow_H
