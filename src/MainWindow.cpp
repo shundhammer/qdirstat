@@ -67,7 +67,6 @@ MainWindow::MainWindow():
     // DEBUG
     // DEBUG
     ExcludeRules::add( ".*/\\.git$" );
-    _dirTreeModel->openUrl( ".." );
     // DEBUG
     // DEBUG
     // DEBUG
@@ -76,6 +75,12 @@ MainWindow::MainWindow():
 
 MainWindow::~MainWindow()
 {
+}
+
+
+void MainWindow::openUrl( const QString & url )
+{
+    _dirTreeModel->openUrl( url );
 }
 
 
@@ -125,7 +130,7 @@ void MainWindow::expandTree()
 
 #if 1
     logDebug() << "Expanding tree" << endl;
-    _ui->dirTreeView->expandToDepth( 2 ); // TO DO
+    _ui->dirTreeView->expandToDepth( 1 ); // TO DO
 #endif
 
     // Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );

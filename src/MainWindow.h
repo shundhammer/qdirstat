@@ -29,6 +29,11 @@ public:
     MainWindow();
     virtual ~MainWindow();
 
+    /**
+     * Open an URL (start reading that directory).
+     **/
+    void openUrl( const QString & url );
+
 protected slots:
     void expandTree();
     void notImplemented();

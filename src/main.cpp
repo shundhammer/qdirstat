@@ -20,5 +20,8 @@ int main( int argc, char *argv[] )
     MainWindow mainWin;
     mainWin.show();
 
+    if ( argc > 1 )
+        mainWin.openUrl( argv[1] );
+
     app.exec();
 }
