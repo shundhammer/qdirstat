@@ -270,6 +270,7 @@ namespace QDirStat
 
 	DirTree *	_tree;
 	DotEntryPolicy	_dotEntryPolicy;
+        QString         _treeIconDir;
 	QList<Column>	_colMapping;
 	int		_readJobsCol;
 

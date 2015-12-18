@@ -1,12 +1,22 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/qdirstat.png</file>
-        <file>icons/dir.png</file>
-        <file>icons/dot-entry.png</file>
-        <file>icons/excluded.png</file>
-        <file>icons/file.png</file>
-        <file>icons/mount-point.png</file>
-        <file>icons/stop.png</file>
-        <file>icons/unreadable-dir.png</file>
+
+        <file>icons/tree-medium/dir.png</file>
+        <file>icons/tree-medium/dot-entry.png</file>
+        <file>icons/tree-medium/excluded.png</file>
+        <file>icons/tree-medium/file.png</file>
+        <file>icons/tree-medium/mount-point.png</file>
+        <file>icons/tree-medium/stop.png</file>
+        <file>icons/tree-medium/unreadable-dir.png</file>
+
+        <file>icons/tree-small/dir.png</file>
+        <file>icons/tree-small/dot-entry.png</file>
+        <file>icons/tree-small/excluded.png</file>
+        <file>icons/tree-small/file.png</file>
+        <file>icons/tree-small/mount-point.png</file>
+        <file>icons/tree-small/stop.png</file>
+        <file>icons/tree-small/unreadable-dir.png</file>
+
     </qresource>
 </RCC>
