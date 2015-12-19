@@ -298,7 +298,7 @@ LocalDirReadJob::stat( const QString & url,
 		parent->insertChild( dir );
 
 	    if ( dir && parent &&
-		 ! tree->isToplevel( dir )
+		 ! tree->isTopLevel( dir )
 		 && dir->device() != parent->device() )
 	    {
 		logDebug() << dir << " is a mount point" << endl;

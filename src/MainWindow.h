@@ -42,6 +42,11 @@ public slots:
     void askOpenUrl();
 
     /**
+     * Re-read the complete directory tree.
+     **/
+    void refreshAll();
+
+    /**
      * Stop reading if reading is in process.
      **/
     void stopReading();
@@ -74,7 +79,7 @@ protected slots:
     /**
      * Enable or disable actions depending on current status.
      **/
-    void enableActions();
+    void updateActions();
 
     /**
      * Open a popup dialog with a message that this feature is not implemented.

@@ -78,16 +78,25 @@ DirTree::setRoot( DirInfo *newRoot )
 
 
 FileInfo *
-DirTree::firstToplevel() const
+DirTree::firstTopLevel() const
 {
     return _root ? _root->firstChild() : 0;
 }
 
 
 bool
-DirTree::isToplevel( FileInfo *item ) const
+DirTree::isTopLevel( FileInfo *item ) const
 {
     return item && item->parent() && ! item->parent()->parent();
+}
+
+
+QString
+DirTree::url() const
+{
+    FileInfo * realRoot = firstTopLevel();
+
+    return realRoot ? realRoot->url() : "";
 }
 
 
@@ -158,7 +167,7 @@ DirTree::refresh( FileInfo *subtree )
 
     if ( ! subtree || ! subtree->parent() )	// Refresh all (from root)
     {
-	startReading( QDir::cleanPath( firstToplevel()->url() ) );
+	startReading( QDir::cleanPath( firstTopLevel()->url() ) );
     }
     else	// Refresh subtree
     {

@@ -39,6 +39,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionRefreshAll"/>
     <addaction name="actionStopReading"/>
     <addaction name="separator"/>
     <addaction name="actionAskWriteCache"/>
@@ -237,6 +238,14 @@
    </property>
    <property name="toolTip">
     <string>Read a directory tree from a cache file.</string>
+   </property>
+  </action>
+  <action name="actionRefreshAll">
+   <property name="text">
+    <string>Refresh &amp;All</string>
+   </property>
+   <property name="toolTip">
+    <string>Re-read the entire directory tree from disk.</string>
    </property>
   </action>
  </widget>

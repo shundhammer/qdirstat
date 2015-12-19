@@ -61,13 +61,13 @@ MainWindow::MainWindow():
 	     this,			SLOT  ( readingFinished() ) );
 
     connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
-	     this,			SLOT  ( enableActions()   ) );
+	     this,			SLOT  ( updateActions()   ) );
 
     connect( _dirTreeModel->tree(),	SIGNAL( finished()        ),
-	     this,			SLOT  ( enableActions()   ) );
+	     this,			SLOT  ( updateActions()   ) );
 
     connect( _dirTreeModel->tree(),	SIGNAL( aborted()         ),
-	     this,			SLOT  ( enableActions()   ) );
+	     this,			SLOT  ( updateActions()   ) );
 
     connect( _ui->dirTreeView,		SIGNAL( clicked	   ( QModelIndex ) ),
 	     this,			SLOT  ( itemClicked( QModelIndex ) ) );
@@ -82,7 +82,7 @@ MainWindow::MainWindow():
     // DEBUG
     // DEBUG
 
-    enableActions();
+    updateActions();
 }
 
 
@@ -99,6 +99,9 @@ void MainWindow::connectActions()
 
     connect( _ui->actionOpen,		SIGNAL( triggered()  ),
 	     this,			SLOT  ( askOpenUrl() ) );
+
+    connect( _ui->actionRefreshAll,     SIGNAL( triggered()  ),
+             this,                      SLOT  ( refreshAll() ) );
 
     connect( _ui->actionStopReading,    SIGNAL( triggered()   ),
              this,                      SLOT  ( stopReading() ) );
@@ -144,10 +147,51 @@ void MainWindow::mapTreeExpandAction( QAction * action, int level )
 }
 
 
+void MainWindow::updateActions()
+{
+    bool reading = _dirTreeModel->tree()->isBusy();
+
+    _ui->actionStopReading->setEnabled( reading );
+    _ui->actionRefreshAll->setEnabled   ( ! reading );
+    _ui->actionAskReadCache->setEnabled ( ! reading );
+    _ui->actionAskWriteCache->setEnabled( ! reading );
+}
+
+
+void MainWindow::closeEvent( QCloseEvent *event )
+{
+    if ( _modified )
+    {
+	int button = QMessageBox::question( this, tr( "Unsaved changes" ),
+					    tr( "Save changes?" ),
+					    QMessageBox::Save |
+					    QMessageBox::Discard |
+					    QMessageBox::Cancel );
+
+	if ( button == QMessageBox::Cancel )
+	{
+	    event->ignore();
+	    return;
+	}
+
+	if ( button == QMessageBox::Save )
+	{
+	    // saveFile();
+	}
+
+	event->accept();
+    }
+    else
+    {
+	event->accept();
+    }
+}
+
+
 void MainWindow::openUrl( const QString & url )
 {
     _dirTreeModel->openUrl( url );
-    enableActions();
+    updateActions();
 }
 
 
@@ -160,12 +204,20 @@ void MainWindow::askOpenUrl()
 }
 
 
-void MainWindow::expandTreeToLevel( int level )
+void MainWindow::refreshAll()
 {
-    if ( level < 1 )
-        _ui->dirTreeView->collapseAll();
+    QString url = _dirTreeModel->tree()->url();
+
+    if ( ! url.isEmpty() )
+    {
+        logDebug() << "Refreshing " << url << endl;
+        _dirTreeModel->openUrl( url );
+        updateActions();
+    }
     else
-        _ui->dirTreeView->expandToDepth( level - 1 );
+    {
+        askOpenUrl();
+    }
 }
 
 
@@ -208,43 +260,12 @@ void MainWindow::askWriteCache()
 }
 
 
-void MainWindow::enableActions()
+void MainWindow::expandTreeToLevel( int level )
 {
-    bool reading = _dirTreeModel->tree()->isBusy();
-
-    _ui->actionStopReading->setEnabled( reading );
-    _ui->actionAskReadCache->setEnabled ( ! reading );
-    _ui->actionAskWriteCache->setEnabled( ! reading );
-}
-
-
-void MainWindow::closeEvent( QCloseEvent *event )
-{
-    if ( _modified )
-    {
-	int button = QMessageBox::question( this, tr( "Unsaved changes" ),
-					    tr( "Save changes?" ),
-					    QMessageBox::Save |
-					    QMessageBox::Discard |
-					    QMessageBox::Cancel );
-
-	if ( button == QMessageBox::Cancel )
-	{
-	    event->ignore();
-	    return;
-	}
-
-	if ( button == QMessageBox::Save )
-	{
-	    // saveFile();
-	}
-
-	event->accept();
-    }
+    if ( level < 1 )
+        _ui->dirTreeView->collapseAll();
     else
-    {
-	event->accept();
-    }
+        _ui->dirTreeView->expandToDepth( level - 1 );
 }
 
 

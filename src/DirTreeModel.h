@@ -104,7 +104,7 @@ namespace QDirStat
 
     public slots:
 	/**
-	 * Open a directory URL. Assume "file:" protocol unless otherwise specified.
+	 * Open a directory URL.
 	 **/
 	void openUrl( const QString &url );
 

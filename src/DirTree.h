@@ -107,6 +107,12 @@ namespace QDirStat
 
     public:
 
+        /**
+         * Return the URL of this tree if it has any elements or an empty
+         * string if it doesn't.
+         **/
+        QString url() const;
+
 	/**
 	 * Return the root item of this tree. Notice that this is a pseudo
 	 * root that doesn not really correspond to a filesystem object.
@@ -122,13 +128,13 @@ namespace QDirStat
 	 * Return the first toplevel item of this tree or 0 if there is
 	 * none. This is the logical root item.
 	 **/
-	FileInfo * firstToplevel() const;
+	FileInfo * firstTopLevel() const;
 
 	/**
 	 * Return 'true' if 'item' is a toplevel item, i.e. a direct child of
 	 * the root item.
 	 **/
-	bool isToplevel( FileInfo *item ) const;
+	bool isTopLevel( FileInfo *item ) const;
 
 	/**
 	 * Clear all items of this tree.
@@ -333,8 +339,8 @@ namespace QDirStat
 	 * @ref DirInfo::finalizeLocal(), e.g. cleaning up unused / undesired
 	 * dot entries like in @ref DirInfo::cleanupDotEntries().
 	 *
-	 * Notice that the dot entry might be removed and its children reparented
-	 * after this signal.
+	 * Notice that the dot entry might be removed and its children
+	 * reparented after this signal.
 	 **/
 	void finalizeLocal( DirInfo *dir );
 
