@@ -430,7 +430,7 @@ void DirInfo::readJobAborted()
 
 void DirInfo::finalizeLocal()
 {
-    logDebug() << this << endl;
+    // logDebug() << this << endl;
     cleanupDotEntries();
 }
 
@@ -513,20 +513,23 @@ void DirInfo::cleanupDotEntries()
 }
 
 
-void DirInfo::clearTouched()
+void DirInfo::clearTouched( bool recursive )
 {
     _touched = false;
 
-    FileInfo * child = _firstChild;
-
-    while ( child )
+    if ( recursive )
     {
-	if ( child->isDirInfo() )
-	    child->toDirInfo()->clearTouched();
-	child = child->next();
-    }
+        FileInfo * child = _firstChild;
 
-    if ( _dotEntry )
-	_dotEntry->clearTouched();
+        while ( child )
+        {
+            if ( child->isDirInfo() )
+                child->toDirInfo()->clearTouched();
+            child = child->next();
+        }
+
+        if ( _dotEntry )
+            _dotEntry->clearTouched();
+    }
 }
 

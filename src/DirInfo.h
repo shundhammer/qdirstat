@@ -332,7 +332,7 @@ namespace QDirStat
 	/**
 	 * Recursively clear the 'touched' flag.
 	 **/
-	void clearTouched();
+	void clearTouched( bool recursive = false );
 
 	/**
 	 * Returns true if this is a @ref DirInfo object.

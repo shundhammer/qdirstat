@@ -112,7 +112,7 @@ void LocalDirReadJob::startReading()
     QString		dirName		 = _dir->url();
     QString		defaultCacheName = DEFAULT_CACHE_NAME;
 
-    logDebug() << _dir << endl;
+    // logDebug() << _dir << endl;
 
     if ( ( _diskDir = opendir( dirName.toUtf8() ) ) )
     {
@@ -263,7 +263,7 @@ void LocalDirReadJob::startReading()
 
 void LocalDirReadJob::finishReading( DirInfo * dir )
 {
-    logDebug() << dir << endl;
+    // logDebug() << dir << endl;
 
     _tree->sendFinalizeLocal( dir );
     dir->finalizeLocal();

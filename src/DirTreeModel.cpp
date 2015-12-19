@@ -36,6 +36,10 @@ DirTreeModel::DirTreeModel( QObject * parent ):
 		<< TotalSubDirsCol
 		<< LatestMTimeCol;
     createTree();
+    _updateTimer.setInterval( 333 ); // millisec - TO DO: Configurable
+
+    connect( &_updateTimer, SIGNAL( timeout()            ),
+             this,          SLOT  ( sendPendingUpdates() ) );
 }
 
 
@@ -78,6 +82,7 @@ void DirTreeModel::openUrl( const QString &url )
     if ( _tree && _tree->root() &&  _tree->root()->hasChildren() )
 	clear();
 
+    _updateTimer.start();
     _tree->startReading( url );
 }
 
@@ -120,6 +125,15 @@ int DirTreeModel::mappedCol( int viewCol ) const
     }
 
     return _colMapping.at( viewCol );
+}
+
+
+int DirTreeModel::viewCol( int modelCol ) const
+{
+    if ( modelCol < 0 || modelCol >= colCount() )
+	return 0;
+
+    return _colMapping.indexOf( (Column) modelCol );
 }
 
 
@@ -264,6 +278,13 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 	    {
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
 		QVariant result = columnText( item, col );
+
+                if ( item && item->isDirInfo() )
+                {
+                    // logDebug() << "Touching " << item << endl;
+                    item->toDirInfo()->touch();
+                }
+
 		return result;
 	    }
 
@@ -571,6 +592,7 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
 void DirTreeModel::readJobFinished( DirInfo * dir )
 {
     logDebug() << ( dir == _tree->root() ? "<root>" : dir->url() ) << endl;
+    delayedUpdate( dir );
 
     if ( anyAncestorBusy( dir ) )
     {
@@ -604,7 +626,7 @@ bool DirTreeModel::anyAncestorBusy( FileInfo * item ) const
 void DirTreeModel::newChildrenNotify( DirInfo * dir )
 {
     QString dirName = dir == _tree->root() ? "<root>" : dir->debugUrl();
-    logDebug() << dirName << endl;
+    // logDebug() << dirName << endl;
 
     if ( ! dir )
     {
@@ -618,7 +640,7 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 
     if ( count > 0 )
     {
-	logDebug() << "Notifying view about " << count << " new children of " << dirName << endl;
+	// logDebug() << "Notifying view about " << count << " new children of " << dirName << endl;
 
 	dir->lock();
 	beginInsertRows( index, 0, count - 1 );
@@ -644,23 +666,63 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 }
 
 
+void DirTreeModel::delayedUpdate( DirInfo * dir )
+{
+    while ( dir && dir != _tree->root() )
+    {
+        if ( dir->isTouched() )
+            _pendingUpdates.insert( dir );
+
+        dir = dir->parent();
+    }
+}
+
+
+void DirTreeModel::sendPendingUpdates()
+{
+    // logDebug() << "Sending " << _pendingUpdates.size() << " updates" << endl;
+
+    foreach ( DirInfo * dir, _pendingUpdates )
+    {
+        dataChangedNotify( dir );
+    }
+
+    _pendingUpdates.clear();
+}
+
+
 void DirTreeModel::dataChangedNotify( DirInfo * dir )
 {
     if ( ! dir || dir == _tree->root() )
 	return;
 
-    QModelIndex topLeft	    = modelIndex( dir, 0 );
-    QModelIndex bottomRight = createIndex( topLeft.row(), colCount() - 1, dir );
+    if ( dir->isTouched() ) // only if the view ever requested data about this dir
+    {
+        QModelIndex topLeft	= modelIndex( dir, 0 );
+        QModelIndex bottomRight = createIndex( topLeft.row(), colCount() - 1, dir );
 
-    QVector<int> roles;
-    roles << Qt::DisplayRole;
+        QVector<int> roles;
+        roles << Qt::DisplayRole;
 
-    emit dataChanged( topLeft, bottomRight, roles );
+        logDebug() << "Data changed for " << dir << endl;
+        emit dataChanged( topLeft, bottomRight, roles );
+
+        // If the view is still interested in this dir, it will fetch data, and
+        // then the dir will be touched again. For all we know now, this dir
+        // might easily be out of scope for the view, so let's not bother the
+        // view again about this dir until it's clear that the view still wants
+        // updates about it.
+
+        dir->clearTouched();
+    }
 }
 
 
 void DirTreeModel::readingFinished()
 {
+    _updateTimer.stop();
+    sendPendingUpdates();
+
 #if 0
     beginResetModel();
     endResetModel();

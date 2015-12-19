@@ -56,7 +56,6 @@ MainWindow::MainWindow():
     header->setSectionResizeMode( QHeaderView::ResizeToContents );
     _ui->dirTreeView->setRootIsDecorated( true );
 
-
     connect( _dirTreeModel->tree(),	SIGNAL( finished()	  ),
 	     this,			SLOT  ( readingFinished() ) );
 
@@ -77,13 +76,9 @@ MainWindow::MainWindow():
 
     connectActions();
 
-    // DEBUG
-    // DEBUG
-    // DEBUG
+#if 0
     ExcludeRules::add( ".*/\\.git$" );
-    // DEBUG
-    // DEBUG
-    // DEBUG
+#endif
 
     updateActions();
 }
@@ -195,6 +190,7 @@ void MainWindow::openUrl( const QString & url )
 {
     _dirTreeModel->openUrl( url );
     updateActions();
+    expandTreeToLevel( 1 );
 }
 
 
@@ -289,6 +285,8 @@ void MainWindow::readingFinished()
     logDebug() << endl;
     _ui->statusBar->showMessage( tr( "Ready.") );
     expandTreeToLevel( 1 );
+    int sortCol = _dirTreeModel->viewCol( QDirStat::DirTreeModel::TotalSizeCol );
+    _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
 
     // Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );
 }

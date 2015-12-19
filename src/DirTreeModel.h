@@ -12,6 +12,8 @@
 
 #include <QAbstractItemModel>
 #include <QPixmap>
+#include <QSet>
+#include <QTimer>
 
 #include "FileInfoIterator.h"
 
@@ -100,6 +102,13 @@ namespace QDirStat
 	 * Return the number of columns that are curently displayed.
 	 **/
 	int colCount() const { return _colMapping.size(); }
+
+        /**
+         * Look up a model column in the column mapping to get the
+         * corresponding view column. This is the reverse operation to
+         * 'mappedCol()'.
+         **/
+        int viewCol( int modelCol ) const;
 
 
     public slots:
@@ -201,6 +210,21 @@ namespace QDirStat
 	 **/
 	void readingFinished();
 
+        /**
+         * Delayed update of the data fields in the view for 'dir':
+         * Store 'dir' and all its ancestors in _pendingUpdates.
+         *
+         * The updates will be sent several times per second to the views with
+         * 'sendPendingUpdates()'.
+         **/
+        void delayedUpdate( DirInfo * dir );
+
+        /**
+         * Send all pending updates to the connected views.
+         * This is triggered by the update timer.
+         **/
+        void sendPendingUpdates();
+
 
     protected:
 	/**
@@ -278,6 +302,8 @@ namespace QDirStat
 	QString		_treeIconDir;
 	QList<Column>	_colMapping;
 	int		_readJobsCol;
+        QSet<DirInfo *> _pendingUpdates;
+        QTimer          _updateTimer;
 
 	// The various icons
 
