@@ -32,10 +32,9 @@ FileInfoIterator::FileInfoIterator( FileInfo *	   parent,
 }
 
 
-void
-FileInfoIterator::init( FileInfo *     parent,
-			DotEntryPolicy dotEntryPolicy,
-			bool	       callNext )
+void FileInfoIterator::init( FileInfo *	    parent,
+			     DotEntryPolicy dotEntryPolicy,
+			     bool	    callNext )
 {
     _parent  = parent;
     _policy  = dotEntryPolicy;
@@ -124,8 +123,7 @@ void FileInfoIterator::next()
 }
 
 
-int
-FileInfoIterator::count()
+int FileInfoIterator::count()
 {
     int cnt = 0;
 

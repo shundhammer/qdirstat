@@ -36,8 +36,8 @@ namespace Debug
      * blanks).
      **/
     void dumpModelTree( const QAbstractItemModel * model,
-                        const QModelIndex        & index,
-                        const QString            & indent );
+			const QModelIndex	 & index,
+			const QString		 & indent );
 
     /**
      * Return a string list of data(0) of the tree ancestors of 'index'.
@@ -45,6 +45,6 @@ namespace Debug
      **/
     QStringList modelTreeAncestors( const QModelIndex & index );
 
-}       // namespace
+}	// namespace
 
-#endif  // DebugHelpers_h
+#endif	// DebugHelpers_h

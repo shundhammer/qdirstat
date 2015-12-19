@@ -293,27 +293,46 @@ namespace QDirStat
 	 **/
 	void setReadState( DirReadState newReadState );
 
-        /**
-         * Check if this directory is locked. This is purely a user lock
-         * that can be used by the application. The DirInfo does not care
-         * about it at all.
-         **/
-        bool isLocked() const { return _locked; }
+	/**
+	 * Check if this directory is locked. This is purely a user lock
+	 * that can be used by the application. The DirInfo does not care
+	 * about it at all.
+	 **/
+	bool isLocked() const { return _locked; }
 
-        /**
-         * Set the user lock.
-         **/
-        void lock() { _locked = true; }
+	/**
+	 * Set the user lock.
+	 **/
+	void lock() { _locked = true; }
 
-        /**
-         * Unlock the user lock.
-         **/
-        void unlock() { _locked = false; }
+	/**
+	 * Unlock the user lock.
+	 **/
+	void unlock() { _locked = false; }
 
-        /**
-         * Recursively delete all children, including the dot entry.
-         **/
-        void clear();
+	/**
+	 * Recursively delete all children, including the dot entry.
+	 **/
+	void clear();
+
+	/**
+	 * Mark this directory as 'touched'. Item models can use this to keep
+	 * track of which items were ever used by a connected view to minimize
+	 * any update events: If no information about an item was ever
+	 * requested by the view, it is not necessary to tell it that that that
+	 * data is now outdated.
+	 **/
+	void touch() { _touched = true; }
+
+	/**
+	 * Check the 'touched' flag.
+	 **/
+	bool isTouched() const { return _touched; }
+
+	/**
+	 * Recursively clear the 'touched' flag.
+	 **/
+	void clearTouched();
 
 	/**
 	 * Returns true if this is a @ref DirInfo object.
@@ -355,14 +374,15 @@ namespace QDirStat
 	bool		_isMountPoint:1;	// Flag: is this a mount point?
 	bool		_isExcluded:1;		// Flag: was this directory excluded?
 	bool		_summaryDirty:1;	// dirty flag for the cached values
-	bool		_deletingAll:1;         // Deleting complete children tree?
-        bool            _locked:1;              // User lock
+	bool		_deletingAll:1;		// Deleting complete children tree?
+	bool		_locked:1;		// App lock
+	bool		_touched:1;		// App 'touch' flag
 	int		_pendingReadJobs;	// number of open directories in this subtree
 
 	// Children management
 
 	FileInfo *	_firstChild;		// pointer to the first child
-	DirInfo  *	_dotEntry;		// pseudo entry to hold non-dir children
+	DirInfo	 *	_dotEntry;		// pseudo entry to hold non-dir children
 
 	// Some cached values
 

@@ -57,17 +57,20 @@ MainWindow::MainWindow():
     _ui->dirTreeView->setRootIsDecorated( true );
 
 
-    connect( _dirTreeModel->tree(),	SIGNAL( finished()        ),
+    connect( _dirTreeModel->tree(),	SIGNAL( finished()	  ),
 	     this,			SLOT  ( readingFinished() ) );
 
     connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
-	     this,			SLOT  ( updateActions()   ) );
+	     this,			SLOT  ( updateActions()	  ) );
 
-    connect( _dirTreeModel->tree(),	SIGNAL( finished()        ),
-	     this,			SLOT  ( updateActions()   ) );
+    connect( _dirTreeModel->tree(),	SIGNAL( finished()	  ),
+	     this,			SLOT  ( updateActions()	  ) );
 
-    connect( _dirTreeModel->tree(),	SIGNAL( aborted()         ),
-	     this,			SLOT  ( updateActions()   ) );
+    connect( _dirTreeModel->tree(),	SIGNAL( aborted()	  ),
+	     this,			SLOT  ( updateActions()	  ) );
+
+    connect( _dirTreeModel->tree(),	SIGNAL( progressInfo( QString ) ),
+	     this,			SLOT  ( showProgress( QString ) ) );
 
     connect( _ui->dirTreeView,		SIGNAL( clicked	   ( QModelIndex ) ),
 	     this,			SLOT  ( itemClicked( QModelIndex ) ) );
@@ -100,17 +103,17 @@ void MainWindow::connectActions()
     connect( _ui->actionOpen,		SIGNAL( triggered()  ),
 	     this,			SLOT  ( askOpenUrl() ) );
 
-    connect( _ui->actionRefreshAll,     SIGNAL( triggered()  ),
-             this,                      SLOT  ( refreshAll() ) );
+    connect( _ui->actionRefreshAll,	SIGNAL( triggered()  ),
+	     this,			SLOT  ( refreshAll() ) );
 
-    connect( _ui->actionStopReading,    SIGNAL( triggered()   ),
-             this,                      SLOT  ( stopReading() ) );
+    connect( _ui->actionStopReading,	SIGNAL( triggered()   ),
+	     this,			SLOT  ( stopReading() ) );
 
-    connect( _ui->actionAskWriteCache,  SIGNAL( triggered()     ),
-             this,                      SLOT  ( askWriteCache() ) );
+    connect( _ui->actionAskWriteCache,	SIGNAL( triggered()	),
+	     this,			SLOT  ( askWriteCache() ) );
 
-    connect( _ui->actionAskReadCache,   SIGNAL( triggered()     ),
-             this,                      SLOT  ( askReadCache()  ) );
+    connect( _ui->actionAskReadCache,	SIGNAL( triggered()	),
+	     this,			SLOT  ( askReadCache()	) );
 
     connect( _ui->actionQuit,		SIGNAL( triggered() ),
 	     qApp,			SLOT  ( quit()	    ) );
@@ -121,8 +124,8 @@ void MainWindow::connectActions()
 
     _treeLevelMapper = new QSignalMapper( this );
 
-    connect( _treeLevelMapper, SIGNAL( mapped           ( int ) ),
-             this,             SLOT  ( expandTreeToLevel( int ) ) );
+    connect( _treeLevelMapper, SIGNAL( mapped		( int ) ),
+	     this,	       SLOT  ( expandTreeToLevel( int ) ) );
 
     mapTreeExpandAction( _ui->actionExpandTreeLevel0, 0 );
     mapTreeExpandAction( _ui->actionExpandTreeLevel1, 1 );
@@ -141,8 +144,8 @@ void MainWindow::connectActions()
 
 void MainWindow::mapTreeExpandAction( QAction * action, int level )
 {
-    connect( action,           SIGNAL( triggered() ),
-             _treeLevelMapper, SLOT  ( map()       ) );
+    connect( action,	       SIGNAL( triggered() ),
+	     _treeLevelMapper, SLOT  ( map()	   ) );
     _treeLevelMapper->setMapping( action, level );
 }
 
@@ -152,7 +155,7 @@ void MainWindow::updateActions()
     bool reading = _dirTreeModel->tree()->isBusy();
 
     _ui->actionStopReading->setEnabled( reading );
-    _ui->actionRefreshAll->setEnabled   ( ! reading );
+    _ui->actionRefreshAll->setEnabled	( ! reading );
     _ui->actionAskReadCache->setEnabled ( ! reading );
     _ui->actionAskWriteCache->setEnabled( ! reading );
 }
@@ -198,9 +201,9 @@ void MainWindow::openUrl( const QString & url )
 void MainWindow::askOpenUrl()
 {
     QString url = QFileDialog::getExistingDirectory( this, // parent
-                                                     tr("Select directory to scan") );
+						     tr("Select directory to scan") );
     if ( ! url.isEmpty() )
-        openUrl( url );
+	openUrl( url );
 }
 
 
@@ -210,13 +213,13 @@ void MainWindow::refreshAll()
 
     if ( ! url.isEmpty() )
     {
-        logDebug() << "Refreshing " << url << endl;
-        _dirTreeModel->openUrl( url );
-        updateActions();
+	logDebug() << "Refreshing " << url << endl;
+	_dirTreeModel->openUrl( url );
+	updateActions();
     }
     else
     {
-        askOpenUrl();
+	askOpenUrl();
     }
 }
 
@@ -225,8 +228,8 @@ void MainWindow::stopReading()
 {
     if ( _dirTreeModel->tree()->isBusy() )
     {
-        _dirTreeModel->tree()->abortReading();
-        _ui->statusBar->showMessage( tr( "Reading aborted." ) );
+	_dirTreeModel->tree()->abortReading();
+	_ui->statusBar->showMessage( tr( "Reading aborted." ) );
     }
 }
 
@@ -234,12 +237,12 @@ void MainWindow::stopReading()
 void MainWindow::askReadCache()
 {
     QString fileName = QFileDialog::getOpenFileName( this, // parent
-                                                     tr( "Select QDirStat cache file" ),
-                                                     DEFAULT_CACHE_NAME );
+						     tr( "Select QDirStat cache file" ),
+						     DEFAULT_CACHE_NAME );
     if ( ! fileName.isEmpty() )
     {
-        _dirTreeModel->clear();
-        _dirTreeModel->tree()->readCache( fileName );
+	_dirTreeModel->clear();
+	_dirTreeModel->tree()->readCache( fileName );
     }
 }
 
@@ -247,15 +250,15 @@ void MainWindow::askReadCache()
 void MainWindow::askWriteCache()
 {
     QString fileName = QFileDialog::getSaveFileName( this, // parent
-                                                     tr( "Enter name for QDirStat cache file"),
-                                                     DEFAULT_CACHE_NAME );
+						     tr( "Enter name for QDirStat cache file"),
+						     DEFAULT_CACHE_NAME );
     if ( ! fileName.isEmpty() )
     {
-        bool ok = _dirTreeModel->tree()->writeCache( fileName );
+	bool ok = _dirTreeModel->tree()->writeCache( fileName );
 
-        QString msg = ok ? tr( "Directory tree written to file %1" ).arg( fileName ) :
-                           tr( "ERROR writing cache file %1").arg( fileName );
-        _ui->statusBar->showMessage( msg, _statusBarTimeOut );
+	QString msg = ok ? tr( "Directory tree written to file %1" ).arg( fileName ) :
+			   tr( "ERROR writing cache file %1").arg( fileName );
+	_ui->statusBar->showMessage( msg, _statusBarTimeOut );
     }
 }
 
@@ -263,9 +266,15 @@ void MainWindow::askWriteCache()
 void MainWindow::expandTreeToLevel( int level )
 {
     if ( level < 1 )
-        _ui->dirTreeView->collapseAll();
+	_ui->dirTreeView->collapseAll();
     else
-        _ui->dirTreeView->expandToDepth( level - 1 );
+	_ui->dirTreeView->expandToDepth( level - 1 );
+}
+
+
+void MainWindow::showProgress( const QString & text )
+{
+    _ui->statusBar->showMessage( text, _statusBarTimeOut );
 }
 
 

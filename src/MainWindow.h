@@ -68,6 +68,11 @@ public slots:
      **/
     void expandTreeToLevel( int level );
 
+    /**
+     * Show progress text in the status bar for a few seconds.
+     **/
+    void showProgress( const QString & text );
+
 
 protected slots:
 
@@ -117,8 +122,8 @@ private:
     QDirStat::DirTreeModel * _dirTreeModel;
     QSortFilterProxyModel  * _sortModel;
     bool		     _modified;
-    int                      _statusBarTimeOut; // millisec
-    QSignalMapper          * _treeLevelMapper;
+    int			     _statusBarTimeOut; // millisec
+    QSignalMapper	   * _treeLevelMapper;
 };
 
 #endif // MainWindow_H

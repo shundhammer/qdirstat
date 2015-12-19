@@ -42,8 +42,7 @@ DirTree::~DirTree()
 }
 
 
-void
-DirTree::readConfig()
+void DirTree::readConfig()
 {
 #if 0
     // FIXME
@@ -62,8 +61,7 @@ DirTree::readConfig()
 }
 
 
-void
-DirTree::setRoot( DirInfo *newRoot )
+void DirTree::setRoot( DirInfo *newRoot )
 {
     if ( _root )
     {
@@ -77,22 +75,19 @@ DirTree::setRoot( DirInfo *newRoot )
 }
 
 
-FileInfo *
-DirTree::firstTopLevel() const
+FileInfo * DirTree::firstTopLevel() const
 {
     return _root ? _root->firstChild() : 0;
 }
 
 
-bool
-DirTree::isTopLevel( FileInfo *item ) const
+bool DirTree::isTopLevel( FileInfo *item ) const
 {
     return item && item->parent() && ! item->parent()->parent();
 }
 
 
-QString
-DirTree::url() const
+QString DirTree::url() const
 {
     FileInfo * realRoot = firstTopLevel();
 
@@ -100,33 +95,31 @@ DirTree::url() const
 }
 
 
-void
-DirTree::clear()
+void DirTree::clear()
 {
     _jobQueue.clear();
 
     if ( _root )
     {
 	selectItem( 0 );
-        _root->clear();
+	_root->clear();
     }
 
     _isBusy = false;
 }
 
 
-void
-DirTree::startReading( const QString & rawUrl )
+void DirTree::startReading( const QString & rawUrl )
 {
     QFileInfo fileInfo( rawUrl );
     QString url = fileInfo.absoluteFilePath();
     // logDebug() << "rawUrl: \"" << rawUrl << "\"" << endl;
-    logDebug() << "   url: \"" << url    << "\"" << endl;
+    logDebug() << "   url: \"" << url	 << "\"" << endl;
 
     _isBusy = true;
 
     if ( _root->hasChildren() )
-        clear();
+	clear();
     emit startingReading();
     readConfig();
 
@@ -159,8 +152,7 @@ DirTree::startReading( const QString & rawUrl )
 }
 
 
-void
-DirTree::refresh( FileInfo *subtree )
+void DirTree::refresh( FileInfo *subtree )
 {
     if ( ! _root )
 	return;
@@ -238,8 +230,7 @@ DirTree::refresh( FileInfo *subtree )
 }
 
 
-void
-DirTree::abortReading()
+void DirTree::abortReading()
 {
     if ( _jobQueue.isEmpty() )
 	return;
@@ -251,16 +242,14 @@ DirTree::abortReading()
 }
 
 
-void
-DirTree::slotFinished()
+void DirTree::slotFinished()
 {
     _isBusy = false;
     emit finished();
 }
 
 
-void
-DirTree::childAddedNotify( FileInfo *newChild )
+void DirTree::childAddedNotify( FileInfo *newChild )
 {
     emit childAdded( newChild );
 
@@ -269,8 +258,7 @@ DirTree::childAddedNotify( FileInfo *newChild )
 }
 
 
-void
-DirTree::deletingChildNotify( FileInfo *deletedChild )
+void DirTree::deletingChildNotify( FileInfo *deletedChild )
 {
     emit deletingChild( deletedChild );
 
@@ -285,15 +273,13 @@ DirTree::deletingChildNotify( FileInfo *deletedChild )
 }
 
 
-void
-DirTree::childDeletedNotify()
+void DirTree::childDeletedNotify()
 {
     emit childDeleted();
 }
 
 
-void
-DirTree::deleteSubtree( FileInfo *subtree )
+void DirTree::deleteSubtree( FileInfo *subtree )
 {
     // logDebug() << "Deleting subtree " << subtree << endl;
     DirInfo *parent = subtree->parent();
@@ -354,57 +340,49 @@ DirTree::deleteSubtree( FileInfo *subtree )
 }
 
 
-void
-DirTree::addJob( DirReadJob * job )
+void DirTree::addJob( DirReadJob * job )
 {
     _jobQueue.enqueue( job );
 }
 
 
-void
-DirTree::sendProgressInfo( const QString &infoLine )
+void DirTree::sendProgressInfo( const QString &infoLine )
 {
     emit progressInfo( infoLine );
 }
 
 
-void
-DirTree::sendFinalizeLocal( DirInfo *dir )
+void DirTree::sendFinalizeLocal( DirInfo *dir )
 {
     emit finalizeLocal( dir );
 }
 
 
-void
-DirTree::sendStartingReading()
+void DirTree::sendStartingReading()
 {
     emit startingReading();
 }
 
 
-void
-DirTree::sendFinished()
+void DirTree::sendFinished()
 {
     emit finished();
 }
 
 
-void
-DirTree::sendAborted()
+void DirTree::sendAborted()
 {
     emit aborted();
 }
 
 
-void
-DirTree::sendStartingReading( DirInfo * dir )
+void DirTree::sendStartingReading( DirInfo * dir )
 {
     emit startingReading( dir );
 }
 
 
-void
-DirTree::sendReadJobFinished( DirInfo * dir )
+void DirTree::sendReadJobFinished( DirInfo * dir )
 {
     // logDebug() << dir << endl;
     emit readJobFinished( dir );
@@ -413,8 +391,7 @@ DirTree::sendReadJobFinished( DirInfo * dir )
 
 
 
-void
-DirTree::selectItem( FileInfo *newSelection )
+void DirTree::selectItem( FileInfo *newSelection )
 {
     if ( newSelection == _selection )
 	return;
@@ -431,16 +408,14 @@ DirTree::selectItem( FileInfo *newSelection )
 }
 
 
-bool
-DirTree::writeCache( const QString & cacheFileName )
+bool DirTree::writeCache( const QString & cacheFileName )
 {
     CacheWriter writer( cacheFileName.toUtf8(), this );
     return writer.ok();
 }
 
 
-void
-DirTree::readCache( const QString & cacheFileName )
+void DirTree::readCache( const QString & cacheFileName )
 {
     _isBusy = true;
     emit startingReading();

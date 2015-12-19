@@ -49,8 +49,7 @@ DirReadJob::~DirReadJob()
  * startReading() (or both).
  **/
 
-void
-DirReadJob::read()
+void DirReadJob::read()
 {
     if ( ! _started )
     {
@@ -63,15 +62,13 @@ DirReadJob::read()
 }
 
 
-void
-DirReadJob::setDir( DirInfo * dir )
+void DirReadJob::setDir( DirInfo * dir )
 {
     _dir = dir;
 }
 
 
-void
-DirReadJob::finished()
+void DirReadJob::finished()
 {
     if ( _queue )
 	_queue->jobFinishedNotify( this );
@@ -80,15 +77,13 @@ DirReadJob::finished()
 }
 
 
-void
-DirReadJob::childAdded( FileInfo *newChild )
+void DirReadJob::childAdded( FileInfo *newChild )
 {
     _tree->childAddedNotify( newChild );
 }
 
 
-void
-DirReadJob::deletingChild( FileInfo *deletedChild )
+void DirReadJob::deletingChild( FileInfo *deletedChild )
 {
     _tree->deletingChildNotify( deletedChild );
 }
@@ -110,8 +105,7 @@ LocalDirReadJob::~LocalDirReadJob()
 }
 
 
-void
-LocalDirReadJob::startReading()
+void LocalDirReadJob::startReading()
 {
     struct dirent *	entry;
     struct stat		statInfo;
@@ -209,7 +203,7 @@ LocalDirReadJob::startReading()
 				_queue->killAll( _dir, cacheReadJob );	// Will delete this job as well!
 				// All data members of this object are invalid from here on!
 
-                                logDebug() << "Deleting subtree " << dir << endl;
+				logDebug() << "Deleting subtree " << dir << endl;
 				tree->deleteSubtree( dir );
 
 				return;
@@ -267,8 +261,7 @@ LocalDirReadJob::startReading()
 }
 
 
-void
-LocalDirReadJob::finishReading( DirInfo * dir )
+void LocalDirReadJob::finishReading( DirInfo * dir )
 {
     logDebug() << dir << endl;
 
@@ -279,10 +272,9 @@ LocalDirReadJob::finishReading( DirInfo * dir )
 
 
 
-FileInfo *
-LocalDirReadJob::stat( const QString & url,
-		       DirTree	     * tree,
-		       DirInfo	     * parent )
+FileInfo * LocalDirReadJob::stat( const QString & url,
+				  DirTree	* tree,
+				  DirInfo	* parent )
 {
     struct stat statInfo;
     logDebug() << "url: \"" << url << "\"" << endl;
@@ -355,8 +347,7 @@ CacheReadJob::CacheReadJob( DirTree	  * tree,
 }
 
 
-void
-CacheReadJob::init()
+void CacheReadJob::init()
 {
     if ( _reader )
     {
@@ -421,8 +412,7 @@ DirReadJobQueue::~DirReadJobQueue()
 }
 
 
-void
-DirReadJobQueue::enqueue( DirReadJob * job )
+void DirReadJobQueue::enqueue( DirReadJob * job )
 {
     if ( job )
     {
@@ -439,8 +429,7 @@ DirReadJobQueue::enqueue( DirReadJob * job )
 }
 
 
-DirReadJob *
-DirReadJobQueue::dequeue()
+DirReadJob * DirReadJobQueue::dequeue()
 {
     DirReadJob * job = _queue.first();
     _queue.removeFirst();
@@ -452,16 +441,14 @@ DirReadJobQueue::dequeue()
 }
 
 
-void
-DirReadJobQueue::clear()
+void DirReadJobQueue::clear()
 {
     qDeleteAll( _queue );
     _queue.clear();
 }
 
 
-void
-DirReadJobQueue::abort()
+void DirReadJobQueue::abort()
 {
     foreach ( DirReadJob * job, _queue )
     {
@@ -473,8 +460,7 @@ DirReadJobQueue::abort()
 }
 
 
-void
-DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
+void DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 {
     if ( ! subtree )
 	return;
@@ -486,10 +472,10 @@ DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 	DirReadJob * job = it.next();
 
 	if ( exceptJob && job == exceptJob )
-        {
-            logDebug() << "NOT killing read job " << job->dir() << endl;
+	{
+	    logDebug() << "NOT killing read job " << job->dir() << endl;
 	    continue;
-        }
+	}
 
 	if ( job->dir() && job->dir()->isInSubtree( subtree ) )
 	{
@@ -501,16 +487,14 @@ DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 }
 
 
-void
-DirReadJobQueue::timeSlicedRead()
+void DirReadJobQueue::timeSlicedRead()
 {
     if ( ! _queue.isEmpty() )
 	_queue.first()->read();
 }
 
 
-void
-DirReadJobQueue::jobFinishedNotify( DirReadJob *job )
+void DirReadJobQueue::jobFinishedNotify( DirReadJob *job )
 {
     // Get rid of the old (finished) job.
 

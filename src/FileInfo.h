@@ -619,10 +619,10 @@ namespace QDirStat
      *
      * Examples:
      *
-     *     "/home/bob/foo.txt"	-> "foo.txt"
-     *     "foo.txt" 		-> "foo.txt"
+     *	   "/home/bob/foo.txt"	-> "foo.txt"
+     *	   "foo.txt"		-> "foo.txt"
      *	   "/usr/bin"		-> "bin"
-     *     "/usr/bin/"		-> "bin"
+     *	   "/usr/bin/"		-> "bin"
      **/
     QString baseName( const QString & fileName );
 

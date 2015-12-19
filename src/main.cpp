@@ -21,9 +21,9 @@ int main( int argc, char *argv[] )
     mainWin.show();
 
     if ( argc > 1 )
-        mainWin.openUrl( argv[1] );
+	mainWin.openUrl( argv[1] );
     else
-        mainWin.askOpenUrl();
+	mainWin.askOpenUrl();
 
     app.exec();
 }

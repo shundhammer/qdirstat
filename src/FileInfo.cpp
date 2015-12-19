@@ -153,15 +153,13 @@ FileInfo::~FileInfo()
 }
 
 
-FileSize
-FileInfo::allocatedSize() const
+FileSize FileInfo::allocatedSize() const
 {
     return blocks() * blockSize();
 }
 
 
-FileSize
-FileInfo::size() const
+FileSize FileInfo::size() const
 {
     FileSize sz = _isSparseFile ? allocatedSize() : _size;
 
@@ -172,8 +170,7 @@ FileInfo::size() const
 }
 
 
-QString
-FileInfo::url() const
+QString FileInfo::url() const
 {
     if ( _parent )
     {
@@ -192,15 +189,13 @@ FileInfo::url() const
 }
 
 
-QString
-FileInfo::debugUrl() const
+QString FileInfo::debugUrl() const
 {
     return url() + ( isDotEntry() ? ( QString( "/" ) + dotEntryName() ) : "" );
 }
 
 
-int
-FileInfo::treeLevel() const
+int FileInfo::treeLevel() const
 {
     int		level	= 0;
     FileInfo *	parent	= _parent;
@@ -221,15 +216,13 @@ FileInfo::treeLevel() const
 }
 
 
-bool
-FileInfo::hasChildren() const
+bool FileInfo::hasChildren() const
 {
     return firstChild() || dotEntry();
 }
 
 
-bool
-FileInfo::isInSubtree( const FileInfo *subtree ) const
+bool FileInfo::isInSubtree( const FileInfo *subtree ) const
 {
     const FileInfo * ancestor = this;
 
@@ -245,8 +238,7 @@ FileInfo::isInSubtree( const FileInfo *subtree ) const
 }
 
 
-FileInfo *
-FileInfo::locate( QString url, bool findDotEntries )
+FileInfo * FileInfo::locate( QString url, bool findDotEntries )
 {
     if ( ! url.startsWith( _name ) )
 	return 0;

@@ -226,7 +226,7 @@ static void qt_logger( QtMsgType msgType,
 	case QtCriticalMsg: severity = LogSeverityError;   break;
 	case QtFatalMsg:    severity = LogSeverityError;   break;
 #if QT_VERSION >= 0x050500
-	case QtInfoMsg:     severity = LogSeverityDebug;   break;
+	case QtInfoMsg:	    severity = LogSeverityDebug;   break;
 #endif
     }
 

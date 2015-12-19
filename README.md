@@ -5,7 +5,7 @@ Qt-based directory statistics: KDirStat without any KDE -- from the original KDi
 
 License: GPL V2
 
-Updated: 2015-12-18
+Updated: 2015-12-19
 
 
 ## Overview
@@ -54,7 +54,7 @@ little own infrastructure. The KDE libs are just not worth the hassle anymore.
 ## Current Development Status
 
 - 2015-12-18  Found the crippling bugs that made the DirTreeModel do crazy things.
-              None of the Qt classes proved to be helpful to find that - 
+              None of the Qt classes proved to be helpful to find that -
               they just happily do the crazy things. That's what I call poor design.
               Now there is a first working QDirStat with a useful display tree,
               including icons (but no percentage bar graph yet).

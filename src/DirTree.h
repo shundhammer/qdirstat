@@ -107,11 +107,11 @@ namespace QDirStat
 
     public:
 
-        /**
-         * Return the URL of this tree if it has any elements or an empty
-         * string if it doesn't.
-         **/
-        QString url() const;
+	/**
+	 * Return the URL of this tree if it has any elements or an empty
+	 * string if it doesn't.
+	 **/
+	QString url() const;
 
 	/**
 	 * Return the root item of this tree. Notice that this is a pseudo
@@ -225,7 +225,7 @@ namespace QDirStat
 	 **/
 	virtual void childDeletedNotify();
 
-        /**
+	/**
 	 * Send a @ref startingReading() signal.
 	 **/
 	void sendStartingReading();
@@ -246,15 +246,15 @@ namespace QDirStat
 	 **/
 	void sendProgressInfo( const QString &infoLine );
 
-        /**
-         * Send a @ref startingReading( DirInfo * ) signal.
-         **/
-        void sendStartingReading( DirInfo * dir );
+	/**
+	 * Send a @ref startingReading( DirInfo * ) signal.
+	 **/
+	void sendStartingReading( DirInfo * dir );
 
-        /**
-         * Send a @ref readJobFinished( DirInfo * ) signal.
-         **/
-        void sendReadJobFinished( DirInfo * dir );
+	/**
+	 * Send a @ref readJobFinished( DirInfo * ) signal.
+	 **/
+	void sendReadJobFinished( DirInfo * dir );
 
 	/**
 	 * Send a @ref finalizeLocal() signal to give views a chance to
@@ -317,16 +317,16 @@ namespace QDirStat
 	 **/
 	void aborted();
 
-        /**
-         * Emitted when reading the specified directory is started.
-         **/
-        void startingReading( DirInfo * dir );
+	/**
+	 * Emitted when reading the specified directory is started.
+	 **/
+	void startingReading( DirInfo * dir );
 
-        /**
-         * Emitted when reading the specified directory has been finished.
-         * This is sent AFTER finalizeLocal( DirInfo * dir ).
-         **/
-        void readJobFinished( DirInfo * dir );
+	/**
+	 * Emitted when reading the specified directory has been finished.
+	 * This is sent AFTER finalizeLocal( DirInfo * dir ).
+	 **/
+	void readJobFinished( DirInfo * dir );
 
 	/**
 	 * Emitted when reading a directory is finished.

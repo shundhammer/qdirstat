@@ -18,77 +18,77 @@ namespace Debug
 
     void dumpDirectChildren( FileInfo * dir, const QString & dirName )
     {
-        if ( ! dir )
-            return;
+	if ( ! dir )
+	    return;
 
-        QString name = dirName.isEmpty() ? dir->debugUrl() : dirName;
+	QString name = dirName.isEmpty() ? dir->debugUrl() : dirName;
 
-        if ( name.isEmpty() && dir == dir->tree()->root() )
-            name = "<root>";
+	if ( name.isEmpty() && dir == dir->tree()->root() )
+	    name = "<root>";
 
-        FileInfoIterator it( dir, DotEntryIsSubDir );
+	FileInfoIterator it( dir, DotEntryIsSubDir );
 
-        if ( dir->hasChildren() )
-        {
-            logDebug() << "Children of " << name << endl;
-            int count = 0;
+	if ( dir->hasChildren() )
+	{
+	    logDebug() << "Children of " << name << endl;
+	    int count = 0;
 
-            while ( *it )
-            {
-                logDebug() << "    #" << count++ << ": " << *it << endl;
-                ++it;
-            }
-        }
-        else
-        {
-            logDebug() << "\t\tNo children in " << name << endl;
-        }
+	    while ( *it )
+	    {
+		logDebug() << "	   #" << count++ << ": " << *it << endl;
+		++it;
+	    }
+	}
+	else
+	{
+	    logDebug() << "\t\tNo children in " << name << endl;
+	}
     }
 
 
     void dumpModelTree( const QAbstractItemModel * model,
-                        const QModelIndex        & index,
-                        const QString            & indent )
+			const QModelIndex	 & index,
+			const QString		 & indent )
     {
-        int rowCount = model->rowCount( index );
-        QVariant data = model->data( index, Qt::DisplayRole );
+	int rowCount = model->rowCount( index );
+	QVariant data = model->data( index, Qt::DisplayRole );
 
-        if ( data.isValid() )
-        {
-            if ( rowCount > 0 )
-                logDebug() << indent << data.toString() << ": " << rowCount << " rows" << endl;
-            else
-                logDebug() << indent << data.toString() << endl;
-        }
-        else
-        {
-            logDebug() << "<No data> " << rowCount << " rows" << endl;
-        }
+	if ( data.isValid() )
+	{
+	    if ( rowCount > 0 )
+		logDebug() << indent << data.toString() << ": " << rowCount << " rows" << endl;
+	    else
+		logDebug() << indent << data.toString() << endl;
+	}
+	else
+	{
+	    logDebug() << "<No data> " << rowCount << " rows" << endl;
+	}
 
-        for ( int row=0; row < rowCount; row++ )
-        {
-            QModelIndex childIndex = model->index( row, 0, index );
-            Debug::dumpModelTree( model, childIndex, indent + QString( 4, ' ' ) );
-        }
+	for ( int row=0; row < rowCount; row++ )
+	{
+	    QModelIndex childIndex = model->index( row, 0, index );
+	    Debug::dumpModelTree( model, childIndex, indent + QString( 4, ' ' ) );
+	}
     }
 
 
     QStringList modelTreeAncestors( const QModelIndex & index )
     {
-        QStringList parents;
-        QModelIndex parent = index;
+	QStringList parents;
+	QModelIndex parent = index;
 
-        while ( parent.isValid() )
-        {
-            QVariant data = index.model()->data( parent, 0 );
+	while ( parent.isValid() )
+	{
+	    QVariant data = index.model()->data( parent, 0 );
 
-            if ( data.isValid() )
-                parents.prepend( data.toString() );
+	    if ( data.isValid() )
+		parents.prepend( data.toString() );
 
-            parent = index.model()->parent( parent );
-        }
+	    parent = index.model()->parent( parent );
+	}
 
-        return parents;
+	return parents;
     }
 
 } // namespace

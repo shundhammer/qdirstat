@@ -37,8 +37,7 @@ ExcludeRule::~ExcludeRule()
 }
 
 
-bool
-ExcludeRule::match( const QString & text )
+bool ExcludeRule::match( const QString & text )
 {
     if ( text.isEmpty() || ! _enabled )
 	return false;
@@ -102,8 +101,7 @@ void ExcludeRules::add( const QString & regexp )
 }
 
 
-bool
-ExcludeRules::match( const QString & text )
+bool ExcludeRules::match( const QString & text )
 {
     _lastMatchingRule = 0;
     if ( text.isEmpty() )
@@ -127,8 +125,7 @@ ExcludeRules::match( const QString & text )
 }
 
 
-const ExcludeRule *
-ExcludeRules::matchingRule( const QString & text )
+const ExcludeRule * ExcludeRules::matchingRule( const QString & text )
 {
     if ( text.isEmpty() )
 	return 0;

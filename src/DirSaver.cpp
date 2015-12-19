@@ -37,14 +37,6 @@ void DirSaver::cd( const QString & newPath )
 }
 
 
-#if 0
-QString DirSaver::currentDirPath() const
-{
-    return QDir::currentPath();
-}
-#endif
-
-
 void DirSaver::restore()
 {
     cd( _oldWorkingDir );

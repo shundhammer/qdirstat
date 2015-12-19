@@ -236,6 +236,11 @@ namespace QDirStat
 	void newChildrenNotify( DirInfo * dir );
 
 	/**
+	 * Notify the view about changed data of 'dir'.
+	 **/
+	void dataChangedNotify( DirInfo * dir );
+
+	/**
 	 * Return 'true' if 'item' or any ancestor (parent or parent's parent
 	 * etc.) is still busy, i.e. the read job for the directory itself (not
 	 * any children!) is still queued or currently reading.
@@ -270,7 +275,7 @@ namespace QDirStat
 
 	DirTree *	_tree;
 	DotEntryPolicy	_dotEntryPolicy;
-        QString         _treeIconDir;
+	QString		_treeIconDir;
 	QList<Column>	_colMapping;
 	int		_readJobsCol;
 

@@ -37,8 +37,7 @@ CacheWriter::~CacheWriter()
 }
 
 
-bool
-CacheWriter::writeCache( const QString & fileName, DirTree *tree )
+bool CacheWriter::writeCache( const QString & fileName, DirTree *tree )
 {
     if ( ! tree || ! tree->root() )
 	return false;
@@ -65,8 +64,7 @@ CacheWriter::writeCache( const QString & fileName, DirTree *tree )
 }
 
 
-void
-CacheWriter::writeTree( gzFile cache, FileInfo * item )
+void CacheWriter::writeTree( gzFile cache, FileInfo * item )
 {
     if ( ! item )
 	return;
@@ -99,8 +97,7 @@ CacheWriter::writeTree( gzFile cache, FileInfo * item )
 }
 
 
-void
-CacheWriter::writeItem( gzFile cache, FileInfo * item )
+void CacheWriter::writeItem( gzFile cache, FileInfo * item )
 {
     if ( ! item )
 	return;
@@ -155,8 +152,7 @@ CacheWriter::writeItem( gzFile cache, FileInfo * item )
 }
 
 
-QString
-CacheWriter::formatSize( FileSize size )
+QString CacheWriter::formatSize( FileSize size )
 {
     QString str;
 
@@ -238,8 +234,7 @@ CacheReader::~CacheReader()
 }
 
 
-void
-CacheReader::rewind()
+void CacheReader::rewind()
 {
     if ( _cache )
     {
@@ -249,8 +244,7 @@ CacheReader::rewind()
 }
 
 
-bool
-CacheReader::read( int maxLines )
+bool CacheReader::read( int maxLines )
 {
     while ( ! gzeof( _cache )
 	    && _ok
@@ -267,8 +261,7 @@ CacheReader::read( int maxLines )
 }
 
 
-void
-CacheReader::addItem()
+void CacheReader::addItem()
 {
     if ( fieldsCount() < 4 )
     {
@@ -311,7 +304,7 @@ CacheReader::addItem()
     // Path
 
     if ( *raw_path == '/' )
-        _lastDir = 0;
+	_lastDir = 0;
 
 
 
@@ -322,13 +315,13 @@ CacheReader::addItem()
 
     if ( end )
     {
-        switch ( *end )
-        {
-            case 'K':   size *= KB; break;
-            case 'M':   size *= MB; break;
-            case 'G':   size *= GB; break;
-            default: break;
-        }
+	switch ( *end )
+	{
+	    case 'K':	size *= KB; break;
+	    case 'M':	size *= MB; break;
+	    case 'G':	size *= GB; break;
+	    default: break;
+	}
     }
 
 
@@ -355,14 +348,14 @@ CacheReader::addItem()
 
     if ( *raw_path == '/' && _tree->root() )
     {
-        // Split raw_path in path + name
+	// Split raw_path in path + name
 
-        raw_name = strrchr( raw_path, '/' );
+	raw_name = strrchr( raw_path, '/' );
 
-        if ( raw_name )
-            *raw_name++ = 0;    // Overwrite the last '/' with 0 byte - split string there
-        else                    // No '/' found
-            raw_name = raw_path;
+	if ( raw_name )
+	    *raw_name++ = 0;	// Overwrite the last '/' with 0 byte - split string there
+	else			// No '/' found
+	    raw_name = raw_path;
     }
 
     QString path = QUrl::fromEncoded( raw_path ).path();
@@ -370,11 +363,11 @@ CacheReader::addItem()
 
     if ( _lastExcludedDir )
     {
-        if ( path.startsWith( _lastExcludedDirUrl ) )
-        {
-            // logDebug() << "Excluding " << path << "/" << name << endl;
-            return;
-        }
+	if ( path.startsWith( _lastExcludedDirUrl ) )
+	{
+	    // logDebug() << "Excluding " << path << "/" << name << endl;
+	    return;
+	}
     }
 
     // Find parent in tree
@@ -383,129 +376,126 @@ CacheReader::addItem()
 
     if ( ! parent && _tree->root() )
     {
-        // Try the easy way first - the starting point of this cache
+	// Try the easy way first - the starting point of this cache
 
-        if ( _toplevel )
-            parent = dynamic_cast<DirInfo *> ( _toplevel->locate( path ) );
-
-
-        // Fallback: Search the entire tree
-
-        if ( ! parent )
-            parent = dynamic_cast<DirInfo *> ( _tree->locate( path ) );
+	if ( _toplevel )
+	    parent = dynamic_cast<DirInfo *> ( _toplevel->locate( path ) );
 
 
-        if ( ! parent ) // Still nothing?
-        {
+	// Fallback: Search the entire tree
+
+	if ( ! parent )
+	    parent = dynamic_cast<DirInfo *> ( _tree->locate( path ) );
+
+
+	if ( ! parent ) // Still nothing?
+	{
 #if 0
-            logError() << _fileName << ":" << _lineNo << ": "
-                      << "Could not locate parent " << path << endl;
+	    logError() << _fileName << ":" << _lineNo << ": "
+		      << "Could not locate parent " << path << endl;
 #endif
 
-            return;     // Ignore this cache line completely
-        }
+	    return;	// Ignore this cache line completely
+	}
     }
 
     if ( strcasecmp( type, "D" ) == 0 )
     {
-        // logDebug() << "Creating DirInfo  for " << name << endl;
-        DirInfo * dir = new DirInfo( _tree, parent, name,
-                                       mode, size, mtime );
-        dir->setReadState( DirCached );
-        _lastDir = dir;
+	// logDebug() << "Creating DirInfo  for " << name << endl;
+	DirInfo * dir = new DirInfo( _tree, parent, name,
+				       mode, size, mtime );
+	dir->setReadState( DirCached );
+	_lastDir = dir;
 
-        if ( parent )
-            parent->insertChild( dir );
+	if ( parent )
+	    parent->insertChild( dir );
 
-        if ( ! _tree->root() )
-        {
-            _tree->setRoot( dir );
-            _toplevel = dir;
-        }
+	if ( ! _tree->root() )
+	{
+	    _tree->setRoot( dir );
+	    _toplevel = dir;
+	}
 
-        if ( ! _toplevel )
-            _toplevel = dir;
+	if ( ! _toplevel )
+	    _toplevel = dir;
 
-        _tree->childAddedNotify( dir );
+	_tree->childAddedNotify( dir );
 
-        if ( dir != _toplevel )
-        {
-            if ( ExcludeRules::instance()->match( dir->url() ) )
-            {
-                logDebug() << "Excluding " << name << endl;
-                dir->setExcluded();
-                dir->setReadState( DirOnRequestOnly );
-                _tree->sendFinalizeLocal( dir );
-                dir->finalizeLocal();
-                _tree->sendReadJobFinished( dir );
+	if ( dir != _toplevel )
+	{
+	    if ( ExcludeRules::instance()->match( dir->url() ) )
+	    {
+		logDebug() << "Excluding " << name << endl;
+		dir->setExcluded();
+		dir->setReadState( DirOnRequestOnly );
+		_tree->sendFinalizeLocal( dir );
+		dir->finalizeLocal();
+		_tree->sendReadJobFinished( dir );
 
-                _lastExcludedDir    = dir;
-                _lastExcludedDirUrl = _lastExcludedDir->url();
-                _lastDir            = 0;
-            }
-        }
+		_lastExcludedDir    = dir;
+		_lastExcludedDirUrl = _lastExcludedDir->url();
+		_lastDir	    = 0;
+	    }
+	}
     }
     else
     {
-        if ( parent )
-        {
-            // logDebug() << "Creating FileInfo for " << parent->debugUrl() << "/" << name << endl;
+	if ( parent )
+	{
+	    // logDebug() << "Creating FileInfo for " << parent->debugUrl() << "/" << name << endl;
 
-            FileInfo * item = new FileInfo( _tree, parent, name,
-                                              mode, size, mtime,
-                                              blocks, links );
-            parent->insertChild( item );
-            _tree->childAddedNotify( item );
-        }
-        else
-        {
-            logError() << _fileName << ":" << _lineNo << ": "
-                      << "No parent for item " << name << endl;
-        }
+	    FileInfo * item = new FileInfo( _tree, parent, name,
+					      mode, size, mtime,
+					      blocks, links );
+	    parent->insertChild( item );
+	    _tree->childAddedNotify( item );
+	}
+	else
+	{
+	    logError() << _fileName << ":" << _lineNo << ": "
+		      << "No parent for item " << name << endl;
+	}
     }
 }
 
 
-bool
-CacheReader::eof()
+bool CacheReader::eof()
 {
     if ( ! _ok || ! _cache )
-        return true;
+	return true;
 
     return gzeof( _cache );
 }
 
 
-QString
-CacheReader::firstDir()
+QString CacheReader::firstDir()
 {
     while ( ! gzeof( _cache ) && _ok )
     {
-        if ( ! readLine() )
-            return "";
+	if ( ! readLine() )
+	    return "";
 
-        splitLine();
+	splitLine();
 
-        if ( fieldsCount() < 2 )
-            return "";
+	if ( fieldsCount() < 2 )
+	    return "";
 
-        int n = 0;
-        char * type = field( n++ );
-        char * path = field( n++ );
+	int n = 0;
+	char * type = field( n++ );
+	char * path = field( n++ );
 
-        if ( strcasecmp( type, "D" ) == 0 )
-            return QString( path );
+	if ( strcasecmp( type, "D" ) == 0 )
+	    return QString( path );
     }
 
     return "";
 }
 
 
-bool
-CacheReader::checkHeader()
+bool CacheReader::checkHeader()
 {
     if ( ! _ok || ! readLine() )
-        return false;
+	return false;
 
     // logDebug() << "Checking cache file header" << endl;
     QString line( _line );
@@ -513,159 +503,153 @@ CacheReader::checkHeader()
 
     // Check for    [qdirstat <version> cache file]
 
-    if ( fieldsCount() != 4 )   _ok = false;
+    if ( fieldsCount() != 4 )	_ok = false;
 
     if ( _ok )
     {
-        if ( strcmp( field( 0 ), "[qdirstat" ) != 0 ||
-             strcmp( field( 2 ), "cache"     ) != 0 ||
-             strcmp( field( 3 ), "file]"     ) != 0 )
-        {
-            _ok = false;
-            logError() << _fileName << ":" << _lineNo
-                      << ": Unknown file format" << endl;
-        }
+	if ( strcmp( field( 0 ), "[qdirstat" ) != 0 ||
+	     strcmp( field( 2 ), "cache"     ) != 0 ||
+	     strcmp( field( 3 ), "file]"     ) != 0 )
+	{
+	    _ok = false;
+	    logError() << _fileName << ":" << _lineNo
+		      << ": Unknown file format" << endl;
+	}
     }
 
     if ( _ok )
     {
-        QString version = field( 1 );
+	QString version = field( 1 );
 
-        // currently not checking version number
-        // for future use
+	// currently not checking version number
+	// for future use
 
-        if ( ! _ok )
-            logError() << _fileName << ":" << _lineNo
-                      << ": Incompatible cache file version" << endl;
+	if ( ! _ok )
+	    logError() << _fileName << ":" << _lineNo
+		      << ": Incompatible cache file version" << endl;
     }
 
     // logDebug() << "Cache file header check OK: " << _ok << endl;
 
     if ( ! _ok )
-        emit error();
+	emit error();
 
     return _ok;
 }
 
 
-bool
-CacheReader::readLine()
+bool CacheReader::readLine()
 {
     if ( ! _ok || ! _cache )
-        return false;
+	return false;
 
     _fieldsCount = 0;
 
     do
     {
-        _lineNo++;
+	_lineNo++;
 
-        if ( ! gzgets( _cache, _buffer, MAX_CACHE_LINE_LEN-1 ) )
-        {
-            _buffer[0]  = 0;
-            _line       = _buffer;
+	if ( ! gzgets( _cache, _buffer, MAX_CACHE_LINE_LEN-1 ) )
+	{
+	    _buffer[0]	= 0;
+	    _line	= _buffer;
 
-            if ( ! gzeof( _cache ) )
-            {
-                _ok = false;
-                logError() << _fileName << ":" << _lineNo << ": Read error" << endl;
-                emit error();
-            }
+	    if ( ! gzeof( _cache ) )
+	    {
+		_ok = false;
+		logError() << _fileName << ":" << _lineNo << ": Read error" << endl;
+		emit error();
+	    }
 
-            return false;
-        }
+	    return false;
+	}
 
-        _line = skipWhiteSpace( _buffer );
-        killTrailingWhiteSpace( _line );
+	_line = skipWhiteSpace( _buffer );
+	killTrailingWhiteSpace( _line );
 
-        // logDebug() << "line[ " << _lineNo << "]: \"" << _line<< "\"" << endl;
+	// logDebug() << "line[ " << _lineNo << "]: \"" << _line<< "\"" << endl;
 
     } while ( ! gzeof( _cache ) &&
-              ( *_line == 0   ||        // empty line
-                *_line == '#'     ) );  // comment line
+	      ( *_line == 0   ||	// empty line
+		*_line == '#'	  ) );	// comment line
 
     return true;
 }
 
 
-void
-CacheReader::splitLine()
+void CacheReader::splitLine()
 {
     _fieldsCount = 0;
 
     if ( ! _ok || ! _line )
-        return;
+	return;
 
-    if ( *_line == '#' )        // skip comment lines
-        *_line = 0;
+    if ( *_line == '#' )	// skip comment lines
+	*_line = 0;
 
     char * current = _line;
-    char * end     = _line + strlen( _line );
+    char * end	   = _line + strlen( _line );
 
     while ( current
-            && current < end
-            && *current
-            && _fieldsCount < MAX_FIELDS_PER_LINE-1 )
+	    && current < end
+	    && *current
+	    && _fieldsCount < MAX_FIELDS_PER_LINE-1 )
     {
-        _fields[ _fieldsCount++ ] = current;
-        current = findNextWhiteSpace( current );
+	_fields[ _fieldsCount++ ] = current;
+	current = findNextWhiteSpace( current );
 
-        if ( current && current < end )
-        {
-            *current++ = 0;
-            current = skipWhiteSpace( current );
-        }
+	if ( current && current < end )
+	{
+	    *current++ = 0;
+	    current = skipWhiteSpace( current );
+	}
     }
 }
 
 
-char *
-CacheReader::field( int no )
+char * CacheReader::field( int no )
 {
     if ( no >= 0 && no < _fieldsCount )
-        return _fields[ no ];
+	return _fields[ no ];
     else
-        return 0;
+	return 0;
 }
 
 
-char *
-CacheReader::skipWhiteSpace( char * cptr )
+char * CacheReader::skipWhiteSpace( char * cptr )
 {
     if ( cptr == 0 )
-        return 0;
+	return 0;
 
     while ( *cptr != 0 && isspace( *cptr ) )
-        cptr++;
+	cptr++;
 
     return cptr;
 }
 
 
-char *
-CacheReader::findNextWhiteSpace( char * cptr )
+char * CacheReader::findNextWhiteSpace( char * cptr )
 {
     if ( cptr == 0 )
-        return 0;
+	return 0;
 
     while ( *cptr != 0 && ! isspace( *cptr ) )
-        cptr++;
+	cptr++;
 
     return *cptr == 0 ? 0 : cptr;
 }
 
 
-void
-CacheReader::killTrailingWhiteSpace( char * cptr )
+void CacheReader::killTrailingWhiteSpace( char * cptr )
 {
     char * start = cptr;
 
     if ( cptr == 0 )
-        return;
+	return;
 
     cptr = start + strlen( start ) -1;
 
     while ( cptr >= start && isspace( *cptr ) )
-        *cptr-- = 0;
+	*cptr-- = 0;
 }
 
