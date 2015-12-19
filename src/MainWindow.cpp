@@ -56,6 +56,12 @@ MainWindow::MainWindow():
     header->setSectionResizeMode( QHeaderView::ResizeToContents );
     _ui->dirTreeView->setRootIsDecorated( true );
 
+    int col = _dirTreeModel->viewCol( QDirStat::DirTreeModel::PercentBarCol );
+    _percentBarDelegate = new PercentBarDelegate( this, col );
+    CHECK_NEW( _percentBarDelegate );
+    _ui->dirTreeView->setItemDelegate( _percentBarDelegate );
+
+
     connect( _dirTreeModel->tree(),	SIGNAL( finished()	  ),
 	     this,			SLOT  ( readingFinished() ) );
 

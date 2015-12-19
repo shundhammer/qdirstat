@@ -18,9 +18,10 @@
 #include "DirSaver.h"
 #include "Exception.h"
 
-// Some file systems (NTFS seems to be among them) may handle block fragments well.
-// Don't report files as "sparse" files if the block size is only a few bytes
-// less than the byte size - it may be due to intelligent fragment handling.
+// Some file systems (NTFS seems to be among them) may handle block fragments
+// well. Don't report files as "sparse" files if the block size is only a few
+// bytes less than the byte size - it may be due to intelligent fragment
+// handling.
 
 #define FRAGMENT_SIZE	2048
 

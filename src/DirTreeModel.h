@@ -25,7 +25,8 @@ namespace QDirStat
 
     enum CustomRoles
     {
-	SortRole = Qt::UserRole
+	SortRole = Qt::UserRole,
+        RawDataRole
     };
 
 

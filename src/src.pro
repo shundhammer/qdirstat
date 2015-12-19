@@ -37,6 +37,7 @@ SOURCES	  = main.cpp			\
 	    FileInfoIterator.cpp	\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
+	    PercentBar.cpp		\
 
 
 HEADERS	  =				\
@@ -53,6 +54,7 @@ HEADERS	  =				\
 	    FileInfoIterator.h		\
 	    Logger.h			\
 	    MainWindow.h		\
+	    PercentBar.h		\
 	    SignalBlocker.h		\
 
 

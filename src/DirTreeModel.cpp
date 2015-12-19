@@ -1,5 +1,5 @@
 /*
- *   File name: DirTreeModel.h
+ *   File name: DirTreeModel.cpp
  *   Summary:	Qt data model for directory tree
  *   License:	GPL V2 - See file LICENSE for details.
  *
@@ -38,8 +38,8 @@ DirTreeModel::DirTreeModel( QObject * parent ):
     createTree();
     _updateTimer.setInterval( 333 ); // millisec - TO DO: Configurable
 
-    connect( &_updateTimer, SIGNAL( timeout()            ),
-             this,          SLOT  ( sendPendingUpdates() ) );
+    connect( &_updateTimer, SIGNAL( timeout()		 ),
+	     this,	    SLOT  ( sendPendingUpdates() ) );
 }
 
 
@@ -279,11 +279,11 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
 		QVariant result = columnText( item, col );
 
-                if ( item && item->isDirInfo() )
-                {
-                    // logDebug() << "Touching " << item << endl;
-                    item->toDirInfo()->touch();
-                }
+		if ( item && item->isDirInfo() )
+		{
+		    // logDebug() << "Touching " << item << endl;
+		    item->toDirInfo()->touch();
+		}
 
 		return result;
 	    }
@@ -321,18 +321,20 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		return alignment;
 	    }
 
-	case SortRole: // Custom QDirStat role: Raw types for sorting
+	case SortRole:	  // Custom QDirStat role: Raw types for sorting.
+	    // Together with a QSortProxyFilterModel that uses this custom role
+	    // as its sortRole, this takes care of sorting: The
+	    // QSortProxyFilterModel queries this model for data for the sort
+	    // column and uses QVariant and its known types and their
+	    // operator<() (in its lessThan() function). Since all columns we
+	    // use are either strings or simple numeric values, all we need to
+	    // do is to return the corresponding string or numeric value for
+	    // each column.
+
+	    // FALLTHRU
+
+	case RawDataRole: // Send raw data to our PercentBarDelegate
 	    {
-		// Together with a QSortProxyFilterModel that uses this custom
-		// role as its sortRole, this takes care of sorting: The
-		// QSortProxyFilterModel queries this model for data for the
-		// sort column and uses QVariant and its known types and their
-		// operator<() (in its lessThan() function). Since all columns
-		// we use are either strings or simple numeric values, all we
-		// need to do is to return the corresponding string or numeric
-		// value for each column. Notice that we don't even have to
-		// calculate any percentages here since for the purpose of
-		// sorting, the percentage behaves exactly like the totalSize.
 
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
 		CHECK_PTR( item );
@@ -343,8 +345,8 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		switch ( col )
 		{
 		    case NameCol:	  return item->name();
-		    case PercentBarCol:	  // FALLTHRU
-		    case PercentNumCol:	  // FALLTHRU
+		    case PercentBarCol:	  return item->subtreePercent();
+		    case PercentNumCol:	  return item->subtreePercent();
 		    case TotalSizeCol:	  return item->totalSize();
 		    case OwnSizeCol:	  return item->size();
 		    case TotalItemsCol:	  return item->totalItems();
@@ -670,10 +672,10 @@ void DirTreeModel::delayedUpdate( DirInfo * dir )
 {
     while ( dir && dir != _tree->root() )
     {
-        if ( dir->isTouched() )
-            _pendingUpdates.insert( dir );
+	if ( dir->isTouched() )
+	    _pendingUpdates.insert( dir );
 
-        dir = dir->parent();
+	dir = dir->parent();
     }
 }
 
@@ -684,7 +686,7 @@ void DirTreeModel::sendPendingUpdates()
 
     foreach ( DirInfo * dir, _pendingUpdates )
     {
-        dataChangedNotify( dir );
+	dataChangedNotify( dir );
     }
 
     _pendingUpdates.clear();
@@ -698,22 +700,22 @@ void DirTreeModel::dataChangedNotify( DirInfo * dir )
 
     if ( dir->isTouched() ) // only if the view ever requested data about this dir
     {
-        QModelIndex topLeft	= modelIndex( dir, 0 );
-        QModelIndex bottomRight = createIndex( topLeft.row(), colCount() - 1, dir );
+	QModelIndex topLeft	= modelIndex( dir, 0 );
+	QModelIndex bottomRight = createIndex( topLeft.row(), colCount() - 1, dir );
 
-        QVector<int> roles;
-        roles << Qt::DisplayRole;
+	QVector<int> roles;
+	roles << Qt::DisplayRole;
 
-        logDebug() << "Data changed for " << dir << endl;
-        emit dataChanged( topLeft, bottomRight, roles );
+	logDebug() << "Data changed for " << dir << endl;
+	emit dataChanged( topLeft, bottomRight, roles );
 
-        // If the view is still interested in this dir, it will fetch data, and
-        // then the dir will be touched again. For all we know now, this dir
-        // might easily be out of scope for the view, so let's not bother the
-        // view again about this dir until it's clear that the view still wants
-        // updates about it.
+	// If the view is still interested in this dir, it will fetch data, and
+	// then the dir will be touched again. For all we know now, this dir
+	// might easily be out of scope for the view, so let's not bother the
+	// view again about this dir until it's clear that the view still wants
+	// updates about it.
 
-        dir->clearTouched();
+	dir->clearTouched();
     }
 }
 

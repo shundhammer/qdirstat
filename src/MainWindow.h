@@ -1,9 +1,9 @@
 /*
  *   File name: MainWindow.h
- *   Summary:	QDirStat main window
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   QDirStat main window
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
@@ -14,6 +14,7 @@
 #include <QString>
 
 #include "DirTreeModel.h"
+#include "PercentBar.h"
 #include "ui_main-window.h"
 
 class QCloseEvent;
@@ -27,10 +28,12 @@ class MainWindow: public QMainWindow
     Q_OBJECT
 
 public:
+
     MainWindow();
     virtual ~MainWindow();
 
 public slots:
+
     /**
      * Open an URL (start reading that directory).
      **/
@@ -118,12 +121,13 @@ protected:
 
 private:
 
-    Ui::MainWindow *	     _ui;
-    QDirStat::DirTreeModel * _dirTreeModel;
-    QSortFilterProxyModel  * _sortModel;
-    bool		     _modified;
-    int			     _statusBarTimeOut; // millisec
-    QSignalMapper	   * _treeLevelMapper;
+    Ui::MainWindow               * _ui;
+    QDirStat::DirTreeModel       * _dirTreeModel;
+    QSortFilterProxyModel        * _sortModel;
+    QDirStat::PercentBarDelegate * _percentBarDelegate;
+    bool                           _modified;
+    int                            _statusBarTimeOut; // millisec
+    QSignalMapper                * _treeLevelMapper;
 };
 
 #endif // MainWindow_H
