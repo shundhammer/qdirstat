@@ -7,6 +7,7 @@
  */
 
 #include <QPainter>
+#include <QTreeView>
 
 #include "PercentBar.h"
 #include "DirTreeModel.h"
@@ -18,9 +19,10 @@
 using namespace QDirStat;
 
 
-PercentBarDelegate::PercentBarDelegate( QWidget * parent,
-					int	  percentBarCol ):
-    QStyledItemDelegate( parent ),
+PercentBarDelegate::PercentBarDelegate( QTreeView * treeView,
+					int	    percentBarCol ):
+    QStyledItemDelegate( 0 ),
+    _treeView( treeView ),
     _percentBarCol( percentBarCol )
 {
     _fillColors << QColor( 0,	  0, 255 )
@@ -35,6 +37,8 @@ PercentBarDelegate::PercentBarDelegate( QWidget * parent,
 		<< QColor(   0, 194,  65 )
 		<< QColor( 194, 108, 187 )
 		<< QColor(   0, 179, 255 );
+
+    _barBackground = QColor( 160, 160, 160 );
 
     // TO DO: Read colors from config
 }
@@ -62,17 +66,33 @@ void PercentBarDelegate::paint( QPainter		   * painter,
 
 	if ( ok )
 	{
-	    logDebug() << "Painting percent bar for " << percent
-		       << " % for col " << _percentBarCol << endl;
+	    int depth = treeLevel( index ) - 1; // compensate for invisible root
+	    int indentPixel  = depth * _treeView->indentation();
+	    QColor fillColor = _fillColors.at( depth % _fillColors.size() );
 
 	    paintPercentBar( percent,
 			     painter,
-			     0,			// indent - FIXME
+			     indentPixel,
 			     option.rect,
-			     _fillColors.at(0), // FIXME
-			     QColor( 128, 128, 128 ) );	// background - FIXME
+			     fillColor,
+			     _barBackground );
 	}
     }
+}
+
+
+int PercentBarDelegate::treeLevel( const QModelIndex & index ) const
+{
+    int level = 0;
+    QModelIndex item = index;
+
+    while ( item.isValid() )
+    {
+	item = item.parent();
+	++level;
+    }
+
+    return level;
 }
 
 
@@ -84,7 +104,7 @@ QSize PercentBarDelegate::sizeHint( const QStyleOptionViewItem & option,
     if ( ! index.isValid() || index.column() != _percentBarCol )
 	return size;
 
-    size.setWidth( 200 ); // TO DO: Find a better value
+    size.setWidth( 180 ); // TO DO: Find a better value
 
     return size;
 }
@@ -95,24 +115,23 @@ namespace QDirStat
 {
     void paintPercentBar( float		 percent,
 			  QPainter *	 painter,
-			  int		 indent,
+			  int		 indentPixel,
 			  const QRect  & cellRect,
 			  const QColor & fillColor,
 			  const QColor & barBackground )
     {
 	int penWidth = 2;
-	int extraMargin = 3;
-	// int x = _view->itemMargin();
-	int x = cellRect.x(); // FIXME
+	int extraMargin = 4;
+	int itemMargin = 4;
+	int x = cellRect.x() + itemMargin;
 	int y = cellRect.y() + extraMargin;
-	// int w = width - 2 * _view->itemMargin();
-	int w = cellRect.width();
+	int w = cellRect.width() - 2 * itemMargin;
 	int h = cellRect.height() - 2 * extraMargin;
 	int fillWidth;
 
 	painter->eraseRect( cellRect );
-	w -= indent;
-	x += indent;
+	w -= indentPixel;
+	x += indentPixel;
 
 	if ( w > 0 )
 	{

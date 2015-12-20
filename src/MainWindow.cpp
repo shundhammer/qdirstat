@@ -57,7 +57,7 @@ MainWindow::MainWindow():
     _ui->dirTreeView->setRootIsDecorated( true );
 
     int col = _dirTreeModel->viewCol( QDirStat::DirTreeModel::PercentBarCol );
-    _percentBarDelegate = new PercentBarDelegate( this, col );
+    _percentBarDelegate = new PercentBarDelegate( _ui->dirTreeView, col );
     CHECK_NEW( _percentBarDelegate );
     _ui->dirTreeView->setItemDelegate( _percentBarDelegate );
 
@@ -92,6 +92,9 @@ MainWindow::MainWindow():
 
 MainWindow::~MainWindow()
 {
+    // Relying on the QObject hierarchy to properly clean this up resulted in a
+    //  segfault; there was probably a problem in the deletion order.
+    delete _percentBarDelegate;
 }
 
 

@@ -15,6 +15,7 @@
 
 
 typedef QList<QColor> ColorList;
+class QTreeView;
 
 
 namespace QDirStat
@@ -29,8 +30,8 @@ namespace QDirStat
 	 * Constructor.
 	 * 'percentBarCol' is the (view) column to paint the percent bar in.
 	 **/
-	PercentBarDelegate( QWidget * parent,
-			    int	      percentBarCol );
+	PercentBarDelegate( QTreeView * treeView,
+			    int		percentBarCol );
 
 	/**
 	 * Destructor.
@@ -74,19 +75,31 @@ namespace QDirStat
 
     protected:
 
-	ColorList _fillColors;
-	int	  _percentBarCol;
+	/**
+	 * Find out the tree depth level of item 'index' by following its
+	 * parent, parent's parent etc. to the top.
+	 **/
+	int treeLevel( const QModelIndex & index ) const;
+
+	//
+	// Data Members
+	//
+
+	QTreeView * _treeView;
+	ColorList   _fillColors;
+	QColor	    _barBackground;
+	int	    _percentBarCol;
 
     }; // class PercentBarDelegate
 
 
     /**
      * Paint a percent bar into a widget.
-     * 'indent' is the number of pixels to indent the bar.
+     * 'indentPixel' is the number of pixels to indent the bar.
      **/
     void paintPercentBar( float		 percent,
 			  QPainter *	 painter,
-			  int		 indent,
+			  int		 indentPixel,
 			  const QRect  & cellRect,
 			  const QColor & fillColor,
 			  const QColor & barBackground	 );
