@@ -5,7 +5,7 @@ Qt-based directory statistics: KDirStat without any KDE -- from the original KDi
 
 License: GPL V2
 
-Updated: 2015-12-19
+Updated: 2015-12-20
 
 
 ## Overview
@@ -19,6 +19,30 @@ latest Qt 5.
 ![Screenshot of first preview 2015-12-20:]
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-2015-12-20-001.png)
 _First preview 2015-12-20 -- see also section "Development Status" below_
+
+
+## Current Development Status
+
+- 2015-12-20  First usable preview version - see screenshot above. It's still
+              pretty rough, and sorting via the QSortProxyModel seems to be
+              awfully slow once a number of tree branches were ever
+              opened. Looks like I'll have to do that myself, too.
+
+- 2015-12-18  Found the crippling bugs that made the DirTreeModel do crazy
+              things.  None of the Qt classes proved to be helpful to find that
+              - they just happily do the crazy things. That's what I call poor
+              design.  Now there is a first working QDirStat with a useful
+              display tree, including icons (but no percentage bar graph yet).
+
+- 2015-12-07  First working DirTreeModel -- still minimalistic, but working.
+
+- 2015-12-06  Created tree model based on QAbstractItemModel.
+              Compiles, but dumps core so far.
+
+- 2015-12-05  Imported and ported directory tree data classes.
+              Hammered through the compiler, but nothing usable so far.
+
+- 2015-11-28  Project is being set up. Nothing usable so far.
 
 
 
@@ -46,73 +70,95 @@ probably also on all other distros). Argh. I found that the most important tool
 for that stuff was the _akonadiconsole_ which I needed numerous times to fix a
 borked mail environment. But I am a system developer. How on earth is a normal
 user supposed to fix that kind of problem? A problem that wouldn't exist in the
-first place if the developers hadn't choosen the most complicated and most
+first place if the developers hadn't chosen the most complicated and most
 fragile combination of tools?
 
 What was once a great desktop environment has become a playground for
 developers who don't seem to talk to each other - and, worse, who don't give a
 shit about their users anymore.
 
-Time for KDirStat to move away from this insanity. Time to become
-independent. KDirStat had never used that much of the KDE infrastructure to
-begin with; what little it used (icons, for example) can be replaced by very
-little own infrastructure. The KDE libs are just not worth the hassle anymore.
+Time for KDirStat to move away from this insanity. Time to become independent.
+KDirStat had never used that much of the KDE infrastructure to begin with; what
+little it used (icons, for example) can be replaced by very little own
+infrastructure. The KDE libs are just not worth the hassle anymore.
 
 
 ### But what about K4DirStat?
 
-Well, yes, it does exist. I don't want to discount the work that went into that port,
-but when I looked at it just a couple of days ago, it was still using the old Qt3
-compatibility classes which were deprecated a long time ago. It's only a matter of time
-until they will finally be dropped. And the old KDirStat took the old Qt3 QListView / 
-QListViewItem very much to its limits, and it used the old Qt3 QCanvas heavily for the
-treemaps. So, K4DirStat was a port to Qt4 / KDE4 -- kind of. It does use Qt4 / KDE4 
-libs -- technically speaking, but not by spirit. It does not use any of the new 
-technologies that Qt4 brought along, neither the model/view based item views nor
-QGraphicsView and related.
+Well, yes, it does exist. I don't want to discount the work that went into that
+port, but when I looked at it just a couple of days ago, it was still using the
+old Qt3 compatibility classes which were deprecated a long time ago (like, 5-6
+years ago). It's only a matter of time until they will finally be dropped, and
+then what? And the old KDirStat took the old Qt3 QListView / QListViewItem very
+much to their limits, and it used the old Qt3 QCanvas heavily for the
+treemaps. I don't think it will be easily possible to use the newer Qt4/Qt5
+QTreeWidget / QTreeWidgetItem instead.
 
-That's what I did with this recent port: It's now cleanly based on the model/view concept. 
-There is no Qt3 compatibility stuff left over. And while I was at it, I also threw out
-the other KDE stuff; I didn't really need or want it.
+So, yes, K4DirStat was a port to Qt4 / KDE4 -- kind of. It does use Qt4 / KDE4
+libs -- technically, but not by spirit. It does not use any of the new
+technologies that Qt4 brought along, neither the model/view based item views
+nor QGraphicsView and related.
+
+That's what I did with this recent port: It's now cleanly based on the Qt4 /
+Qt5 model/view concept.  There is no Qt3 compatibility stuff left over. And
+while I was at it, I also threw out the other KDE stuff; I didn't really need
+or want it.
 
 
 ### New Stuff
 
-- Icons are now compiled into the source thanks to Qt's resource system; now it's 
-just one binary file, and nothing will go missing.
+- Icons are now compiled into the source thanks to Qt's resource system; now
+it's just one binary file, and nothing will go missing. No more dozens of
+little files to handle.
 
-- The build system is now Qt's _QMake_. I got rid of that _AutoTools_ (Automake, 
-Autoconf, Libtool) stuff that most developers find intimidating with its crude M4 macro
-processor syntax. QMake .pro files are so much simpler, and they do the job just as well.
+- The build system is now Qt's _QMake_. I got rid of that _AutoTools_
+(Automake, Autoconf, Libtool) stuff that most developers find intimidating with
+its crude M4 macro processor syntax. QMake .pro files are so much simpler, and
+they do the job just as well (and no, it will definitely never be that fucking
+_CMake_. I hate that stuff. It's just as much as a PITA as the AutoTools, just
+not as portable, no usable documentation, changing all the time, and those
+out-of-source builds drive most developers crazy).
 
-- QDirStat now has its own log file. Right now it still logs to /tmp/qdirstat.log, but this
-will probably change in the future. No more messages on stdout that either clobber the shell
-you started the program from or that simply go missing.
+- QDirStat now has its own log file. Right now it logs to /tmp/qdirstat.log,
+but this will probably change in the future. No more messages on stdout that
+either clobber the shell you started the program from or that simply go
+missing.
+
+- It should still compile and work with Qt4. I didn't test it, nor is this a
+supported scenario. But given the emphasis on QML / Qt Quick with Qt5, not much
+changed in the general area of item views or the other widgets used here. If
+anybody needs Qt4 support and is willing to invest the time, (reasonably small)
+patches for Qt4 compatibility are welcome -- see also section "Contributing"
+below.
 
 
-## Current Development Status
+### Windows / MacOS X Compatibility
 
-- 2015-12-20  First usable preview version - see screenshot below. It's still pretty 
-              rough, and sorting via the QSortProxyModel seems to be awfully slow
-              once a number of tree branches were ever opened. Looks like I'll have
-              to do that myself, too.
+None yet. Right now, there is only one DirReadJob subclass that uses POSIX
+function calls like opendir(), closedir(), lstat(). There should be a
+reasonable way to do that on MacOS X since it's a BSD Unix at heart, but I
+don't have a Mac to try this.
 
-- 2015-12-18  Found the crippling bugs that made the DirTreeModel do crazy things.
-              None of the Qt classes proved to be helpful to find that -
-              they just happily do the crazy things. That's what I call poor design.
-              Now there is a first working QDirStat with a useful display tree,
-              including icons (but no percentage bar graph yet).
+It should be fairly simple to use plain Qt calls for most of this, but one
+feature will clearly go missing then: Stopping at file system boundaries while
+scanning a directory tree. If your root filesystem fills up, you need to know
+what stuff causes this, not what other fileystems are mounted there. This had
+been the single most requested feature of the very first KDirStat, and I
+rewrote most of it to make this happen.
 
-- 2015-12-07  First working DirTreeModel -- still minimalistic, but working.
+The QFileInfo class gives a lot of information about a file, but not the device
+(major and minor device number) the file is on, and that's the only way to
+figure out if a file or directory is still on the same filesystem as its
+parent. And I don't know of a Qt class that would give me that information, so
+at that point, it's down to low-level (and non-portable) system calls again.
 
-- 2015-12-06  Created tree model based on QAbstractItemModel.
-              Compiles, but dumps core so far.
+With Windows, this is probably not a problem, since all directory tree scans
+are limited to one drive. Until the day, of course, that Microsoft finally
+discovers the magic of having one large integrated filesystem tree, like we
+Linux / Unix users have been using since the early 1970s. ;-)
 
-- 2015-12-05  Imported and ported directory tree data classes.
-              Hammered through the compiler, but nothing usable so far.
-
-- 2015-11-28  Project is being set up. Nothing usable so far.
-
+So it might come down to that some day: Use POSIX calls on platforms where they
+are available, and QDir / QFileInfo for everything else.
 
 
 ## Building
@@ -124,6 +170,7 @@ Make sure you have a working Qt 5 build environment installed. This includes:
 - C++ compiler (gcc recommended)
 - Qt 5 runtime environment
 - Qt 5 header files
+- libz (compression lib) runtime and header file
 
 
 #### Ubuntu
@@ -187,8 +234,7 @@ The project is still in its early stages, but contributions are welcome.
 
 ### Contribution Guide Lines
 
-Use the same style as the existing code. Look at the old KDE 3 kdirstat for
-examples.
+Use the same style as the existing code.
 
 Indentation is 4 blanks. One tab is 8 blanks. Do not indent with single tabs
 for each indentation level and thus fuck up everybody else's editor. Letting
@@ -257,8 +303,8 @@ documentation:
   case returns 'false'?
 - What happens in fringe cases? (returning NULL pointer?)
 - If the function creates any objects: Who owns them?
-- Does the function transfer ownership of any objects it gets pointers to as
-  parameters to itself or wherever?
+- Does the function transfer ownership of any objects it gets pointers to (as
+  parameters) to itself or wherever?
 
 If you do that right, you might as well leave the implementation to somebody else.
 
@@ -266,6 +312,8 @@ If you do that right, you might as well leave the implementation to somebody els
 **Do not** insert any doc template without content before each function.
 This is worse than no documentation at all: Everybody has to wade through tons
 of useless empty forms that don't contain any content whatsoever.
+
+Been there. Done that. Hated it.
 
 Be careful when copying and pasting documentation from some other place.
 Misleading documentation is worse than no documentation at all.
@@ -349,6 +397,7 @@ and/or (b) because they want that piece of software to be successful. Educating
 newbies and cleaning up after them is very low on most developers' list of fun
 things to do. They still do it, but it's painful for them. Please help
 minimizing that pain.
+
 
 ## Reference
 
