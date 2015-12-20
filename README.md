@@ -14,6 +14,14 @@ This is a Qt-only port of the old Qt3/KDE3-based KDirStat, now based on the
 latest Qt 5.
 
 
+## Screenshot
+
+![Screenshot of first preview 2015-12-20:]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-2015-12-20-001.png)
+_First preview 2015-12-20 -- see also section "Development Status" below_
+
+
+
 ## Motivation / Rant
 
 Now that KDE has been losing direction more and more, it's time to come up with
@@ -51,7 +59,43 @@ begin with; what little it used (icons, for example) can be replaced by very
 little own infrastructure. The KDE libs are just not worth the hassle anymore.
 
 
+### But what about K4DirStat?
+
+Well, yes, it does exist. I don't want to discount the work that went into that port,
+but when I looked at it just a couple of days ago, it was still using the old Qt3
+compatibility classes which were deprecated a long time ago. It's only a matter of time
+until they will finally be dropped. And the old KDirStat took the old Qt3 QListView / 
+QListViewItem very much to its limits, and it used the old Qt3 QCanvas heavily for the
+treemaps. So, K4DirStat was a port to Qt4 / KDE4 -- kind of. It does use Qt4 / KDE4 
+libs -- technically speaking, but not by spirit. It does not use any of the new 
+technologies that Qt4 brought along, neither the model/view based item views nor
+QGraphicsView and related.
+
+That's what I did with this recent port: It's now cleanly based on the model/view concept. 
+There is no Qt3 compatibility stuff left over. And while I was at it, I also threw out
+the other KDE stuff; I didn't really need or want it.
+
+
+### New Stuff
+
+- Icons are now compiled into the source thanks to Qt's resource system; now it's 
+just one binary file, and nothing will go missing.
+
+- The build system is now Qt's _QMake_. I got rid of that _AutoTools_ (Automake, 
+Autoconf, Libtool) stuff that most developers find intimidating with its crude M4 macro
+processor syntax. QMake .pro files are so much simpler, and they do the job just as well.
+
+- QDirStat now has its own log file. Right now it still logs to /tmp/qdirstat.log, but this
+will probably change in the future. No more messages on stdout that either clobber the shell
+you started the program from or that simply go missing.
+
+
 ## Current Development Status
+
+- 2015-12-20  First usable preview version - see screenshot below. It's still pretty 
+              rough, and sorting via the QSortProxyModel seems to be awfully slow
+              once a number of tree branches were ever opened. Looks like I'll have
+              to do that myself, too.
 
 - 2015-12-18  Found the crippling bugs that made the DirTreeModel do crazy things.
               None of the Qt classes proved to be helpful to find that -
@@ -69,10 +113,6 @@ little own infrastructure. The KDE libs are just not worth the hassle anymore.
 
 - 2015-11-28  Project is being set up. Nothing usable so far.
 
-
-## Screen Shots
-
-None yet. Stay tuned.
 
 
 ## Building
