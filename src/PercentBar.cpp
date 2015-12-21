@@ -64,8 +64,14 @@ void PercentBarDelegate::paint( QPainter		   * painter,
 	bool ok = true;
 	float percent = data.toFloat( &ok );
 
-	if ( ok )
+	if ( ok && percent >= 0.0 )
 	{
+	    if ( percent > 100.0f )
+	    {
+		logError() << "Percent maxed out: " << percent << endl;
+		percent = 100.0f;
+	    }
+
 	    int depth = treeLevel( index ) - 1; // compensate for invisible root
 	    int indentPixel  = depth * _treeView->indentation();
 	    QColor fillColor = _fillColors.at( depth % _fillColors.size() );
@@ -76,6 +82,10 @@ void PercentBarDelegate::paint( QPainter		   * painter,
 			     option.rect,
 			     fillColor,
 			     _barBackground );
+	}
+	else // percent < 0.0 => tree is busy => use as read job column
+	{
+	    return QStyledItemDelegate::paint( painter, option, index );
 	}
     }
 }

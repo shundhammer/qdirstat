@@ -331,6 +331,14 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 	    // do is to return the corresponding string or numeric value for
 	    // each column.
 
+	    if ( col == _readJobsCol )
+	    {
+		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+		CHECK_PTR( item );
+
+		if ( item->isBusy() )
+		    return item->pendingReadJobs();
+	    }
 	    // FALLTHRU
 
 	case RawDataRole: // Send raw data to our PercentBarDelegate
@@ -339,13 +347,16 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
 		CHECK_PTR( item );
 
-		if ( col == _readJobsCol && item->isBusy() )
-		    return item->pendingReadJobs();
-
 		switch ( col )
 		{
-		    case NameCol:	  return item->name();
-		    case PercentBarCol:	  return item->subtreePercent();
+		    case NameCol:	  return item->isDotEntry() ? QString( "zzzz" ) : item->name();
+		    case PercentBarCol:
+			{
+			    if ( item->parent() && item->parent()->isBusy() )
+				return -1.0;
+			    else
+				return item->subtreePercent();
+			}
 		    case PercentNumCol:	  return item->subtreePercent();
 		    case TotalSizeCol:	  return item->totalSize();
 		    case OwnSizeCol:	  return item->size();
@@ -593,7 +604,7 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
 
 void DirTreeModel::readJobFinished( DirInfo * dir )
 {
-    logDebug() << ( dir == _tree->root() ? "<root>" : dir->url() ) << endl;
+    // logDebug() << ( dir == _tree->root() ? "<root>" : dir->url() ) << endl;
     delayedUpdate( dir );
 
     if ( anyAncestorBusy( dir ) )
@@ -706,7 +717,7 @@ void DirTreeModel::dataChangedNotify( DirInfo * dir )
 	QVector<int> roles;
 	roles << Qt::DisplayRole;
 
-	logDebug() << "Data changed for " << dir << endl;
+	// logDebug() << "Data changed for " << dir << endl;
 	emit dataChanged( topLeft, bottomRight, roles );
 
 	// If the view is still interested in this dir, it will fetch data, and

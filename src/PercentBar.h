@@ -20,6 +20,12 @@ class QTreeView;
 
 namespace QDirStat
 {
+    /**
+     * Item delegate class to paint the percent bar in the PercentBarCol.
+     *
+     * This class uses the custom RawDataRole to obtain the data (the subtree
+     * percent) in numeric format from the model.
+     **/
     class PercentBarDelegate: public QStyledItemDelegate
     {
 	Q_OBJECT
