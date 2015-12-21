@@ -108,7 +108,7 @@ void DirTreeModel::loadIcons()
 }
 
 
-void DirTreeModel::setColumns( QList<Column> columns )
+void DirTreeModel::setColumns( const DataColumnList & columns )
 {
     beginResetModel();
     _colMapping = columns;
@@ -133,7 +133,7 @@ int DirTreeModel::viewCol( int modelCol ) const
     if ( modelCol < 0 || modelCol >= colCount() )
 	return 0;
 
-    return _colMapping.indexOf( (Column) modelCol );
+    return _colMapping.indexOf( (DataColumn) modelCol );
 }
 
 

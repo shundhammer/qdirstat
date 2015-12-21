@@ -294,6 +294,22 @@ namespace QDirStat
 	void setReadState( DirReadState newReadState );
 
 	/**
+	 * Return a list of (direct) children sorted by 'sortCol' and
+	 * 'sortOrder' (Qt::AscendingOrder or Qt::DescendingOrder).
+	 *
+	 * This might return cached information if the sort column and order
+	 * are the same as for the last call to this function, and there were
+	 * no children added or removed in the meantime.
+	 **/
+	const FileInfoList & sortedChildren( DataColumn	   sortCol,
+					     Qt::SortOrder sortOrder );
+
+	/**
+	 * Drop all cached information about children sorting.
+	 **/
+	void dropSortCache( bool recursive = false );
+
+	/**
 	 * Check if this directory is locked. This is purely a user lock
 	 * that can be used by the application. The DirInfo does not care
 	 * about it at all.
@@ -392,6 +408,10 @@ namespace QDirStat
 	int		_totalSubDirs;
 	int		_totalFiles;
 	time_t		_latestMtime;
+
+	FileInfoList *	_sortedChildren;
+	DataColumn	_lastSortCol;
+	Qt::SortOrder	_lastSortOrder;
 
 	DirReadState	_readState;
 

@@ -35,6 +35,7 @@ SOURCES	  = main.cpp			\
 	    ExcludeRules.cpp		\
 	    FileInfo.cpp		\
 	    FileInfoIterator.cpp	\
+	    FileInfoSorter.cpp		\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
 	    PercentBar.cpp		\
@@ -52,6 +53,7 @@ HEADERS	  =				\
 	    ExcludeRules.h		\
 	    FileInfo.h			\
 	    FileInfoIterator.h		\
+	    FileInfoSorter.h		\
 	    Logger.h			\
 	    MainWindow.h		\
 	    PercentBar.h		\

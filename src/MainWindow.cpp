@@ -49,14 +49,14 @@ MainWindow::MainWindow():
     QHeaderView * header = _ui->dirTreeView->header();
     CHECK_PTR( header );
 
-    header->setSortIndicator( QDirStat::DirTreeModel::NameCol, Qt::AscendingOrder );
+    header->setSortIndicator( QDirStat::NameCol, Qt::AscendingOrder );
     header->setStretchLastSection( false );
 
     // TO DO: This is too strict. But it's better than the brain-dead defaults.
     header->setSectionResizeMode( QHeaderView::ResizeToContents );
     _ui->dirTreeView->setRootIsDecorated( true );
 
-    int col = _dirTreeModel->viewCol( QDirStat::DirTreeModel::PercentBarCol );
+    int col = _dirTreeModel->viewCol( QDirStat::PercentBarCol );
     _percentBarDelegate = new PercentBarDelegate( _ui->dirTreeView, col );
     CHECK_NEW( _percentBarDelegate );
     _ui->dirTreeView->setItemDelegate( _percentBarDelegate );
@@ -294,7 +294,7 @@ void MainWindow::readingFinished()
     logDebug() << endl;
     _ui->statusBar->showMessage( tr( "Ready.") );
     expandTreeToLevel( 1 );
-    int sortCol = _dirTreeModel->viewCol( QDirStat::DirTreeModel::TotalSizeCol );
+    int sortCol = _dirTreeModel->viewCol( QDirStat::TotalSizeCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
 
     // Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );

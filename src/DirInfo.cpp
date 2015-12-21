@@ -7,9 +7,12 @@
  */
 
 
+#include <algorithm>
+
 #include "DirInfo.h"
 #include "DirTree.h"
 #include "FileInfoIterator.h"
+#include "FileInfoSorter.h"
 #include "Exception.h"
 
 using namespace QDirStat;
@@ -62,29 +65,32 @@ DirInfo::DirInfo( DirTree *	  tree,
 		mtime )
 {
     init();
-    _dotEntry	= new DirInfo( tree, this, true );
+    _dotEntry = new DirInfo( tree, this, true );
 }
 
 
 void DirInfo::init()
 {
-    _isDotEntry		= false;
-    _pendingReadJobs	= 0;
-    _dotEntry		= 0;
-    _firstChild		= 0;
-    _totalSize		= _size;
-    _totalBlocks	= _blocks;
-    _totalItems		= 0;
-    _totalSubDirs	= 0;
-    _totalFiles		= 0;
-    _latestMtime	= _mtime;
-    _isMountPoint	= false;
-    _isExcluded		= false;
-    _summaryDirty	= false;
-    _deletingAll	= false;
-    _readState		= DirQueued;
-    _locked		= false;
-    _touched		= false;
+    _isDotEntry	     = false;
+    _isMountPoint    = false;
+    _isExcluded	     = false;
+    _summaryDirty    = false;
+    _deletingAll     = false;
+    _locked	     = false;
+    _touched	     = false;
+    _pendingReadJobs = 0;
+    _dotEntry	     = 0;
+    _firstChild	     = 0;
+    _totalSize	     = _size;
+    _totalBlocks     = _blocks;
+    _totalItems	     = 0;
+    _totalSubDirs    = 0;
+    _totalFiles	     = 0;
+    _latestMtime     = _mtime;
+    _readState	     = DirQueued;
+    _sortedChildren  = 0;
+    _lastSortCol     = UndefinedCol;
+    _lastSortOrder   = Qt::AscendingOrder;
 }
 
 
@@ -117,6 +123,8 @@ void DirInfo::clear()
 	delete _dotEntry;
 	_dotEntry = 0;
     }
+
+    _summaryDirty = true;
 }
 
 
@@ -135,11 +143,11 @@ void DirInfo::recalc()
 
     while ( *it )
     {
-	_totalSize	+= (*it)->totalSize();
-	_totalBlocks	+= (*it)->totalBlocks();
-	_totalItems	+= (*it)->totalItems() + 1;
-	_totalSubDirs	+= (*it)->totalSubDirs();
-	_totalFiles	+= (*it)->totalFiles();
+	_totalSize    += (*it)->totalSize();
+	_totalBlocks  += (*it)->totalBlocks();
+	_totalItems   += (*it)->totalItems() + 1;
+	_totalSubDirs += (*it)->totalSubDirs();
+	_totalFiles   += (*it)->totalFiles();
 
 	if ( (*it)->isDir() )
 	    _totalSubDirs++;
@@ -300,8 +308,8 @@ void DirInfo::childAdded( FileInfo *newChild )
 {
     if ( ! _summaryDirty )
     {
-	_totalSize	+= newChild->size();
-	_totalBlocks	+= newChild->blocks();
+	_totalSize   += newChild->size();
+	_totalBlocks += newChild->blocks();
 	_totalItems++;
 
 	if ( newChild->isDir() )
@@ -501,7 +509,10 @@ void DirInfo::cleanupDotEntries()
     }
 
 
-    // Delete dot entries without any children
+    // Delete dot entries without any children.
+    //
+    // This also affects dot entries that were just disowned because they had
+    // no siblings (i.e., there are no subdirectories on this level).
 
     if ( ! _dotEntry->firstChild() )
     {
@@ -517,19 +528,89 @@ void DirInfo::clearTouched( bool recursive )
 {
     _touched = false;
 
-    if ( recursive )
+    if ( recursive && ! _isDotEntry )
     {
-        FileInfo * child = _firstChild;
+	FileInfo * child = _firstChild;
 
-        while ( child )
-        {
-            if ( child->isDirInfo() )
-                child->toDirInfo()->clearTouched();
-            child = child->next();
-        }
+	while ( child )
+	{
+	    if ( child->isDirInfo() )
+		child->toDirInfo()->clearTouched();
 
-        if ( _dotEntry )
-            _dotEntry->clearTouched();
+	    child = child->next();
+	}
+
+	if ( _dotEntry )
+	    _dotEntry->clearTouched();
     }
 }
 
+
+const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
+					      Qt::SortOrder sortOrder )
+{
+    if ( _sortedChildren && sortCol == _lastSortCol && sortOrder == _lastSortOrder )
+	return *_sortedChildren;
+
+
+    // Clean old sorted children list and create a new one
+
+    if ( _sortedChildren )
+	delete _sortedChildren;
+
+    _sortedChildren = new FileInfoList();
+
+
+    // Populate with unsorted children list
+
+    FileInfo * child = _firstChild;
+
+    while ( child )
+    {
+	_sortedChildren->append( child );
+	child = child->next();
+    }
+
+    if ( _dotEntry )
+	_sortedChildren->append( _dotEntry );
+
+
+    // Sort
+
+    logDebug() << "Sorting children of " << this << endl;
+
+    std::stable_sort( _sortedChildren->begin(),
+		      _sortedChildren->end(),
+		      FileInfoSorter( sortCol, sortOrder ) );
+
+    _lastSortCol   = sortCol;
+    _lastSortOrder = sortOrder;
+
+    return *_sortedChildren;
+}
+
+
+void DirInfo::dropSortCache( bool recursive )
+{
+    if ( _sortedChildren )
+    {
+	delete _sortedChildren;
+	_sortedChildren = 0;
+    }
+
+    if ( recursive && ! _isDotEntry )
+    {
+	FileInfo * child = _firstChild;
+
+	while ( child )
+	{
+	    if ( child->isDirInfo() )
+		child->toDirInfo()->dropSortCache( recursive );
+
+	    child = child->next();
+	}
+
+	if ( _dotEntry )
+	    _dotEntry->dropSortCache( recursive );
+    }
+}
