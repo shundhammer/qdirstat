@@ -388,6 +388,12 @@ void DirTree::sendReadJobFinished( DirInfo * dir )
     emit readJobFinished( dir );
 }
 
+void DirTree::sendSortingChanged( DirInfo * dir )
+{
+    emit sortingChanged( dir );
+}
+
+
 
 
 

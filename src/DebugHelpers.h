@@ -21,6 +21,7 @@ class QAbstractItemModel;
 namespace Debug
 {
     using QDirStat::FileInfo;
+    using QDirStat::FileInfoList;
 
     /**
      * Dump the direct children of 'dir' to the log. If specified, use
@@ -30,6 +31,15 @@ namespace Debug
      **/
     void dumpDirectChildren( FileInfo * dir, const QString & dirName = QString() );
 
+    /**
+     * Dump a children list to the log. If specified, use 'dirName' as the
+     * directory name for the heading line. This mostly makes sense with an
+     * unnamed directory like the DirTreeModel's pseudo root.
+     **/
+    void dumpChildrenList( FileInfo           * dir,
+                           const FileInfoList & children,
+                           const QString      & dirName = QString() );
+    
     /**
      * Recursively dump the model tree from 'index' on to the log.
      * Indent each line with 'indent' (typically a string consisting of

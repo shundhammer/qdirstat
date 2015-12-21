@@ -46,6 +46,24 @@ namespace Debug
     }
 
 
+    void dumpChildrenList( FileInfo           * dir,
+                           const FileInfoList & children,
+                           const QString      & dirName )
+    {
+	QString name = dirName.isEmpty() ? dir->debugUrl() : dirName;
+        
+	if ( name.isEmpty() && dir == dir->tree()->root() )
+	    name = "<root>";
+
+        logDebug() << "Children of " << name << endl;
+        
+        for ( int i=0; i < children.size(); ++i )
+	{
+	    logDebug() << "    #" << i << ": " << children.at(i) << endl;
+	}
+    }
+
+
     void dumpModelTree( const QAbstractItemModel * model,
 			const QModelIndex	 & index,
 			const QString		 & indent )

@@ -263,6 +263,12 @@ namespace QDirStat
 	 **/
 	void sendFinalizeLocal( DirInfo *dir );
 
+        /**
+         * Send a sortingChanged() signal to tell data models and their views
+         * that items need to be re-sorted.
+         **/
+	void sendSortingChanged( DirInfo * dir );
+
 	/**
 	 * Returns 'true' if directory reading is in progress in this tree.
 	 **/
@@ -342,7 +348,17 @@ namespace QDirStat
 	 * Notice that the dot entry might be removed and its children
 	 * reparented after this signal.
 	 **/
-	void finalizeLocal( DirInfo *dir );
+	void finalizeLocal( DirInfo * dir );
+
+	/**
+	 * Emitted when the sort order of a directory changed.
+	 *
+	 * This is only emitted if the directory had been sorted before and now
+	 * that old sortedChildren() list is no longer valid, yet it has been
+	 * requested. This is useful for data models to notify their view about
+	 * it.
+	 **/
+	void sortingChanged( DirInfo * dir );
 
 	/**
 	 * Emitted when the current selection has changed, i.e. whenever some
@@ -351,14 +367,14 @@ namespace QDirStat
 	 *
 	 * NOTE: 'newSelection' may be 0 if nothing is selected.
 	 **/
-	void selectionChanged( FileInfo *newSelection );
+	void selectionChanged( FileInfo * newSelection );
 
 	/**
 	 * Single line progress information, emitted when the read status
 	 * changes - typically when a new directory is being read. Connect to a
 	 * status bar etc. to keep the user entertained.
 	 **/
-	void progressInfo( const QString &infoLine );
+	void progressInfo( const QString & infoLine );
 
 
     protected slots:

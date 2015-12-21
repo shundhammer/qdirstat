@@ -65,6 +65,9 @@ void DirTreeModel::createTree()
 
     connect( _tree, SIGNAL( readJobFinished( DirInfo * ) ),
 	     this,  SLOT  ( readJobFinished( DirInfo * ) ) );
+
+    connect( _tree, SIGNAL( sortingChanged( DirInfo * ) ),
+             this,  SLOT  ( sortingChanged( DirInfo * ) ) );
 }
 
 
@@ -148,17 +151,15 @@ FileInfo * DirTreeModel::findChild( DirInfo * parent, int childNo ) const
 
     if ( childNo < 0 || childNo >= childrenList.size() )
     {
-	logError() << "Child #" << childNo << " out of range: 0.."
+	logError() << "Child #" << childNo << " is out of range: 0.."
 		   << childrenList.size()-1 << " children for "
 		   << parent << endl;
-
-	for ( int i=0; i < childrenList.size(); ++i )
-	{
-	    logDebug() << "  Child #" << i << ": " << childrenList.at(i) << endl;
-	}
+	Debug::dumpChildrenList( parent, childrenList );
 
 	return 0;
     }
+
+    // Debug::dumpChildrenList( parent, childrenList );
 
     return childrenList.at( childNo );
 }
@@ -176,9 +177,9 @@ int DirTreeModel::rowNumber( FileInfo * child ) const
 
     if ( row < 0 )
     {
-        // Not found
-        logError() << "Child \"" << child << "\" not found in \""
-                   << child->parent() << "\"" << endl;
+	// Not found
+	logError() << "Child \"" << child << "\" not found in \""
+		   << child->parent() << "\"" << endl;
     }
 
     return row;
@@ -287,7 +288,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 
 		if ( item && item->isDirInfo() )
 		{
-		    logDebug() << "Touching col " << col << " of " << item << endl;
+		    // logDebug() << "Touching col " << col << " of " << item << endl;
 		    item->toDirInfo()->touch();
 		}
 
@@ -468,10 +469,15 @@ QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
 void DirTreeModel::sort( int column, Qt::SortOrder order )
 {
     logDebug() << "Sorting by col #" << column
-               << ( order == Qt::AscendingOrder ? " ascending" : " descending" )
-               << endl;
+	       << ( order == Qt::AscendingOrder ? " ascending" : " descending" )
+	       << endl;
+
     _sortCol   = static_cast<DataColumn>( mappedCol( column ) );
     _sortOrder = order;
+#if 1
+    emit layoutAboutToBeChanged();
+    emit layoutChanged();
+#endif
 }
 
 
@@ -643,13 +649,19 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 	return;
     }
 
+    if ( ! dir->isTouched() )
+    {
+	// logDebug() << "Remaining silent about untouched dir " << dir << endl;
+	return;
+    }
+
     QModelIndex index = modelIndex( dir );
     int count = countDirectChildren( dir );
     // Debug::dumpDirectChildren( dir );
 
     if ( count > 0 )
     {
-	// logDebug() << "Notifying view about " << count << " new children of " << dirName << endl;
+	logDebug() << "Notifying view about " << count << " new children of " << dirName << endl;
 
 	dir->lock();
 	beginInsertRows( index, 0, count - 1 );
@@ -727,6 +739,26 @@ void DirTreeModel::dataChangedNotify( DirInfo * dir )
 }
 
 
+void DirTreeModel::sortingChanged( DirInfo * dir )
+{
+    if ( ! dir || dir == _tree->root() )
+	return;
+
+    if ( dir->isTouched() ) // only if the view ever requested data about this dir
+    {
+#if 0
+        emit layoutAboutToBeChanged();
+        emit layoutChanged();
+        
+        // TO DO
+        // TO DO
+        // TO DO
+        // TO DO
+#endif
+    }
+}
+
+
 void DirTreeModel::readingFinished()
 {
     _updateTimer.stop();
@@ -736,8 +768,6 @@ void DirTreeModel::readingFinished()
     beginResetModel();
     endResetModel();
 #endif
-
-    // TO DO: Finalize display
 
     // Debug::dumpDirectChildren( _tree->root(), "root" );
 }

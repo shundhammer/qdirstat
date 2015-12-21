@@ -195,6 +195,12 @@ namespace QDirStat
 	 **/
 	void readingFinished();
 
+        /**
+         * Process notification that the sort order of a directory actually
+         * changed, i.e. it had to give up its sort cache.
+         **/
+        void sortingChanged( DirInfo * dir );
+
 	/**
 	 * Delayed update of the data fields in the view for 'dir':
 	 * Store 'dir' and all its ancestors in _pendingUpdates.

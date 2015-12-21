@@ -555,10 +555,10 @@ const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
 
     // Clean old sorted children list and create a new one
 
-    if ( _sortedChildren )
-	delete _sortedChildren;
-
+    bool hadSortCache = ( _sortedChildren != 0 );
+    dropSortCache();
     _sortedChildren = new FileInfoList();
+    CHECK_NEW( _sortedChildren );
 
 
     // Populate with unsorted children list
@@ -586,6 +586,9 @@ const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
     _lastSortCol   = sortCol;
     _lastSortOrder = sortOrder;
 
+    if ( hadSortCache )
+        _tree->sendSortingChanged( this );
+
     return *_sortedChildren;
 }
 
@@ -594,6 +597,15 @@ void DirInfo::dropSortCache( bool recursive )
 {
     if ( _sortedChildren )
     {
+        logDebug() << "Dropping sort cache for " << this << endl;
+
+        // Intentionally deleting the list and creating a new one since
+        // QList never shrinks, it always just grows (this is documented):
+        // QList.clear() would not free the allocated space.
+        //
+        // With this stragegy, if we get lucky, we won't even need the
+        // _sortedChildren list any more if nobody asks for it.
+
 	delete _sortedChildren;
 	_sortedChildren = 0;
     }
