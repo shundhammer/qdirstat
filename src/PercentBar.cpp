@@ -68,7 +68,8 @@ void PercentBarDelegate::paint( QPainter		   * painter,
 	{
 	    if ( percent > 100.0f )
 	    {
-		logError() << "Percent maxed out: " << percent << endl;
+                if ( percent > 103.0f )
+                    logError() << "Percent maxed out: " << percent << endl;
 		percent = 100.0f;
 	    }
 

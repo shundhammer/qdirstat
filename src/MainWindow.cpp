@@ -11,7 +11,6 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QSortFilterProxyModel>
 #include <QSignalMapper>
 
 #include "MainWindow.h"
@@ -37,13 +36,7 @@ MainWindow::MainWindow():
     _dirTreeModel = new QDirStat::DirTreeModel( this );
     CHECK_NEW( _dirTreeModel );
 
-    _sortModel = new QSortFilterProxyModel( this );
-    CHECK_NEW( _sortModel );
-
-    _sortModel->setSourceModel( _dirTreeModel );
-    _sortModel->setSortRole( QDirStat::SortRole );
-
-    _ui->dirTreeView->setModel( _sortModel );
+    _ui->dirTreeView->setModel( _dirTreeModel );
     _ui->dirTreeView->setSortingEnabled( true );
 
     QHeaderView * header = _ui->dirTreeView->header();

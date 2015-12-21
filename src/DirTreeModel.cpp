@@ -22,7 +22,9 @@ DirTreeModel::DirTreeModel( QObject * parent ):
     QAbstractItemModel( parent ),
     _tree(0),
     _dotEntryPolicy( DotEntryIsSubDir ),
-    _readJobsCol( PercentBarCol )
+    _readJobsCol( PercentBarCol ),
+    _sortCol( NameCol ),
+    _sortOrder( Qt::AscendingOrder )
 {
     _treeIconDir = ":/icons/tree-medium/"; // TO DO: Configurable
     loadIcons();
@@ -137,18 +139,28 @@ int DirTreeModel::viewCol( int modelCol ) const
 }
 
 
-FileInfo * DirTreeModel::findChild( FileInfo * parent, int childNo ) const
+FileInfo * DirTreeModel::findChild( DirInfo * parent, int childNo ) const
 {
-    FileInfoIterator it( parent, _dotEntryPolicy );
-    int index = 0;
+    CHECK_PTR( parent );
 
-    while ( *it && index != childNo )
+    const FileInfoList & childrenList =
+	parent->sortedChildren( _sortCol, _sortOrder );
+
+    if ( childNo < 0 || childNo >= childrenList.size() )
     {
-	++index;
-	++it;
+	logError() << "Child #" << childNo << " out of range: 0.."
+		   << childrenList.size()-1 << " children for "
+		   << parent << endl;
+
+	for ( int i=0; i < childrenList.size(); ++i )
+	{
+	    logDebug() << "  Child #" << i << ": " << childrenList.at(i) << endl;
+	}
+
+	return 0;
     }
 
-    return *it;
+    return childrenList.at( childNo );
 }
 
 
@@ -157,25 +169,19 @@ int DirTreeModel::rowNumber( FileInfo * child ) const
     if ( ! child->parent() )
 	return 0;
 
-    FileInfoIterator it( child->parent(), _dotEntryPolicy );
-    int row = 0;
+    const FileInfoList & childrenList =
+	child->parent()->sortedChildren( _sortCol, _sortOrder );
 
-    while ( *it )
+    int row = childrenList.indexOf( child );
+
+    if ( row < 0 )
     {
-	if ( *it == child )
-	    return row;
-
-	++row;
-	++it;
+        // Not found
+        logError() << "Child \"" << child << "\" not found in \""
+                   << child->parent() << "\"" << endl;
     }
 
-    if ( child == child->parent()->dotEntry() )
-	return row;
-
-    // Not found
-    logError() << "Child \"" << child << "\" not found in \""
-	       << child->parent() << "\"" << endl;
-    return -1;
+    return row;
 }
 
 
@@ -281,7 +287,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 
 		if ( item && item->isDirInfo() )
 		{
-		    // logDebug() << "Touching " << item << endl;
+		    logDebug() << "Touching col " << col << " of " << item << endl;
 		    item->toDirInfo()->touch();
 		}
 
@@ -321,27 +327,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		return alignment;
 	    }
 
-	case SortRole:	  // Custom QDirStat role: Raw types for sorting.
-	    // Together with a QSortProxyFilterModel that uses this custom role
-	    // as its sortRole, this takes care of sorting: The
-	    // QSortProxyFilterModel queries this model for data for the sort
-	    // column and uses QVariant and its known types and their
-	    // operator<() (in its lessThan() function). Since all columns we
-	    // use are either strings or simple numeric values, all we need to
-	    // do is to return the corresponding string or numeric value for
-	    // each column.
-
-	    if ( col == _readJobsCol )
-	    {
-		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-		CHECK_PTR( item );
-
-		if ( item->isBusy() )
-		    return item->pendingReadJobs();
-	    }
-	    // FALLTHRU
-
-	case RawDataRole: // Send raw data to our PercentBarDelegate
+	case RawDataRole: // Send raw data to our item delegate (the PercentBarDelegate)
 	    {
 
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
@@ -349,7 +335,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 
 		switch ( col )
 		{
-		    case NameCol:	  return item->isDotEntry() ? QString( "zzzz" ) : item->name();
+		    case NameCol:	  return item->name();
 		    case PercentBarCol:
 			{
 			    if ( item->parent() && item->parent()->isBusy() )
@@ -449,7 +435,7 @@ QModelIndex DirTreeModel::index( int row, int column, const QModelIndex & parent
     else
 	parent = _tree->root();
 
-    FileInfo * child = findChild( parent, row );
+    FileInfo * child = findChild( parent->toDirInfo(), row );
     CHECK_PTR( child );
 
     if ( child )
@@ -476,6 +462,16 @@ QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
     // logDebug() << "Parent of " << child << " is " << parent << " #" << row << endl;
 
     return createIndex( row, 0, parent );
+}
+
+
+void DirTreeModel::sort( int column, Qt::SortOrder order )
+{
+    logDebug() << "Sorting by col #" << column
+               << ( order == Qt::AscendingOrder ? " ascending" : " descending" )
+               << endl;
+    _sortCol   = static_cast<DataColumn>( mappedCol( column ) );
+    _sortOrder = order;
 }
 
 
