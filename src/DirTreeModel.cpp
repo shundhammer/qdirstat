@@ -308,6 +308,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 
 		switch ( col )
 		{
+		    case PercentBarCol:
 		    case PercentNumCol:
 		    case TotalSizeCol:
 		    case OwnSizeCol:
@@ -318,7 +319,6 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 			break;
 
 		    case NameCol:
-		    case PercentBarCol:
 		    case LatestMTimeCol:
 		    default:
 			alignment |= Qt::AlignLeft;
