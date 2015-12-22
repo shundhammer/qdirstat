@@ -75,6 +75,7 @@ MainWindow::MainWindow():
 
     connectActions();
 
+    ExcludeRules::add( ".*/\\.snapshot$" );
 #if 0
     ExcludeRules::add( ".*/\\.git$" );
 #endif
