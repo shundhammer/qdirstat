@@ -102,6 +102,11 @@ namespace QDirStat
 	 **/
 	void clear();
 
+	/**
+	 * Debugging: Dump list of persistent model indices to the log.
+	 **/
+	void dumpPersistentIndexList() const;
+
     public:
 
 	// Mapping of tree items to model rows and vice versa.
@@ -254,6 +259,11 @@ namespace QDirStat
 	 * Notify the view about changed data of 'dir'.
 	 **/
 	void dataChangedNotify( DirInfo * dir );
+
+	/**
+	 * Update the persistent indices with current row after sorting etc.
+	 **/
+	void updatePersistentIndices();
 
 	/**
 	 * Return 'true' if 'item' or any ancestor (parent or parent's parent

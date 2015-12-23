@@ -474,10 +474,17 @@ void DirTreeModel::sort( int column, Qt::SortOrder order )
 
     _sortCol   = static_cast<DataColumn>( mappedCol( column ) );
     _sortOrder = order;
+
+    logDebug() << "Before layoutAboutToBeChanged()" << endl;
+    dumpPersistentIndexList();
+
 #if 1
     emit layoutAboutToBeChanged();
+    updatePersistentIndices();
     emit layoutChanged();
 #endif
+    logDebug() << "After layoutChanged()" << endl;
+    dumpPersistentIndexList();
 }
 
 
@@ -769,7 +776,42 @@ void DirTreeModel::readingFinished()
     endResetModel();
 #endif
 
+    dumpPersistentIndexList();
     // Debug::dumpDirectChildren( _tree->root(), "root" );
+}
+
+
+void DirTreeModel::dumpPersistentIndexList() const
+{
+    logDebug() << "Persistent Indices" << endl;
+
+    foreach ( const QModelIndex & index, persistentIndexList() )
+    {
+	FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+	logDebug() << "  Persistent index row " << index.row()
+		   << " col " << index.column()
+		   << "  " << item
+		   << endl;
+    }
+}
+
+
+void DirTreeModel::updatePersistentIndices()
+{
+    foreach ( const QModelIndex & oldIndex, persistentIndexList() )
+    {
+	if ( oldIndex.isValid() )
+	{
+	    FileInfo * item = static_cast<FileInfo *>( oldIndex.internalPointer() );
+	    QModelIndex newIndex = modelIndex( item, oldIndex.column() );
+	    logDebug() << "Updating " << item
+		       << " col " << oldIndex.column()
+		       << " row " << oldIndex.row()
+		       << " --> " << newIndex.row()
+		       << endl;
+	    changePersistentIndex( oldIndex, newIndex );
+	}
+    }
 }
 
 
@@ -783,5 +825,4 @@ QVariant DirTreeModel::formatPercent( float percent ) const
 
     return text;
 }
-
 

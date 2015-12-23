@@ -5,7 +5,7 @@ Qt-based directory statistics: KDirStat without any KDE -- from the original KDi
 
 License: GPL V2
 
-Updated: 2015-12-20
+Updated: 2015-12-23
 
 
 ## Overview
@@ -52,9 +52,9 @@ Now that KDE has been losing direction more and more, it's time to come up with
 a desktop agnostic version of KDirStat - one that can be used without the
 hassle of an ever-changing desktop environment like KDE. KDE has become a
 moving target for developers. Much effort has gone into creating eminently
-essential things like a yellow note desktop widget (a.k.a. _Plasmoid_) that can
-be rotated by 7.834°, but basic usability has gone downhill during that
-process.
+essential things like a yellow sticky note desktop widget (a.k.a. _Plasmoid_)
+that can be rotated by 7.834°, but basic usability has gone downhill during
+that process.
 
 With the latest Plasma 5 (as of late 2015), there are some KDE apps that use
 KDE 5.x, and some that still use KDE 4.x, with the overall effect that settings
@@ -82,22 +82,33 @@ KDirStat had never used that much of the KDE infrastructure to begin with; what
 little it used (icons, for example) can be replaced by very little own
 infrastructure. The KDE libs are just not worth the hassle anymore.
 
+To put all that into perspective: I have been a KDE user since about 1998. I
+liked it very much during the times of KDE 1, KDE 2 and KDE 3. Linux and KDE
+are my main desktop (Windows only for gaming).
+
+When KDE 4 came along, I tried it, but went back to KDE 3 - back and forth
+several times. KDE 4 stabilized somewhat over recent years, but it still has
+its quirks -- a lot of them. Too many in my opinion. And with Plasma 5, for me
+it clearly went over the top. There may be people who like it, but I am not
+among them.
+
+
 
 ### But what about K4DirStat?
 
 Well, yes, it does exist. I don't want to discount the work that went into that
 port, but when I looked at it just a couple of days ago, it was still using the
 old Qt3 compatibility classes which were deprecated a long time ago (like, 5-6
-years ago). It's only a matter of time until they will finally be dropped, and
-then what? And the old KDirStat took the old Qt3 QListView / QListViewItem very
-much to their limits, and it used the old Qt3 QCanvas heavily for the
-treemaps. I don't think it will be easily possible to use the newer Qt4/Qt5
-QTreeWidget / QTreeWidgetItem instead.
+years ago), and with Qt5, they have been finally dropped.  And the old KDirStat
+took the old Qt3 QListView / QListViewItem very much to their limits, and it
+used the old Qt3 QCanvas heavily for the treemaps. I don't think it will be
+easily possible to use the newer Qt4/Qt5 QTreeWidget / QTreeWidgetItem instead.
 
 So, yes, K4DirStat was a port to Qt4 / KDE4 -- kind of. It does use Qt4 / KDE4
 libs -- technically, but not by spirit. It does not use any of the new
 technologies that Qt4 brought along, neither the model/view based item views
-nor QGraphicsView and related.
+nor QGraphicsView and related. And with the Qt3support module gone in Qt5, this
+is a dead end.
 
 That's what I did with this recent port: It's now cleanly based on the Qt4 /
 Qt5 model/view concept.  There is no Qt3 compatibility stuff left over. And
@@ -331,7 +342,7 @@ into source files? Sure, they listened to spineless corporate lawyers who just
 want to make sure. But those lawyers are not going to have that crap smack up
 their faces every time they open a file for editing. We developers do.
 
-You lawyers out there, can you here me? **This crap is in the way! Nobody wants
+You lawyers out there, can you hear me? **This crap is in the way! Nobody wants
 to read that!** It's in the way of people trying to do their jobs! We could
 construct a harassment case from this!
 

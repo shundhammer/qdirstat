@@ -309,5 +309,7 @@ void MainWindow::itemClicked( const QModelIndex & index )
     {
 	logDebug() << "Invalid model index" << endl;
     }
+
+    _dirTreeModel->dumpPersistentIndexList();
 }
 
