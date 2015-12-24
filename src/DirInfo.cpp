@@ -597,7 +597,7 @@ void DirInfo::dropSortCache( bool recursive )
 {
     if ( _sortedChildren )
     {
-        logDebug() << "Dropping sort cache for " << this << endl;
+        // logDebug() << "Dropping sort cache for " << this << endl;
 
         // Intentionally deleting the list and creating a new one since
         // QList never shrinks, it always just grows (this is documented):

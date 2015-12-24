@@ -67,7 +67,7 @@ void DirTreeModel::createTree()
 	     this,  SLOT  ( readJobFinished( DirInfo * ) ) );
 
     connect( _tree, SIGNAL( sortingChanged( DirInfo * ) ),
-             this,  SLOT  ( sortingChanged( DirInfo * ) ) );
+	     this,  SLOT  ( sortingChanged( DirInfo * ) ) );
 }
 
 
@@ -472,19 +472,17 @@ void DirTreeModel::sort( int column, Qt::SortOrder order )
 	       << ( order == Qt::AscendingOrder ? " ascending" : " descending" )
 	       << endl;
 
+    // logDebug() << "Before layoutAboutToBeChanged()" << endl;
+    // dumpPersistentIndexList();
+
+    emit layoutAboutToBeChanged();
     _sortCol   = static_cast<DataColumn>( mappedCol( column ) );
     _sortOrder = order;
-
-    logDebug() << "Before layoutAboutToBeChanged()" << endl;
-    dumpPersistentIndexList();
-
-#if 1
-    emit layoutAboutToBeChanged();
     updatePersistentIndices();
     emit layoutChanged();
-#endif
-    logDebug() << "After layoutChanged()" << endl;
-    dumpPersistentIndexList();
+
+    // logDebug() << "After layoutChanged()" << endl;
+    // dumpPersistentIndexList();
 }
 
 
@@ -754,13 +752,13 @@ void DirTreeModel::sortingChanged( DirInfo * dir )
     if ( dir->isTouched() ) // only if the view ever requested data about this dir
     {
 #if 0
-        emit layoutAboutToBeChanged();
-        emit layoutChanged();
-        
-        // TO DO
-        // TO DO
-        // TO DO
-        // TO DO
+	emit layoutAboutToBeChanged();
+	emit layoutChanged();
+
+	// TO DO
+	// TO DO
+	// TO DO
+	// TO DO
 #endif
     }
 }
@@ -783,14 +781,20 @@ void DirTreeModel::readingFinished()
 
 void DirTreeModel::dumpPersistentIndexList() const
 {
-    logDebug() << "Persistent Indices" << endl;
+    QModelIndexList persistentList = persistentIndexList();
 
-    foreach ( const QModelIndex & index, persistentIndexList() )
+    logDebug() << persistentList.size() << " persistent indices" << endl;
+
+    for ( int i=0; i < persistentList.size(); ++i )
     {
+	QModelIndex index = persistentList.at(i);
+
 	FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-	logDebug() << "  Persistent index row " << index.row()
+	logDebug() << "#" << i
+		   << " Persistent index"
 		   << " col " << index.column()
-		   << "  " << item
+		   << " row " << index.row()
+		   << " " << item
 		   << endl;
     }
 }
@@ -798,17 +802,24 @@ void DirTreeModel::dumpPersistentIndexList() const
 
 void DirTreeModel::updatePersistentIndices()
 {
-    foreach ( const QModelIndex & oldIndex, persistentIndexList() )
+    QModelIndexList persistentList = persistentIndexList();
+
+    for ( int i=0; i < persistentList.size(); ++i )
     {
+	QModelIndex oldIndex = persistentList.at(i);
+
 	if ( oldIndex.isValid() )
 	{
 	    FileInfo * item = static_cast<FileInfo *>( oldIndex.internalPointer() );
 	    QModelIndex newIndex = modelIndex( item, oldIndex.column() );
-	    logDebug() << "Updating " << item
+#if 0
+	    logDebug() << "Updating #" << i
+		       << " " << item
 		       << " col " << oldIndex.column()
 		       << " row " << oldIndex.row()
 		       << " --> " << newIndex.row()
 		       << endl;
+#endif
 	    changePersistentIndex( oldIndex, newIndex );
 	}
     }
