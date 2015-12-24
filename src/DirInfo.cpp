@@ -576,7 +576,7 @@ const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
 
     // Sort
 
-    logDebug() << "Sorting children of " << this << endl;
+    // logDebug() << "Sorting children of " << this << endl;
 
     std::stable_sort( _sortedChildren->begin(),
 		      _sortedChildren->end(),

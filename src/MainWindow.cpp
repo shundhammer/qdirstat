@@ -299,11 +299,14 @@ void MainWindow::itemClicked( const QModelIndex & index )
 {
     if ( index.isValid() )
     {
-	logDebug() << "Clicked row #" << index.row()
-		   << " col #" << index.column()
-		   << " data(0): " << index.model()->data( index, 0 ).toString()
+        FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+
+	logDebug() << "Clicked row " << index.row()
+		   << " col " << index.column()
+                   << " " << item
 		   << endl;
-	logDebug() << "Ancestors: " << Debug::modelTreeAncestors( index ).join( " -> " ) << endl;
+        // << " data(0): " << index.model()->data( index, 0 ).toString()
+	// logDebug() << "Ancestors: " << Debug::modelTreeAncestors( index ).join( " -> " ) << endl;
     }
     else
     {

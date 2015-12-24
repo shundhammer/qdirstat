@@ -663,7 +663,7 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
 
     if ( count > 0 )
     {
-	logDebug() << "Notifying view about " << count << " new children of " << dirName << endl;
+	// logDebug() << "Notifying view about " << count << " new children of " << dirName << endl;
 
 	dir->lock();
 	beginInsertRows( index, 0, count - 1 );
