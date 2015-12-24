@@ -2,10 +2,10 @@
 		       ================================
 
 Author:  Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
-Updated: 2015-12-04
+Updated: 2015-12-24
 
 
-KDirStat can read cache files in either gzip or plain text (uncompressed)
+QDirStat can read cache files in either gzip or plain text (uncompressed)
 format. The file format is line oriented.
 
 Empty lines as well as lines with a '#' character as their first
@@ -138,9 +138,9 @@ does not hurt to escape a few more characters than would strictly be
 neccessary.
 
 As for encoding, unfortunately this is one big mess. 7 bit ASCII works
-allright, but if there are any special characters, everything depends on the
+alright, but if there are any special characters, everything depends on the
 locale in which the user created a file. There is no standard for file name
-encodings in file systems; it all Special characters may come in all kinds of
+encodings in file systems; special characters may come in all kinds of
 flavours - in Latin-1 (ISO-8859-1), Latin-2, UTF-8, Japanese, Korean, Chinese,
 whatever. In an ideal world, the file system would take care about this and
 normalize file names with non-ASCII (7 bit) characters, but that doesn't
