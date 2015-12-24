@@ -145,6 +145,19 @@ public:
 };
 
 
+class BadMagicNumberException: public Exception
+{
+public:
+    BadMagicNumberException():
+	Exception( "Magic number check failed" )
+	{}
+
+    virtual ~BadMagicNumberException() throw()
+	{}
+};
+
+
+
 //
 // Helper macros
 //
@@ -235,6 +248,19 @@ public:
 	if ( ! (PTR) )						\
 	{							\
 	    THROW( DynamicCastException( EXPECTED_TYPE) );	\
+	}							\
+    } while( 0 )
+
+
+/**
+ * Check the magic number of an object and throw an exception if it returned false.
+ */
+#define CHECK_MAGIC( PTR )                                      \
+    do								\
+    {								\
+	if ( ! PTR->checkMagicNumber() )			\
+	{							\
+	    THROW( BadMagicNumberException() );			\
 	}							\
     } while( 0 )
 

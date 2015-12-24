@@ -45,6 +45,7 @@ FileInfo::FileInfo( DirTree    * tree,
     _size	  = 0;
     _blocks	  = 0;
     _mtime	  = 0;
+    _magic        = FileInfoMagic;
 }
 
 
@@ -65,6 +66,7 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
     _mode	 = statInfo->st_mode;
     _links	 = statInfo->st_nlink;
     _mtime	 = statInfo->st_mtime;
+    _magic       = FileInfoMagic;
 
     if ( isSpecial() )
     {
@@ -118,6 +120,7 @@ FileInfo::FileInfo( DirTree *	    tree,
     _size	 = size;
     _mtime	 = mtime;
     _links	 = links;
+    _magic       = FileInfoMagic;
 
     if ( blocks < 0 )
     {
@@ -139,7 +142,7 @@ FileInfo::FileInfo( DirTree *	    tree,
 
 FileInfo::~FileInfo()
 {
-    // NOP
+    _magic = 0;
 
     /**
      * The destructor should also take care about unlinking this object from
@@ -151,6 +154,12 @@ FileInfo::~FileInfo()
      *
      * This sucks, but it's the C++ standard.
      **/
+}
+
+
+bool FileInfo::checkMagicNumber()
+{
+    return _magic == FileInfoMagic;
 }
 
 

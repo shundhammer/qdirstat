@@ -72,9 +72,19 @@ void DirTreeModel::clear()
 {
     if ( _tree )
     {
+        logDebug() << "Before beginResetModel()" << endl;
+        dumpPersistentIndexList();
+
 	beginResetModel();
+
+	logDebug() << "After beginResetModel()" << endl;
+	dumpPersistentIndexList();
+
 	_tree->clear();
 	endResetModel();
+
+	logDebug() << "After endResetModel()" << endl;
+	dumpPersistentIndexList();
     }
 }
 
@@ -205,7 +215,10 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
     FileInfo * item = 0;
 
     if ( parentIndex.isValid() )
+    {
 	item = static_cast<FileInfo *>( parentIndex.internalPointer() );
+	CHECK_MAGIC( item );
+    }
     else
 	item = _tree->root();
 
@@ -281,6 +294,8 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 	case Qt::DisplayRole:
 	    {
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+		CHECK_MAGIC( item );
+
 		QVariant result = columnText( item, col );
 
 		if ( item && item->isDirInfo() )
@@ -295,6 +310,8 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 	case Qt::DecorationRole:
 	    {
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+		CHECK_MAGIC( item );
+
 		QVariant result = columnIcon( item, col );
 		return result;
 	    }
@@ -330,6 +347,8 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
 		CHECK_PTR( item );
+		CHECK_MAGIC( item );
+
 
 		switch ( col )
 		{
@@ -401,6 +420,8 @@ Qt::ItemFlags DirTreeModel::flags( const QModelIndex &index ) const
 
     FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
     CHECK_PTR( item );
+    CHECK_MAGIC( item );
+
     Qt::ItemFlags baseFlags = Qt::ItemIsEnabled;
 
     if ( ! item->isDirInfo() )
@@ -429,7 +450,10 @@ QModelIndex DirTreeModel::index( int row, int column, const QModelIndex & parent
     FileInfo *parent;
 
     if ( parentIndex.isValid() )
+    {
 	parent = static_cast<FileInfo *>( parentIndex.internalPointer() );
+	CHECK_MAGIC( parent );
+    }
     else
 	parent = _tree->root();
 
@@ -450,6 +474,8 @@ QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
 
     FileInfo * child = static_cast<FileInfo*>( index.internalPointer() );
     CHECK_PTR( child );
+    CHECK_MAGIC( child );
+
     FileInfo * parent = child->parent();
     CHECK_PTR( parent );
 
@@ -767,6 +793,8 @@ void DirTreeModel::dumpPersistentIndexList() const
 	QModelIndex index = persistentList.at(i);
 
 	FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+	CHECK_MAGIC( item );
+
 	logDebug() << "#" << i
 		   << " Persistent index"
 		   << " col " << index.column()

@@ -28,6 +28,8 @@ namespace QDirStat
     // This is how much bytes this program can handle.
 #define FileSizeMax 9223372036854775807LL
 
+#define FileInfoMagic 4242
+
     // Forward declarations
     class DirInfo;
     class DirTree;
@@ -129,13 +131,21 @@ namespace QDirStat
 	virtual ~FileInfo();
 
 	/**
+	 * Check with the magic number if this object is valid.
+	 * Return 'true' if it is valid, 'false' if invalid.
+	 *
+	 * Notice that this is intentionally not a virtual function to avoid
+	 * a segfault via the vptr if it is not valid.
+	 **/
+	bool checkMagicNumber();
+
+	/**
 	 * Returns whether or not this is a local file (protocol "file:").
 	 * It might as well be a remote file ("ftp:", "smb:" etc.).
 	 **/
 	bool isLocalFile() const { return _isLocalFile; }
 
 	/**
-
 	 * Returns the file or directory name without path, i.e. only the last
 	 * path name component (i.e. "printcap" rather than "/etc/printcap").
 	 *
@@ -596,6 +606,7 @@ namespace QDirStat
 	// Keep this short in order to use as little memory as possible -
 	// there will be a _lot_ of entries of this kind!
 
+	short		_magic;                 // magic number to detect if this object is valid
 	QString		_name;			// the file name (without path!)
 	bool		_isLocalFile  :1;	// flag: local or remote file?
 	bool		_isSparseFile :1;	// (cache) flag: sparse file (file with "holes")?
