@@ -125,6 +125,7 @@ void DirInfo::clear()
     }
 
     _summaryDirty = true;
+    dropSortCache();
 }
 
 

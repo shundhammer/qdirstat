@@ -225,10 +225,9 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
     if ( ! item->isDirInfo() )
 	return 0;
 
-    QString dirName = item == _tree->root() ? "<root>" : item->debugUrl();
-
     if ( item->toDirInfo()->isLocked() )
     {
+        // QString dirName = item == _tree->root() ? "<root>" : item->debugUrl();
 	// logDebug() << dirName << " is locked - returning 0" << endl;
 	return 0;
     }
