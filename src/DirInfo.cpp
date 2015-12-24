@@ -555,8 +555,7 @@ const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
 
     // Clean old sorted children list and create a new one
 
-    bool hadSortCache = ( _sortedChildren != 0 );
-    dropSortCache();
+    dropSortCache( true ); // recursive
     _sortedChildren = new FileInfoList();
     CHECK_NEW( _sortedChildren );
 
@@ -586,9 +585,6 @@ const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
     _lastSortCol   = sortCol;
     _lastSortOrder = sortOrder;
 
-    if ( hadSortCache )
-        _tree->sendSortingChanged( this );
-
     return *_sortedChildren;
 }
 
@@ -597,32 +593,39 @@ void DirInfo::dropSortCache( bool recursive )
 {
     if ( _sortedChildren )
     {
-        // logDebug() << "Dropping sort cache for " << this << endl;
+	// logDebug() << "Dropping sort cache for " << this << endl;
 
-        // Intentionally deleting the list and creating a new one since
-        // QList never shrinks, it always just grows (this is documented):
-        // QList.clear() would not free the allocated space.
-        //
-        // With this stragegy, if we get lucky, we won't even need the
-        // _sortedChildren list any more if nobody asks for it.
+	// Intentionally deleting the list and creating a new one since
+	// QList never shrinks, it always just grows (this is documented):
+	// QList.clear() would not free the allocated space.
+	//
+	// If we get lucky, we won't even need the _sortedChildren list any
+	// more if nobody asks for it. This prevents pathological cases where
+	// the user opened all tree branches at once (there are menu entries to
+	// open to a certain tree level), then closed them again and now opens
+	// select branches manually.
 
 	delete _sortedChildren;
 	_sortedChildren = 0;
-    }
 
-    if ( recursive && ! _isDotEntry )
-    {
-	FileInfo * child = _firstChild;
+	// Optimization: If this dir didn't have any sort cache, there won't be
+	// any in the subtree, either. And dot entries don't have dir children
+	// that could have a sort cache.
 
-	while ( child )
+	if ( recursive && ! _isDotEntry )
 	{
-	    if ( child->isDirInfo() )
-		child->toDirInfo()->dropSortCache( recursive );
+	    FileInfo * child = _firstChild;
 
-	    child = child->next();
+	    while ( child )
+	    {
+		if ( child->isDirInfo() )
+		    child->toDirInfo()->dropSortCache( recursive );
+
+		child = child->next();
+	    }
+
+	    if ( _dotEntry )
+		_dotEntry->dropSortCache( recursive );
 	}
-
-	if ( _dotEntry )
-	    _dotEntry->dropSortCache( recursive );
     }
 }

@@ -388,14 +388,6 @@ void DirTree::sendReadJobFinished( DirInfo * dir )
     emit readJobFinished( dir );
 }
 
-void DirTree::sendSortingChanged( DirInfo * dir )
-{
-    emit sortingChanged( dir );
-}
-
-
-
-
 
 void DirTree::selectItem( FileInfo *newSelection )
 {

@@ -65,9 +65,6 @@ void DirTreeModel::createTree()
 
     connect( _tree, SIGNAL( readJobFinished( DirInfo * ) ),
 	     this,  SLOT  ( readJobFinished( DirInfo * ) ) );
-
-    connect( _tree, SIGNAL( sortingChanged( DirInfo * ) ),
-	     this,  SLOT  ( sortingChanged( DirInfo * ) ) );
 }
 
 
@@ -740,26 +737,6 @@ void DirTreeModel::dataChangedNotify( DirInfo * dir )
 	// updates about it.
 
 	dir->clearTouched();
-    }
-}
-
-
-void DirTreeModel::sortingChanged( DirInfo * dir )
-{
-    if ( ! dir || dir == _tree->root() )
-	return;
-
-    if ( dir->isTouched() ) // only if the view ever requested data about this dir
-    {
-#if 0
-	emit layoutAboutToBeChanged();
-	emit layoutChanged();
-
-	// TO DO
-	// TO DO
-	// TO DO
-	// TO DO
-#endif
     }
 }
 
