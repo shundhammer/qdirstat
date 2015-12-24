@@ -502,12 +502,14 @@ bool CacheReader::checkHeader()
     splitLine();
 
     // Check for    [qdirstat <version> cache file]
+    // or           [kdirstat <version> cache file]
 
     if ( fieldsCount() != 4 )	_ok = false;
 
     if ( _ok )
     {
-	if ( strcmp( field( 0 ), "[qdirstat" ) != 0 ||
+	if ( ( strcmp( field( 0 ), "[qdirstat" ) != 0 &&
+               strcmp( field( 0 ), "[kdirstat" ) != 0   ) ||
 	     strcmp( field( 2 ), "cache"     ) != 0 ||
 	     strcmp( field( 3 ), "file]"     ) != 0 )
 	{
