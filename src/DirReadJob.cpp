@@ -175,7 +175,7 @@ void LocalDirReadJob::startReading()
 		    {
 			if ( entryName == defaultCacheName )	// .qdirstat.cache.gz found?
 			{
-			    logDebug() << "Found " << defaultCacheName << endl;
+			    logDebug() << "Found cache file " << defaultCacheName << endl;
 
 			    //
 			    // Read content of this subdirectory from cache file
@@ -192,6 +192,9 @@ void LocalDirReadJob::startReading()
 
 				cacheReadJob->reader()->rewind();  // Read offset was moved by firstDir()
 				_tree->addJob( cacheReadJob );	   // Job queue will assume ownership of cacheReadJob
+
+                                if ( _dir->parent() )
+                                    _dir->parent()->setReadState( DirReading );
 
 				//
 				// Clean up partially read directory content
@@ -210,10 +213,10 @@ void LocalDirReadJob::startReading()
 			    }
 			    else
 			    {
-				logDebug() << "NOT using cache file " << fullName
-					   << " with dir " << firstDirInCache
-					   << " for " << dirName
-					   << endl;
+				logWarning() << "NOT using cache file " << fullName
+					     << " with dir " << firstDirInCache
+					     << " for " << dirName
+					     << endl;
 
 				delete cacheReadJob;
 			    }
@@ -479,7 +482,7 @@ void DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 
 	if ( job->dir() && job->dir()->isInSubtree( subtree ) )
 	{
-	    logDebug() << "Killing read job " << job->dir() << endl;
+	    // logDebug() << "Killing read job " << job->dir() << endl;
 	    it.remove();
 	    delete job;
 	}

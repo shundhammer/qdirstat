@@ -148,8 +148,9 @@ public:
 class BadMagicNumberException: public Exception
 {
 public:
-    BadMagicNumberException():
-	Exception( "Magic number check failed" )
+    BadMagicNumberException( void * badPointer ):
+	Exception( QString( "Magic number check failed for address 0x%1" )
+                   .arg( (qulonglong) badPointer, 0, 16 ) )
 	{}
 
     virtual ~BadMagicNumberException() throw()
@@ -260,7 +261,7 @@ public:
     {								\
 	if ( ! PTR->checkMagicNumber() )			\
 	{							\
-	    THROW( BadMagicNumberException() );			\
+	    THROW( BadMagicNumberException( PTR ) );		\
 	}							\
     } while( 0 )
 

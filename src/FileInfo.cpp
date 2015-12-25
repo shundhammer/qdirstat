@@ -15,7 +15,7 @@
 
 #include "FileInfo.h"
 #include "DirInfo.h"
-#include "DirSaver.h"
+#include "DirTree.h"
 #include "Exception.h"
 
 // Some file systems (NTFS seems to be among them) may handle block fragments
@@ -201,7 +201,13 @@ QString FileInfo::url() const
 
 QString FileInfo::debugUrl() const
 {
-    return url() + ( isDotEntry() ? ( QString( "/" ) + dotEntryName() ) : "" );
+    if ( this == _tree->root() )
+        return "<root>";
+
+    if ( isDotEntry() )
+        return url() + "/" + dotEntryName();
+
+    return url() ;
 }
 
 
@@ -250,23 +256,26 @@ bool FileInfo::isInSubtree( const FileInfo *subtree ) const
 
 FileInfo * FileInfo::locate( QString url, bool findDotEntries )
 {
-    if ( ! url.startsWith( _name ) )
+    if ( ! url.startsWith( _name ) && this != _tree->root() )
 	return 0;
     else					// URL starts with this node's name
     {
-	url.remove( 0, _name.length() );	// Remove leading name of this node
+        if ( this != _tree->root() )            // The root item is invisible
+        {
+            url.remove( 0, _name.length() );	// Remove leading name of this node
 
-	if ( url.length() == 0 )		// Nothing left?
-	    return this;			// Hey! That's us!
+            if ( url.length() == 0 )		// Nothing left?
+                return this;			// Hey! That's us!
 
-	if ( url.startsWith( "/" ) )		// If the next thing a path delimiter,
-	    url.remove( 0, 1 );			// remove that leading delimiter.
-	else					// No path delimiter at the beginning
-	{
-	    if ( _name.right(1) != "/" &&	// and this is not the root directory
-		 ! isDotEntry() )		// or a dot entry:
-		return 0;			// This can't be any of our children.
-	}
+            if ( url.startsWith( "/" ) )	// If the next thing a path delimiter,
+                url.remove( 0, 1 );		// remove that leading delimiter.
+            else				// No path delimiter at the beginning
+            {
+                if ( _name.right(1) != "/" &&	// and this is not the root directory
+                     ! isDotEntry() )		// or a dot entry:
+                    return 0;			// This can't be any of our children.
+            }
+        }
 
 
 	// Search all children

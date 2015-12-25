@@ -225,10 +225,18 @@ CacheReader::~CacheReader()
     if ( _cache )
 	gzclose( _cache );
 
-    // logDebug() << "Cache reading finished" << endl;
+    logDebug() << "Cache reading finished" << endl;
 
     if ( _toplevel )
+    {
 	_toplevel->finalizeAll();
+
+        if ( _toplevel->readState() == DirReading )
+            _toplevel->setReadState( DirCached );
+
+	logDebug() << "Sending read job finished for " << _toplevel << endl;
+        _tree->sendReadJobFinished( _toplevel );
+    }
 
     emit finished();
 }
@@ -298,7 +306,7 @@ void CacheReader::addItem()
     else if ( strcasecmp( type, "BlockDev" ) == 0 )	mode = S_IFBLK;
     else if ( strcasecmp( type, "CharDev"  ) == 0 )	mode = S_IFCHR;
     else if ( strcasecmp( type, "FIFO"	   ) == 0 )	mode = S_IFIFO;
-    else if ( strcasecmp( type, "Socket"   ) == 0 )mode = S_IFSOCK;
+    else if ( strcasecmp( type, "Socket"   ) == 0 )	mode = S_IFSOCK;
 
 
     // Path
@@ -376,9 +384,12 @@ void CacheReader::addItem()
 
     if ( ! parent && _tree->root() )
     {
+        if ( ! _tree->root()->hasChildren() )
+            parent = _tree->root();
+
 	// Try the easy way first - the starting point of this cache
 
-	if ( _toplevel )
+	if ( ! parent && _toplevel )
 	    parent = dynamic_cast<DirInfo *> ( _toplevel->locate( path ) );
 
 
@@ -390,10 +401,8 @@ void CacheReader::addItem()
 
 	if ( ! parent ) // Still nothing?
 	{
-#if 0
 	    logError() << _fileName << ":" << _lineNo << ": "
-		      << "Could not locate parent " << path << endl;
-#endif
+		       << "Could not locate parent " << path << endl;
 
 	    return;	// Ignore this cache line completely
 	}
@@ -401,9 +410,10 @@ void CacheReader::addItem()
 
     if ( strcasecmp( type, "D" ) == 0 )
     {
-	// logDebug() << "Creating DirInfo  for " << name << endl;
-	DirInfo * dir = new DirInfo( _tree, parent, name,
-				       mode, size, mtime );
+        QString url = ( parent == _tree->root() ) ? path + "/" + name : name;
+	// logDebug() << "Creating DirInfo  for " << url << " with parent " << parent << endl;
+	DirInfo * dir = new DirInfo( _tree, parent, url,
+				     mode, size, mtime );
 	dir->setReadState( DirCached );
 	_lastDir = dir;
 
@@ -445,15 +455,15 @@ void CacheReader::addItem()
 	    // logDebug() << "Creating FileInfo for " << parent->debugUrl() << "/" << name << endl;
 
 	    FileInfo * item = new FileInfo( _tree, parent, name,
-					      mode, size, mtime,
-					      blocks, links );
+					    mode, size, mtime,
+					    blocks, links );
 	    parent->insertChild( item );
 	    _tree->childAddedNotify( item );
 	}
 	else
 	{
 	    logError() << _fileName << ":" << _lineNo << ": "
-		      << "No parent for item " << name << endl;
+		       << "No parent for item " << name << endl;
 	}
     }
 }
@@ -502,14 +512,14 @@ bool CacheReader::checkHeader()
     splitLine();
 
     // Check for    [qdirstat <version> cache file]
-    // or           [kdirstat <version> cache file]
+    // or	    [kdirstat <version> cache file]
 
     if ( fieldsCount() != 4 )	_ok = false;
 
     if ( _ok )
     {
 	if ( ( strcmp( field( 0 ), "[qdirstat" ) != 0 &&
-               strcmp( field( 0 ), "[kdirstat" ) != 0   ) ||
+	       strcmp( field( 0 ), "[kdirstat" ) != 0	) ||
 	     strcmp( field( 2 ), "cache"     ) != 0 ||
 	     strcmp( field( 3 ), "file]"     ) != 0 )
 	{

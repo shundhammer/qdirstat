@@ -215,6 +215,21 @@ namespace QDirStat
 	 **/
 	void sendPendingUpdates();
 
+	/**
+	 * Notification that a subtree is about to be deleted.
+	 **/
+	void deletingChild( FileInfo * child );
+
+	/**
+	 * Notification that deleting a subtree is done.
+	 **/
+	void childDeleted();
+
+	/**
+	 * Invalidate all persistent indices in 'subtree'.
+	 **/
+	void invalidatePersistent( FileInfo * subtree );
+
 
     protected:
 	/**

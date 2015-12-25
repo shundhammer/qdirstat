@@ -335,6 +335,9 @@ void DirInfo::childAdded( FileInfo *newChild )
 	 */
     }
 
+    if ( newChild->parent() == this )
+        dropSortCache();
+
     if ( _parent )
 	_parent->childAdded( newChild );
 }
@@ -360,16 +363,23 @@ void DirInfo::deletingChild( FileInfo *deletedChild )
     if ( _parent )
 	_parent->deletingChild( deletedChild );
 
-    if ( ! _deletingAll && deletedChild->parent() == this )
+    if ( deletedChild->parent() == this )
     {
-	/**
-	 * Unlink the child from the children's list - but only if this doesn't
-	 * happen recursively for all children of this object: No use bothering
-	 * about the validity of the children's list if this will all be
-	 * history anyway in a moment.
-	 **/
+        if ( ! _deletingAll )
+        {
+            /**
+             * Unlink the child from the children's list - but only if this
+             * doesn't happen recursively for all children of this object: No
+             * use bothering about the validity of the children's list if this
+             * will all be history anyway in a moment.
+             **/
 
-	unlinkChild( deletedChild );
+            unlinkChild( deletedChild );
+        }
+        else
+        {
+            dropSortCache();
+        }
     }
 }
 
@@ -382,6 +392,8 @@ void DirInfo::unlinkChild( FileInfo *deletedChild )
 		   << " - cannot unlink from children list!" << endl;
 	return;
     }
+
+    dropSortCache();
 
     if ( deletedChild == _firstChild )
     {

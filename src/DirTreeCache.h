@@ -92,8 +92,8 @@ namespace QDirStat
 	 * until this object is destroyed.
 	 **/
 	CacheReader( const QString & fileName,
-		      DirTree	   * tree,
-		      DirInfo	   * parent = 0 );
+		     DirTree	   * tree,
+		     DirInfo	   * parent = 0 );
 
 	/**
 	 * Destructor

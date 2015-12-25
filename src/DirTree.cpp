@@ -75,7 +75,7 @@ void DirTree::setRoot( DirInfo *newRoot )
 }
 
 
-FileInfo * DirTree::firstTopLevel() const
+FileInfo * DirTree::firstToplevel() const
 {
     return _root ? _root->firstChild() : 0;
 }
@@ -89,7 +89,7 @@ bool DirTree::isTopLevel( FileInfo *item ) const
 
 QString DirTree::url() const
 {
-    FileInfo * realRoot = firstTopLevel();
+    FileInfo * realRoot = firstToplevel();
 
     return realRoot ? realRoot->url() : "";
 }
@@ -159,7 +159,7 @@ void DirTree::refresh( FileInfo *subtree )
 
     if ( ! subtree || ! subtree->parent() )	// Refresh all (from root)
     {
-	startReading( QDir::cleanPath( firstTopLevel()->url() ) );
+	startReading( QDir::cleanPath( firstToplevel()->url() ) );
     }
     else	// Refresh subtree
     {
@@ -260,6 +260,7 @@ void DirTree::childAddedNotify( FileInfo *newChild )
 
 void DirTree::deletingChildNotify( FileInfo *deletedChild )
 {
+    logDebug() << "Deleting child " << deletedChild << endl;
     emit deletingChild( deletedChild );
 
     // Only now check for selection and root: Give connected objects

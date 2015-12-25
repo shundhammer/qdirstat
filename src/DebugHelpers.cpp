@@ -16,47 +16,41 @@ namespace Debug
 {
     using namespace QDirStat;
 
-    void dumpDirectChildren( FileInfo * dir, const QString & dirName )
+    void dumpDirectChildren( FileInfo * dir )
     {
 	if ( ! dir )
 	    return;
-
-	QString name = dirName.isEmpty() ? dir->debugUrl() : dirName;
-
-	if ( name.isEmpty() && dir == dir->tree()->root() )
-	    name = "<root>";
 
 	FileInfoIterator it( dir, DotEntryIsSubDir );
 
 	if ( dir->hasChildren() )
 	{
-	    logDebug() << "Children of " << name << endl;
+	    logDebug() << "Children of " << dir
+                       << "  (" << (void *) dir << ")"
+                       << endl;
 	    int count = 0;
 
 	    while ( *it )
 	    {
-		logDebug() << "	   #" << count++ << ": " << *it << endl;
+		logDebug() << "	   #" << count++ << ": "
+                           << (void *) *it
+                           << "  " << *it
+                           << endl;
 		++it;
 	    }
 	}
 	else
 	{
-	    logDebug() << "\t\tNo children in " << name << endl;
+	    logDebug() << "    No children in " << dir << endl;
 	}
     }
 
 
     void dumpChildrenList( FileInfo           * dir,
-                           const FileInfoList & children,
-                           const QString      & dirName )
+                           const FileInfoList & children )
     {
-	QString name = dirName.isEmpty() ? dir->debugUrl() : dirName;
-        
-	if ( name.isEmpty() && dir == dir->tree()->root() )
-	    name = "<root>";
+        logDebug() << "Children of " << dir << endl;
 
-        logDebug() << "Children of " << name << endl;
-        
         for ( int i=0; i < children.size(); ++i )
 	{
 	    logDebug() << "    #" << i << ": " << children.at(i) << endl;

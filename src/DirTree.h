@@ -128,7 +128,7 @@ namespace QDirStat
 	 * Return the first toplevel item of this tree or 0 if there is
 	 * none. This is the logical root item.
 	 **/
-	FileInfo * firstTopLevel() const;
+	FileInfo * firstToplevel() const;
 
 	/**
 	 * Return 'true' if 'item' is a toplevel item, i.e. a direct child of

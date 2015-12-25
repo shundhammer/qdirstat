@@ -24,12 +24,9 @@ namespace Debug
     using QDirStat::FileInfoList;
 
     /**
-     * Dump the direct children of 'dir' to the log. If specified, use
-     * 'dirName' as the directory name for the heading line. This mostly
-     * makes sense with an unnamed directory like the DirTreeModel's pseudo
-     * root.
+     * Dump the direct children of 'dir' to the log.
      **/
-    void dumpDirectChildren( FileInfo * dir, const QString & dirName = QString() );
+    void dumpDirectChildren(FileInfo * dir);
 
     /**
      * Dump a children list to the log. If specified, use 'dirName' as the
@@ -37,9 +34,8 @@ namespace Debug
      * unnamed directory like the DirTreeModel's pseudo root.
      **/
     void dumpChildrenList( FileInfo           * dir,
-                           const FileInfoList & children,
-                           const QString      & dirName = QString() );
-    
+                           const FileInfoList & children );
+
     /**
      * Recursively dump the model tree from 'index' on to the log.
      * Indent each line with 'indent' (typically a string consisting of
