@@ -5,7 +5,7 @@ Qt-based directory statistics: KDirStat without any KDE -- from the original KDi
 
 License: GPL V2
 
-Updated: 2015-12-23
+Updated: 2015-12-25
 
 
 ## Overview
@@ -22,6 +22,28 @@ _First preview 2015-12-20 -- see also section "Development Status" below_
 
 
 ## Current Development Status
+
+- 2015-12-25  Christmas release
+
+  - Sorting is now done internally in the DirTreeModel, and it's blazingly
+    fast. It uses lazy sorting - postponing sorting until the last possible
+    moment for each tree branch. Maybe the branch will never get visible, and
+    then it doesn't need to be sorted at all. The QSortProxyModel is gone.
+
+  - Reading cache files finally works again. It was quite some hassle to find
+    all the places where the invisible root item that is required for the
+    QTreeView / QAbstractItemModel make a difference. I hope now I caught all
+    of them.
+
+  - Fixed some bugs that resulted in segfaults. Well, it's a development
+    version. Such things happen.
+
+  - Removed the section about K4DirStat in this README.md; that information was
+    outdated. It turns out I hadn't looked at the most recent sources of
+    K4DirStat - that was entirely my own stupidity. My apologies. Since right
+    now I don't have an informed opinion about K4DirStat, I preferred to remove
+    that section entirely for the time being. Looks like K4DirStat is indeed
+    ported to Qt5 now.
 
 - 2015-12-20  First usable preview version - see screenshot above. It's still
               pretty rough, and sorting via the QSortProxyModel seems to be
@@ -93,29 +115,6 @@ it clearly went over the top. There may be people who like it, but I am not
 among them.
 
 
-
-### But what about K4DirStat?
-
-Well, yes, it does exist. I don't want to discount the work that went into that
-port, but when I looked at it just a couple of days ago, it was still using the
-old Qt3 compatibility classes which were deprecated a long time ago (like, 5-6
-years ago), and with Qt5, they have been finally dropped.  And the old KDirStat
-took the old Qt3 QListView / QListViewItem very much to their limits, and it
-used the old Qt3 QCanvas heavily for the treemaps. I don't think it will be
-easily possible to use the newer Qt4/Qt5 QTreeWidget / QTreeWidgetItem instead.
-
-So, yes, K4DirStat was a port to Qt4 / KDE4 -- kind of. It does use Qt4 / KDE4
-libs -- technically, but not by spirit. It does not use any of the new
-technologies that Qt4 brought along, neither the model/view based item views
-nor QGraphicsView and related. And with the Qt3support module gone in Qt5, this
-is a dead end.
-
-That's what I did with this recent port: It's now cleanly based on the Qt4 /
-Qt5 model/view concept.  There is no Qt3 compatibility stuff left over. And
-while I was at it, I also threw out the other KDE stuff; I didn't really need
-or want it.
-
-
 ### New Stuff
 
 - Icons are now compiled into the source thanks to Qt's resource system; now
@@ -170,6 +169,12 @@ Linux / Unix users have been using since the early 1970s. ;-)
 
 So it might come down to that some day: Use POSIX calls on platforms where they
 are available, and QDir / QFileInfo for everything else.
+
+
+_Update 2015-12-25:_ Suy (Alejandro Exojo) suggested to use QStorageInfo
+(available since Qt 5.4) to find out platform-independently on what device a
+directory is. This doesn't sound too bad. This is something worthwhile to
+investigate in more detail.
 
 
 ## Building
