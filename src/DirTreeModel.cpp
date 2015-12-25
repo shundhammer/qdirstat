@@ -852,7 +852,7 @@ void DirTreeModel::deletingChild( FileInfo * child )
         beginRemoveRows( parentIndex, row, row );
     }
 
-    // invalidatePersistent( child );
+    invalidatePersistent( child );
 }
 
 

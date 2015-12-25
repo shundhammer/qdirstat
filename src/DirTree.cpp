@@ -283,15 +283,7 @@ void DirTree::childDeletedNotify()
 void DirTree::deleteSubtree( FileInfo *subtree )
 {
     // logDebug() << "Deleting subtree " << subtree << endl;
-    DirInfo *parent = subtree->parent();
-
-    if ( parent )
-    {
-	// Give the parent of the child to be deleted a chance to unlink the
-	// child from its children list and take care of internal summary
-	// fields
-	parent->deletingChild( subtree );
-    }
+    DirInfo * parent = subtree->parent();
 
     // Send notification to anybody interested (e.g., to attached views)
     deletingChildNotify( subtree );
@@ -327,6 +319,14 @@ void DirTree::deleteSubtree( FileInfo *subtree )
 		//     delete parent;
 	    }
 	}
+    }
+
+    if ( parent )
+    {
+	// Give the parent of the child to be deleted a chance to unlink the
+	// child from its children list and take care of internal summary
+	// fields
+	parent->deletingChild( subtree );
     }
 
     delete subtree;

@@ -343,7 +343,7 @@ void DirInfo::childAdded( FileInfo *newChild )
 }
 
 
-void DirInfo::deletingChild( FileInfo *deletedChild )
+void DirInfo::deletingChild( FileInfo * child )
 {
     /**
      * When children are deleted, things go downhill: Marking the summary
@@ -361,9 +361,9 @@ void DirInfo::deletingChild( FileInfo *deletedChild )
     _summaryDirty = true;
 
     if ( _parent )
-	_parent->deletingChild( deletedChild );
+	_parent->deletingChild( child );
 
-    if ( deletedChild->parent() == this )
+    if ( child->parent() == this )
     {
         if ( ! _deletingAll )
         {
@@ -374,7 +374,7 @@ void DirInfo::deletingChild( FileInfo *deletedChild )
              * will all be history anyway in a moment.
              **/
 
-            unlinkChild( deletedChild );
+            unlinkChild( child );
         }
         else
         {
