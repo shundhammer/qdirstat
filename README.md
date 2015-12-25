@@ -417,8 +417,12 @@ minimizing that pain.
 
 ## Reference
 
-Original KDirStat:
+### Original KDirStat
 
 Sources: https://github.com/shundhammer/kdirstat
 
 Home page: http://kdirstat.sourceforge.net/
+
+### K4Dirstat
+
+https://bitbucket.org/jeromerobert/k4dirstat/wiki/Home
