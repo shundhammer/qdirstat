@@ -121,13 +121,11 @@ protected:
 
 private:
 
-    Ui::MainWindow               * _ui;
-    QDirStat::DirTreeModel       * _dirTreeModel;
-    QSortFilterProxyModel        * _sortModel;
-    QDirStat::PercentBarDelegate * _percentBarDelegate;
-    bool                           _modified;
-    int                            _statusBarTimeOut; // millisec
-    QSignalMapper                * _treeLevelMapper;
+    Ui::MainWindow         * _ui;
+    QDirStat::DirTreeModel * _dirTreeModel;
+    bool                     _modified;
+    int                      _statusBarTimeOut; // millisec
+    QSignalMapper          * _treeLevelMapper;
 };
 
 #endif // MainWindow_H

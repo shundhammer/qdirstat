@@ -37,22 +37,6 @@ MainWindow::MainWindow():
     CHECK_NEW( _dirTreeModel );
 
     _ui->dirTreeView->setModel( _dirTreeModel );
-    _ui->dirTreeView->setSortingEnabled( true );
-
-    QHeaderView * header = _ui->dirTreeView->header();
-    CHECK_PTR( header );
-
-    header->setSortIndicator( QDirStat::NameCol, Qt::AscendingOrder );
-    header->setStretchLastSection( false );
-
-    // TO DO: This is too strict. But it's better than the brain-dead defaults.
-    header->setSectionResizeMode( QHeaderView::ResizeToContents );
-    _ui->dirTreeView->setRootIsDecorated( true );
-
-    int col = _dirTreeModel->viewCol( QDirStat::PercentBarCol );
-    _percentBarDelegate = new PercentBarDelegate( _ui->dirTreeView, col );
-    CHECK_NEW( _percentBarDelegate );
-    _ui->dirTreeView->setItemDelegate( _percentBarDelegate );
 
 
     connect( _dirTreeModel->tree(),	SIGNAL( finished()	  ),
@@ -89,7 +73,6 @@ MainWindow::~MainWindow()
     // Relying on the QObject hierarchy to properly clean this up resulted in a
     //  segfault; there was probably a problem in the deletion order.
     delete _ui->dirTreeView;
-    delete _percentBarDelegate;
     delete _dirTreeModel;
 }
 
