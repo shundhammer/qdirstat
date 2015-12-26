@@ -19,12 +19,11 @@
 using namespace QDirStat;
 
 
-PercentBarDelegate::PercentBarDelegate( QTreeView * treeView,
-					int	    percentBarCol ):
+PercentBarDelegate::PercentBarDelegate( QTreeView * treeView ):
     QStyledItemDelegate( 0 ),
-    _treeView( treeView ),
-    _percentBarCol( percentBarCol )
+    _treeView( treeView )
 {
+    _percentBarCol = DataColumns::toViewCol( PercentBarCol );
     _fillColors << QColor( 0,	  0, 255 )
 		<< QColor( 128,	  0, 128 )
 		<< QColor( 231, 147,  43 )
@@ -41,12 +40,21 @@ PercentBarDelegate::PercentBarDelegate( QTreeView * treeView,
     _barBackground = QColor( 160, 160, 160 );
 
     // TO DO: Read colors from config
+
+    connect( DataColumns::instance(), SIGNAL( columnsChanged() ),
+             this,                    SLOT  ( columnsChanged() ) );
 }
 
 
 PercentBarDelegate::~PercentBarDelegate()
 {
 
+}
+
+
+void PercentBarDelegate::columnsChanged()
+{
+    _percentBarCol = DataColumns::toViewCol( PercentBarCol );
 }
 
 

@@ -19,6 +19,7 @@
 #include "ExcludeRules.h"
 #include "DirTree.h"
 #include "DirTreeCache.h"
+#include "DataColumns.h"
 #include "DebugHelpers.h"
 
 
@@ -273,7 +274,7 @@ void MainWindow::readingFinished()
     logDebug() << endl;
     _ui->statusBar->showMessage( tr( "Ready.") );
     expandTreeToLevel( 1 );
-    int sortCol = _dirTreeModel->viewCol( QDirStat::TotalSizeCol );
+    int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::TotalSizeCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
 
     // Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );
@@ -288,7 +289,8 @@ void MainWindow::itemClicked( const QModelIndex & index )
 
 	logDebug() << "Clicked row " << index.row()
 		   << " col " << index.column()
-                   << " " << item
+                   << " (" << QDirStat::DataColumns::fromViewCol( index.column() ) << ")"
+                   << "\t" << item
 		   << endl;
         // << " data(0): " << index.model()->data( index, 0 ).toString()
 	// logDebug() << "Ancestors: " << Debug::modelTreeAncestors( index ).join( " -> " ) << endl;

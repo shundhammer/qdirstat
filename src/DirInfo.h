@@ -13,6 +13,7 @@
 
 #include "Logger.h"
 #include "FileInfo.h"
+#include "DataColumns.h"
 
 
 namespace QDirStat

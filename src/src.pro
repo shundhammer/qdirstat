@@ -25,6 +25,7 @@ INSTALLS	    += TARGET
 
 SOURCES	  = main.cpp			\
 	    DebugHelpers.cpp		\
+	    DataColumns.cpp		\
 	    DirInfo.cpp			\
 	    DirReadJob.cpp		\
 	    DirSaver.cpp		\
@@ -44,6 +45,7 @@ SOURCES	  = main.cpp			\
 
 HEADERS	  =				\
 	    DebugHelpers.h		\
+	    DataColumns.h		\
 	    DirInfo.h			\
 	    DirReadJob.h		\
 	    DirSaver.h			\

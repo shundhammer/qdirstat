@@ -9,7 +9,10 @@
 #ifndef FileInfoSorter_h
 #define FileInfoSorter_h
 
+
 #include "FileInfo.h"
+#include "DataColumns.h"
+
 
 namespace QDirStat
 {

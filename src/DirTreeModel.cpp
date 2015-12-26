@@ -10,6 +10,7 @@
 #include "DirTreeModel.h"
 #include "DirTree.h"
 #include "FileInfoIterator.h"
+#include "DataColumns.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "DebugHelpers.h"
@@ -21,22 +22,12 @@ using namespace QDirStat;
 DirTreeModel::DirTreeModel( QObject * parent ):
     QAbstractItemModel( parent ),
     _tree(0),
-    _dotEntryPolicy( DotEntryIsSubDir ),
     _readJobsCol( PercentBarCol ),
     _sortCol( NameCol ),
     _sortOrder( Qt::AscendingOrder )
 {
     _treeIconDir = ":/icons/tree-medium/"; // TO DO: Configurable
     loadIcons();
-    _colMapping << NameCol
-		<< PercentBarCol
-		<< PercentNumCol
-		<< TotalSizeCol
-		<< OwnSizeCol
-		<< TotalItemsCol
-		<< TotalFilesCol
-		<< TotalSubDirsCol
-		<< LatestMTimeCol;
     createTree();
     _updateTimer.setInterval( 333 ); // millisec - TO DO: Configurable
 
@@ -67,10 +58,10 @@ void DirTreeModel::createTree()
 	     this,  SLOT  ( readJobFinished( DirInfo * ) ) );
 
     connect( _tree, SIGNAL( deletingChild( FileInfo * ) ),
-             this,  SLOT  ( deletingChild( FileInfo * ) ) );
+	     this,  SLOT  ( deletingChild( FileInfo * ) ) );
 
     connect( _tree, SIGNAL( childDeleted() ),
-             this,  SLOT  ( childDeleted() ) );
+	     this,  SLOT  ( childDeleted() ) );
 }
 
 
@@ -78,8 +69,8 @@ void DirTreeModel::clear()
 {
     if ( _tree )
     {
-        logDebug() << "Before beginResetModel()" << endl;
-        dumpPersistentIndexList();
+	logDebug() << "Before beginResetModel()" << endl;
+	dumpPersistentIndexList();
 
 	beginResetModel();
 
@@ -129,29 +120,8 @@ void DirTreeModel::loadIcons()
 void DirTreeModel::setColumns( const DataColumnList & columns )
 {
     beginResetModel();
-    _colMapping = columns;
+    DataColumns::instance()->setColumns( columns );
     endResetModel();
-}
-
-
-int DirTreeModel::mappedCol( int viewCol ) const
-{
-    if ( viewCol < 0 || viewCol >= colCount() )
-    {
-	// logError() << "Invalid view column no.: " << viewCol << endl;
-	return 0;
-    }
-
-    return _colMapping.at( viewCol );
-}
-
-
-int DirTreeModel::viewCol( int modelCol ) const
-{
-    if ( modelCol < 0 || modelCol >= colCount() )
-	return 0;
-
-    return _colMapping.indexOf( (DataColumn) modelCol );
 }
 
 
@@ -192,11 +162,11 @@ int DirTreeModel::rowNumber( FileInfo * child ) const
     {
 	// Not found
 	logError() << "Child " << child
-                   << " (" << (void *) child << ")"
-                   << " not found in \""
+		   << " (" << (void *) child << ")"
+		   << " not found in \""
 		   << child->parent() << "\"" << endl;
 
-        Debug::dumpDirectChildren( child->parent() );
+	Debug::dumpDirectChildren( child->parent() );
     }
 
     return row;
@@ -205,7 +175,7 @@ int DirTreeModel::rowNumber( FileInfo * child ) const
 
 int DirTreeModel::countDirectChildren( FileInfo * parent ) const
 {
-    FileInfoIterator it( parent, _dotEntryPolicy );
+    FileInfoIterator it( parent, DotEntryIsSubDir );
 
     return it.count();
 }
@@ -286,7 +256,7 @@ int DirTreeModel::columnCount( const QModelIndex &parent ) const
 {
     Q_UNUSED( parent );
 
-    return colCount();
+    return DataColumns::instance()->colCount();
 }
 
 
@@ -295,7 +265,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
     if ( ! index.isValid() )
 	return QVariant();
 
-    int col = mappedCol( index.column() );
+    DataColumn col = DataColumns::fromViewCol( index.column() );
 
     switch ( role )
     {
@@ -308,7 +278,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 
 		if ( item && item->isDirInfo() )
 		{
-		    // logDebug() << "Touching col " << col << " of " << item << endl;
+		    // logDebug() << "Touching " << col << "\tof " << item << endl;
 		    item->toDirInfo()->touch();
 		}
 
@@ -397,7 +367,7 @@ QVariant DirTreeModel::headerData( int		   section,
     switch ( role )
     {
 	case Qt::DisplayRole:
-	    switch ( mappedCol( section ) )
+	    switch ( DataColumns::fromViewCol( section ) )
 	    {
 		case NameCol:		return tr( "Name"		);
 		case PercentBarCol:	return tr( "Subtree Percentage" );
@@ -436,8 +406,7 @@ Qt::ItemFlags DirTreeModel::flags( const QModelIndex &index ) const
 	baseFlags |= Qt::ItemNeverHasChildren;
 
     // logDebug() << "Flags for row #" << index.row() << " col #" << index.column() << ": "  << item << endl;
-
-    int col = mappedCol( index.column() );
+    DataColumn col = DataColumns::fromViewCol( index.column() );
 
     switch ( col )
     {
@@ -499,7 +468,7 @@ QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
 
 void DirTreeModel::sort( int column, Qt::SortOrder order )
 {
-    logDebug() << "Sorting by col #" << column
+    logDebug() << "Sorting by " << static_cast<DataColumn>( column )
 	       << ( order == Qt::AscendingOrder ? " ascending" : " descending" )
 	       << endl;
 
@@ -507,7 +476,7 @@ void DirTreeModel::sort( int column, Qt::SortOrder order )
     // dumpPersistentIndexList();
 
     emit layoutAboutToBeChanged();
-    _sortCol   = static_cast<DataColumn>( mappedCol( column ) );
+    _sortCol   = DataColumns::fromViewCol( column );
     _sortOrder = order;
     updatePersistentIndices();
     emit layoutChanged();
@@ -707,7 +676,7 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
     // If any readJobFinished signals were ignored because a parent was not
     // finished yet, now is the time to notify the view about those children,
     // too.
-    FileInfoIterator it( dir, _dotEntryPolicy );
+    FileInfoIterator it( dir, DotEntryIsSubDir );
 
     while ( *it )
     {
@@ -755,7 +724,7 @@ void DirTreeModel::dataChangedNotify( DirInfo * dir )
     if ( dir->isTouched() ) // only if the view ever requested data about this dir
     {
 	QModelIndex topLeft	= modelIndex( dir, 0 );
-	QModelIndex bottomRight = createIndex( topLeft.row(), colCount() - 1, dir );
+	QModelIndex bottomRight = createIndex( topLeft.row(), DataColumns::instance()->colCount() - 1, dir );
 
 	QVector<int> roles;
 	roles << Qt::DisplayRole;
@@ -843,13 +812,13 @@ void DirTreeModel::deletingChild( FileInfo * child )
     logDebug() << "Deleting child " << child << endl;
 
     if ( child->parent() &&
-         ( child->parent() == _tree->root() ||
-           child->parent()->isTouched()  ) )
+	 ( child->parent() == _tree->root() ||
+	   child->parent()->isTouched()	 ) )
     {
-        QModelIndex parentIndex = modelIndex( child->parent(), 0 );
-        int row = rowNumber( child );
-        logDebug() << "beginRemoveRows for " << child << " row " << row << endl;
-        beginRemoveRows( parentIndex, row, row );
+	QModelIndex parentIndex = modelIndex( child->parent(), 0 );
+	int row = rowNumber( child );
+	logDebug() << "beginRemoveRows for " << child << " row " << row << endl;
+	beginRemoveRows( parentIndex, row, row );
     }
 
     invalidatePersistent( child );

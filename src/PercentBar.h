@@ -36,8 +36,7 @@ namespace QDirStat
 	 * Constructor.
 	 * 'percentBarCol' is the (view) column to paint the percent bar in.
 	 **/
-	PercentBarDelegate( QTreeView * treeView,
-			    int		percentBarCol );
+	PercentBarDelegate( QTreeView * treeView );
 
 	/**
 	 * Destructor.
@@ -77,6 +76,12 @@ namespace QDirStat
 	 **/
 	void setPercentBarCol( int newCol )
 	    { _percentBarCol = newCol; }
+
+    public slots:
+        /**
+         * Notification that the columns have changed.
+         **/
+        void columnsChanged();
 
 
     protected:

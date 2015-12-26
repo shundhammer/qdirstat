@@ -51,29 +51,6 @@ namespace QDirStat
 
 
     /**
-     * Columns for data model and sorting.
-     **/
-    typedef enum
-    {
-	NameCol	       = 0,	// File / directory name
-	PercentBarCol,		// Graphical percentage bar
-	PercentNumCol,		// Numeric percentage Value
-	TotalSizeCol,		// Total subtree size
-	OwnSizeCol,		// Own size of file / directory
-	TotalItemsCol,		// Total number of items    in subtree
-	TotalFilesCol,		// Total number of files    in subtree
-	TotalSubDirsCol,	// Total number of subdirs  in subtree
-	LatestMTimeCol,		// Latest modification time in subtree
-	ReadJobsCol,		// Number of pending read jobs in subtree
-	UndefinedCol = -99
-    } DataColumn;
-
-
-    typedef QList<DataColumn> DataColumnList;
-
-
-
-    /**
      * The most basic building block of a @ref DirTree:
      *
      * Information about one single directory entry. This is the type of info

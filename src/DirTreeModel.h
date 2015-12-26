@@ -15,13 +15,14 @@
 #include <QSet>
 #include <QTimer>
 
-#include "FileInfoIterator.h"
+#include "DataColumns.h"
 
 
 namespace QDirStat
 {
     class DirTree;
     class FileInfo;
+    class DirInfo;
 
     enum CustomRoles
     {
@@ -65,30 +66,13 @@ namespace QDirStat
 	 * Example:
 	 *
 	 *   DataColumnList col;
-	 *   col << DirTreeModel::NameCol,
-	 *	 << DirTreeModel::PercentBarCol,
-	 *	 << DirTreeModel::PercentNumCol,
-	 *	 << DirTreeModel::TotalSizeCol;
-	 *   model->setColumns( col );
+	 *   col << QDirStat::NameCol,
+	 *	 << QDirStat::PercentBarCol,
+	 *	 << QDirStat::PercentNumCol,
+	 *	 << QDirStat::TotalSizeCol;
+	 *   dirTreeModel->setColumns( col );
 	 */
 	void setColumns( const DataColumnList & columns );
-
-	/**
-	 * Return the current colums that are displayed.
-	 **/
-	const DataColumnList & columns() const { return _colMapping; }
-
-	/**
-	 * Return the number of columns that are curently displayed.
-	 **/
-	int colCount() const { return _colMapping.size(); }
-
-	/**
-	 * Look up a model column in the column mapping to get the
-	 * corresponding view column. This is the reverse operation to
-	 * 'mappedCol()'.
-	 **/
-	int viewCol( int modelCol ) const;
 
 
     public slots:
@@ -248,16 +232,6 @@ namespace QDirStat
 	QModelIndex modelIndex( FileInfo * item, int column = 0 ) const;
 
 	/**
-	 * Look up a column in the view in the column mapping to get the
-	 * corresponding model column: Column #3 in the view might or might not
-	 * be TotalSizeCol, depending on how the model is configured (what
-	 * columns are to be displayed and in what order).
-	 *
-	 * See also setColumns().
-	 **/
-	int mappedCol( int viewCol ) const;
-
-	/**
 	 * Notify the view (with beginInsertRows() and endInsertRows()) about
 	 * new children (all the children of 'dir'). This might become
 	 * recursive if any of those children in turn are already finished.
@@ -308,9 +282,7 @@ namespace QDirStat
 	//
 
 	DirTree *	_tree;
-	DotEntryPolicy	_dotEntryPolicy;
 	QString		_treeIconDir;
-	DataColumnList	_colMapping;
 	int		_readJobsCol;
 	QSet<DirInfo *> _pendingUpdates;
 	QTimer		_updateTimer;
