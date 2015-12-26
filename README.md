@@ -5,7 +5,7 @@ Qt-based directory statistics: KDirStat without any KDE -- from the original KDi
 
 License: GPL V2
 
-Updated: 2015-12-25
+Updated: 2015-12-26
 
 
 ## Overview
@@ -419,10 +419,13 @@ minimizing that pain.
 
 ### Original KDirStat
 
+Home page: http://kdirstat.sourceforge.net/
+
 Sources: https://github.com/shundhammer/kdirstat
 
-Home page: http://kdirstat.sourceforge.net/
 
 ### K4Dirstat
 
-https://bitbucket.org/jeromerobert/k4dirstat/wiki/Home
+Home page: https://bitbucket.org/jeromerobert/k4dirstat/wiki/Home
+
+Sources: https://bitbucket.org/jeromerobert/k4dirstat/src
