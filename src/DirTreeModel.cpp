@@ -69,19 +69,16 @@ void DirTreeModel::clear()
 {
     if ( _tree )
     {
-	logDebug() << "Before beginResetModel()" << endl;
-	dumpPersistentIndexList();
-
 	beginResetModel();
 
-	logDebug() << "After beginResetModel()" << endl;
-	dumpPersistentIndexList();
+	// logDebug() << "After beginResetModel()" << endl;
+	// dumpPersistentIndexList();
 
 	_tree->clear();
 	endResetModel();
 
-	logDebug() << "After endResetModel()" << endl;
-	dumpPersistentIndexList();
+	// logDebug() << "After endResetModel()" << endl;
+	// dumpPersistentIndexList();
     }
 }
 
@@ -616,8 +613,7 @@ void DirTreeModel::readJobFinished( DirInfo * dir )
 
     if ( anyAncestorBusy( dir ) )
     {
-	logDebug() << "Ancestor busy - ignoring readJobFinished for "
-		   << dir << endl;
+	logDebug() << "Ancestor busy - ignoring readJobFinished for " << dir << endl;
     }
     else
     {
