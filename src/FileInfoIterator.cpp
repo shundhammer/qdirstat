@@ -15,34 +15,28 @@ using namespace QDirStat;
 
 
 
-FileInfoIterator::FileInfoIterator( FileInfo *	   parent,
-				    DotEntryPolicy dotEntryPolicy )
+FileInfoIterator::FileInfoIterator( FileInfo * parent )
 {
     init( parent,
-	  dotEntryPolicy,
-	  true );		// callNext
+	  true ); // callNext
 }
 
 
-FileInfoIterator::FileInfoIterator( FileInfo *	   parent,
-				    DotEntryPolicy dotEntryPolicy,
-				    bool	   callNext )
+FileInfoIterator::FileInfoIterator( FileInfo * parent,
+				    bool       callNext )
 {
-    init( parent, dotEntryPolicy, callNext );
+    init( parent, callNext );
 }
 
 
-void FileInfoIterator::init( FileInfo *	    parent,
-			     DotEntryPolicy dotEntryPolicy,
-			     bool	    callNext )
+void FileInfoIterator::init( FileInfo * parent,
+			     bool	callNext )
 {
     _parent  = parent;
-    _policy  = dotEntryPolicy;
     _current = 0;
 
-    _directChildrenProcessed   = false;
-    _dotEntryProcessed	       = false;
-    _dotEntryChildrenProcessed = false;
+    _directChildrenProcessed = false;
+    _dotEntryProcessed	     = false;
 
     if ( callNext )
 	next();
@@ -68,56 +62,19 @@ void FileInfoIterator::next()
 	    _directChildrenProcessed = true;
 	    next();
 	}
-	else
-	{
-	    // logDebug() << " direct child " << _current << endl;
-	}
     }
-    else	// _directChildrenProcessed
+    else // _directChildrenProcessed
     {
 	if ( ! _dotEntryProcessed )
 	{
 	    // Process dot entry
 
-	    _current = _policy == DotEntryIsSubDir ? _parent->dotEntry() : 0;
+	    _current = _parent->dotEntry();
 	    _dotEntryProcessed = true;
-
-	    if ( ! _current )
-	    {
-		next();
-	    }
-	    else
-	    {
-		// logDebug() << " dot entry " << _current << endl;
-	    }
 	}
-	else	// Dot entry already processed or processing it not desired
+	else	// Dot entry already processed
 	{
-	    if ( ! _dotEntryChildrenProcessed )
-	    {
-		if ( _policy == DotEntryTransparent )
-		{
-		    // Process dot entry children
-
-		    _current = _current ?
-			_current->next() :
-			( _parent->dotEntry() ? _parent->dotEntry()->firstChild() : 0 );
-
-		    if ( ! _current )
-		    {
-			_dotEntryChildrenProcessed = true;
-		    }
-		    else
-		    {
-			// logDebug() << " dot entry child " << _current << endl;
-		    }
-		}
-		else	// _policy != DotEntryTransparent
-		{
-		    _current = 0;
-		    _dotEntryChildrenProcessed = true;
-		}
-	    }
+	    _current = 0;
 	}
     }
 }
@@ -129,7 +86,7 @@ int FileInfoIterator::count()
 
     // Count direct children
 
-    FileInfo *child = _parent->firstChild();
+    FileInfo * child = _parent->firstChild();
 
     while ( child )
     {
@@ -140,29 +97,8 @@ int FileInfoIterator::count()
 
     // Handle the dot entry
 
-    switch ( _policy )
-    {
-	case DotEntryTransparent:	// Count the dot entry's children as well.
-	    if ( _parent->dotEntry() )
-	    {
-		child = _parent->dotEntry()->firstChild();
-
-		while ( child )
-		{
-		    cnt++;
-		    child = child->next();
-		}
-	    }
-	    break;
-
-	case DotEntryIsSubDir:		// The dot entry counts as one item.
-	    if ( _parent->dotEntry() )
-		cnt++;
-	    break;
-
-	case DotEntryIgnore:		// We're done.
-	    break;
-    }
+    if ( _parent->dotEntry() )
+	cnt++;
 
     return cnt;
 }

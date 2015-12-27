@@ -21,7 +21,7 @@ namespace Debug
 	if ( ! dir )
 	    return;
 
-	FileInfoIterator it( dir, DotEntryIsSubDir );
+	FileInfoIterator it( dir );
 
 	if ( dir->hasChildren() )
 	{

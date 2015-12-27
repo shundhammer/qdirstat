@@ -140,7 +140,7 @@ void DirInfo::recalc()
     _totalFiles	  = 0;
     _latestMtime  = _mtime;
 
-    FileInfoIterator it( this, DotEntryIsSubDir );
+    FileInfoIterator it( this );
 
     while ( *it )
     {

@@ -23,9 +23,7 @@ namespace QDirStat
      **/
     typedef enum
     {
-	DotEntryTransparent,	// Flatten hierarchy - move dot entry children up
-	DotEntryIsSubDir,	// Treat dot entry as ordinary subdirectory
-	DotEntryIgnore		// Ignore dot entry and its children completely
+	DotEntryIsSubDir	// Treat dot entry as ordinary subdirectory
     } DotEntryPolicy;
 
 
@@ -56,51 +54,25 @@ namespace QDirStat
     public:
 	/**
 	 * Constructor: Initialize an iterator object to iterate over the
-	 * children of 'parent' (unsorted!), depending on 'dotEntryPolicy':
-	 *
-	 * DotEntryTransparent:
-	 *
-	 * Treat the dot entry as if it wasn't there - pretend to move all its
-	 * children up to the real parent. This makes a directory look very
-	 * much like the directory on disk, without the dot entry.  'current()'
-	 * or 'operator*()' will never return the dot entry, but all of its
-	 * children. Subdirectories will be processed before any file children.
-	 *
-	 * DotEntryIsSubDir:
-	 *
-	 * Treat the dot entry just like any other subdirectory. Don't iterate
-	 * over its children, too (unlike DotEntryTransparent above).
-	 * 'current()' or 'operator*()' will return the dot entry, but none of
-	 * its children (unless, of course, you create an iterator with the dot
-	 * entry as the parent).
-	 *
-	 * DotEntryIgnore:
-	 *
-	 * Ignore the dot entry and its children completely. Useful if children
-	 * other than subdirectories are not interesting anyway. 'current()'
-	 * or 'operator*()' will never return the dot entry nor any of its
-	 * children.
-	 *
+	 * children of 'parent' (unsorted!). The dot entry is treated as a
+	 * subdirectory.
 	 **/
-	FileInfoIterator( FileInfo *	 parent,
-			  DotEntryPolicy dotEntryPolicy = DotEntryIsSubDir );
+	FileInfoIterator( FileInfo * parent );
 
     protected:
 	/**
 	 * Alternate constructor to be called from derived classes: Those can
 	 * choose not to call next() in the constructor.
 	 **/
-	FileInfoIterator( FileInfo *	 parent,
-			  DotEntryPolicy dotEntryPolicy,
-			  bool		 callNext );
+	FileInfoIterator( FileInfo * parent,
+			  bool	     callNext );
 
     private:
 	/**
 	 * Internal initialization called from any constructor.
 	 **/
-	void init( FileInfo *	  parent,
-		   DotEntryPolicy dotEntryPolicy,
-		   bool		  callNext );
+	void init( FileInfo * parent,
+		   bool	      callNext );
 
     public:
 
@@ -146,11 +118,9 @@ namespace QDirStat
     protected:
 
 	FileInfo *	_parent;
-	DotEntryPolicy	_policy;
 	FileInfo *	_current;
 	bool		_directChildrenProcessed;
 	bool		_dotEntryProcessed;
-	bool		_dotEntryChildrenProcessed;
 
     };	// class FileInfoIterator
 

@@ -172,7 +172,7 @@ int DirTreeModel::rowNumber( FileInfo * child ) const
 
 int DirTreeModel::countDirectChildren( FileInfo * parent ) const
 {
-    FileInfoIterator it( parent, DotEntryIsSubDir );
+    FileInfoIterator it( parent );
 
     return it.count();
 }
@@ -672,7 +672,7 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
     // If any readJobFinished signals were ignored because a parent was not
     // finished yet, now is the time to notify the view about those children,
     // too.
-    FileInfoIterator it( dir, DotEntryIsSubDir );
+    FileInfoIterator it( dir );
 
     while ( *it )
     {
