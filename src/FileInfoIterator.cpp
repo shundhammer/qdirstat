@@ -8,6 +8,7 @@
 
 
 #include "FileInfoIterator.h"
+#include "FileInfoSorter.h"
 #include "Exception.h"
 
 
@@ -40,12 +41,6 @@ void FileInfoIterator::init( FileInfo * parent,
 
     if ( callNext )
 	next();
-}
-
-
-FileInfoIterator::~FileInfoIterator()
-{
-    // NOP
 }
 
 
@@ -101,5 +96,46 @@ int FileInfoIterator::count()
 	cnt++;
 
     return cnt;
+}
+
+
+FileInfoSortedBySizeIterator::FileInfoSortedBySizeIterator( FileInfo	  * parent,
+							    FileSize	    minSize,
+							    Qt::SortOrder   sortOrder )
+{
+    _currentIndex = 0;
+    FileInfoIterator it( parent );
+
+    while ( *it )
+    {
+	if ( (*it)->totalSize() >= minSize )
+	    _sortedChildren << *it;
+
+	++it;
+    }
+
+    std::stable_sort( _sortedChildren.begin(),
+		      _sortedChildren.end(),
+		      FileInfoSorter( TotalSizeCol, sortOrder ) );
+
+}
+
+
+FileInfo * FileInfoSortedBySizeIterator::current()
+{
+    if ( _currentIndex >= 0 && _currentIndex < _sortedChildren.size() )
+	return _sortedChildren.at( _currentIndex );
+    else
+	return 0;
+}
+
+
+void FileInfoSortedBySizeIterator::next()
+{
+    // Intentionally letting _currentIndex move one position after the last so
+    // current() will return 0 to indicate we are finished.
+
+    if ( _currentIndex < _sortedChildren.size() )
+	_currentIndex++;
 }
 

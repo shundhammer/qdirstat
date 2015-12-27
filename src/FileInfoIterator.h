@@ -77,15 +77,10 @@ namespace QDirStat
     public:
 
 	/**
-	 * Destructor.
-	 **/
-	virtual ~FileInfoIterator();
-
-	/**
 	 * Return the current child object or 0 if there is no more.
 	 * Same as @ref operator*() .
 	 **/
-	virtual FileInfo * current() { return _current; }
+	FileInfo * current() { return _current; }
 
 	/**
 	 * Return the current child object or 0 if there is no more.
@@ -96,17 +91,12 @@ namespace QDirStat
 	/**
 	 * Advance to the next child. Same as @ref operator++().
 	 **/
-	virtual void next();
+	void next();
 
 	/**
 	 * Advance to the next child. Same as @ref next().
 	 **/
 	void operator++() { next(); }
-
-	/**
-	 * Returns 'true' if this iterator is finished and 'false' if not.
-	 **/
-	virtual bool finished() { return _current == 0; }
 
 	/**
 	 * Return the number of items that will be processed.
@@ -123,6 +113,51 @@ namespace QDirStat
 	bool		_dotEntryProcessed;
 
     };	// class FileInfoIterator
+
+
+    class FileInfoSortedBySizeIterator
+    {
+    public:
+
+	/**
+	 * Constructor. Children below 'minSize' will be ignored by this iterator.
+	 **/
+	FileInfoSortedBySizeIterator( FileInfo	    * parent,
+				      FileSize	      minSize	= 0,
+				      Qt::SortOrder   sortOrder = Qt::DescendingOrder );
+
+	/**
+	 * Return the current child object or 0 if there is no more.
+	 * Same as @ref operator*() .
+	 **/
+	FileInfo * current();
+
+	/**
+	 * Return the current child object or 0 if there is no more.
+	 * Same as @ref current().
+	 **/
+	FileInfo * operator*() { return current(); }
+
+	/**
+	 * Advance to the next child. Same as @ref operator++().
+	 **/
+	void next();
+
+	/**
+	 * Advance to the next child. Same as @ref next().
+	 **/
+	void operator++() { next(); }
+
+	/**
+	 * Return the number of items that will be processed.
+	 **/
+	int count() { return _sortedChildren.size(); }
+
+    protected:
+
+	FileInfoList _sortedChildren;
+	int	     _currentIndex;
+    }; //
 
 } // namespace QDirStat
 

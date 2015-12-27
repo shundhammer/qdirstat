@@ -39,8 +39,8 @@ namespace QDirStat
     {
     public:
 	/**
-	 * Constructor. This sets the sort column and sort order that will be used
-	 * in subsequent calls.
+	 * Constructor. This sets the sort column and sort order that will be
+	 * used in subsequent calls.
 	 **/
 	FileInfoSorter( DataColumn sortCol, Qt::SortOrder sortOrder ):
 	    _sortCol( sortCol ),

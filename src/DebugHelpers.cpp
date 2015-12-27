@@ -26,16 +26,16 @@ namespace Debug
 	if ( dir->hasChildren() )
 	{
 	    logDebug() << "Children of " << dir
-                       << "  (" << (void *) dir << ")"
-                       << endl;
+		       << "  (" << (void *) dir << ")"
+		       << endl;
 	    int count = 0;
 
 	    while ( *it )
 	    {
 		logDebug() << "	   #" << count++ << ": "
-                           << (void *) *it
-                           << "  " << *it
-                           << endl;
+			   << (void *) *it
+			   << "	 " << *it
+			   << endl;
 		++it;
 	    }
 	}
@@ -46,14 +46,28 @@ namespace Debug
     }
 
 
-    void dumpChildrenList( FileInfo           * dir,
-                           const FileInfoList & children )
+    void dumpChildrenList( FileInfo	      * dir,
+			   const FileInfoList & children )
     {
-        logDebug() << "Children of " << dir << endl;
+	logDebug() << "Children of " << dir << endl;
 
-        for ( int i=0; i < children.size(); ++i )
+	for ( int i=0; i < children.size(); ++i )
 	{
 	    logDebug() << "    #" << i << ": " << children.at(i) << endl;
+	}
+    }
+
+
+    void dumpChildrenBySize( FileInfo * dir )
+    {
+	logDebug() << "Direct children of " << dir << " by size:" << endl;
+
+	QDirStat::FileInfoSortedBySizeIterator it( dir );
+
+	while ( *it )
+	{
+	    logDebug() << "  " << formatSize( (*it)->totalSize() ) << "	 " << *it << endl;
+	    ++it;
 	}
     }
 

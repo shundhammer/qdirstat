@@ -29,12 +29,17 @@ namespace Debug
     void dumpDirectChildren(FileInfo * dir);
 
     /**
+     * Dump the direct children of 'dir' sorted by size to the log.
+     **/
+    void dumpChildrenBySize( FileInfo * dir );
+
+    /**
      * Dump a children list to the log. If specified, use 'dirName' as the
      * directory name for the heading line. This mostly makes sense with an
      * unnamed directory like the DirTreeModel's pseudo root.
      **/
-    void dumpChildrenList( FileInfo           * dir,
-                           const FileInfoList & children );
+    void dumpChildrenList( FileInfo	      * dir,
+			   const FileInfoList & children );
 
     /**
      * Recursively dump the model tree from 'index' on to the log.
