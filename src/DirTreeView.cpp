@@ -29,6 +29,7 @@ DirTreeView::DirTreeView( QWidget * parent ):
 
     setRootIsDecorated( true );
     setSortingEnabled( true );
+    setSelectionMode( ExtendedSelection );
 
     header()->setSortIndicator( NameCol, Qt::AscendingOrder );
     header()->setStretchLastSection( false );
