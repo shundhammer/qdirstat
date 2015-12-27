@@ -14,14 +14,15 @@
 #include <QPixmap>
 #include <QSet>
 #include <QTimer>
+#include <QTextStream>
 
 #include "DataColumns.h"
+#include "FileInfo.h"
 
 
 namespace QDirStat
 {
     class DirTree;
-    class FileInfo;
     class DirInfo;
 
     enum CustomRoles
@@ -301,6 +302,32 @@ namespace QDirStat
 	QPixmap _excludedIcon;
 
     };	// class DirTreeModel
+
+
+    /**
+     * Print a QModelIndex of this model in text form to a debug stream.
+     **/
+    inline QTextStream & operator<< ( QTextStream & stream, const QModelIndex & index )
+    {
+	if ( ! index.isValid() )
+	    stream << "<Invalid QModelIndex>";
+	else
+	{
+	    FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+	    stream << "<QModelIndex row: " << index.row()
+		   << " col: " << index.column();
+
+	    if ( item && ! item->checkMagicNumber() )
+		stream << " <INVALID FileInfo *>";
+	    else
+		stream << " " << item;
+
+	    stream << " >";
+	}
+
+	return stream;
+    }
+
 
 }	// namespace QDirStat
 

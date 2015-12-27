@@ -402,7 +402,7 @@ Qt::ItemFlags DirTreeModel::flags( const QModelIndex &index ) const
     if ( ! item->isDirInfo() )
 	baseFlags |= Qt::ItemNeverHasChildren;
 
-    // logDebug() << "Flags for row #" << index.row() << " col #" << index.column() << ": "  << item << endl;
+    // logDebug() << "Flags for " << index << endl;
     DataColumn col = DataColumns::fromViewCol( index.column() );
 
     switch ( col )
@@ -768,10 +768,8 @@ void DirTreeModel::dumpPersistentIndexList() const
 	CHECK_MAGIC( item );
 
 	logDebug() << "#" << i
-		   << " Persistent index"
-		   << " col " << index.column()
-		   << " row " << index.row()
-		   << " " << item
+		   << " Persistent index "
+		   << index
 		   << endl;
     }
 }
@@ -841,10 +839,7 @@ void DirTreeModel::invalidatePersistent( FileInfo * subtree )
 	     item->isInSubtree( subtree ) )
 	{
 #if 1
-	    logDebug() << "Invalidating " << item
-		       << " col " << index.column()
-		       << " row " << index.row()
-		       << endl;
+	    logDebug() << "Invalidating " << index << endl;
 #endif
 	    changePersistentIndex( index, QModelIndex() );
 	}

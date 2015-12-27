@@ -16,6 +16,8 @@
 #include <limits.h>
 
 #include <QTextStream>
+#include <QList>
+#include <QSet>
 
 #include "Logger.h"
 
@@ -24,9 +26,8 @@ namespace QDirStat
 {
     typedef long long FileSize;
 
-    // Taken from Linux <limits.h> (the Alpha definition - 64 Bit long!).
-    // This is how much bytes this program can handle.
-#define FileSizeMax 9223372036854775807LL
+#define FileSizeMax   LLONG_MAX
+// 0x7FFFFFFFFFFFFFFFLL == 9223372036854775807LL
 
 #define FileInfoMagic 4242
 
@@ -601,7 +602,42 @@ namespace QDirStat
     };	// class FileInfo
 
 
+
     typedef QList<FileInfo *> FileInfoList;
+
+    /**
+     * Container for FileInfo pointers. This is a wrapper around QSet with some
+     * few add-on functions.
+     **/
+    class FileInfoSet: public QSet<FileInfo *>
+    {
+    public:
+        FileInfoSet():
+            QSet<FileInfo *>()
+            {}
+
+        /**
+         * Return 'true' if the set contains any dot entry.
+         **/
+        bool containsDotEntry() const;
+
+        /**
+         * Return 'true' if the set contains any directory item.
+         **/
+        bool containsDir() const;
+
+        /**
+         * Return 'true' if the set contains any file item.
+         **/
+        bool containsFile() const;
+
+        /**
+         * Return 'true' if the set contains any special file,
+         * i.e., a char or block device, a FIFO, or a socket.
+         **/
+        bool containsSpecial() const;
+    };
+
 
 
     //----------------------------------------------------------------------

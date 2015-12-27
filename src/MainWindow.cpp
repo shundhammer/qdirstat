@@ -25,6 +25,10 @@
 
 using namespace QDirStat;
 
+using QDirStat::DataColumns;
+using QDirStat::DirTreeModel;
+using QDirStat::SelectionModel;
+
 
 MainWindow::MainWindow():
     QMainWindow(),
@@ -34,10 +38,14 @@ MainWindow::MainWindow():
     _treeLevelMapper(0)
 {
     _ui->setupUi( this );
-    _dirTreeModel = new QDirStat::DirTreeModel( this );
+    _dirTreeModel = new DirTreeModel( this );
     CHECK_NEW( _dirTreeModel );
 
+    _selectionModel = new SelectionModel( _dirTreeModel, this );
+    CHECK_NEW( _selectionModel );
+
     _ui->dirTreeView->setModel( _dirTreeModel );
+    _ui->dirTreeView->setSelectionModel( _selectionModel );
 
 
     connect( _dirTreeModel->tree(),	SIGNAL( finished()	  ),
@@ -55,8 +63,25 @@ MainWindow::MainWindow():
     connect( _dirTreeModel->tree(),	SIGNAL( progressInfo( QString ) ),
 	     this,			SLOT  ( showProgress( QString ) ) );
 
-    connect( _ui->dirTreeView,		SIGNAL( clicked	   ( QModelIndex ) ),
-	     this,			SLOT  ( itemClicked( QModelIndex ) ) );
+
+    // Debug connections
+
+    connect( _ui->dirTreeView, SIGNAL( clicked	  ( QModelIndex ) ),
+	     this,	       SLOT  ( itemClicked( QModelIndex ) ) );
+
+    connect( _selectionModel, SIGNAL( selectionChanged() ),
+	     this,	      SLOT  ( selectionChanged() ) );
+
+    connect( _selectionModel, SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
+	     this,	      SLOT  ( currentItemChanged( FileInfo *, FileInfo * ) ) );
+
+#if 0
+    connect( _selectionModel, SIGNAL( currentChanged( QModelIndex, QModelIndex	) ),
+	     this,	      SLOT  ( currentChanged( QModelIndex, QModelIndex	) ) );
+
+    connect( _selectionModel, SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ),
+	     this,	      SLOT  ( selectionChanged( QItemSelection, QItemSelection ) ) );
+#endif
 
     connectActions();
 
@@ -72,7 +97,7 @@ MainWindow::MainWindow():
 MainWindow::~MainWindow()
 {
     // Relying on the QObject hierarchy to properly clean this up resulted in a
-    //  segfault; there was probably a problem in the deletion order.
+    //	segfault; there was probably a problem in the deletion order.
     delete _ui->dirTreeView;
     delete _dirTreeModel;
 }
@@ -285,14 +310,14 @@ void MainWindow::itemClicked( const QModelIndex & index )
 {
     if ( index.isValid() )
     {
-        FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+	FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
 
 	logDebug() << "Clicked row " << index.row()
 		   << " col " << index.column()
-                   << " (" << QDirStat::DataColumns::fromViewCol( index.column() ) << ")"
-                   << "\t" << item
+		   << " (" << QDirStat::DataColumns::fromViewCol( index.column() ) << ")"
+		   << "\t" << item
 		   << endl;
-        // << " data(0): " << index.model()->data( index, 0 ).toString()
+	// << " data(0): " << index.model()->data( index, 0 ).toString()
 	// logDebug() << "Ancestors: " << Debug::modelTreeAncestors( index ).join( " -> " ) << endl;
     }
     else
@@ -303,3 +328,49 @@ void MainWindow::itemClicked( const QModelIndex & index )
     // _dirTreeModel->dumpPersistentIndexList();
 }
 
+
+void MainWindow::selectionChanged()
+{
+    logDebug() << endl;
+    _selectionModel->dumpSelectedItems();
+}
+
+
+void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurrent )
+{
+    logDebug() << "new current: " << newCurrent << endl;
+    logDebug() << "old current: " << oldCurrent << endl;
+    _selectionModel->dumpSelectedItems();
+}
+
+
+void MainWindow::currentChanged( const QModelIndex & newCurrent,
+				 const QModelIndex & oldCurrent )
+{
+    logDebug() << "new current: " << newCurrent << endl;
+    logDebug() << "old current: " << oldCurrent << endl;
+    _selectionModel->dumpSelectedItems();
+}
+
+
+void MainWindow::selectionChanged( const QItemSelection & selected,
+				   const QItemSelection & deselected )
+{
+    logDebug() << endl;
+#if 0
+    foreach ( const QModelIndex index, selected.indexes() )
+    {
+	logDebug() << "Selected: " << index << endl;
+    }
+
+    foreach ( const QModelIndex index, deselected.indexes() )
+    {
+	logDebug() << "Deselected: " << index << endl;
+    }
+#else
+    Q_UNUSED( selected );
+    Q_UNUSED( deselected );
+#endif
+
+    _selectionModel->dumpSelectedItems();
+}

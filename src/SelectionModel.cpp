@@ -24,12 +24,10 @@ SelectionModel::SelectionModel( DirTreeModel * dirTreeModel, QObject * parent ):
     _selectedItemsDirty(false)
 {
     connect( this, SIGNAL( currentChanged	  ( QModelIndex, QModelIndex ) ),
-	     this, SIGNAL( propagateCurrentChanged( QModelIndex, QModelIndex ) ) );
+	     this, SLOT	 ( propagateCurrentChanged( QModelIndex, QModelIndex ) ) );
 
-    connect( this, SIGNAL( selectionChanged	    ( const QItemSelection & selected,
-						      const QItemSelection & deselected ) ),
-	     this, SIGNAL( propagateSelectionChanged( const QItemSelection & selected,
-						      const QItemSelection & deselected ) ) );
+    connect( this, SIGNAL( selectionChanged	    ( QItemSelection, QItemSelection  ) ),
+	     this, SLOT	 ( propagateSelectionChanged( QItemSelection, QItemSelection  ) ) );
 }
 
 
@@ -43,23 +41,23 @@ FileInfoSet SelectionModel::selectedItems()
 {
     if ( _selectedItemsDirty )
     {
-        // Build set of selected items from the selected model indexes
+	// Build set of selected items from the selected model indexes
 
-        _selectedItems.clear();
+	_selectedItems.clear();
 
-        foreach ( const QModelIndex index, selectedIndexes() )
-        {
-            if ( index.isValid() )
-            {
-                FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-                CHECK_MAGIC( item );
+	foreach ( const QModelIndex index, selectedIndexes() )
+	{
+	    if ( index.isValid() )
+	    {
+		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+		CHECK_MAGIC( item );
 
-                logDebug() << "Adding " << item << " to selected items" << endl;
-                _selectedItems << item;
-            }
-        }
+		//logDebug() << "Adding " << item << " to selected items" << endl;
+		_selectedItems << item;
+	    }
+	}
 
-        _selectedItemsDirty = false;
+	_selectedItemsDirty = false;
     }
 
     return _selectedItems;
@@ -97,13 +95,14 @@ void SelectionModel::propagateSelectionChanged( const QItemSelection & selected,
 
     _selectedItemsDirty = true;
     emit selectionChanged();
+    emit selectionChanged( selectedItems() );
 }
 
 
 void SelectionModel::selectItem( FileInfo * item )
 {
     extendSelection( item,
-                     true ); // clear
+		     true ); // clear
 }
 
 
@@ -116,18 +115,18 @@ void SelectionModel::extendSelection( FileInfo * item, bool clear )
 	if ( index.isValid() )
 	{
 	    logDebug() << "Selecting " << item << endl;
-            SelectionFlags flags = Select | Rows;
+	    SelectionFlags flags = Select | Rows;
 
-            if ( clear )
-                flags |= Clear;
+	    if ( clear )
+		flags |= Clear;
 
 	    select( index, flags ); // emits selectionChanged()
 	}
     }
     else
     {
-        if ( clear )
-            clearSelection(); // emits selectionChanged()
+	if ( clear )
+	    clearSelection(); // emits selectionChanged()
     }
 }
 

@@ -339,6 +339,77 @@ QString FileInfo::dotEntryName()
 //---------------------------------------------------------------------------
 
 
+bool FileInfoSet::containsDotEntry() const
+{
+    FileInfoSet::const_iterator it  = constBegin();
+    FileInfoSet::const_iterator end = constEnd();
+
+    while ( it != end )
+    {
+        if ( *it && (*it)->isDotEntry() )
+            return true;
+
+        ++it;
+    }
+
+    return false;
+}
+
+
+bool FileInfoSet::containsDir() const
+{
+    FileInfoSet::const_iterator it  = constBegin();
+    FileInfoSet::const_iterator end = constEnd();
+
+    while ( it != end )
+    {
+        if ( *it && (*it)->isDir() )
+            return true;
+
+        ++it;
+    }
+
+    return false;
+}
+
+
+bool FileInfoSet::containsFile() const
+{
+    FileInfoSet::const_iterator it  = constBegin();
+    FileInfoSet::const_iterator end = constEnd();
+
+    while ( it != end )
+    {
+        if ( *it && (*it)->isFile() )
+            return true;
+
+        ++it;
+    }
+
+    return false;
+}
+
+
+bool FileInfoSet::containsSpecial() const
+{
+    FileInfoSet::const_iterator it  = constBegin();
+    FileInfoSet::const_iterator end = constEnd();
+
+    while ( it != end )
+    {
+        if ( *it && (*it)->isSpecial() )
+            return true;
+
+        ++it;
+    }
+
+    return false;
+}
+
+
+//---------------------------------------------------------------------------
+
+
 QString QDirStat::formatSize( FileSize lSize )
 {
     QString sizeString;

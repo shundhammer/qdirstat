@@ -1,9 +1,9 @@
 /*
  *   File name: MainWindow.h
- *   Summary:   QDirStat main window
- *   License:   GPL V2 - See file LICENSE for details.
+ *   Summary:	QDirStat main window
+ *   License:	GPL V2 - See file LICENSE for details.
  *
- *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
@@ -14,13 +14,15 @@
 #include <QString>
 
 #include "DirTreeModel.h"
-#include "PercentBar.h"
+#include "SelectionModel.h"
+#include "FileInfo.h"
 #include "ui_main-window.h"
 
 class QCloseEvent;
 class QSortFilterProxyModel;
 class QSignalMapper;
-class DirTreeModel;
+
+using QDirStat::FileInfo;
 
 
 class MainWindow: public QMainWindow
@@ -94,10 +96,26 @@ protected slots:
      **/
     void notImplemented();
 
+#if 1
+    //
+    // Debugging slots
+    //
+
     /**
      * Debug: Item clicked in the tree widget.
      **/
     void itemClicked( const QModelIndex & index );
+
+    void selectionChanged();
+
+    void currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurrent );
+
+    void currentChanged( const QModelIndex & newCurrent,
+			 const QModelIndex & oldCurrent );
+
+    void selectionChanged( const QItemSelection & selected,
+			   const QItemSelection & deselected );
+#endif
 
 
 protected:
@@ -121,11 +139,12 @@ protected:
 
 private:
 
-    Ui::MainWindow         * _ui;
-    QDirStat::DirTreeModel * _dirTreeModel;
-    bool                     _modified;
-    int                      _statusBarTimeOut; // millisec
-    QSignalMapper          * _treeLevelMapper;
+    Ui::MainWindow	     * _ui;
+    QDirStat::DirTreeModel   * _dirTreeModel;
+    QDirStat::SelectionModel * _selectionModel;
+    bool		       _modified;
+    int			       _statusBarTimeOut; // millisec
+    QSignalMapper	     * _treeLevelMapper;
 };
 
 #endif // MainWindow_H
