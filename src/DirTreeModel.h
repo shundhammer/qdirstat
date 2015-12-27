@@ -117,6 +117,11 @@ namespace QDirStat
 	 **/
 	int countDirectChildren( FileInfo * parent ) const;
 
+	/**
+	 * Return a model index for 'item' and 'column'.
+	 **/
+	QModelIndex modelIndex( FileInfo * item, int column = 0 ) const;
+
 
 	//
 	// Reimplented from QAbstractItemModel:
@@ -225,11 +230,6 @@ namespace QDirStat
 	 * Load all required icons.
 	 **/
 	void loadIcons();
-
-	/**
-	 * Return a model index for 'item' and 'column'.
-	 **/
-	QModelIndex modelIndex( FileInfo * item, int column = 0 ) const;
 
 	/**
 	 * Notify the view (with beginInsertRows() and endInsertRows()) about
