@@ -137,19 +137,6 @@ namespace QDirStat
 	virtual bool finished() { return _current == 0; }
 
 	/**
-	 * Check whether or not the current child is a directory, i.e. can be
-	 * cast to @ref DirInfo * .
-	 **/
-	bool currentIsDir() { return _current && _current->isDirInfo(); }
-
-	/**
-	 * Return the current child object cast to @ref DirInfo * or 0 if
-	 * there either is no more or it isn't a directory. Check with @ref
-	 * currentIsDir() before using this!
-	 **/
-	DirInfo * currentDir() { return currentIsDir() ? (DirInfo *) _current : 0; }
-
-	/**
 	 * Return the number of items that will be processed.
 	 * This is an expensive operation.
 	 **/
