@@ -5,7 +5,7 @@ Qt-based directory statistics: KDirStat without any KDE -- from the original KDi
 
 License: GPL V2
 
-Updated: 2015-12-26
+Updated: 2015-12-27
 
 
 ## Overview
@@ -22,6 +22,13 @@ _First preview 2015-12-20 -- see also section "Development Status" below_
 
 
 ## Current Development Status
+
+- 2015-12-27  The tree view now supports _extended_ selection, i.e. you can
+	      shift-click to select a range of items or ctrl-click to select or
+	      deselect individual items. This was the most requested feature
+	      for the last KDirStat. This means you can now select more than
+	      one item at once to move it to the trash can etc. (once cleanup
+	      actions are back).
 
 - 2015-12-25  Christmas release
 
@@ -46,23 +53,23 @@ _First preview 2015-12-20 -- see also section "Development Status" below_
     ported to Qt5 now.
 
 - 2015-12-20  First usable preview version - see screenshot above. It's still
-              pretty rough, and sorting via the QSortProxyModel seems to be
-              awfully slow once a number of tree branches were ever
-              opened. Looks like I'll have to do that myself, too.
+	      pretty rough, and sorting via the QSortProxyModel seems to be
+	      awfully slow once a number of tree branches were ever
+	      opened. Looks like I'll have to do that myself, too.
 
 - 2015-12-18  Found the crippling bugs that made the DirTreeModel do crazy
-              things.  None of the Qt classes proved to be helpful to find that
-              - they just happily do the crazy things. That's what I call poor
-              design.  Now there is a first working QDirStat with a useful
-              display tree, including icons (but no percentage bar graph yet).
+	      things.  None of the Qt classes proved to be helpful to find that
+	      - they just happily do the crazy things. That's what I call poor
+	      design.  Now there is a first working QDirStat with a useful
+	      display tree, including icons (but no percentage bar graph yet).
 
 - 2015-12-07  First working DirTreeModel -- still minimalistic, but working.
 
 - 2015-12-06  Created tree model based on QAbstractItemModel.
-              Compiles, but dumps core so far.
+	      Compiles, but dumps core so far.
 
 - 2015-12-05  Imported and ported directory tree data classes.
-              Hammered through the compiler, but nothing usable so far.
+	      Hammered through the compiler, but nothing usable so far.
 
 - 2015-11-28  Project is being set up. Nothing usable so far.
 
@@ -262,13 +269,13 @@ before closing parentheses:
 
     if ( someCondition )
     {
-        doSomething( arg1, arg2 )
+	doSomething( arg1, arg2 )
     }
 
 **No** K&R style indentation:
 
-    if (someCondition) {         // WRONG!!!
-        doSomething(arg1, arg2)  // WRONG!!!
+    if (someCondition) {	 // WRONG!!!
+	doSomething(arg1, arg2)	 // WRONG!!!
     }
 
 Use blank lines liberally. No Rubocop-style code.
@@ -279,11 +286,11 @@ setter with Set...(), use only the name (someValue()) for the getter, **Not**
 getSomeValue():
 
     private:
-        SomeType _someValue;    // member variable
+	SomeType _someValue;	// member variable
 
     public:
-        const & SomeType someValue() const;              // getter
-        void setSomeValue( const SomeType & newValue );  // setter
+	const & SomeType someValue() const;		 // getter
+	void setSomeValue( const SomeType & newValue );	 // setter
 
 Use a const reference for the setter parameter and the getter return type for
 nontrival data types (everything beyond a pointer or an int etc.), and the type
