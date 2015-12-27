@@ -41,6 +41,7 @@ SOURCES	  = main.cpp			\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
 	    PercentBar.cpp		\
+	    SelectionModel.cpp		\
 
 
 HEADERS	  =				\
@@ -61,6 +62,7 @@ HEADERS	  =				\
 	    Logger.h			\
 	    MainWindow.h		\
 	    PercentBar.h		\
+	    SelectionModel.h		\
 	    SignalBlocker.h		\
 
 
