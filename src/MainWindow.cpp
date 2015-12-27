@@ -99,6 +99,7 @@ MainWindow::~MainWindow()
     // Relying on the QObject hierarchy to properly clean this up resulted in a
     //	segfault; there was probably a problem in the deletion order.
     delete _ui->dirTreeView;
+    delete _selectionModel;
     delete _dirTreeModel;
 }
 
