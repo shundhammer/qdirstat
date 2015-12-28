@@ -36,6 +36,7 @@ TreemapTile::TreemapTile( TreemapView *	 parentView,
     _parentTile( parentTile ),
     _orig( orig )
 {
+    logDebug() << "Creating tile without cushion for " << orig << " at " << rect << endl;
     init();
 
     if ( parentTile )
@@ -57,6 +58,7 @@ TreemapTile::TreemapTile( TreemapView *		 parentView,
     _orig( orig ),
     _cushionSurface( cushionSurface )
 {
+    logDebug() << "Creating cushioned tile for " << orig << " at " << rect << endl;
     init();
 
     // Intentionally not copying the parent's cushion surface!
@@ -78,10 +80,11 @@ void TreemapTile::init()
 
     setZValue( _parentTile ? ( _parentTile->zValue() + 1.0 ) : 0.0 );
 
-    _parentView->scene()->addItem( this );
+    if ( ! _parentTile )
+        _parentView->scene()->addItem( this );
 
-    logDebug() << "Creating treemap tile for " << _orig
-	       << " size " << formatSize( _orig->totalSize() ) << endl;
+    // logDebug() << "Creating treemap tile for " << _orig
+    //            << " size " << formatSize( _orig->totalSize() ) << endl;
 }
 
 
@@ -375,10 +378,10 @@ void TreemapTile::paint( QPainter			* painter,
 		painter->setPen( QPen( _parentView->cushionGridColor(), 1 ) );
 
 		if ( rect.x() > 0 )
-		    painter->drawLine( rect.topLeft(), rect.bottomLeft() + QPointF( 0.0, 1.0 ) );
+		    painter->drawLine( rect.topLeft(), rect.bottomLeft() );
 
 		if ( rect.y() > 0 )
-		    painter->drawLine( rect.topLeft(), rect.topRight() + QPointF( 1.0, 0.0 ) );
+		    painter->drawLine( rect.topLeft(), rect.topRight() );
 	    }
 	}
     }

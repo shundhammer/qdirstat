@@ -47,6 +47,9 @@ MainWindow::MainWindow():
     _ui->dirTreeView->setModel( _dirTreeModel );
     _ui->dirTreeView->setSelectionModel( _selectionModel );
 
+    _ui->treemapView->setDirTree( _dirTreeModel->tree() );
+    _ui->treemapView->setSelectionModel( _selectionModel );
+
 
     connect( _dirTreeModel->tree(),	SIGNAL( finished()	  ),
 	     this,			SLOT  ( readingFinished() ) );

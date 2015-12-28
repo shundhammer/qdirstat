@@ -21,7 +21,13 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QDirStat::DirTreeView" name="dirTreeView"/>
+     <widget class="QSplitter" name="mainWinSplitter">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QDirStat::DirTreeView" name="dirTreeView"/>
+      <widget class="QDirStat::TreemapView" name="treemapView"/>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -73,6 +79,17 @@
    <addaction name="menuView"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
   <action name="actionQuit">
    <property name="text">
     <string>&amp;Quit</string>
@@ -254,6 +271,11 @@
    <class>QDirStat::DirTreeView</class>
    <extends>QTreeView</extends>
    <header>DirTreeView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QDirStat::TreemapView</class>
+   <extends>QGraphicsView</extends>
+   <header>TreemapView.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -67,13 +67,14 @@ void TreemapView::setDirTree( DirTree * newTree )
 {
     logDebug() << endl;
     _tree = newTree;
+    CHECK_PTR( _tree );
 
 #if 0
     if ( initialSize.isValid() )
         resize( initialSize );
 #endif
 
-    if ( _tree && _tree->root() )
+    if ( _tree->firstToplevel() )
     {
         if ( ! _rootTile )
         {
@@ -81,7 +82,7 @@ void TreemapView::setDirTree( DirTree * newTree )
             // rebuildTreemap() called from resizeEvent() triggered by resize()
             // above. If this is so, don't do it again.
 
-            rebuildTreemap( _tree->root() );
+            rebuildTreemap( _tree->firstToplevel() );
         }
     }
 
@@ -90,6 +91,9 @@ void TreemapView::setDirTree( DirTree * newTree )
 
     connect( _tree, SIGNAL( childDeleted()   ),
              this,  SLOT  ( rebuildTreemap() ) );
+
+    connect( _tree, SIGNAL( finished()       ),
+             this,  SLOT  ( rebuildTreemap() ) );
 }
 
 
@@ -97,10 +101,11 @@ void TreemapView::setSelectionModel( SelectionModel * selectionModel )
 {
     logDebug() << endl;
     _selectionModel = selectionModel;
-    
+    CHECK_PTR( _selectionModel );
+
     connect( this,            SIGNAL( selectionChanged( FileInfo * ) ),
              _selectionModel, SLOT  ( selectItem      ( FileInfo * ) ) );
-    
+
     connect( this,            SIGNAL( selectionChanged( FileInfo * ) ),
              _selectionModel, SLOT  ( setCurrentItem  ( FileInfo * ) ) );
 
@@ -134,18 +139,20 @@ void TreemapView::readConfig()
     // FIXME: Read from config
     // FIXME: Read from config
     // FIXME: Read from config
-    
+
     _ambientLight       = DefaultAmbientLight;
 
     _heightScaleFactor  = DefaultHeightScaleFactor;
     _squarify           = true;
     _doCushionShading   = true;
     _ensureContrast     = true;
-    _forceCushionGrid   = false;
+    // _forceCushionGrid   = false;
+    _forceCushionGrid   = true; // DEBUG
     _minTileSize        = DefaultMinTileSize;
 
     _highlightColor     = Qt::red;
-    _cushionGridColor   = QColor( 0x80, 0x80, 0x80 );
+    // _cushionGridColor   = QColor( 0x80, 0x80, 0x80 );
+    _cushionGridColor   = Qt::green; // DEBUG
     _outlineColor       = Qt::black;
     _fileFillColor      = QColor( 0xde, 0x8d, 0x53 );
     _dirFillColor       = QColor( 0x10, 0x7d, 0xb4 );
@@ -364,10 +371,10 @@ bool TreemapView::canZoomIn() const
 
 bool TreemapView::canZoomOut() const
 {
-    if ( ! _rootTile || ! _tree->root() )
+    if ( ! _rootTile || ! _tree->firstToplevel() )
         return false;
 
-    return _rootTile->orig() != _tree->root();
+    return _rootTile->orig() != _tree->firstToplevel();
 }
 
 
@@ -389,7 +396,7 @@ void TreemapView::rebuildTreemap()
     }
 
     if ( ! root )
-        root = _rootTile ? _rootTile->orig() : _tree->root();
+        root = _rootTile ? _rootTile->orig() : _tree->firstToplevel();
 
     rebuildTreemap( root, sceneRect().size() );
     _savedRootUrl = "";
@@ -410,7 +417,7 @@ void TreemapView::rebuildTreemap( FileInfo *     newRoot,
     // Delete all old stuff.
     clear();
 
-    
+
     if ( ! scene() )
     {
         QGraphicsScene * scene = new QGraphicsScene( this );
@@ -458,7 +465,7 @@ void TreemapView::deleteNotify( FileInfo * )
 {
     if ( _rootTile )
     {
-        if ( _rootTile->orig() != _tree->root() )
+        if ( _rootTile->orig() != _tree->firstToplevel() )
         {
             // If the user zoomed the treemap in, save the root's URL so the
             // current state can be restored upon the next rebuildTreemap()
@@ -493,28 +500,31 @@ void TreemapView::deleteNotify( FileInfo * )
 
 void TreemapView::resizeEvent( QResizeEvent * event )
 {
+    logDebug() << endl;
     QGraphicsView::resizeEvent( event );
 
-    bool tooSmall =
-        event->size().width()  < UpdateMinSize ||
-                                 event->size().height() < UpdateMinSize;
+    if ( ! _tree )
+        return;
+
+    bool tooSmall = event->size().width()  < UpdateMinSize ||
+                    event->size().height() < UpdateMinSize;
 
     if ( tooSmall && _rootTile )
     {
-        // logDebug() << "Suppressing treemap contents" << endl;
+        logDebug() << "Suppressing treemap contents" << endl;
         rebuildTreemap( _rootTile->orig() );
     }
     else if ( ! tooSmall && ! _rootTile )
     {
-        if ( _tree->root() )
+        if ( _tree && _tree->firstToplevel() )
         {
-            // logDebug() << "Redisplaying suppressed treemap contents" << endl;
-            rebuildTreemap( _tree->root() );
+            logDebug() << "Redisplaying suppressed treemap contents" << endl;
+            rebuildTreemap( _tree->firstToplevel() );
         }
     }
     else if ( _rootTile )
     {
-        // logDebug() << "Auto-resizing treemap" << endl;
+        logDebug() << "Auto-resizing treemap" << endl;
         rebuildTreemap( _rootTile->orig() );
     }
 }
@@ -704,7 +714,7 @@ TreemapSelectionRect::TreemapSelectionRect( QGraphicsScene * scene, const QColor
 {
     setPen( QPen( color, 2 ) );
     setZValue( 1e10 );          // Higher than everything else
-    hide();    
+    hide();
     scene->addItem( this );
 }
 
