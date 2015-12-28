@@ -1,43 +1,43 @@
 /*
- *   File name:	KTreemapView.h
- *   Summary:	High level classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   File name: TreemapView.h
+ *   Summary:	View widget for treemap rendering for QDirStat
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
-#ifndef KTreemapView_h
-#define KTreemapView_h
+#ifndef TreemapView_h
+#define TreemapView_h
 
 
-#include <qcanvas.h>
+#include <QGraphicsView>
 
 
-#define MinAmbientLight			0
-#define MaxAmbientLight			200
-#define DefaultAmbientLight		40
+#define MinAmbientLight		   0
+#define MaxAmbientLight		   200
+#define DefaultAmbientLight	   40
 
-#define	MinHeightScalePercent		10
-#define	MaxHeightScalePercent		200
-#define DefaultHeightScalePercent	100
-#define DefaultHeightScaleFactor	( DefaultHeightScalePercent / 100.0 )
+#define MinHeightScalePercent	   10
+#define MaxHeightScalePercent	   200
+#define DefaultHeightScalePercent  100
+#define DefaultHeightScaleFactor   ( DefaultHeightScalePercent / 100.0 )
 
-#define DefaultMinTileSize		3
-#define CushionHeight			1.0
+#define DefaultMinTileSize	   3
+#define CushionHeight		   1.0
 
 
 class QMouseEvent;
-class KConfig;
+
 
 namespace QDirStat
 {
-    class KTreemapTile;
-    class KTreemapSelectionRect;
+    class TreemapTile;
+    class TreemapSelectionRect;
     class DirTree;
     class FileInfo;
 
-    class KTreemapView:	public QCanvasView
+    class TreemapView:	public QGraphicsView
     {
 	Q_OBJECT
 
@@ -45,20 +45,20 @@ namespace QDirStat
 	/**
 	 * Constructor.
 	 **/
-	KTreemapView( DirTree * 	tree,
-		      QWidget * 	parent 		= 0,
-		      const QSize &	initialSize 	= QSize() );
+	TreemapView( DirTree *	   tree,
+		     QWidget *	   parent      = 0,
+		     const QSize & initialSize = QSize() );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KTreemapView();
+	virtual ~TreemapView();
 
 	/**
 	 * Returns the (topmost) treemap tile at the specified position
 	 * or 0 if there is none.
 	 **/
-	KTreemapTile * tileAt( QPoint pos );
+	TreemapTile * tileAt( QPoint pos );
 
 	/**
 	 * Returns the minimum recommended size for this widget.
@@ -70,13 +70,13 @@ namespace QDirStat
 	 * Returns this treemap view's currently selected treemap tile or 0 if
 	 * there is none.
 	 **/
-	KTreemapTile * selectedTile() const { return _selectedTile; }
+	TreemapTile * selectedTile() const { return _selectedTile; }
 
 
 	/**
 	 * Returns this treemap view's root treemap tile or 0 if there is none.
 	 **/
-	KTreemapTile * rootTile() const { return _rootTile; }
+	TreemapTile * rootTile() const { return _rootTile; }
 
 	/**
 	 * Returns this treemap view's @ref DirTree.
@@ -90,7 +90,7 @@ namespace QDirStat
 	 * Notice: This is an expensive operation since all treemap tiles need
 	 * to be searched.
 	 **/
-	KTreemapTile * findTile( FileInfo * node );
+	TreemapTile * findTile( FileInfo * node );
 
 	/**
 	 * Returns a suitable color for 'file' based on a set of internal rules
@@ -101,19 +101,19 @@ namespace QDirStat
 
     public slots:
 
-        /**
+	/**
 	 * Make a treemap tile this treemap's selected tile.
 	 * 'tile' may be 0. In this case, only the previous selection is
 	 * deselected.
 	 **/
-        void selectTile( KTreemapTile * tile );
+	void selectTile( TreemapTile * tile );
 
 	/**
 	 * Search the treemap for a tile with the specified FileInfo node and
 	 * select that tile if it is found. If nothing is found or if 'node' is
 	 * 0, the previously selected tile is deselected.
 	 **/
-        void selectTile( FileInfo * node );
+	void selectTile( FileInfo * node );
 
 	/**
 	 * Zoom in one level towards the currently selected treemap tile:
@@ -163,7 +163,7 @@ namespace QDirStat
 	void deleteNotify( FileInfo * node );
 
 	/**
-	 * Read some parameters from the global @ref KConfig object.
+	 * Read some parameters from the config file
 	 **/
 	void readConfig();
 
@@ -173,8 +173,8 @@ namespace QDirStat
 	 * Rebuild the treemap with 'newRoot' as the new root and the specified
 	 * size. If 'newSize' is (0, 0), visibleSize() is used.
 	 **/
-	void rebuildTreemap( FileInfo * 	newRoot,
-			     const QSize &	newSize = QSize() );
+	void rebuildTreemap( FileInfo *	   newRoot,
+			     const QSize & newSize = QSize() );
 
 	/**
 	 * Returns the visible size of the viewport presuming no scrollbars are
@@ -279,7 +279,7 @@ namespace QDirStat
 	const QColor & dirFillColor() const { return _dirFillColor; }
 
 	/**
-	 * Returns the intensity of ambient light for cushion shading 
+	 * Returns the intensity of ambient light for cushion shading
 	 * [0..255]
 	 **/
 	int ambientLight() const { return _ambientLight; }
@@ -329,16 +329,7 @@ namespace QDirStat
 	 * (usually on right click). 'pos' contains the click's mouse
 	 * coordinates.
 	 **/
-	void contextMenu( KTreemapTile * tile, const QPoint & pos );
-
-	/**
-	 * Emitted at user activity. Some interactive actions are assigned an
-	 * amount of "activity points" that can be used to judge whether or not
-	 * the user is actually using this program or if it's just idly sitting
-	 * around on the desktop. This is intended for use together with a @ref
-	 * KActivityTracker.
-	 **/
-	void userActivity( int points );
+	void contextMenu( TreemapTile * tile, const QPoint & pos );
 
 
     protected:
@@ -350,9 +341,9 @@ namespace QDirStat
 
 	/**
 	 * Catch mouse double click:
-	 * 	Left   button double-click zooms in,
+	 *	Left   button double-click zooms in,
 	 *	right  button double-click zooms out,
-	 * 	middle button double-click rebuilds treemap.
+	 *	middle button double-click rebuilds treemap.
 	 **/
 	virtual void contentsMouseDoubleClickEvent( QMouseEvent * event );
 
@@ -365,43 +356,45 @@ namespace QDirStat
 	 **/
 	virtual void resizeEvent( QResizeEvent * event );
 
+#if 0
 	/**
 	 * Convenience method to read a color from 'config'.
 	 **/
-	QColor readColorEntry( KConfig * 	config,
-			       const char * 	entryName,
-			       QColor 		defaultColor );
+	QColor readColorEntry( KConfig *    config,
+			       const char * entryName,
+			       QColor	    defaultColor );
+#endif
 
 	// Data members
 
 	DirTree *		_tree;
-	KTreemapTile *		_rootTile;
-	KTreemapTile * 		_selectedTile;
-	KTreemapSelectionRect *	_selectionRect;
+	TreemapTile *		_rootTile;
+	TreemapTile *		_selectedTile;
+	TreemapSelectionRect *	_selectionRect;
 	QString			_savedRootUrl;
 
-	bool			_autoResize;
-	bool			_squarify;
-	bool			_doCushionShading;
-	bool			_forceCushionGrid;
-	bool			_ensureContrast;
-	int			_minTileSize;
+	bool   _autoResize;
+	bool   _squarify;
+	bool   _doCushionShading;
+	bool   _forceCushionGrid;
+	bool   _ensureContrast;
+	int    _minTileSize;
 
-	QColor			_highlightColor;
-	QColor			_cushionGridColor;
-	QColor			_outlineColor;
-	QColor			_fileFillColor;
-	QColor			_dirFillColor;
+	QColor _highlightColor;
+	QColor _cushionGridColor;
+	QColor _outlineColor;
+	QColor _fileFillColor;
+	QColor _dirFillColor;
 
-	int			_ambientLight;
+	int    _ambientLight;
 
-	double			_lightX;
-	double			_lightY;
-	double			_lightZ;
+	double _lightX;
+	double _lightY;
+	double _lightZ;
 
-	double 			_heightScaleFactor;
+	double _heightScaleFactor;
 
-    }; // class KTreemapView
+    }; // class TreemapView
 
 
 
@@ -414,14 +407,14 @@ namespace QDirStat
      * on top (i.e., great z-height) of everything else. The rectangle is
      * transparent, so the treemap tile contents remain visible.
      **/
-    class KTreemapSelectionRect: public QCanvasRectangle
+    class TreemapSelectionRect: public QGraphicsRect
     {
     public:
 
 	/**
 	 * Constructor.
 	 **/
-	KTreemapSelectionRect( QCanvas * canvas, const QColor & color );
+	TreemapSelectionRect( QCanvas * canvas, const QColor & color );
 
 	/**
 	 * Highlight the specified treemap tile: Resize this selection
@@ -429,12 +422,12 @@ namespace QDirStat
 	 * position. Show the selection rectangle if it is currently
 	 * invisible.
 	 **/
-	void highlight( KTreemapTile * tile );
+	void highlight( TreemapTile * tile );
 
-    }; // class KTreemapSelectionRect
+    }; // class TreemapSelectionRect
 
 }	// namespace QDirStat
 
 
-#endif // ifndef KTreemapView_h
+#endif // ifndef TreemapView_h
 

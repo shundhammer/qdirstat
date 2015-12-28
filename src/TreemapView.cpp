@@ -1,22 +1,18 @@
 /*
- *   File name: KTreemapView.cpp
- *   Summary:	High level classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   File name: TreemapView.cpp
+ *   Summary:	View widget for treemap rendering for QDirStat
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
-#include <qevent.h>
-#include <qregexp.h>
-
-#include <kapp.h>
-#include <kconfig.h>
-#include <kglobal.h>
+#include <QEvent>
+#include <QRegExp>
 
 #include "DirTree.h"
-#include "KTreeMapView.h"
-#include "KTreeMapTile.h"
+#include "TreemapView.h"
+#include "TreemapTile.h"
 
 
 using namespace QDirStat;
@@ -25,23 +21,23 @@ using namespace QDirStat;
 
 
 
-KTreemapView::KTreemapView( DirTree * tree, QWidget * parent, const QSize & initialSize )
-    : QCanvasView( parent )
+TreemapView::TreemapView( DirTree * tree, QWidget * parent, const QSize & initialSize )
+    : QGraphicsView( parent )
     , _tree( tree )
     , _rootTile( 0 )
     , _selectedTile( 0 )
     , _selectionRect( 0 )
 {
-    // logDebug() << k_funcinfo << endl;
+    // logDebug() << endl;
 
     readConfig();
 
     // Default values for light sources taken from Wiik / Wetering's paper
     // about "cushion treemaps".
 
-    _lightX		= 0.09759;
-    _lightY		= 0.19518;
-    _lightZ		= 0.9759;
+    _lightX = 0.09759;
+    _lightY = 0.19518;
+    _lightZ = 0.9759;
 
     if ( _autoResize )
     {
@@ -64,39 +60,37 @@ KTreemapView::KTreemapView( DirTree * tree, QWidget * parent, const QSize & init
 	}
     }
 
-    connect( this,	SIGNAL( selectionChanged( FileInfo * ) ),
-	     tree,	SLOT  ( selectItem	( FileInfo * ) ) );
+    connect( this, SIGNAL( selectionChanged( FileInfo * ) ),
+	     tree, SLOT	 ( selectItem	   ( FileInfo * ) ) );
 
-    connect( tree,	SIGNAL( selectionChanged( FileInfo * ) ),
-	     this,	SLOT  ( selectTile	( FileInfo * ) ) );
+    connect( tree, SIGNAL( selectionChanged( FileInfo * ) ),
+	     this, SLOT	 ( selectTile	   ( FileInfo * ) ) );
 
-    connect( tree,	SIGNAL( deletingChild	( FileInfo * )	),
-	     this,	SLOT  ( deleteNotify	( FileInfo * ) ) );
+    connect( tree, SIGNAL( deletingChild   ( FileInfo * )  ),
+	     this, SLOT	 ( deleteNotify	   ( FileInfo * ) ) );
 
-    connect( tree,	SIGNAL( childDeleted()	 ),
-	     this,	SLOT  ( rebuildTreemap() ) );
+    connect( tree, SIGNAL( childDeleted()   ),
+	     this, SLOT	 ( rebuildTreemap() ) );
 }
 
 
-KTreemapView::~KTreemapView()
+TreemapView::~TreemapView()
 {
 }
 
 
-void
-KTreemapView::clear()
+void TreemapView::clear()
 {
     if ( canvas() )
 	deleteAllItems( canvas() );
 
-    _selectedTile	= 0;
-    _selectionRect	= 0;
-    _rootTile		= 0;
+    _selectedTile  = 0;
+    _selectionRect = 0;
+    _rootTile	   = 0;
 }
 
 
-void
-KTreemapView::deleteAllItems( QCanvas * canvas )
+void TreemapView::deleteAllItems( QCanvas * canvas )
 {
     if ( ! canvas )
 	return;
@@ -108,9 +102,9 @@ KTreemapView::deleteAllItems( QCanvas * canvas )
 }
 
 
-void
-KTreemapView::readConfig()
+void TreemapView::readConfig()
 {
+#if 0
     KConfig * config = kapp->config();
     config->setGroup( "Treemaps" );
 
@@ -121,7 +115,7 @@ KTreemapView::readConfig()
     _squarify		= config->readBoolEntry( "Squarify"		, true	);
     _doCushionShading	= config->readBoolEntry( "CushionShading"	, true	);
     _ensureContrast	= config->readBoolEntry( "EnsureContrast"	, true	);
-    _forceCushionGrid	= config->readBoolEntry( "ForceCushionGrid"	, false	);
+    _forceCushionGrid	= config->readBoolEntry( "ForceCushionGrid"	, false );
     _minTileSize	= config->readNumEntry ( "MinTileSize"		, DefaultMinTileSize );
 
     _highlightColor	= readColorEntry( config, "HighlightColor"	, red			     );
@@ -140,27 +134,28 @@ KTreemapView::readConfig()
 	setHScrollBarMode( QScrollView::Auto );
 	setVScrollBarMode( QScrollView::Auto );
     }
+#endif
 }
 
 
-QColor
-KTreemapView::readColorEntry( KConfig * config, const char * entryName, QColor defaultColor )
+#if 0
+QColor TreemapView::readColorEntry( KConfig * config, const char * entryName, QColor defaultColor )
 {
     return config->readColorEntry( entryName, &defaultColor );
 }
+#endif
 
 
-KTreemapTile *
-KTreemapView::tileAt( QPoint pos )
+TreemapTile * TreemapView::tileAt( QPoint pos )
 {
-    KTreemapTile * tile = 0;
+    TreemapTile * tile = 0;
 
     QCanvasItemList coll = canvas()->collisions( pos );
     QCanvasItemList::Iterator it = coll.begin();
 
     while ( it != coll.end() && tile == 0 )
     {
-	tile = dynamic_cast<KTreemapTile *> (*it);
+	tile = dynamic_cast<TreemapTile *> (*it);
 	++it;
     }
 
@@ -168,12 +163,11 @@ KTreemapView::tileAt( QPoint pos )
 }
 
 
-void
-KTreemapView::contentsMousePressEvent( QMouseEvent * event )
+void TreemapView::contentsMousePressEvent( QMouseEvent * event )
 {
-    // logDebug() << k_funcinfo << endl;
+    // logDebug() << endl;
 
-    KTreemapTile * tile = tileAt( event->pos() );
+    TreemapTile * tile = tileAt( event->pos() );
 
     if ( ! tile )
 	return;
@@ -182,7 +176,6 @@ KTreemapView::contentsMousePressEvent( QMouseEvent * event )
     {
 	case LeftButton:
 	    selectTile( tile );
-	    emit userActivity( 1 );
 	    break;
 
 	case MidButton:
@@ -204,7 +197,6 @@ KTreemapView::contentsMousePressEvent( QMouseEvent * event )
 	    // hierarchy (i.e. the topmost directory is highlighted).
 
 	    selectTile( tile );
-	    emit userActivity( 1 );
 	    break;
 
 	case RightButton:
@@ -224,8 +216,6 @@ KTreemapView::contentsMousePressEvent( QMouseEvent * event )
 		    selectTile( tile );
 		    emit contextMenu( tile, event->globalPos() );
 		}
-
-		emit userActivity( 3 );
 	    }
 	    break;
 
@@ -237,12 +227,11 @@ KTreemapView::contentsMousePressEvent( QMouseEvent * event )
 }
 
 
-void
-KTreemapView::contentsMouseDoubleClickEvent( QMouseEvent * event )
+void TreemapView::contentsMouseDoubleClickEvent( QMouseEvent * event )
 {
-    // logDebug() << k_funcinfo << endl;
+    // logDebug() << endl;
 
-    KTreemapTile * tile = tileAt( event->pos() );
+    TreemapTile * tile = tileAt( event->pos() );
 
     if ( ! tile )
 	return;
@@ -254,13 +243,11 @@ KTreemapView::contentsMouseDoubleClickEvent( QMouseEvent * event )
 	    {
 		selectTile( tile );
 		zoomIn();
-		emit userActivity( 5 );
 	    }
 	    break;
 
 	case MidButton:
 	    zoomOut();
-	    emit userActivity( 5 );
 	    break;
 
 	case RightButton:
@@ -279,13 +266,12 @@ KTreemapView::contentsMouseDoubleClickEvent( QMouseEvent * event )
 }
 
 
-void
-KTreemapView::zoomIn()
+void TreemapView::zoomIn()
 {
     if ( ! _selectedTile || ! _rootTile )
 	return;
 
-    KTreemapTile * newRootTile = _selectedTile;
+    TreemapTile * newRootTile = _selectedTile;
 
     while ( newRootTile->parentTile() != _rootTile &&
 	    newRootTile->parentTile() ) // This should never happen, but who knows?
@@ -303,8 +289,7 @@ KTreemapView::zoomIn()
 }
 
 
-void
-KTreemapView::zoomOut()
+void TreemapView::zoomOut()
 {
     if ( _rootTile )
     {
@@ -318,16 +303,14 @@ KTreemapView::zoomOut()
 }
 
 
-void
-KTreemapView::selectParent()
+void TreemapView::selectParent()
 {
     if ( _selectedTile && _selectedTile->parentTile() )
 	selectTile( _selectedTile->parentTile() );
 }
 
 
-bool
-KTreemapView::canZoomIn() const
+bool TreemapView::canZoomIn() const
 {
     if ( ! _selectedTile || ! _rootTile )
 	return false;
@@ -335,7 +318,7 @@ KTreemapView::canZoomIn() const
     if ( _selectedTile == _rootTile )
 	return false;
 
-    KTreemapTile * newRootTile = _selectedTile;
+    TreemapTile * newRootTile = _selectedTile;
 
     while ( newRootTile->parentTile() != _rootTile &&
 	    newRootTile->parentTile() ) // This should never happen, but who knows?
@@ -355,8 +338,7 @@ KTreemapView::canZoomIn() const
 }
 
 
-bool
-KTreemapView::canZoomOut() const
+bool TreemapView::canZoomOut() const
 {
     if ( ! _rootTile || ! _tree->root() )
 	return false;
@@ -365,15 +347,13 @@ KTreemapView::canZoomOut() const
 }
 
 
-bool
-KTreemapView::canSelectParent() const
+bool TreemapView::canSelectParent() const
 {
     return _selectedTile && _selectedTile->parentTile();
 }
 
 
-void
-KTreemapView::rebuildTreemap()
+void TreemapView::rebuildTreemap()
 {
     FileInfo * root = 0;
 
@@ -392,11 +372,10 @@ KTreemapView::rebuildTreemap()
 }
 
 
-void
-KTreemapView::rebuildTreemap( FileInfo *	newRoot,
-			      const QSize &	newSz )
+void TreemapView::rebuildTreemap( FileInfo *	newRoot,
+			     const QSize &	newSz )
 {
-    // logDebug() << k_funcinfo << endl;
+    // logDebug() << endl;
 
     QSize newSize = newSz;
 
@@ -429,11 +408,11 @@ KTreemapView::rebuildTreemap( FileInfo *	newRoot,
 
 	if ( newRoot )
 	{
-	    _rootTile = new KTreemapTile( this,		// parentView
-					  0,		// parentTile
-					  newRoot,	// orig
-					  QRect( QPoint( 0, 0), newSize ),
-					  KTreemapAuto );
+	    _rootTile = new TreemapTile( this,		// parentView
+					 0,		// parentTile
+					 newRoot,	// orig
+					 QRect( QPoint( 0, 0), newSize ),
+					 TreemapAuto );
 	}
 
 
@@ -451,8 +430,7 @@ KTreemapView::rebuildTreemap( FileInfo *	newRoot,
 }
 
 
-void
-KTreemapView::deleteNotify( FileInfo * )
+void TreemapView::deleteNotify( FileInfo * )
 {
     if ( _rootTile )
     {
@@ -489,16 +467,15 @@ KTreemapView::deleteNotify( FileInfo * )
 }
 
 
-void
-KTreemapView::resizeEvent( QResizeEvent * event )
+void TreemapView::resizeEvent( QResizeEvent * event )
 {
-    QCanvasView::resizeEvent( event );
+    QGraphicsView::resizeEvent( event );
 
     if ( _autoResize )
     {
 	bool tooSmall =
 	    event->size().width()  < UpdateMinSize ||
-	    event->size().height() < UpdateMinSize;
+				     event->size().height() < UpdateMinSize;
 
 	if ( tooSmall && _rootTile )
 	{
@@ -522,12 +499,11 @@ KTreemapView::resizeEvent( QResizeEvent * event )
 }
 
 
-void
-KTreemapView::selectTile( KTreemapTile * tile )
+void TreemapView::selectTile( TreemapTile * tile )
 {
-    // logDebug() << k_funcinfo << endl;
+    // logDebug() << endl;
 
-    KTreemapTile * oldSelection = _selectedTile;
+    TreemapTile * oldSelection = _selectedTile;
     _selectedTile = tile;
 
 
@@ -536,7 +512,7 @@ KTreemapView::selectTile( KTreemapTile * tile )
     if ( _selectedTile )
     {
 	if ( ! _selectionRect )
-	    _selectionRect = new KTreemapSelectionRect( canvas(), _highlightColor );
+	    _selectionRect = new TreemapSelectionRect( canvas(), _highlightColor );
     }
 
     if ( _selectionRect )
@@ -551,16 +527,14 @@ KTreemapView::selectTile( KTreemapTile * tile )
 }
 
 
-void
-KTreemapView::selectTile( FileInfo * node )
+void TreemapView::selectTile( FileInfo * node )
 {
     selectTile( findTile( node ) );
 }
 
 
 
-KTreemapTile *
-KTreemapView::findTile( FileInfo * node )
+TreemapTile * TreemapView::findTile( FileInfo * node )
 {
     if ( ! node )
 	return 0;
@@ -570,7 +544,7 @@ KTreemapView::findTile( FileInfo * node )
 
     while ( it != itemList.end() )
     {
-	KTreemapTile * tile = dynamic_cast<KTreemapTile *> (*it);
+	TreemapTile * tile = dynamic_cast<TreemapTile *> (*it);
 
 	if ( tile && tile->orig() == node )
 	    return tile;
@@ -582,8 +556,7 @@ KTreemapView::findTile( FileInfo * node )
 }
 
 
-QSize
-KTreemapView::visibleSize()
+QSize TreemapView::visibleSize()
 {
     ScrollBarMode oldHMode = hScrollBarMode();
     ScrollBarMode oldVMode = vScrollBarMode();
@@ -591,8 +564,8 @@ KTreemapView::visibleSize()
     setHScrollBarMode( AlwaysOff );
     setVScrollBarMode( AlwaysOff );
 
-    QSize size = QSize( QCanvasView::visibleWidth(),
-			QCanvasView::visibleHeight() );
+    QSize size = QSize( QGraphicsView::visibleWidth(),
+			QGraphicsView::visibleHeight() );
 
     setHScrollBarMode( oldHMode );
     setVScrollBarMode( oldVMode );
@@ -601,8 +574,7 @@ KTreemapView::visibleSize()
 }
 
 
-QColor
-KTreemapView::tileColor( FileInfo * file )
+QColor TreemapView::tileColor( FileInfo * file )
 {
     if ( file )
     {
@@ -645,17 +617,17 @@ KTreemapView::tileColor( FileInfo * file )
 		if ( lowerExt == "bz"	)	return Qt::green;
 		if ( lowerExt == "gz"	)	return Qt::green;
 
-		if ( lowerExt == "html"	)	return Qt::blue;
+		if ( lowerExt == "html" )	return Qt::blue;
 		if ( lowerExt == "htm"	)	return Qt::blue;
 		if ( lowerExt == "txt"	)	return Qt::blue;
 		if ( lowerExt == "doc"	)	return Qt::blue;
 
 		if ( lowerExt == "png"	)	return Qt::cyan;
 		if ( lowerExt == "jpg"	)	return Qt::cyan;
-		if ( lowerExt == "jpeg"	)	return Qt::cyan;
+		if ( lowerExt == "jpeg" )	return Qt::cyan;
 		if ( lowerExt == "gif"	)	return Qt::cyan;
 		if ( lowerExt == "tif"	)	return Qt::cyan;
-		if ( lowerExt == "tiff"	)	return Qt::cyan;
+		if ( lowerExt == "tiff" )	return Qt::cyan;
 		if ( lowerExt == "bmp"	)	return Qt::cyan;
 		if ( lowerExt == "xpm"	)	return Qt::cyan;
 		if ( lowerExt == "tga"	)	return Qt::cyan;
@@ -666,7 +638,7 @@ KTreemapView::tileColor( FileInfo * file )
 		if ( lowerExt == "avi"	)	return QColor( 0xa0, 0xff, 0x00 );
 		if ( lowerExt == "mov"	)	return QColor( 0xa0, 0xff, 0x00 );
 		if ( lowerExt == "mpg"	)	return QColor( 0xa0, 0xff, 0x00 );
-		if ( lowerExt == "mpeg"	)	return QColor( 0xa0, 0xff, 0x00 );
+		if ( lowerExt == "mpeg" )	return QColor( 0xa0, 0xff, 0x00 );
 
 		if ( lowerExt == "pdf"	)	return Qt::blue;
 		if ( lowerExt == "ps"	)	return Qt::cyan;
@@ -713,7 +685,7 @@ KTreemapView::tileColor( FileInfo * file )
 
 
 
-KTreemapSelectionRect::KTreemapSelectionRect( QCanvas * canvas, const QColor & color )
+TreemapSelectionRect::TreemapSelectionRect( QCanvas * canvas, const QColor & color )
     : QCanvasRectangle( canvas )
 {
     setPen( QPen( color, 2 ) );
@@ -722,8 +694,7 @@ KTreemapSelectionRect::KTreemapSelectionRect( QCanvas * canvas, const QColor & c
 
 
 
-void
-KTreemapSelectionRect::highlight( KTreemapTile * tile )
+void TreemapSelectionRect::highlight( TreemapTile * tile )
 {
     if ( tile )
     {

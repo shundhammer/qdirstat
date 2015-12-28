@@ -1,7 +1,7 @@
 /*
- *   File name:	KTreemapTile.cpp
- *   Summary:	High level classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   File name: TreemapTile.cpp
+ *   Summary:	Treemap rendering for QDirStat
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -10,14 +10,12 @@
 #include <math.h>
 #include <algorithm>
 
-#include <kapp.h>
-#include <kglobal.h>
-#include <qimage.h>
-#include <qpainter.h>
+#include <QImage>
+#include <QPainter>
 
-#include "KTreeMapTile.h"
-#include "KTreeMapView.h"
-#include "DirTreeIterators.h"
+#include "TreemapTile.h"
+#include "TreemapView.h"
+#include "FileInfoIterator.h"
 #include "DirTreeView.h"
 
 
@@ -26,12 +24,12 @@ using std::max;
 using std::min;
 
 
-KTreemapTile::KTreemapTile( KTreemapView *	parentView,
-			    KTreemapTile *	parentTile,
-			    FileInfo *		orig,
-			    const QRect &	rect,
-			    KOrientation	orientation )
-    : QCanvasRectangle( rect, parentView->canvas() )
+TreemapTile::TreemapTile( TreemapView * parentView,
+			  TreemapTile * parentTile,
+			  FileInfo *	orig,
+			  const QRect & rect,
+			  Orientation	orientation )
+    : QGraphicsRect( rect, parentView->canvas() )
     , _parentView( parentView )
     , _parentTile( parentTile )
     , _orig( orig )
@@ -45,13 +43,13 @@ KTreemapTile::KTreemapTile( KTreemapView *	parentView,
 }
 
 
-KTreemapTile::KTreemapTile( KTreemapView *		parentView,
-			    KTreemapTile *		parentTile,
-			    FileInfo *			orig,
-			    const QRect &		rect,
-			    const KCushionSurface &	cushionSurface,
-			    KOrientation		orientation )
-    : QCanvasRectangle( rect, parentView->canvas() )
+TreemapTile::TreemapTile( TreemapView *		 parentView,
+			  TreemapTile *		 parentTile,
+			  FileInfo    *		 orig,
+			  const QRect &		 rect,
+			  const CushionSurface & cushionSurface,
+			  Orientation		 orientation )
+    : QGraphicsRect( rect, parentView->canvas() )
     , _parentView( parentView )
     , _parentTile( parentTile )
     , _orig( orig )
@@ -65,14 +63,13 @@ KTreemapTile::KTreemapTile( KTreemapView *		parentView,
 }
 
 
-KTreemapTile::~KTreemapTile()
+TreemapTile::~TreemapTile()
 {
     // NOP
 }
 
 
-void
-KTreemapTile::init()
+void TreemapTile::init()
 {
     // Set up height (z coordinate) - one level higher than the parent so this
     // will be closer to the foreground.
@@ -88,13 +85,12 @@ KTreemapTile::init()
     show();	// QCanvasItems are invisible by default!
 
     // logDebug() << "Creating treemap tile for " << _orig
-    //           << " size " << formatSize( _orig->totalSize() ) << endl;
+    //		  << " size " << formatSize( _orig->totalSize() ) << endl;
 }
 
 
-void
-KTreemapTile::createChildren( const QRect &	rect,
-			      KOrientation	orientation )
+void TreemapTile::createChildren( const QRect & rect,
+				  Orientation	orientation )
 {
     if ( _orig->totalSize() == 0 )	// Prevent division by zero
 	return;
@@ -106,30 +102,27 @@ KTreemapTile::createChildren( const QRect &	rect,
 }
 
 
-void
-KTreemapTile::createChildrenSimple( const QRect &	rect,
-				    KOrientation	orientation )
+void TreemapTile::createChildrenSimple( const QRect & rect,
+					Orientation   orientation )
 {
 
-    KOrientation dir      = orientation;
-    KOrientation childDir = orientation;
+    Orientation dir	 = orientation;
+    Orientation childDir = orientation;
 
-    if ( dir == KTreemapAuto )
-	dir = rect.width() > rect.height() ? KTreemapHorizontal : KTreemapVertical;
+    if ( dir == TreemapAuto )
+	dir = rect.width() > rect.height() ? TreemapHorizontal : TreemapVertical;
 
-    if ( orientation == KTreemapHorizontal	)	childDir = KTreemapVertical;
-    if ( orientation == KTreemapVertical	)	childDir = KTreemapHorizontal;
+    if ( orientation == TreemapHorizontal )  childDir = TreemapVertical;
+    if ( orientation == TreemapVertical	  )  childDir = TreemapHorizontal;
 
     int offset	 = 0;
-    int size	 = dir == KTreemapHorizontal ? rect.width() : rect.height();
-    int count 	 = 0;
+    int size	 = dir == TreemapHorizontal ? rect.width() : rect.height();
+    int count	 = 0;
     double scale = (double) size / (double) _orig->totalSize();
 
     _cushionSurface.addRidge( childDir, _cushionSurface.height(), rect );
-
-    FileInfoSortedBySizeIterator it( _orig,
-				      (FileSize) ( _parentView->minTileSize() / scale ),
-				      KDotEntryAsSubDir );
+    FileSize minSize = (FileSize) ( _parentView->minTileSize() / scale );
+    FileInfoSortedBySizeIterator it( _orig, minSize );
 
     while ( *it )
     {
@@ -141,12 +134,12 @@ KTreemapTile::createChildrenSimple( const QRect &	rect,
 	{
 	    QRect childRect;
 
-	    if ( dir == KTreemapHorizontal )
+	    if ( dir == TreemapHorizontal )
 		childRect = QRect( rect.x() + offset, rect.y(), childSize, rect.height() );
 	    else
 		childRect = QRect( rect.x(), rect.y() + offset, rect.width(), childSize );
 
-	    KTreemapTile * tile = new KTreemapTile( _parentView, this, *it, childRect, childDir );
+	    TreemapTile * tile = new TreemapTile( _parentView, this, *it, childRect, childDir );
 	    CHECK_PTR( tile );
 
 	    tile->cushionSurface().addRidge( dir,
@@ -162,12 +155,11 @@ KTreemapTile::createChildrenSimple( const QRect &	rect,
 }
 
 
-void
-KTreemapTile::createSquarifiedChildren( const QRect & rect )
+void TreemapTile::createSquarifiedChildren( const QRect & rect )
 {
     if ( _orig->totalSize() == 0 )
     {
-	logError() << k_funcinfo << "Zero totalSize()" << endl;
+	logError()  << "Zero totalSize()" << endl;
 	return;
     }
 
@@ -177,8 +169,8 @@ KTreemapTile::createSquarifiedChildren( const QRect & rect )
 #if 0
     if ( _orig->hasChildren() )
     {
-	_cushionSurface.addRidge( KTreemapHorizontal, _cushionSurface.height(), rect );
-	_cushionSurface.addRidge( KTreemapVertical,   _cushionSurface.height(), rect );
+	_cushionSurface.addRidge( TreemapHorizontal, _cushionSurface.height(), rect );
+	_cushionSurface.addRidge( TreemapVertical,   _cushionSurface.height(), rect );
     }
 #endif
 
@@ -193,10 +185,9 @@ KTreemapTile::createSquarifiedChildren( const QRect & rect )
 }
 
 
-FileInfoList
-KTreemapTile::squarify( const QRect & 			rect,
-			double				scale,
-			FileInfoSortedBySizeIterator & it   )
+FileInfoList TreemapTile::squarify( const QRect & rect,
+				    double	  scale,
+				    FileInfoSortedBySizeIterator & it )
 {
     // logDebug() << "squarify() " << _orig << " " << rect << endl;
 
@@ -205,7 +196,7 @@ KTreemapTile::squarify( const QRect & 			rect,
 
     if ( length == 0 )	// Sanity check
     {
-	logWarning() << k_funcinfo << "Zero length" << endl;
+	logWarning()  << "Zero length" << endl;
 
 	if ( *it )	// Prevent endless loop in case of error:
 	    ++it;	// Advance iterator.
@@ -214,9 +205,9 @@ KTreemapTile::squarify( const QRect & 			rect,
     }
 
 
-    bool	improvingAspectRatio 	= true;
-    double	lastWorstAspectRatio	= -1.0;
-    double	sum 			= 0;
+    bool   improvingAspectRatio = true;
+    double lastWorstAspectRatio = -1.0;
+    double sum			= 0;
 
     // This is a bit ugly, but doing all calculations in the 'size' dimension
     // is more efficient here since that requires only one scaling before
@@ -229,12 +220,12 @@ KTreemapTile::squarify( const QRect & 			rect,
 
 	if ( ! row.isEmpty() && sum != 0 && (*it)->totalSize() != 0 )
 	{
-	    double sumSquare        = sum * sum;
+	    double sumSquare	    = sum * sum;
 	    double worstAspectRatio = max( scaledLengthSquare * row.first()->totalSize() / sumSquare,
 					   sumSquare / ( scaledLengthSquare * (*it)->totalSize() ) );
 
 	    if ( lastWorstAspectRatio >= 0.0 &&
-		worstAspectRatio > lastWorstAspectRatio )
+		 worstAspectRatio > lastWorstAspectRatio )
 	    {
 		improvingAspectRatio = false;
 	    }
@@ -259,17 +250,16 @@ KTreemapTile::squarify( const QRect & 			rect,
 
 
 
-QRect
-KTreemapTile::layoutRow( const QRect &		rect,
-			 double			scale,
-			 FileInfoList & 	row )
+QRect TreemapTile::layoutRow( const QRect &   rect,
+			      double	      scale,
+			      FileInfoList &  row )
 {
     if ( row.isEmpty() )
 	return rect;
 
     // Determine the direction in which to subdivide.
     // We always use the longer side of the rectangle.
-    KOrientation dir = rect.width() > rect.height() ? KTreemapHorizontal : KTreemapVertical;
+    Orientation dir = rect.width() > rect.height() ? TreemapHorizontal : TreemapVertical;
 
     // This row's primary length is the longer one.
     int primary = max( rect.width(), rect.height() );
@@ -290,9 +280,9 @@ KTreemapTile::layoutRow( const QRect &		rect,
     // Add another ridge perpendicular to the row's direction
     // that optically groups this row's tiles together.
 
-    KCushionSurface rowCushionSurface = _cushionSurface;
+    CushionSurface rowCushionSurface = _cushionSurface;
 
-    rowCushionSurface.addRidge( dir == KTreemapHorizontal ? KTreemapVertical : KTreemapHorizontal,
+    rowCushionSurface.addRidge( dir == TreemapHorizontal ? TreemapVertical : TreemapHorizontal,
 				_cushionSurface.height() * _parentView->heightScaleFactor(),
 				rect );
 
@@ -313,12 +303,12 @@ KTreemapTile::layoutRow( const QRect &		rect,
 	{
 	    QRect childRect;
 
-	    if ( dir == KTreemapHorizontal )
+	    if ( dir == TreemapHorizontal )
 		childRect = QRect( rect.x() + offset, rect.y(), childSize, secondary );
 	    else
 		childRect = QRect( rect.x(), rect.y() + offset, secondary, childSize );
 
-	    KTreemapTile * tile = new KTreemapTile( _parentView, this, *it, childRect, rowCushionSurface );
+	    TreemapTile * tile = new TreemapTile( _parentView, this, *it, childRect, rowCushionSurface );
 	    CHECK_PTR( tile );
 
 	    tile->cushionSurface().addRidge( dir,
@@ -335,7 +325,7 @@ KTreemapTile::layoutRow( const QRect &		rect,
 
     QRect newRect;
 
-    if ( dir == KTreemapHorizontal )
+    if ( dir == TreemapHorizontal )
 	newRect = QRect( rect.x(), rect.y() + secondary, rect.width(), rect.height() - secondary );
     else
 	newRect = QRect( rect.x() + secondary, rect.y(), rect.width() - secondary, rect.height() );
@@ -346,8 +336,7 @@ KTreemapTile::layoutRow( const QRect &		rect,
 }
 
 
-void
-KTreemapTile::drawShape( QPainter & painter )
+void TreemapTile::drawShape( QPainter & painter )
 {
     // logDebug() << "drawShape() " << _orig << endl;
 
@@ -405,43 +394,42 @@ KTreemapTile::drawShape( QPainter & painter )
 }
 
 
-QPixmap
-KTreemapTile::renderCushion()
+QPixmap TreemapTile::renderCushion()
 {
     QRect rect = QCanvasRectangle::rect();
 
     if ( rect.width() < 1 || rect.height() < 1 )
 	return QPixmap();
 
-    // logDebug() << k_funcinfo << endl;
+    // logDebug() << endl;
 
-    double 	nx;
-    double 	ny;
-    double 	cosa;
-    int		x, y;
-    int		red, green, blue;
+    double nx;
+    double ny;
+    double cosa;
+    int	   x, y;
+    int	   red, green, blue;
 
 
     // Cache some values. They are used for each loop iteration, so let's try
     // to keep multiple indirect references down.
 
-    int		ambientLight	= parentView()->ambientLight();
-    double 	lightX		= parentView()->lightX();
-    double 	lightY		= parentView()->lightY();
-    double 	lightZ		= parentView()->lightZ();
+    int		ambientLight = parentView()->ambientLight();
+    double	lightX	     = parentView()->lightX();
+    double	lightY	     = parentView()->lightY();
+    double	lightZ	     = parentView()->lightZ();
 
-    double	xx2		= cushionSurface().xx2();
-    double	xx1		= cushionSurface().xx1();
-    double	yy2		= cushionSurface().yy2();
-    double	yy1		= cushionSurface().yy1();
+    double	xx2	     = cushionSurface().xx2();
+    double	xx1	     = cushionSurface().xx1();
+    double	yy2	     = cushionSurface().yy2();
+    double	yy1	     = cushionSurface().yy1();
 
-    int		x0 		= rect.x();
-    int		y0 		= rect.y();
+    int		x0	     = rect.x();
+    int		y0	     = rect.y();
 
-    QColor	color		= parentView()->tileColor( _orig );
-    int		maxRed		= max( 0, color.red()   - ambientLight );
-    int		maxGreen	= max( 0, color.green() - ambientLight );
-    int		maxBlue		= max( 0, color.blue()  - ambientLight );
+    QColor	color	     = parentView()->tileColor( _orig );
+    int		maxRed	     = max( 0, color.red()   - ambientLight );
+    int		maxGreen     = max( 0, color.green() - ambientLight );
+    int		maxBlue	     = max( 0, color.blue()  - ambientLight );
 
     QImage image( rect.width(), rect.height(), 32 );
 
@@ -461,7 +449,7 @@ KTreemapTile::renderCushion()
 	    if ( green < 0 )	green = 0;
 	    if ( blue  < 0 )	blue  = 0;
 
-	    red   += ambientLight;
+	    red	  += ambientLight;
 	    green += ambientLight;
 	    blue  += ambientLight;
 
@@ -476,8 +464,7 @@ KTreemapTile::renderCushion()
 }
 
 
-void
-KTreemapTile::ensureContrast( QImage & image )
+void TreemapTile::ensureContrast( QImage & image )
 {
     if ( image.width() > 5 )
     {
@@ -541,8 +528,7 @@ KTreemapTile::ensureContrast( QImage & image )
 }
 
 
-QRgb
-KTreemapTile::contrastingColor( QRgb col )
+QRgb TreemapTile::contrastingColor( QRgb col )
 {
     if ( qGray( col ) < 128 )
 	return qRgb( qRed( col ) * 2, qGreen( col ) * 2, qBlue( col ) * 2 );
@@ -553,22 +539,21 @@ KTreemapTile::contrastingColor( QRgb col )
 
 
 
-KCushionSurface::KCushionSurface()
+CushionSurface::CushionSurface()
 {
-    _xx2 	= 0.0;
-    _xx1 	= 0.0;
-    _yy2 	= 0.0;
-    _yy1 	= 0.0;
-    _height	= CushionHeight;
+    _xx2    = 0.0;
+    _xx1    = 0.0;
+    _yy2    = 0.0;
+    _yy1    = 0.0;
+    _height = CushionHeight;
 }
 
 
-void
-KCushionSurface::addRidge( KOrientation dim, double height, const QRect & rect )
+void CushionSurface::addRidge( Orientation dim, double height, const QRect & rect )
 {
     _height = height;
 
-    if ( dim == KTreemapHorizontal )
+    if ( dim == TreemapHorizontal )
     {
 	_xx2 = squareRidge( _xx2, _height, rect.left(), rect.right() );
 	_xx1 = linearRidge( _xx1, _height, rect.left(), rect.right() );
@@ -581,8 +566,7 @@ KCushionSurface::addRidge( KOrientation dim, double height, const QRect & rect )
 }
 
 
-double
-KCushionSurface::squareRidge( double squareCoefficient, double height, int x1, int x2 )
+double CushionSurface::squareRidge( double squareCoefficient, double height, int x1, int x2 )
 {
     if ( x2 != x1 ) // Avoid division by zero
 	squareCoefficient -= 4.0 * height / ( x2 - x1 );
@@ -591,8 +575,7 @@ KCushionSurface::squareRidge( double squareCoefficient, double height, int x1, i
 }
 
 
-double
-KCushionSurface::linearRidge( double linearCoefficient, double height, int x1, int x2 )
+double CushionSurface::linearRidge( double linearCoefficient, double height, int x1, int x2 )
 {
     if ( x2 != x1 ) // Avoid division by zero
 	linearCoefficient += 4.0 * height * ( x2 + x1 ) / ( x2 - x1 );

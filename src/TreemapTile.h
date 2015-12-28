@@ -1,31 +1,32 @@
 /*
- *   File name:	KTreemapTile.h
- *   Summary:	High level classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   File name: TreemapTile.h
+ *   Summary:	Treemap rendering for QDirStat
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
-#ifndef KTreemapTile_h
-#define KTreemapTile_h
+#ifndef TreemapTile_h
+#define TreemapTile_h
 
 
-#include <qcanvas.h>
-#include <qrect.h>
-#include "DirTreeIterators.h"
+#include <QGraphicsView>
+#include <QRect>
+
+#include "FileInfoIterator.h"
 
 
 namespace QDirStat
 {
     class FileInfo;
-    class KTreemapView;
+    class TreemapView;
 
-    enum KOrientation
+    enum Orientation
     {
-	KTreemapHorizontal,
-	KTreemapVertical,
-	KTreemapAuto
+	TreemapHorizontal,
+	TreemapVertical,
+	TreemapAuto
     };
 
 
@@ -34,19 +35,19 @@ namespace QDirStat
      * parameters for the cushion surface. The height of each point of such a
      * surface is defined as:
      *
-     *     z(x, y) = a*x^2 + b*y^2 + c*x + d*y
+     *	   z(x, y) = a*x^2 + b*y^2 + c*x + d*y
      * or
-     *     z(x, y) = xx2*x^2 + yy2*y^2 + xx1*x + yy1*y
+     *	   z(x, y) = xx2*x^2 + yy2*y^2 + xx1*x + yy1*y
      *
      * to better keep track of which coefficient belongs where.
      **/
-    class KCushionSurface
+    class CushionSurface
     {
     public:
 	/**
 	 * Constructor. All polynome coefficients are set to 0.
 	 **/
-	KCushionSurface();
+	CushionSurface();
 
 	/**
 	 * Adds a ridge of the specified height in dimension 'dim' within
@@ -59,7 +60,7 @@ namespace QDirStat
 	 * If you don't want to get all that involved: The coefficients are
 	 * changed in some way.
 	 **/
-	void addRidge( KOrientation dim, double height, const QRect & rect );
+	void addRidge( Orientation dim, double height, const QRect & rect );
 
 	/**
 	 * Set the cushion's height.
@@ -113,7 +114,7 @@ namespace QDirStat
 	double _yy2, _yy1;
 	double _height;
 
-    }; // class KCushionSurface
+    }; // class CushionSurface
 
 
 
@@ -125,7 +126,7 @@ namespace QDirStat
      *
      * @short Basic building block of a treemap
      **/
-    class KTreemapTile:	public QCanvasRectangle
+    class TreemapTile:	public QGraphicsRect
     {
     public:
 
@@ -136,11 +137,11 @@ namespace QDirStat
 	 * 'orientation' is the direction for further subdivision. 'Auto'
 	 * selects the wider direction inside 'rect'.
 	 **/
-	KTreemapTile( KTreemapView *		parentView,
-		      KTreemapTile *		parentTile,
-		      FileInfo *		orig,
-		      const QRect &		rect,
-		      KOrientation		orientation = KTreemapAuto );
+	TreemapTile( TreemapView * parentView,
+		     TreemapTile * parentTile,
+		     FileInfo	 * orig,
+		     const QRect & rect,
+		     Orientation   orientation = TreemapAuto );
 
     protected:
 
@@ -148,18 +149,18 @@ namespace QDirStat
 	 * Alternate constructor: Like the above, but explicitly specify a
 	 * cushion surface rather than using the parent's.
 	 **/
-	KTreemapTile( KTreemapView *		parentView,
-		      KTreemapTile *		parentTile,
-		      FileInfo *		orig,
-		      const QRect &		rect,
-		      const KCushionSurface &	cushionSurface,
-		      KOrientation		orientation = KTreemapAuto );
+	TreemapTile( TreemapView	  * parentView,
+		     TreemapTile	  * parentTile,
+		     FileInfo		  * orig,
+		     const QRect	  & rect,
+		     const CushionSurface & cushionSurface,
+		     Orientation	    orientation = TreemapAuto );
 
     public:
 	/**
 	 * Destructor.
 	 **/
-	virtual ~KTreemapTile();
+	virtual ~TreemapTile();
 
 
 	/**
@@ -169,19 +170,19 @@ namespace QDirStat
 	FileInfo * orig() const { return _orig; }
 
 	/**
-	 * Returns the parent @ref KTreemapView.
+	 * Returns the parent @ref TreemapView.
 	 **/
-	KTreemapView * parentView() const { return _parentView; }
+	TreemapView * parentView() const { return _parentView; }
 
 	/**
-	 * Returns the parent @ref KTreemapTile or 0 if there is none.
+	 * Returns the parent @ref TreemapTile or 0 if there is none.
 	 **/
-	KTreemapTile * parentTile() const { return _parentTile; }
+	TreemapTile * parentTile() const { return _parentTile; }
 
 	/**
 	 * Returns this tile's cushion surface parameters.
 	 **/
-	KCushionSurface & cushionSurface() { return _cushionSurface; }
+	CushionSurface & cushionSurface() { return _cushionSurface; }
 
 
     protected:
@@ -189,8 +190,8 @@ namespace QDirStat
 	/**
 	 * Create children (sub-tiles) of this tile.
 	 **/
-	void createChildren	( const QRect &	rect,
-				  KOrientation	orientation );
+	void createChildren	( const QRect & rect,
+				  Orientation	orientation );
 
 	/**
 	 * Create children (sub-tiles) using the simple treemap algorithm:
@@ -199,8 +200,8 @@ namespace QDirStat
 	 * of the specified rectangle. This algorithm is very fast, but often
 	 * results in very thin, elongated tiles.
 	 **/
-	void createChildrenSimple( const QRect &	rect,
-				   KOrientation		orientation );
+	void createChildrenSimple( const QRect & rect,
+				   Orientation	 orientation );
 
 	/**
 	 * Create children using the "squarified treemaps" algorithm as
@@ -239,17 +240,17 @@ namespace QDirStat
 	 *
 	 * 'scale' is the scaling factor between file sizes and pixels.
 	 **/
-	FileInfoList squarify( const QRect & 			rect,
-				double				scale,
-				FileInfoSortedBySizeIterator & it   );
+	FileInfoList squarify( const QRect & rect,
+			       double	     scale,
+			       FileInfoSortedBySizeIterator & it   );
 
 	/**
 	 * Lay out all members of 'row' within 'rect' along its longer side.
 	 * Returns the new rectangle with the layouted area subtracted.
 	 **/
-	QRect layoutRow( const QRect &		rect,
-			 double			scale,
-			 FileInfoList & 	row );
+	QRect layoutRow( const QRect  & rect,
+			 double		scale,
+			 FileInfoList & row );
 
 	/**
 	 * Draw the tile.
@@ -260,7 +261,7 @@ namespace QDirStat
 
 	/**
 	 * Render a cushion as described in "cushioned treemaps" by Jarke
-	 * J. van Wijk and Huub van de Wetering  of the TU Eindhoven, NL.
+	 * J. van Wijk and Huub van de Wetering	 of the TU Eindhoven, NL.
 	 **/
 	QPixmap renderCushion();
 
@@ -284,24 +285,24 @@ namespace QDirStat
 	 **/
 	void init();
 
-	
+
     protected:
 
 	// Data members
 
-	KTreemapView *	_parentView;
-	KTreemapTile *	_parentTile;
+	TreemapView *	_parentView;
+	TreemapTile *	_parentTile;
 	FileInfo *	_orig;
-	KCushionSurface	_cushionSurface;
+	CushionSurface	_cushionSurface;
 	QPixmap		_cushion;
 
-    }; // class KTreemapTile
+    }; // class TreemapTile
 
 }	// namespace QDirStat
 
 
 
-inline kdbgstream & operator<< ( kdbgstream & stream, const QRect & rect )
+inline QTextStream & operator<< ( QTextStream & stream, const QRect & rect )
 {
     stream << "("
 	   << rect.width() << "x" << rect.height()
@@ -312,5 +313,5 @@ inline kdbgstream & operator<< ( kdbgstream & stream, const QRect & rect )
 }
 
 
-#endif // ifndef KTreemapTile_h
+#endif // ifndef TreemapTile_h
 
