@@ -1,6 +1,6 @@
 # QDirStat src-unported
 
-Updated: 2015-12-06
+Updated: 2015-12-28
 
 This directory contains source files from the old KDirStat project that are
 waiting to be ported to QDirStat.
@@ -50,9 +50,20 @@ the hassle with using the KDE libs.
 
 ### The Hard Parts
 
-- Treemap stuff. This was based on Qt 3 QCanvas which is completely gone. From
-  Qt 4 on, there is QGraphicsView / QGraphicsScene. There is no simple 1:1
-  match between that and old QCanvas. This might be quite a challenge.
+- Model/view for the dir tree view: Done.
+
+- Treemaps: Done. This went much smoother than I had expected (see below).
+
+That means no less than the hard parts are all done; from now on, it's just a
+lot of moderately difficult or simple stuff, but still lots of that.
+
+I don't see any more possible showstoppers ahead. Model/view had almost become
+one since those classes don't do shit with regard to supporting developers to
+find problems, they just happily do crazy stuff if any minor thing is wrong.
+
+The road to an official QDirStat 1.0 release is free (albeit still somewhat
+bumpy).
+
 
 ### Simple and Moderately Difficult Parts
 
@@ -112,3 +123,8 @@ the hassle with using the KDE libs.
 
 - Tree model based on QAbstractItemModel. This can be connected to a number of
   Qt's view classes, in particular QTreeView.
+
+- Treemap stuff. This was based on Qt 3 QCanvas which is completely gone. From
+  Qt 4 on, there is QGraphicsView / QGraphicsScene. I had feared that would be
+  quite a challenge, but this went much smoother than I had expected.
+
