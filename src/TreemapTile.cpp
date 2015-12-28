@@ -411,7 +411,7 @@ QPixmap TreemapTile::renderCushion()
 {
     QRectF rect = QGraphicsRectItem::rect();
 
-    if ( rect.width() < 1 || rect.height() < 1 )
+    if ( rect.width() < 1.0 || rect.height() < 1.0 )
 	return QPixmap();
 
     // logDebug() << endl;
@@ -444,7 +444,7 @@ QPixmap TreemapTile::renderCushion()
     int		maxGreen     = max( 0, color.green() - ambientLight );
     int		maxBlue	     = max( 0, color.blue()  - ambientLight );
 
-    QImage image( (int) rect.width(), (int) rect.height(), QImage::Format_RGB32 );
+    QImage image( qRound( rect.width() ), qRound( rect.height() ), QImage::Format_RGB32 );
 
     for ( y = 0; y < rect.height(); y++ )
     {
