@@ -36,7 +36,7 @@ TreemapTile::TreemapTile( TreemapView *	 parentView,
     _parentTile( parentTile ),
     _orig( orig )
 {
-    logDebug() << "Creating tile without cushion for " << orig << " at " << rect << endl;
+    logDebug() << "Creating tile without cushion for " << orig << "  " << rect << endl;
     init();
 
     if ( parentTile )
@@ -58,7 +58,7 @@ TreemapTile::TreemapTile( TreemapView *		 parentView,
     _orig( orig ),
     _cushionSurface( cushionSurface )
 {
-    logDebug() << "Creating cushioned tile for " << orig << " at " << rect << endl;
+    // logDebug() << "Creating cushioned tile for " << orig << "  " << rect << endl;
     init();
 
     // Intentionally not copying the parent's cushion surface!
@@ -345,7 +345,7 @@ void TreemapTile::paint( QPainter			* painter,
 			 const QStyleOptionGraphicsItem * option,
 			 QWidget			* widget )
 {
-    // logDebug() << _orig << endl;
+    // logDebug() << _orig << "  " << rect() << endl;
 
     QSizeF size = rect().size();
 
@@ -359,6 +359,7 @@ void TreemapTile::paint( QPainter			* painter,
     {
 	if ( _orig->isDir() || _orig->isDotEntry() )
 	{
+	    painter->setBrush( _parentView->dirFillColor() );
 	    QGraphicsRectItem::paint( painter, option, widget );
 	}
 	else
@@ -369,7 +370,7 @@ void TreemapTile::paint( QPainter			* painter,
 	    QRectF rect = QGraphicsRectItem::rect();
 
 	    if ( ! _cushion.isNull() )
-		painter->drawPixmap( rect, _cushion, rect );
+		painter->drawPixmap( rect.x(), rect.y(), _cushion );
 
 	    if ( _parentView->forceCushionGrid() )
 	    {
@@ -390,7 +391,9 @@ void TreemapTile::paint( QPainter			* painter,
 	painter->setPen( QPen( _parentView->outlineColor(), 1 ) );
 
 	if ( _orig->isDir() || _orig->isDotEntry() )
+        {
 	    painter->setBrush( _parentView->dirFillColor() );
+        }
 	else
 	{
 	    painter->setBrush( _parentView->tileColor( _orig ) );

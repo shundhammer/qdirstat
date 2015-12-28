@@ -69,11 +69,6 @@ void TreemapView::setDirTree( DirTree * newTree )
     _tree = newTree;
     CHECK_PTR( _tree );
 
-#if 0
-    if ( initialSize.isValid() )
-        resize( initialSize );
-#endif
-
     if ( _tree->firstToplevel() )
     {
         if ( ! _rootTile )
@@ -146,13 +141,12 @@ void TreemapView::readConfig()
     _squarify           = true;
     _doCushionShading   = true;
     _ensureContrast     = true;
-    // _forceCushionGrid   = false;
+    _forceCushionGrid   = false;
     _forceCushionGrid   = true; // DEBUG
     _minTileSize        = DefaultMinTileSize;
 
     _highlightColor     = Qt::red;
-    // _cushionGridColor   = QColor( 0x80, 0x80, 0x80 );
-    _cushionGridColor   = Qt::green; // DEBUG
+    _cushionGridColor   = QColor( 0x80, 0x80, 0x80 );
     _outlineColor       = Qt::black;
     _fileFillColor      = QColor( 0xde, 0x8d, 0x53 );
     _dirFillColor       = QColor( 0x10, 0x7d, 0xb4 );
@@ -532,7 +526,7 @@ void TreemapView::resizeEvent( QResizeEvent * event )
 
 void TreemapView::selectTile( TreemapTile * tile )
 {
-    // logDebug() << endl;
+    logDebug() << tile << endl;
 
     TreemapTile * oldSelection = _selectedTile;
     _selectedTile = tile;
@@ -560,30 +554,25 @@ void TreemapView::selectTile( TreemapTile * tile )
 
 void TreemapView::selectTile( FileInfo * node )
 {
+    logDebug() << node << endl;
+
     selectTile( findTile( node ) );
 }
 
 
 
-TreemapTile * TreemapView::findTile( FileInfo * node )
+TreemapTile * TreemapView::findTile( FileInfo * fileInfo )
 {
-    if ( ! node )
+    if ( ! fileInfo || ! scene() )
         return 0;
 
-#if 0
-    QCanvasItemList itemList = canvas()->allItems();
-    QCanvasItemList::Iterator it = itemList.begin();
-
-    while ( it != itemList.end() )
+    foreach ( QGraphicsItem * graphicsItem, scene()->items() )
     {
-        TreemapTile * tile = dynamic_cast<TreemapTile *> (*it);
+        TreemapTile * tile = dynamic_cast<TreemapTile *>(graphicsItem);
 
-        if ( tile && tile->orig() == node )
+        if ( tile && tile->orig() == fileInfo )
             return tile;
-
-        ++it;
     }
-#endif
 
     return 0;
 }
