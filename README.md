@@ -5,7 +5,7 @@ Qt-based directory statistics: KDirStat without any KDE -- from the original KDi
 
 License: GPL V2
 
-Updated: 2015-12-27
+Updated: 2015-12-28
 
 
 ## Overview
@@ -16,12 +16,19 @@ latest Qt 5.
 
 ## Screenshot
 
-![Screenshot of first preview 2015-12-20:]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-2015-12-20-001.png)
-_First preview 2015-12-20 -- see also section "Development Status" below_
+![Screenshot of preview 2015-12-28:]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png)
+_Preview 2015-12-28 -- see also section "Development Status" below_
 
 
 ## Current Development Status
+
+- 2015-12-28  Treemaps are back. It's not perfect yet, but the basic rendering
+              works.  I admit I was somewhat scared of that part, but the
+              transition from Qt3 QCanvas to QGraphicsScene / QGraphicsView
+              went much smoother than I had expected. I am very glad I don't
+              have to dig deep into the math again with those cushioned
+              treemaps; that part worked completely unchanged. :-)
 
 - 2015-12-27  The tree view now supports _extended_ selection, i.e. you can
 	      shift-click to select a range of items or ctrl-click to select or
