@@ -12,6 +12,7 @@
 
 
 #include <QGraphicsView>
+#include <QGraphicsRectItem>
 
 
 #define MinAmbientLight		   0
@@ -36,23 +37,40 @@ namespace QDirStat
     class TreemapSelectionRect;
     class DirTree;
     class FileInfo;
+    class SelectionModel;
+    
 
+    /**
+     * View widget that displays a DirTree as a treemap.
+     **/
     class TreemapView:	public QGraphicsView
     {
 	Q_OBJECT
 
     public:
 	/**
-	 * Constructor.
+	 * Constructor. Remember to set the directory tree with setDirTree()
+	 * and the selection model with setSelectionModel() after creating this
+	 * widget.
 	 **/
-	TreemapView( DirTree *	   tree,
-		     QWidget *	   parent      = 0,
-		     const QSize & initialSize = QSize() );
+	TreemapView( QWidget * parent = 0 );
 
 	/**
 	 * Destructor.
 	 **/
 	virtual ~TreemapView();
+
+        /**
+         * Set the directory tree to work on. Without this, this widget will
+         * not display anything.
+         **/
+        void setDirTree( DirTree * tree );
+
+        /**
+         * Set the selection model. This is important to synchronize current /
+         * selected items between a DirTreeView and this TreemapView.
+         **/
+        void setSelectionModel( SelectionModel * selectionModel );
 
 	/**
 	 * Returns the (topmost) treemap tile at the specified position
@@ -151,13 +169,6 @@ namespace QDirStat
 	void clear();
 
 	/**
-	 * Delete all items of a QCanvas.
-	 *
-	 * Strangely enough, QCanvas itself does not provide such a function.
-	 **/
-	static void deleteAllItems( QCanvas * canvas );
-
-	/**
 	 * Notification that a dir tree node has been deleted.
 	 **/
 	void deleteNotify( FileInfo * node );
@@ -173,8 +184,8 @@ namespace QDirStat
 	 * Rebuild the treemap with 'newRoot' as the new root and the specified
 	 * size. If 'newSize' is (0, 0), visibleSize() is used.
 	 **/
-	void rebuildTreemap( FileInfo *	   newRoot,
-			     const QSize & newSize = QSize() );
+	void rebuildTreemap( FileInfo *	    newRoot,
+			     const QSizeF & newSize = QSize() );
 
 	/**
 	 * Returns the visible size of the viewport presuming no scrollbars are
@@ -220,12 +231,6 @@ namespace QDirStat
 	 * selected tile, false if not.
 	 **/
 	bool canSelectParent() const;
-
-	/**
-	 * Returns 'true' if the treemap is automatically resized to fit into
-	 * the available space, 'false' if not.
-	 **/
-	bool autoResize() const { return _autoResize; }
 
 	/**
 	 * Returns 'true' if treemap tiles are to be squarified upon creation,
@@ -334,6 +339,7 @@ namespace QDirStat
 
     protected:
 
+#if 0
 	/**
 	 * Catch mouse click - emits a selectionChanged() signal.
 	 **/
@@ -346,6 +352,7 @@ namespace QDirStat
 	 *	middle button double-click rebuilds treemap.
 	 **/
 	virtual void contentsMouseDoubleClickEvent( QMouseEvent * event );
+#endif
 
 	/**
 	 * Resize the treemap view. Suppress the treemap contents if the size
@@ -367,13 +374,13 @@ namespace QDirStat
 
 	// Data members
 
-	DirTree *		_tree;
-	TreemapTile *		_rootTile;
-	TreemapTile *		_selectedTile;
+	DirTree        *	_tree;
+        SelectionModel *        _selectionModel;
+	TreemapTile    *	_rootTile;
+	TreemapTile    *	_selectedTile;
 	TreemapSelectionRect *	_selectionRect;
 	QString			_savedRootUrl;
 
-	bool   _autoResize;
 	bool   _squarify;
 	bool   _doCushionShading;
 	bool   _forceCushionGrid;
@@ -407,14 +414,14 @@ namespace QDirStat
      * on top (i.e., great z-height) of everything else. The rectangle is
      * transparent, so the treemap tile contents remain visible.
      **/
-    class TreemapSelectionRect: public QGraphicsRect
+    class TreemapSelectionRect: public QGraphicsRectItem
     {
     public:
 
 	/**
 	 * Constructor.
 	 **/
-	TreemapSelectionRect( QCanvas * canvas, const QColor & color );
+	TreemapSelectionRect( QGraphicsScene * scene, const QColor & color );
 
 	/**
 	 * Highlight the specified treemap tile: Resize this selection

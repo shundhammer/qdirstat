@@ -17,6 +17,8 @@
 #include "TreemapView.h"
 #include "FileInfoIterator.h"
 #include "DirTreeView.h"
+#include "Exception.h"
+#include "Logger.h"
 
 
 using namespace QDirStat;
@@ -24,15 +26,15 @@ using std::max;
 using std::min;
 
 
-TreemapTile::TreemapTile( TreemapView * parentView,
-			  TreemapTile * parentTile,
-			  FileInfo *	orig,
-			  const QRect & rect,
-			  Orientation	orientation )
-    : QGraphicsRect( rect, parentView->canvas() )
-    , _parentView( parentView )
-    , _parentTile( parentTile )
-    , _orig( orig )
+TreemapTile::TreemapTile( TreemapView *	 parentView,
+			  TreemapTile *	 parentTile,
+			  FileInfo *	 orig,
+			  const QRectF & rect,
+			  Orientation	 orientation ):
+    QGraphicsRectItem( rect, parentTile ),
+    _parentView( parentView ),
+    _parentTile( parentTile ),
+    _orig( orig )
 {
     init();
 
@@ -46,14 +48,14 @@ TreemapTile::TreemapTile( TreemapView * parentView,
 TreemapTile::TreemapTile( TreemapView *		 parentView,
 			  TreemapTile *		 parentTile,
 			  FileInfo    *		 orig,
-			  const QRect &		 rect,
+			  const QRectF &	 rect,
 			  const CushionSurface & cushionSurface,
-			  Orientation		 orientation )
-    : QGraphicsRect( rect, parentView->canvas() )
-    , _parentView( parentView )
-    , _parentTile( parentTile )
-    , _orig( orig )
-    , _cushionSurface( cushionSurface )
+			  Orientation		 orientation ):
+    QGraphicsRectItem( rect, parentTile ),
+    _parentView( parentView ),
+    _parentTile( parentTile ),
+    _orig( orig ),
+    _cushionSurface( cushionSurface )
 {
     init();
 
@@ -73,24 +75,18 @@ void TreemapTile::init()
 {
     // Set up height (z coordinate) - one level higher than the parent so this
     // will be closer to the foreground.
-    //
-    // Note that this must happen before any children are created.
-    // I found that out the hard way. ;-)
 
-    setZ( _parentTile ? ( _parentTile->z() + 1.0 ) : 0.0 );
+    setZValue( _parentTile ? ( _parentTile->zValue() + 1.0 ) : 0.0 );
 
-    setBrush( QColor( 0x60, 0x60, 0x60 ) );
-    setPen( NoPen );
+    _parentView->scene()->addItem( this );
 
-    show();	// QCanvasItems are invisible by default!
-
-    // logDebug() << "Creating treemap tile for " << _orig
-    //		  << " size " << formatSize( _orig->totalSize() ) << endl;
+    logDebug() << "Creating treemap tile for " << _orig
+	       << " size " << formatSize( _orig->totalSize() ) << endl;
 }
 
 
-void TreemapTile::createChildren( const QRect & rect,
-				  Orientation	orientation )
+void TreemapTile::createChildren( const QRectF & rect,
+				  Orientation	 orientation )
 {
     if ( _orig->totalSize() == 0 )	// Prevent division by zero
 	return;
@@ -102,8 +98,8 @@ void TreemapTile::createChildren( const QRect & rect,
 }
 
 
-void TreemapTile::createChildrenSimple( const QRect & rect,
-					Orientation   orientation )
+void TreemapTile::createChildrenSimple( const QRectF & rect,
+					Orientation    orientation )
 {
 
     Orientation dir	 = orientation;
@@ -132,15 +128,15 @@ void TreemapTile::createChildrenSimple( const QRect & rect,
 
 	if ( childSize >= _parentView->minTileSize() )
 	{
-	    QRect childRect;
+	    QRectF childRect;
 
 	    if ( dir == TreemapHorizontal )
-		childRect = QRect( rect.x() + offset, rect.y(), childSize, rect.height() );
+		childRect = QRectF( rect.x() + offset, rect.y(), childSize, rect.height() );
 	    else
-		childRect = QRect( rect.x(), rect.y() + offset, rect.width(), childSize );
+		childRect = QRectF( rect.x(), rect.y() + offset, rect.width(), childSize );
 
 	    TreemapTile * tile = new TreemapTile( _parentView, this, *it, childRect, childDir );
-	    CHECK_PTR( tile );
+	    CHECK_NEW( tile );
 
 	    tile->cushionSurface().addRidge( dir,
 					     _cushionSurface.height() * _parentView->heightScaleFactor(),
@@ -155,7 +151,7 @@ void TreemapTile::createChildrenSimple( const QRect & rect,
 }
 
 
-void TreemapTile::createSquarifiedChildren( const QRect & rect )
+void TreemapTile::createSquarifiedChildren( const QRectF & rect )
 {
     if ( _orig->totalSize() == 0 )
     {
@@ -174,8 +170,8 @@ void TreemapTile::createSquarifiedChildren( const QRect & rect )
     }
 #endif
 
-    FileInfoSortedBySizeIterator it( _orig, minSize, KDotEntryAsSubDir );
-    QRect childrenRect = rect;
+    FileInfoSortedBySizeIterator it( _orig, minSize );
+    QRectF childrenRect = rect;
 
     while ( *it )
     {
@@ -185,7 +181,7 @@ void TreemapTile::createSquarifiedChildren( const QRect & rect )
 }
 
 
-FileInfoList TreemapTile::squarify( const QRect & rect,
+FileInfoList TreemapTile::squarify( const QRectF & rect,
 				    double	  scale,
 				    FileInfoSortedBySizeIterator & it )
 {
@@ -250,9 +246,9 @@ FileInfoList TreemapTile::squarify( const QRect & rect,
 
 
 
-QRect TreemapTile::layoutRow( const QRect &   rect,
-			      double	      scale,
-			      FileInfoList &  row )
+QRectF TreemapTile::layoutRow( const QRectF & rect,
+			       double	      scale,
+			       FileInfoList & row )
 {
     if ( row.isEmpty() )
 	return rect;
@@ -266,7 +262,12 @@ QRect TreemapTile::layoutRow( const QRect &   rect,
 
     // This row's secondary length is determined by the area (the number of
     // pixels) to be allocated for all of the row's items.
-    FileSize sum = row.sumTotalSizes();
+
+    FileSize sum = 0;
+
+    foreach ( FileInfo * item, row )
+	sum += item->totalSize();
+
     int secondary = (int) ( sum * scale / primary );
 
     if ( sum == 0 )	// Prevent division by zero.
@@ -288,9 +289,10 @@ QRect TreemapTile::layoutRow( const QRect &   rect,
 
     int offset = 0;
     int remaining = primary;
-    FileInfoListIterator it( row );
+    FileInfoList::const_iterator it  = row.constBegin();
+    FileInfoList::const_iterator end = row.constEnd();
 
-    while ( *it )
+    while ( it != end )
     {
 	int childSize = (int) ( (*it)->totalSize() / (double) sum * primary + 0.5 );
 
@@ -301,15 +303,15 @@ QRect TreemapTile::layoutRow( const QRect &   rect,
 
 	if ( childSize >= _parentView->minTileSize() )
 	{
-	    QRect childRect;
+	    QRectF childRect;
 
 	    if ( dir == TreemapHorizontal )
-		childRect = QRect( rect.x() + offset, rect.y(), childSize, secondary );
+		childRect = QRectF( rect.x() + offset, rect.y(), childSize, secondary );
 	    else
-		childRect = QRect( rect.x(), rect.y() + offset, secondary, childSize );
+		childRect = QRectF( rect.x(), rect.y() + offset, secondary, childSize );
 
 	    TreemapTile * tile = new TreemapTile( _parentView, this, *it, childRect, rowCushionSurface );
-	    CHECK_PTR( tile );
+	    CHECK_NEW( tile );
 
 	    tile->cushionSurface().addRidge( dir,
 					     rowCushionSurface.height() * _parentView->heightScaleFactor(),
@@ -323,12 +325,12 @@ QRect TreemapTile::layoutRow( const QRect &   rect,
 
     // Subtract the layouted area from the rectangle.
 
-    QRect newRect;
+    QRectF newRect;
 
     if ( dir == TreemapHorizontal )
-	newRect = QRect( rect.x(), rect.y() + secondary, rect.width(), rect.height() - secondary );
+	newRect = QRectF( rect.x(), rect.y() + secondary, rect.width(), rect.height() - secondary );
     else
-	newRect = QRect( rect.x() + secondary, rect.y(), rect.width() - secondary, rect.height() );
+	newRect = QRectF( rect.x() + secondary, rect.y(), rect.width() - secondary, rect.height() );
 
     // logDebug() << "Left over:" << " " << newRect << " " << _orig << endl;
 
@@ -336,67 +338,72 @@ QRect TreemapTile::layoutRow( const QRect &   rect,
 }
 
 
-void TreemapTile::drawShape( QPainter & painter )
+void TreemapTile::paint( QPainter			* painter,
+			 const QStyleOptionGraphicsItem * option,
+			 QWidget			* widget )
 {
-    // logDebug() << "drawShape() " << _orig << endl;
+    // logDebug() << _orig << endl;
 
-    QSize size = rect().size();
+    QSizeF size = rect().size();
 
-    if ( size.height() < 1 || size.width() < 1 )
+    if ( size.height() < 1.0 || size.width() < 1.0 )
 	return;
+
+    painter->setBrush( QColor( 0x60, 0x60, 0x60 ) );
+    painter->setPen( Qt::NoPen );
 
     if ( _parentView->doCushionShading() )
     {
 	if ( _orig->isDir() || _orig->isDotEntry() )
 	{
-	    QCanvasRectangle::drawShape( painter );
+	    QGraphicsRectItem::paint( painter, option, widget );
 	}
 	else
 	{
 	    if ( _cushion.isNull() )
 		_cushion = renderCushion();
 
-	    QRect rect = QCanvasRectangle::rect();
+	    QRectF rect = QGraphicsRectItem::rect();
 
 	    if ( ! _cushion.isNull() )
-		painter.drawPixmap( rect, _cushion );
+		painter->drawPixmap( rect, _cushion, rect );
 
 	    if ( _parentView->forceCushionGrid() )
 	    {
 		// Draw a clearly visible boundary
 
-		painter.setPen( QPen( _parentView->cushionGridColor(), 1 ) );
+		painter->setPen( QPen( _parentView->cushionGridColor(), 1 ) );
 
 		if ( rect.x() > 0 )
-		    painter.drawLine( rect.topLeft(), rect.bottomLeft() + QPoint( 0, 1 ) );
+		    painter->drawLine( rect.topLeft(), rect.bottomLeft() + QPointF( 0.0, 1.0 ) );
 
 		if ( rect.y() > 0 )
-		    painter.drawLine( rect.topLeft(), rect.topRight() + QPoint( 1, 0 ) );
+		    painter->drawLine( rect.topLeft(), rect.topRight() + QPointF( 1.0, 0.0 ) );
 	    }
 	}
     }
     else	// No cushion shading, use plain tiles
     {
-	painter.setPen( QPen( _parentView->outlineColor(), 1 ) );
+	painter->setPen( QPen( _parentView->outlineColor(), 1 ) );
 
 	if ( _orig->isDir() || _orig->isDotEntry() )
-	    painter.setBrush( _parentView->dirFillColor() );
+	    painter->setBrush( _parentView->dirFillColor() );
 	else
 	{
-	    painter.setBrush( _parentView->tileColor( _orig ) );
+	    painter->setBrush( _parentView->tileColor( _orig ) );
 #if 0
-	    painter.setBrush( _parentView->fileFillColor() );
+	    painter->setBrush( _parentView->fileFillColor() );
 #endif
 	}
 
-	QCanvasRectangle::drawShape( painter );
+	QGraphicsRectItem::paint( painter, option, widget );
     }
 }
 
 
 QPixmap TreemapTile::renderCushion()
 {
-    QRect rect = QCanvasRectangle::rect();
+    QRectF rect = QGraphicsRectItem::rect();
 
     if ( rect.width() < 1 || rect.height() < 1 )
 	return QPixmap();
@@ -431,7 +438,7 @@ QPixmap TreemapTile::renderCushion()
     int		maxGreen     = max( 0, color.green() - ambientLight );
     int		maxBlue	     = max( 0, color.blue()  - ambientLight );
 
-    QImage image( rect.width(), rect.height(), 32 );
+    QImage image( (int) rect.width(), (int) rect.height(), QImage::Format_RGB32 );
 
     for ( y = 0; y < rect.height(); y++ )
     {
@@ -460,7 +467,7 @@ QPixmap TreemapTile::renderCushion()
     if ( _parentView->ensureContrast() )
 	ensureContrast( image );
 
-    return QPixmap( image );
+    return QPixmap::fromImage( image );
 }
 
 
@@ -549,7 +556,7 @@ CushionSurface::CushionSurface()
 }
 
 
-void CushionSurface::addRidge( Orientation dim, double height, const QRect & rect )
+void CushionSurface::addRidge( Orientation dim, double height, const QRectF & rect )
 {
     _height = height;
 

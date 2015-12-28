@@ -584,7 +584,7 @@ namespace QDirStat
 	// Keep this short in order to use as little memory as possible -
 	// there will be a _lot_ of entries of this kind!
 
-	short		_magic;                 // magic number to detect if this object is valid
+	short		_magic;			// magic number to detect if this object is valid
 	QString		_name;			// the file name (without path!)
 	bool		_isLocalFile  :1;	// flag: local or remote file?
 	bool		_isSparseFile :1;	// (cache) flag: sparse file (file with "holes")?
@@ -612,30 +612,30 @@ namespace QDirStat
     class FileInfoSet: public QSet<FileInfo *>
     {
     public:
-        FileInfoSet():
-            QSet<FileInfo *>()
-            {}
+	FileInfoSet():
+	    QSet<FileInfo *>()
+	    {}
 
-        /**
-         * Return 'true' if the set contains any dot entry.
-         **/
-        bool containsDotEntry() const;
+	/**
+	 * Return 'true' if the set contains any dot entry.
+	 **/
+	bool containsDotEntry() const;
 
-        /**
-         * Return 'true' if the set contains any directory item.
-         **/
-        bool containsDir() const;
+	/**
+	 * Return 'true' if the set contains any directory item.
+	 **/
+	bool containsDir() const;
 
-        /**
-         * Return 'true' if the set contains any file item.
-         **/
-        bool containsFile() const;
+	/**
+	 * Return 'true' if the set contains any file item.
+	 **/
+	bool containsFile() const;
 
-        /**
-         * Return 'true' if the set contains any special file,
-         * i.e., a char or block device, a FIFO, or a socket.
-         **/
-        bool containsSpecial() const;
+	/**
+	 * Return 'true' if the set contains any special file,
+	 * i.e., a char or block device, a FIFO, or a socket.
+	 **/
+	bool containsSpecial() const;
     };
 
 

@@ -11,8 +11,8 @@
 #define TreemapTile_h
 
 
-#include <QGraphicsView>
-#include <QRect>
+#include <QGraphicsRectItem>
+#include <QRectF>
 
 #include "FileInfoIterator.h"
 
@@ -60,7 +60,7 @@ namespace QDirStat
 	 * If you don't want to get all that involved: The coefficients are
 	 * changed in some way.
 	 **/
-	void addRidge( Orientation dim, double height, const QRect & rect );
+	void addRidge( Orientation dim, double height, const QRectF & rect );
 
 	/**
 	 * Set the cushion's height.
@@ -73,7 +73,8 @@ namespace QDirStat
 	double height() const { return _height; }
 
 	/**
-	 * Returns the polynomal coefficient of the second order for X direction.
+	 * Returns the polynomal coefficient of the second order for X
+	 * direction.
 	 **/
 	double xx2() const { return _xx2; }
 
@@ -83,7 +84,8 @@ namespace QDirStat
 	double xx1() const { return _xx1; }
 
 	/**
-	 * Returns the polynomal coefficient of the second order for Y direction.
+	 * Returns the polynomal coefficient of the second order for Y
+	 * direction.
 	 **/
 	double yy2() const { return _yy2; }
 
@@ -126,7 +128,7 @@ namespace QDirStat
      *
      * @short Basic building block of a treemap
      **/
-    class TreemapTile:	public QGraphicsRect
+    class TreemapTile:	public QGraphicsRectItem
     {
     public:
 
@@ -137,11 +139,11 @@ namespace QDirStat
 	 * 'orientation' is the direction for further subdivision. 'Auto'
 	 * selects the wider direction inside 'rect'.
 	 **/
-	TreemapTile( TreemapView * parentView,
-		     TreemapTile * parentTile,
-		     FileInfo	 * orig,
-		     const QRect & rect,
-		     Orientation   orientation = TreemapAuto );
+	TreemapTile( TreemapView  * parentView,
+		     TreemapTile  * parentTile,
+		     FileInfo	  * orig,
+		     const QRectF & rect,
+		     Orientation    orientation = TreemapAuto );
 
     protected:
 
@@ -152,7 +154,7 @@ namespace QDirStat
 	TreemapTile( TreemapView	  * parentView,
 		     TreemapTile	  * parentTile,
 		     FileInfo		  * orig,
-		     const QRect	  & rect,
+		     const QRectF	  & rect,
 		     const CushionSurface & cushionSurface,
 		     Orientation	    orientation = TreemapAuto );
 
@@ -190,8 +192,8 @@ namespace QDirStat
 	/**
 	 * Create children (sub-tiles) of this tile.
 	 **/
-	void createChildren	( const QRect & rect,
-				  Orientation	orientation );
+	void createChildren( const QRectF & rect,
+                             Orientation    orientation );
 
 	/**
 	 * Create children (sub-tiles) using the simple treemap algorithm:
@@ -200,8 +202,8 @@ namespace QDirStat
 	 * of the specified rectangle. This algorithm is very fast, but often
 	 * results in very thin, elongated tiles.
 	 **/
-	void createChildrenSimple( const QRect & rect,
-				   Orientation	 orientation );
+	void createChildrenSimple( const QRectF & rect,
+				   Orientation	  orientation );
 
 	/**
 	 * Create children using the "squarified treemaps" algorithm as
@@ -229,7 +231,7 @@ namespace QDirStat
 	 * and, most important, don't need to be sorted by size (which has a
 	 * cost of O(n*ln(n)) in the best case, so reducing n helps a lot).
 	 **/
-	void createSquarifiedChildren( const QRect & rect );
+	void createSquarifiedChildren( const QRectF & rect );
 
 	/**
 	 * Squarify as many children as possible: Try to squeeze members
@@ -240,7 +242,7 @@ namespace QDirStat
 	 *
 	 * 'scale' is the scaling factor between file sizes and pixels.
 	 **/
-	FileInfoList squarify( const QRect & rect,
+	FileInfoList squarify( const QRectF & rect,
 			       double	     scale,
 			       FileInfoSortedBySizeIterator & it   );
 
@@ -248,17 +250,19 @@ namespace QDirStat
 	 * Lay out all members of 'row' within 'rect' along its longer side.
 	 * Returns the new rectangle with the layouted area subtracted.
 	 **/
-	QRect layoutRow( const QRect  & rect,
-			 double		scale,
-			 FileInfoList & row );
+	QRectF layoutRow( const QRectF	& rect,
+			  double	  scale,
+			  FileInfoList  & row );
 
-	/**
-	 * Draw the tile.
-	 *
-	 * Reimplemented from QCanvasRectangle.
-	 **/
-	virtual void drawShape( QPainter & painter );
-
+        /**
+         * Paint this tile.
+         *
+         * Reimplemented from QGraphicsRectItem.
+         **/
+	virtual void paint( QPainter                       * painter,
+                            const QStyleOptionGraphicsItem * option,
+                            QWidget                        * widget = 0);
+        
 	/**
 	 * Render a cushion as described in "cushioned treemaps" by Jarke
 	 * J. van Wijk and Huub van de Wetering	 of the TU Eindhoven, NL.
@@ -302,7 +306,7 @@ namespace QDirStat
 
 
 
-inline QTextStream & operator<< ( QTextStream & stream, const QRect & rect )
+inline QTextStream & operator<< ( QTextStream & stream, const QRectF & rect )
 {
     stream << "("
 	   << rect.width() << "x" << rect.height()
