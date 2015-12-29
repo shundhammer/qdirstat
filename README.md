@@ -3,6 +3,8 @@ Qt-based directory statistics: KDirStat without any KDE -- from the original KDi
 
 (c) 2015 Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
 
+Target Platforms: Linux, BSD, Unix-like systems
+
 License: GPL V2
 
 Updated: 2015-12-29
