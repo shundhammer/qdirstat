@@ -21,6 +21,7 @@ namespace QDirStat
 {
     class FileInfo;
     class TreemapView;
+    class HighlightRect;
 
     enum Orientation
     {
@@ -193,7 +194,7 @@ namespace QDirStat
 	 * Create children (sub-tiles) of this tile.
 	 **/
 	void createChildren( const QRectF & rect,
-                             Orientation    orientation );
+			     Orientation    orientation );
 
 	/**
 	 * Create children (sub-tiles) using the simple treemap algorithm:
@@ -252,17 +253,27 @@ namespace QDirStat
 	 **/
 	QRectF layoutRow( const QRectF	& rect,
 			  double	  scale,
-			  FileInfoList  & row );
+			  FileInfoList	& row );
 
-        /**
-         * Paint this tile.
-         *
-         * Reimplemented from QGraphicsRectItem.
-         **/
-	virtual void paint( QPainter                       * painter,
-                            const QStyleOptionGraphicsItem * option,
-                            QWidget                        * widget = 0);
-        
+	/**
+	 * Paint this tile.
+	 *
+	 * Reimplemented from QGraphicsRectItem.
+	 **/
+	virtual void paint( QPainter			   * painter,
+			    const QStyleOptionGraphicsItem * option,
+			    QWidget			   * widget = 0) Q_DECL_OVERRIDE;
+
+	/**
+	 * Notification that item attributes (such as the 'selected' state)
+	 * have changed.
+	 *
+	 * Reimplemented from QGraphicsItem.
+	 **/
+	virtual QVariant itemChange( GraphicsItemChange	  change,
+				     const QVariant	& value) Q_DECL_OVERRIDE;
+
+
 	/**
 	 * Render a cushion as described in "cushioned treemaps" by Jarke
 	 * J. van Wijk and Huub van de Wetering	 of the TU Eindhoven, NL.
@@ -299,6 +310,7 @@ namespace QDirStat
 	FileInfo *	_orig;
 	CushionSurface	_cushionSurface;
 	QPixmap		_cushion;
+	HighlightRect * _highlighter;
 
     }; // class TreemapTile
 

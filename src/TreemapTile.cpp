@@ -69,7 +69,8 @@ TreemapTile::TreemapTile( TreemapView *		 parentView,
 
 TreemapTile::~TreemapTile()
 {
-    // NOP
+    if ( _highlighter )
+	delete _highlighter;
 }
 
 
@@ -82,12 +83,14 @@ void TreemapTile::init()
 
     setBrush( QColor( 0x60, 0x60, 0x60 ) );
     setPen( Qt::NoPen );
+    setFlags( ItemIsSelectable );
+    _highlighter = 0;
 
     if ( ! _parentTile )
-        _parentView->scene()->addItem( this );
+	_parentView->scene()->addItem( this );
 
     // logDebug() << "Creating treemap tile for " << _orig
-    //            << " size " << formatSize( _orig->totalSize() ) << endl;
+    //		  << " size " << formatSize( _orig->totalSize() ) << endl;
 }
 
 
@@ -348,7 +351,7 @@ void TreemapTile::paint( QPainter			* painter,
 			 const QStyleOptionGraphicsItem * option,
 			 QWidget			* widget )
 {
-    // logDebug() << _orig << "  " << rect() << endl;
+    // logDebug() << _orig << "	 " << rect() << endl;
 
     QSizeF size = rect().size();
 
@@ -371,6 +374,23 @@ void TreemapTile::paint( QPainter			* painter,
 	    if ( ! _cushion.isNull() )
 		painter->drawPixmap( rect.topLeft(), _cushion );
 
+	    if ( isSelected() && ! _orig->hasChildren() )
+	    {
+		// Highlight this tile. This makes only sense if this is a leaf
+		// tile (i.e., if the corresponding FileInfo doesn't have any
+		// children), because otherwise the children will obscure this
+		// tile anyway. In that case, we have to rely on a
+		// HighlightRect to be created. But we can save some memory if
+		// we don't do that for every tile, so we draw that highlight
+		// frame manually if this is a leaf tile.
+
+		QRectF selectionRect = rect;
+		selectionRect.setSize( rect.size() - QSize( 1.0, 1.0 ) );
+		painter->setBrush( Qt::NoBrush );
+		painter->setPen( QPen( _parentView->selectedItemsColor(), 1 ) );
+		painter->drawRect( selectionRect );
+	    }
+
 	    if ( _parentView->forceCushionGrid() )
 	    {
 		// Draw a clearly visible boundary
@@ -390,9 +410,9 @@ void TreemapTile::paint( QPainter			* painter,
 	painter->setPen( QPen( _parentView->outlineColor(), 1 ) );
 
 	if ( _orig->isDir() || _orig->isDotEntry() )
-        {
+	{
 	    painter->setBrush( _parentView->dirFillColor() );
-        }
+	}
 	else
 	{
 	    painter->setBrush( _parentView->tileColor( _orig ) );
@@ -543,6 +563,40 @@ QRgb TreemapTile::contrastingColor( QRgb col )
 	return qRgb( qRed( col ) * 2, qGreen( col ) * 2, qBlue( col ) * 2 );
     else
 	return qRgb( qRed( col ) / 2, qGreen( col ) / 2, qBlue( col ) / 2 );
+}
+
+
+QVariant TreemapTile::itemChange( GraphicsItemChange   change,
+				  const QVariant     & value)
+{
+    // logDebug() << _orig << endl;
+
+    if ( change == ItemSelectedChange )
+    {
+	bool selected = value.toBool();
+	logDebug() << _orig << ( selected ? " is selected" : " is deselected" ) << endl;
+
+	if ( _orig->hasChildren() )
+	{
+	    if ( ! selected && _highlighter )
+		_highlighter->hide();
+
+	    if ( selected )
+	    {
+		if ( ! _highlighter )
+		{
+		    logDebug() << "Creating highlighter for " << _orig << endl;
+		    _highlighter = new HighlightRect( this, _parentView->selectedItemsColor() );
+		    CHECK_NEW( _highlighter );
+		}
+
+		if ( ! _highlighter->isVisible() )
+		    _highlighter->show();
+	    }
+	}
+    }
+
+    return QGraphicsRectItem::itemChange( change, value );
 }
 
 

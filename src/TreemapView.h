@@ -14,6 +14,8 @@
 #include <QGraphicsView>
 #include <QGraphicsRectItem>
 
+#include "FileInfo.h"
+
 
 #define MinAmbientLight		   0
 #define MaxAmbientLight		   200
@@ -34,11 +36,10 @@ class QMouseEvent;
 namespace QDirStat
 {
     class TreemapTile;
-    class TreemapSelectionRect;
+    class HighlightRect;
     class DirTree;
-    class FileInfo;
     class SelectionModel;
-    
+
 
     /**
      * View widget that displays a DirTree as a treemap.
@@ -60,17 +61,17 @@ namespace QDirStat
 	 **/
 	virtual ~TreemapView();
 
-        /**
-         * Set the directory tree to work on. Without this, this widget will
-         * not display anything.
-         **/
-        void setDirTree( DirTree * tree );
+	/**
+	 * Set the directory tree to work on. Without this, this widget will
+	 * not display anything.
+	 **/
+	void setDirTree( DirTree * tree );
 
-        /**
-         * Set the selection model. This is important to synchronize current /
-         * selected items between a DirTreeView and this TreemapView.
-         **/
-        void setSelectionModel( SelectionModel * selectionModel );
+	/**
+	 * Set the selection model. This is important to synchronize current /
+	 * selected items between a DirTreeView and this TreemapView.
+	 **/
+	void setSelectionModel( SelectionModel * selectionModel );
 
 	/**
 	 * Returns the (topmost) treemap tile at the specified position
@@ -85,10 +86,9 @@ namespace QDirStat
 	virtual QSize minimumSizeHint() const { return QSize( 0, 0 ); }
 
 	/**
-	 * Returns this treemap view's currently selected treemap tile or 0 if
-	 * there is none.
+	 * Returns this treemap view's current item tile or 0 if there is none.
 	 **/
-	TreemapTile * selectedTile() const { return _selectedTile; }
+	TreemapTile * currentItem() const { return _currentItem; }
 
 
 	/**
@@ -120,18 +120,29 @@ namespace QDirStat
     public slots:
 
 	/**
-	 * Make a treemap tile this treemap's selected tile.
+	 * Update the selected items that have been selected in another view.
+	 **/
+	void updateSelection( const FileInfoSet & newSelection );
+
+	/**
+	 * Update the current item that has been changed in another view.
+	 **/
+	void updateCurrentItem( FileInfo * currentItem );
+
+	/**
+	 * Make a treemap tile this treemap's current item.
 	 * 'tile' may be 0. In this case, only the previous selection is
 	 * deselected.
 	 **/
-	void selectTile( TreemapTile * tile );
+	void setCurrentItem( TreemapTile * tile );
 
 	/**
 	 * Search the treemap for a tile with the specified FileInfo node and
-	 * select that tile if it is found. If nothing is found or if 'node' is
-	 * 0, the previously selected tile is deselected.
+	 * make that tile the current item if it is found. If nothing is found
+	 * or if 'node' is 0, the highlighting is removed from the previous
+	 * current item.
 	 **/
-	void selectTile( FileInfo * node );
+	void setCurrentItem( FileInfo * node );
 
 	/**
 	 * Zoom in one level towards the currently selected treemap tile:
@@ -267,6 +278,11 @@ namespace QDirStat
 	const QColor & cushionGridColor() const { return _cushionGridColor; }
 
 	/**
+	 * Return the frame color for selected items.
+	 **/
+	const QColor & selectedItemsColor() const { return _selectedItemsColor; }
+
+	/**
 	 * Returns the outline color to use if cushion shading is not used.
 	 **/
 	const QColor & outlineColor() const { return _outlineColor; }
@@ -374,12 +390,12 @@ namespace QDirStat
 
 	// Data members
 
-	DirTree        *	_tree;
-        SelectionModel *        _selectionModel;
-	TreemapTile    *	_rootTile;
-	TreemapTile    *	_selectedTile;
-	TreemapSelectionRect *	_selectionRect;
-	QString			_savedRootUrl;
+	DirTree		* _tree;
+	SelectionModel	* _selectionModel;
+	TreemapTile	* _rootTile;
+	TreemapTile	* _currentItem;
+	HighlightRect * _currentItemRect;
+	QString		  _savedRootUrl;
 
 	bool   _squarify;
 	bool   _doCushionShading;
@@ -387,7 +403,8 @@ namespace QDirStat
 	bool   _ensureContrast;
 	int    _minTileSize;
 
-	QColor _highlightColor;
+	QColor _currentItemColor;
+	QColor _selectedItemsColor;
 	QColor _cushionGridColor;
 	QColor _outlineColor;
 	QColor _fileFillColor;
@@ -406,22 +423,34 @@ namespace QDirStat
 
 
     /**
-     * Transparent rectangle to make a treemap tile clearly visible as
-     * "selected". Leaf tiles could do that on their own, but higher-level
-     * tiles (corresponding to directories) are obscured for the most part, so
-     * only a small portion (if any) of their highlighted outline could be
-     * visible. This selection rectangle simply draws a two-pixel red outline
-     * on top (i.e., great z-height) of everything else. The rectangle is
-     * transparent, so the treemap tile contents remain visible.
+     * Transparent rectangle to make a treemap tile clearly visible as the
+     * current item or as selected.
+     *
+     * Leaf tiles can do that themselves, but directory tiles are typically
+     * completely obscured by their children, so no highlight border they draw
+     * themselves will ever become visible.
+     *
+     * This highlight rectangle simply draws a colored red outline on top
+     * (i.e., great z-height) of everything else. The rectangle is transparent,
+     * so the treemap tile contents remain visible.
      **/
-    class TreemapSelectionRect: public QGraphicsRectItem
+    class HighlightRect: public QGraphicsRectItem
     {
     public:
 
 	/**
-	 * Constructor.
+	 * Create a highlight rectangle for the entire scene. This is most
+	 * useful for the current item.
 	 **/
-	TreemapSelectionRect( QGraphicsScene * scene, const QColor & color );
+	HighlightRect( QGraphicsScene * scene, const QColor & color, int lineWidth = 2 );
+
+	/**
+	 * Create a highlight rectangle for one specific tile and highlight it
+	 * right away. This is most useful for selected items if more than one
+	 * item is selected. The z-height of this is lower than for the
+	 * scene-wide highlight rectangle.
+	 **/
+	HighlightRect( TreemapTile * tile, const QColor & color, int lineWidth = 2 );
 
 	/**
 	 * Highlight the specified treemap tile: Resize this selection
