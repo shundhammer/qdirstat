@@ -131,6 +131,12 @@ among them.
 
 ### New Stuff
 
+- The tree view now supports _extended_ selection, i.e. you can shift-click to
+select a range of items or ctrl-click to select or deselect individual
+items. This was the most requested feature for the last KDirStat. This means
+you can now select more than one item at once to move it to the trash can
+etc. (once cleanup actions are back).
+
 - Icons are now compiled into the source thanks to Qt's resource system; now
 it's just one binary file, and nothing will go missing. No more dozens of
 little files to handle.
@@ -154,6 +160,17 @@ changed in the general area of item views or the other widgets used here. If
 anybody needs Qt4 support and is willing to invest the time, (reasonably small)
 patches for Qt4 compatibility are welcome -- see also section "Contributing"
 below.
+
+
+### Promised New Features
+
+- There will no longer be a limit on cleanup actions. Users will be able to add
+new ones to their hearts' content. In the old KDirStat, there were 8
+predefined and 10 user cleanup actions.
+
+- Treemap colors, the respective file categories (pictures, videos, compressed
+archives, ...) and their filename extensions (*.jpg, *.png; *.mp4, *.wmv, ...)
+will be configurable.
 
 
 ### Windows / MacOS X Compatibility
