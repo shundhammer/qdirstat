@@ -80,6 +80,9 @@ void TreemapTile::init()
 
     setZValue( _parentTile ? ( _parentTile->zValue() + 1.0 ) : 0.0 );
 
+    setBrush( QColor( 0x60, 0x60, 0x60 ) );
+    setPen( Qt::NoPen );
+
     if ( ! _parentTile )
         _parentView->scene()->addItem( this );
 
@@ -352,14 +355,10 @@ void TreemapTile::paint( QPainter			* painter,
     if ( size.height() < 1.0 || size.width() < 1.0 )
 	return;
 
-    painter->setBrush( QColor( 0x60, 0x60, 0x60 ) );
-    painter->setPen( Qt::NoPen );
-
     if ( _parentView->doCushionShading() )
     {
 	if ( _orig->isDir() || _orig->isDotEntry() )
 	{
-	    painter->setBrush( _parentView->dirFillColor() );
 	    QGraphicsRectItem::paint( painter, option, widget );
 	}
 	else
@@ -370,7 +369,7 @@ void TreemapTile::paint( QPainter			* painter,
 	    QRectF rect = QGraphicsRectItem::rect();
 
 	    if ( ! _cushion.isNull() )
-		painter->drawPixmap( rect.x(), rect.y(), _cushion );
+		painter->drawPixmap( rect.topLeft(), _cushion );
 
 	    if ( _parentView->forceCushionGrid() )
 	    {
@@ -397,9 +396,6 @@ void TreemapTile::paint( QPainter			* painter,
 	else
 	{
 	    painter->setBrush( _parentView->tileColor( _orig ) );
-#if 0
-	    painter->setBrush( _parentView->fileFillColor() );
-#endif
 	}
 
 	QGraphicsRectItem::paint( painter, option, widget );

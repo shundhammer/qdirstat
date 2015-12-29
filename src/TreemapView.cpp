@@ -142,7 +142,6 @@ void TreemapView::readConfig()
     _doCushionShading   = true;
     _ensureContrast     = true;
     _forceCushionGrid   = false;
-    _forceCushionGrid   = true; // DEBUG
     _minTileSize        = DefaultMinTileSize;
 
     _highlightColor     = Qt::red;
