@@ -25,6 +25,11 @@ _Preview 2015-12-28 -- see also section "Development Status" below_
 
 ## Current Development Status
 
+**Work in Progress**
+
+Usable, but still pre-Alpha. Use at your own risk. You have been warned. ;-)
+
+
 - 2015-12-28  Treemaps are back. It's not perfect yet, but the basic rendering
               works.  I admit I was somewhat scared of that part, but the
               transition from Qt3 QCanvas to QGraphicsScene / QGraphicsView
