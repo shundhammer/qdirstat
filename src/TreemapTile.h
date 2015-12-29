@@ -17,6 +17,9 @@
 #include "FileInfoIterator.h"
 
 
+class QGraphicsSceneMouseEvent;
+
+
 namespace QDirStat
 {
     class FileInfo;
@@ -165,7 +168,6 @@ namespace QDirStat
 	 **/
 	virtual ~TreemapTile();
 
-
 	/**
 	 * Returns the original @ref FileInfo item that corresponds to this
 	 * treemap tile.
@@ -273,6 +275,12 @@ namespace QDirStat
 	virtual QVariant itemChange( GraphicsItemChange	  change,
 				     const QVariant	& value) Q_DECL_OVERRIDE;
 
+        /**
+         * Mouse press event.
+	 *
+	 * Reimplemented from QGraphicsItem.
+         **/
+        virtual void mousePressEvent( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Render a cushion as described in "cushioned treemaps" by Jarke
@@ -314,19 +322,31 @@ namespace QDirStat
 
     }; // class TreemapTile
 
+
+
+    inline QTextStream & operator<< ( QTextStream & stream, TreemapTile * tile )
+    {
+        if ( tile )
+            stream << tile->orig();
+        else
+            stream << "<NULL TreemapTile *>";
+
+        return stream;
+    }
+
+
+    inline QTextStream & operator<< ( QTextStream & stream, const QRectF & rect )
+    {
+        stream << "QRectF("
+               << rect.width() << "x" << rect.height()
+               << "+" << rect.x() << "+" << rect.y()
+               << ")";
+
+        return stream;
+    }
+
 }	// namespace QDirStat
 
-
-
-inline QTextStream & operator<< ( QTextStream & stream, const QRectF & rect )
-{
-    stream << "QRectF("
-	   << rect.width() << "x" << rect.height()
-	   << "+" << rect.x() << "+" << rect.y()
-	   << ")";
-
-    return stream;
-}
 
 
 #endif // ifndef TreemapTile_h

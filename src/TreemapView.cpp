@@ -58,9 +58,9 @@ void TreemapView::clear()
     if ( scene() )
 	qDeleteAll( scene()->items() );
 
-    _currentItem  = 0;
+    _currentItem     = 0;
     _currentItemRect = 0;
-    _rootTile	   = 0;
+    _rootTile	     = 0;
 }
 
 
@@ -534,13 +534,10 @@ void TreemapView::resizeEvent( QResizeEvent * event )
 
 void TreemapView::setCurrentItem( TreemapTile * tile )
 {
-    logDebug() << tile << endl;
+    logDebug() << tile->orig() << endl;
 
-    TreemapTile * oldSelection = _currentItem;
+    TreemapTile * oldCurrent = _currentItem;
     _currentItem = tile;
-
-
-    // Handle selection (highlight) rectangle
 
     if ( _currentItem )
     {
@@ -551,11 +548,10 @@ void TreemapView::setCurrentItem( TreemapTile * tile )
     if ( _currentItemRect )
 	_currentItemRect->highlight( _currentItem );
 
-    update(); // FIXME: really needed?
-
-    if ( oldSelection != _currentItem )
+    if ( oldCurrent != _currentItem )
     {
-	emit selectionChanged( _currentItem ? _currentItem->orig() : 0 );
+        logDebug() << "Sending currentItemChanged " << _currentItem << endl;
+	emit currentItemChanged( _currentItem ? _currentItem->orig() : 0 );
     }
 }
 

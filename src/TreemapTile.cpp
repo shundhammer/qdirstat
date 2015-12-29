@@ -12,6 +12,7 @@
 
 #include <QImage>
 #include <QPainter>
+#include <QGraphicsSceneMouseEvent>
 
 #include "TreemapTile.h"
 #include "TreemapView.h"
@@ -36,7 +37,7 @@ TreemapTile::TreemapTile( TreemapView *	 parentView,
     _parentTile( parentTile ),
     _orig( orig )
 {
-    logDebug() << "Creating tile without cushion for " << orig << "  " << rect << endl;
+    // logDebug() << "Creating tile without cushion for " << orig << "  " << rect << endl;
     init();
 
     if ( parentTile )
@@ -89,7 +90,7 @@ void TreemapTile::init()
     if ( ! _parentTile )
 	_parentView->scene()->addItem( this );
 
-    // logDebug() << "Creating treemap tile for " << _orig
+    // logDebug() << "Creating treemap tile for " << this
     //		  << " size " << formatSize( _orig->totalSize() ) << endl;
 }
 
@@ -194,7 +195,7 @@ FileInfoList TreemapTile::squarify( const QRectF & rect,
 				    double	  scale,
 				    FileInfoSortedBySizeIterator & it )
 {
-    // logDebug() << "squarify() " << _orig << " " << rect << endl;
+    // logDebug() << "squarify() " << this << " " << rect << endl;
 
     FileInfoList row;
     int length = max( rect.width(), rect.height() );
@@ -341,7 +342,7 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
     else
 	newRect = QRectF( rect.x() + secondary, rect.y(), rect.width() - secondary, rect.height() );
 
-    // logDebug() << "Left over:" << " " << newRect << " " << _orig << endl;
+    // logDebug() << "Left over:" << " " << newRect << " " << this << endl;
 
     return newRect;
 }
@@ -351,7 +352,7 @@ void TreemapTile::paint( QPainter			* painter,
 			 const QStyleOptionGraphicsItem * option,
 			 QWidget			* widget )
 {
-    // logDebug() << _orig << "	 " << rect() << endl;
+    // logDebug() << this << "	 " << rect() << endl;
 
     QSizeF size = rect().size();
 
@@ -569,12 +570,12 @@ QRgb TreemapTile::contrastingColor( QRgb col )
 QVariant TreemapTile::itemChange( GraphicsItemChange   change,
 				  const QVariant     & value)
 {
-    // logDebug() << _orig << endl;
+    // logDebug() << this << endl;
 
     if ( change == ItemSelectedChange )
     {
 	bool selected = value.toBool();
-	logDebug() << _orig << ( selected ? " is selected" : " is deselected" ) << endl;
+	logDebug() << this << ( selected ? " is selected" : " is deselected" ) << endl;
 
 	if ( _orig->hasChildren() )
 	{
@@ -585,7 +586,7 @@ QVariant TreemapTile::itemChange( GraphicsItemChange   change,
 	    {
 		if ( ! _highlighter )
 		{
-		    logDebug() << "Creating highlighter for " << _orig << endl;
+		    logDebug() << "Creating highlighter for " << this << endl;
 		    _highlighter = new HighlightRect( this, _parentView->selectedItemsColor() );
 		    CHECK_NEW( _highlighter );
 		}
@@ -600,6 +601,21 @@ QVariant TreemapTile::itemChange( GraphicsItemChange   change,
 }
 
 
+void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
+{
+    QGraphicsRectItem::mouseReleaseEvent( event );
+
+    if ( event->button() == Qt::LeftButton )
+    {
+        logDebug() << this << " clicked" << endl;
+        _parentView->setCurrentItem( this );
+    }
+}
+
+
+//
+//---------------------------------------------------------------------------
+//
 
 
 CushionSurface::CushionSurface()

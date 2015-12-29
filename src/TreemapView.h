@@ -90,7 +90,6 @@ namespace QDirStat
 	 **/
 	TreemapTile * currentItem() const { return _currentItem; }
 
-
 	/**
 	 * Returns this treemap view's root treemap tile or 0 if there is none.
 	 **/
@@ -338,6 +337,11 @@ namespace QDirStat
 	 * Caution: 'item' may be 0 when the selection is cleared.
 	 **/
 	void selectionChanged( FileInfo * item );
+
+        /**
+         * Emitted when the current item changes.
+         **/
+        void currentItemChanged( FileInfo * newCurrent );
 
 	/**
 	 * Emitted when the treemap changes, e.g. is rebuilt, zoomed in, or
