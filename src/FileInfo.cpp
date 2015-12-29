@@ -445,7 +445,7 @@ QString QDirStat::formatSize( FileSize lSize )
 	    ++unitIndex;
 	}
 
-	sizeString.sprintf( "%.2f ", size );
+	sizeString.sprintf( "%.1f ", size );
 	sizeString += units.at( unitIndex );
     }
 

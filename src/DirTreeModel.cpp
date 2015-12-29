@@ -330,10 +330,15 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		    case NameCol:	  return item->name();
 		    case PercentBarCol:
 			{
-			    if ( item->parent() && item->parent()->isBusy() )
+			    if ( ( item->parent() && item->parent()->isBusy() ) ||
+                                 item == _tree->firstToplevel() )
+                            {
 				return -1.0;
+                            }
 			    else
+                            {
 				return item->subtreePercent();
+                            }
 			}
 		    case PercentNumCol:	  return item->subtreePercent();
 		    case TotalSizeCol:	  return item->totalSize();
@@ -515,7 +520,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	case NameCol:		return item->name();
 	case PercentBarCol:	return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
 	case OwnSizeCol:	return ownSizeColText( item );
-	case PercentNumCol:	return formatPercent( item->subtreePercent() );
+	case PercentNumCol:	return item == _tree->firstToplevel() ? QVariant() : formatPercent( item->subtreePercent() );
 	case LatestMTimeCol:	return formatTime( item->latestMtime() );
     }
 

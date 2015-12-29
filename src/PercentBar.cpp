@@ -81,7 +81,7 @@ void PercentBarDelegate::paint( QPainter		   * painter,
 		percent = 100.0f;
 	    }
 
-	    int depth = treeLevel( index ) - 1; // compensate for invisible root
+	    int depth = treeLevel( index ) - 2; // compensate for invisible root and toplevel
 	    int indentPixel  = ( depth * _treeView->indentation() ) / 2;
 	    QColor fillColor = _fillColors.at( depth % _fillColors.size() );
 
