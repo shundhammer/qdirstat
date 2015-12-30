@@ -102,8 +102,8 @@ void TreemapView::setSelectionModel( SelectionModel * selectionModel )
     connect( this,	      SIGNAL( selectionChanged( FileInfo * ) ),
 	     _selectionModel, SLOT  ( selectItem      ( FileInfo * ) ) );
 
-    connect( this,	      SIGNAL( selectionChanged( FileInfo * ) ),
-	     _selectionModel, SLOT  ( setCurrentItem  ( FileInfo * ) ) );
+    connect( this,	      SIGNAL( currentItemChanged( FileInfo * ) ),
+	     _selectionModel, SLOT  ( setCurrentItem    ( FileInfo * ) ) );
 
     connect( _selectionModel, SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
 	     this,	      SLOT  ( updateCurrentItem ( FileInfo *		 ) ) );
@@ -534,7 +534,7 @@ void TreemapView::resizeEvent( QResizeEvent * event )
 
 void TreemapView::setCurrentItem( TreemapTile * tile )
 {
-    logDebug() << tile->orig() << endl;
+    logDebug() << tile << endl;
 
     TreemapTile * oldCurrent = _currentItem;
     _currentItem = tile;

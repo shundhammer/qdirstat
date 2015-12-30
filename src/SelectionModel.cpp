@@ -133,6 +133,7 @@ void SelectionModel::extendSelection( FileInfo * item, bool clear )
 
 void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 {
+    logDebug() << item << endl;
     _currentItem = item;
 
     if ( item )
@@ -141,8 +142,12 @@ void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 
 	if ( index.isValid() )
 	{
-	    logDebug() << "Setting current to " << item << endl;
+	    logDebug() << "Setting current to " << index << endl;
 	    setCurrentIndex( index, select ? ( Current | Select | Rows ) : Current );
+	}
+	else
+	{
+	    logError() << "NOT FOUND in dir tree: " << item << endl;
 	}
     }
     else

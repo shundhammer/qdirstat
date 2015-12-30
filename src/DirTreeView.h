@@ -45,7 +45,16 @@ namespace QDirStat
 	 **/
 	virtual ~DirTreeView();
 
+
     protected:
+
+        /**
+         * Change the current item. Overwritten from QTreeView to make sure
+         * the branch of the new current item is expanded and scrolled to
+         * the visible area.
+         **/
+        virtual void currentChanged( const QModelIndex & current,
+                                     const QModelIndex & oldCurrent ) Q_DECL_OVERRIDE;
 
 	PercentBarDelegate	* _percentBarDelegate;
 

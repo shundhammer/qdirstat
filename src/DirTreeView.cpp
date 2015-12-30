@@ -10,6 +10,7 @@
 #include <QHeaderView>
 
 #include "DirTreeView.h"
+#include "DirTreeModel.h"
 #include "PercentBar.h"
 #include "DirTree.h"
 #include "Exception.h"
@@ -43,3 +44,13 @@ DirTreeView::~DirTreeView()
 {
     delete _percentBarDelegate;
 }
+
+
+void DirTreeView::currentChanged( const QModelIndex & current,
+                                  const QModelIndex & oldCurrent )
+{
+    logDebug() << "Setting new current to " << current << endl;
+    QTreeView::currentChanged( current, oldCurrent );
+    scrollTo( current );
+}
+
