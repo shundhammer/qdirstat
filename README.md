@@ -18,9 +18,9 @@ latest Qt 5.
 
 ## Screenshot
 
-![Screenshot of preview 2015-12-28:]
+![Screenshot of preview:]
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png)
-_Preview 2015-12-28 -- see also section "Development Status" below_
+_Preview screenshot -- see also section "Development Status" below_
 
 
 ## Current Development Status
