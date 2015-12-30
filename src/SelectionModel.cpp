@@ -131,6 +131,24 @@ void SelectionModel::extendSelection( FileInfo * item, bool clear )
 }
 
 
+void SelectionModel::setSelectedItems( const FileInfoSet & selectedItems )
+{
+    logDebug() << "Selecting " << selectedItems.size() << " items" << endl;
+
+    QItemSelection sel;
+
+    foreach ( FileInfo * item, selectedItems )
+    {
+	QModelIndex index = _dirTreeModel->modelIndex( item, 0 );
+
+	if ( index.isValid() )
+	     sel.merge( QItemSelection( index, index ), Select );
+    }
+
+    select( sel, Clear | Select | Rows );
+}
+
+
 void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 {
     logDebug() << item << endl;
@@ -179,24 +197,24 @@ SelectionModelProxy::SelectionModelProxy( SelectionModel * master, QObject * par
     QObject( parent )
 {
     connect( master, SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ),
-             this,   SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ) );
+	     this,   SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ) );
 
     connect( master, SIGNAL( currentChanged( QModelIndex, QModelIndex ) ),
-             this,   SIGNAL( currentChanged( QModelIndex, QModelIndex ) ) );
+	     this,   SIGNAL( currentChanged( QModelIndex, QModelIndex ) ) );
 
     connect( master, SIGNAL( currentColumnChanged( QModelIndex, QModelIndex ) ),
-             this,   SIGNAL( currentColumnChanged( QModelIndex, QModelIndex ) ) );
-    
-    connect( master, SIGNAL( currentRowChanged   ( QModelIndex, QModelIndex ) ),
-             this,   SIGNAL( currentRowChanged   ( QModelIndex, QModelIndex ) ) );
+	     this,   SIGNAL( currentColumnChanged( QModelIndex, QModelIndex ) ) );
+
+    connect( master, SIGNAL( currentRowChanged	 ( QModelIndex, QModelIndex ) ),
+	     this,   SIGNAL( currentRowChanged	 ( QModelIndex, QModelIndex ) ) );
 
     connect( master, SIGNAL( selectionChanged() ),
-             this,   SIGNAL( selectionChanged() ) );
+	     this,   SIGNAL( selectionChanged() ) );
 
     connect( master, SIGNAL( selectionChanged( FileInfoSet ) ),
-             this,   SIGNAL( selectionChanged( FileInfoSet ) ) );
-    
+	     this,   SIGNAL( selectionChanged( FileInfoSet ) ) );
+
     connect( master, SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
-             this,   SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ) );
+	     this,   SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ) );
 }
 

@@ -108,7 +108,7 @@ namespace QDirStat
 	 * Notice: This is an expensive operation since all treemap tiles need
 	 * to be searched.
 	 **/
-	TreemapTile * findTile( FileInfo * node );
+	TreemapTile * findTile( const FileInfo * node );
 
 	/**
 	 * Returns a suitable color for 'file' based on a set of internal rules

@@ -590,7 +590,7 @@ void TreemapView::updateSelection( const FileInfoSet & newSelection )
     SignalBlocker sigBlocker( this );
     scene()->clearSelection();
 
-    foreach ( FileInfo * item, newSelection )
+    foreach ( const FileInfo * item, newSelection )
     {
         logDebug() << "  Selected: " << item << endl;
 	TreemapTile * tile = findTile( item );
@@ -606,21 +606,19 @@ void TreemapView::sendSelection()
     if ( ! scene() )
         return;
 
-    SignalBlocker sigBlocker( _selectionModelProxy );
-    _selectionModel->clearSelection();
+    FileInfoSet selectedItems;
 
-    foreach ( QGraphicsItem * item, scene()->selectedItems() )
+    foreach ( const QGraphicsItem * item, scene()->selectedItems() )
     {
-        TreemapTile * tile = dynamic_cast<TreemapTile *>( item );
+        const TreemapTile * tile = dynamic_cast<const TreemapTile *>( item );
 
         if ( tile )
-            _selectionModel->extendSelection( tile->orig() );
+            selectedItems << tile->orig();
     }
 
-    if ( _currentItem )
-        _selectionModel->setCurrentItem( _currentItem->orig() );
-
-    // _selectionModel->dumpSelectedItems();
+    SignalBlocker sigBlocker( _selectionModelProxy );
+    _selectionModel->setSelectedItems( selectedItems );
+    _selectionModel->setCurrentItem( _currentItem ? _currentItem->orig() : 0 );
 }
 
 
@@ -635,7 +633,7 @@ void TreemapView::updateCurrentItem( FileInfo * currentItem )
 
 
 
-TreemapTile * TreemapView::findTile( FileInfo * fileInfo )
+TreemapTile * TreemapView::findTile( const FileInfo * fileInfo )
 {
     if ( ! fileInfo || ! scene() )
 	return 0;

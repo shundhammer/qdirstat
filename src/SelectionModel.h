@@ -85,6 +85,11 @@ namespace QDirStat
 	void extendSelection( FileInfo * item, bool clear = false );
 
 	/**
+	 * Set the selected items, i.e., replace the complete selection.
+	 **/
+	void setSelectedItems( const FileInfoSet  & selectedItems );
+
+	/**
 	 * Make 'item' the current item. This is different from the selection:
 	 * There is one current item (mostly for the keyboard focus), but there
 	 * can be any number of selected items.
