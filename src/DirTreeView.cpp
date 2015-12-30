@@ -11,6 +11,7 @@
 
 #include "DirTreeView.h"
 #include "DirTreeModel.h"
+#include "SelectionModel.h"
 #include "PercentBar.h"
 #include "DirTree.h"
 #include "Exception.h"
@@ -22,6 +23,9 @@ using namespace QDirStat;
 
 DirTreeView::DirTreeView( QWidget * parent ):
     QTreeView( parent )
+#if 0
+    , _selectionModelProxy(0)
+#endif
 {
     _percentBarDelegate = new PercentBarDelegate( this );
     CHECK_NEW( _percentBarDelegate );
@@ -47,10 +51,38 @@ DirTreeView::~DirTreeView()
 
 
 void DirTreeView::currentChanged( const QModelIndex & current,
-                                  const QModelIndex & oldCurrent )
+				  const QModelIndex & oldCurrent )
 {
     logDebug() << "Setting new current to " << current << endl;
     QTreeView::currentChanged( current, oldCurrent );
     scrollTo( current );
 }
 
+
+#if 0
+void DirTreeView::setSelectionModel( QItemSelectionModel * selectionModel )
+{
+    QTreeView::setSelectionModel( selectionModel );
+    selectionModel->disconnect( this );
+
+    if ( _selectionModelProxy )
+	delete _selectionModelProxy;
+
+    SelectionModel * master = dynamic_cast<SelectionModel *>( selectionModel );
+    CHECK_DYNAMIC_CAST( master, "SelectionModel *" );
+
+    _selectionModelProxy = new SelectionModelProxy( master, this );
+
+    connect( _selectionModelProxy, SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ),
+	     this,		   SLOT	 ( selectionChanged( QItemSelection, QItemSelection ) ) );
+
+    connect( _selectionModelProxy, SIGNAL( currentChanged( QModelIndex, QModelIndex ) ),
+	     this,		   SLOT	 ( currentChanged( QModelIndex, QModelIndex ) ) );
+
+    connect( _selectionModelProxy, SIGNAL( currentColumnChanged( QModelIndex, QModelIndex ) ),
+	     this,		   SLOT	 ( currentColumnChanged( QModelIndex, QModelIndex ) ) );
+
+    connect( _selectionModelProxy, SIGNAL( currentRowChanged( QModelIndex, QModelIndex ) ),
+	     this,		   SLOT	 ( currentRowChanged( QModelIndex, QModelIndex ) ) );
+}
+#endif

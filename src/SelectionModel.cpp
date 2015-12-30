@@ -171,3 +171,32 @@ void SelectionModel::dumpSelectedItems()
 }
 
 
+
+
+
+
+SelectionModelProxy::SelectionModelProxy( SelectionModel * master, QObject * parent ):
+    QObject( parent )
+{
+    connect( master, SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ),
+             this,   SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ) );
+
+    connect( master, SIGNAL( currentChanged( QModelIndex, QModelIndex ) ),
+             this,   SIGNAL( currentChanged( QModelIndex, QModelIndex ) ) );
+
+    connect( master, SIGNAL( currentColumnChanged( QModelIndex, QModelIndex ) ),
+             this,   SIGNAL( currentColumnChanged( QModelIndex, QModelIndex ) ) );
+    
+    connect( master, SIGNAL( currentRowChanged   ( QModelIndex, QModelIndex ) ),
+             this,   SIGNAL( currentRowChanged   ( QModelIndex, QModelIndex ) ) );
+
+    connect( master, SIGNAL( selectionChanged() ),
+             this,   SIGNAL( selectionChanged() ) );
+
+    connect( master, SIGNAL( selectionChanged( FileInfoSet ) ),
+             this,   SIGNAL( selectionChanged( FileInfoSet ) ) );
+    
+    connect( master, SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
+             this,   SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ) );
+}
+

@@ -39,6 +39,7 @@ namespace QDirStat
     class HighlightRect;
     class DirTree;
     class SelectionModel;
+    class SelectionModelProxy;
 
 
     /**
@@ -182,6 +183,11 @@ namespace QDirStat
 	 * Notification that a dir tree node has been deleted.
 	 **/
 	void deleteNotify( FileInfo * node );
+
+        /**
+         * Sync the selected items and the current item to the selection model.
+         **/
+        void sendSelection();
 
 	/**
 	 * Read some parameters from the config file
@@ -338,10 +344,10 @@ namespace QDirStat
 	 **/
 	void selectionChanged( FileInfo * item );
 
-        /**
-         * Emitted when the current item changes.
-         **/
-        void currentItemChanged( FileInfo * newCurrent );
+	/**
+	 * Emitted when the current item changes.
+	 **/
+	void currentItemChanged( FileInfo * newCurrent );
 
 	/**
 	 * Emitted when the treemap changes, e.g. is rebuilt, zoomed in, or
@@ -394,12 +400,13 @@ namespace QDirStat
 
 	// Data members
 
-	DirTree		* _tree;
-	SelectionModel	* _selectionModel;
-	TreemapTile	* _rootTile;
-	TreemapTile	* _currentItem;
-	HighlightRect * _currentItemRect;
-	QString		  _savedRootUrl;
+	DirTree		    * _tree;
+	SelectionModel	    * _selectionModel;
+	SelectionModelProxy * _selectionModelProxy;
+	TreemapTile	    * _rootTile;
+	TreemapTile	    * _currentItem;
+	HighlightRect	    * _currentItemRect;
+	QString		      _savedRootUrl;
 
 	bool   _squarify;
 	bool   _doCushionShading;

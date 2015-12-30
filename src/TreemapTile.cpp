@@ -575,7 +575,7 @@ QVariant TreemapTile::itemChange( GraphicsItemChange   change,
     if ( change == ItemSelectedChange )
     {
 	bool selected = value.toBool();
-	logDebug() << this << ( selected ? " is selected" : " is deselected" ) << endl;
+	// logDebug() << this << ( selected ? " is selected" : " is deselected" ) << endl;
 
 	if ( _orig->hasChildren() )
 	{
@@ -601,15 +601,17 @@ QVariant TreemapTile::itemChange( GraphicsItemChange   change,
 }
 
 
-void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
+void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 {
     QGraphicsRectItem::mouseReleaseEvent( event );
 
     if ( event->button() == Qt::LeftButton )
     {
-        logDebug() << this << " clicked" << endl;
+        logDebug() << this << " clicked; selected: " << isSelected() << endl;
         _parentView->setCurrentItem( this );
     }
+
+    _parentView->sendSelection();
 }
 
 

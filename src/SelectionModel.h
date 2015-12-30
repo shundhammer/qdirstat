@@ -101,7 +101,7 @@ namespace QDirStat
 	 * with this item, i.e. only this item is selected afterwards. If
 	 * 'select' is 'false', the selection remains unchanged.
 	 **/
-	void setCurrentItem( FileInfo * item, bool select = true );
+	void setCurrentItem( FileInfo * item, bool select = false );
 
 	/**
 	 * For debugging: Dump the currently selected items and the current
@@ -150,6 +150,69 @@ namespace QDirStat
 	bool		  _selectedItemsDirty;
 
     };	// class SelectionModel
+
+
+
+    /**
+     * Proxy class for SelectionModel: Forward the relevant selection signals
+     * to a receiver.
+     *
+     * The basic idea behind this is to avoid signal ping-pong between the
+     * SelectionModel and any number of conncected view widgets:
+     *
+     * View A sends a "selectionChanged()" signal to the SelectionModel, the
+     * SelectionModel sends that signal to all connected widgets - including
+     * back to view A which initiated it, which then sends the signal again to
+     * the model etc. etc.
+     *
+     * With this proxy class, the view connects the "changed" signals not from
+     * the SelectionModel to itself, but from the SelectionModelProxy (which in
+     * turn connects the signals transparently from the master SelectionModel).
+     *
+     * Now if view A sends the signal, it first blocks signals from its
+     * SelectionModelProxy (preferably using a SignalBlocker), sends the signal
+     * and unblocks signals again from the proxy. This means that view A does
+     * not receive its own signals, but all other connected widgets do.
+     *
+     * If we'd just block all signals from the SelectionModel, the other
+     * widgets would not get notified at all. With this approach, only the
+     * connections from one widget are disabled temporarily.
+     *
+     * Of course, each view has to create and set up its own proxy. They cannot
+     * be shared among views.
+     **/
+    class SelectionModelProxy: public QObject
+    {
+	Q_OBJECT
+
+    public:
+	/**
+	 * Creates a SelectionModelProxy. This automatically connects the
+	 * master SelectionModel's signals to the matching signals of this
+	 * object.
+	 *
+	 * 'parent' is the QObject tree parent for automatic deletion
+	 * of this object when the parent is deleted.
+	 **/
+	SelectionModelProxy( SelectionModel * master, QObject * parent = 0 );
+
+    signals:
+
+	// From QItemSelectionModel
+
+	void selectionChanged( const QItemSelection & selected, const QItemSelection & deselected );
+	void currentChanged	 ( const QModelIndex & current, const QModelIndex & previous );
+	void currentColumnChanged( const QModelIndex & current, const QModelIndex & previous );
+	void currentRowChanged	 ( const QModelIndex & current, const QModelIndex & previous );
+
+	// from SelectionModel
+
+	void selectionChanged();
+	void selectionChanged( const FileInfoSet & selectedItems );
+	void currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurrent );
+
+    };	// class SelectionModelProxy
+
 
 }	// namespace QDirStat
 

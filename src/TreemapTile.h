@@ -276,11 +276,11 @@ namespace QDirStat
 				     const QVariant	& value) Q_DECL_OVERRIDE;
 
         /**
-         * Mouse press event.
+         * Mouse event.
 	 *
 	 * Reimplemented from QGraphicsItem.
          **/
-        virtual void mousePressEvent( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
+        virtual void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Render a cushion as described in "cushioned treemaps" by Jarke

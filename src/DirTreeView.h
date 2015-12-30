@@ -27,6 +27,7 @@
 namespace QDirStat
 {
     class PercentBarDelegate;
+    class SelectionModelProxy;
 
 
     class DirTreeView: public QTreeView
@@ -45,6 +46,14 @@ namespace QDirStat
 	 **/
 	virtual ~DirTreeView();
 
+#if 0
+        /**
+         * Set the selection model.
+         *
+         * Reimplemented from QTreeView to use a SelectionModelProxy.
+         **/
+        virtual void setSelectionModel( QItemSelectionModel * selectionModel ) Q_DECL_OVERRIDE;
+#endif
 
     protected:
 
@@ -56,7 +65,12 @@ namespace QDirStat
         virtual void currentChanged( const QModelIndex & current,
                                      const QModelIndex & oldCurrent ) Q_DECL_OVERRIDE;
 
+        // Data members
+
 	PercentBarDelegate	* _percentBarDelegate;
+#if 0
+        SelectionModelProxy     * _selectionModelProxy;
+#endif
 
     };	// class DirTreeView
 
