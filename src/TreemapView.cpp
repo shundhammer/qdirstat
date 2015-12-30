@@ -101,7 +101,7 @@ void TreemapView::setSelectionModel( SelectionModel * selectionModel )
     CHECK_PTR( _selectionModel );
 
     if ( _selectionModelProxy )
-        delete _selectionModelProxy;
+	delete _selectionModelProxy;
 
     _selectionModelProxy = new SelectionModelProxy( selectionModel, this );
     CHECK_PTR( _selectionModelProxy );
@@ -110,16 +110,16 @@ void TreemapView::setSelectionModel( SelectionModel * selectionModel )
 	     _selectionModel, SLOT  ( selectItem      ( FileInfo * ) ) );
 
     connect( this,	      SIGNAL( currentItemChanged( FileInfo * ) ),
-	     _selectionModel, SLOT  ( setCurrentItem    ( FileInfo * ) ) );
+	     _selectionModel, SLOT  ( setCurrentItem	( FileInfo * ) ) );
 
 
     // Use the proxy for all receiving signals!
 
     connect( _selectionModelProxy, SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
-	     this,	           SLOT  ( updateCurrentItem ( FileInfo *		 ) ) );
+	     this,		   SLOT	 ( updateCurrentItem ( FileInfo *		 ) ) );
 
     connect( _selectionModelProxy, SIGNAL( selectionChanged( FileInfoSet ) ),
-	     this,	           SLOT  ( updateSelection ( FileInfoSet ) ) );
+	     this,		   SLOT	 ( updateSelection ( FileInfoSet ) ) );
 }
 
 
@@ -557,17 +557,17 @@ void TreemapView::setCurrentItem( TreemapTile * tile )
 
     if ( _currentItemRect )
     {
-        if ( _currentItem == _rootTile )
-            _currentItemRect->hide(); // Don't highlight the root tile
-        else
-            _currentItemRect->highlight( _currentItem );
+	if ( _currentItem == _rootTile )
+	    _currentItemRect->hide(); // Don't highlight the root tile
+	else
+	    _currentItemRect->highlight( _currentItem );
     }
 
     if ( oldCurrent != _currentItem )
     {
-        logDebug() << "Sending currentItemChanged " << _currentItem << endl;
+	logDebug() << "Sending currentItemChanged " << _currentItem << endl;
 
-        SignalBlocker sigBlocker( _selectionModelProxy ); // Prevent signal ping-pong
+	SignalBlocker sigBlocker( _selectionModelProxy ); // Prevent signal ping-pong
 	emit currentItemChanged( _currentItem ? _currentItem->orig() : 0 );
     }
 }
@@ -592,7 +592,7 @@ void TreemapView::updateSelection( const FileInfoSet & newSelection )
 
     foreach ( const FileInfo * item, newSelection )
     {
-        logDebug() << "  Selected: " << item << endl;
+	logDebug() << "	 Selected: " << item << endl;
 	TreemapTile * tile = findTile( item );
 
 	if ( tile )
@@ -604,21 +604,34 @@ void TreemapView::updateSelection( const FileInfoSet & newSelection )
 void TreemapView::sendSelection()
 {
     if ( ! scene() )
-        return;
-
-    FileInfoSet selectedItems;
-
-    foreach ( const QGraphicsItem * item, scene()->selectedItems() )
-    {
-        const TreemapTile * tile = dynamic_cast<const TreemapTile *>( item );
-
-        if ( tile )
-            selectedItems << tile->orig();
-    }
+	return;
 
     SignalBlocker sigBlocker( _selectionModelProxy );
-    _selectionModel->setSelectedItems( selectedItems );
-    _selectionModel->setCurrentItem( _currentItem ? _currentItem->orig() : 0 );
+    QList<QGraphicsItem *> selectedTiles = scene()->selectedItems();
+
+    if ( selectedTiles.size() == 1 && selectedTiles.first() == _currentItem )
+    {
+	// This is the most common case: One tile is selected.
+	// Reduce number of signals in that case.
+
+	_selectionModel->setCurrentItem( _currentItem->orig(),
+					 true ); // select
+    }
+    else // Multi-selection
+    {
+	FileInfoSet selectedItems;
+
+	foreach ( QGraphicsItem * item, selectedTiles )
+	{
+	    TreemapTile * tile = dynamic_cast<TreemapTile *>( item );
+
+	    if ( tile )
+		selectedItems << tile->orig();
+	}
+
+	_selectionModel->setSelectedItems( selectedItems );
+	_selectionModel->setCurrentItem( _currentItem ? _currentItem->orig() : 0 );
+    }
 }
 
 
