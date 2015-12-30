@@ -546,7 +546,12 @@ void TreemapView::setCurrentItem( TreemapTile * tile )
     }
 
     if ( _currentItemRect )
-	_currentItemRect->highlight( _currentItem );
+    {
+        if ( _currentItem == _rootTile )
+            _currentItemRect->hide(); // Don't highlight the root tile
+        else
+            _currentItemRect->highlight( _currentItem );
+    }
 
     if ( oldCurrent != _currentItem )
     {

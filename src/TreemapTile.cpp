@@ -582,7 +582,7 @@ QVariant TreemapTile::itemChange( GraphicsItemChange   change,
 	    if ( ! selected && _highlighter )
 		_highlighter->hide();
 
-	    if ( selected )
+	    if ( selected && this != _parentView->rootTile() ) // don't highlight the root tile
 	    {
 		if ( ! _highlighter )
 		{
