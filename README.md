@@ -7,7 +7,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2015-12-29
+Updated: 2015-12-30
 
 
 ## Overview
@@ -29,6 +29,11 @@ _Preview 2015-12-28 -- see also section "Development Status" below_
 
 Usable, but still pre-Alpha. Use at your own risk. You have been warned. ;-)
 
+- 2015-12-30  Treemap rendering now works as expected, and selecting items
+              (including multi-selection with shift-click and ctrl-click in the
+              tree view and ctrl-click in the treemap view) works. It was a bit
+              of a challenge to avoid Qt signal ping-pong between the selection
+              model object and the two views.
 
 - 2015-12-28  Treemaps are back. It's not perfect yet, but the basic rendering
               works.  I admit I was somewhat scared of that part, but the
