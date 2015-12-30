@@ -275,12 +275,13 @@ namespace QDirStat
 	virtual QVariant itemChange( GraphicsItemChange	  change,
 				     const QVariant	& value) Q_DECL_OVERRIDE;
 
-        /**
-         * Mouse event.
+	/**
+	 * Mouse events.
 	 *
 	 * Reimplemented from QGraphicsItem.
-         **/
-        virtual void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
+	 **/
+	virtual void mousePressEvent  ( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
+	virtual void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Render a cushion as described in "cushioned treemaps" by Jarke
@@ -326,23 +327,23 @@ namespace QDirStat
 
     inline QTextStream & operator<< ( QTextStream & stream, TreemapTile * tile )
     {
-        if ( tile )
-            stream << tile->orig();
-        else
-            stream << "<NULL TreemapTile *>";
+	if ( tile )
+	    stream << tile->orig();
+	else
+	    stream << "<NULL TreemapTile *>";
 
-        return stream;
+	return stream;
     }
 
 
     inline QTextStream & operator<< ( QTextStream & stream, const QRectF & rect )
     {
-        stream << "QRectF("
-               << rect.width() << "x" << rect.height()
-               << "+" << rect.x() << "+" << rect.y()
-               << ")";
+	stream << "QRectF("
+	       << rect.width() << "x" << rect.height()
+	       << "+" << rect.x() << "+" << rect.y()
+	       << ")";
 
-        return stream;
+	return stream;
     }
 
 }	// namespace QDirStat

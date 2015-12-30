@@ -37,7 +37,7 @@ TreemapTile::TreemapTile( TreemapView *	 parentView,
     _parentTile( parentTile ),
     _orig( orig )
 {
-    // logDebug() << "Creating tile without cushion for " << orig << "  " << rect << endl;
+    // logDebug() << "Creating tile without cushion for " << orig << "	" << rect << endl;
     init();
 
     if ( parentTile )
@@ -601,14 +601,34 @@ QVariant TreemapTile::itemChange( GraphicsItemChange   change,
 }
 
 
+void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
+{
+    QGraphicsRectItem::mousePressEvent( event );
+
+    if ( event->button() == Qt::LeftButton )
+    {
+	// isSelected() is unreliable here since in QGraphicsItem some stuff is
+	// done in the mousePressEvent, while some other stuff is done in the
+	// mouseReleaseEvent. Just setting the current item here to avoid
+	// having a yellow highlighter rectangle upon mouse press and then a
+	// red one upon mouse release. No matter if the item ends up selected
+	// or not, the mouse press makes it the current item, so let's update
+	// the red highlighter rectangle here.
+
+	logDebug() << this << " mouse pressed" << endl;
+	_parentView->setCurrentItem( this );
+    }
+}
+
+
 void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 {
     QGraphicsRectItem::mouseReleaseEvent( event );
 
     if ( event->button() == Qt::LeftButton )
     {
-        logDebug() << this << " clicked; selected: " << isSelected() << endl;
-        _parentView->setCurrentItem( this );
+	// The current item was already set in the mouse press event.
+	logDebug() << this << " clicked; selected: " << isSelected() << endl;
     }
 
     _parentView->sendSelection();
