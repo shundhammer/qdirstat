@@ -35,6 +35,10 @@ Usable, but still pre-Alpha. Use at your own risk. You have been warned. ;-)
 
 - 2015-12-31  New Year's Eve release
 
+  - Added the URL of the current item in the status bar at the bottom of the
+    main window. If more than one item is selected, it displays the total sum
+    of all selected items there.
+
   - Treemap zoom in / out / zoom reset works. The treemap now automatically
     zooms out if an item outside its current scope is clicked in the tree view.
 
