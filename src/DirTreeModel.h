@@ -301,6 +301,9 @@ namespace QDirStat
 	QPixmap _mountPointIcon;
 	QPixmap _stopIcon;
 	QPixmap _excludedIcon;
+	QPixmap _blockDeviceIcon;
+	QPixmap _charDeviceIcon;
+	QPixmap _specialIcon;
 
     };	// class DirTreeModel
 

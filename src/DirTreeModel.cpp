@@ -112,6 +112,9 @@ void DirTreeModel::loadIcons()
     _mountPointIcon    = QPixmap( _treeIconDir + "mount-point.png"    );
     _stopIcon	       = QPixmap( _treeIconDir + "stop.png"	      );
     _excludedIcon      = QPixmap( _treeIconDir + "excluded.png"	      );
+    _blockDeviceIcon   = QPixmap( _treeIconDir + "block-device.png"   );
+    _charDeviceIcon    = QPixmap( _treeIconDir + "char-device.png"   );
+    _specialIcon       = QPixmap( _treeIconDir + "special.png"	 );
 }
 
 
@@ -603,9 +606,9 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
     {
 	if	( item->isFile()	)  icon = _fileIcon;
 	else if ( item->isSymLink()	)  icon = _symlinkIcon;
-	else if ( item->isBlockDevice() )  icon = _fileIcon; // TO DO: Find a better icon
-	else if ( item->isCharDevice()	)  icon = _fileIcon; // TO DO: Find a better icon
-	else if ( item->isSpecial()	)  icon = _fileIcon; // TO DO: Find a better icon
+	else if ( item->isBlockDevice() )  icon = _blockDeviceIcon;
+	else if ( item->isCharDevice()	)  icon = _charDeviceIcon;
+	else if ( item->isSpecial()	)  icon = _specialIcon;
     }
 
     return icon.isNull() ? QVariant() : icon;

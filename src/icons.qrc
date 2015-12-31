@@ -20,6 +20,9 @@
         <file>icons/tree-medium/stop.png</file>
         <file>icons/tree-medium/symlink.png</file>
         <file>icons/tree-medium/unreadable-dir.png</file>
+        <file>icons/tree-medium/block-device.png</file>
+        <file>icons/tree-medium/char-device.png</file>
+        <file>icons/tree-medium/special.png</file>
 
         <file>icons/tree-small/dir.png</file>
         <file>icons/tree-small/dot-entry.png</file>
@@ -29,6 +32,9 @@
         <file>icons/tree-small/stop.png</file>
         <file>icons/tree-small/symlink.png</file>
         <file>icons/tree-small/unreadable-dir.png</file>
+        <file>icons/tree-small/block-device.png</file>
+        <file>icons/tree-small/char-device.png</file>
+        <file>icons/tree-small/special.png</file>
 
     </qresource>
 </RCC>
