@@ -339,17 +339,42 @@ QString FileInfo::dotEntryName()
 //---------------------------------------------------------------------------
 
 
+bool FileInfoSet::containsAncestorOf( FileInfo * item ) const
+{
+    while ( item )
+    {
+        item = item->parent();
+
+        if ( contains( item ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+FileInfoSet FileInfoSet::normalized() const
+{
+    FileInfoSet normalized;
+
+    foreach ( FileInfo * item, *this )
+    {
+        if ( ! containsAncestorOf( item ) )
+            normalized << item;
+        else
+            logDebug() << "Removing " << item << " with ancestors in the set" << endl;
+    }
+
+    return normalized;
+}
+
+
 bool FileInfoSet::containsDotEntry() const
 {
-    FileInfoSet::const_iterator it  = constBegin();
-    FileInfoSet::const_iterator end = constEnd();
-
-    while ( it != end )
+    foreach ( FileInfo * item, *this )
     {
-        if ( *it && (*it)->isDotEntry() )
+        if ( item  && item->isDotEntry() )
             return true;
-
-        ++it;
     }
 
     return false;
@@ -358,15 +383,10 @@ bool FileInfoSet::containsDotEntry() const
 
 bool FileInfoSet::containsDir() const
 {
-    FileInfoSet::const_iterator it  = constBegin();
-    FileInfoSet::const_iterator end = constEnd();
-
-    while ( it != end )
+    foreach ( FileInfo * item, *this )
     {
-        if ( *it && (*it)->isDir() )
+        if ( item  && item->isDir() )
             return true;
-
-        ++it;
     }
 
     return false;
@@ -375,15 +395,10 @@ bool FileInfoSet::containsDir() const
 
 bool FileInfoSet::containsFile() const
 {
-    FileInfoSet::const_iterator it  = constBegin();
-    FileInfoSet::const_iterator end = constEnd();
-
-    while ( it != end )
+    foreach ( FileInfo * item, *this )
     {
-        if ( *it && (*it)->isFile() )
+        if ( item  && item->isFile() )
             return true;
-
-        ++it;
     }
 
     return false;
@@ -392,18 +407,27 @@ bool FileInfoSet::containsFile() const
 
 bool FileInfoSet::containsSpecial() const
 {
-    FileInfoSet::const_iterator it  = constBegin();
-    FileInfoSet::const_iterator end = constEnd();
-
-    while ( it != end )
+    foreach ( FileInfo * item, *this )
     {
-        if ( *it && (*it)->isSpecial() )
+        if ( item  && item->isSpecial() )
             return true;
-
-        ++it;
     }
 
     return false;
+}
+
+
+FileSize FileInfoSet::totalSize() const
+{
+    FileSize sum = 0LL;
+
+    foreach ( FileInfo * item, *this )
+    {
+        if ( item )
+            sum += item->totalSize();
+    }
+
+    return sum;
 }
 
 

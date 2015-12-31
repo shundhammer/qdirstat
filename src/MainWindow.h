@@ -78,6 +78,16 @@ public slots:
      **/
     void showProgress( const QString & text );
 
+    /**
+     * Show the URL of 'item' and its total size in the status line.
+     **/
+    void showCurrent( FileInfo * item );
+
+    /**
+     * Show a summary of the current selection in the status line.
+     **/
+    void showSummary();
+
 
 protected slots:
 

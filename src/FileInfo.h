@@ -636,6 +636,27 @@ namespace QDirStat
 	 * i.e., a char or block device, a FIFO, or a socket.
 	 **/
 	bool containsSpecial() const;
+
+	/**
+	 * Return the sum of all total sizes in the set.
+	 *
+	 * It is desirable to call this on a normalized() set to avoid
+	 * duplicate accounting of sums.
+	 **/
+	FileSize totalSize() const;
+
+	/**
+	 * Return 'true' if this set contains any ancestor (parent, parent's
+	 * parent etc.) of 'item'. This does not check if 'item' itself is in
+	 * the set.
+	 **/
+	bool containsAncestorOf( FileInfo * item ) const;
+
+	/**
+	 * Return a 'normalized' set, i.e. with all items removed that have
+	 * ancestors in the set.
+	 **/
+	FileInfoSet normalized() const;
     };
 
 

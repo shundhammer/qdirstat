@@ -292,6 +292,39 @@ void MainWindow::showProgress( const QString & text )
 }
 
 
+void MainWindow::showCurrent( FileInfo * item )
+{
+    if ( item )
+    {
+        _ui->statusBar->showMessage( QString( "%1  (%2)" )
+                                     .arg( item->debugUrl() )
+                                     .arg( formatSize( item->totalSize() ) ) );
+    }
+    else
+    {
+        _ui->statusBar->clearMessage();
+    }
+}
+
+
+void MainWindow::showSummary()
+{
+    FileInfoSet sel = _selectionModel->selectedItems();
+    int count = sel.size();
+
+    if ( count <= 1 )
+        showCurrent( _selectionModel->currentItem() );
+    else
+    {
+        sel = sel.normalized();
+
+        _ui->statusBar->showMessage( tr( "%1 items selected (%2 total)" )
+                                     .arg( count )
+                                     .arg( formatSize( sel.totalSize() ) ) );
+    }
+}
+
+
 void MainWindow::notImplemented()
 {
     QMessageBox::warning( this, tr( "Error" ), tr( "Not implemented!" ) );
@@ -336,6 +369,7 @@ void MainWindow::itemClicked( const QModelIndex & index )
 void MainWindow::selectionChanged()
 {
     logDebug() << endl;
+    showSummary();
     _selectionModel->dumpSelectedItems();
 }
 
@@ -344,6 +378,7 @@ void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurren
 {
     logDebug() << "new current: " << newCurrent << endl;
     logDebug() << "old current: " << oldCurrent << endl;
+    showSummary();
     _selectionModel->dumpSelectedItems();
 }
 
