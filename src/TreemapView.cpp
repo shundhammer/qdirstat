@@ -871,8 +871,6 @@ void HighlightRect::highlight( TreemapTile * tile )
 
 	if ( ! isVisible() )
 	    show();
-
-        setPenStyle( tile );
     }
     else
     {
