@@ -105,8 +105,9 @@ void DirTreeModel::loadIcons()
 	_treeIconDir += "/";
 
     _dirIcon	       = QPixmap( _treeIconDir + "dir.png"	      );
-    _fileIcon	       = QPixmap( _treeIconDir + "file.png"	      );
     _dotEntryIcon      = QPixmap( _treeIconDir + "dot-entry.png"      );
+    _fileIcon	       = QPixmap( _treeIconDir + "file.png"	      );
+    _symlinkIcon       = QPixmap( _treeIconDir + "symlink.png"	      );
     _unreadableDirIcon = QPixmap( _treeIconDir + "unreadable-dir.png" );
     _mountPointIcon    = QPixmap( _treeIconDir + "mount-point.png"    );
     _stopIcon	       = QPixmap( _treeIconDir + "stop.png"	      );
@@ -331,14 +332,14 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		    case PercentBarCol:
 			{
 			    if ( ( item->parent() && item->parent()->isBusy() ) ||
-                                 item == _tree->firstToplevel() )
-                            {
+				 item == _tree->firstToplevel() )
+			    {
 				return -1.0;
-                            }
+			    }
 			    else
-                            {
+			    {
 				return item->subtreePercent();
-                            }
+			    }
 			}
 		    case PercentNumCol:	  return item->subtreePercent();
 		    case TotalSizeCol:	  return item->totalSize();
@@ -601,7 +602,7 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
     else // ! item->isDir()
     {
 	if	( item->isFile()	)  icon = _fileIcon;
-	else if ( item->isSymLink()	)  icon = _fileIcon; // TO DO: Find a better icon
+	else if ( item->isSymLink()	)  icon = _symlinkIcon;
 	else if ( item->isBlockDevice() )  icon = _fileIcon; // TO DO: Find a better icon
 	else if ( item->isCharDevice()	)  icon = _fileIcon; // TO DO: Find a better icon
 	else if ( item->isSpecial()	)  icon = _fileIcon; // TO DO: Find a better icon
