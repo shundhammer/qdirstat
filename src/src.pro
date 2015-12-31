@@ -68,6 +68,7 @@ HEADERS	  =				\
 	    SignalBlocker.h		\
 	    TreemapTile.h		\
 	    TreemapView.h		\
+	    Version.h   		\
 
 
 

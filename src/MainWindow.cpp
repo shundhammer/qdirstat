@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSignalMapper>
+#include <QClipboard>
 
 #include "MainWindow.h"
 #include "Logger.h"
@@ -21,6 +22,7 @@
 #include "DirTreeCache.h"
 #include "DataColumns.h"
 #include "DebugHelpers.h"
+#include "Version.h"
 
 
 using namespace QDirStat;
@@ -66,6 +68,12 @@ MainWindow::MainWindow():
     connect( _dirTreeModel->tree(),	SIGNAL( progressInfo( QString ) ),
 	     this,			SLOT  ( showProgress( QString ) ) );
 
+    connect( _selectionModel, SIGNAL( selectionChanged() ),
+	     this,	      SLOT  ( updateActions()	 ) );
+
+    connect( _selectionModel, SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
+	     this,	      SLOT  ( updateActions()				   ) );
+
 
     // Debug connections
 
@@ -107,33 +115,23 @@ MainWindow::~MainWindow()
 }
 
 
+#define CONNECT_ACTION(ACTION, RECEIVER, RCVR_SLOT) \
+    connect( (ACTION), SIGNAL( triggered() ), (RECEIVER), SLOT( RCVR_SLOT ) )
+
+
 void MainWindow::connectActions()
 {
-    //
     // "File" menu
-    //
 
-    connect( _ui->actionOpen,		SIGNAL( triggered()  ),
-	     this,			SLOT  ( askOpenUrl() ) );
+    CONNECT_ACTION( _ui->actionOpen,	      this, askOpenUrl()    );
+    CONNECT_ACTION( _ui->actionRefreshAll,    this, refreshAll()    );
+    CONNECT_ACTION( _ui->actionStopReading,   this, stopReading()   );
+    CONNECT_ACTION( _ui->actionAskWriteCache, this, askWriteCache() );
+    CONNECT_ACTION( _ui->actionAskReadCache,  this, askReadCache()  );
+    CONNECT_ACTION( _ui->actionQuit,	      qApp, quit()	    );
 
-    connect( _ui->actionRefreshAll,	SIGNAL( triggered()  ),
-	     this,			SLOT  ( refreshAll() ) );
 
-    connect( _ui->actionStopReading,	SIGNAL( triggered()   ),
-	     this,			SLOT  ( stopReading() ) );
-
-    connect( _ui->actionAskWriteCache,	SIGNAL( triggered()	),
-	     this,			SLOT  ( askWriteCache() ) );
-
-    connect( _ui->actionAskReadCache,	SIGNAL( triggered()	),
-	     this,			SLOT  ( askReadCache()	) );
-
-    connect( _ui->actionQuit,		SIGNAL( triggered() ),
-	     qApp,			SLOT  ( quit()	    ) );
-
-    //
     // "View" menu
-    //
 
     _treeLevelMapper = new QSignalMapper( this );
 
@@ -152,13 +150,40 @@ void MainWindow::connectActions()
     mapTreeExpandAction( _ui->actionExpandTreeLevel9, 9 );
 
     mapTreeExpandAction( _ui->actionCloseAllTreeLevels, 0 );
+
+
+    // "Edit" menu
+
+    CONNECT_ACTION( _ui->actionCopyUrlToClipboard, this, copyCurrentUrlToClipboard() );
+
+
+    // "Go To" menu
+
+    CONNECT_ACTION( _ui->actionGoUp,	     this, navigateUp() );
+    CONNECT_ACTION( _ui->actionGoToToplevel, this, navigateToToplevel() );
+
+
+    // "Treemap" menu
+
+    // TO DO
+    // _ui->actionShowTreemap;
+    // TO DO
+
+    CONNECT_ACTION( _ui->actionTreemapZoomIn,	 _ui->treemapView, zoomIn()	    );
+    CONNECT_ACTION( _ui->actionTreemapZoomOut,	 _ui->treemapView, zoomOut()	    );
+    CONNECT_ACTION( _ui->actionResetTreemapZoom, _ui->treemapView, rebuildTreemap() );
+    CONNECT_ACTION( _ui->actionTreemapRebuild,	 _ui->treemapView, rebuildTreemap() );
+
+    // "Help" menu
+
+    CONNECT_ACTION( _ui->actionAbout,	this, showAboutDialog() );
+    CONNECT_ACTION( _ui->actionAboutQt, qApp, aboutQt() );
 }
 
 
 void MainWindow::mapTreeExpandAction( QAction * action, int level )
 {
-    connect( action,	       SIGNAL( triggered() ),
-	     _treeLevelMapper, SLOT  ( map()	   ) );
+    CONNECT_ACTION( action, _treeLevelMapper, map() );
     _treeLevelMapper->setMapping( action, level );
 }
 
@@ -171,6 +196,21 @@ void MainWindow::updateActions()
     _ui->actionRefreshAll->setEnabled	( ! reading );
     _ui->actionAskReadCache->setEnabled ( ! reading );
     _ui->actionAskWriteCache->setEnabled( ! reading );
+
+    bool haveCurrentItem = ( _selectionModel->currentItem() != 0 );
+    bool treeNotEmpty	 = ( _dirTreeModel->tree()->firstToplevel() != 0 );
+
+    _ui->actionCopyUrlToClipboard->setEnabled( haveCurrentItem );
+
+    _ui->actionGoUp->setEnabled( haveCurrentItem );
+    _ui->actionGoToToplevel->setEnabled( treeNotEmpty );
+
+    bool showingTreemap = _ui->treemapView->isVisible();
+
+    _ui->actionTreemapZoomIn->setEnabled   ( showingTreemap && _ui->treemapView->canZoomIn() );
+    _ui->actionTreemapZoomOut->setEnabled  ( showingTreemap && _ui->treemapView->canZoomOut() );
+    _ui->actionResetTreemapZoom->setEnabled( showingTreemap && _ui->treemapView->canZoomOut() );
+    _ui->actionTreemapRebuild->setEnabled  ( showingTreemap );
 }
 
 
@@ -296,13 +336,13 @@ void MainWindow::showCurrent( FileInfo * item )
 {
     if ( item )
     {
-        _ui->statusBar->showMessage( QString( "%1  (%2)" )
-                                     .arg( item->debugUrl() )
-                                     .arg( formatSize( item->totalSize() ) ) );
+	_ui->statusBar->showMessage( QString( "%1  (%2)" )
+				     .arg( item->debugUrl() )
+				     .arg( formatSize( item->totalSize() ) ) );
     }
     else
     {
-        _ui->statusBar->clearMessage();
+	_ui->statusBar->clearMessage();
     }
 }
 
@@ -313,14 +353,14 @@ void MainWindow::showSummary()
     int count = sel.size();
 
     if ( count <= 1 )
-        showCurrent( _selectionModel->currentItem() );
+	showCurrent( _selectionModel->currentItem() );
     else
     {
-        sel = sel.normalized();
+	sel = sel.normalized();
 
-        _ui->statusBar->showMessage( tr( "%1 items selected (%2 total)" )
-                                     .arg( count )
-                                     .arg( formatSize( sel.totalSize() ) ) );
+	_ui->statusBar->showMessage( tr( "%1 items selected (%2 total)" )
+				     .arg( count )
+				     .arg( formatSize( sel.totalSize() ) ) );
     }
 }
 
@@ -341,6 +381,81 @@ void MainWindow::readingFinished()
 
     // Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );
 }
+
+
+void MainWindow::copyCurrentUrlToClipboard()
+{
+    FileInfo * currentItem = _selectionModel->currentItem();
+
+    if ( currentItem )
+    {
+	QClipboard * clipboard = QApplication::clipboard();
+	QString url = currentItem->url();
+	clipboard->setText( url );
+	showProgress( tr( "Copied to system clipboard: %1" ).arg( url ) );
+    }
+    else
+    {
+	showProgress( tr( "No current item" ) );
+    }
+}
+
+
+void MainWindow::navigateUp()
+{
+    FileInfo * currentItem = _selectionModel->currentItem();
+
+    if ( currentItem && currentItem->parent() &&
+	 currentItem->parent() != _dirTreeModel->tree()->root() )
+    {
+	_selectionModel->setCurrentItem( currentItem->parent() );
+    }
+}
+
+
+void MainWindow::navigateToToplevel()
+{
+    FileInfo * toplevel = _dirTreeModel->tree()->firstToplevel();
+
+    if ( toplevel )
+	_selectionModel->setCurrentItem( toplevel );
+}
+
+
+void MainWindow::showAboutDialog()
+{
+    QString homePage = "https://github.com/shundhammer/qdirstat";
+    QString mailTo   = "qdirstat@gmx.de";
+
+    QString text = "<h2>QDirStat " QDIRSTAT_VERSION "</h2>";
+    text += "<p>(c) 2015 Stefan Hundhammer</p>";
+    text += "<p>";
+    text += tr( "Contact: " ) + QString( "<a href=\"mailto:%1\">%2</a>" ).arg( mailTo ).arg( mailTo );
+    text += "</p><p>";
+    text += QString( "<p><a href=\"%1\">%2</a></p>" ).arg( homePage ).arg( homePage );
+    text += tr( "License: GPL V2 (GNU Public License Version 2)" );
+    text += "</p><p>";
+    text += tr( "This is free Open Source software, provided to you hoping that it might be "
+		"useful for you. It does not cost you anything, but on the other hand there "
+		"is no warranty or promise of anything." );
+    text += "</p><p>";
+    text += tr( "This software was made with the best intentions and greatest care, but still "
+		"there is the off chance that something might go wrong which might damage "
+		"data on your computer. Under no circumstances will the authors of this program "
+		"be held responsible for anything like that. Use this program at your own risk." );
+    text += "</p>";
+
+    QMessageBox::about( this, tr( "About QDirStat" ), text );
+}
+
+
+
+
+
+
+//---------------------------------------------------------------------------
+//			       Debugging Helpers
+//---------------------------------------------------------------------------
 
 
 void MainWindow::itemClicked( const QModelIndex & index )

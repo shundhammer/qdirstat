@@ -88,6 +88,27 @@ public slots:
      **/
     void showSummary();
 
+    /**
+     * Copy the URL of the current item (if there is one) to the system
+     * clipboard for use in other applications.
+     **/
+    void copyCurrentUrlToClipboard();
+
+    /**
+     * Navigate one directory level up.
+     **/
+    void navigateUp();
+
+    /**
+     * Navigate to the toplevel directory of this tree.
+     **/
+    void navigateToToplevel();
+
+    /**
+     * Show the "about" dialog.
+     **/
+    void showAboutDialog();
+
 
 protected slots:
 

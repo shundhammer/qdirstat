@@ -44,6 +44,9 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <property name="toolTipsVisible">
+     <bool>true</bool>
+    </property>
     <addaction name="actionOpen"/>
     <addaction name="actionRefreshAll"/>
     <addaction name="actionStopReading"/>
@@ -57,9 +60,15 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
+    <property name="toolTipsVisible">
+     <bool>true</bool>
+    </property>
     <widget class="QMenu" name="menuExpandTreeToLevel">
      <property name="title">
       <string>E&amp;xpand Tree To Level</string>
+     </property>
+     <property name="toolTipsVisible">
+      <bool>true</bool>
      </property>
      <addaction name="actionExpandTreeLevel0"/>
      <addaction name="actionExpandTreeLevel1"/>
@@ -75,8 +84,52 @@
     <addaction name="actionCloseAllTreeLevels"/>
     <addaction name="menuExpandTreeToLevel"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <property name="toolTipsVisible">
+     <bool>true</bool>
+    </property>
+    <addaction name="actionCopyUrlToClipboard"/>
+   </widget>
+   <widget class="QMenu" name="menuTreemap">
+    <property name="title">
+     <string>Tree&amp;map</string>
+    </property>
+    <property name="toolTipsVisible">
+     <bool>true</bool>
+    </property>
+    <addaction name="actionShowTreemap"/>
+    <addaction name="separator"/>
+    <addaction name="actionTreemapZoomIn"/>
+    <addaction name="actionTreemapZoomOut"/>
+    <addaction name="actionResetTreemapZoom"/>
+    <addaction name="actionTreemapRebuild"/>
+   </widget>
+   <widget class="QMenu" name="menuGoTo">
+    <property name="title">
+     <string>&amp;Go To</string>
+    </property>
+    <property name="toolTipsVisible">
+     <bool>true</bool>
+    </property>
+    <addaction name="actionGoUp"/>
+    <addaction name="actionGoToToplevel"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+    <addaction name="actionAboutQt"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuView"/>
+   <addaction name="menuGoTo"/>
+   <addaction name="menuTreemap"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
@@ -126,9 +179,6 @@
    </property>
    <property name="toolTip">
     <string>Expand (open) the directory tree to level 0.</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+0</string>
    </property>
   </action>
   <action name="actionExpandTreeLevel1">
@@ -263,6 +313,116 @@
    </property>
    <property name="toolTip">
     <string>Re-read the entire directory tree from disk.</string>
+   </property>
+  </action>
+  <action name="actionCopyUrlToClipboard">
+   <property name="text">
+    <string>&amp;Copy URL</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy the full path of the current item to the system clipboard for use in other applications.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionTreemapZoomIn">
+   <property name="text">
+    <string>Zoom &amp;In</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom the treemap in (enlarge) one level.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl++</string>
+   </property>
+  </action>
+  <action name="actionTreemapZoomOut">
+   <property name="text">
+    <string>Zoom &amp;Out</string>
+   </property>
+   <property name="toolTip">
+    <string>Zoom the treemap out one level.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="actionResetTreemapZoom">
+   <property name="text">
+    <string>&amp;Reset Zoom</string>
+   </property>
+   <property name="toolTip">
+    <string>Reset the treemap zoom factor to normal.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+0</string>
+   </property>
+  </action>
+  <action name="actionTreemapRebuild">
+   <property name="text">
+    <string>Re&amp;build</string>
+   </property>
+   <property name="toolTip">
+    <string>Rebuild the treemap.</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionShowTreemap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Show Treemap</string>
+   </property>
+   <property name="toolTip">
+    <string>Enable or disable showing the treemap view.</string>
+   </property>
+   <property name="shortcut">
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="actionGoUp">
+   <property name="text">
+    <string>&amp;Up One Level</string>
+   </property>
+   <property name="toolTip">
+    <string>Navigate one directory level up.</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Up</string>
+   </property>
+  </action>
+  <action name="actionGoToToplevel">
+   <property name="text">
+    <string>&amp;Toplevel</string>
+   </property>
+   <property name="toolTip">
+    <string>Navigate to the toplevel directory of this tree.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Home</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>&amp;About QDirStat...</string>
+   </property>
+   <property name="toolTip">
+    <string>Show version, copyright and license information about this program.</string>
+   </property>
+  </action>
+  <action name="actionAboutQt">
+   <property name="text">
+    <string>About &amp;Qt...</string>
+   </property>
+   <property name="toolTip">
+    <string>Show information about the Qt version used for building this program.</string>
    </property>
   </action>
  </widget>
