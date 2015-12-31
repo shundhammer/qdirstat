@@ -159,6 +159,11 @@ namespace QDirStat
 	void zoomOut();
 
 	/**
+	 * Reset the zoom level: Zoom out as far as possible.
+	 **/
+	void resetZoom();
+
+	/**
 	 * Select the parent of the currently selected tile (if possible).
 	 *
 	 * This is very much the same as clicking with the middle mouse button,
@@ -241,12 +246,6 @@ namespace QDirStat
 	 * selected tile, false if not.
 	 **/
 	bool canZoomOut() const;
-
-	/**
-	 * Returns true if it is possible to select the parent of the currently
-	 * selected tile, false if not.
-	 **/
-	bool canSelectParent() const;
 
 	/**
 	 * Returns 'true' if treemap tiles are to be squarified upon creation,
@@ -387,7 +386,7 @@ namespace QDirStat
 	 *
 	 * Reimplemented from QFrame.
 	 **/
-	virtual void resizeEvent( QResizeEvent * event );
+	virtual void resizeEvent( QResizeEvent * event ) Q_DECL_OVERRIDE;
 
 #if 0
 	/**

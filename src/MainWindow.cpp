@@ -68,11 +68,15 @@ MainWindow::MainWindow():
     connect( _dirTreeModel->tree(),	SIGNAL( progressInfo( QString ) ),
 	     this,			SLOT  ( showProgress( QString ) ) );
 
-    connect( _selectionModel, SIGNAL( selectionChanged() ),
-	     this,	      SLOT  ( updateActions()	 ) );
+    connect( _selectionModel,  SIGNAL( selectionChanged() ),
+	     this,	       SLOT  ( updateActions()	 ) );
 
-    connect( _selectionModel, SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
-	     this,	      SLOT  ( updateActions()				   ) );
+    connect( _selectionModel,  SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
+	     this,	       SLOT  ( updateActions()				   ) );
+
+    connect( _ui->treemapView, SIGNAL( treemapChanged() ),
+	     this,	       SLOT  ( updateActions()	 ) );
+
 
 
     // Debug connections
@@ -171,7 +175,7 @@ void MainWindow::connectActions()
 
     CONNECT_ACTION( _ui->actionTreemapZoomIn,	 _ui->treemapView, zoomIn()	    );
     CONNECT_ACTION( _ui->actionTreemapZoomOut,	 _ui->treemapView, zoomOut()	    );
-    CONNECT_ACTION( _ui->actionResetTreemapZoom, _ui->treemapView, rebuildTreemap() );
+    CONNECT_ACTION( _ui->actionResetTreemapZoom, _ui->treemapView, resetZoom()      );
     CONNECT_ACTION( _ui->actionTreemapRebuild,	 _ui->treemapView, rebuildTreemap() );
 
     // "Help" menu
@@ -408,7 +412,8 @@ void MainWindow::navigateUp()
     if ( currentItem && currentItem->parent() &&
 	 currentItem->parent() != _dirTreeModel->tree()->root() )
     {
-	_selectionModel->setCurrentItem( currentItem->parent() );
+	_selectionModel->setCurrentItem( currentItem->parent(),
+					 true ); // select
     }
 }
 
@@ -418,7 +423,8 @@ void MainWindow::navigateToToplevel()
     FileInfo * toplevel = _dirTreeModel->tree()->firstToplevel();
 
     if ( toplevel )
-	_selectionModel->setCurrentItem( toplevel );
+	_selectionModel->setCurrentItem( toplevel,
+					 true ); // select
 }
 
 
@@ -428,8 +434,12 @@ void MainWindow::showAboutDialog()
     QString mailTo   = "qdirstat@gmx.de";
 
     QString text = "<h2>QDirStat " QDIRSTAT_VERSION "</h2>";
-    text += "<p>(c) 2015 Stefan Hundhammer</p>";
     text += "<p>";
+    text += tr( "Qt-based directory statistics -- showing where all your disk space has gone "
+                " and trying to help you to clean it up." );
+    text += "</p><p>";
+    text += "(c) 2015 Stefan Hundhammer";
+    text += "</p><p>";
     text += tr( "Contact: " ) + QString( "<a href=\"mailto:%1\">%2</a>" ).arg( mailTo ).arg( mailTo );
     text += "</p><p>";
     text += QString( "<p><a href=\"%1\">%2</a></p>" ).arg( homePage ).arg( homePage );

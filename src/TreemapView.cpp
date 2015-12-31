@@ -333,13 +333,20 @@ void TreemapView::zoomOut()
 {
     if ( _rootTile )
     {
-	FileInfo * root = _rootTile->orig();
+	FileInfo * newRoot = _rootTile->orig();
 
-	if ( root->parent() )
-	    root = root->parent();
+	if ( newRoot->parent() && newRoot->parent() != _tree->root() )
+	    newRoot = newRoot->parent();
 
-	rebuildTreemap( root );
+	rebuildTreemap( newRoot );
     }
+}
+
+
+void TreemapView::resetZoom()
+{
+    if ( _tree && _tree->firstToplevel() )
+        rebuildTreemap( _tree->firstToplevel() );
 }
 
 
@@ -384,12 +391,6 @@ bool TreemapView::canZoomOut() const
 	return false;
 
     return _rootTile->orig() != _tree->firstToplevel();
-}
-
-
-bool TreemapView::canSelectParent() const
-{
-    return _currentItem && _currentItem->parentTile();
 }
 
 
@@ -576,6 +577,27 @@ void TreemapView::setCurrentItem( TreemapTile * tile )
 void TreemapView::setCurrentItem( FileInfo * node )
 {
     logDebug() << node << endl;
+
+    if ( node && _rootTile )
+    {
+        FileInfo * treemapRoot = _rootTile->orig();
+
+        // Check if the new current item is inside the current treemap
+        // (it might be zoomed).
+
+        while ( ! node->isInSubtree( treemapRoot ) &&
+                treemapRoot->parent() &&
+                treemapRoot->parent() != _tree->root() )
+        {
+            treemapRoot = treemapRoot->parent(); // try one level higher
+        }
+
+        if ( treemapRoot != _rootTile->orig() )   // need to zoom out?
+        {
+            logDebug() << "Zooming out to " << treemapRoot << " to make current item visible" << endl;
+            rebuildTreemap( treemapRoot );
+        }
+    }
 
     setCurrentItem( findTile( node ) );
 }

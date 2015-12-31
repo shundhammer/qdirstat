@@ -70,8 +70,9 @@ TreemapTile::TreemapTile( TreemapView *		 parentView,
 
 TreemapTile::~TreemapTile()
 {
-    if ( _highlighter )
-	delete _highlighter;
+    // DO NOT try to delete the _highlighter: It is owned by the TreemapView /
+    // QGraphicsScene and deleted together with all other QGraphicsItems
+    // in the TreemapView destructor.
 }
 
 
