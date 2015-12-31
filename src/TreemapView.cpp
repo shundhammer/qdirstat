@@ -598,6 +598,8 @@ void TreemapView::updateSelection( const FileInfoSet & newSelection )
 	if ( tile )
 	    tile->setSelected( true );
     }
+
+    updateCurrentItem( _currentItem ? _currentItem->orig() : 0 );
 }
 
 
@@ -786,7 +788,10 @@ QColor TreemapView::tileColor( FileInfo * file )
 HighlightRect::HighlightRect( QGraphicsScene * scene, const QColor & color, int lineWidth ):
     QGraphicsRectItem()
 {
+    QPen pen( color, lineWidth );
+    pen.setStyle( Qt::DotLine );
     setPen( QPen( color, lineWidth ) );
+    setPen( pen );
     setZValue( 1e10 );		// Higher than everything else
     hide();
     scene->addItem( this );
@@ -808,14 +813,18 @@ HighlightRect::HighlightRect( TreemapTile * tile, const QColor & color, int line
 
 void HighlightRect::highlight( TreemapTile * tile )
 {
-    if ( tile )
+    _tile = tile;
+
+    if ( _tile )
     {
-	QRectF tileRect = tile->rect();
+	QRectF tileRect = _tile->rect();
 	tileRect.moveTo( mapFromScene( tile->mapToScene( tileRect.topLeft() ) ) );
 	setRect( tileRect );
 
 	if ( ! isVisible() )
 	    show();
+
+        setPenStyle( _tile );
     }
     else
     {
@@ -824,3 +833,19 @@ void HighlightRect::highlight( TreemapTile * tile )
     }
 }
 
+
+void HighlightRect::setPenStyle( Qt::PenStyle style )
+{
+    QPen highlightPen = pen();
+    highlightPen.setStyle( style );
+    setPen( highlightPen );
+}
+
+
+void HighlightRect::setPenStyle( TreemapTile * tile )
+{
+    if ( tile && tile->isSelected() )
+        setPenStyle( Qt::SolidLine );
+    else
+        setPenStyle( Qt::DotLine );
+}

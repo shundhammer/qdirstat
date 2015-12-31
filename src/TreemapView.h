@@ -471,6 +471,20 @@ namespace QDirStat
 	 **/
 	void highlight( TreemapTile * tile );
 
+        /**
+         * Set the pen style. Recommended: Qt::SolidLine or Qt::DotLine.
+         **/
+        void setPenStyle( Qt::PenStyle style = Qt::SolidLine );
+
+        /**
+         * Set the pen style according to the 'selected' status of 'tile'.
+         **/
+        void setPenStyle( TreemapTile * tile );
+
+    protected:
+
+        TreemapTile * _tile;
+
     }; // class TreemapSelectionRect
 
 }	// namespace QDirStat

@@ -627,7 +627,10 @@ void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 
     if ( event->button() == Qt::LeftButton )
     {
-	// The current item was already set in the mouse press event.
+	// The current item was already set in the mouse press event, but it
+	// might have changed its 'selected' status right now, so let the view
+	// update it.
+	_parentView->setCurrentItem( this );
 	logDebug() << this << " clicked; selected: " << isSelected() << endl;
     }
 
