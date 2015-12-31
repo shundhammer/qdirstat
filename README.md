@@ -7,7 +7,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2015-12-30
+Updated: 2015-12-31
 
 
 ## Overview
@@ -22,12 +22,29 @@ latest Qt 5.
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png)
 _Preview screenshot -- see also section "Development Status" below_
 
+Since this is a screenshot of QDirStat in its own source directory, the
+screenshot date and time is always the "Last Modified" timestamp in the
+screenshot. Neat, huh? ;-)
+
 
 ## Current Development Status
 
 **Work in Progress**
 
 Usable, but still pre-Alpha. Use at your own risk. You have been warned. ;-)
+
+- 2015-12-31  New Year's Eve release
+
+  - Treemap zoom in / out / zoom reset works. The treemap now automatically
+    zooms out if an item outside its current scope is clicked in the tree view.
+
+  - Added more menu and toolbar actions and icons for many of them.
+
+  - The treemap's red "current item" rectangle is now stippled instead of a
+    solid line if the current item is not also selected (users can do that with
+    shift-click).
+
+  - Added "about" dialogs for the program and the used Qt version.
 
 - 2015-12-30  Treemap rendering now works as expected, and selecting items
               (including multi-selection with shift-click and ctrl-click in the
