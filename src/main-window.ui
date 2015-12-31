@@ -142,8 +142,16 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionGoUp"/>
+   <addaction name="actionTreemapZoomIn"/>
+   <addaction name="actionTreemapZoomOut"/>
+   <addaction name="actionResetTreemapZoom"/>
   </widget>
   <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/window-close.png</normaloff>:/icons/window-close.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Quit</string>
    </property>
@@ -155,6 +163,10 @@
    </property>
   </action>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/open-dir.png</normaloff>:/icons/open-dir.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Open...</string>
    </property>
@@ -281,6 +293,10 @@
    </property>
   </action>
   <action name="actionStopReading">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/stop.png</normaloff>:/icons/stop.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Stop Reading</string>
    </property>
@@ -308,6 +324,10 @@
    </property>
   </action>
   <action name="actionRefreshAll">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/refresh.png</normaloff>:/icons/refresh.png</iconset>
+   </property>
    <property name="text">
     <string>Refresh &amp;All</string>
    </property>
@@ -316,6 +336,10 @@
    </property>
   </action>
   <action name="actionCopyUrlToClipboard">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/edit-copy.png</normaloff>:/icons/edit-copy.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Copy URL</string>
    </property>
@@ -327,6 +351,10 @@
    </property>
   </action>
   <action name="actionTreemapZoomIn">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/zoom-in.png</normaloff>:/icons/zoom-in.png</iconset>
+   </property>
    <property name="text">
     <string>Zoom &amp;In</string>
    </property>
@@ -338,6 +366,10 @@
    </property>
   </action>
   <action name="actionTreemapZoomOut">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/zoom-out.png</normaloff>:/icons/zoom-out.png</iconset>
+   </property>
    <property name="text">
     <string>Zoom &amp;Out</string>
    </property>
@@ -349,6 +381,10 @@
    </property>
   </action>
   <action name="actionResetTreemapZoom">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/zoom-best-fit.png</normaloff>:/icons/zoom-best-fit.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Reset Zoom</string>
    </property>
@@ -388,6 +424,10 @@
    </property>
   </action>
   <action name="actionGoUp">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/go-up.png</normaloff>:/icons/go-up.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Up One Level</string>
    </property>
@@ -399,6 +439,10 @@
    </property>
   </action>
   <action name="actionGoToToplevel">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/go-top.png</normaloff>:/icons/go-top.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Toplevel</string>
    </property>
@@ -410,6 +454,10 @@
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/qdirstat.png</normaloff>:/icons/qdirstat.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;About QDirStat...</string>
    </property>

@@ -185,6 +185,18 @@ namespace QDirStat
 	void clear();
 
 	/**
+	 * Disable this treemap view: Clear its contents, resize it to below
+	 * the update threshold and hide it.
+	 **/
+	void disable();
+
+	/**
+	 * Re-enable this treemap view after disabling it: Show it, resize it
+	 * to half the height of its parent widget and redisplay its content.
+	 **/
+	void enable();
+
+	/**
 	 * Notification that a dir tree node has been deleted.
 	 **/
 	void deleteNotify( FileInfo * node );
@@ -468,7 +480,7 @@ namespace QDirStat
 	 * position. Show the selection rectangle if it is currently
 	 * invisible.
 	 **/
-	void highlight( TreemapTile * tile );
+	virtual void highlight( TreemapTile * tile );
 
         /**
          * Set the pen style. Recommended: Qt::SolidLine or Qt::DotLine.
@@ -480,11 +492,39 @@ namespace QDirStat
          **/
         void setPenStyle( TreemapTile * tile );
 
-    protected:
-
-        TreemapTile * _tile;
-
     }; // class TreemapSelectionRect
+
+
+    /**
+     * Highlighter for the treemap view's current tile.
+     * This one is shared; it moves around from tile to tile.
+     **/
+    class CurrentItemHighlighter: public HighlightRect
+    {
+    public:
+	CurrentItemHighlighter( QGraphicsScene * scene, const QColor & color, int lineWidth = 2 ):
+            HighlightRect( scene, color, lineWidth )
+            {}
+        
+	virtual void highlight( TreemapTile * tile );
+    };
+
+    
+    /**
+     * Highlighter for the treemap view's current item.
+     *
+     * This one is created on demand for each directory when the directory is
+     * selected; this cannot be done in the tile's paint() method since the
+     * tile will mostly be obscured by its children. This highlighter hovers
+     * above the children as long as the directory is selected.
+     **/
+    class SelectedItemHighlighter: public HighlightRect
+    {
+    public:
+        SelectedItemHighlighter( TreemapTile * tile, const QColor & color, int lineWidth = 2 ):
+            HighlightRect( tile, color, lineWidth )
+            {}
+    };
 
 }	// namespace QDirStat
 

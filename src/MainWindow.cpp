@@ -78,7 +78,6 @@ MainWindow::MainWindow():
 	     this,	       SLOT  ( updateActions()	 ) );
 
 
-
     // Debug connections
 
     connect( _ui->dirTreeView, SIGNAL( clicked	  ( QModelIndex ) ),
@@ -104,6 +103,9 @@ MainWindow::MainWindow():
 #if 0
     ExcludeRules::add( ".*/\\.git$" );
 #endif
+
+    if ( ! _ui->actionShowTreemap->isChecked() )
+        _ui->treemapView->disable();
 
     updateActions();
 }
@@ -169,9 +171,8 @@ void MainWindow::connectActions()
 
     // "Treemap" menu
 
-    // TO DO
-    // _ui->actionShowTreemap;
-    // TO DO
+    connect( _ui->actionShowTreemap, SIGNAL( toggled( bool )   ),
+             this,                   SLOT  ( showTreemapView() ) );
 
     CONNECT_ACTION( _ui->actionTreemapZoomIn,	 _ui->treemapView, zoomIn()	    );
     CONNECT_ACTION( _ui->actionTreemapZoomOut,	 _ui->treemapView, zoomOut()	    );
@@ -215,6 +216,15 @@ void MainWindow::updateActions()
     _ui->actionTreemapZoomOut->setEnabled  ( showingTreemap && _ui->treemapView->canZoomOut() );
     _ui->actionResetTreemapZoom->setEnabled( showingTreemap && _ui->treemapView->canZoomOut() );
     _ui->actionTreemapRebuild->setEnabled  ( showingTreemap );
+}
+
+
+void MainWindow::showTreemapView()
+{
+    if ( _ui->actionShowTreemap->isChecked() )
+        _ui->treemapView->enable();
+    else
+        _ui->treemapView->disable();
 }
 
 
@@ -423,8 +433,11 @@ void MainWindow::navigateToToplevel()
     FileInfo * toplevel = _dirTreeModel->tree()->firstToplevel();
 
     if ( toplevel )
+    {
+        expandTreeToLevel( 1 );
 	_selectionModel->setCurrentItem( toplevel,
 					 true ); // select
+    }
 }
 
 

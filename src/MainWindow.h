@@ -123,6 +123,12 @@ protected slots:
     void updateActions();
 
     /**
+     * Enable or disable the treemap view, depending on the value of
+     * the corresponding action.
+     **/
+    void showTreemapView();
+
+    /**
      * Open a popup dialog with a message that this feature is not implemented.
      **/
     void notImplemented();

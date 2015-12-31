@@ -1,6 +1,16 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/qdirstat.png</file>
+        <file>icons/edit-copy.png</file>
+        <file>icons/go-top.png</file>
+        <file>icons/go-up.png</file>
+        <file>icons/open-dir.png</file>
+        <file>icons/refresh.png</file>
+        <file>icons/stop.png</file>
+        <file>icons/window-close.png</file>
+        <file>icons/zoom-best-fit.png</file>
+        <file>icons/zoom-in.png</file>
+        <file>icons/zoom-out.png</file>
 
         <file>icons/tree-medium/dir.png</file>
         <file>icons/tree-medium/dot-entry.png</file>
@@ -8,6 +18,7 @@
         <file>icons/tree-medium/file.png</file>
         <file>icons/tree-medium/mount-point.png</file>
         <file>icons/tree-medium/stop.png</file>
+        <file>icons/tree-medium/symlink.png</file>
         <file>icons/tree-medium/unreadable-dir.png</file>
 
         <file>icons/tree-small/dir.png</file>
@@ -16,7 +27,9 @@
         <file>icons/tree-small/file.png</file>
         <file>icons/tree-small/mount-point.png</file>
         <file>icons/tree-small/stop.png</file>
+        <file>icons/tree-small/symlink.png</file>
         <file>icons/tree-small/unreadable-dir.png</file>
 
     </qresource>
 </RCC>
+

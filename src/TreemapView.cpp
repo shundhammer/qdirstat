@@ -543,6 +543,34 @@ void TreemapView::resizeEvent( QResizeEvent * event )
 }
 
 
+void TreemapView::disable()
+{
+    logDebug() << "Disabling treemap view" << endl;
+
+    clear();
+    resize( width(), 1 );
+    hide();
+
+    emit treemapChanged();
+}
+
+
+void TreemapView::enable()
+{
+    if ( ! isVisible() )
+    {
+        logDebug() << "Enabling treemap view" << endl;
+        show();
+        QWidget * parentWidget = qobject_cast<QWidget *>( parent() );
+
+        if ( parentWidget )
+            resize( parentWidget->height(), width() );
+
+        rebuildTreemap( _tree->firstToplevel() );
+    }
+}
+
+
 void TreemapView::setCurrentItem( TreemapTile * tile )
 {
     logDebug() << tile << endl;
@@ -553,7 +581,7 @@ void TreemapView::setCurrentItem( TreemapTile * tile )
     if ( _currentItem )
     {
 	if ( ! _currentItemRect )
-	    _currentItemRect = new HighlightRect( scene(), _currentItemColor );
+	    _currentItemRect = new CurrentItemHighlighter( scene(), _currentItemColor );
     }
 
     if ( _currentItemRect )
@@ -835,18 +863,16 @@ HighlightRect::HighlightRect( TreemapTile * tile, const QColor & color, int line
 
 void HighlightRect::highlight( TreemapTile * tile )
 {
-    _tile = tile;
-
-    if ( _tile )
+    if ( tile )
     {
-	QRectF tileRect = _tile->rect();
+	QRectF tileRect = tile->rect();
 	tileRect.moveTo( mapFromScene( tile->mapToScene( tileRect.topLeft() ) ) );
 	setRect( tileRect );
 
 	if ( ! isVisible() )
 	    show();
 
-        setPenStyle( _tile );
+        setPenStyle( tile );
     }
     else
     {
@@ -871,3 +897,12 @@ void HighlightRect::setPenStyle( TreemapTile * tile )
     else
         setPenStyle( Qt::DotLine );
 }
+
+
+
+void CurrentItemHighlighter::highlight( TreemapTile * tile )
+{
+    HighlightRect::highlight( tile );
+    setPenStyle( tile );
+}
+
