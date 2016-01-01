@@ -90,7 +90,7 @@ void TreemapView::setDirTree( DirTree * newTree )
 	     this,  SLOT  ( rebuildTreemap() ) );
 
     connect( _tree, SIGNAL( clearing() ),
-             this,  SLOT  ( clear()    ) );
+	     this,  SLOT  ( clear()    ) );
 
     connect( _tree, SIGNAL( finished()	     ),
 	     this,  SLOT  ( rebuildTreemap() ) );
@@ -205,40 +205,8 @@ TreemapTile * TreemapView::tileAt( QPoint pos )
 #if 0
 void TreemapView::contentsMousePressEvent( QMouseEvent * event )
 {
-    // logDebug() << endl;
-
-    TreemapTile * tile = tileAt( event->pos() );
-
-    if ( ! tile )
-	return;
-
     switch ( event->button() )
     {
-	case LeftButton:
-	    setCurrentItem( tile );
-	    break;
-
-	case MidButton:
-	    // Select clicked tile's parent, if available
-
-	    if ( _currentItem &&
-		 _currentItem->rect().contains( event->pos() ) )
-	    {
-		if ( _currentItem->parentTile() )
-		    tile = _currentItem->parentTile();
-	    }
-
-	    // Intentionally handling the middle button like the left button if
-	    // the user clicked outside the (old) selected tile: Simply select
-	    // the clicked tile. This makes using this middle mouse button
-	    // intuitive: It can be used very much like the left mouse button,
-	    // but it has added functionality. Plus, it cycles back to the
-	    // clicked tile if the user has already clicked all the way up the
-	    // hierarchy (i.e. the topmost directory is highlighted).
-
-	    setCurrentItem( tile );
-	    break;
-
 	case RightButton:
 
 	    if ( tile )
@@ -257,52 +225,6 @@ void TreemapView::contentsMousePressEvent( QMouseEvent * event )
 		    emit contextMenu( tile, event->globalPos() );
 		}
 	    }
-	    break;
-
-	default:
-	    // event->button() is an enum, so g++ complains
-	    // if there are unhandled cases.
-	    break;
-    }
-}
-#endif
-
-
-#if 0
-void TreemapView::contentsMouseDoubleClickEvent( QMouseEvent * event )
-{
-    // logDebug() << endl;
-
-    TreemapTile * tile = tileAt( event->pos() );
-
-    if ( ! tile )
-	return;
-
-    switch ( event->button() )
-    {
-	case LeftButton:
-	    if ( tile )
-	    {
-		setCurrentItem( tile );
-		zoomIn();
-	    }
-	    break;
-
-	case MidButton:
-	    zoomOut();
-	    break;
-
-	case RightButton:
-	    // Double-clicking the right mouse button is pretty useless - the
-	    // first click opens the context menu: Single clicks are always
-	    // delivered first. Even if that would be caught by using timers,
-	    // it would still be very awkward to use: Click too slow, and
-	    // you'll get the context menu rather than what you really wanted -
-	    // then you'd have to get rid of the context menu first.
-	    break;
-
-	default:
-	    // Prevent compiler complaints about missing enum values in switch
 	    break;
     }
 }
@@ -350,13 +272,6 @@ void TreemapView::resetZoom()
 {
     if ( _tree && _tree->firstToplevel() )
 	rebuildTreemap( _tree->firstToplevel() );
-}
-
-
-void TreemapView::selectParent()
-{
-    if ( _currentItem && _currentItem->parentTile() )
-	setCurrentItem( _currentItem->parentTile() );
 }
 
 

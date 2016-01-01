@@ -164,16 +164,6 @@ namespace QDirStat
 	void resetZoom();
 
 	/**
-	 * Select the parent of the currently selected tile (if possible).
-	 *
-	 * This is very much the same as clicking with the middle mouse button,
-	 * but not quite: The middle mouse button cycles back to the tile
-	 * clicked at if there is no more parent. This method does not (because
-	 * there is no known mouse position).
-	 **/
-	void selectParent();
-
-	/**
 	 * Completely rebuild the entire treemap from the internal tree's root
 	 * on.
 	 **/
@@ -201,10 +191,10 @@ namespace QDirStat
 	 **/
 	void deleteNotify( FileInfo * node );
 
-        /**
-         * Sync the selected items and the current item to the selection model.
-         **/
-        void sendSelection();
+	/**
+	 * Sync the selected items and the current item to the selection model.
+	 **/
+	void sendSelection();
 
 	/**
 	 * Read some parameters from the config file
@@ -376,21 +366,6 @@ namespace QDirStat
 
     protected:
 
-#if 0
-	/**
-	 * Catch mouse click - emits a selectionChanged() signal.
-	 **/
-	virtual void contentsMousePressEvent( QMouseEvent * event );
-
-	/**
-	 * Catch mouse double click:
-	 *	Left   button double-click zooms in,
-	 *	right  button double-click zooms out,
-	 *	middle button double-click rebuilds treemap.
-	 **/
-	virtual void contentsMouseDoubleClickEvent( QMouseEvent * event );
-#endif
-
 	/**
 	 * Resize the treemap view. Suppress the treemap contents if the size
 	 * falls below a minimum size, redisplay it if it grows above that
@@ -482,15 +457,15 @@ namespace QDirStat
 	 **/
 	virtual void highlight( TreemapTile * tile );
 
-        /**
-         * Set the pen style. Recommended: Qt::SolidLine or Qt::DotLine.
-         **/
-        void setPenStyle( Qt::PenStyle style = Qt::SolidLine );
+	/**
+	 * Set the pen style. Recommended: Qt::SolidLine or Qt::DotLine.
+	 **/
+	void setPenStyle( Qt::PenStyle style = Qt::SolidLine );
 
-        /**
-         * Set the pen style according to the 'selected' status of 'tile'.
-         **/
-        void setPenStyle( TreemapTile * tile );
+	/**
+	 * Set the pen style according to the 'selected' status of 'tile'.
+	 **/
+	void setPenStyle( TreemapTile * tile );
 
     }; // class TreemapSelectionRect
 
@@ -503,13 +478,13 @@ namespace QDirStat
     {
     public:
 	CurrentItemHighlighter( QGraphicsScene * scene, const QColor & color, int lineWidth = 2 ):
-            HighlightRect( scene, color, lineWidth )
-            {}
-        
+	    HighlightRect( scene, color, lineWidth )
+	    {}
+
 	virtual void highlight( TreemapTile * tile );
     };
 
-    
+
     /**
      * Highlighter for the treemap view's current item.
      *
@@ -521,9 +496,9 @@ namespace QDirStat
     class SelectedItemHighlighter: public HighlightRect
     {
     public:
-        SelectedItemHighlighter( TreemapTile * tile, const QColor & color, int lineWidth = 2 ):
-            HighlightRect( tile, color, lineWidth )
-            {}
+	SelectedItemHighlighter( TreemapTile * tile, const QColor & color, int lineWidth = 2 ):
+	    HighlightRect( tile, color, lineWidth )
+	    {}
     };
 
 }	// namespace QDirStat

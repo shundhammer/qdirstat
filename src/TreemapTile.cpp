@@ -173,14 +173,6 @@ void TreemapTile::createSquarifiedChildren( const QRectF & rect )
     double scale	= rect.width() * (double) rect.height() / _orig->totalSize();
     FileSize minSize	= (FileSize) ( _parentView->minTileSize() / scale );
 
-#if 0
-    if ( _orig->hasChildren() )
-    {
-	_cushionSurface.addRidge( TreemapHorizontal, _cushionSurface.height(), rect );
-	_cushionSurface.addRidge( TreemapVertical,   _cushionSurface.height(), rect );
-    }
-#endif
-
     FileInfoSortedBySizeIterator it( _orig, minSize );
     QRectF childrenRect = rect;
 
@@ -604,38 +596,102 @@ QVariant TreemapTile::itemChange( GraphicsItemChange   change,
 
 void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
 {
-    QGraphicsRectItem::mousePressEvent( event );
-
-    if ( event->button() == Qt::LeftButton )
+    switch ( event->button() )
     {
-	// isSelected() is unreliable here since in QGraphicsItem some stuff is
-	// done in the mousePressEvent, while some other stuff is done in the
-	// mouseReleaseEvent. Just setting the current item here to avoid
-	// having a yellow highlighter rectangle upon mouse press and then a
-	// red one upon mouse release. No matter if the item ends up selected
-	// or not, the mouse press makes it the current item, so let's update
-	// the red highlighter rectangle here.
+	case Qt::LeftButton:
+	    // isSelected() is unreliable here since in QGraphicsItem some
+	    // stuff is done in the mousePressEvent, while some other stuff is
+	    // done in the mouseReleaseEvent. Just setting the current item
+	    // here to avoid having a yellow highlighter rectangle upon mouse
+	    // press and then a red one upon mouse release. No matter if the
+	    // item ends up selected or not, the mouse press makes it the
+	    // current item, so let's update the red highlighter rectangle
+	    // here.
 
-	logDebug() << this << " mouse pressed" << endl;
-	_parentView->setCurrentItem( this );
+	    QGraphicsRectItem::mousePressEvent( event );
+	    logDebug() << this << " mouse pressed" << endl;
+	    _parentView->setCurrentItem( this );
+	    break;
+
+	case Qt::MidButton:
+	    logDebug() << "Middle button pressed for " << this << endl;
+	    break;
+
+	case Qt::RightButton:
+	    logDebug() << "Right button pressed for " << this << endl;
+	    break;
+
+	default:
+	    QGraphicsRectItem::mousePressEvent( event );
+	    break;
     }
 }
 
 
 void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 {
-    QGraphicsRectItem::mouseReleaseEvent( event );
-
-    if ( event->button() == Qt::LeftButton )
+    switch ( event->button() )
     {
-	// The current item was already set in the mouse press event, but it
-	// might have changed its 'selected' status right now, so let the view
-	// update it.
-	_parentView->setCurrentItem( this );
-	logDebug() << this << " clicked; selected: " << isSelected() << endl;
+	case Qt::LeftButton:
+	    {
+		// The current item was already set in the mouse press event,
+		// but it might have changed its 'selected' status right now,
+		// so let the view update it.
+
+		QGraphicsRectItem::mouseReleaseEvent( event );
+		_parentView->setCurrentItem( this );
+		// logDebug() << this << " clicked; selected: " << isSelected() << endl;
+	    }
+	    break;
+
+	case Qt::MidButton:
+	    {
+		TreemapTile * oldCurrentTile = _parentView->currentItem();
+		TreemapTile * newCurrentTile = this;
+
+		// Select the next-higher ancestor if possible
+
+		if ( oldCurrentTile &&
+		     oldCurrentTile->parentTile() &&
+		     _orig->isInSubtree( oldCurrentTile->parentTile()->orig() ) )
+		{
+		    newCurrentTile = oldCurrentTile->parentTile();
+		}
+
+		_parentView->currentItem()->setSelected( false );
+		newCurrentTile->setSelected( true );
+		_parentView->setCurrentItem( newCurrentTile );
+	    }
+	    break;
+
+	default:
+	    QGraphicsRectItem::mouseReleaseEvent( event );
+	    break;
     }
 
     _parentView->sendSelection();
+}
+
+
+void TreemapTile::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event )
+{
+    switch ( event->button() )
+    {
+	case Qt::LeftButton:
+	    _parentView->zoomIn();
+	    break;
+
+	case Qt::MidButton:
+	    _parentView->resetZoom();
+	    break;
+
+	case Qt::RightButton:
+	    _parentView->zoomOut();
+	    break;
+
+	default:
+	    break;
+    }
 }
 
 

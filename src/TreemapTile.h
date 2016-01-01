@@ -276,12 +276,28 @@ namespace QDirStat
 				     const QVariant	& value) Q_DECL_OVERRIDE;
 
 	/**
-	 * Mouse events.
+	 * Mouse press event: Handle setting the current item.
 	 *
 	 * Reimplemented from QGraphicsItem.
 	 **/
 	virtual void mousePressEvent  ( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
+
+	/**
+	 * Mouse release event: Handle marking item selection.
+	 *
+	 * Reimplemented from QGraphicsItem.
+	 **/
 	virtual void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
+
+	/**
+	 * Mouse double click event:
+	 *	Left   button double-click zooms in,
+	 *	right  button double-click zooms out,
+	 *	middle button double-click rebuilds treemap.
+	 *
+	 * Reimplemented from QGraphicsItem.
+	 **/
+	virtual void mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Render a cushion as described in "cushioned treemaps" by Jarke
