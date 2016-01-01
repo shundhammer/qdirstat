@@ -711,7 +711,6 @@ void TreemapTile::wheelEvent( QGraphicsSceneWheelEvent * event )
 }
 
 
-
 //
 //---------------------------------------------------------------------------
 //

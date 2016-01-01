@@ -233,7 +233,7 @@ void TreemapView::contentsMousePressEvent( QMouseEvent * event )
 
 void TreemapView::zoomIn()
 {
-    if ( ! _currentItem || ! _rootTile )
+    if ( ! canZoomIn() )
 	return;
 
     TreemapTile * newRootTile = _currentItem;
@@ -256,15 +256,15 @@ void TreemapView::zoomIn()
 
 void TreemapView::zoomOut()
 {
-    if ( _rootTile )
-    {
-	FileInfo * newRoot = _rootTile->orig();
+    if ( ! canZoomOut() )
+	return;
 
-	if ( newRoot->parent() && newRoot->parent() != _tree->root() )
-	    newRoot = newRoot->parent();
+    FileInfo * newRoot = _rootTile->orig();
 
-	rebuildTreemap( newRoot );
-    }
+    if ( newRoot->parent() && newRoot->parent() != _tree->root() )
+	newRoot = newRoot->parent();
+
+    rebuildTreemap( newRoot );
 }
 
 
