@@ -259,12 +259,14 @@ void MainWindow::busyDisplay()
 {
     _ui->treemapView->disable();
     updateActions();
-    expandTreeToLevel( 1 );
 
     // During reading, PercentBarCol contains the number of read jobs.
 
     int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::PercentBarCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
+
+    // Wait until the toplevel entry has some children, then expand to level 1
+    QTimer::singleShot( 200, _ui->actionExpandTreeLevel1, SLOT( trigger() ) );
 }
 
 
