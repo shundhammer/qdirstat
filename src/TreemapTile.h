@@ -299,6 +299,13 @@ namespace QDirStat
 	 **/
 	virtual void mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
 
+        /**
+         * Mouse wheel event: Zoom in or out
+         *
+	 * Reimplemented from QGraphicsItem.
+         **/
+        virtual void wheelEvent( QGraphicsSceneWheelEvent * event) Q_DECL_OVERRIDE;
+
 	/**
 	 * Render a cushion as described in "cushioned treemaps" by Jarke
 	 * J. van Wijk and Huub van de Wetering	 of the TU Eindhoven, NL.

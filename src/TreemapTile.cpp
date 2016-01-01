@@ -695,6 +695,23 @@ void TreemapTile::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event )
 }
 
 
+void TreemapTile::wheelEvent( QGraphicsSceneWheelEvent * event )
+{
+    if ( event->delta() > 0 )
+    {
+	if ( ! _parentView->currentItem() )  // can only zoom in with a current item
+	    _parentView->setCurrentItem( this );
+
+	_parentView->zoomIn();
+    }
+    else if ( event->delta() < 0 )
+    {
+	_parentView->zoomOut();
+    }
+}
+
+
+
 //
 //---------------------------------------------------------------------------
 //
