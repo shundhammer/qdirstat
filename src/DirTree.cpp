@@ -21,7 +21,6 @@ using namespace QDirStat;
 DirTree::DirTree()
     : QObject()
 {
-    _selection = 0;
     _isBusy    = false;
     _root      = new DirInfo( this );
     CHECK_NEW( _root );
@@ -35,8 +34,6 @@ DirTree::DirTree()
 
 DirTree::~DirTree()
 {
-    selectItem( 0 );
-
     if ( _root )
 	delete _root;
 }
@@ -65,7 +62,6 @@ void DirTree::setRoot( DirInfo *newRoot )
 {
     if ( _root )
     {
-	selectItem( 0 );
 	emit deletingChild( _root );
 	delete _root;
 	emit childDeleted();
@@ -101,7 +97,6 @@ void DirTree::clear()
 
     if ( _root )
     {
-	selectItem( 0 );
 	_root->clear();
     }
 
@@ -167,12 +162,6 @@ void DirTree::refresh( FileInfo *subtree )
 
 	QString	  url	 = subtree->url();
 	DirInfo * parent = subtree->parent();
-
-
-	// Select nothing if the current selection is to be deleted
-
-	if ( _selection && _selection->isInSubtree( subtree ) )
-	    selectItem( 0 );
 
 
 	// Clear any old "excluded" status
@@ -263,12 +252,6 @@ void DirTree::deletingChildNotify( FileInfo *deletedChild )
     logDebug() << "Deleting child " << deletedChild << endl;
     emit deletingChild( deletedChild );
 
-    // Only now check for selection and root: Give connected objects
-    // (i.e. views) a chance to change either while handling the signal.
-
-    if ( _selection && _selection->isInSubtree( deletedChild ) )
-	 selectItem( 0 );
-
     if ( deletedChild == _root )
 	_root = 0;
 }
@@ -333,7 +316,6 @@ void DirTree::deleteSubtree( FileInfo *subtree )
 
     if ( subtree == _root )
     {
-	selectItem( 0 );
 	_root = 0;
     }
 
@@ -387,23 +369,6 @@ void DirTree::sendReadJobFinished( DirInfo * dir )
 {
     // logDebug() << dir << endl;
     emit readJobFinished( dir );
-}
-
-
-void DirTree::selectItem( FileInfo *newSelection )
-{
-    if ( newSelection == _selection )
-	return;
-
-#if 1
-    if ( newSelection )
-	logDebug() << " selecting " << newSelection << endl;
-    else
-	logDebug() << " selecting nothing" << endl;
-#endif
-
-    _selection = newSelection;
-    emit selectionChanged( _selection );
 }
 
 

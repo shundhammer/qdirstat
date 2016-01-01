@@ -91,15 +91,6 @@ namespace QDirStat
 	void refresh( FileInfo *subtree = 0 );
 
 	/**
-	 * Select some other item in this tree. Triggers the @ref
-	 * selectionChanged() signal - even to the sender of this signal,
-	 * i.e. take care not to cause endless signal ping-pong!
-	 *
-	 * Select nothing if '0' is passed.
-	 **/
-	void selectItem( FileInfo *newSelection );
-
-	/**
 	 * Delete a subtree.
 	 **/
 	void deleteSubtree( FileInfo *subtree );
@@ -157,15 +148,6 @@ namespace QDirStat
 	FileInfo * locate( QString url, bool findDotEntries = false )
 	    { return _root ? _root->locate( url, findDotEntries ) : 0; }
 
-#if 0
-	/**
-	 * Notification of a finished directory read job.
-	 * All read jobs are required to call this upon (successful or
-	 * unsuccessful) completion.
-	 **/
-	void jobFinishedNotify( DirReadJob *job );
-#endif
-
 	/**
 	 * Add a new directory read job to the queue.
 	 **/
@@ -184,20 +166,6 @@ namespace QDirStat
 	 * Set or unset the "cross file systems" flag.
 	 **/
 	void setCrossFileSystems( bool doCross ) { _crossFileSystems = doCross; }
-
-	/**
-	 * Return the tree's current selection.
-	 *
-	 * Even though the DirTree by itself doesn't have a visual
-	 * representation, it supports the concept of one single selected
-	 * item. Views can use this to transparently keep track of this single
-	 * selected item, notifying the DirTree and thus other views with @ref
-	 * DirTree::selectItem() . Attached views should connect to the @ref
-	 * selectionChanged() signal to be notified when the selection changes.
-	 *
-	 * NOTE: This method returns 0 if nothing is selected.
-	 **/
-	FileInfo * selection() const { return _selection; }
 
 	/**
 	 * Notification that a child has been added.
@@ -286,12 +254,12 @@ namespace QDirStat
 	/**
 	 * Emitted when a child has been added.
 	 **/
-	void childAdded( FileInfo *newChild );
+	void childAdded( FileInfo * newChild );
 
 	/**
 	 * Emitted when a child is about to be deleted.
 	 **/
-	void deletingChild( FileInfo *deletedChild );
+	void deletingChild( FileInfo * deletedChild );
 
 	/**
 	 * Emitted after a child is deleted. If you are interested which child
@@ -345,15 +313,6 @@ namespace QDirStat
 	void finalizeLocal( DirInfo * dir );
 
 	/**
-	 * Emitted when the current selection has changed, i.e. whenever some
-	 * attached view triggers the @ref selectItem() slot or when the
-	 * current selection is deleted.
-	 *
-	 * NOTE: 'newSelection' may be 0 if nothing is selected.
-	 **/
-	void selectionChanged( FileInfo * newSelection );
-
-	/**
 	 * Single line progress information, emitted when the read status
 	 * changes - typically when a new directory is being read. Connect to a
 	 * status bar etc. to keep the user entertained.
@@ -378,7 +337,6 @@ namespace QDirStat
     protected:
 
 	DirInfo *	_root;
-	FileInfo *	_selection;
 	DirReadJobQueue _jobQueue;
 	bool		_crossFileSystems;
 	bool		_enableLocalDirReader;
