@@ -32,6 +32,8 @@
 
 - Qt designer forms
 
+- Data columns to display + order (NameCol is alwas there and #1)
+
 - ...
 
 ## Cleanups
