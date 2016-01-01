@@ -169,14 +169,7 @@ protected slots:
     void itemClicked( const QModelIndex & index );
 
     void selectionChanged();
-
     void currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurrent );
-
-    void currentChanged( const QModelIndex & newCurrent,
-			 const QModelIndex & oldCurrent );
-
-    void selectionChanged( const QItemSelection & selected,
-			   const QItemSelection & deselected );
 #endif
 
 

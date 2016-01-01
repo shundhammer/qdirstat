@@ -86,14 +86,6 @@ MainWindow::MainWindow():
     connect( _selectionModel, SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
 	     this,	      SLOT  ( currentItemChanged( FileInfo *, FileInfo * ) ) );
 
-#if 0
-    connect( _selectionModel, SIGNAL( currentChanged( QModelIndex, QModelIndex	) ),
-	     this,	      SLOT  ( currentChanged( QModelIndex, QModelIndex	) ) );
-
-    connect( _selectionModel, SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ),
-	     this,	      SLOT  ( selectionChanged( QItemSelection, QItemSelection ) ) );
-#endif
-
     connectActions();
 
     ExcludeRules::add( ".*/\\.snapshot$" );
@@ -558,39 +550,6 @@ void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurren
     showSummary();
     _selectionModel->dumpSelectedItems();
 }
-
-
-void MainWindow::currentChanged( const QModelIndex & newCurrent,
-				 const QModelIndex & oldCurrent )
-{
-    logDebug() << "new current: " << newCurrent << endl;
-    logDebug() << "old current: " << oldCurrent << endl;
-    _selectionModel->dumpSelectedItems();
-}
-
-
-void MainWindow::selectionChanged( const QItemSelection & selected,
-				   const QItemSelection & deselected )
-{
-    logDebug() << endl;
-#if 0
-    foreach ( const QModelIndex index, selected.indexes() )
-    {
-	logDebug() << "Selected: " << index << endl;
-    }
-
-    foreach ( const QModelIndex index, deselected.indexes() )
-    {
-	logDebug() << "Deselected: " << index << endl;
-    }
-#else
-    Q_UNUSED( selected );
-    Q_UNUSED( deselected );
-#endif
-
-    _selectionModel->dumpSelectedItems();
-}
-
 
 
 QString MainWindow::formatTime( qint64 millisec )
