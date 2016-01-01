@@ -47,29 +47,36 @@ namespace QDirStat
 	virtual ~DirTreeView();
 
 #if 0
-        /**
-         * Set the selection model.
-         *
-         * Reimplemented from QTreeView to use a SelectionModelProxy.
-         **/
-        virtual void setSelectionModel( QItemSelectionModel * selectionModel ) Q_DECL_OVERRIDE;
+	/**
+	 * Set the selection model.
+	 *
+	 * Reimplemented from QTreeView to use a SelectionModelProxy.
+	 **/
+	virtual void setSelectionModel( QItemSelectionModel * selectionModel ) Q_DECL_OVERRIDE;
 #endif
+
+    protected slots:
+
+	/**
+	 * Post a context menu for the item at 'pos'.
+	 **/
+	void contextMenu( const QPoint & pos );
 
     protected:
 
-        /**
-         * Change the current item. Overwritten from QTreeView to make sure
-         * the branch of the new current item is expanded and scrolled to
-         * the visible area.
-         **/
-        virtual void currentChanged( const QModelIndex & current,
-                                     const QModelIndex & oldCurrent ) Q_DECL_OVERRIDE;
+	/**
+	 * Change the current item. Overwritten from QTreeView to make sure
+	 * the branch of the new current item is expanded and scrolled to
+	 * the visible area.
+	 **/
+	virtual void currentChanged( const QModelIndex & current,
+				     const QModelIndex & oldCurrent ) Q_DECL_OVERRIDE;
 
-        // Data members
+	// Data members
 
 	PercentBarDelegate	* _percentBarDelegate;
 #if 0
-        SelectionModelProxy     * _selectionModelProxy;
+	SelectionModelProxy	* _selectionModelProxy;
 #endif
 
     };	// class DirTreeView

@@ -8,10 +8,12 @@
 
 
 #include <QHeaderView>
+#include <QMenu>
 
 #include "DirTreeView.h"
 #include "DirTreeModel.h"
 #include "SelectionModel.h"
+#include "ActionManager.h"
 #include "PercentBar.h"
 #include "DirTree.h"
 #include "Exception.h"
@@ -35,12 +37,17 @@ DirTreeView::DirTreeView( QWidget * parent ):
     setRootIsDecorated( true );
     setSortingEnabled( true );
     setSelectionMode( ExtendedSelection );
+    setContextMenuPolicy( Qt::CustomContextMenu );
 
     header()->setSortIndicator( NameCol, Qt::AscendingOrder );
     header()->setStretchLastSection( false );
 
     // TO DO: This is too strict. But it's better than the brain-dead defaults.
     header()->setSectionResizeMode( QHeaderView::ResizeToContents );
+
+    connect( this , SIGNAL( customContextMenuRequested( const QPoint & ) ),
+             this,  SLOT  ( contextMenu               ( const QPoint & ) ) );
+
 }
 
 
@@ -56,6 +63,40 @@ void DirTreeView::currentChanged( const QModelIndex & current,
     // logDebug() << "Setting new current to " << current << endl;
     QTreeView::currentChanged( current, oldCurrent );
     scrollTo( current );
+}
+
+
+void DirTreeView::contextMenu( const QPoint & pos )
+{
+    QModelIndex index = indexAt( pos );
+
+    if ( ! index.isValid() )
+    {
+        logDebug() << "No item at this position" << endl;
+        return;
+    }
+
+    logDebug() << "Context menu for " << this << endl;
+
+    QMenu menu;
+    QStringList actions;
+    actions << "actionGoUp"
+            << "actionRefreshSelected"
+            << "actionContinueReading";
+
+    ActionManager::instance()->addActions( &menu, actions );
+
+    QAction * selectedAction = menu.exec( mapToGlobal( pos ) );
+
+    if ( selectedAction )
+    {
+        logDebug() << "Executing action " << selectedAction->objectName() << endl;
+        selectedAction->trigger();
+    }
+    else
+    {
+        logDebug() << "No action selected" << endl;
+    }
 }
 
 
