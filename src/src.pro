@@ -24,6 +24,7 @@ TARGET.path	     = /usr/bin
 INSTALLS	    += TARGET
 
 SOURCES	  = main.cpp			\
+	    ActionManager.cpp		\
 	    DebugHelpers.cpp		\
 	    DataColumns.cpp		\
 	    DirInfo.cpp			\
@@ -47,6 +48,7 @@ SOURCES	  = main.cpp			\
 
 
 HEADERS	  =				\
+	    ActionManager.h		\
 	    DebugHelpers.h		\
 	    DataColumns.h		\
 	    DirInfo.h			\
@@ -68,7 +70,7 @@ HEADERS	  =				\
 	    SignalBlocker.h		\
 	    TreemapTile.h		\
 	    TreemapView.h		\
-	    Version.h   		\
+	    Version.h			\
 
 
 

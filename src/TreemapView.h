@@ -101,6 +101,11 @@ namespace QDirStat
 	 **/
 	DirTree * tree() const { return _tree; }
 
+        /**
+         * Return this treemap view's SelectionModel.
+         **/
+        SelectionModel * selectionModel() const { return _selectionModel; }
+
 	/**
 	 * Search the treemap for a tile that corresponds to the specified
 	 * FileInfo node. Returns 0 if there is none.

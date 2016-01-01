@@ -13,11 +13,13 @@
 #include <QImage>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
+#include <QMenu>
 
 #include "TreemapTile.h"
 #include "TreemapView.h"
 #include "FileInfoIterator.h"
-#include "DirTreeView.h"
+#include "SelectionModel.h"
+#include "ActionManager.h"
 #include "Exception.h"
 #include "Logger.h"
 
@@ -613,13 +615,10 @@ void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	    _parentView->setCurrentItem( this );
 	    break;
 
-	case Qt::MidButton:
-	    logDebug() << "Middle button pressed for " << this << endl;
-	    break;
-
 	case Qt::RightButton:
-	    logDebug() << "Right button pressed for " << this << endl;
-	    break;
+	    logDebug() << this << " right mouse pressed" << endl;
+	    _parentView->setCurrentItem( this );
+            break;
 
 	default:
 	    QGraphicsRectItem::mousePressEvent( event );
@@ -707,6 +706,49 @@ void TreemapTile::wheelEvent( QGraphicsSceneWheelEvent * event )
     else if ( event->delta() < 0 )
     {
 	_parentView->zoomOut();
+    }
+}
+
+
+void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
+{
+    if ( ! _parentView->selectionModel() )
+        return;
+
+    FileInfoSet selectedItems = _parentView->selectionModel()->selectedItems();
+
+    if ( ! selectedItems.contains( _orig ) )
+    {
+        logDebug() << "Abandoning old selection" << endl;
+        _parentView->selectionModel()->setCurrentItem( _orig, true );
+        selectedItems = _parentView->selectionModel()->selectedItems();
+    }
+
+    _parentView->selectionModel()->dumpSelectedItems();
+
+
+    logDebug() << "Context menu for " << this << endl;
+
+    QMenu menu;
+    QStringList actions;
+    actions << "actionGoUp"
+            << "actionTreemapZoomIn"
+            << "actionTreemapZoomOut"
+            << "noSuchAction"
+            << "actionResetTreemapZoom";
+
+    ActionManager::instance()->addActions( &menu, actions );
+
+    QAction * selectedAction = menu.exec( event->screenPos() );
+
+    if ( selectedAction )
+    {
+        logDebug() << "Executing action " << selectedAction->objectName() << endl;
+        selectedAction->trigger();
+    }
+    else
+    {
+        logDebug() << "No action selected" << endl;
     }
 }
 

@@ -15,13 +15,14 @@
 #include <QClipboard>
 
 #include "MainWindow.h"
-#include "Logger.h"
-#include "Exception.h"
-#include "ExcludeRules.h"
-#include "DirTree.h"
-#include "DirTreeCache.h"
+#include "ActionManager.h"
 #include "DataColumns.h"
 #include "DebugHelpers.h"
+#include "DirTree.h"
+#include "DirTreeCache.h"
+#include "Exception.h"
+#include "ExcludeRules.h"
+#include "Logger.h"
 #include "Version.h"
 
 
@@ -40,6 +41,8 @@ MainWindow::MainWindow():
     _treeLevelMapper(0)
 {
     _ui->setupUi( this );
+    ActionManager::instance()->addWidgetTree( this );
+
     _dirTreeModel = new DirTreeModel( this );
     CHECK_NEW( _dirTreeModel );
 

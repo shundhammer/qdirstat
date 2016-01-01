@@ -306,6 +306,13 @@ namespace QDirStat
          **/
         virtual void wheelEvent( QGraphicsSceneWheelEvent * event) Q_DECL_OVERRIDE;
 
+        /**
+         * Context menu event.
+         *
+	 * Reimplemented from QGraphicsItem.
+         **/
+        virtual void contextMenuEvent( QGraphicsSceneContextMenuEvent * event ) Q_DECL_OVERRIDE;
+
 	/**
 	 * Render a cushion as described in "cushioned treemaps" by Jarke
 	 * J. van Wijk and Huub van de Wetering	 of the TU Eindhoven, NL.
