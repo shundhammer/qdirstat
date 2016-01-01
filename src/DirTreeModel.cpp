@@ -493,7 +493,6 @@ void DirTreeModel::sort( int column, Qt::SortOrder order )
     {
 	_sortCol = ReadJobsCol;
 	logDebug() << "Sorting by " << _sortCol << " during reading" << endl;
-	_tree->root()->dropSortCache( true );
     }
 
     updatePersistentIndices();
@@ -512,8 +511,7 @@ void DirTreeModel::busyDisplay()
     emit layoutAboutToBeChanged();
 
     _sortCol = ReadJobsCol;
-    logDebug() << "Sorting by " << _sortCol << " during reading" << endl;
-    _tree->root()->dropSortCache( true );
+    // logDebug() << "Sorting by " << _sortCol << " during reading" << endl;
 
     updatePersistentIndices();
     emit layoutChanged();
@@ -527,8 +525,7 @@ void DirTreeModel::idleDisplay()
     if ( _sortCol == _readJobsCol )
     {
 	_sortCol = PercentNumCol;
-	logDebug() << "Sorting by " << _sortCol << " after reading is finished" << endl;
-	_tree->root()->dropSortCache( true );
+	// logDebug() << "Sorting by " << _sortCol << " after reading is finished" << endl;
     }
 
     updatePersistentIndices();
