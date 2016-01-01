@@ -335,8 +335,8 @@ void DirInfo::childAdded( FileInfo *newChild )
 	 */
     }
 
-    if ( newChild->parent() == this )
-        dropSortCache();
+    if ( _lastSortCol != ReadJobsCol )
+	dropSortCache();
 
     if ( _parent )
 	_parent->childAdded( newChild );
@@ -365,21 +365,21 @@ void DirInfo::deletingChild( FileInfo * child )
 
     if ( child->parent() == this )
     {
-        if ( ! _deletingAll )
-        {
-            /**
-             * Unlink the child from the children's list - but only if this
-             * doesn't happen recursively for all children of this object: No
-             * use bothering about the validity of the children's list if this
-             * will all be history anyway in a moment.
-             **/
+	if ( ! _deletingAll )
+	{
+	    /**
+	     * Unlink the child from the children's list - but only if this
+	     * doesn't happen recursively for all children of this object: No
+	     * use bothering about the validity of the children's list if this
+	     * will all be history anyway in a moment.
+	     **/
 
-            unlinkChild( child );
-        }
-        else
-        {
-            dropSortCache();
-        }
+	    unlinkChild( child );
+	}
+	else
+	{
+	    dropSortCache();
+	}
     }
 }
 
@@ -426,6 +426,9 @@ void DirInfo::readJobAdded()
 {
     _pendingReadJobs++;
 
+    if ( _lastSortCol == ReadJobsCol )
+	dropSortCache();
+
     if ( _parent )
 	_parent->readJobAdded();
 }
@@ -434,6 +437,9 @@ void DirInfo::readJobAdded()
 void DirInfo::readJobFinished()
 {
     _pendingReadJobs--;
+
+    if ( _lastSortCol == ReadJobsCol )
+	dropSortCache();
 
     if ( _parent )
 	_parent->readJobFinished();
@@ -589,7 +595,7 @@ const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
 
     // Sort
 
-    // logDebug() << "Sorting children of " << this << endl;
+    // logDebug() << "Sorting children of " << this << " by " << sortCol << endl;
 
     std::stable_sort( _sortedChildren->begin(),
 		      _sortedChildren->end(),

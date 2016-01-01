@@ -53,17 +53,14 @@ MainWindow::MainWindow():
     _ui->treemapView->setSelectionModel( _selectionModel );
 
 
+    connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
+	     this,			SLOT  ( startingReading() ) );
+
     connect( _dirTreeModel->tree(),	SIGNAL( finished()	  ),
 	     this,			SLOT  ( readingFinished() ) );
 
-    connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
-	     this,			SLOT  ( updateActions()	  ) );
-
-    connect( _dirTreeModel->tree(),	SIGNAL( finished()	  ),
-	     this,			SLOT  ( updateActions()	  ) );
-
     connect( _dirTreeModel->tree(),	SIGNAL( aborted()	  ),
-	     this,			SLOT  ( updateActions()	  ) );
+	     this,			SLOT  ( readingAborted()  ) );
 
     connect( _dirTreeModel->tree(),	SIGNAL( progressInfo( QString ) ),
 	     this,			SLOT  ( showProgress( QString ) ) );
@@ -105,7 +102,7 @@ MainWindow::MainWindow():
 #endif
 
     if ( ! _ui->actionShowTreemap->isChecked() )
-        _ui->treemapView->disable();
+	_ui->treemapView->disable();
 
     updateActions();
 }
@@ -172,11 +169,11 @@ void MainWindow::connectActions()
     // "Treemap" menu
 
     connect( _ui->actionShowTreemap, SIGNAL( toggled( bool )   ),
-             this,                   SLOT  ( showTreemapView() ) );
+	     this,		     SLOT  ( showTreemapView() ) );
 
     CONNECT_ACTION( _ui->actionTreemapZoomIn,	 _ui->treemapView, zoomIn()	    );
     CONNECT_ACTION( _ui->actionTreemapZoomOut,	 _ui->treemapView, zoomOut()	    );
-    CONNECT_ACTION( _ui->actionResetTreemapZoom, _ui->treemapView, resetZoom()      );
+    CONNECT_ACTION( _ui->actionResetTreemapZoom, _ui->treemapView, resetZoom()	    );
     CONNECT_ACTION( _ui->actionTreemapRebuild,	 _ui->treemapView, rebuildTreemap() );
 
     // "Help" menu
@@ -222,9 +219,9 @@ void MainWindow::updateActions()
 void MainWindow::showTreemapView()
 {
     if ( _ui->actionShowTreemap->isChecked() )
-        _ui->treemapView->enable();
+	_ui->treemapView->enable();
     else
-        _ui->treemapView->disable();
+	_ui->treemapView->disable();
 }
 
 
@@ -255,6 +252,57 @@ void MainWindow::closeEvent( QCloseEvent *event )
     {
 	event->accept();
     }
+}
+
+
+void MainWindow::busyDisplay()
+{
+    _ui->treemapView->disable();
+    updateActions();
+
+    // During reading, PercentBarCol contains the number of read jobs.
+
+    int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::PercentBarCol );
+    _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
+}
+
+
+void MainWindow::idleDisplay()
+{
+    updateActions();
+    expandTreeToLevel( 1 );
+    int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::PercentNumCol );
+    _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
+    showTreemapView();
+}
+
+
+void MainWindow::startingReading()
+{
+    _stopWatch.start();
+    busyDisplay();
+}
+
+
+void MainWindow::readingFinished()
+{
+    logDebug() << endl;
+
+    idleDisplay();
+    _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1")
+				 .arg( formatTime( _stopWatch.elapsed() ) ) );
+
+    // Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );
+}
+
+
+void MainWindow::readingAborted()
+{
+    logDebug() << endl;
+
+    idleDisplay();
+    _ui->statusBar->showMessage( tr( "Aborted. Elapsed time: %1")
+				 .arg( formatTime( _stopWatch.elapsed() ) ) );
 }
 
 
@@ -385,18 +433,6 @@ void MainWindow::notImplemented()
 }
 
 
-void MainWindow::readingFinished()
-{
-    logDebug() << endl;
-    _ui->statusBar->showMessage( tr( "Ready.") );
-    expandTreeToLevel( 1 );
-    int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::TotalSizeCol );
-    _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
-
-    // Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );
-}
-
-
 void MainWindow::copyCurrentUrlToClipboard()
 {
     FileInfo * currentItem = _selectionModel->currentItem();
@@ -434,7 +470,7 @@ void MainWindow::navigateToToplevel()
 
     if ( toplevel )
     {
-        expandTreeToLevel( 1 );
+	expandTreeToLevel( 1 );
 	_selectionModel->setCurrentItem( toplevel,
 					 true ); // select
     }
@@ -449,7 +485,7 @@ void MainWindow::showAboutDialog()
     QString text = "<h2>QDirStat " QDIRSTAT_VERSION "</h2>";
     text += "<p>";
     text += tr( "Qt-based directory statistics -- showing where all your disk space has gone "
-                " and trying to help you to clean it up." );
+		" and trying to help you to clean it up." );
     text += "</p><p>";
     text += "(c) 2015 Stefan Hundhammer";
     text += "</p><p>";
@@ -550,4 +586,35 @@ void MainWindow::selectionChanged( const QItemSelection & selected,
 #endif
 
     _selectionModel->dumpSelectedItems();
+}
+
+
+
+QString MainWindow::formatTime( qint64 millisec )
+{
+    QString formattedTime;
+    int hours;
+    int min;
+    int sec;
+
+    hours	= millisec / 3600000L;	// 60*60*1000
+    millisec	%= 3600000L;
+
+    min		= millisec / 60000L;	// 60*1000
+    millisec	%= 60000L;
+
+    sec		= millisec / 1000L;
+    millisec	%= 1000L;
+
+    if ( hours < 1 && min < 1 && sec < 60 )
+    {
+	formattedTime.sprintf ( "%2d.%03lld ", sec, millisec );
+	formattedTime += tr( "sec" );
+    }
+    else
+    {
+	formattedTime.sprintf ( "%02d:%02d:%02d", hours, min, sec );
+    }
+
+    return formattedTime;
 }

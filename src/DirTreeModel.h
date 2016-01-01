@@ -179,6 +179,19 @@ namespace QDirStat
     protected slots:
 
 	/**
+	 * Fix up sort order while reading: Sort by read jobs if the sort
+	 * column is the PercentBarCol.
+	 **/
+
+	void busyDisplay();
+
+	/**
+	 * Fix up sort order after reading is finished: No longer Sort by read
+	 * jobs if the sort column is the PercentBarCol.
+	 **/
+	void idleDisplay();
+
+	/**
 	 * Process notification that the read job for 'dir' is finished.
 	 * Other read jobs might still be pending.
 	 **/

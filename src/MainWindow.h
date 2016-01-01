@@ -12,6 +12,7 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <QElapsedTimer>
 
 #include "DirTreeModel.h"
 #include "SelectionModel.h"
@@ -113,9 +114,33 @@ public slots:
 protected slots:
 
     /**
+     * Switch display to "busy display" after reading was started and restart
+     * the stopwatch.
+     **/
+    void startingReading();
+
+    /**
      * Finalize display after reading is finished.
      **/
     void readingFinished();
+
+    /**
+     * Finalize display after reading has been aborted.
+     **/
+    void readingAborted();
+
+    /**
+     * Change display mode to "busy" (while reading a directory tree):
+     * Sort tree view by read jobs, hide treemap view.
+     **/
+    void busyDisplay();
+
+    /**
+     * Change display mode to "idle" (after reading the directory tree is
+     * finished): If the tree view is still sorted by read jobs, now sort it by
+     * subtree percent, show the treemap view if enabled.
+     **/
+    void idleDisplay();
 
     /**
      * Enable or disable actions depending on current status.
@@ -173,12 +198,18 @@ protected:
      **/
     virtual void closeEvent( QCloseEvent *event ) Q_DECL_OVERRIDE;
 
+    /**
+     * Format a millisecond-based time
+     **/
+    QString formatTime( qint64 millisec );
+
 
 private:
 
     Ui::MainWindow	     * _ui;
     QDirStat::DirTreeModel   * _dirTreeModel;
     QDirStat::SelectionModel * _selectionModel;
+    QElapsedTimer	       _stopWatch;
     bool		       _modified;
     int			       _statusBarTimeOut; // millisec
     QSignalMapper	     * _treeLevelMapper;

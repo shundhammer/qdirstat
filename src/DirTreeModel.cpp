@@ -48,6 +48,9 @@ void DirTreeModel::createTree()
     _tree = new DirTree();
     CHECK_NEW( _tree );
 
+    connect( _tree, SIGNAL( startingReading() ),
+	     this,  SLOT  ( busyDisplay() ) );
+
     connect( _tree, SIGNAL( finished()	      ),
 	     this,  SLOT  ( readingFinished() ) );
 
@@ -482,8 +485,17 @@ void DirTreeModel::sort( int column, Qt::SortOrder order )
     // dumpPersistentIndexList();
 
     emit layoutAboutToBeChanged();
-    _sortCol   = DataColumns::fromViewCol( column );
+
+    _sortCol = DataColumns::fromViewCol( column );
     _sortOrder = order;
+
+    if ( _sortCol == _readJobsCol && _tree->isBusy() )
+    {
+	_sortCol = ReadJobsCol;
+	logDebug() << "Sorting by " << _sortCol << " during reading" << endl;
+	_tree->root()->dropSortCache( true );
+    }
+
     updatePersistentIndices();
     emit layoutChanged();
 
@@ -493,6 +505,35 @@ void DirTreeModel::sort( int column, Qt::SortOrder order )
 
 
 //---------------------------------------------------------------------------
+
+
+void DirTreeModel::busyDisplay()
+{
+    emit layoutAboutToBeChanged();
+
+    _sortCol = ReadJobsCol;
+    logDebug() << "Sorting by " << _sortCol << " during reading" << endl;
+    _tree->root()->dropSortCache( true );
+
+    updatePersistentIndices();
+    emit layoutChanged();
+}
+
+
+void DirTreeModel::idleDisplay()
+{
+    emit layoutAboutToBeChanged();
+
+    if ( _sortCol == _readJobsCol )
+    {
+	_sortCol = PercentNumCol;
+	logDebug() << "Sorting by " << _sortCol << " after reading is finished" << endl;
+	_tree->root()->dropSortCache( true );
+    }
+
+    updatePersistentIndices();
+    emit layoutChanged();
+}
 
 
 QModelIndex DirTreeModel::modelIndex( FileInfo * item, int column ) const
@@ -751,14 +792,10 @@ void DirTreeModel::dataChangedNotify( DirInfo * dir )
 void DirTreeModel::readingFinished()
 {
     _updateTimer.stop();
+    idleDisplay();
     sendPendingUpdates();
 
-#if 0
-    beginResetModel();
-    endResetModel();
-#endif
-
-    dumpPersistentIndexList();
+    // dumpPersistentIndexList();
     // Debug::dumpDirectChildren( _tree->root(), "root" );
 }
 
