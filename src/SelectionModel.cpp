@@ -31,12 +31,25 @@ SelectionModel::SelectionModel( DirTreeModel * dirTreeModel, QObject * parent ):
 
     connect( dirTreeModel->tree(), SIGNAL( deletingChild      ( FileInfo * ) ),
 	     this,		   SLOT	 ( deletingChildNotify( FileInfo * ) ) );
+
+    connect( dirTreeModel->tree(), SIGNAL( clearing() ),
+             this,                 SLOT  ( clear()    ) );
 }
 
 
 SelectionModel::~SelectionModel()
 {
     // NOP
+}
+
+
+void SelectionModel::clear()
+{
+    _selectedItems.clear();
+    _selectedItemsDirty = true;
+    _currentItem = 0;
+
+    clearSelection();
 }
 
 
@@ -180,11 +193,11 @@ void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 
 void SelectionModel::deletingChildNotify( FileInfo * deletedChild )
 {
-    if ( _currentItem->isInSubtree( deletedChild ) )
-	setCurrentItem( 0 );
-
     _selectedItemsDirty = true;
     _selectedItems.clear();
+
+    if ( _currentItem->isInSubtree( deletedChild ) )
+	setCurrentItem( 0 );
 }
 
 

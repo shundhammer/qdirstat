@@ -89,6 +89,9 @@ void TreemapView::setDirTree( DirTree * newTree )
     connect( _tree, SIGNAL( childDeleted()   ),
 	     this,  SLOT  ( rebuildTreemap() ) );
 
+    connect( _tree, SIGNAL( clearing() ),
+             this,  SLOT  ( clear()    ) );
+
     connect( _tree, SIGNAL( finished()	     ),
 	     this,  SLOT  ( rebuildTreemap() ) );
 }

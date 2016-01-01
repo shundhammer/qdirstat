@@ -97,6 +97,7 @@ void DirTree::clear()
 
     if ( _root )
     {
+        emit clearing();
 	_root->clear();
     }
 

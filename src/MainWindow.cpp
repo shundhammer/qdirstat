@@ -259,6 +259,7 @@ void MainWindow::busyDisplay()
 {
     _ui->treemapView->disable();
     updateActions();
+    expandTreeToLevel( 1 );
 
     // During reading, PercentBarCol contains the number of read jobs.
 

@@ -257,6 +257,11 @@ namespace QDirStat
 	void childAdded( FileInfo * newChild );
 
 	/**
+	 * Emitted when the tree is about to be cleared.
+	 **/
+	void clearing();
+
+	/**
 	 * Emitted when a child is about to be deleted.
 	 **/
 	void deletingChild( FileInfo * deletedChild );

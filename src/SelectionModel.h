@@ -63,6 +63,7 @@ namespace QDirStat
 	 **/
 	DirTreeModel * dirTreeModel() const { return _dirTreeModel; }
 
+
     public slots:
 
 	/**
@@ -144,6 +145,10 @@ namespace QDirStat
 	void propagateSelectionChanged( const QItemSelection & selected,
 					const QItemSelection & deselected );
 
+	/**
+	 * Clear all old contents.
+	 **/
+	void clear();
 	/**
 	 * Notification that a child is about to be deleted.
 	 **/
