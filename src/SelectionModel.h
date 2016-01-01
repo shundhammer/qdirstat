@@ -144,6 +144,12 @@ namespace QDirStat
 	void propagateSelectionChanged( const QItemSelection & selected,
 					const QItemSelection & deselected );
 
+	/**
+	 * Notification that a child is about to be deleted.
+	 **/
+	void deletingChildNotify( FileInfo *deletedChild );
+
+
     protected:
 
 

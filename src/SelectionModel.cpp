@@ -28,6 +28,9 @@ SelectionModel::SelectionModel( DirTreeModel * dirTreeModel, QObject * parent ):
 
     connect( this, SIGNAL( selectionChanged	    ( QItemSelection, QItemSelection  ) ),
 	     this, SLOT	 ( propagateSelectionChanged( QItemSelection, QItemSelection  ) ) );
+
+    connect( dirTreeModel->tree(), SIGNAL( deletingChild      ( FileInfo * ) ),
+	     this,		   SLOT	 ( deletingChildNotify( FileInfo * ) ) );
 }
 
 
@@ -172,6 +175,16 @@ void SelectionModel::setCurrentItem( FileInfo * item, bool select )
     {
 	clearCurrentIndex();
     }
+}
+
+
+void SelectionModel::deletingChildNotify( FileInfo * deletedChild )
+{
+    if ( _currentItem->isInSubtree( deletedChild ) )
+	setCurrentItem( 0 );
+
+    _selectedItemsDirty = true;
+    _selectedItems.clear();
 }
 
 
