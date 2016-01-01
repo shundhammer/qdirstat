@@ -53,7 +53,7 @@ DirTreeView::~DirTreeView()
 void DirTreeView::currentChanged( const QModelIndex & current,
 				  const QModelIndex & oldCurrent )
 {
-    logDebug() << "Setting new current to " << current << endl;
+    // logDebug() << "Setting new current to " << current << endl;
     QTreeView::currentChanged( current, oldCurrent );
     scrollTo( current );
 }

@@ -346,7 +346,7 @@ void TreemapView::zoomOut()
 void TreemapView::resetZoom()
 {
     if ( _tree && _tree->firstToplevel() )
-        rebuildTreemap( _tree->firstToplevel() );
+	rebuildTreemap( _tree->firstToplevel() );
 }
 
 
@@ -513,7 +513,7 @@ void TreemapView::deleteNotify( FileInfo * )
 
 void TreemapView::resizeEvent( QResizeEvent * event )
 {
-    logDebug() << endl;
+    // logDebug() << endl;
     QGraphicsView::resizeEvent( event );
 
     if ( ! _tree )
@@ -531,13 +531,13 @@ void TreemapView::resizeEvent( QResizeEvent * event )
     {
 	if ( _tree && _tree->firstToplevel() )
 	{
-	    logDebug() << "Redisplaying suppressed treemap contents" << endl;
+	    // logDebug() << "Redisplaying suppressed treemap contents" << endl;
 	    rebuildTreemap( _tree->firstToplevel() );
 	}
     }
     else if ( _rootTile )
     {
-	logDebug() << "Auto-resizing treemap" << endl;
+	// logDebug() << "Auto-resizing treemap" << endl;
 	rebuildTreemap( _rootTile->orig() );
     }
 }
@@ -545,7 +545,7 @@ void TreemapView::resizeEvent( QResizeEvent * event )
 
 void TreemapView::disable()
 {
-    logDebug() << "Disabling treemap view" << endl;
+    // logDebug() << "Disabling treemap view" << endl;
 
     clear();
     resize( width(), 1 );
@@ -559,21 +559,21 @@ void TreemapView::enable()
 {
     if ( ! isVisible() )
     {
-        logDebug() << "Enabling treemap view" << endl;
-        show();
-        QWidget * parentWidget = qobject_cast<QWidget *>( parent() );
+	// logDebug() << "Enabling treemap view" << endl;
+	show();
+	QWidget * parentWidget = qobject_cast<QWidget *>( parent() );
 
-        if ( parentWidget )
-            resize( parentWidget->height(), width() );
+	if ( parentWidget )
+	    resize( parentWidget->height(), width() );
 
-        rebuildTreemap( _tree->firstToplevel() );
+	rebuildTreemap( _tree->firstToplevel() );
     }
 }
 
 
 void TreemapView::setCurrentItem( TreemapTile * tile )
 {
-    logDebug() << tile << endl;
+    // logDebug() << tile << endl;
 
     TreemapTile * oldCurrent = _currentItem;
     _currentItem = tile;
@@ -594,7 +594,7 @@ void TreemapView::setCurrentItem( TreemapTile * tile )
 
     if ( oldCurrent != _currentItem )
     {
-	logDebug() << "Sending currentItemChanged " << _currentItem << endl;
+	// logDebug() << "Sending currentItemChanged " << _currentItem << endl;
 
 	SignalBlocker sigBlocker( _selectionModelProxy ); // Prevent signal ping-pong
 	emit currentItemChanged( _currentItem ? _currentItem->orig() : 0 );
@@ -604,27 +604,27 @@ void TreemapView::setCurrentItem( TreemapTile * tile )
 
 void TreemapView::setCurrentItem( FileInfo * node )
 {
-    logDebug() << node << endl;
+    // logDebug() << node << endl;
 
     if ( node && _rootTile )
     {
-        FileInfo * treemapRoot = _rootTile->orig();
+	FileInfo * treemapRoot = _rootTile->orig();
 
-        // Check if the new current item is inside the current treemap
-        // (it might be zoomed).
+	// Check if the new current item is inside the current treemap
+	// (it might be zoomed).
 
-        while ( ! node->isInSubtree( treemapRoot ) &&
-                treemapRoot->parent() &&
-                treemapRoot->parent() != _tree->root() )
-        {
-            treemapRoot = treemapRoot->parent(); // try one level higher
-        }
+	while ( ! node->isInSubtree( treemapRoot ) &&
+		treemapRoot->parent() &&
+		treemapRoot->parent() != _tree->root() )
+	{
+	    treemapRoot = treemapRoot->parent(); // try one level higher
+	}
 
-        if ( treemapRoot != _rootTile->orig() )   // need to zoom out?
-        {
-            logDebug() << "Zooming out to " << treemapRoot << " to make current item visible" << endl;
-            rebuildTreemap( treemapRoot );
-        }
+	if ( treemapRoot != _rootTile->orig() )	  // need to zoom out?
+	{
+	    logDebug() << "Zooming out to " << treemapRoot << " to make current item visible" << endl;
+	    rebuildTreemap( treemapRoot );
+	}
     }
 
     setCurrentItem( findTile( node ) );
@@ -636,13 +636,13 @@ void TreemapView::updateSelection( const FileInfoSet & newSelection )
     if ( ! scene() )
 	return;
 
-    logDebug() << newSelection.size() << " items selected" << endl;
+    // logDebug() << newSelection.size() << " items selected" << endl;
     SignalBlocker sigBlocker( this );
     scene()->clearSelection();
 
     foreach ( const FileInfo * item, newSelection )
     {
-	logDebug() << "	 Selected: " << item << endl;
+	// logDebug() << "	 Selected: " << item << endl;
 	TreemapTile * tile = findTile( item );
 
 	if ( tile )
@@ -718,7 +718,7 @@ TreemapTile * TreemapView::findTile( const FileInfo * fileInfo )
 QSize TreemapView::visibleSize()
 {
     QSize size = viewport()->size();
-    logDebug() << "Visible size: " << size.width() << " x " << size.height() << endl;
+    // logDebug() << "Visible size: " << size.width() << " x " << size.height() << endl;
 
     return size;
 }
@@ -891,9 +891,9 @@ void HighlightRect::setPenStyle( Qt::PenStyle style )
 void HighlightRect::setPenStyle( TreemapTile * tile )
 {
     if ( tile && tile->isSelected() )
-        setPenStyle( Qt::SolidLine );
+	setPenStyle( Qt::SolidLine );
     else
-        setPenStyle( Qt::DotLine );
+	setPenStyle( Qt::DotLine );
 }
 
 
