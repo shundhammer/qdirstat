@@ -96,11 +96,9 @@ MainWindow::MainWindow():
 
     if ( ExcludeRules::instance()->isEmpty() )
     {
-        ExcludeRules::add( ".*/\\.snapshot$" );
-#if 1
-        ExcludeRules::add( ".*/\\.schlonz$" );
-        ExcludeRules::add( ".*/\\.git$" );
-#endif
+	ExcludeRules::add( QRegExp( ".snapshot",
+				    Qt::CaseSensitive,
+				    QRegExp::FixedString ) );
     }
 
     Debug::dumpExcludeRules();
@@ -231,7 +229,7 @@ void MainWindow::readSettings()
     _statusBarTimeOut	 = settings.value( "StatusBarTimeOutMillisec", 3000 ).toInt();
     bool   showTreemap	 = settings.value( "ShowTreemap"	     , true ).toBool();
     QPoint winPos	 = settings.value( "WindowPos"		     , QPoint( -99, -99 ) ).toPoint();
-    QSize  winSize	 = settings.value( "WindowSize"		     , QSize (   0,   0 ) ).toSize();
+    QSize  winSize	 = settings.value( "WindowSize"		     , QSize (	 0,   0 ) ).toSize();
 
     settings.endGroup();
 

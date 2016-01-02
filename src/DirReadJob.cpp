@@ -138,7 +138,7 @@ void LocalDirReadJob::startReading()
 			_dir->insertChild( subDir );
 			childAdded( subDir );
 
-			if ( ExcludeRules::instance()->match( fullName ) )
+			if ( ExcludeRules::instance()->match( entryName ) )
 			{
 			    subDir->setExcluded();
 			    subDir->setReadState( DirOnRequestOnly );
@@ -193,8 +193,8 @@ void LocalDirReadJob::startReading()
 				cacheReadJob->reader()->rewind();  // Read offset was moved by firstDir()
 				_tree->addJob( cacheReadJob );	   // Job queue will assume ownership of cacheReadJob
 
-                                if ( _dir->parent() )
-                                    _dir->parent()->setReadState( DirReading );
+				if ( _dir->parent() )
+				    _dir->parent()->setReadState( DirReading );
 
 				//
 				// Clean up partially read directory content
