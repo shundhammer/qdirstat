@@ -110,6 +110,16 @@ public slots:
      **/
     void showAboutDialog();
 
+    /**
+     * Read parameters from the settings file.
+     **/
+    void readSettings();
+
+    /**
+     * Write parameters to the settings file.
+     **/
+    void writeSettings();
+
 
 protected slots:
 

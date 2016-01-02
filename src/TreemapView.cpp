@@ -54,7 +54,7 @@ TreemapView::~TreemapView()
 {
     // Write settings back to file so the user can change them in that file:
     // There is no settings dialog for this class because the settings are all
-    // so very technical.
+    // pretty obscure - strictly for experts.
     writeSettings();
 }
 

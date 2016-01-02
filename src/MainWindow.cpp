@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSignalMapper>
+#include <QSettings>
 #include <QClipboard>
 
 #include "MainWindow.h"
@@ -42,6 +43,7 @@ MainWindow::MainWindow():
 {
     _ui->setupUi( this );
     ActionManager::instance()->addWidgetTree( this );
+    readSettings();
 
     _dirTreeModel = new DirTreeModel( this );
     CHECK_NEW( _dirTreeModel );
@@ -105,6 +107,8 @@ MainWindow::MainWindow():
 
 MainWindow::~MainWindow()
 {
+    writeSettings();
+
     // Relying on the QObject hierarchy to properly clean this up resulted in a
     //	segfault; there was probably a problem in the deletion order.
     delete _ui->dirTreeView;
@@ -208,6 +212,42 @@ void MainWindow::updateActions()
     _ui->actionTreemapZoomOut->setEnabled  ( showingTreemap && _ui->treemapView->canZoomOut() );
     _ui->actionResetTreemapZoom->setEnabled( showingTreemap && _ui->treemapView->canZoomOut() );
     _ui->actionTreemapRebuild->setEnabled  ( showingTreemap );
+}
+
+
+void MainWindow::readSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "MainWindow" );
+
+    _statusBarTimeOut	 = settings.value( "StatusBarTimeOutMillisec", 3000 ).toInt();
+    bool   showTreemap	 = settings.value( "ShowTreemap"	     , true ).toBool();
+    QPoint winPos	 = settings.value( "WindowPos"		     , QPoint( -99, -99 ) ).toPoint();
+    QSize  winSize	 = settings.value( "WindowSize"		     , QSize (   0,   0 ) ).toSize();
+
+    settings.endGroup();
+
+    _ui->actionShowTreemap->setChecked( showTreemap );
+
+    if ( winSize.height() > 100 && winSize.width() > 100 )
+	resize( winSize );
+
+    if ( winPos.x() != -99 && winPos.y() != -99 )
+	move( winPos );
+}
+
+
+void MainWindow::writeSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "MainWindow" );
+
+    settings.setValue( "StatusBarTimeOutMillisec", _statusBarTimeOut );
+    settings.setValue( "ShowTreemap"		 , _ui->actionShowTreemap->isChecked() );
+    settings.setValue( "WindowPos"		 , pos()  );
+    settings.setValue( "WindowSize"		 , size() );
+
+    settings.endGroup();
 }
 
 

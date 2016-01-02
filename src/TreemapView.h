@@ -206,16 +206,17 @@ namespace QDirStat
 	 *
 	 * Unlike other classes in this program, this is not done from the
 	 * corresponding settings dialog - because there is none. The settings
-	 * here are thought to be too technical for normal users, so there is
-	 * no settings dialog for them. To be able to find the parameter names
-	 * and their types, however, they are written automatically in the
-	 * destructor of this class. If the user edits the settings file
-	 * (typically in ~/.config/QDirStat/QDirStat.conf ), they will be taken
-	 * from there at the next program start.
+	 * here are very obscure - strictly for experts; nothing to bother a
+	 * normal user with.
 	 *
-	 * If the user is unsure if he broke anything, he can simply delete the
-	 * whole settings section from the file; it will be restored with the
-	 * defaults the next time the program is used.
+	 * Experts can edit them in the settings file, typically in
+	 * ~/.config/QDirStat/QDirStat.conf ; this class writes the settings to
+	 * that file in its destructor so those experts can find and edit them.
+	 *
+	 * If you misconfigured things and want to go back to the defaults,
+	 * simply delete that one setting or the section in the settings or the
+	 * complete settings file; missing settings are restored to the
+	 * defaults when the program exits the next time.
 	 **/
 	void writeSettings();
 
