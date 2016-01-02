@@ -87,9 +87,54 @@ QString DataColumns::toString( DataColumn col )
 	case ReadJobsCol:	return "ReadJobsCol";
 	case UndefinedCol:	return "UndefinedCol";
 
-            // Intentionally omitting 'default' so the compiler
-            // can catch unhandled enum values
+	    // Intentionally omitting 'default' so the compiler
+	    // can catch unhandled enum values
     }
 
-    return QString( "<Unknown DataColumn %1" ).arg( (int) col );
+    logError() << "Unknown DataColumn " << col << endl;
+    return QString( "<Unknown DataColumn %1>" ).arg( (int) col );
+}
+
+
+DataColumn DataColumns::fromString( const QString & str )
+{
+    for ( int i = DataColumnBegin; i <= DataColumnEnd; ++i )
+    {
+	DataColumn col = static_cast<DataColumn>( i );
+
+	if ( str == toString( col ) )
+	    return col;
+    }
+
+    logError() << "Undefined DataColumn \"" << str << "\"" << endl;
+    return UndefinedCol;
+}
+
+
+QStringList DataColumns::toStringList( const DataColumnList & colList )
+{
+    QStringList strList;
+
+    foreach ( DataColumn col, colList )
+    {
+	strList << toString( col );
+    }
+
+    return strList;
+}
+
+
+DataColumnList DataColumns::fromStringList( const QStringList & strList )
+{
+    DataColumnList colList;
+
+    foreach ( const QString & str, strList )
+    {
+	DataColumn col = fromString( str );
+
+	if ( col != UndefinedCol )
+	    colList << col;
+    }
+
+    return colList;
 }

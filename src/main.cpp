@@ -16,6 +16,10 @@ int main( int argc, char *argv[] )
 {
     Logger logger( "/tmp/qdirstat.log" );
 
+    // Set org/app name for QSettings
+    QCoreApplication::setOrganizationName( "QDirStat" );
+    QCoreApplication::setApplicationName ( "QDirStat" );
+
     QApplication app( argc, argv);
     MainWindow mainWin;
     mainWin.show();

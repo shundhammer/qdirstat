@@ -7,7 +7,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-01
+Updated: 2016-01-02
 
 
 ## Overview
@@ -63,7 +63,7 @@ Usable, but still pre-Alpha. Use at your own risk. You have been warned. ;-)
 
   - The treemap's red "current item" rectangle is now stippled instead of a
     solid line if the current item is not also selected (users can do that with
-    shift-click).
+    ctrl-click).
 
   - Added "about" dialogs for the program and the used Qt version.
 

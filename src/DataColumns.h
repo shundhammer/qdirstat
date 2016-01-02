@@ -33,8 +33,13 @@ namespace QDirStat
 	TotalSubDirsCol,	// Total number of subdirs  in subtree
 	LatestMTimeCol,		// Latest modification time in subtree
 	ReadJobsCol,		// Number of pending read jobs in subtree
-	UndefinedCol = -99
+	UndefinedCol
     } DataColumn;
+
+    // For use in loops
+#define DataColumnBegin NameCol
+#define DataColumnEnd	UndefinedCol
+
 
     typedef QList<DataColumn> DataColumnList;
 
@@ -115,10 +120,26 @@ namespace QDirStat
 	 **/
 	int colCount() const { return _columns.size(); }
 
-        /**
-         * Return a string representation of a column.
-         **/
-        static QString toString( DataColumn col );
+	/**
+	 * Convert a column to string.
+	 **/
+	static QString toString( DataColumn col );
+
+	/**
+	 * Convert string to column.
+	 **/
+	static DataColumn fromString( const QString & str );
+
+	/**
+	 * Convert a list of columns to a string list.
+	 **/
+	static QStringList toStringList( const DataColumnList & colList );
+
+	/**
+	 * convert a string list to a list of columns.
+	 **/
+	static DataColumnList fromStringList( const QStringList & strList );
+
 
     signals:
 	/**
@@ -148,7 +169,7 @@ namespace QDirStat
      **/
     inline QTextStream & operator<< ( QTextStream & stream, DataColumn col )
     {
-        stream << DataColumns::toString( col );
+	stream << DataColumns::toString( col );
 
 	return stream;
     }
