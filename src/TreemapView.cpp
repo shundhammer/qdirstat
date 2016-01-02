@@ -181,56 +181,6 @@ QColor TreemapView::readColorEntry( KConfig * config, const char * entryName, QC
 #endif
 
 
-TreemapTile * TreemapView::tileAt( QPoint pos )
-{
-    TreemapTile * tile = 0;
-
-#if 1
-    Q_UNUSED( pos );
-#else
-    QCanvasItemList coll = canvas()->collisions( pos );
-    QCanvasItemList::Iterator it = coll.begin();
-
-    while ( it != coll.end() && tile == 0 )
-    {
-	tile = dynamic_cast<TreemapTile *> (*it);
-	++it;
-    }
-#endif
-
-    return tile;
-}
-
-
-#if 0
-void TreemapView::contentsMousePressEvent( QMouseEvent * event )
-{
-    switch ( event->button() )
-    {
-	case RightButton:
-
-	    if ( tile )
-	    {
-		if ( _currentItem &&
-		     _currentItem->rect().contains( event->pos() ) )
-		{
-		    // If a directory (non-leaf tile) is already selected,
-		    // don't override this by
-
-		    emit contextMenu( _currentItem, event->globalPos() );
-		}
-		else
-		{
-		    setCurrentItem( tile );
-		    emit contextMenu( tile, event->globalPos() );
-		}
-	    }
-	    break;
-    }
-}
-#endif
-
-
 void TreemapView::zoomIn()
 {
     if ( ! canZoomIn() )

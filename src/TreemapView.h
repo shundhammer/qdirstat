@@ -75,12 +75,6 @@ namespace QDirStat
 	void setSelectionModel( SelectionModel * selectionModel );
 
 	/**
-	 * Returns the (topmost) treemap tile at the specified position
-	 * or 0 if there is none.
-	 **/
-	TreemapTile * tileAt( QPoint pos );
-
-	/**
 	 * Returns the minimum recommended size for this widget.
 	 * Reimplemented from QWidget.
 	 **/
@@ -101,10 +95,10 @@ namespace QDirStat
 	 **/
 	DirTree * tree() const { return _tree; }
 
-        /**
-         * Return this treemap view's SelectionModel.
-         **/
-        SelectionModel * selectionModel() const { return _selectionModel; }
+	/**
+	 * Return this treemap view's SelectionModel.
+	 **/
+	SelectionModel * selectionModel() const { return _selectionModel; }
 
 	/**
 	 * Search the treemap for a tile that corresponds to the specified
