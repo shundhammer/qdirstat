@@ -93,10 +93,17 @@ MainWindow::MainWindow():
 
     connectActions();
 
-    ExcludeRules::add( ".*/\\.snapshot$" );
-#if 0
-    ExcludeRules::add( ".*/\\.git$" );
+
+    if ( ExcludeRules::instance()->isEmpty() )
+    {
+        ExcludeRules::add( ".*/\\.snapshot$" );
+#if 1
+        ExcludeRules::add( ".*/\\.schlonz$" );
+        ExcludeRules::add( ".*/\\.git$" );
 #endif
+    }
+
+    Debug::dumpExcludeRules();
 
     if ( ! _ui->actionShowTreemap->isChecked() )
 	_ui->treemapView->disable();
@@ -108,6 +115,7 @@ MainWindow::MainWindow():
 MainWindow::~MainWindow()
 {
     writeSettings();
+    ExcludeRules::instance()->writeSettings();
 
     // Relying on the QObject hierarchy to properly clean this up resulted in a
     //	segfault; there was probably a problem in the deletion order.
@@ -234,6 +242,8 @@ void MainWindow::readSettings()
 
     if ( winPos.x() != -99 && winPos.y() != -99 )
 	move( winPos );
+
+    ExcludeRules::instance()->readSettings();
 }
 
 

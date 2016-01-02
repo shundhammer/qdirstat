@@ -7,25 +7,27 @@
  */
 
 
+#include <QSettings>
+
+#include "SettingsHelpers.h"
 #include "Logger.h"
 #include "ExcludeRules.h"
+
 
 #define VERBOSE_EXCLUDE_MATCHES	1
 
 using namespace QDirStat;
 
 
-ExcludeRule::ExcludeRule( const QRegExp & regexp )
-    : _regexp( regexp )
-    , _enabled( true )
+ExcludeRule::ExcludeRule( const QRegExp & regexp ):
+    _regexp( regexp )
 {
     // NOP
 }
 
 
-ExcludeRule::ExcludeRule( const QString & regexp )
-    : _regexp( QRegExp( regexp ) )
-    , _enabled( true )
+ExcludeRule::ExcludeRule( const QString & regexp ):
+    _regexp( QRegExp( regexp ) )
 {
     // NOP
 }
@@ -39,7 +41,7 @@ ExcludeRule::~ExcludeRule()
 
 bool ExcludeRule::match( const QString & text )
 {
-    if ( text.isEmpty() || ! _enabled )
+    if ( text.isEmpty() )
 	return false;
 
     return _regexp.exactMatch( text );
@@ -139,3 +141,64 @@ const ExcludeRule * ExcludeRules::matchingRule( const QString & text )
     return 0;
 }
 
+
+void ExcludeRules::readSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "Exclude_Rules" );
+    int size = settings.beginReadArray( "Rules" );
+
+    if ( size > 0 )
+    {
+	clear();
+
+	for ( int i=0; i < size; ++i )
+	{
+	    settings.setArrayIndex( i );
+	    QString pattern    = settings.value( "Pattern"	       ).toString();
+	    bool caseSensitive = settings.value( "CaseSensitive", true ).toBool();
+	    int syntax = readEnumEntry( settings, "Syntax",
+					QRegExp::RegExp,
+					patternSyntaxMapping() );
+
+	    QRegExp regexp( pattern,
+			    caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive,
+			    static_cast<QRegExp::PatternSyntax>( syntax ) );
+
+	    if ( ! pattern.isEmpty() && regexp.isValid() )
+		add( regexp );
+	    else
+	    {
+		logError() << "Invalid regexp: \"" << regexp.pattern()
+			   << "\": " << regexp.errorString()
+			   << endl;
+	    }
+	}
+    }
+
+    settings.endArray();
+    settings.endGroup();
+}
+
+
+void ExcludeRules::writeSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "Exclude_Rules" );
+    settings.beginWriteArray( "Rules", _rules.size() );
+
+    for ( int i=0; i < _rules.size(); ++i )
+    {
+	QRegExp regexp = _rules.at(i)->regexp();
+	settings.setArrayIndex( i );
+	settings.setValue( "Pattern"	  , regexp.pattern() );
+	settings.setValue( "CaseSensitive", regexp.caseSensitivity() == Qt::CaseSensitive );
+
+	writeEnumEntry( settings, "Syntax",
+			regexp.patternSyntax(),
+			patternSyntaxMapping() );
+    }
+
+    settings.endArray();
+    settings.endGroup();
+}

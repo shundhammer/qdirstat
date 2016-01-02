@@ -9,6 +9,7 @@
 
 #include <QSettings>
 #include <QColor>
+#include <QRegExp>
 
 #include "SettingsHelpers.h"
 #include "Exception.h"
@@ -86,6 +87,65 @@ namespace QDirStat
 	}
 
 	settings.setValue( entryName, strList );
+    }
+
+
+    int readEnumEntry( const QSettings & settings,
+		       const char      * entryName,
+		       int		 fallback,
+		       const QMap<int, QString> & enumMapping )
+    {
+	if ( ! settings.contains( entryName ) )
+	    return fallback;
+
+	QString str = settings.value( entryName ).toString();
+	QMap<int, QString>::const_iterator it = enumMapping.constBegin();
+
+	while ( it != enumMapping.constEnd() )
+	{
+	    if ( it.value() == str )
+		return it.key();
+
+	    ++it;
+	}
+
+	logError() << "Invalid value for " << entryName
+		   << ": \"" << str << "\"" << endl;
+
+	return fallback;
+    }
+
+
+    void writeEnumEntry( QSettings  & settings,
+			 const char * entryName,
+			 int	      enumValue,
+			 const QMap<int, QString> & enumMapping )
+    {
+	if ( ! enumMapping.contains( enumValue ) )
+	{
+	    logError() << "No string for enum value " << enumValue << endl;
+	    return;
+	}
+
+	settings.setValue( entryName, enumMapping.value( enumValue ) );
+    }
+
+
+    QMap<int, QString> patternSyntaxMapping()
+    {
+	static QMap<int, QString> mapping;
+
+	if ( mapping.isEmpty() )
+	{
+	    mapping[ QRegExp::RegExp	     ] = "RegExp";
+	    mapping[ QRegExp::Wildcard	     ] = "Wildcard";
+	    mapping[ QRegExp::FixedString    ] = "FixedString";
+	    mapping[ QRegExp::RegExp2	     ] = "RegExp2";
+	    mapping[ QRegExp::WildcardUnix   ] = "WildcardUnix";
+	    mapping[ QRegExp::W3CXmlSchema11 ] = "W3CXmlSchema11";
+	}
+
+	return mapping;
     }
 
 

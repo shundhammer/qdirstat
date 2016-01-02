@@ -51,6 +51,11 @@ namespace Debug
 			const QString		 & indent );
 
     /**
+     * Dump the exclude rules to the log.
+     **/
+    void dumpExcludeRules();
+
+    /**
      * Return a string list of data(0) of the tree ancestors of 'index'.
      * The list will start with the tree's root.
      **/

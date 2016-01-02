@@ -47,6 +47,29 @@ namespace QDirStat
 			      const char	  * entryName,
 			      const QList<QColor> & colors );
 
+    /**
+     * Read an enum value in string format from the settings.
+     * 'enumMapping' maps each valid enum value to the corresponding string.
+     **/
+    int readEnumEntry( const QSettings & settings,
+		       const char      * entryName,
+		       int		 fallback,
+		       const QMap<int, QString> & enumMapping );
+
+    /**
+     * Write an enum value in string format to the settings.
+     * 'enumMapping' maps each valid enum value to the corresponding string.
+     **/
+    void writeEnumEntry( QSettings  & settings,
+			 const char * entryName,
+			 int	      enumValue,
+			 const QMap<int, QString> & enumMapping );
+
+    /**
+     * Return the enum mapping for QRegExp::PatternSyntax.
+     **/
+    QMap<int, QString> patternSyntaxMapping();
+
 }	// namespace QDirStat
 
 #endif	// SettingsHelpers_h

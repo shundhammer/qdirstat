@@ -20,8 +20,6 @@ namespace QDirStat
 {
     /**
      * One single exclude rule to check text (file names) against.
-     * It can be enabled or disabled. Only enabled rules can ever match; a
-     * disabled exclude rule will never exclude anything.
      **/
     class ExcludeRule
     {
@@ -46,9 +44,6 @@ namespace QDirStat
 	 * Check a string (usually a file name) against this exclude rule.
 	 * Returns 'true' if the string matches, i.e. if the object this string
 	 * belongs to should be excluded.
-	 *
-	 * Only enabled exclude rules will ever match; as long as it is
-	 * disabled, this will always return 'false'.
 	 **/
 	bool match( const QString & text );
 
@@ -62,22 +57,9 @@ namespace QDirStat
 	 **/
 	void setRegexp( const QRegExp & regexp ) { _regexp = regexp; }
 
-	/**
-	 * Check if this rule is enabled.
-	 **/
-	bool isEnabled() const { return _enabled; }
-
-	/**
-	 * Enable or disable this rule.
-	 * New rules are always enabled by default.
-	 **/
-	void enable( bool enable = true ) { _enabled = enable; }
-
-
     private:
 
 	QRegExp _regexp;
-	bool	_enabled;
     };
 
 
@@ -99,15 +81,16 @@ namespace QDirStat
      **/
     class ExcludeRules
     {
-    public:
-
+    protected:
 	/**
 	 * Constructor.
 	 *
-	 * Most applications will want to use excludeRules() instead to create
+	 * Most applications will want to use instance() instead to create
 	 * and use a singleton object of this class.
 	 **/
 	ExcludeRules();
+
+    public:
 
 	/**
 	 * Destructor.
@@ -135,7 +118,7 @@ namespace QDirStat
 
 	/**
 	 * Check a string against the exclude rules.
-	 * This will return 'true' if the text matches any (enabled) rule.
+	 * This will return 'true' if the text matches any rule.
 	 *
 	 * Note that this operation will move current().
 	 **/
@@ -175,6 +158,17 @@ namespace QDirStat
 	 * Return a const iterator for the last exclude rule.
 	 **/
 	ExcludeRuleListIterator end()	{ return _rules.constEnd(); }
+
+	/**
+	 * Clear all existing exclude rules and read exclude rules from the
+	 * settings file.
+	 **/
+	void readSettings();
+
+	/**
+	 * Write all exclude rules to the settings file.
+	 **/
+	void writeSettings();
 
     private:
 

@@ -11,6 +11,7 @@
 #include "DebugHelpers.h"
 #include "DirTree.h"
 #include "FileInfoIterator.h"
+#include "ExcludeRules.h"
 
 namespace Debug
 {
@@ -116,5 +117,20 @@ namespace Debug
 
 	return parents;
     }
+
+
+    void dumpExcludeRules()
+    {
+	if ( ExcludeRules::instance()->isEmpty() )
+	    logDebug() << "No exclude rules defined" << endl;
+
+	for ( ExcludeRuleListIterator it = ExcludeRules::instance()->begin();
+	      it != ExcludeRules::instance()->end();
+	      ++it )
+	{
+	    logDebug() << *it << endl;
+	}
+    }
+
 
 } // namespace
