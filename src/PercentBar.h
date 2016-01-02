@@ -57,6 +57,7 @@ namespace QDirStat
 	 **/
 	QSize sizeHint( const QStyleOptionViewItem & option,
 			const QModelIndex	   & index) const Q_DECL_OVERRIDE;
+
 	/**
 	 * Return the percent bar fill colors for each tree level. If there
 	 * are more tree levels than colors, the colors will wrap around.
@@ -65,6 +66,11 @@ namespace QDirStat
 	 * colors.
 	 **/
 	ColorList & fillColors() { return _fillColors; }
+
+	/**
+	 * Return the default fill colors.
+	 **/
+	ColorList defaultFillColors() const;
 
 	/**
 	 * Return the percent bar column.
@@ -78,10 +84,21 @@ namespace QDirStat
 	    { _percentBarCol = newCol; }
 
     public slots:
-        /**
-         * Notification that the columns have changed.
-         **/
-        void columnsChanged();
+
+	/**
+	 * Notification that the columns have changed.
+	 **/
+	void columnsChanged();
+
+	/**
+	 * Read parameters from the settings file.
+	 **/
+	void readSettings();
+
+	/**
+	 * Write parameters to the settings file.
+	 **/
+	void writeSettings();
 
 
     protected:
@@ -99,6 +116,7 @@ namespace QDirStat
 	QTreeView * _treeView;
 	ColorList   _fillColors;
 	QColor	    _barBackground;
+	int	    _sizeHintWidth;
 	int	    _percentBarCol;
 
     }; // class PercentBarDelegate

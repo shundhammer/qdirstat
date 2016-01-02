@@ -8,12 +8,14 @@
 
 #include <QPainter>
 #include <QTreeView>
+#include <QSettings>
 
 #include "PercentBar.h"
 #include "DirTreeModel.h"
+#include "Exception.h"
 #include "FileInfo.h"
 #include "Logger.h"
-#include "Exception.h"
+#include "SettingsHelpers.h"
 
 
 using namespace QDirStat;
@@ -24,31 +26,63 @@ PercentBarDelegate::PercentBarDelegate( QTreeView * treeView ):
     _treeView( treeView )
 {
     _percentBarCol = DataColumns::toViewCol( PercentBarCol );
-    _fillColors << QColor( 0,	  0, 255 )
-		<< QColor( 128,	  0, 128 )
-		<< QColor( 231, 147,  43 )
-		<< QColor(   4, 113,   0 )
-		<< QColor( 176,	  0,   0 )
-		<< QColor( 204, 187,   0 )
-		<< QColor( 162,	 98,  30 )
-		<< QColor(   0, 148, 146 )
-		<< QColor( 217,	 94,   0 )
-		<< QColor(   0, 194,  65 )
-		<< QColor( 194, 108, 187 )
-		<< QColor(   0, 179, 255 );
-
-    _barBackground = QColor( 160, 160, 160 );
-
-    // TO DO: Read colors from config
+    readSettings();
 
     connect( DataColumns::instance(), SIGNAL( columnsChanged() ),
-             this,                    SLOT  ( columnsChanged() ) );
+	     this,		      SLOT  ( columnsChanged() ) );
 }
 
 
 PercentBarDelegate::~PercentBarDelegate()
 {
+    writeSettings();
+}
 
+
+ColorList PercentBarDelegate::defaultFillColors() const
+{
+    ColorList colors;
+
+    colors << QColor( 0,     0, 255 )
+	   << QColor( 128,   0, 128 )
+	   << QColor( 231, 147,	 43 )
+	   << QColor(	4, 113,	  0 )
+	   << QColor( 176,   0,	  0 )
+	   << QColor( 204, 187,	  0 )
+	   << QColor( 162,  98,	 30 )
+	   << QColor(	0, 148, 146 )
+	   << QColor( 217,  94,	  0 )
+	   << QColor(	0, 194,	 65 )
+	   << QColor( 194, 108, 187 )
+	   << QColor(	0, 179, 255 );
+
+    return colors;
+}
+
+
+void PercentBarDelegate::readSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "Percent_Bar" );
+
+    _fillColors	   = readColorListEntry( settings, "Colors"    , defaultFillColors() );
+    _barBackground = readColorEntry    ( settings, "Background", QColor( 160, 160, 160 ) );
+    _sizeHintWidth = settings.value( "PercentBarColumnWidth", 180 ).toInt();
+
+    settings.endGroup();
+}
+
+
+void PercentBarDelegate::writeSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "Percent_Bar" );
+
+    writeColorListEntry( settings, "Colors"    , _fillColors	);
+    writeColorEntry    ( settings, "Background", _barBackground );
+    settings.setValue( "PercentBarColumnWidth", _sizeHintWidth	);
+
+    settings.endGroup();
 }
 
 
@@ -76,8 +110,8 @@ void PercentBarDelegate::paint( QPainter		   * painter,
 	{
 	    if ( percent > 100.0f )
 	    {
-                if ( percent > 103.0f )
-                    logError() << "Percent maxed out: " << percent << endl;
+		if ( percent > 103.0f )
+		    logError() << "Percent maxed out: " << percent << endl;
 		percent = 100.0f;
 	    }
 
@@ -123,7 +157,7 @@ QSize PercentBarDelegate::sizeHint( const QStyleOptionViewItem & option,
     if ( ! index.isValid() || index.column() != _percentBarCol )
 	return size;
 
-    size.setWidth( 180 ); // TO DO: Find a better value
+    size.setWidth( _sizeHintWidth );
 
     return size;
 }

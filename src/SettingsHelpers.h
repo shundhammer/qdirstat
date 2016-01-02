@@ -9,6 +9,11 @@
 #ifndef SettingsHelpers_h
 #define SettingsHelpers_h
 
+#include <QColor>
+#include <QList>
+
+class QSettings;
+
 
 namespace QDirStat
 {
@@ -17,7 +22,7 @@ namespace QDirStat
      **/
     QColor readColorEntry( const QSettings & settings,
 			   const char	   * entryName,
-			   const QColor	   & defaultColor );
+			   const QColor	   & fallback );
 
     /**
      * Write a color in RGB format (#RRGGBB) to the settings.
@@ -26,6 +31,21 @@ namespace QDirStat
 			  const char   * entryName,
 			  const QColor & color );
 
+    /**
+     * Read a list of colors in RGB format (#RRGGBB, #RRGGBB, ...) from the
+     * settings.
+     **/
+    QList<QColor> readColorListEntry( const QSettings	  & settings,
+				      const char	  * entryName,
+				      const QList<QColor> & fallback );
+
+    /**
+     * Write a list of colors in RGB format (#RRGGBB, #RRGGBB, ...) to the
+     * settings.
+     **/
+    void writeColorListEntry( QSettings		  & settings,
+			      const char	  * entryName,
+			      const QList<QColor> & colors );
 
 }	// namespace QDirStat
 
