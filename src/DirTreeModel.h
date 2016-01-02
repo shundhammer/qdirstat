@@ -92,6 +92,16 @@ namespace QDirStat
 	 **/
 	void dumpPersistentIndexList() const;
 
+	/**
+	 * Read parameters from settings file.
+	 **/
+	void readSettings();
+
+	/**
+	 * Write parameters to settings file.
+	 **/
+	void writeSettings();
+
     public:
 
 	// Mapping of tree items to model rows and vice versa.
@@ -300,6 +310,7 @@ namespace QDirStat
 	int		_readJobsCol;
 	QSet<DirInfo *> _pendingUpdates;
 	QTimer		_updateTimer;
+	int		_updateTimerMillisec;
 	DataColumn	_sortCol;
 	Qt::SortOrder	_sortOrder;
 

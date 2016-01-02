@@ -116,6 +116,11 @@ namespace QDirStat
 	const DataColumnList & columns() const { return _columns; }
 
 	/**
+	 * Return the default model columns.
+	 **/
+	const DataColumnList defaultColumns() const;
+
+	/**
 	 * Return the number of columns that are curently displayed.
 	 **/
 	int colCount() const { return _columns.size(); }
@@ -139,6 +144,19 @@ namespace QDirStat
 	 * convert a string list to a list of columns.
 	 **/
 	static DataColumnList fromStringList( const QStringList & strList );
+
+
+    public slots:
+
+	/**
+	 * Read parameters from the settings file.
+	 **/
+	void readSettings();
+
+	/**
+	 * Write parameters to the settings file.
+	 **/
+	void writeSettings();
 
 
     signals:

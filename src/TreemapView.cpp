@@ -26,7 +26,6 @@ using namespace QDirStat;
 #define UpdateMinSize	20
 
 
-
 TreemapView::TreemapView( QWidget * parent ):
     QGraphicsView( parent ),
     _tree( 0 ),

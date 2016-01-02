@@ -7,6 +7,8 @@
  */
 
 
+#include <QSettings>
+
 #include "DirTreeModel.h"
 #include "DirTree.h"
 #include "FileInfoIterator.h"
@@ -23,13 +25,14 @@ DirTreeModel::DirTreeModel( QObject * parent ):
     QAbstractItemModel( parent ),
     _tree(0),
     _readJobsCol( PercentBarCol ),
+    _updateTimerMillisec( 333 ),
     _sortCol( NameCol ),
     _sortOrder( Qt::AscendingOrder )
 {
-    _treeIconDir = ":/icons/tree-medium/"; // TO DO: Configurable
+    readSettings();
     loadIcons();
     createTree();
-    _updateTimer.setInterval( 333 ); // millisec - TO DO: Configurable
+    _updateTimer.setInterval( _updateTimerMillisec );
 
     connect( &_updateTimer, SIGNAL( timeout()		 ),
 	     this,	    SLOT  ( sendPendingUpdates() ) );
@@ -38,8 +41,34 @@ DirTreeModel::DirTreeModel( QObject * parent ):
 
 DirTreeModel::~DirTreeModel()
 {
+    writeSettings();
+
     if ( _tree )
 	delete _tree;
+}
+
+
+void DirTreeModel::readSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "Directory_Tree" );
+
+    _treeIconDir         = settings.value( "TreeIconDir" , ":/icons/tree-medium/" ).toString();
+    _updateTimerMillisec = settings.value( "UpdateTimerMillisec", 333 ).toInt();
+
+    settings.endGroup();
+}
+
+
+void DirTreeModel::writeSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "Directory_Tree" );
+
+    settings.setValue( "TreeIconDir" ,        _treeIconDir         );
+    settings.setValue( "UpdateTimerMillisec", _updateTimerMillisec );
+
+    settings.endGroup();
 }
 
 

@@ -6,6 +6,9 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
+
+#include <QSettings>
+
 #include "DataColumns.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -31,15 +34,59 @@ DataColumns * DataColumns::instance()
 DataColumns::DataColumns():
     QObject()
 {
-    _columns << NameCol
-	     << PercentBarCol
-	     << PercentNumCol
-	     << TotalSizeCol
-	     << OwnSizeCol
-	     << TotalItemsCol
-	     << TotalFilesCol
-	     << TotalSubDirsCol
-	     << LatestMTimeCol;
+    readSettings();
+
+    // Write settings immediately back since the destructor of this singleton
+    // is very likely never called.
+    writeSettings();
+}
+
+
+const DataColumnList DataColumns::defaultColumns() const
+{
+    DataColumnList columns;
+
+    columns << NameCol
+	    << PercentBarCol
+	    << PercentNumCol
+	    << TotalSizeCol
+	    << OwnSizeCol
+	    << TotalItemsCol
+	    << TotalFilesCol
+	    << TotalSubDirsCol
+	    << LatestMTimeCol;
+
+    return columns;
+}
+
+
+void DataColumns::readSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "Data_Columns" );
+    QStringList strColList = settings.value( "Columns" ).toStringList();
+    settings.endGroup();
+
+    _columns = fromStringList( strColList );
+
+    if ( _columns.isEmpty() )
+	_columns = defaultColumns();
+    else if ( _columns.first() != NameCol )
+    {
+	logError() << "NameCol is required to be first!" << endl;
+	_columns.removeAll( NameCol );
+	_columns.prepend( NameCol );
+	logError() << "Fixed column list: " << toStringList( _columns ) << endl;
+    }
+}
+
+
+void DataColumns::writeSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "Data_Columns" );
+    settings.setValue( "Columns", toStringList( _columns ) );
+    settings.endGroup();
 }
 
 

@@ -27,9 +27,10 @@ namespace QDirStat
 	if ( ! color.isValid() )
 	{
 	    color = defaultColor;
-
+#if 0
 	    logDebug() << "Using fallback for " << entryName
 		       << ": " << color.name() << endl;
+#endif
 	}
 
 	return color;
