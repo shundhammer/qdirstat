@@ -9,14 +9,16 @@
 
 #include <QResizeEvent>
 #include <QRegExp>
+#include <QSettings>
 
-#include "DirTree.h"
-#include "SelectionModel.h"
 #include "TreemapView.h"
-#include "TreemapTile.h"
+#include "DirTree.h"
 #include "Exception.h"
 #include "Logger.h"
+#include "SelectionModel.h"
+#include "SettingsHelpers.h"
 #include "SignalBlocker.h"
+#include "TreemapTile.h"
 
 
 using namespace QDirStat;
@@ -35,7 +37,7 @@ TreemapView::TreemapView( QWidget * parent ):
     _currentItemRect( 0 )
 {
     logDebug() << endl;
-    readConfig();
+    readSettings();
 
     // Default values for light sources taken from Wiik / Wetering's paper
     // about "cushion treemaps".
@@ -51,6 +53,10 @@ TreemapView::TreemapView( QWidget * parent ):
 
 TreemapView::~TreemapView()
 {
+    // Write settings back to file so the user can change them in that file:
+    // There is no settings dialog for this class because the settings are all
+    // so very technical.
+    writeSettings();
 }
 
 
@@ -126,59 +132,54 @@ void TreemapView::setSelectionModel( SelectionModel * selectionModel )
 }
 
 
-void TreemapView::readConfig()
+void TreemapView::readSettings()
 {
-#if 0
-    KConfig * config = kapp->config();
-    config->setGroup( "Treemaps" );
+    QSettings settings;
+    settings.beginGroup( "Treemaps" );
 
-    _ambientLight	= config->readNumEntry( "AmbientLight"		,  DefaultAmbientLight );
+    _ambientLight	= settings.value( "AmbientLight"     , DefaultAmbientLight ).toInt();
+    _heightScaleFactor	= settings.value( "HeightScaleFactor", DefaultHeightScaleFactor ).toDouble();
+    _squarify		= settings.value( "Squarify"	     , true  ).toBool();
+    _doCushionShading	= settings.value( "CushionShading"   , true  ).toBool();
+    _ensureContrast	= settings.value( "EnsureContrast"   , true  ).toBool();
+    _forceCushionGrid	= settings.value( "ForceCushionGrid" , false ).toBool();
+    _minTileSize	= settings.value( "MinTileSize"	     , DefaultMinTileSize ).toInt();
 
-    _heightScaleFactor	= config->readDoubleNumEntry( "HeightScaleFactor" , DefaultHeightScaleFactor );
-    _squarify		= config->readBoolEntry( "Squarify"		, true	);
-    _doCushionShading	= config->readBoolEntry( "CushionShading"	, true	);
-    _ensureContrast	= config->readBoolEntry( "EnsureContrast"	, true	);
-    _forceCushionGrid	= config->readBoolEntry( "ForceCushionGrid"	, false );
-    _minTileSize	= config->readNumEntry ( "MinTileSize"		, DefaultMinTileSize );
+    _currentItemColor	= readColorEntry( settings, "CurrentItemColor"	, Qt::red		     );
+    _selectedItemsColor = readColorEntry( settings, "SelectedItemsColor", Qt::yellow		     );
+    _cushionGridColor	= readColorEntry( settings, "CushionGridColor"	, QColor( 0x80, 0x80, 0x80 ) );
+    _outlineColor	= readColorEntry( settings, "OutlineColor"	, Qt::black		     );
+    _fileFillColor	= readColorEntry( settings, "FileFillColor"	, QColor( 0xde, 0x8d, 0x53 ) );
+    _dirFillColor	= readColorEntry( settings, "DirFillColor"	, QColor( 0x10, 0x7d, 0xb4 ) );
 
-    _currentItemColor	= readColorEntry( config, "CurrentItemColor"	, Qt::red		     );
-    _selectedItemsColor = readColorEntry( config, "SelectedItemsColor"	, Qt::yellow		     );
-    _cushionGridColor	= readColorEntry( config, "CushionGridColor"	, QColor( 0x80, 0x80, 0x80 ) );
-    _outlineColor	= readColorEntry( config, "OutlineColor"	, Qt::black		     );
-    _fileFillColor	= readColorEntry( config, "FileFillColor"	, QColor( 0xde, 0x8d, 0x53 ) );
-    _dirFillColor	= readColorEntry( config, "DirFillColor"	, QColor( 0x10, 0x7d, 0xb4 ) );
-#else
-
-    // FIXME: Read from config
-    // FIXME: Read from config
-    // FIXME: Read from config
-
-    _ambientLight	= DefaultAmbientLight;
-
-    _heightScaleFactor	= DefaultHeightScaleFactor;
-    _squarify		= true;
-    _doCushionShading	= true;
-    _ensureContrast	= true;
-    _forceCushionGrid	= false;
-    _minTileSize	= DefaultMinTileSize;
-
-    _currentItemColor	= Qt::red;
-    _selectedItemsColor = Qt::yellow;
-    _cushionGridColor	= QColor( 0x80, 0x80, 0x80 );
-    _outlineColor	= Qt::black;
-    _fileFillColor	= QColor( 0xde, 0x8d, 0x53 );
-    _dirFillColor	= QColor( 0x10, 0x7d, 0xb4 );
-
-#endif
+    settings.endGroup();
 }
 
 
-#if 0
-QColor TreemapView::readColorEntry( KConfig * config, const char * entryName, QColor defaultColor )
+void TreemapView::writeSettings()
 {
-    return config->readColorEntry( entryName, &defaultColor );
+    logDebug() << endl;
+
+    QSettings settings;
+    settings.beginGroup( "Treemaps" );
+
+    settings.setValue( "AmbientLight"	   , _ambientLight	 );
+    settings.setValue( "HeightScaleFactor" , _heightScaleFactor	 );
+    settings.setValue( "Squarify"	   , _squarify		 );
+    settings.setValue( "CushionShading"	   , _doCushionShading	 );
+    settings.setValue( "EnsureContrast"	   , _ensureContrast	 );
+    settings.setValue( "ForceCushionGrid"  , _forceCushionGrid	 );
+    settings.setValue( "MinTileSize"	   , _minTileSize	 );
+
+    writeColorEntry( settings, "CurrentItemColor"  , _currentItemColor	 );
+    writeColorEntry( settings, "SelectedItemsColor", _selectedItemsColor );
+    writeColorEntry( settings, "CushionGridColor"  , _cushionGridColor	 );
+    writeColorEntry( settings, "OutlineColor"	   , _outlineColor	 );
+    writeColorEntry( settings, "FileFillColor"	   , _fileFillColor	 );
+    writeColorEntry( settings, "DirFillColor"	   , _dirFillColor	 );
+
+    settings.endGroup();
 }
-#endif
 
 
 void TreemapView::zoomIn()

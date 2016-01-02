@@ -31,6 +31,7 @@
 
 
 class QMouseEvent;
+class QSettings;
 
 
 namespace QDirStat
@@ -196,9 +197,27 @@ namespace QDirStat
 	void sendSelection();
 
 	/**
-	 * Read some parameters from the config file
+	 * Read parameters from the settings file.
 	 **/
-	void readConfig();
+	void readSettings();
+
+	/**
+	 * Write parameters to the settings file.
+	 *
+	 * Unlike other classes in this program, this is not done from the
+	 * corresponding settings dialog - because there is none. The settings
+	 * here are thought to be too technical for normal users, so there is
+	 * no settings dialog for them. To be able to find the parameter names
+	 * and their types, however, they are written automatically in the
+	 * destructor of this class. If the user edits the settings file
+	 * (typically in ~/.config/QDirStat/QDirStat.conf ), they will be taken
+	 * from there at the next program start.
+	 *
+	 * If the user is unsure if he broke anything, he can simply delete the
+	 * whole settings section from the file; it will be restored with the
+	 * defaults the next time the program is used.
+	 **/
+	void writeSettings();
 
     public:
 
@@ -374,14 +393,6 @@ namespace QDirStat
 	 **/
 	virtual void resizeEvent( QResizeEvent * event ) Q_DECL_OVERRIDE;
 
-#if 0
-	/**
-	 * Convenience method to read a color from 'config'.
-	 **/
-	QColor readColorEntry( KConfig *    config,
-			       const char * entryName,
-			       QColor	    defaultColor );
-#endif
 
 	// Data members
 

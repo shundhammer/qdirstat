@@ -328,9 +328,9 @@ namespace QDirStat
     protected slots:
 
 	/**
-	 * Read some parameters from the global @ref KConfig object.
+	 * Read parameters from the settings.
 	 **/
-	void readConfig();
+	void readSettings();
 
 	/**
 	 * Notification that all jobs in the job queue are finished.
@@ -344,7 +344,6 @@ namespace QDirStat
 	DirInfo *	_root;
 	DirReadJobQueue _jobQueue;
 	bool		_crossFileSystems;
-	bool		_enableLocalDirReader;
 	bool		_isBusy;
 
     };	// class DirTree

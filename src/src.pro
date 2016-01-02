@@ -43,6 +43,7 @@ SOURCES	  = main.cpp			\
 	    MainWindow.cpp		\
 	    PercentBar.cpp		\
 	    SelectionModel.cpp		\
+	    SettingsHelpers.cpp		\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
 
@@ -67,6 +68,7 @@ HEADERS	  =				\
 	    MainWindow.h		\
 	    PercentBar.h		\
 	    SelectionModel.h		\
+	    SettingsHelpers.h		\
 	    SignalBlocker.h		\
 	    TreemapTile.h		\
 	    TreemapView.h		\

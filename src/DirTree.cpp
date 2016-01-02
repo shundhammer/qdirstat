@@ -9,6 +9,7 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QSettings>
 
 #include "DirTree.h"
 #include "Exception.h"
@@ -25,7 +26,7 @@ DirTree::DirTree()
     _root      = new DirInfo( this );
     CHECK_NEW( _root );
 
-    readConfig();
+    readSettings();
 
     connect( & _jobQueue, SIGNAL( finished()	 ),
 	     this,	  SLOT	( slotFinished() ) );
@@ -39,22 +40,14 @@ DirTree::~DirTree()
 }
 
 
-void DirTree::readConfig()
+void DirTree::readSettings()
 {
-#if 0
-    // FIXME
-    // FIXME
-    KConfig * config = kapp->config();
-    config->setGroup( "Directory Reading" );
+    QSettings settings;
+    settings.beginGroup( "Directory Reading" );
 
-    _crossFileSystems	  = config->readBoolEntry( "CrossFileSystems",	   false );
-    _enableLocalDirReader = config->readBoolEntry( "EnableLocalDirReader", true	 );
-    // FIXME
-    // FIXME
-#else
-    _crossFileSystems	  = false;
-    _enableLocalDirReader = true;
-#endif
+    _crossFileSystems = settings.value( "CrossFileSystems", false ).toBool();
+
+    settings.endGroup();
 }
 
 
@@ -97,7 +90,7 @@ void DirTree::clear()
 
     if ( _root )
     {
-        emit clearing();
+	emit clearing();
 	_root->clear();
     }
 
@@ -117,7 +110,7 @@ void DirTree::startReading( const QString & rawUrl )
     if ( _root->hasChildren() )
 	clear();
     emit startingReading();
-    readConfig();
+    readSettings();
 
     FileInfo * item = LocalDirReadJob::stat( url, this, _root );
     CHECK_PTR( item );
