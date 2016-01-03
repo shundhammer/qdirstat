@@ -942,7 +942,7 @@ void DirTreeModel::refreshSelected()
     if ( sel && sel->isDir() )
     {
 	logDebug() << "Refreshing " << sel << endl;
-	_tree->refresh( sel );
+	_tree->refresh( sel->toDirInfo() );
     }
     else
     {

@@ -91,7 +91,7 @@ void DirTree::clear()
     if ( _root )
     {
 	emit clearing();
-	_root->clear();
+	_root->clear( false );
     }
 
     _isBusy = false;
@@ -141,74 +141,25 @@ void DirTree::startReading( const QString & rawUrl )
 }
 
 
-void DirTree::refresh( FileInfo *subtree )
+void DirTree::refresh( DirInfo *subtree )
 {
     if ( ! _root )
 	return;
 
-    if ( ! subtree || ! subtree->parent() )	// Refresh all (from root)
+    if ( ! subtree || ! subtree->parent() )	// Refresh all (from first toplevel)
     {
 	startReading( QDir::cleanPath( firstToplevel()->url() ) );
     }
     else	// Refresh subtree
     {
-	// Save some values from the old subtree.
-
-	QString	  url	 = subtree->url();
-	DirInfo * parent = subtree->parent();
-
-
-	// Clear any old "excluded" status
-
+        subtree->clear( true );
+        subtree->reset();
 	subtree->setExcluded( false );
 
-
-	// Get rid of the old subtree.
-
-	emit deletingChild( subtree );
-
-	// logDebug() << "Deleting subtree " << subtree << endl;
-
-	/**
-	 * This may sound stupid, but the parent must be told to unlink its
-	 * child from the children list. The child cannot simply do this by
-	 * itself in its destructor since at this point important parts of the
-	 * object may already be destroyed, e.g., the virtual table -
-	 * i.e. virtual methods won't work any more.
-	 *
-	 * I just found that out the hard way by several hours of debugging. ;-}
-	 **/
-	parent->deletingChild( subtree );
-	delete subtree;
-	emit childDeleted();
-
 	_isBusy = true;
+        subtree->setReadState( DirReading );
 	emit startingReading();
-
-	// Create new subtree root.
-
-	subtree = LocalDirReadJob::stat( url, this, parent );
-
-	// logDebug() << "New subtree: " << subtree << endl;
-
-	if ( subtree )
-	{
-	    // Insert new subtree root into the tree hierarchy.
-
-	    parent->insertChild( subtree );
-	    childAddedNotify( subtree );
-
-	    if ( subtree->isDirInfo() )
-	    {
-		// Prepare reading this subtree's contents.
-		addJob( new LocalDirReadJob( this, subtree->toDirInfo() ) );
-	    }
-	    else
-	    {
-		_isBusy = false;
-		emit finished();
-	    }
-	}
+        addJob( new LocalDirReadJob( this, subtree ) );
     }
 }
 
@@ -364,6 +315,19 @@ void DirTree::sendReadJobFinished( DirInfo * dir )
     // logDebug() << dir << endl;
     emit readJobFinished( dir );
 }
+
+
+void DirTree::sendDeletingChild( FileInfo * child )
+{
+    emit deletingChild( child );
+}
+
+
+void DirTree::sendChildDeleted()
+{
+    emit childDeleted();
+}
+
 
 
 bool DirTree::writeCache( const QString & cacheFileName )

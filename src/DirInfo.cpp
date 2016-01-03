@@ -96,23 +96,31 @@ void DirInfo::init()
 
 DirInfo::~DirInfo()
 {
-    clear();
+    clear( false );
 }
 
 
-void DirInfo::clear()
+void DirInfo::clear( bool sendSignals )
 {
     _deletingAll = true;
-    FileInfo *child = _firstChild;
-    _firstChild = 0;
 
     // Recursively delete all children.
 
-    while ( child )
+    while ( _firstChild )
     {
-	FileInfo * nextChild = child->next();
-	delete child;
-	child = nextChild;
+	FileInfo * nextChild = _firstChild->next();
+
+        if ( _parent )
+            _parent->deletingChild( _firstChild );
+
+        if ( sendSignals )
+            _tree->sendDeletingChild( _firstChild );
+
+	delete _firstChild;
+        _firstChild = nextChild; // unlink the old first child
+
+        if ( sendSignals )
+            _tree->sendChildDeleted();
     }
 
 
@@ -120,8 +128,14 @@ void DirInfo::clear()
 
     if ( _dotEntry )
     {
+        if ( sendSignals )
+            _tree->sendDeletingChild( _dotEntry );
+
 	delete _dotEntry;
 	_dotEntry = 0;
+
+        if ( sendSignals )
+            _tree->sendChildDeleted();
     }
 
     _summaryDirty = true;
@@ -135,16 +149,20 @@ void DirInfo::reset()
         return;
 
     if ( _firstChild )
-        clear();
-
-    if ( _dotEntry )
-        _dotEntry->clear();
-    else
-        _dotEntry = new DirInfo( _tree, this, true );
+        clear( true );
 
     _readState	     = DirQueued;
     _pendingReadJobs = 0;
     _summaryDirty    = true;
+
+    if ( _dotEntry )
+        _dotEntry->clear( true );
+    else
+    {
+        _dotEntry = new DirInfo( _tree, this, true );
+        _tree->childAddedNotify( _dotEntry );
+    }
+
     recalc();
     dropSortCache();
 }

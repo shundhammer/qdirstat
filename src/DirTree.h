@@ -80,15 +80,15 @@ namespace QDirStat
 	/**
 	 * Refresh a subtree, i.e. read its contents from disk again.
 	 *
-	 * The old subtree will be deleted and rebuilt from scratch, i.e. all
-	 * pointers to elements within this subtree will become invalid (a
-	 * @ref subtreeDeleted() signal will be emitted to notify about that
-	 * fact).
+	 * All children of the old subtree will be deleted and rebuilt from
+	 * scratch, i.e. all pointers to elements within this subtree will
+	 * become invalid (a @ref subtreeDeleted() signal will be emitted to
+	 * notify about that fact).
 	 *
 	 * When 0 is passed, the entire tree will be refreshed, i.e. from the
-	 * root element on.
+	 * first toplevel element on.
 	 **/
-	void refresh( FileInfo *subtree = 0 );
+	void refresh( DirInfo *subtree = 0 );
 
 	/**
 	 * Delete a subtree.
@@ -230,6 +230,16 @@ namespace QDirStat
 	 * entries, set the final "expandable" state etc.
 	 **/
 	void sendFinalizeLocal( DirInfo *dir );
+
+        /**
+         * Send a deletingChild() signal.
+         **/
+        void sendDeletingChild( FileInfo * child );
+
+        /**
+         * Send a childDeleted() signal.
+         **/
+        void sendChildDeleted();
 
 	/**
 	 * Returns 'true' if directory reading is in progress in this tree.
