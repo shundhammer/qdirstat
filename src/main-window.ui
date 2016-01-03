@@ -49,6 +49,10 @@
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionRefreshAll"/>
+    <addaction name="actionRefreshSelected"/>
+    <addaction name="separator"/>
+    <addaction name="actionReadExcludedDirectory"/>
+    <addaction name="actionContinueReadingAtMountPoint"/>
     <addaction name="actionStopReading"/>
     <addaction name="separator"/>
     <addaction name="actionAskWriteCache"/>
@@ -471,6 +475,27 @@
    </property>
    <property name="toolTip">
     <string>Show information about the Qt version used for building this program.</string>
+   </property>
+  </action>
+  <action name="actionRefreshSelected">
+   <property name="text">
+    <string>Refresh &amp;Selected</string>
+   </property>
+   <property name="toolTip">
+    <string>Reread the selected branch from disk.</string>
+   </property>
+  </action>
+  <action name="actionReadExcludedDirectory">
+   <property name="text">
+    <string>Read &amp;Excluded Directory</string>
+   </property>
+   <property name="toolTip">
+    <string>Read a directory that was excluded by an exclude rule.</string>
+   </property>
+  </action>
+  <action name="actionContinueReadingAtMountPoint">
+   <property name="text">
+    <string>Continue Reading at &amp;Mount Point</string>
    </property>
   </action>
  </widget>
