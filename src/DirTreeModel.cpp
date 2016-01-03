@@ -908,7 +908,7 @@ void DirTreeModel::childDeleted()
 
 void DirTreeModel::clearingSubtree( DirInfo * subtree )
 {
-    logDebug() << "Deleting all children of " << subtree << endl;
+    // logDebug() << "Deleting all children of " << subtree << endl;
 
     if ( subtree == _tree->root() || subtree->isTouched() )
     {
@@ -917,7 +917,7 @@ void DirTreeModel::clearingSubtree( DirInfo * subtree )
 
         if ( count > 0 )
         {
-            logDebug() << "beginRemoveRows for " << subtree << " row 0 to " << count - 1 << endl;
+            // logDebug() << "beginRemoveRows for " << subtree << " row 0 to " << count - 1 << endl;
             beginRemoveRows( subtreeIndex, 0, count - 1 );
         }
     }
@@ -930,7 +930,7 @@ void DirTreeModel::subtreeCleared( DirInfo * subtree )
 {
     Q_UNUSED( subtree );
 
-    logDebug() << "endRemoveRows()" << endl;
+    // logDebug() << "endRemoveRows()" << endl;
     endRemoveRows();
 }
 

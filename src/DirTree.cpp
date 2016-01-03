@@ -152,20 +152,22 @@ void DirTree::refresh( DirInfo *subtree )
     }
     else	// Refresh subtree
     {
-        if ( subtree->hasChildren() )
-        {
-            emit clearingSubtree( subtree );
-            subtree->clear();
-            emit subtreeCleared( subtree );
-        }
+	// logDebug() << "Refreshing subtree " << subtree << endl;
 
-        subtree->reset();
+	if ( subtree->hasChildren() )
+	{
+	    emit clearingSubtree( subtree );
+	    subtree->clear();
+	    emit subtreeCleared( subtree );
+	}
+
+	subtree->reset();
 	subtree->setExcluded( false );
 
 	_isBusy = true;
-        subtree->setReadState( DirReading );
+	subtree->setReadState( DirReading );
 	emit startingReading();
-        addJob( new LocalDirReadJob( this, subtree ) );
+	addJob( new LocalDirReadJob( this, subtree ) );
     }
 }
 

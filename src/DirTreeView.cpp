@@ -46,7 +46,7 @@ DirTreeView::DirTreeView( QWidget * parent ):
     header()->setSectionResizeMode( QHeaderView::ResizeToContents );
 
     connect( this , SIGNAL( customContextMenuRequested( const QPoint & ) ),
-             this,  SLOT  ( contextMenu               ( const QPoint & ) ) );
+	     this,  SLOT  ( contextMenu		      ( const QPoint & ) ) );
 
 }
 
@@ -72,35 +72,22 @@ void DirTreeView::contextMenu( const QPoint & pos )
 
     if ( ! index.isValid() )
     {
-        logDebug() << "No item at this position" << endl;
-        return;
+	// logDebug() << "No item at this position" << endl;
+	return;
     }
-
-    logDebug() << "Context menu for " << this << endl;
 
     QMenu menu;
     QStringList actions;
     actions << "actionGoUp"
-            << "actionCopyUrlToClipboard"
-            << "---"
-            << "actionRefreshSelected"
-            << "actionReadExcludedDirectory"
-            << "actionContinueReadingAtMountPoint"
-        ;
+	    << "actionCopyUrlToClipboard"
+	    << "---"
+	    << "actionRefreshSelected"
+	    << "actionReadExcludedDirectory"
+	    << "actionContinueReadingAtMountPoint"
+	;
 
     ActionManager::instance()->addActions( &menu, actions );
-
-    QAction * selectedAction = menu.exec( mapToGlobal( pos ) );
-
-    if ( selectedAction )
-    {
-        logDebug() << "Executing action " << selectedAction->objectName() << endl;
-        selectedAction->trigger();
-    }
-    else
-    {
-        logDebug() << "No action selected" << endl;
-    }
+    menu.exec( mapToGlobal( pos ) );
 }
 
 

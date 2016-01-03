@@ -618,7 +618,7 @@ void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	case Qt::RightButton:
 	    logDebug() << this << " right mouse pressed" << endl;
 	    _parentView->setCurrentItem( this );
-            break;
+	    break;
 
 	default:
 	    QGraphicsRectItem::mousePressEvent( event );
@@ -713,15 +713,15 @@ void TreemapTile::wheelEvent( QGraphicsSceneWheelEvent * event )
 void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 {
     if ( ! _parentView->selectionModel() )
-        return;
+	return;
 
     FileInfoSet selectedItems = _parentView->selectionModel()->selectedItems();
 
     if ( ! selectedItems.contains( _orig ) )
     {
-        logDebug() << "Abandoning old selection" << endl;
-        _parentView->selectionModel()->setCurrentItem( _orig, true );
-        selectedItems = _parentView->selectionModel()->selectedItems();
+	logDebug() << "Abandoning old selection" << endl;
+	_parentView->selectionModel()->setCurrentItem( _orig, true );
+	selectedItems = _parentView->selectionModel()->selectedItems();
     }
 
     _parentView->selectionModel()->dumpSelectedItems();
@@ -732,26 +732,15 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
     QMenu menu;
     QStringList actions;
     actions << "actionGoUp"
-            << "actionCopyUrlToClipboard"
-            << "---"
-            << "actionTreemapZoomIn"
-            << "actionTreemapZoomOut"
-            << "actionResetTreemapZoom"
-        ;
+	    << "actionCopyUrlToClipboard"
+	    << "---"
+	    << "actionTreemapZoomIn"
+	    << "actionTreemapZoomOut"
+	    << "actionResetTreemapZoom"
+	;
 
     ActionManager::instance()->addActions( &menu, actions );
-
-    QAction * selectedAction = menu.exec( event->screenPos() );
-
-    if ( selectedAction )
-    {
-        logDebug() << "Executing action " << selectedAction->objectName() << endl;
-        selectedAction->trigger();
-    }
-    else
-    {
-        logDebug() << "No action selected" << endl;
-    }
+    menu.exec( event->screenPos() );
 }
 
 
