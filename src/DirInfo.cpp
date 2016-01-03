@@ -129,6 +129,27 @@ void DirInfo::clear()
 }
 
 
+void DirInfo::reset()
+{
+    if ( _isDotEntry )
+        return;
+
+    if ( _firstChild )
+        clear();
+
+    if ( _dotEntry )
+        _dotEntry->clear();
+    else
+        _dotEntry = new DirInfo( _tree, this, true );
+
+    _readState	     = DirQueued;
+    _pendingReadJobs = 0;
+    _summaryDirty    = true;
+    recalc();
+    dropSortCache();
+}
+
+
 void DirInfo::recalc()
 {
     logDebug() << this << endl;

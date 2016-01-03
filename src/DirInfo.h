@@ -332,6 +332,16 @@ namespace QDirStat
 	 **/
 	void clear();
 
+        /**
+         * Reset to the same status like just after construction in preparation
+         * of refreshing the tree from this point on:
+         *
+         * Delete all children if there are any, delete the dot entry's
+         * children if there are any, restore the dot entry if it was removed
+         * (e.g. in finalizeLocal()), set the read state to DirQueued.
+         **/
+        void reset();
+
 	/**
 	 * Mark this directory as 'touched'. Item models can use this to keep
 	 * track of which items were ever used by a connected view to minimize

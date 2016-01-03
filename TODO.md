@@ -23,11 +23,6 @@
   - Add context menu to header to unlock widths?
 
 
-## Config
-
-- readConfig() everywhere
-
-
 ## Config Dialog(s)
 
 - Qt designer forms
@@ -39,8 +34,6 @@
 ## Cleanups
 
 - port old code
-
-- Make actionCollection a QObject and add the cleanups as QActions to it
 
 
 ### Move to Trash
