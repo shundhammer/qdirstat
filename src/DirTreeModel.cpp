@@ -94,6 +94,12 @@ void DirTreeModel::createTree()
     connect( _tree, SIGNAL( deletingChild( FileInfo * ) ),
 	     this,  SLOT  ( deletingChild( FileInfo * ) ) );
 
+    connect( _tree, SIGNAL( clearingSubtree( DirInfo * ) ),
+	     this,  SLOT  ( clearingSubtree( DirInfo * ) ) );
+
+    connect( _tree, SIGNAL( subtreeCleared( DirInfo * ) ),
+	     this,  SLOT  ( subtreeCleared( DirInfo * ) ) );
+
     connect( _tree, SIGNAL( childDeleted() ),
 	     this,  SLOT  ( childDeleted() ) );
 }
@@ -526,7 +532,7 @@ void DirTreeModel::sort( int column, Qt::SortOrder order )
 	logDebug() << "Sorting by " << _sortCol << " during reading" << endl;
     }
 
-    updatePersistentIndices();
+    updatePersistentIndexes();
     emit layoutChanged();
 
     // logDebug() << "After layoutChanged()" << endl;
@@ -544,7 +550,7 @@ void DirTreeModel::busyDisplay()
     _sortCol = ReadJobsCol;
     // logDebug() << "Sorting by " << _sortCol << " during reading" << endl;
 
-    updatePersistentIndices();
+    updatePersistentIndexes();
     emit layoutChanged();
 }
 
@@ -559,7 +565,7 @@ void DirTreeModel::idleDisplay()
 	// logDebug() << "Sorting by " << _sortCol << " after reading is finished" << endl;
     }
 
-    updatePersistentIndices();
+    updatePersistentIndexes();
     emit layoutChanged();
 }
 
@@ -832,7 +838,7 @@ void DirTreeModel::dumpPersistentIndexList() const
 {
     QModelIndexList persistentList = persistentIndexList();
 
-    logDebug() << persistentList.size() << " persistent indices" << endl;
+    logDebug() << persistentList.size() << " persistent indexes" << endl;
 
     for ( int i=0; i < persistentList.size(); ++i )
     {
@@ -849,7 +855,7 @@ void DirTreeModel::dumpPersistentIndexList() const
 }
 
 
-void DirTreeModel::updatePersistentIndices()
+void DirTreeModel::updatePersistentIndexes()
 {
     QModelIndexList persistentList = persistentIndexList();
 
@@ -900,6 +906,35 @@ void DirTreeModel::childDeleted()
 }
 
 
+void DirTreeModel::clearingSubtree( DirInfo * subtree )
+{
+    logDebug() << "Deleting all children of " << subtree << endl;
+
+    if ( subtree == _tree->root() || subtree->isTouched() )
+    {
+	QModelIndex subtreeIndex = modelIndex( subtree, 0 );
+	int count = countDirectChildren( subtree );
+
+        if ( count > 0 )
+        {
+            logDebug() << "beginRemoveRows for " << subtree << " row 0 to " << count - 1 << endl;
+            beginRemoveRows( subtreeIndex, 0, count - 1 );
+        }
+    }
+
+    invalidatePersistent( subtree );
+}
+
+
+void DirTreeModel::subtreeCleared( DirInfo * subtree )
+{
+    Q_UNUSED( subtree );
+
+    logDebug() << "endRemoveRows()" << endl;
+    endRemoveRows();
+}
+
+
 void DirTreeModel::invalidatePersistent( FileInfo * subtree )
 {
     logDebug() << "Subtree: " << subtree << endl;
@@ -942,11 +977,12 @@ void DirTreeModel::refreshSelected()
     if ( sel && sel->isDir() )
     {
 	logDebug() << "Refreshing " << sel << endl;
+	busyDisplay();
 	_tree->refresh( sel->toDirInfo() );
     }
     else
     {
-        logWarning() << "NOT refreshing " << sel << endl;
+	logWarning() << "NOT refreshing " << sel << endl;
     }
 }
 

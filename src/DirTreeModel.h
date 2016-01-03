@@ -89,7 +89,7 @@ namespace QDirStat
 	void clear();
 
 	/**
-	 * Debugging: Dump list of persistent model indices to the log.
+	 * Debugging: Dump list of persistent model indexes to the log.
 	 **/
 	void dumpPersistentIndexList() const;
 
@@ -260,8 +260,18 @@ namespace QDirStat
 	 **/
 	void childDeleted();
 
+        /**
+         * Notification that a subtree is about to be cleared.
+         **/
+        void clearingSubtree( DirInfo * subtree );
+
+        /**
+         * Notification that clearing a subtree is done.
+         **/
+        void subtreeCleared( DirInfo * subtree );
+
 	/**
-	 * Invalidate all persistent indices in 'subtree'.
+	 * Invalidate all persistent indexes in 'subtree'.
 	 **/
 	void invalidatePersistent( FileInfo * subtree );
 
@@ -290,9 +300,9 @@ namespace QDirStat
 	void dataChangedNotify( DirInfo * dir );
 
 	/**
-	 * Update the persistent indices with current row after sorting etc.
+	 * Update the persistent indexes with current row after sorting etc.
 	 **/
-	void updatePersistentIndices();
+	void updatePersistentIndexes();
 
 	/**
 	 * Return 'true' if 'item' or any ancestor (parent or parent's parent

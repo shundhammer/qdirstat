@@ -91,7 +91,7 @@ void DirTree::clear()
     if ( _root )
     {
 	emit clearing();
-	_root->clear( false );
+	_root->clear();
     }
 
     _isBusy = false;
@@ -152,7 +152,13 @@ void DirTree::refresh( DirInfo *subtree )
     }
     else	// Refresh subtree
     {
-        subtree->clear( true );
+        if ( subtree->hasChildren() )
+        {
+            emit clearingSubtree( subtree );
+            subtree->clear();
+            emit subtreeCleared( subtree );
+        }
+
         subtree->reset();
 	subtree->setExcluded( false );
 
@@ -315,19 +321,6 @@ void DirTree::sendReadJobFinished( DirInfo * dir )
     // logDebug() << dir << endl;
     emit readJobFinished( dir );
 }
-
-
-void DirTree::sendDeletingChild( FileInfo * child )
-{
-    emit deletingChild( child );
-}
-
-
-void DirTree::sendChildDeleted()
-{
-    emit childDeleted();
-}
-
 
 
 bool DirTree::writeCache( const QString & cacheFileName )

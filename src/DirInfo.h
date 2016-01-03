@@ -329,12 +329,8 @@ namespace QDirStat
 
 	/**
 	 * Recursively delete all children, including the dot entry.
-	 *
-	 * If 'sendSignals' is 'false', deletingChild() and childDeleted()
-	 * signals that would normally be sent for each child to be deleted are
-	 * suppressed.
 	 **/
-	void clear( bool sendSignals );
+	void clear();
 
 	/**
 	 * Reset to the same status like just after construction in preparation

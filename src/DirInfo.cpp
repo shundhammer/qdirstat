@@ -96,11 +96,11 @@ void DirInfo::init()
 
 DirInfo::~DirInfo()
 {
-    clear( false );
+    clear();
 }
 
 
-void DirInfo::clear( bool sendSignals )
+void DirInfo::clear()
 {
     _deletingAll = true;
 
@@ -113,14 +113,8 @@ void DirInfo::clear( bool sendSignals )
         if ( _parent )
             _parent->deletingChild( _firstChild );
 
-        if ( sendSignals )
-            _tree->sendDeletingChild( _firstChild );
-
 	delete _firstChild;
         _firstChild = nextChild; // unlink the old first child
-
-        if ( sendSignals )
-            _tree->sendChildDeleted();
     }
 
 
@@ -128,14 +122,8 @@ void DirInfo::clear( bool sendSignals )
 
     if ( _dotEntry )
     {
-        if ( sendSignals )
-            _tree->sendDeletingChild( _dotEntry );
-
 	delete _dotEntry;
 	_dotEntry = 0;
-
-        if ( sendSignals )
-            _tree->sendChildDeleted();
     }
 
     _summaryDirty = true;
@@ -148,16 +136,14 @@ void DirInfo::reset()
     if ( _isDotEntry )
         return;
 
-    if ( _firstChild )
-        clear( true );
+    if ( _firstChild || _dotEntry )
+        clear();
 
     _readState	     = DirQueued;
     _pendingReadJobs = 0;
     _summaryDirty    = true;
 
-    if ( _dotEntry )
-        _dotEntry->clear( true );
-    else
+    if ( ! _dotEntry )
     {
         _dotEntry = new DirInfo( _tree, this, true );
         _tree->childAddedNotify( _dotEntry );

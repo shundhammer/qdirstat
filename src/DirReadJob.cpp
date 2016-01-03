@@ -181,7 +181,6 @@ void LocalDirReadJob::startReading()
 			    // Read content of this subdirectory from cache file
 			    //
 
-
 			    CacheReadJob * cacheReadJob = new CacheReadJob( _tree, _dir->parent(), fullName );
 			    CHECK_NEW( cacheReadJob );
 			    QString firstDirInCache = cacheReadJob->reader()->firstDir();

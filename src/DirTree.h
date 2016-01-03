@@ -231,16 +231,6 @@ namespace QDirStat
 	 **/
 	void sendFinalizeLocal( DirInfo *dir );
 
-        /**
-         * Send a deletingChild() signal.
-         **/
-        void sendDeletingChild( FileInfo * child );
-
-        /**
-         * Send a childDeleted() signal.
-         **/
-        void sendChildDeleted();
-
 	/**
 	 * Returns 'true' if directory reading is in progress in this tree.
 	 **/
@@ -284,6 +274,17 @@ namespace QDirStat
 	 * e.g., when entire subtrees are deleted.
 	 **/
 	void childDeleted();
+
+        /**
+         * Emitted when a subtree is about to be cleared, i.e. all its children
+         * will be deleted (but not the subtree node itself).
+         **/
+        void clearingSubtree( DirInfo * subtree );
+
+        /**
+         * Emitted when clearing a subtree is finished.
+         **/
+        void subtreeCleared( DirInfo * subtree );
 
 	/**
 	 * Emitted when reading is started.
