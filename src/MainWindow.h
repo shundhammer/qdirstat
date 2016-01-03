@@ -53,6 +53,11 @@ public slots:
     void refreshAll();
 
     /**
+     * Re-read the selected branch of the tree.
+     **/
+    void refreshSelected();
+
+    /**
      * Stop reading if reading is in process.
      **/
     void stopReading();

@@ -133,16 +133,16 @@ void MainWindow::connectActions()
 {
     // "File" menu
 
-    CONNECT_ACTION( _ui->actionOpen,	      this, askOpenUrl()    );
-    CONNECT_ACTION( _ui->actionRefreshAll,    this, refreshAll()    );
-    CONNECT_ACTION( _ui->actionStopReading,   this, stopReading()   );
-    CONNECT_ACTION( _ui->actionAskWriteCache, this, askWriteCache() );
-    CONNECT_ACTION( _ui->actionAskReadCache,  this, askReadCache()  );
-    CONNECT_ACTION( _ui->actionQuit,	      qApp, quit()	    );
+    CONNECT_ACTION( _ui->actionOpen,			    this, askOpenUrl()	    );
+    CONNECT_ACTION( _ui->actionRefreshAll,		    this, refreshAll()	    );
+    CONNECT_ACTION( _ui->actionRefreshSelected,		    this, refreshSelected() );
+    CONNECT_ACTION( _ui->actionReadExcludedDirectory,	    this, refreshSelected() );
+    CONNECT_ACTION( _ui->actionContinueReadingAtMountPoint, this, refreshSelected() );
+    CONNECT_ACTION( _ui->actionStopReading,		    this, stopReading()	    );
+    CONNECT_ACTION( _ui->actionAskWriteCache,		    this, askWriteCache()   );
+    CONNECT_ACTION( _ui->actionAskReadCache,		    this, askReadCache()    );
+    CONNECT_ACTION( _ui->actionQuit,			    qApp, quit()	    );
 
-    CONNECT_ACTION( _ui->actionRefreshSelected,		    _dirTreeModel, refreshSelected() );
-    CONNECT_ACTION( _ui->actionReadExcludedDirectory,	    _dirTreeModel, refreshSelected() );
-    CONNECT_ACTION( _ui->actionContinueReadingAtMountPoint, _dirTreeModel, refreshSelected() );
 
 
     // "View" menu
@@ -396,6 +396,14 @@ void MainWindow::refreshAll()
     {
 	askOpenUrl();
     }
+}
+
+
+void MainWindow::refreshSelected()
+{
+    busyDisplay();
+    _dirTreeModel->refreshSelected();
+    updateActions();
 }
 
 
