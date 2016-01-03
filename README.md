@@ -42,7 +42,7 @@ Usable, but still pre-Alpha. Use at your own risk. You have been warned. ;-)
   - Refreshing the selected tree branch, continuing reading at mount points and
     at excluded directories now works.
 
-  - Context menus are back. I am somewhat proud on the way my new ActionManager
+  - Context menus are back. I am somewhat proud of the way my new ActionManager
     handles that with Qt introspection to avoid duplicating stuff: I wanted to
     keep the QActions in the Qt Designer file. That ActionManager keeps a
     pointer to the MainWindow that is the parent of all those QActions, and
