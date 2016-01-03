@@ -13,6 +13,7 @@
 #include "DirTree.h"
 #include "FileInfoIterator.h"
 #include "DataColumns.h"
+#include "SelectionModel.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "DebugHelpers.h"
@@ -24,6 +25,7 @@ using namespace QDirStat;
 DirTreeModel::DirTreeModel( QObject * parent ):
     QAbstractItemModel( parent ),
     _tree(0),
+    _selectionModel(0),
     _readJobsCol( PercentBarCol ),
     _updateTimerMillisec( 333 ),
     _sortCol( NameCol ),
@@ -53,7 +55,7 @@ void DirTreeModel::readSettings()
     QSettings settings;
     settings.beginGroup( "Directory_Tree" );
 
-    _treeIconDir         = settings.value( "TreeIconDir" , ":/icons/tree-medium/" ).toString();
+    _treeIconDir	 = settings.value( "TreeIconDir" , ":/icons/tree-medium/" ).toString();
     _updateTimerMillisec = settings.value( "UpdateTimerMillisec", 333 ).toInt();
 
     settings.endGroup();
@@ -65,7 +67,7 @@ void DirTreeModel::writeSettings()
     QSettings settings;
     settings.beginGroup( "Directory_Tree" );
 
-    settings.setValue( "TreeIconDir" ,        _treeIconDir         );
+    settings.setValue( "TreeIconDir" ,	      _treeIconDir	   );
     settings.setValue( "UpdateTimerMillisec", _updateTimerMillisec );
 
     settings.endGroup();
@@ -929,5 +931,22 @@ QVariant DirTreeModel::formatPercent( float percent ) const
     text.sprintf( "%.1f%%", percent );
 
     return text;
+}
+
+
+void DirTreeModel::refreshSelected()
+{
+    CHECK_PTR( _selectionModel );
+    FileInfo * sel = _selectionModel->selectedItems().first();
+
+    if ( sel && sel->isDir() )
+    {
+	logDebug() << "Refreshing " << sel << endl;
+	_tree->refresh( sel );
+    }
+    else
+    {
+        logWarning() << "NOT refreshing " << sel << endl;
+    }
 }
 

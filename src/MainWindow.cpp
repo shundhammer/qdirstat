@@ -57,6 +57,8 @@ MainWindow::MainWindow():
     _ui->treemapView->setDirTree( _dirTreeModel->tree() );
     _ui->treemapView->setSelectionModel( _selectionModel );
 
+    _dirTreeModel->setSelectionModel( _selectionModel );
+
 
     connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
 	     this,			SLOT  ( startingReading() ) );
@@ -138,6 +140,10 @@ void MainWindow::connectActions()
     CONNECT_ACTION( _ui->actionAskReadCache,  this, askReadCache()  );
     CONNECT_ACTION( _ui->actionQuit,	      qApp, quit()	    );
 
+    CONNECT_ACTION( _ui->actionRefreshSelected,		    _dirTreeModel, refreshSelected() );
+    CONNECT_ACTION( _ui->actionReadExcludedDirectory,	    _dirTreeModel, refreshSelected() );
+    CONNECT_ACTION( _ui->actionContinueReadingAtMountPoint, _dirTreeModel, refreshSelected() );
+
 
     // "View" menu
 
@@ -208,9 +214,16 @@ void MainWindow::updateActions()
     bool treeNotEmpty	 = ( _dirTreeModel->tree()->firstToplevel() != 0 );
 
     _ui->actionCopyUrlToClipboard->setEnabled( haveCurrentItem );
-
     _ui->actionGoUp->setEnabled( haveCurrentItem );
     _ui->actionGoToToplevel->setEnabled( treeNotEmpty );
+
+    FileInfoSet selectedItems = _selectionModel->selectedItems();
+    FileInfo * sel = selectedItems.first();
+    bool oneDirSelected = ( selectedItems.size() == 1 ) && ( sel->isDir() );
+
+    _ui->actionRefreshSelected->setEnabled( oneDirSelected && ! sel->isExcluded() && ! sel->isMountPoint() );
+    _ui->actionContinueReadingAtMountPoint->setEnabled( oneDirSelected && sel->isMountPoint() );
+    _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
 
     bool showingTreemap = _ui->treemapView->isVisible();
 

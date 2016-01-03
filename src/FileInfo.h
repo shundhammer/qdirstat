@@ -616,6 +616,15 @@ namespace QDirStat
 	    QSet<FileInfo *>()
 	    {}
 
+        /**
+         * Return the first item in this set or 0 if the set is empty.
+         *
+         * This makes most sense if there is only one item at all;
+         * otherwise it would be completely random which item would be
+         * returned as the first.
+         **/
+        FileInfo * first() const;
+
 	/**
 	 * Return 'true' if the set contains any dot entry.
 	 **/

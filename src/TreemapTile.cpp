@@ -732,9 +732,12 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
     QMenu menu;
     QStringList actions;
     actions << "actionGoUp"
+            << "actionCopyUrlToClipboard"
+            << "---"
             << "actionTreemapZoomIn"
             << "actionTreemapZoomOut"
-            << "actionResetTreemapZoom";
+            << "actionResetTreemapZoom"
+        ;
 
     ActionManager::instance()->addActions( &menu, actions );
 

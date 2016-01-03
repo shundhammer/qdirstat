@@ -51,6 +51,9 @@ namespace QDirStat
 	/**
 	 * Add all the actions in 'actionNames' to a menu. Return 'true' if
 	 * success, 'false' if any of the actions were not found.
+         *
+         * If an action name in actionNames starts with "---", a separator is
+         * added to the menu instead of an action.
 	 **/
 	bool addActions( QMenu * menu, const QStringList & actionNames );
 

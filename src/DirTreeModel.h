@@ -24,6 +24,7 @@ namespace QDirStat
 {
     class DirTree;
     class DirInfo;
+    class SelectionModel;
 
     enum CustomRoles
     {
@@ -101,6 +102,27 @@ namespace QDirStat
 	 * Write parameters to settings file.
 	 **/
 	void writeSettings();
+
+        /**
+         * Return this data model's selection model.
+         *
+         * The data model doesn't strictly need a selection model, but certain
+         * operations it provides (like refreshSelected()) do.
+         **/
+        SelectionModel * selectionModel() const { return _selectionModel; }
+
+        /**
+         * Set the selection model. This is required for all methods with
+         * '..Selected()' in their name.
+         **/
+        void setSelectionModel( SelectionModel * selModel )
+            { _selectionModel = selModel; }
+
+        /**
+         * Refresh the selected items: Re-read their contents from disk.
+         * This requires a selection model to be set.
+         **/
+        void refreshSelected();
 
     public:
 
@@ -305,14 +327,15 @@ namespace QDirStat
 	// Data members
 	//
 
-	DirTree *	_tree;
-	QString		_treeIconDir;
-	int		_readJobsCol;
-	QSet<DirInfo *> _pendingUpdates;
-	QTimer		_updateTimer;
-	int		_updateTimerMillisec;
-	DataColumn	_sortCol;
-	Qt::SortOrder	_sortOrder;
+	DirTree *	 _tree;
+        SelectionModel * _selectionModel;
+	QString		 _treeIconDir;
+	int		 _readJobsCol;
+	QSet<DirInfo *>  _pendingUpdates;
+	QTimer		 _updateTimer;
+	int		 _updateTimerMillisec;
+	DataColumn	 _sortCol;
+	Qt::SortOrder	 _sortOrder;
 
 
 	// The various icons

@@ -369,6 +369,15 @@ FileInfoSet FileInfoSet::normalized() const
 }
 
 
+FileInfo * FileInfoSet::first() const
+{
+    if ( isEmpty() )
+        return 0;
+    else
+        return *begin();
+}
+
+
 bool FileInfoSet::containsDotEntry() const
 {
     foreach ( FileInfo * item, *this )

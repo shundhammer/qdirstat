@@ -63,12 +63,17 @@ bool ActionManager::addActions( QMenu * menu, const QStringList & actionNames )
 
     foreach ( const QString & actionName, actionNames )
     {
-        QAction * act = action( actionName );
-
-        if ( act )
-            menu->addAction( act );
+        if ( actionName.startsWith( "---" ) )
+            menu->addSeparator();
         else
-            foundAll = false;
+        {
+            QAction * act = action( actionName );
+
+            if ( act )
+                menu->addAction( act );
+            else
+                foundAll = false;
+        }
     }
 
     return foundAll;
