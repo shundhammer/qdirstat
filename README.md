@@ -7,7 +7,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-02
+Updated: 2016-01-03
 
 
 ## Overview
@@ -32,6 +32,34 @@ screenshot. Neat, huh? ;-)
 **Work in Progress**
 
 Usable, but still pre-Alpha. Use at your own risk. You have been warned. ;-)
+
+- 2016-01-03 We are getting nearer to the target:
+
+  - Settings are read from and written to the settings file in all relevant
+    places. This includes what columns to display and their order. See section
+    'Settings' below.
+
+  - Refreshing the selected tree branch, continuing reading at mount points and
+    at excluded directories now works.
+
+  - Context menus are back. I am somewhat proud on the way my new ActionManager
+    handles that with Qt introspection to avoid duplicating stuff: I wanted to
+    keep the QActions in the Qt Designer file. That ActionManager keeps a
+    pointer to the MainWindow that is the parent of all those QActions, and
+    attached views can search that widget tree for action names (yes, that
+    works only if you keep those QObject names tidy - which I am doing anyway).
+
+  - Found some more icons for those actions.
+
+  - Exclude rules are now greatly simplified. They no longer get the entire
+    path to match which requires quite complex regexps, they only get the last
+    path component - i.e., no longer "/work/home/sh/src/qdirstat/src/.git", but
+    only ".git". You can now even tell the exclude rule to use a simplfied
+    syntax: "FixedString" or "Wildcard" in addition to the normal "RegExp".
+
+  - Still missing (this list is getting considerably shorter):
+    - Cleanups
+    - Settings dialog
 
 - 2016-01-01  New Year release
   - Added mouse operations to the treemap. Some where there in the old kdirstat
@@ -68,24 +96,24 @@ Usable, but still pre-Alpha. Use at your own risk. You have been warned. ;-)
   - Added "about" dialogs for the program and the used Qt version.
 
 - 2015-12-30  Treemap rendering now works as expected, and selecting items
-              (including multi-selection with shift-click and ctrl-click in the
-              tree view and ctrl-click in the treemap view) works. It was a bit
-              of a challenge to avoid Qt signal ping-pong between the selection
-              model object and the two views.
+	      (including multi-selection with shift-click and ctrl-click in the
+	      tree view and ctrl-click in the treemap view) works. It was a bit
+	      of a challenge to avoid Qt signal ping-pong between the selection
+	      model object and the two views.
 
 - 2015-12-28  Treemaps are back. It's not perfect yet, but the basic rendering
-              works.  I admit I was somewhat scared of that part, but the
-              transition from Qt3 QCanvas to QGraphicsScene / QGraphicsView
-              went much smoother than I had expected. I am very glad I don't
-              have to dig deep into the math again with those cushioned
-              treemaps; that part worked completely unchanged. :-)
+	      works.  I admit I was somewhat scared of that part, but the
+	      transition from Qt3 QCanvas to QGraphicsScene / QGraphicsView
+	      went much smoother than I had expected. I am very glad I don't
+	      have to dig deep into the math again with those cushioned
+	      treemaps; that part worked completely unchanged. :-)
 
 - 2015-12-27  The tree view now supports _extended_ selection, i.e. you can
-              shift-click to select a range of items or ctrl-click to select or
-              deselect individual items. This was the most requested feature
-              for the last KDirStat. This means you can now select more than
-              one item at once to move it to the trash can etc. (once cleanup
-              actions are back).
+	      shift-click to select a range of items or ctrl-click to select or
+	      deselect individual items. This was the most requested feature
+	      for the last KDirStat. This means you can now select more than
+	      one item at once to move it to the trash can etc. (once cleanup
+	      actions are back).
 
 - 2015-12-25  Christmas release
 
@@ -110,23 +138,23 @@ Usable, but still pre-Alpha. Use at your own risk. You have been warned. ;-)
     ported to Qt5 now.
 
 - 2015-12-20  First usable preview version - see screenshot above. It's still
-              pretty rough, and sorting via the QSortProxyModel seems to be
-              awfully slow once a number of tree branches were ever
-              opened. Looks like I'll have to do that myself, too.
+	      pretty rough, and sorting via the QSortProxyModel seems to be
+	      awfully slow once a number of tree branches were ever
+	      opened. Looks like I'll have to do that myself, too.
 
 - 2015-12-18  Found the crippling bugs that made the DirTreeModel do crazy
-              things.  None of the Qt classes proved to be helpful to find that
-              - they just happily do the crazy things. That's what I call poor
-              design.  Now there is a first working QDirStat with a useful
-              display tree, including icons (but no percentage bar graph yet).
+	      things.  None of the Qt classes proved to be helpful to find that
+	      - they just happily do the crazy things. That's what I call poor
+	      design.  Now there is a first working QDirStat with a useful
+	      display tree, including icons (but no percentage bar graph yet).
 
 - 2015-12-07  First working DirTreeModel -- still minimalistic, but working.
 
 - 2015-12-06  Created tree model based on QAbstractItemModel.
-              Compiles, but dumps core so far.
+	      Compiles, but dumps core so far.
 
 - 2015-12-05  Imported and ported directory tree data classes.
-              Hammered through the compiler, but nothing usable so far.
+	      Hammered through the compiler, but nothing usable so far.
 
 - 2015-11-28  Project is being set up. Nothing usable so far.
 
@@ -221,6 +249,58 @@ predefined and 10 user cleanup actions.
 - Treemap colors, the respective file categories (pictures, videos, compressed
 archives, ...) and their filename extensions (*.jpg, *.png; *.mp4, *.wmv, ...)
 will be configurable.
+
+
+## Settings
+
+Stuff that can be configured in ~/.config/QDirStat/QDirStat.conf:
+
+    [Data_Columns]
+    Columns=NameCol, PercentBarCol, PercentNumCol, TotalSizeCol, OwnSizeCol, TotalItemsCol, TotalFilesCol, TotalSubDirsCol, LatestMTimeCol
+
+    [Directory_Tree]
+    TreeIconDir=:/icons/tree-medium/
+    UpdateTimerMillisec=333
+
+    [Exclude_Rules]
+    Rules\1\CaseSensitive=true
+    Rules\1\Pattern=.snapshot
+    Rules\1\Syntax=FixedString
+    Rules\size=1
+
+    [MainWindow]
+    ShowTreemap=true
+    StatusBarTimeOutMillisec=3000
+    WindowPos=@Point(388 60)
+    WindowSize=@Size(1157 650)
+
+    [Percent_Bar]
+    Background=#a0a0a0
+    Colors=#0000ff, #800080, #e7932b, #047100, #b00000, #ccbb00, #a2621e, #009492, #d95e00, #00c241, #c26cbb, #00b3ff
+    PercentBarColumnWidth=180
+
+    [Treemaps]
+    AmbientLight=40
+    CurrentItemColor=#ff0000
+    CushionGridColor=#808080
+    CushionShading=true
+    DirFillColor=#107db4
+    EnsureContrast=true
+    FileFillColor=#de8d53
+    ForceCushionGrid=false
+    HeightScaleFactor=1
+    MinTileSize=3
+    OutlineColor=#000000
+    SelectedItemsColor=#ffff00
+    Squarify=true
+
+
+There will not be a settings dialog for all that; some things are just too
+arcane for normal people to configure (the treemap parameters, for example).
+
+As you can see, the data columns are already configurable: Except for the
+NameCol (where the file or directory name is displayed), everything can be
+omitted or rearranged to your liking.
 
 
 ### Windows / MacOS X Compatibility
@@ -343,13 +423,13 @@ before closing parentheses:
 
     if ( someCondition )
     {
-        doSomething( arg1, arg2 )
+	doSomething( arg1, arg2 )
     }
 
 **No** K&R style indentation:
 
-    if (someCondition) {         // WRONG!!!
-        doSomething(arg1, arg2)  // WRONG!!!
+    if (someCondition) {	 // WRONG!!!
+	doSomething(arg1, arg2)	 // WRONG!!!
     }
 
 Use blank lines liberally. No Rubocop-style code.
@@ -360,11 +440,11 @@ setter with Set...(), use only the name (someValue()) for the getter, **Not**
 getSomeValue():
 
     private:
-        SomeType _someValue;    // member variable
+	SomeType _someValue;	// member variable
 
     public:
-        const & SomeType someValue() const;              // getter
-        void setSomeValue( const SomeType & newValue );  // setter
+	const & SomeType someValue() const;		 // getter
+	void setSomeValue( const SomeType & newValue );	 // setter
 
 Use a const reference for the setter parameter and the getter return type for
 nontrival data types (everything beyond a pointer or an int etc.), and the type
