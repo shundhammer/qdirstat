@@ -312,6 +312,10 @@
    </property>
   </action>
   <action name="actionAskWriteCache">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/document-export.png</normaloff>:/icons/document-export.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Write To Cache File...</string>
    </property>
@@ -320,6 +324,10 @@
    </property>
   </action>
   <action name="actionAskReadCache">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/document-import.png</normaloff>:/icons/document-import.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Read Cache File...</string>
    </property>
@@ -494,6 +502,10 @@
    </property>
   </action>
   <action name="actionContinueReadingAtMountPoint">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/hard-disk.png</normaloff>:/icons/hard-disk.png</iconset>
+   </property>
    <property name="text">
     <string>Continue Reading at &amp;Mount Point</string>
    </property>

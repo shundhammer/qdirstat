@@ -1,12 +1,20 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/qdirstat.png</file>
+        <file>icons/document-export.png</file>
+        <file>icons/document-import.png</file>
+        <file>icons/delete.png</file>
         <file>icons/edit-copy.png</file>
+        <file>icons/file-manager.png</file>
         <file>icons/go-top.png</file>
         <file>icons/go-up.png</file>
+        <file>icons/hard-disk.png</file>
         <file>icons/open-dir.png</file>
+        <file>icons/preferences.png</file>
         <file>icons/refresh.png</file>
         <file>icons/stop.png</file>
+        <file>icons/terminal.png</file>
+        <file>icons/trashcan.png</file>
         <file>icons/window-close.png</file>
         <file>icons/zoom-best-fit.png</file>
         <file>icons/zoom-in.png</file>
