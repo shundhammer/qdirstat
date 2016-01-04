@@ -25,6 +25,9 @@ INSTALLS	    += TARGET
 
 SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
+	    Cleanup.cpp			\
+	    CleanupCollection.cpp	\
+	    StdCleanup.cpp		\
 	    DebugHelpers.cpp		\
 	    DataColumns.cpp		\
 	    DirInfo.cpp			\
@@ -50,6 +53,9 @@ SOURCES	  = main.cpp			\
 
 HEADERS	  =				\
 	    ActionManager.h		\
+	    Cleanup.h			\
+	    CleanupCollection.h		\
+	    StdCleanup.h		\
 	    DebugHelpers.h		\
 	    DataColumns.h		\
 	    DirInfo.h			\

@@ -110,11 +110,11 @@ void DirInfo::clear()
     {
 	FileInfo * nextChild = _firstChild->next();
 
-        if ( _parent )
-            _parent->deletingChild( _firstChild );
+	if ( _parent )
+	    _parent->deletingChild( _firstChild );
 
 	delete _firstChild;
-        _firstChild = nextChild; // unlink the old first child
+	_firstChild = nextChild; // unlink the old first child
     }
 
 
@@ -134,10 +134,10 @@ void DirInfo::clear()
 void DirInfo::reset()
 {
     if ( _isDotEntry )
-        return;
+	return;
 
     if ( _firstChild || _dotEntry )
-        clear();
+	clear();
 
     _readState	     = DirQueued;
     _pendingReadJobs = 0;
@@ -145,8 +145,8 @@ void DirInfo::reset()
 
     if ( ! _dotEntry )
     {
-        _dotEntry = new DirInfo( _tree, this, true );
-        _tree->childAddedNotify( _dotEntry );
+	_dotEntry = new DirInfo( _tree, this, true );
+	_tree->childAddedNotify( _dotEntry );
     }
 
     recalc();

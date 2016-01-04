@@ -28,12 +28,13 @@ using namespace QDirStat;
 
 TreemapView::TreemapView( QWidget * parent ):
     QGraphicsView( parent ),
-    _tree( 0 ),
-    _selectionModel( 0 ),
-    _selectionModelProxy( 0 ),
-    _rootTile( 0 ),
-    _currentItem( 0 ),
-    _currentItemRect( 0 )
+    _tree(0),
+    _selectionModel(0),
+    _selectionModelProxy(0),
+    _cleanupCollection(0),
+    _rootTile(0),
+    _currentItem(0),
+    _currentItemRect(0)
 {
     logDebug() << endl;
     readSettings();

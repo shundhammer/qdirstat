@@ -6,12 +6,14 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
+
 #include <QAbstractItemModel>
 
 #include "DebugHelpers.h"
 #include "DirTree.h"
 #include "FileInfoIterator.h"
 #include "ExcludeRules.h"
+
 
 namespace Debug
 {

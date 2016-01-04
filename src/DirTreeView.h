@@ -28,6 +28,7 @@ namespace QDirStat
 {
     class PercentBarDelegate;
     class SelectionModelProxy;
+    class CleanupCollection;
 
 
     class DirTreeView: public QTreeView
@@ -45,6 +46,18 @@ namespace QDirStat
 	 * Destructor
 	 **/
 	virtual ~DirTreeView();
+
+	/**
+	 * Set the cleanup collection. If set, all cleanup actions from that
+	 * collection will be added to the item context menu.
+	 **/
+	void setCleanupCollection( CleanupCollection * collection )
+	    { _cleanupCollection = collection; }
+
+	/**
+	 * Return the cleanup collection or 0 if it is not set.
+	 **/
+	CleanupCollection * cleanupCollection() const { return _cleanupCollection; }
 
 #if 0
 	/**
@@ -75,6 +88,7 @@ namespace QDirStat
 	// Data members
 
 	PercentBarDelegate	* _percentBarDelegate;
+	CleanupCollection	* _cleanupCollection;
 #if 0
 	SelectionModelProxy	* _selectionModelProxy;
 #endif

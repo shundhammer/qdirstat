@@ -45,7 +45,7 @@ FileInfo::FileInfo( DirTree    * tree,
     _size	  = 0;
     _blocks	  = 0;
     _mtime	  = 0;
-    _magic        = FileInfoMagic;
+    _magic	  = FileInfoMagic;
 }
 
 
@@ -66,7 +66,7 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
     _mode	 = statInfo->st_mode;
     _links	 = statInfo->st_nlink;
     _mtime	 = statInfo->st_mtime;
-    _magic       = FileInfoMagic;
+    _magic	 = FileInfoMagic;
 
     if ( isSpecial() )
     {
@@ -120,7 +120,7 @@ FileInfo::FileInfo( DirTree *	    tree,
     _size	 = size;
     _mtime	 = mtime;
     _links	 = links;
-    _magic       = FileInfoMagic;
+    _magic	 = FileInfoMagic;
 
     if ( blocks < 0 )
     {
@@ -202,10 +202,10 @@ QString FileInfo::url() const
 QString FileInfo::debugUrl() const
 {
     if ( this == _tree->root() )
-        return "<root>";
+	return "<root>";
 
     if ( isDotEntry() )
-        return url() + "/" + dotEntryName();
+	return url() + "/" + dotEntryName();
 
     return url() ;
 }
@@ -260,22 +260,22 @@ FileInfo * FileInfo::locate( QString url, bool findDotEntries )
 	return 0;
     else					// URL starts with this node's name
     {
-        if ( this != _tree->root() )            // The root item is invisible
-        {
-            url.remove( 0, _name.length() );	// Remove leading name of this node
+	if ( this != _tree->root() )		// The root item is invisible
+	{
+	    url.remove( 0, _name.length() );	// Remove leading name of this node
 
-            if ( url.length() == 0 )		// Nothing left?
-                return this;			// Hey! That's us!
+	    if ( url.length() == 0 )		// Nothing left?
+		return this;			// Hey! That's us!
 
-            if ( url.startsWith( "/" ) )	// If the next thing a path delimiter,
-                url.remove( 0, 1 );		// remove that leading delimiter.
-            else				// No path delimiter at the beginning
-            {
-                if ( _name.right(1) != "/" &&	// and this is not the root directory
-                     ! isDotEntry() )		// or a dot entry:
-                    return 0;			// This can't be any of our children.
-            }
-        }
+	    if ( url.startsWith( "/" ) )	// If the next thing a path delimiter,
+		url.remove( 0, 1 );		// remove that leading delimiter.
+	    else				// No path delimiter at the beginning
+	    {
+		if ( _name.right(1) != "/" &&	// and this is not the root directory
+		     ! isDotEntry() )		// or a dot entry:
+		    return 0;			// This can't be any of our children.
+	    }
+	}
 
 
 	// Search all children
@@ -343,10 +343,10 @@ bool FileInfoSet::containsAncestorOf( FileInfo * item ) const
 {
     while ( item )
     {
-        item = item->parent();
+	item = item->parent();
 
-        if ( contains( item ) )
-            return true;
+	if ( contains( item ) )
+	    return true;
     }
 
     return false;
@@ -359,10 +359,10 @@ FileInfoSet FileInfoSet::normalized() const
 
     foreach ( FileInfo * item, *this )
     {
-        if ( ! containsAncestorOf( item ) )
-            normalized << item;
-        else
-            logDebug() << "Removing " << item << " with ancestors in the set" << endl;
+	if ( ! containsAncestorOf( item ) )
+	    normalized << item;
+	else
+	    logDebug() << "Removing " << item << " with ancestors in the set" << endl;
     }
 
     return normalized;
@@ -372,9 +372,9 @@ FileInfoSet FileInfoSet::normalized() const
 FileInfo * FileInfoSet::first() const
 {
     if ( isEmpty() )
-        return 0;
+	return 0;
     else
-        return *begin();
+	return *begin();
 }
 
 
@@ -382,8 +382,8 @@ bool FileInfoSet::containsDotEntry() const
 {
     foreach ( FileInfo * item, *this )
     {
-        if ( item  && item->isDotEntry() )
-            return true;
+	if ( item  && item->isDotEntry() )
+	    return true;
     }
 
     return false;
@@ -394,8 +394,8 @@ bool FileInfoSet::containsDir() const
 {
     foreach ( FileInfo * item, *this )
     {
-        if ( item  && item->isDir() )
-            return true;
+	if ( item  && item->isDir() )
+	    return true;
     }
 
     return false;
@@ -406,8 +406,8 @@ bool FileInfoSet::containsFile() const
 {
     foreach ( FileInfo * item, *this )
     {
-        if ( item  && item->isFile() )
-            return true;
+	if ( item  && item->isFile() )
+	    return true;
     }
 
     return false;
@@ -418,8 +418,8 @@ bool FileInfoSet::containsSpecial() const
 {
     foreach ( FileInfo * item, *this )
     {
-        if ( item  && item->isSpecial() )
-            return true;
+	if ( item  && item->isSpecial() )
+	    return true;
     }
 
     return false;
@@ -432,8 +432,8 @@ FileSize FileInfoSet::totalSize() const
 
     foreach ( FileInfo * item, *this )
     {
-        if ( item )
-            sum += item->totalSize();
+	if ( item )
+	    sum += item->totalSize();
     }
 
     return sum;

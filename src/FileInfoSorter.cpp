@@ -6,6 +6,7 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
+
 #include <algorithm>
 #include "FileInfoSorter.h"
 

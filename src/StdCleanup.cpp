@@ -1,7 +1,7 @@
 /*
- *   File name:	StdCleanup.cpp
- *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   File name: StdCleanup.cpp
+ *   Summary:	QDirStat classes to reclaim disk space
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -9,136 +9,183 @@
 
 #include "Cleanup.h"
 #include "StdCleanup.h"
+#include "Exception.h"
+#include "Logger.h"
 
 using namespace QDirStat;
 
 
-Cleanup *
-StdCleanup::openInKonqueror( KActionCollection *parent )
+CleanupList StdCleanup::stdCleanups( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanup_open_in_konqueror",
-				      "kfmclient openURL %p",
-				      tr( "Open in &Konqueror" ),
-				      parent );
-    CHECK_PTR( cleanup );
-    cleanup->setWorksForDir     ( true );
-    cleanup->setWorksForFile    ( true );
+    CleanupList cleanups;
+
+    cleanups << openInFileManager( parent )
+	     << openInTerminal	 ( parent )
+	     << moveToTrash	 ( parent )
+	     << hardDelete	 ( parent )
+	     << compressSubtree	 ( parent )
+	     << makeClean	 ( parent )
+	     << deleteJunk	 ( parent )
+	     << echoargs	 ( parent )
+	     << pwd		 ( parent )
+	;
+
+    return cleanups;
+}
+
+
+
+Cleanup * StdCleanup::openInFileManager( QObject * parent )
+{
+    Cleanup *cleanup = new Cleanup( "cleanupOpenInFileManager",
+				    "xdg-open %p",
+				    QObject::tr( "Open in &File Manager" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true );
+    cleanup->setWorksForFile	( true );
     cleanup->setWorksForDotEntry( true );
-    cleanup->setWorksLocalOnly	( false );
-    cleanup->setRefreshPolicy( Cleanup::noRefresh );
-    cleanup->setIcon( "konqueror.png" );
+    cleanup->setRefreshPolicy( Cleanup::NoRefresh );
+    cleanup->setIcon( ":/icons/file-manager.png" );
     cleanup->setShortcut( Qt::CTRL + Qt::Key_K );
-    
+
     return cleanup;
 }
 
 
-Cleanup *
-StdCleanup::openInTerminal( KActionCollection *parent )
+Cleanup * StdCleanup::openInTerminal( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanup_open_in_terminal",
-				      "konsole",
-				      tr( "Open in &Terminal" ),
-				      parent );
-    CHECK_PTR( cleanup );
-    cleanup->setWorksForDir     ( true );
-    cleanup->setWorksForFile    ( true );
+    Cleanup *cleanup = new Cleanup( "cleanupOpenInTerminal",
+				    "x-terminal-emulator",
+				    QObject::tr( "Open in &Terminal" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true );
+    cleanup->setWorksForFile	( true );
     cleanup->setWorksForDotEntry( true );
-    cleanup->setRefreshPolicy( Cleanup::noRefresh );
-    cleanup->setIcon( "konsole.png" );
+    cleanup->setRefreshPolicy( Cleanup::NoRefresh );
+    cleanup->setIcon( ":/icons/terminal.png" );
     cleanup->setShortcut( Qt::CTRL + Qt::Key_T );
 
     return cleanup;
 }
 
 
-Cleanup *
-StdCleanup::compressSubtree( KActionCollection *parent )
+Cleanup * StdCleanup::compressSubtree( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanup_compress_subtree",
-				      "cd ..; tar cjvf %n.tar.bz2 %n && rm -rf %n",
-				      tr( "&Compress" ),
-				      parent );
-    CHECK_PTR( cleanup );
-    cleanup->setWorksForDir     ( true  );
-    cleanup->setWorksForFile    ( false );
+    Cleanup *cleanup = new Cleanup( "cleanupCompressSubtree",
+				    "cd ..; tar cjvf %n.tar.bz2 %n && rm -rf %n",
+				    QObject::tr( "&Compress" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( false );
     cleanup->setWorksForDotEntry( false );
-    cleanup->setRefreshPolicy( Cleanup::refreshParent );
-    cleanup->setIcon( "ark.png" );
+    cleanup->setRefreshPolicy( Cleanup::RefreshParent );
 
     return cleanup;
 }
 
 
-Cleanup *
-StdCleanup::makeClean( KActionCollection *parent )
+Cleanup * StdCleanup::makeClean( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanup_make_clean",
-				      "make clean",
-				      tr( "&make clean" ),
-				      parent );
-    CHECK_PTR( cleanup );
-    cleanup->setWorksForDir     ( true  );
-    cleanup->setWorksForFile    ( false );
-    cleanup->setWorksForDotEntry( true  );
-    cleanup->setRefreshPolicy( Cleanup::refreshThis );
+    Cleanup *cleanup = new Cleanup( "cleanupMakeClean",
+				    "make clean",
+				    QObject::tr( "&make clean" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( false );
+    cleanup->setWorksForDotEntry( true	);
+    cleanup->setRefreshPolicy( Cleanup::RefreshThis );
 
     return cleanup;
 }
 
 
-Cleanup *
-StdCleanup::deleteTrash( KActionCollection *parent )
+Cleanup * StdCleanup::deleteJunk( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanup_delete_trash",
-				      "rm -f *.o *~ *.bak *.auto core",
-				      tr( "Delete T&rash Files" ),
-				      parent );
-    CHECK_PTR( cleanup );
-    cleanup->setWorksForDir     ( true  );
-    cleanup->setWorksForFile    ( false );
-    cleanup->setWorksForDotEntry( true  );
-    cleanup->setRefreshPolicy( Cleanup::refreshThis );
+    Cleanup *cleanup = new Cleanup( "cleanupDeleteJunk",
+				    "rm -f *.o *~ *.bak *.auto core",
+				    QObject::tr( "Delete T&rash Files" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( false );
+    cleanup->setWorksForDotEntry( true	);
+    cleanup->setRefreshPolicy( Cleanup::RefreshThis );
     cleanup->setRecurse( true );
 
     return cleanup;
 }
 
 
-Cleanup *
-StdCleanup::moveToTrashBin( KActionCollection *parent )
+Cleanup * StdCleanup::moveToTrash( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanup_move_to_trash_bin",
-				      "kfmclient move %p %t",
-				      tr( "Delete (to Trash &Bin)" ),
-				      parent );
-    CHECK_PTR( cleanup );
-    cleanup->setWorksForDir     ( true  );
-    cleanup->setWorksForFile    ( true  );
+    Cleanup *cleanup = new Cleanup( "cleanupMoveToTrash",
+				    "kfmclient move %p %t",
+				    QObject::tr( "Delete (to Trash &Bin)" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( true	);
     cleanup->setWorksForDotEntry( false );
-    cleanup->setRefreshPolicy( Cleanup::assumeDeleted );
-    cleanup->setIcon( "edittrash.png" );
-    cleanup->setShortcut( Qt::CTRL + Qt::Key_X );
+    cleanup->setRefreshPolicy( Cleanup::AssumeDeleted );
+    cleanup->setIcon( ":/icons/trash.png" );
+    cleanup->setShortcut( Qt::Key_Delete );
 
     return cleanup;
 }
-	
 
-Cleanup *
-StdCleanup::hardDelete( KActionCollection *parent )
+
+Cleanup * StdCleanup::hardDelete( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanup_hard_delete",
-				      "rm -rf %p",
-				      tr( "&Delete (no way to undelete!)" ),
-				      parent );
-    CHECK_PTR( cleanup );
-    cleanup->setWorksForDir     ( true  );
-    cleanup->setWorksForFile    ( true  );
+    Cleanup *cleanup = new Cleanup( "cleanupHardDelete",
+				    "rm -rf %p",
+				    QObject::tr( "&Delete (no way to undelete!)" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( true	);
     cleanup->setWorksForDotEntry( false );
     cleanup->setAskForConfirmation( true );
-    cleanup->setRefreshPolicy( Cleanup::assumeDeleted );
-    cleanup->setIcon( "editdelete.png" );
+    cleanup->setRefreshPolicy( Cleanup::AssumeDeleted );
+    cleanup->setIcon( ":/icons/delete.png" );
     cleanup->setShortcut( Qt::CTRL + Qt::Key_Delete );
+
+    return cleanup;
+}
+
+
+Cleanup * StdCleanup::echoargs( QObject * parent )
+{
+    Cleanup *cleanup = new Cleanup( "cleanupEchoargs",
+				    "echoargs %p",
+				    QObject::tr( "echoargs" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( true	);
+    cleanup->setWorksForDotEntry( true );
+    cleanup->setAskForConfirmation( true );
+    cleanup->setRefreshPolicy( Cleanup::NoRefresh );
+
+    return cleanup;
+}
+
+
+Cleanup * StdCleanup::pwd( QObject * parent )
+{
+    Cleanup *cleanup = new Cleanup( "cleanupPwd",
+				    "pwd",
+				    QObject::tr( "pwd" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( true	);
+    cleanup->setWorksForDotEntry( true );
+    cleanup->setAskForConfirmation( true );
+    cleanup->setRefreshPolicy( Cleanup::NoRefresh );
 
     return cleanup;
 }

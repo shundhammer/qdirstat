@@ -63,7 +63,7 @@ const DataColumnList DataColumns::defaultColumns() const
 void DataColumns::readSettings()
 {
     QSettings settings;
-    settings.beginGroup( "Data_Columns" );
+    settings.beginGroup( "DataColumns" );
     QStringList strColList = settings.value( "Columns" ).toStringList();
     settings.endGroup();
 
@@ -84,7 +84,7 @@ void DataColumns::readSettings()
 void DataColumns::writeSettings()
 {
     QSettings settings;
-    settings.beginGroup( "Data_Columns" );
+    settings.beginGroup( "DataColumns" );
     settings.setValue( "Columns", toStringList( _columns ) );
     settings.endGroup();
 }

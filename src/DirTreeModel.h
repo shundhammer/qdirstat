@@ -103,26 +103,26 @@ namespace QDirStat
 	 **/
 	void writeSettings();
 
-        /**
-         * Return this data model's selection model.
-         *
-         * The data model doesn't strictly need a selection model, but certain
-         * operations it provides (like refreshSelected()) do.
-         **/
-        SelectionModel * selectionModel() const { return _selectionModel; }
+	/**
+	 * Return this data model's selection model.
+	 *
+	 * The data model doesn't strictly need a selection model, but certain
+	 * operations it provides (like refreshSelected()) do.
+	 **/
+	SelectionModel * selectionModel() const { return _selectionModel; }
 
-        /**
-         * Set the selection model. This is required for all methods with
-         * '..Selected()' in their name.
-         **/
-        void setSelectionModel( SelectionModel * selModel )
-            { _selectionModel = selModel; }
+	/**
+	 * Set the selection model. This is required for all methods with
+	 * '..Selected()' in their name.
+	 **/
+	void setSelectionModel( SelectionModel * selModel )
+	    { _selectionModel = selModel; }
 
-        /**
-         * Refresh the selected items: Re-read their contents from disk.
-         * This requires a selection model to be set.
-         **/
-        void refreshSelected();
+	/**
+	 * Refresh the selected items: Re-read their contents from disk.
+	 * This requires a selection model to be set.
+	 **/
+	void refreshSelected();
 
     public:
 
@@ -214,7 +214,6 @@ namespace QDirStat
 	 * Fix up sort order while reading: Sort by read jobs if the sort
 	 * column is the PercentBarCol.
 	 **/
-
 	void busyDisplay();
 
 	/**
@@ -260,15 +259,15 @@ namespace QDirStat
 	 **/
 	void childDeleted();
 
-        /**
-         * Notification that a subtree is about to be cleared.
-         **/
-        void clearingSubtree( DirInfo * subtree );
+	/**
+	 * Notification that a subtree is about to be cleared.
+	 **/
+	void clearingSubtree( DirInfo * subtree );
 
-        /**
-         * Notification that clearing a subtree is done.
-         **/
-        void subtreeCleared( DirInfo * subtree );
+	/**
+	 * Notification that clearing a subtree is done.
+	 **/
+	void subtreeCleared( DirInfo * subtree );
 
 	/**
 	 * Invalidate all persistent indexes in 'subtree'.
@@ -338,10 +337,10 @@ namespace QDirStat
 	//
 
 	DirTree *	 _tree;
-        SelectionModel * _selectionModel;
+	SelectionModel * _selectionModel;
 	QString		 _treeIconDir;
 	int		 _readJobsCol;
-	QSet<DirInfo *>  _pendingUpdates;
+	QSet<DirInfo *>	 _pendingUpdates;
 	QTimer		 _updateTimer;
 	int		 _updateTimerMillisec;
 	DataColumn	 _sortCol;

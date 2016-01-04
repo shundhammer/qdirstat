@@ -39,7 +39,7 @@ namespace QDirStat
     /**
      * Status of a directory read job.
      **/
-    typedef enum
+    enum DirReadState
     {
 	DirQueued,		// Waiting in the directory read queue
 	DirReading,		// Reading in progress
@@ -48,7 +48,7 @@ namespace QDirStat
 	DirCached,		// Content was read from a cache
 	DirAborted,		// Reading aborted upon user request
 	DirError		// Error while reading
-    } DirReadState;
+    };
 
 
     /**
@@ -616,14 +616,14 @@ namespace QDirStat
 	    QSet<FileInfo *>()
 	    {}
 
-        /**
-         * Return the first item in this set or 0 if the set is empty.
-         *
-         * This makes most sense if there is only one item at all;
-         * otherwise it would be completely random which item would be
-         * returned as the first.
-         **/
-        FileInfo * first() const;
+	/**
+	 * Return the first item in this set or 0 if the set is empty.
+	 *
+	 * This makes most sense if there is only one item at all;
+	 * otherwise it would be completely random which item would be
+	 * returned as the first.
+	 **/
+	FileInfo * first() const;
 
 	/**
 	 * Return 'true' if the set contains any dot entry.

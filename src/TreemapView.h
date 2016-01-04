@@ -41,6 +41,7 @@ namespace QDirStat
     class DirTree;
     class SelectionModel;
     class SelectionModelProxy;
+    class CleanupCollection;
 
 
     /**
@@ -70,12 +71,6 @@ namespace QDirStat
 	void setDirTree( DirTree * tree );
 
 	/**
-	 * Set the selection model. This is important to synchronize current /
-	 * selected items between a DirTreeView and this TreemapView.
-	 **/
-	void setSelectionModel( SelectionModel * selectionModel );
-
-	/**
 	 * Returns the minimum recommended size for this widget.
 	 * Reimplemented from QWidget.
 	 **/
@@ -97,9 +92,27 @@ namespace QDirStat
 	DirTree * tree() const { return _tree; }
 
 	/**
+	 * Set the selection model. This is important to synchronize current /
+	 * selected items between a DirTreeView and this TreemapView.
+	 **/
+	void setSelectionModel( SelectionModel * selectionModel );
+
+	/**
 	 * Return this treemap view's SelectionModel.
 	 **/
 	SelectionModel * selectionModel() const { return _selectionModel; }
+
+	/**
+	 * Set the cleanup collection. If set, all cleanup actions from that
+	 * collection will be added to the item context menu.
+	 **/
+	void setCleanupCollection( CleanupCollection * collection )
+	    { _cleanupCollection = collection; }
+
+	/**
+	 * Return the cleanup collection or 0 if it is not set.
+	 **/
+	CleanupCollection * cleanupCollection() const { return _cleanupCollection; }
 
 	/**
 	 * Search the treemap for a tile that corresponds to the specified
@@ -400,6 +413,7 @@ namespace QDirStat
 	DirTree		    * _tree;
 	SelectionModel	    * _selectionModel;
 	SelectionModelProxy * _selectionModelProxy;
+	CleanupCollection   * _cleanupCollection;
 	TreemapTile	    * _rootTile;
 	TreemapTile	    * _currentItem;
 	HighlightRect	    * _currentItemRect;

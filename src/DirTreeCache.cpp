@@ -231,11 +231,11 @@ CacheReader::~CacheReader()
     {
 	_toplevel->finalizeAll();
 
-        if ( _toplevel->readState() == DirReading )
-            _toplevel->setReadState( DirCached );
+	if ( _toplevel->readState() == DirReading )
+	    _toplevel->setReadState( DirCached );
 
 	logDebug() << "Sending read job finished for " << _toplevel << endl;
-        _tree->sendReadJobFinished( _toplevel );
+	_tree->sendReadJobFinished( _toplevel );
     }
 
     emit finished();
@@ -384,8 +384,8 @@ void CacheReader::addItem()
 
     if ( ! parent && _tree->root() )
     {
-        if ( ! _tree->root()->hasChildren() )
-            parent = _tree->root();
+	if ( ! _tree->root()->hasChildren() )
+	    parent = _tree->root();
 
 	// Try the easy way first - the starting point of this cache
 
@@ -410,7 +410,7 @@ void CacheReader::addItem()
 
     if ( strcasecmp( type, "D" ) == 0 )
     {
-        QString url = ( parent == _tree->root() ) ? path + "/" + name : name;
+	QString url = ( parent == _tree->root() ) ? path + "/" + name : name;
 	// logDebug() << "Creating DirInfo  for " << url << " with parent " << parent << endl;
 	DirInfo * dir = new DirInfo( _tree, parent, url,
 				     mode, size, mtime );

@@ -21,7 +21,7 @@ namespace QDirStat
     /**
      * Data columns for data model, view and sorting.
      **/
-    typedef enum
+    enum DataColumn
     {
 	NameCol	       = 0,	// File / directory name
 	PercentBarCol,		// Graphical percentage bar
@@ -34,7 +34,7 @@ namespace QDirStat
 	LatestMTimeCol,		// Latest modification time in subtree
 	ReadJobsCol,		// Number of pending read jobs in subtree
 	UndefinedCol
-    } DataColumn;
+    };
 
     // For use in loops
 #define DataColumnBegin NameCol

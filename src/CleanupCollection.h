@@ -1,42 +1,29 @@
 /*
  *   File name:	CleanupCollection.h
- *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   Summary:	QDirStat classes to reclaim disk space
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
-
 #ifndef CleanupCollection_h
 #define CleanupCollection_h
 
-
+#include "QList"
 #include "Cleanup.h"
 
-// Forward declarations
-class KActionCollection;
+
+class QMenu;
 
 
 namespace QDirStat
 {
-    typedef QDict<Cleanup>		CleanupDict;
-    typedef QDictIterator<Cleanup>	CleanupDictIterator;
+    class SelectionModel;
 
-    typedef QPtrList<Cleanup>		CleanupList;
-    typedef QPtrListIterator<Cleanup>	CleanupListIterator;
-
-    
     /**
-     * Set of @ref Cleanup actions to be performed for @ref DirTree items,
-     * consisting of a number of predefined and a number of user-defined
-     * cleanups. The prime purpose of this is to make save/restore operations
-     * with a number of cleanups easier. Thus, it provides a copy constructor,
-     * an assignment operator and various methods to directly access individual
-     * cleanups.
-     *
-     * @short QDirStat cleanup action collection
+     * Set of Cleanup actions to be performed for DirTree items, consisting of
+     * a number of predefined and a number of user-defined cleanups.
      **/
-
     class CleanupCollection: public QObject
     {
 	Q_OBJECT
@@ -45,39 +32,8 @@ namespace QDirStat
 
 	/**
 	 * Constructor.
-	 *
-	 * Most applications will want to pass KMainWindow::actionCollection()
-	 * for 'actionCollection' so the menus and toolbars can be created
-	 * using the XML UI description ('kdirstatui.rc' for QDirStat).
-	 *
-	 * All @ref Cleanup actions ever added to this collection will get
-	 * this as their parent.
 	 **/
-	CleanupCollection( KActionCollection *	actionCollection = 0 );
-
-	/**
-	 * Copy Constructor.
-	 *
-	 * Makes a deep copy of this collection with 'actionCollection' set to
-	 * 0 for all copied cleanups. Please note that since there is no
-	 * complete copy constructor for @ref Cleanup, all restrictions to the
-	 * @ref Cleanup copy constructor apply to the CleanupCollection, too:
-	 * This copy constructor is intended for save/restore operations only,
-	 * not for general use.  In particular, DO NOT connect an object thus
-	 * constructed with signals. The results will be undefined (at best).
-	 **/
-	CleanupCollection( const CleanupCollection &src );
-
-	/**
-	 * Assignment operator.
-	 *
-	 * This operator has the same restrictions as the copy constructor:
-	 * Just like the copy constructor, this is intended for save/restore
-	 * operations, not for general use.
-	 *
-	 * For details, see the extensive comments in the source file.
-	 **/
-	CleanupCollection &	operator= ( const CleanupCollection &src );
+	CleanupCollection( SelectionModel * selectionModel );
 
 	/**
 	 * Destructor
@@ -90,125 +46,117 @@ namespace QDirStat
 	void addStdCleanups();
 
 	/**
-	 * Add 'number' user-defined cleanups to this collection.
+	 * Add a cleanup to this collection. The collection assumes ownerwhip
+	 * of this cleanup.
 	 **/
-	void addUserCleanups( int number );
+	void add( Cleanup * cleanup );
 
 	/**
-	 * Add one single cleanup to this collection. The collection assumes
-	 * ownerwhip of this cleanup - don't delete it!
+	 * Remove a cleanup from this collection and delete it.
 	 **/
-	void add( Cleanup *cleanup );
+	void remove( Cleanup * cleanup );
+
+	/**
+	 * Add all actions to the specified menu.
+	 **/
+	void addToMenu( QMenu * menu );
 
 	/**
 	 * Retrieve a cleanup by its ID (internal name).
 	 * Returns 0 if there is no such cleanup.
 	 **/
-	Cleanup * cleanup( const QString & id );
+	Cleanup * findById( const QString & id ) const;
 
 	/**
-	 * An alias to @ref cleanup() for convenience: Thus, you can use
-	 * collection[ "cleanup_id" ] to access any particular cleanup.
+	 * Return the index of the cleanup with ID 'id' or -1 if there is no
+	 * such cleanup.
 	 **/
-	Cleanup * operator[] ( const QString & id )
-	    { return cleanup( id ); }
-	
+	int indexOf( const QString & id ) const;
+
+	/**
+	 * Return the index of a cleanup or -1 if it is not part of this
+	 * collection.
+	 **/
+	int indexOf( Cleanup * cleanup ) const;
+
+	/**
+	 * Return the cleanup with the specified index or 0 if the index is out
+	 * of range.
+	 **/
+	Cleanup * at( int index ) const;
+
+	/**
+	 * Return the number of cleanup actions in this collection.
+	 **/
+	int size() const { return _cleanupList.size(); }
+
 	/**
 	 * Remove all cleanups from this collection.
 	 **/
 	void clear();
 
 	/**
-	 * Return (a shallow copy of) the internal cleanup list.
-	 *
-	 * Use this and a CleanupListIterator to iterate over all cleanups in
-	 * this collection. Remember to keep the list until you no longer need
-	 * the iterator! 
-	 *
-	 *	CleanupCollection *coll = ...
-	 *	CleanupList cleanup_list = coll->cleanupList();
-	 *	CleanupListIterator it( cleanup_list );
-	 *
-	 *	while ( *it )
-	 *	{
-	 *	    logDebug() << "Found cleanup " << *it << endl;
-	 *	    ++it;
-	 *	}
+	 * Return the internal cleanup list.
 	 **/
-	CleanupList cleanupList() const { return _cleanupList; }
-
-	/**
-	 * Return the number of cleanup actions in this collection.
-	 **/
-	int size() const { return _cleanupList.count(); }
-
-	/**
-	 * For internal use only: Returns the number to be assigned to the next
-	 * user cleanup that may be added.
-	 **/
-	int nextUserCleanupNo() const { return _nextUserCleanupNo; }
+	const CleanupList & cleanupList() const { return _cleanupList; }
 
     public slots:
 
-        /**
-	 * Emit the readConfig() signal for all cleanups.
-	 **/
-        void slotReadConfig();
-
-	
-    signals:
-	
 	/**
-	 * Emitted when the currently selected item changes.
-	 * 'item' may be 0 when the selection is cleared.
-	 *
-	 * Connect a view's selectionChanged() signal to this
-	 * selectionChanged() signal to have the cleanup collection pass this
-	 * signal to its cleanups.
+	 * Update the enabled/disabled state of all cleanup actions depending
+	 * on the SelectionModel.
 	 **/
-	void selectionChanged( FileInfo *item );
-
-        /**
-	 * Read collection for all cleanups.
-	 **/
-        void readConfig();
+	void updateActions();
 
 	/**
-	 * Save configuration for all cleanups.
+	 * Move a cleanup one position up in the list.
 	 **/
-	void saveConfig();
+	void moveUp( Cleanup * cleanup );
 
 	/**
-	 * Emitted at user activity, i.e. when the user executes a cleanup.
-	 * This is intended for use together with a @ref KActivityTracker.
+	 * Move a cleanup one position down in the list.
 	 **/
-	void userActivity( int points );
+	void moveDown( Cleanup * cleanup );
+
+	/**
+	 * Move a cleanup to the top of the list.
+	 **/
+	void moveToTop( Cleanup * cleanup );
+
+	/**
+	 * Move a cleanup to the bottom of the list.
+	 **/
+	void moveToBottom( Cleanup * cleanup );
+
+
+	/**
+	 * Read configuration for all cleanups.
+	 **/
+	void readSettings();
+
+	/**
+	 * Write configuration for all cleanups.
+	 **/
+	void writeSettings();
 
 
     protected slots:
 
-        /**
-	 * Connected to each cleanup's @ref executed() signal to track user
-	 * activity. 
+	/**
+	 * Execute a cleanup. This uses sender() to find out which cleanup it
+	 * was.
 	 **/
-	void cleanupExecuted();
+	void execute();
 
 
     protected:
 
-	/**
-	 * Internal implementation of copy constructor and assignment operator:
-	 * Make a deep copy of the collection.
-	 **/
-	void deepCopy( const CleanupCollection &src );
-
-	
+	//
 	// Data members
-	
-        KActionCollection *	_actionCollection;
-	int			_nextUserCleanupNo;
-	CleanupList		_cleanupList;
-	CleanupDict		_cleanupDict;
+	//
+
+	SelectionModel * _selectionModel;
+	CleanupList	 _cleanupList;
     };
 }	// namespace QDirStat
 

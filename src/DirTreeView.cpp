@@ -14,6 +14,7 @@
 #include "DirTreeModel.h"
 #include "SelectionModel.h"
 #include "ActionManager.h"
+#include "CleanupCollection.h"
 #include "PercentBar.h"
 #include "DirTree.h"
 #include "Exception.h"
@@ -24,7 +25,8 @@ using namespace QDirStat;
 
 
 DirTreeView::DirTreeView( QWidget * parent ):
-    QTreeView( parent )
+    QTreeView( parent ),
+    _cleanupCollection(0)
 #if 0
     , _selectionModelProxy(0)
 #endif
@@ -87,6 +89,10 @@ void DirTreeView::contextMenu( const QPoint & pos )
 	;
 
     ActionManager::instance()->addActions( &menu, actions );
+
+    if ( _cleanupCollection )
+	_cleanupCollection->addToMenu( &menu );
+
     menu.exec( mapToGlobal( pos ) );
 }
 

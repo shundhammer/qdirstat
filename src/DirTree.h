@@ -275,16 +275,16 @@ namespace QDirStat
 	 **/
 	void childDeleted();
 
-        /**
-         * Emitted when a subtree is about to be cleared, i.e. all its children
-         * will be deleted (but not the subtree node itself).
-         **/
-        void clearingSubtree( DirInfo * subtree );
+	/**
+	 * Emitted when a subtree is about to be cleared, i.e. all its children
+	 * will be deleted (but not the subtree node itself).
+	 **/
+	void clearingSubtree( DirInfo * subtree );
 
-        /**
-         * Emitted when clearing a subtree is finished.
-         **/
-        void subtreeCleared( DirInfo * subtree );
+	/**
+	 * Emitted when clearing a subtree is finished.
+	 **/
+	void subtreeCleared( DirInfo * subtree );
 
 	/**
 	 * Emitted when reading is started.
@@ -337,11 +337,6 @@ namespace QDirStat
 
 
     protected slots:
-
-	/**
-	 * Read parameters from the settings.
-	 **/
-	void readSettings();
 
 	/**
 	 * Notification that all jobs in the job queue are finished.

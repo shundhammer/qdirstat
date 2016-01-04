@@ -26,8 +26,6 @@ DirTree::DirTree()
     _root      = new DirInfo( this );
     CHECK_NEW( _root );
 
-    readSettings();
-
     connect( & _jobQueue, SIGNAL( finished()	 ),
 	     this,	  SLOT	( slotFinished() ) );
 }
@@ -37,17 +35,6 @@ DirTree::~DirTree()
 {
     if ( _root )
 	delete _root;
-}
-
-
-void DirTree::readSettings()
-{
-    QSettings settings;
-    settings.beginGroup( "Directory Reading" );
-
-    _crossFileSystems = settings.value( "CrossFileSystems", false ).toBool();
-
-    settings.endGroup();
 }
 
 
@@ -110,7 +97,6 @@ void DirTree::startReading( const QString & rawUrl )
     if ( _root->hasChildren() )
 	clear();
     emit startingReading();
-    readSettings();
 
     FileInfo * item = LocalDirReadJob::stat( url, this, _root );
     CHECK_PTR( item );

@@ -53,8 +53,9 @@ DirTreeModel::~DirTreeModel()
 void DirTreeModel::readSettings()
 {
     QSettings settings;
-    settings.beginGroup( "Directory_Tree" );
+    settings.beginGroup( "DirectoryTree" );
 
+    _tree->setCrossFileSystems( settings.value( "CrossFileSystems", false ).toBool() );
     _treeIconDir	 = settings.value( "TreeIconDir" , ":/icons/tree-medium/" ).toString();
     _updateTimerMillisec = settings.value( "UpdateTimerMillisec", 333 ).toInt();
 
@@ -65,8 +66,9 @@ void DirTreeModel::readSettings()
 void DirTreeModel::writeSettings()
 {
     QSettings settings;
-    settings.beginGroup( "Directory_Tree" );
+    settings.beginGroup( "DirectoryTree" );
 
+    settings.setValue( "CrossFileSystems",    _tree->crossFileSystems() );
     settings.setValue( "TreeIconDir" ,	      _treeIconDir	   );
     settings.setValue( "UpdateTimerMillisec", _updateTimerMillisec );
 
@@ -915,11 +917,11 @@ void DirTreeModel::clearingSubtree( DirInfo * subtree )
 	QModelIndex subtreeIndex = modelIndex( subtree, 0 );
 	int count = countDirectChildren( subtree );
 
-        if ( count > 0 )
-        {
-            // logDebug() << "beginRemoveRows for " << subtree << " row 0 to " << count - 1 << endl;
-            beginRemoveRows( subtreeIndex, 0, count - 1 );
-        }
+	if ( count > 0 )
+	{
+	    // logDebug() << "beginRemoveRows for " << subtree << " row 0 to " << count - 1 << endl;
+	    beginRemoveRows( subtreeIndex, 0, count - 1 );
+	}
     }
 
     invalidatePersistent( subtree );

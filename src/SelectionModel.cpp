@@ -6,6 +6,7 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
+
 #include "SelectionModel.h"
 #include "DirTreeModel.h"
 #include "DirTree.h"
@@ -33,7 +34,7 @@ SelectionModel::SelectionModel( DirTreeModel * dirTreeModel, QObject * parent ):
 	     this,		   SLOT	 ( deletingChildNotify( FileInfo * ) ) );
 
     connect( dirTreeModel->tree(), SIGNAL( clearing() ),
-             this,                 SLOT  ( clear()    ) );
+	     this,		   SLOT	 ( clear()    ) );
 }
 
 

@@ -17,6 +17,7 @@
 
 #include "MainWindow.h"
 #include "ActionManager.h"
+#include "CleanupCollection.h"
 #include "DataColumns.h"
 #include "DebugHelpers.h"
 #include "DirTree.h"
@@ -32,6 +33,7 @@ using namespace QDirStat;
 using QDirStat::DataColumns;
 using QDirStat::DirTreeModel;
 using QDirStat::SelectionModel;
+using QDirStat::CleanupCollection;
 
 
 MainWindow::MainWindow():
@@ -58,6 +60,13 @@ MainWindow::MainWindow():
     _ui->treemapView->setSelectionModel( _selectionModel );
 
     _dirTreeModel->setSelectionModel( _selectionModel );
+
+    _cleanupCollection = new CleanupCollection( _selectionModel );
+    CHECK_NEW( _cleanupCollection );
+    _cleanupCollection->addToMenu( _ui->menuCleanup );
+
+    _ui->dirTreeView->setCleanupCollection( _cleanupCollection );
+    _ui->treemapView->setCleanupCollection( _cleanupCollection );
 
 
     connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),

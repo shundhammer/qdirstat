@@ -145,7 +145,7 @@ const ExcludeRule * ExcludeRules::matchingRule( const QString & text )
 void ExcludeRules::readSettings()
 {
     QSettings settings;
-    settings.beginGroup( "Exclude_Rules" );
+    settings.beginGroup( "ExcludeRules" );
     int size = settings.beginReadArray( "Rules" );
 
     if ( size > 0 )
@@ -184,7 +184,7 @@ void ExcludeRules::readSettings()
 void ExcludeRules::writeSettings()
 {
     QSettings settings;
-    settings.beginGroup( "Exclude_Rules" );
+    settings.beginGroup( "ExcludeRules" );
     settings.beginWriteArray( "Rules", _rules.size() );
 
     for ( int i=0; i < _rules.size(); ++i )

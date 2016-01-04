@@ -20,6 +20,7 @@
 #include "FileInfoIterator.h"
 #include "SelectionModel.h"
 #include "ActionManager.h"
+#include "CleanupCollection.h"
 #include "Exception.h"
 #include "Logger.h"
 
@@ -740,6 +741,10 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	;
 
     ActionManager::instance()->addActions( &menu, actions );
+
+    if ( _parentView->cleanupCollection() )
+	_parentView->cleanupCollection()->addToMenu( &menu );
+
     menu.exec( event->screenPos() );
 }
 

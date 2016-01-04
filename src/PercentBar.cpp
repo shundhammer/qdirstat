@@ -6,6 +6,7 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
+
 #include <QPainter>
 #include <QTreeView>
 #include <QSettings>
@@ -63,7 +64,7 @@ ColorList PercentBarDelegate::defaultFillColors() const
 void PercentBarDelegate::readSettings()
 {
     QSettings settings;
-    settings.beginGroup( "Percent_Bar" );
+    settings.beginGroup( "PercentBar" );
 
     _fillColors	   = readColorListEntry( settings, "Colors"    , defaultFillColors() );
     _barBackground = readColorEntry    ( settings, "Background", QColor( 160, 160, 160 ) );
@@ -76,7 +77,7 @@ void PercentBarDelegate::readSettings()
 void PercentBarDelegate::writeSettings()
 {
     QSettings settings;
-    settings.beginGroup( "Percent_Bar" );
+    settings.beginGroup( "PercentBar" );
 
     writeColorListEntry( settings, "Colors"    , _fillColors	);
     writeColorEntry    ( settings, "Background", _barBackground );

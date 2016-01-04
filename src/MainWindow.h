@@ -214,13 +214,14 @@ protected:
 
 private:
 
-    Ui::MainWindow	     * _ui;
-    QDirStat::DirTreeModel   * _dirTreeModel;
-    QDirStat::SelectionModel * _selectionModel;
-    QElapsedTimer	       _stopWatch;
-    bool		       _modified;
-    int			       _statusBarTimeOut; // millisec
-    QSignalMapper	     * _treeLevelMapper;
+    Ui::MainWindow		* _ui;
+    QDirStat::DirTreeModel	* _dirTreeModel;
+    QDirStat::SelectionModel	* _selectionModel;
+    QDirStat::CleanupCollection * _cleanupCollection;
+    QElapsedTimer		  _stopWatch;
+    bool			  _modified;
+    int				  _statusBarTimeOut; // millisec
+    QSignalMapper	       * _treeLevelMapper;
 };
 
 #endif // MainWindow_H

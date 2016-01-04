@@ -18,17 +18,6 @@
 namespace QDirStat
 {
     /**
-     * Policies how to treat a "dot entry" for iterator objects.
-     * See @ref FileInfoIterator for details.
-     **/
-    typedef enum
-    {
-	DotEntryIsSubDir	// Treat dot entry as ordinary subdirectory
-    } DotEntryPolicy;
-
-
-
-    /**
      * Iterator class for children of a @ref FileInfo object. For optimum
      * performance, this iterator class does NOT return children in any
      * specific sort order.

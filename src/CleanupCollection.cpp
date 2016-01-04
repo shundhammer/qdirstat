@@ -1,279 +1,368 @@
 /*
- *   File name:	CleanupCollection.cpp
- *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   File name: CleanupCollection.cpp
+ *   Summary:	QDirStat classes to reclaim disk space
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
+#include <QMenu>
+#include <QSettings>
+
+#include "CleanupCollection.h"
 #include "Cleanup.h"
 #include "StdCleanup.h"
-#include "CleanupCollection.h"
+#include "SettingsHelpers.h"
+#include "SelectionModel.h"
+#include "Logger.h"
+#include "Exception.h"
 
 
 using namespace QDirStat;
 
 
-CleanupCollection::CleanupCollection( KActionCollection * actionCollection )
-    : QObject()
-    , _actionCollection( actionCollection )
+CleanupCollection::CleanupCollection( SelectionModel * selectionModel ):
+    QObject(),
+    _selectionModel( selectionModel )
 {
-    /**
-     * All cleanups beloningt to this collection are stored in two separate Qt
-     * collections, a QList and a QDict. Make _one_ of them manage the cleanup
-     * objects, i.e. have them clear the Cleanup objects upon deleting. The
-     * QList is the master collection, the QDict the slave.
-     **/
-    
-    _cleanupList.setAutoDelete( true  );
-    _cleanupDict.setAutoDelete( false );
-    
-    _nextUserCleanupNo	= 0;
-}
+    readSettings();
 
+    if ( _cleanupList.isEmpty() )
+	addStdCleanups();
 
-CleanupCollection::CleanupCollection( const CleanupCollection &src )
-    : QObject()
-{
-    deepCopy( src );
-    
-    // Keep consistent with the Cleanup copy constructor: It explicitly uses a
-    // zero KActionCollecton to make sure no duplicates of cleanups get into
-    // the action collection.
-    _actionCollection	 = 0;
+    updateActions();
+
+    connect( selectionModel, SIGNAL( selectionChanged() ),
+	     this,	     SLOT  ( updateActions()	) );
 }
 
 
 CleanupCollection::~CleanupCollection()
 {
-    // No need to delete the cleanups: _cleanupList takes care of that
-    // (autoDelete!).  
+    writeSettings();
+    clear();
 }
 
 
-CleanupCollection &
-CleanupCollection::operator= ( const CleanupCollection &src )
+void CleanupCollection::add( Cleanup * cleanup )
 {
-    if ( size() != src.size() )
-    {
-	/**
-	 * If the sizes are different, we really need to make a deep copy -
-	 * i.e. discard all the existing cleanups in this collection and create
-	 * new ones with the Cleanup copy constructor.
-	 **/
-	
-	// logDebug() << k_funcinfo << "Sizes different - deep copy" << endl;
-	
-	deepCopy( src );
-    }
-    else
-    {
-	/**
-	 * If the sizes are the same, we'd rather just use the Cleanup
-	 * assignment operator to individually assign each cleanup in the
-	 * source collection to the corresponding one in this collection.
-	 *
-	 * The background of this seemingly awkward solution are (again) the
-	 * limitations of the Cleanup copy constructor: It doesn't make a
-	 * truly identical copy of the entire Cleanup object. Rather, it
-	 * copies only the Cleanup members and leaves most of the KAction
-	 * members (the parent class) untouched.
-	 *
-	 * The behaviour implemented here comes handy in the most common
-	 * situation where this assignment operator is used:
-	 *
-	 *	CleanupCollection tmpCollection( origCollection );
-	 *	...
-	 *	... // let use change settings in settings dialog
-	 *	...
-	 *	origCollection = tmpCollection;
-	 *
-	 * 'tmpCollection' here is an incomplete copy of 'origCollection' -
-	 * which represents what the user really can see in the menus, i.e. all
-	 * the KAction stuff in there really needs to work.
-	 *
-	 * During changing preferences in the 'settings' dialog, the user only
-	 * changes 'tmpCollection' - if he chooses to abandon his changes
-	 * (e.g., he clicks on the 'cancel' button), no harm is done -
-	 * 'tmpCollection' is simply not copied back to
-	 * 'origCollection'. Anyway, since 'tmpCollection' is merely a
-	 * container for the true Cleanup members, the KAction members don't
-	 * matter here: There is no representation of 'tmpCollection' in any
-	 * menu or tool bar.
-	 *
-	 * As soon as the user clicks on 'apply' or 'ok' in the 'settings'
-	 * dialog, however, 'tmpCollection' is copied back to 'origCollection'
-	 * - that is, its Cleanup members. Most of the KAction members (other
-	 * than 'text()' which is explicitly copied back) remain untouched,
-	 * thus maintaining consistency with the user interface is guaranteed.
-	 **/
-	
-	// logDebug() << k_funcinfo << "Same sizes - individual assignment" << endl;
-	
-	CleanupList srcList = src.cleanupList();
-	CleanupListIterator srcIt( srcList );
-	CleanupListIterator destIt( _cleanupList );
+    CHECK_PTR( cleanup );
 
-	while ( *srcIt && *destIt )
-	{
-	    // logDebug() << "Assigning " << *srcIt << endl;
-	    **destIt = **srcIt;
-	    ++srcIt;
-	    ++destIt;
-	}
+    int index = indexOf( cleanup->id() );
+
+    if ( index != -1 ) // Replacing an existing ID?
+    {
+	logDebug() << "Replacing cleanup " << cleanup->id() << endl;
+	Cleanup * oldCleanup = _cleanupList.at( index );
+	_cleanupList.removeAt( index );
+	delete oldCleanup;
     }
 
-    // Intentionally leaving '_actionCollection' untouched!
-    
-    return *this;
+    _cleanupList << cleanup;
+
+    connect( cleanup, SIGNAL( triggered() ),
+	     this,    SLOT  ( execute()	  ) );
 }
 
 
-void
-CleanupCollection::deepCopy( const CleanupCollection &src )
+void CleanupCollection::remove( Cleanup * cleanup )
 {
-    // Copy simple values
-    _nextUserCleanupNo	 = src.nextUserCleanupNo();
+    int index = indexOf( cleanup );
 
-    // Just to make sure - clear the internal collections
-    _cleanupList.clear();
-    _cleanupDict.clear();
-
-    
-    // Make a deep copy of all the cleanups in the source collection
-
-    CleanupList srcList = src.cleanupList();
-    CleanupListIterator it( srcList );
-
-    while ( *it )
+    if ( index == -1 )
     {
-	// logDebug() << k_funcinfo << "Creating new " << *it << endl;
-	
-	add( new Cleanup( **it ) );
-	++it;
+	logError() << "No such cleanup: " << cleanup << endl;
+	return;
     }
+
+    _cleanupList.removeAt( index );
 }
 
 
-void
-CleanupCollection::add( Cleanup *newCleanup )
+void CleanupCollection::addStdCleanups()
 {
-    CHECK_PTR( newCleanup );
-    
-    if ( _cleanupDict[ newCleanup->id() ] )	// Already there?
+    foreach ( Cleanup * cleanup, StdCleanup::stdCleanups( this ) )
     {
-	// Delete any old instance in the list.
-	//
-	// The instance in the dict will be deleted automatically by inserting
-	// the new one.
-
-	_cleanupList.first();	// Moves _cleanupList.current() to beginning
-	
-	while ( _cleanupList.current() )
-	{
-	    if ( _cleanupList.current()->id() == newCleanup->id() )
-	    {
-		// Found a cleanup with the same ID -
-		// remove the current list item, delete it (autoDelete!) and
-		// move _cleanupList.current() to the next item.
-		
-		_cleanupList.remove();
-	    }
-	    else
-		_cleanupList.next();
-	}
-    }
-    
-    _cleanupList.append( newCleanup );
-    _cleanupDict.insert( newCleanup->id(), newCleanup );
-
-    connect( this,       SIGNAL( selectionChanged( FileInfo * ) ),
-	     newCleanup, SLOT  ( selectionChanged( FileInfo * ) ) );
-    
-    connect( this,       SIGNAL( readConfig() ),
-	     newCleanup, SLOT  ( readConfig() ) );
-    
-    connect( this,       SIGNAL( saveConfig() ),
-	     newCleanup, SLOT  ( saveConfig() ) );
-    
-    connect( newCleanup, SIGNAL( executed() ),
-	     this, 	 SLOT  ( cleanupExecuted() ) );
-}
-
-
-void
-CleanupCollection::addStdCleanups()
-{
-    add( StdCleanup::openInKonqueror	( _actionCollection ) );
-    add( StdCleanup::openInTerminal	( _actionCollection ) );
-    add( StdCleanup::compressSubtree	( _actionCollection ) );
-    add( StdCleanup::makeClean		( _actionCollection ) );
-    add( StdCleanup::deleteTrash	( _actionCollection ) );
-    add( StdCleanup::moveToTrashBin	( _actionCollection ) );
-    add( StdCleanup::hardDelete	( _actionCollection ) );
-}
-
-
-void
-CleanupCollection::addUserCleanups( int number )
-{
-    for ( int i=0; i < number; i++ )
-    {
-	QString id;
-	id.sprintf( "cleanup_user_defined_%d", _nextUserCleanupNo );
-	QString title;
-
-	if ( _nextUserCleanupNo <= 9 )
-	    // Provide a keyboard shortcut for cleanup #0..#9
-	    title=tr( "User Defined Cleanup #&%1" ).arg(_nextUserCleanupNo);
-	else
-	    // No keyboard shortcuts for cleanups #10.. - they would be duplicates
-	    title=tr( "User Defined Cleanup #%1" ).arg(_nextUserCleanupNo);
-
-	_nextUserCleanupNo++;
-	
-	Cleanup *cleanup = new Cleanup( id, "", title, _actionCollection );
-	CHECK_PTR( cleanup );
-	cleanup->setEnabled( false );
-
-	if ( i <= 9 )
-	{
-	    // Provide an application-wide keyboard accelerator for cleanup #0..#9
-	    cleanup->setShortcut( Qt::CTRL + Qt::Key_0 + i );
-	}
-	
 	add( cleanup );
     }
 }
 
 
-Cleanup *
-CleanupCollection::cleanup( const QString & id )
+
+Cleanup * CleanupCollection::findById( const QString & id ) const
 {
-    return _cleanupDict[ id ];
+    int index = indexOf( id );
+
+    if ( index == -1 )
+	return 0;
+    else
+	return _cleanupList.at( index );
 }
 
 
-void
-CleanupCollection::clear()
+int CleanupCollection::indexOf( const QString & id ) const
 {
+    for ( int i=0; i < _cleanupList.size(); ++i )
+    {
+	if ( id == _cleanupList.at(i)->id() )
+	    return i;
+    }
+
+    logError() << "No Cleanup with ID " << id << " in this collection" << endl;
+    return -1;
+}
+
+
+int CleanupCollection::indexOf( Cleanup * cleanup ) const
+{
+    int index = _cleanupList.indexOf( cleanup );
+
+    if ( index == -1 )
+	logError() << "Cleanup " << cleanup << " is not in this collection" << endl;
+
+    return index;
+}
+
+
+Cleanup * CleanupCollection::at( int index ) const
+{
+    if ( index >= 0 && index < _cleanupList.size() )
+	return _cleanupList.at( index );
+    else
+	return 0;
+}
+
+
+void CleanupCollection::clear()
+{
+    qDeleteAll( _cleanupList );
     _cleanupList.clear();
-    _cleanupDict.clear();
-    _nextUserCleanupNo = 0;
 }
 
 
-void
-CleanupCollection::slotReadConfig()
+void CleanupCollection::updateActions()
 {
-    emit readConfig();
+    FileInfoSet sel = _selectionModel->selectedItems();
+
+    bool dirSelected	  = sel.containsDir();
+    bool fileSelected	  = sel.containsFile();
+    bool dotEntrySelected = sel.containsDotEntry();
+
+    foreach ( Cleanup * cleanup, _cleanupList )
+    {
+	if ( ! cleanup->active() || sel.isEmpty() )
+	    cleanup->setEnabled( false );
+	else
+	{
+	    bool enabled = true;
+
+	    if ( dirSelected && ! cleanup->worksForDir() )
+		enabled = false;
+
+	    if ( dotEntrySelected && ! cleanup->worksForDotEntry() )
+		enabled = false;
+
+	    if ( fileSelected && ! cleanup->worksForFile() )
+		enabled = false;
+
+	    cleanup->setEnabled( enabled );
+	}
+    }
 }
 
 
-void
-CleanupCollection::cleanupExecuted()
+void CleanupCollection::execute()
 {
-    emit userActivity( 10 );
+    Cleanup * cleanup = qobject_cast<Cleanup *>( sender() );
+
+    if ( ! cleanup )
+    {
+	logError() << "Wrong sender type: " << sender()->metaObject()->className() << endl;
+	return;
+    }
+
+    FileInfoSet sel = _selectionModel->selectedItems();
+
+    foreach ( FileInfo * item, sel )
+    {
+	if ( cleanup->worksFor( item ) )
+	{
+	    cleanup->execute( item );
+	}
+	else
+	{
+	    logWarning() << "Cleanup " << cleanup
+			 << " does not work for " << item << endl;
+	}
+    }
+}
+
+
+void CleanupCollection::addToMenu( QMenu * menu )
+{
+    CHECK_PTR( menu );
+
+    foreach ( Cleanup * cleanup, _cleanupList )
+    {
+	if ( cleanup->active() )
+	    menu->addAction( cleanup );
+    }
+}
+
+
+void CleanupCollection::moveUp( Cleanup * cleanup )
+{
+    int oldPos = indexOf( cleanup );
+
+    if ( oldPos > 0 )
+    {
+	_cleanupList.removeAt( oldPos );
+	_cleanupList.insert( oldPos - 1, cleanup );
+    }
+}
+
+
+void CleanupCollection::moveDown( Cleanup * cleanup )
+{
+    int oldPos = indexOf( cleanup );
+
+    if ( oldPos < _cleanupList.size() - 1 )
+    {
+	_cleanupList.removeAt( oldPos );
+	_cleanupList.insert( oldPos + 1, cleanup );
+    }
+}
+
+
+void CleanupCollection::moveToTop( Cleanup * cleanup )
+{
+    int oldPos = indexOf( cleanup );
+
+    if ( oldPos > 0 )
+    {
+	_cleanupList.removeAt( oldPos );
+	_cleanupList.insert( 0, cleanup );
+    }
+}
+
+
+void CleanupCollection::moveToBottom( Cleanup * cleanup )
+{
+    int oldPos = indexOf( cleanup );
+
+    if ( oldPos < _cleanupList.size() - 1 )
+    {
+	_cleanupList.removeAt( oldPos );
+	_cleanupList.insert( _cleanupList.size(), cleanup );
+    }
+}
+
+
+void CleanupCollection::readSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "Cleanups" );
+    int size = settings.beginReadArray( "Cleanup" );
+
+    if ( size > 0 )
+    {
+	clear();
+
+	for ( int i=0; i < size; ++i )
+	{
+	    settings.setArrayIndex( i );
+
+	    QString command  = settings.value( "Command" ).toString();
+	    QString id	     = settings.value( "ID"	 ).toString();
+	    QString title    = settings.value( "Title"	 ).toString();
+	    QString iconName = settings.value( "Icon"	 ).toString();
+	    QString hotkey   = settings.value( "Hotkey"	 ).toString();
+
+	    bool active		    = settings.value( "Active"		  , true  ).toBool();
+	    bool worksForDir	    = settings.value( "WorksForDir"	  , true  ).toBool();
+	    bool worksForFile	    = settings.value( "WorksForFile"	  , true  ).toBool();
+	    bool worksForDotEntry   = settings.value( "WorksForDotEntry"  , true  ).toBool();
+	    bool recurse	    = settings.value( "Recurse"		  , false ).toBool();
+	    bool askForConfirmation = settings.value( "AskForConfirmation", false ).toBool();
+
+	    int refreshPolicy = readEnumEntry( settings, "RefreshPolicy",
+					       Cleanup::NoRefresh,
+					       Cleanup::refreshPolicyMapping() );
+
+	    if ( ! id.isEmpty()	     &&
+		 ! command.isEmpty() &&
+		 ! title.isEmpty()     )
+	    {
+		Cleanup * cleanup = new Cleanup( id, command, title, this );
+		CHECK_NEW( cleanup );
+		add( cleanup );
+
+		cleanup->setActive	    ( active   );
+		cleanup->setWorksForDir	    ( worksForDir );
+		cleanup->setWorksForFile    ( worksForFile );
+		cleanup->setWorksForDotEntry( worksForDotEntry );
+		cleanup->setRecurse	    ( recurse  );
+		cleanup->setAskForConfirmation( askForConfirmation );
+		cleanup->setRefreshPolicy( static_cast<Cleanup::RefreshPolicy>( refreshPolicy ) );
+
+		if ( ! iconName.isEmpty() )
+		    cleanup->setIcon( iconName );
+
+		if ( ! hotkey.isEmpty() )
+		    cleanup->setShortcut( hotkey );
+	    }
+	    else
+	    {
+		logError() << "Need at least Command, ID, Title for a cleanup" << endl;
+	    }
+	}
+    }
+
+    settings.endArray();
+    settings.endGroup();
+}
+
+
+void CleanupCollection::writeSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "Cleanups" );
+
+    if ( _cleanupList.isEmpty() )
+	settings.remove( "Cleanup" );
+    else
+    {
+	settings.beginWriteArray( "Cleanup", _cleanupList.size() );
+
+	for ( int i=0; i < _cleanupList.size(); ++i )
+	{
+	    settings.setArrayIndex( i );
+	    Cleanup * cleanup = _cleanupList.at( i );
+
+	    settings.setValue( "Command"	   , cleanup->command()		   );
+	    settings.setValue( "ID"		   , cleanup->id()		   );
+	    settings.setValue( "Title"		   , cleanup->title()		   );
+	    settings.setValue( "Active"		   , cleanup->active()		   );
+	    settings.setValue( "WorksForDir"	   , cleanup->worksForDir()	   );
+	    settings.setValue( "WorksForFile"	   , cleanup->worksForFile()	   );
+	    settings.setValue( "WorksForDotEntry"  , cleanup->worksForDotEntry()   );
+	    settings.setValue( "Recurse"	   , cleanup->recurse()		   );
+	    settings.setValue( "AskForConfirmation", cleanup->askForConfirmation() );
+
+	    writeEnumEntry( settings, "RefreshPolicy",
+			    cleanup->refreshPolicy(),
+			    Cleanup::refreshPolicyMapping() );
+
+	    if ( ! cleanup->iconName().isEmpty() )
+		 settings.setValue( "Icon", cleanup->iconName() );
+
+	    if ( ! cleanup->shortcut().isEmpty() )
+		settings.setValue( "Hotkey" , cleanup->shortcut().toString() );
+	}
+
+	settings.endArray();
+    }
+    settings.endGroup();
 }
 

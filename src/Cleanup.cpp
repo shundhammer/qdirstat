@@ -1,217 +1,126 @@
 /*
- *   File name:	Cleanup.cpp
- *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   File name: Cleanup.cpp
+ *   Summary:	QDirStat classes to reclaim disk space
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
-#include <stdlib.h>
-#include <qapplication.h>
-#include <qregexp.h>
-
-#include <kapp.h>
-#include <kprocess.h>
-#include "Logger.h"
-#include <kmessagebox.h>
-#include <kglobalsettings.h>
+#include <QApplication>
+#include <QMessageBox>
+#include <QRegExp>
+#include <QProcess>
+#include <QProcessEnvironment>
+#include <QSettings>
 
 #include "Cleanup.h"
+#include "FileInfo.h"
+#include "DirTree.h"
 #include "DirSaver.h"
+#include "Logger.h"
+#include "Exception.h"
 
-#define VERBOSE_RUN_COMMAND	1
-#define SIMULATE_COMMAND	0
+
+#define SIMULATE_COMMAND	1
+#define WAIT_TIMEOUT_MILLISEC	30000
 
 using namespace QDirStat;
 
 
-Cleanup::Cleanup( QString		id,
-		    QString		command,
-		    QString		title,
-		    KActionCollection *	parent	)
-    
-    : KAction( title,
-	       0,	// accel
-	       parent,
-	       id )
-    
-    , _id	( id	  )
-    , _command	( command )
-    , _title	( title	  )
+Cleanup::Cleanup( QString   id,
+		  QString   command,
+		  QString   title,
+		  QObject * parent ):
+    QAction( title, parent ),
+    _id( id ),
+    _command( command ),
+    _title( title )
 {
-    _selection		= 0;
-    _enabled		= true;
+    _active		= true;
     _worksForDir	= true;
     _worksForFile	= false;
     _worksForDotEntry	= false;
-    _worksLocalOnly	= true;
     _recurse		= false;
-    _askForConfirmation	= false;
-    _refreshPolicy	= noRefresh;
-    
-    KAction::setEnabled( false );
+    _askForConfirmation = false;
+    _refreshPolicy	= NoRefresh;
+
+    QAction::setEnabled( true );
 }
 
 
-Cleanup::Cleanup( const Cleanup &src )
-    : KAction()
-{
-    copy( src );
-}
-
-
-Cleanup &
-Cleanup::operator= ( const Cleanup &src )
-{
-    copy( src );
-    
-    return *this;
-}
-
-
-void
-Cleanup::copy( const Cleanup &src )
-{
-    setTitle( src.title() );
-    _selection		= src.selection();
-    _id			= src.id();
-    _command		= src.command();
-    _enabled		= src.enabled();
-    _worksForDir	= src.worksForDir();
-    _worksForFile	= src.worksForFile();
-    _worksForDotEntry	= src.worksForDotEntry();
-    _worksLocalOnly	= src.worksLocalOnly();
-    _recurse		= src.recurse();
-    _askForConfirmation	= src.askForConfirmation();
-    _refreshPolicy	= src.refreshPolicy();
-}
-
-
-void
-Cleanup::setTitle( const QString &title )
+void Cleanup::setTitle( const QString &title )
 {
     _title = title;
-    KAction::setText( _title );
+    QAction::setText( _title );
 }
 
 
-bool
-Cleanup::worksFor( FileInfo *item ) const
+void Cleanup::setIcon( const QString & iconName )
 {
-    if ( ! _enabled || ! item )
-	return false;
+    _iconName = iconName;
+    QAction::setIcon( QPixmap( _iconName ) );
+}
 
-    if ( worksLocalOnly() && ! item->tree()->isFileProtocol() )
+
+bool Cleanup::worksFor( FileInfo *item ) const
+{
+    if ( ! _active || ! item )
 	return false;
 
     if	( item->isDotEntry() )	return worksForDotEntry();
     if	( item->isDir() )	return worksForDir();
-    
+
     return worksForFile();
 }
 
 
-void
-Cleanup::selectionChanged( FileInfo *selection )
-{
-    bool enabled = false;
-    _selection = selection;
-
-    if ( selection )
-    {
-	enabled = worksFor( selection );
-
-	if ( ! selection->isFinished() )
-	{
-	    // This subtree isn't finished reading yet
-
-	    switch ( _refreshPolicy )
-	    {
-		// Refresh policies that would cause this subtree to be deleted
-		case refreshThis:
-		case refreshParent:
-		case assumeDeleted:
-
-		    // Prevent premature deletion of this tree - this would
-		    // cause a core dump for sure. 
-		    enabled = false;
-		    break;
-			
-		default:
-		    break;
-	    }
-	    
-	}
-    }
-    
-    KAction::setEnabled( enabled );
-}
-
-
-void
-Cleanup::executeWithSelection()
-{
-    if ( _selection )
-	execute( _selection );
-}
-
-
-bool
-Cleanup::confirmation( FileInfo * item )
+bool Cleanup::confirmation( FileInfo * item )
 {
     QString msg;
 
     if ( item->isDir() || item->isDotEntry() )
-    {
 	msg = tr( "%1\nin directory %2" ).arg( cleanTitle() ).arg( item->url() );
-    }
     else
-    {
 	msg = tr( "%1\nfor file %2" ).arg( cleanTitle() ).arg( item->url() );
-    }
 
-    if ( KMessageBox::warningContinueCancel( 0,				// parentWidget
-					     msg,			// message
-					     tr( "Please Confirm" ),	// caption
-					     tr( "Confirm" )		// confirmButtonLabel
-					     ) == KMessageBox::Continue )
-	return true;
-    else
-	return false;
+    int ret = QMessageBox::question( qApp->activeWindow(),
+				     tr( "Please Confirm" ), // title
+				     msg );		     // text
+    return ret == QMessageBox::Yes;
 }
 
 
-void
-Cleanup::execute( FileInfo *item )
+void Cleanup::execute( FileInfo *item )
 {
     if ( worksFor( item ) )
     {
 	if ( _askForConfirmation && ! confirmation( item ) )
 	    return;
-	    
-	DirTree  * tree = item->tree();
-	
+
+	DirTree * tree = item->tree();
+
 	executeRecursive( item );
-	
+
 	switch ( _refreshPolicy )
 	{
-	    case noRefresh:
+	    case NoRefresh:
 		// Do nothing.
 		break;
 
+	    case RefreshThis:
 
-	    case refreshThis:
-		tree->refresh( item );
+		if ( item->isDirInfo() )
+		    tree->refresh( item->toDirInfo() );
+		else
+		    tree->refresh( item->parent() );
 		break;
 
-
-	    case refreshParent:
+	    case RefreshParent:
 		tree->refresh( item->parent() );
 		break;
 
-
-	    case assumeDeleted:
+	    case AssumeDeleted:
 
 		// Assume the cleanup action has deleted the item.
 		// Modify the DirTree accordingly.
@@ -228,13 +137,10 @@ Cleanup::execute( FileInfo *item )
 		break;
 	}
     }
-
-    emit executed();
 }
 
 
-void
-Cleanup::executeRecursive( FileInfo *item )
+void Cleanup::executeRecursive( FileInfo *item )
 {
     if ( worksFor( item ) )
     {
@@ -269,8 +175,7 @@ Cleanup::executeRecursive( FileInfo *item )
 }
 
 
-const QString
-Cleanup::itemDir( const FileInfo *item ) const
+const QString Cleanup::itemDir( const FileInfo *item ) const
 {
     QString dir = item->url();
 
@@ -283,11 +188,10 @@ Cleanup::itemDir( const FileInfo *item ) const
 }
 
 
-QString
-Cleanup::cleanTitle() const
+QString Cleanup::cleanTitle() const
 {
     // Use the cleanup action's title, if possible.
-   
+
     QString title = _title;
 
     if ( title.isEmpty() )
@@ -303,126 +207,93 @@ Cleanup::cleanTitle() const
 }
 
 
-QString
-Cleanup::expandVariables( const FileInfo *	item,
-			   const QString &	unexpanded ) const
+QString Cleanup::expandVariables( const FileInfo * item,
+				  const QString	 & unexpanded ) const
 {
     QString expanded = unexpanded;
+    expanded.replace( "%p", escapeAndQuote( item->url()	 ) );
+    expanded.replace( "%n", escapeAndQuote( item->name() ) );
 
-    expanded.replace( QRegExp( "%p" ),
-		      "\"" + QString::fromLocal8Bit( item->url() )  + "\"" );
-    expanded.replace( QRegExp( "%n" ),
-		      "\"" + QString::fromLocal8Bit( item->name() ) + "\"" );
-
-    if ( KDE::versionMajor() >= 3 && KDE::versionMinor() >= 4 )
-	expanded.replace( QRegExp( "%t" ), "trash:/" );
-    else
-	expanded.replace( QRegExp( "%t" ), KGlobalSettings::trashPath() );
-
+    logDebug() << "Expanded: \"" << expanded << "\"" << endl;
     return expanded;
 }
 
-#include <qtextcodec.h>
-void
-Cleanup::runCommand ( const FileInfo *	item,
-		       const QString &		command ) const
+
+QString Cleanup::escapeAndQuote( const QString & unescaped ) const
 {
-    KProcess	proc;
-    DirSaver	dir( itemDir( item ) );
-    QString	cmd( expandVariables( item, command ));
+    QString escaped = unescaped;
+    escaped.replace( "'", "\\'" );
+    escaped = "'" + escaped + "'";
 
-#if VERBOSE_RUN_COMMAND
-    printf( "\ncd " );
-    fflush( stdout );
-    system( "pwd" );
-    QTextCodec * codec = QTextCodec::codecForLocale();
-    printf( "%s\n", (const char *) codec->fromUnicode( cmd ) );
-    fflush( stdout );
-#endif
+    return escaped;
+}
 
-#if ! SIMULATE_COMMAND
-    proc << "sh";
-    proc << "-c";
-    proc << cmd;
+
+void Cleanup::runCommand ( const FileInfo *  item,
+			   const QString &   command ) const
+{
+    DirSaver dir( itemDir( item ) ); // chdir itemdir
+    QString  cleanupCommand( expandVariables( item, command ));
+
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QString shell = env.value( "SHELL", "/bin/sh" );
+
+    QProcess * process = new QProcess( parent() );
+    CHECK_NEW( process );
+
+    // Starting the cleanup command with the user's login shell to have
+    // everything available that users are used to from their shell, including
+    // their normal environment.
+
+    process->setProgram( shell );
+    process->setArguments( QStringList() << "-c" << cleanupCommand );
+
+    logDebug() << "Starting \"" << process->program() << "\" with args \""
+	       << process->arguments().join( "\", \"" ) << "\""
+	       << endl;
 
     switch ( _refreshPolicy )
     {
-	case noRefresh:
-	case assumeDeleted:
+	case NoRefresh:
+	case AssumeDeleted:
 
 	    // In either case it is no use waiting for the command to
 	    // finish, so we are starting the command as a pure
 	    // background process.
 
-	    proc.start( KProcess::DontCare );
+	    process->start();
+	    logDebug() << "Leaving process to run in the background" << endl;
 	    break;
 
 
-	case refreshThis:
-	case refreshParent:
+	case RefreshThis:
+	case RefreshParent:
 
 	    // If a display refresh is due after the command, we need to
 	    // wait for the command to be finished in order to avoid
 	    // performing the update prematurely, so we are starting this
 	    // process in blocking mode.
 
-	    QApplication::setOverrideCursor( waitCursor );
-	    proc.start( KProcess::Block );
+	    QApplication::setOverrideCursor( Qt::WaitCursor );
+	    process->start();
+	    logDebug() << "Waiting for process to finish..." << endl;
+	    process->waitForFinished( WAIT_TIMEOUT_MILLISEC );
+	    logDebug() << "Process finished" << endl;
 	    QApplication::restoreOverrideCursor();
 	    break;
     }
-
-#endif
 }
 
 
-void
-Cleanup::readConfig()
+QMap<int, QString> Cleanup::refreshPolicyMapping()
 {
-    KConfig *config = kapp->config();
-    KConfigGroupSaver saver( config, _id );
+    QMap<int, QString> mapping;
 
-    bool valid = config->readBoolEntry( "valid", false	);
+    mapping[ NoRefresh	   ] = "NoRefresh";
+    mapping[ RefreshThis   ] = "RefreshThis";
+    mapping[ RefreshParent ] = "RefreshParent";
+    mapping[ AssumeDeleted ] = "AssumeDeleted";
 
-    // If the config section requested exists, it should contain a
-    // "valid" field with a true value. If not, there is no such
-    // section within the config file. In this case, just leave this
-    // cleanup action undisturbed - we'd rather have a good default
-    // value (as provided - hopefully - by our application upon
-    // startup) than a generic empty cleanup action.
-   
-    if ( valid )
-    {
-	_command		= config->readEntry	( "command"		);
-	_enabled		= config->readBoolEntry ( "enabled"		);
-	_worksForDir		= config->readBoolEntry ( "worksForDir"		);
-	_worksForFile		= config->readBoolEntry ( "worksForFile"	);
-	_worksForDotEntry	= config->readBoolEntry ( "worksForDotEntry"	);
-	_worksLocalOnly		= config->readBoolEntry ( "worksLocalOnly"	);
-	_recurse		= config->readBoolEntry ( "recurse"		, false	);
-	_askForConfirmation	= config->readBoolEntry ( "askForConfirmation"	, false	);
-	_refreshPolicy		= (Cleanup::RefreshPolicy) config->readNumEntry( "refreshPolicy" );
-	setTitle( config->readEntry( "title" ) );
-    }
-}
-
-
-void
-Cleanup::saveConfig() const
-{
-    KConfig *config = kapp->config();
-    KConfigGroupSaver saver( config, _id );
-
-    config->writeEntry( "valid",		true			);
-    config->writeEntry( "command",		_command		);
-    config->writeEntry( "title",		_title			);
-    config->writeEntry( "enabled",		_enabled		);
-    config->writeEntry( "worksForDir",		_worksForDir		);
-    config->writeEntry( "worksForFile",		_worksForFile		);
-    config->writeEntry( "worksForDotEntry",	_worksForDotEntry	);
-    config->writeEntry( "worksLocalOnly",	_worksLocalOnly		);
-    config->writeEntry( "recurse",		_recurse		);
-    config->writeEntry( "askForConfirmation",	_askForConfirmation	);
-    config->writeEntry( "refreshPolicy",	(int) _refreshPolicy	);
+    return mapping;
 }
 

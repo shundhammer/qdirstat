@@ -1,7 +1,7 @@
 /*
- *   File name:	StdCleanup.h
- *   Summary:	Support classes for QDirStat
- *   License:   GPL V2 - See file LICENSE for details.
+ *   File name: StdCleanup.h
+ *   Summary:	QDirStat classes to reclaim disk space
+ *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
@@ -10,38 +10,46 @@
 #ifndef StdCleanup_h
 #define StdCleanup_h
 
-
-// Forward declarations
-class KActionCollection;
+#include <QObject>
+#include <QList>
 
 
 namespace QDirStat
 {
+    class Cleanup;
+
     /**
-     * Predefined standard @ref Cleanup actions to be performed on
-     * @ref DirTree items.
+     * Create any of the predefined standard @ref Cleanup actions to be
+     * performed on DirTree items. Ownership of the objects is passed to the
+     * caller.
      *
      * This class is not meant to be ever instantiated - use the static methods
      * only.
-     * 
-     * For details about what each individual method does, refer to the help
-     * file. Use the old (QDirStat 0.86) help file in case the current help
-     * file isn't available yet.
-     *
-     * @short QDirStat standard cleanup actions
      **/
-    
+
     class StdCleanup
     {
     public:
-	static Cleanup *openInKonqueror	( KActionCollection *parent = 0 );
-	static Cleanup *openInTerminal		( KActionCollection *parent = 0 );
-	static Cleanup *compressSubtree	( KActionCollection *parent = 0 );
-	static Cleanup *makeClean		( KActionCollection *parent = 0 );
-	static Cleanup *deleteTrash		( KActionCollection *parent = 0 );
-	static Cleanup *moveToTrashBin		( KActionCollection *parent = 0 );
-	static Cleanup *hardDelete		( KActionCollection *parent = 0 );
-	
+
+	static Cleanup * openInFileManager( QObject * parent = 0 );
+	static Cleanup * openInTerminal	  ( QObject * parent = 0 );
+	static Cleanup * compressSubtree  ( QObject * parent = 0 );
+	static Cleanup * makeClean	  ( QObject * parent = 0 );
+	static Cleanup * deleteJunk	  ( QObject * parent = 0 );
+	static Cleanup * moveToTrash	  ( QObject * parent = 0 );
+	static Cleanup * hardDelete	  ( QObject * parent = 0 );
+#if 1
+	// DEBUG
+	static Cleanup * echoargs	  ( QObject * parent = 0 );
+	static Cleanup * pwd		  ( QObject * parent = 0 );
+	// DEBUG
+#endif
+
+	/**
+	 * Create all of the above and return them in a list.
+	 **/
+	static CleanupList stdCleanups( QObject * parent );
+
     private:
 	/**
 	 * Prevent instances of this class - private constructor / destructor.
