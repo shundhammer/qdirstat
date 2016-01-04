@@ -7,7 +7,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-03
+Updated: 2016-01-04
 
 
 ## Overview
@@ -32,6 +32,10 @@ screenshot. Neat, huh? ;-)
 **Work in Progress**
 
 Usable, but still pre-Alpha. Use at your own risk. You have been warned. ;-)
+
+- 2016-01-04 Cleanups are back. They still need some work, and you'll have to
+  edit the config file in ~/.config/QDirStat/QDirStat.conf to configure
+  anything, but they work.
 
 - 2016-01-03 We are getting nearer to the target:
 
