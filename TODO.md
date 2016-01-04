@@ -2,20 +2,10 @@
 
 ## MainWindow
 
-- write window size / position to config upon exit
-
-- Restore old window size / position
-
 - translation support
 
 
 ## DirTreeView
-
-- refreshSelected()
-
-- continueReading() (mount point, excluded item)
-
-- restore dotEntry (after finalizeLocal() ) when continuing reading
 
 - closeAllExcept()
 
@@ -30,10 +20,6 @@
 - Data columns to display + order (NameCol is alwas there and #1)
 
 - ...
-
-## Cleanups
-
-- port old code
 
 
 ### Move to Trash

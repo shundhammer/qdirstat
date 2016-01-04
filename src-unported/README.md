@@ -1,6 +1,6 @@
 # QDirStat src-unported
 
-Updated: 2015-12-31
+Updated: 2016-01-04
 
 This directory contains source files from the old KDirStat project that are
 waiting to be ported to QDirStat.
@@ -71,8 +71,6 @@ free (albeit still somewhat bumpy).
 
 ### Simple and Moderately Difficult Parts
 
-- Tons of menu entries and corresponding actions
-
 - Config dialog
 
   - Should be based on Qt Designer forms
@@ -105,8 +103,6 @@ free (albeit still somewhat bumpy).
     most likely anybody who really wants to change any of them will need to use
     his favourite editor.
 
-- Cleanup Actions - not that hard, just work to do
-
 - Add translation stuff. Setting up the Qt translator classes is easy
   enough. The translation file(s) will probably also end up in the resource
   file to avoid being dependent on external files (they can always go
@@ -123,24 +119,3 @@ free (albeit still somewhat bumpy).
 - When all obvious features are back, look through src-unported/ if anything is
   still missing. After that, get rid of src-unported/.
 
-- Find more icons for all kinds of actions.
-
-
-### Done
-
-- Get rid of the "Updated" header in all source files. Git keeps track of that
-  stuff.
-
-- Filename cleanup. Files are now named like the class they contain, and not
-  all lowercase: ExcludeRules.cpp instead of kexcluderules.cpp.
-
-- Tree model based on QAbstractItemModel. This can be connected to a number of
-  Qt's view classes, in particular QTreeView.
-
-- Treemap stuff. This was based on Qt 3 QCanvas which is completely gone. From
-  Qt 4 on, there is QGraphicsView / QGraphicsScene. I had feared that would be
-  quite a challenge, but this went much smoother than I had expected.
-
-- Common selection model for both the tree and the treemap view with
-  multi-selection for both -- and synchronizing the selection with the
-  respective other view.
