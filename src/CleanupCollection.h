@@ -33,7 +33,7 @@ namespace QDirStat
 	/**
 	 * Constructor.
 	 **/
-	CleanupCollection( SelectionModel * selectionModel );
+	CleanupCollection( SelectionModel * selectionModel, QObject * parent = 0 );
 
 	/**
 	 * Destructor
@@ -89,6 +89,11 @@ namespace QDirStat
 	 * Return the number of cleanup actions in this collection.
 	 **/
 	int size() const { return _cleanupList.size(); }
+
+	/**
+	 * Return 'true' if this collection is empty.
+	 **/
+	bool isEmpty() const { return _cleanupList.isEmpty(); }
 
 	/**
 	 * Remove all cleanups from this collection.

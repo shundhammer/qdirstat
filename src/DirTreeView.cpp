@@ -90,8 +90,11 @@ void DirTreeView::contextMenu( const QPoint & pos )
 
     ActionManager::instance()->addActions( &menu, actions );
 
-    if ( _cleanupCollection )
+    if ( _cleanupCollection && ! _cleanupCollection->isEmpty() )
+    {
+        menu.addSeparator();
 	_cleanupCollection->addToMenu( &menu );
+    }
 
     menu.exec( mapToGlobal( pos ) );
 }

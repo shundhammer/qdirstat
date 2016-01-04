@@ -22,8 +22,8 @@
 using namespace QDirStat;
 
 
-CleanupCollection::CleanupCollection( SelectionModel * selectionModel ):
-    QObject(),
+CleanupCollection::CleanupCollection( SelectionModel * selectionModel, QObject * parent ):
+    QObject( parent ),
     _selectionModel( selectionModel )
 {
     readSettings();

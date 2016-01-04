@@ -742,8 +742,12 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 
     ActionManager::instance()->addActions( &menu, actions );
 
-    if ( _parentView->cleanupCollection() )
+    if ( _parentView->cleanupCollection() &&
+         ! _parentView->cleanupCollection()->isEmpty() )
+    {
+        menu.addSeparator();
 	_parentView->cleanupCollection()->addToMenu( &menu );
+    }
 
     menu.exec( event->screenPos() );
 }

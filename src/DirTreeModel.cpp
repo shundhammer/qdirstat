@@ -31,9 +31,9 @@ DirTreeModel::DirTreeModel( QObject * parent ):
     _sortCol( NameCol ),
     _sortOrder( Qt::AscendingOrder )
 {
+    createTree();
     readSettings();
     loadIcons();
-    createTree();
     _updateTimer.setInterval( _updateTimerMillisec );
 
     connect( &_updateTimer, SIGNAL( timeout()		 ),
