@@ -9,6 +9,7 @@
 
 #include <QMenu>
 #include <QSettings>
+#include <QMessageBox>
 
 #include "CleanupCollection.h"
 #include "Cleanup.h"
@@ -19,11 +20,13 @@
 #include "Logger.h"
 #include "Exception.h"
 
+#define MAX_URLS_IN_CONFIRMATION_POPUP 7
 
 using namespace QDirStat;
 
 
-CleanupCollection::CleanupCollection( SelectionModel * selectionModel, QObject * parent ):
+CleanupCollection::CleanupCollection( SelectionModel * selectionModel,
+				      QObject	     * parent ):
     QObject( parent ),
     _selectionModel( selectionModel )
 {
@@ -183,11 +186,25 @@ void CleanupCollection::execute()
 	return;
     }
 
+    FileInfoSet sel = _selectionModel->selectedItems();
+
+    if ( sel.isEmpty() )
+    {
+	logWarning() << "Nothing selected" << endl;
+	return;
+    }
+
+    if ( cleanup->askForConfirmation() && ! confirmation( cleanup, sel ) )
+    {
+	logDebug() << "User declined confirmation" << endl;
+	return;
+    }
+
     ProcessOutput * processOutput = new ProcessOutput( qApp->activeWindow() );
     CHECK_NEW( processOutput );
     processOutput->show();
+    processOutput->setAutoClose( false );
 
-    FileInfoSet sel = _selectionModel->selectedItems();
 
     foreach ( FileInfo * item, sel )
     {
@@ -202,7 +219,53 @@ void CleanupCollection::execute()
 	}
     }
 
+    processOutput->noMoreProcesses();
 }
+
+
+bool CleanupCollection::confirmation( Cleanup * cleanup, const FileInfoSet & items )
+{
+    QString msg;
+    QString title = cleanup->cleanTitle();
+
+    if ( items.size() == 1 ) // The most common case
+    {
+	FileInfo * item = items.first();
+
+	if ( item->isDir() || item->isDotEntry() )
+	    msg = tr( "%1\nin directory %2" ).arg( title ).arg( item->url() );
+	else
+	    msg = tr( "%1\nfor file %2" ).arg( title ).arg( item->url() );
+    }
+    else // Multiple items selected
+    {
+	// Build a list of the first couple (7 max)
+
+	QStringList urls;
+
+	for ( FileInfoSet::const_iterator it = items.begin();
+	      it != items.end() && urls.size() <= MAX_URLS_IN_CONFIRMATION_POPUP;
+	      ++it )
+	{
+	    urls << (*it)->url();
+	}
+
+	if ( urls.size() < items.size() ) // Only displaying part of the items?
+	{
+	    urls << "...";
+	    urls << tr( "(%1 items total)" ).arg( items.size() );
+	}
+
+
+	msg = tr( "%1 for:\n\n%2" ).arg( title ).arg( urls.join( "\n" ) );
+    }
+
+    int ret = QMessageBox::question( qApp->activeWindow(),
+				     tr( "Please Confirm" ), // title
+				     msg );		     // text
+    return ret == QMessageBox::Yes;
+}
+
 
 
 void CleanupCollection::addToMenu( QMenu * menu )

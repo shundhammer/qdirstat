@@ -7,6 +7,8 @@
  */
 
 
+#include <QCloseEvent>
+
 #include "ProcessOutput.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -18,11 +20,13 @@
 
 ProcessOutput::ProcessOutput( QWidget * parent ):
     QDialog( parent ),
-    _ui( new Ui::ProcessOutputDialog )
+    _ui( new Ui::ProcessOutputDialog ),
+    _showOnStderr( true ),
+    _noMoreProcesses( false ),
+    _closed( false )
 {
     _ui->setupUi( this );
     logDebug() << "Creating" << endl;
-    setAttribute( Qt::WA_DeleteOnClose );
 
     _terminalBackground	 = Qt::black;
     _commandTextColor	 = Qt::white;
@@ -42,13 +46,23 @@ ProcessOutput::ProcessOutput( QWidget * parent ):
 ProcessOutput::~ProcessOutput()
 {
     logDebug() << "Destructor" << endl;
+
+    if ( ! _processList.isEmpty() )
+    {
+	logWarning() << _processList.size() << " processes left over" << endl;
+
+	foreach ( QProcess * process, _processList )
+	    logWarning() << "Left over: " << process << endl;
+
+	qDeleteAll( _processList );
+    }
 }
 
 
 void ProcessOutput::addProcess( QProcess * process )
 {
     CHECK_PTR( process );
-    _processList << QPointer<QProcess>( process );
+    _processList << process;
     logDebug() << "Adding " << process << endl;
 
     connect( process, SIGNAL( readyReadStandardOutput() ),
@@ -80,58 +94,29 @@ void ProcessOutput::addStdout( const QString output )
 void ProcessOutput::addStderr( const QString output )
 {
     addText( output, _stderrColor );
+
+    if ( _showOnStderr && ! isVisible() && ! _closed )
+	show();
 }
 
 
 void ProcessOutput::addText( const QString & rawText, const QColor & textColor )
 {
+    if ( rawText.isEmpty() )
+	return;
+
     QString text = rawText;
 
-    if ( text.isEmpty() )
-        return;
-
-    if ( _ui->terminal->document()->isEmpty() )
-        addHeader();
-
-    QString rgbCode   = textColor.name();
-
-#if 0
-    QStringList lines = text.split( "\n" );
-    QString spanBegin = QString( "<span style=\" color:%1;\">" ).arg( rgbCode );
-    QString spanEnd   = "</span>";
-
-    QString html = spanBegin + "<p>" + lines.join( "</p>\n<p>" ) + "</p>" + spanEnd;
-#endif
-
     if ( ! text.endsWith( "\n" ) )
-        text += "\n";
+	text += "\n";
 
     _ui->terminal->moveCursor( QTextCursor::End );
     QTextCursor cursor( _ui->terminal->textCursor() );
 
     QTextCharFormat format;
-    // format.setFontWeight( QFont::DemiBold );
     format.setForeground( QBrush( textColor ) );
     cursor.setCharFormat( format );
     cursor.insertText( text );
-}
-
-
-void ProcessOutput::addHeader()
-{
-#if 0
-    QString header =
-	"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-	"<html><head>\n"
-	"<meta name=\"qrichtext\" content=\"1\" />\n"
-	"<style type=\"text/css\">\n"
-	"p, li { white-space: pre-wrap; }\n"
-	"</style>"
-	"</head>"
-	"<body style=\" font-family:'DejaVu Sans Mono'; font-size:10pt; font-weight:400; font-style:normal;\">\n";
-
-    _ui->terminal->setHtml( header );
-#endif
 }
 
 
@@ -199,27 +184,22 @@ void ProcessOutput::processFinished( int exitCode, QProcess::ExitStatus exitStat
 	    break;
     }
 
-    cleanupProcessList();
     QProcess * process = senderProcess( __FUNCTION__ );
 
     if ( process )
     {
-	if ( _processList.size() == 1		&&
-	     exitStatus == QProcess::NormalExit &&
-	     process == _processList.first()	&&
-	     _ui->autoCloseCheckBox->isChecked()  )
+	_processList.removeAll( process );
+
+	if ( _noMoreProcesses			&&
+	     autoClose()			&&
+	     _processList.isEmpty()		&&
+	     exitStatus == QProcess::NormalExit	  )
 	{
 	    logDebug() << "No more processes to watch. Auto-closing." << endl;
-#if 0
-            // DEBUG
-            // DEBUG
-            // DEBUG
 	    close();
-            // DEBUG
-            // DEBUG
-            // DEBUG
-#endif
 	}
+
+	process->deleteLater();
     }
 }
 
@@ -255,7 +235,19 @@ void ProcessOutput::processError( QProcess::ProcessError error )
 	    break;
     }
 
+    QProcess * process = senderProcess( __FUNCTION__ );
+
+    if ( process )
+    {
+	_processList.removeAll( process );
+	process->deleteLater();
+    }
+
+    logError() << msg << endl;
     addStderr( msg );
+
+    if ( ! _showOnStderr && ! isVisible() && _processList.isEmpty() )
+	this->deleteLater();
 }
 
 
@@ -301,43 +293,34 @@ void ProcessOutput::resetZoom()
 
 void ProcessOutput::killAll()
 {
-    foreach ( QPointer<QProcess> process, _processList )
+    foreach ( QProcess * process, _processList )
     {
-	if ( process )
-	{
-	    logDebug() << "Killing " << process << endl;
-	    process->kill();
-	}
+	logDebug() << "Killing process " << process << endl;
+	process->kill();
+	_processList.removeAll( process );
+	process->deleteLater();
     }
 }
 
 
-void ProcessOutput::cleanupProcessList()
-{
-    _processList.removeAll( 0 );
-}
-
-
+#if 0
 void ProcessOutput::setTerminalBackground( const QColor & newColor )
 {
-    Q_UNUSED( newColor );
     // TO DO
     // TO DO
     // TO DO
 }
+#endif
 
 
 bool ProcessOutput::hasActiveProcess() const
 {
-    foreach ( QPointer<QProcess> process, _processList )
+    foreach ( QProcess * process, _processList )
     {
-	if ( process )
+	if ( process->state() == QProcess::Starting ||
+	     process->state() == QProcess::Running )
 	{
-	    if ( process->state() == QProcess::Starting ||
-		 process->state() == QProcess::Running )
-	    {
-		return true;
-	    }
+	    return true;
 	}
     }
 
@@ -345,16 +328,27 @@ bool ProcessOutput::hasActiveProcess() const
 }
 
 
-QList<QProcess *> ProcessOutput::processList() const
+bool ProcessOutput::autoClose() const
 {
-    QList<QProcess *> procList;
-
-    foreach ( QPointer<QProcess> process, _processList )
-    {
-	if ( process )
-	    procList << process.data();
-    }
-
-    return procList;
+    return _ui->autoCloseCheckBox->isChecked();
 }
 
+
+void ProcessOutput::setAutoClose( bool autoClose )
+{
+    _ui->autoCloseCheckBox->setChecked( autoClose );
+}
+
+
+void ProcessOutput::closeEvent( QCloseEvent * event )
+{
+    _closed = true;
+
+    if ( _processList.isEmpty() )
+	this->deleteLater();
+
+    // If there are any more processes, wait until the last one is finished and
+    // then deleteLater().
+
+    event->accept();
+}

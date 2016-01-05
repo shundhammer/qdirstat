@@ -8,7 +8,6 @@
 
 
 #include <QApplication>
-#include <QMessageBox>
 #include <QRegExp>
 #include <QProcess>
 #include <QProcessEnvironment>
@@ -76,29 +75,10 @@ bool Cleanup::worksFor( FileInfo *item ) const
 }
 
 
-bool Cleanup::confirmation( FileInfo * item )
-{
-    QString msg;
-
-    if ( item->isDir() || item->isDotEntry() )
-	msg = tr( "%1\nin directory %2" ).arg( cleanTitle() ).arg( item->url() );
-    else
-	msg = tr( "%1\nfor file %2" ).arg( cleanTitle() ).arg( item->url() );
-
-    int ret = QMessageBox::question( qApp->activeWindow(),
-				     tr( "Please Confirm" ), // title
-				     msg );		     // text
-    return ret == QMessageBox::Yes;
-}
-
-
 void Cleanup::execute( FileInfo *item, ProcessOutput * processOutput )
 {
     if ( worksFor( item ) )
     {
-	if ( _askForConfirmation && ! confirmation( item ) )
-	    return;
-
 	DirTree * tree = item->tree();
 
 	executeRecursive( item, processOutput );
@@ -259,6 +239,7 @@ void Cleanup::runCommand ( const FileInfo * item,
     {
 	processOutput->addProcess( process );
 	processOutput->addCommandLine( cleanupCommand );
+	qApp->processEvents();
     }
 
     logDebug() << "Starting \"" << process->program() << "\" with args \""

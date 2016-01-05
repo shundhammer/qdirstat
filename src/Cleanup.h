@@ -201,12 +201,6 @@ namespace QDirStat
 	void executeRecursive( FileInfo *item, ProcessOutput * processOutput );
 
 	/**
-	 * Ask user for confirmation to execute this cleanup action for
-	 * 'item'. Returns 'true' if user accepts, 'false' otherwise.
-	 **/
-	bool confirmation( FileInfo * item );
-
-	/**
 	 * Retrieve the directory part of a FileInfo's path.
 	 **/
 	const QString itemDir( const FileInfo * item ) const;

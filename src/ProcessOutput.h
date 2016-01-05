@@ -12,11 +12,12 @@
 #include <QDialog>
 #include <QProcess>
 #include <QList>
-#include <QPointer>
 #include <QTextStream>
 #include <QStringList>
 
 #include "ui_process-output.h"
+
+class QCloseEvent;
 
 
 /**
@@ -29,8 +30,8 @@
  * selected item one after another, or even multiple processes running in
  * parallel (which may make the output a bit messy, of course).
  *
- * This class uses guarded pointers for processes, so it doesn't matter if any
- * of them is deleted from the outside.
+ * If this dialog is created, but now shown, it will (by default) show itself
+ * as soon as there is any output on stderr.
  **/
 class ProcessOutput: public QDialog
 {
@@ -40,10 +41,6 @@ public:
 
     /**
      * Constructor.
-     *
-     * This sets the Qt::WA_DeleteOnClose attribute which deletes this dialog
-     * when it is closed, so using a guarded pointer (a QPointer) is strongly
-     * recommended when keeping any pointers to this object around.
      **/
     ProcessOutput( QWidget * parent );
 
@@ -53,20 +50,46 @@ public:
     virtual ~ProcessOutput();
 
     /**
-     * Add a process to watch. This object does NOT assume ownership of the
-     * process.
+     * Add a process to watch. Ownership of the process is transferred to this
+     * object.
      **/
     void addProcess( QProcess * process );
 
     /**
-     * Return the background color of the terminal area.
+     * Tell this dialog that no more processes will be added, so when the last
+     * one is finished and the "auto close" checkbox is checked, it may close
+     * itself.
      **/
-    QColor terminalBackground() const { return _terminalBackground; }
+    void noMoreProcesses() { _noMoreProcesses = true; }
 
     /**
-     * Set the background color of the terminal area.
+     * Return 'true' if this dialog closes itself automatically after the last
+     * process finished successfully.
      **/
-    void setTerminalBackground( const QColor & newColor );
+    bool autoClose() const;
+
+    /**
+     * Set if this dialog should close itself automatically after the last
+     * process finished successfully.
+     **/
+    void setAutoClose( bool autoClose );
+
+    /**
+     * Set if this dialog should show itself if there is any output on
+     * stderr. The default is 'true'.
+     *
+     * This means an application can create the dialog and leave it hidden, and
+     * if there is any error output, it will automatically show itself -- with
+     * all previous output of the watched processes on stdout and stderr.
+     * If the user closes the dialog, however, it will remain closed.
+     **/
+    void setShowOnStderr( bool show ) { _showOnStderr = show; }
+
+    /**
+     * Return 'true' if this dialog shows itself if there is any output on
+     * stderr.
+     **/
+    bool showOnStderr() const { return _showOnStderr; }
 
     /**
      * Return the text color for commands in the terminal area.
@@ -101,11 +124,22 @@ public:
     void setStderrColor( const QColor & newColor )
 	{ _stderrColor = newColor; }
 
+#if 0
     /**
-     * Return the internal process list (after cleaning it up first,
-     * i.e. removing all processes that have been deleted in the meantime).
+     * Return the background color of the terminal area.
      **/
-    QList<QProcess *> processList() const;
+    QColor terminalBackground() const { return _terminalBackground; }
+
+    /**
+     * Set the background color of the terminal area.
+     **/
+    void setTerminalBackground( const QColor & newColor );
+#endif
+
+    /**
+     * Return the internal process list.
+     **/
+    const QList<QProcess *> & processList() const { return _processList; }
 
     /**
      * Return 'true' if any process in the internal process is still active.
@@ -185,23 +219,27 @@ protected slots:
 protected:
 
     /**
-     * Add one or more lines of text in text color 'textColor' to the output area.
+     * Close event: Invoked upon QDialog::close(), i.e. the "Close" button, the
+     * window manager close button (the [x] at the top right), or when this
+     * dialog decides to auto-close itself after the last process finishes
+     * successfully.
+     *
+     * This object will delete itself in this event if there are no more
+     * processes to watch.
+     *
+     * Reimplemented from QDialog / QWidget.
+     **/
+    void closeEvent( QCloseEvent * event ) Q_DECL_OVERRIDE;
+
+    /**
+     * Add one or more lines of text in text color 'textColor' to the output
+     * area.
      **/
     void addText( const QString & text, const QColor & textColor );
 
     /**
-     * Add the RichText header to the output area.
-     **/
-    void addHeader();
-
-    /**
-     * Clean up the internal process list: Remove any QPointer that has become
-     * 0 in the meantime.
-     **/
-    void cleanupProcessList();
-
-    /**
-     * Obtain the process to use from sender(). Return 0 if this is not a QProcess.
+     * Obtain the process to use from sender(). Return 0 if this is not a
+     * QProcess.
      **/
     QProcess * senderProcess( const char * callingFunctionName ) const;
 
@@ -216,12 +254,15 @@ protected:
     //
 
     Ui::ProcessOutputDialog	* _ui;
-    QList<QPointer<QProcess> >	  _processList;
+    QList<QProcess *>		  _processList;
+    bool			  _showOnStderr;
+    bool			  _noMoreProcesses;
+    bool			  _closed;
     QColor			  _terminalBackground;
     QColor			  _commandTextColor;
     QColor			  _stdoutColor;
     QColor			  _stderrColor;
-    QFont                         _terminalDefaultFont;
+    QFont			  _terminalDefaultFont;
 
 };	// class ProcessOutput
 
@@ -230,21 +271,21 @@ inline QTextStream & operator<< ( QTextStream & stream, QProcess * process )
 {
     if ( process )
     {
-        // The common case is to start an external command with
-        //    /bin/sh -c theRealCommand arg1 arg2 arg3 ...
-        QStringList args = process->arguments();
+	// The common case is to start an external command with
+	//    /bin/sh -c theRealCommand arg1 arg2 arg3 ...
+	QStringList args = process->arguments();
 
-        if ( ! args.isEmpty() )
-            args.removeFirst();           // Remove the "-c"
+	if ( ! args.isEmpty() )
+	    args.removeFirst();		  // Remove the "-c"
 
-        if ( args.isEmpty() )             // Nothing left?
-            stream << process->program(); // Ok, use the program name
-        else
-            stream << args.join( " " );   // output only the real command and its args
+	if ( args.isEmpty() )		  // Nothing left?
+	    stream << process->program(); // Ok, use the program name
+	else
+	    stream << args.join( " " );	  // output only the real command and its args
     }
     else
     {
-        stream << "<NULL QProcess>";
+	stream << "<NULL QProcess>";
     }
 
     return stream;

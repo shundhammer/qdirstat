@@ -11,6 +11,7 @@
 
 #include "QList"
 #include "Cleanup.h"
+#include "FileInfo.h"
 
 
 class QMenu;
@@ -155,6 +156,13 @@ namespace QDirStat
 
 
     protected:
+
+	/**
+	 * Ask user for confirmation to execute a cleanup action for
+	 * 'items'. Returns 'true' if user accepts, 'false' otherwise.
+	 **/
+	bool confirmation( Cleanup * cleanup, const FileInfoSet & items );
+
 
 	//
 	// Data members
