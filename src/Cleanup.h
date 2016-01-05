@@ -15,6 +15,8 @@
 #include <QList>
 #include <QTextStream>
 
+class ProcessOutput;
+
 
 namespace QDirStat
 {
@@ -184,8 +186,11 @@ namespace QDirStat
 	/**
 	 * The heart of the matter: Perform the cleanup with the FileInfo
 	 * specified.
+	 *
+	 * 'processOutput' is the optional dialog to watch the commands and
+	 * their stdout and stderr output as they are executed.
 	 **/
-	void execute( FileInfo * item );
+	void execute( FileInfo * item, ProcessOutput * processOutput = 0 );
 
 
     protected:
@@ -193,7 +198,7 @@ namespace QDirStat
 	/**
 	 * Recursively perform the cleanup.
 	 **/
-	void executeRecursive( FileInfo *item );
+	void executeRecursive( FileInfo *item, ProcessOutput * processOutput );
 
 	/**
 	 * Ask user for confirmation to execute this cleanup action for
@@ -243,7 +248,8 @@ namespace QDirStat
 	 * Run a command with 'item' as base to expand variables.
 	 **/
 	void runCommand( const FileInfo * item,
-			 const QString	& command ) const;
+			 const QString	& command,
+			 ProcessOutput	* processOutput) const;
 
 
 	//

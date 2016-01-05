@@ -45,6 +45,7 @@ SOURCES	  = main.cpp			\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
 	    PercentBar.cpp		\
+	    ProcessOutput.cpp		\
 	    SelectionModel.cpp		\
 	    SettingsHelpers.cpp		\
 	    TreemapTile.cpp		\
@@ -73,6 +74,7 @@ HEADERS	  =				\
 	    Logger.h			\
 	    MainWindow.h		\
 	    PercentBar.h		\
+	    ProcessOutput.h		\
 	    SelectionModel.h		\
 	    SettingsHelpers.h		\
 	    SignalBlocker.h		\
@@ -82,7 +84,9 @@ HEADERS	  =				\
 
 
 
-FORMS	  = main-window.ui
+FORMS	  = main-window.ui		\
+	    process-output.ui		\
+
 
 RESOURCES = icons.qrc
 

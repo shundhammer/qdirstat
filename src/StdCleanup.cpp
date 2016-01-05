@@ -56,12 +56,12 @@ Cleanup * StdCleanup::openInFileManager( QObject * parent )
 Cleanup * StdCleanup::openInTerminal( QObject * parent )
 {
     Cleanup *cleanup = new Cleanup( "cleanupOpenInTerminal",
-				    "x-terminal-emulator",
+				    "x-terminal-emulator --workdir %p",
 				    QObject::tr( "Open in &Terminal" ),
 				    parent );
     CHECK_NEW( cleanup );
     cleanup->setWorksForDir	( true );
-    cleanup->setWorksForFile	( true );
+    cleanup->setWorksForFile	( false );
     cleanup->setWorksForDotEntry( true );
     cleanup->setRefreshPolicy( Cleanup::NoRefresh );
     cleanup->setIcon( ":/icons/terminal.png" );

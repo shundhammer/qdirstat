@@ -15,6 +15,7 @@
 #include "StdCleanup.h"
 #include "SettingsHelpers.h"
 #include "SelectionModel.h"
+#include "ProcessOutput.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -182,13 +183,17 @@ void CleanupCollection::execute()
 	return;
     }
 
+    ProcessOutput * processOutput = new ProcessOutput( qApp->activeWindow() );
+    CHECK_NEW( processOutput );
+    processOutput->show();
+
     FileInfoSet sel = _selectionModel->selectedItems();
 
     foreach ( FileInfo * item, sel )
     {
 	if ( cleanup->worksFor( item ) )
 	{
-	    cleanup->execute( item );
+	    cleanup->execute( item, processOutput );
 	}
 	else
 	{
@@ -196,6 +201,7 @@ void CleanupCollection::execute()
 			 << " does not work for " << item << endl;
 	}
     }
+
 }
 
 

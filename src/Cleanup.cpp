@@ -18,6 +18,7 @@
 #include "FileInfo.h"
 #include "DirTree.h"
 #include "DirSaver.h"
+#include "ProcessOutput.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -91,7 +92,7 @@ bool Cleanup::confirmation( FileInfo * item )
 }
 
 
-void Cleanup::execute( FileInfo *item )
+void Cleanup::execute( FileInfo *item, ProcessOutput * processOutput )
 {
     if ( worksFor( item ) )
     {
@@ -100,7 +101,7 @@ void Cleanup::execute( FileInfo *item )
 
 	DirTree * tree = item->tree();
 
-	executeRecursive( item );
+	executeRecursive( item, processOutput );
 
 	switch ( _refreshPolicy )
 	{
@@ -140,7 +141,7 @@ void Cleanup::execute( FileInfo *item )
 }
 
 
-void Cleanup::executeRecursive( FileInfo *item )
+void Cleanup::executeRecursive( FileInfo *item, ProcessOutput * processOutput )
 {
     if ( worksFor( item ) )
     {
@@ -161,7 +162,7 @@ void Cleanup::executeRecursive( FileInfo *item )
 		     * the dot entry) if there are no real subdirectories on
 		     * this directory level.
 		     **/
-		    executeRecursive( subdir );
+		    executeRecursive( subdir, processOutput );
 		}
 		subdir = subdir->next();
 	    }
@@ -170,7 +171,7 @@ void Cleanup::executeRecursive( FileInfo *item )
 
 	// Perform cleanup for this directory.
 
-	runCommand( item, _command );
+	runCommand( item, _command, processOutput );
     }
 }
 
@@ -229,10 +230,16 @@ QString Cleanup::escapeAndQuote( const QString & unescaped ) const
 }
 
 
-void Cleanup::runCommand ( const FileInfo *  item,
-			   const QString &   command ) const
+void Cleanup::runCommand ( const FileInfo * item,
+			   const QString  & command,
+			   ProcessOutput  * processOutput ) const
 {
-    DirSaver dir( itemDir( item ) ); // chdir itemdir
+    QString dir = itemDir( item );
+
+    if ( processOutput )
+	processOutput->addCommandLine( "cd " + dir );
+
+    DirSaver dirSaver( dir );  // chdir itemdir
     QString  cleanupCommand( expandVariables( item, command ));
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -247,6 +254,12 @@ void Cleanup::runCommand ( const FileInfo *  item,
 
     process->setProgram( shell );
     process->setArguments( QStringList() << "-c" << cleanupCommand );
+
+    if ( processOutput )
+    {
+	processOutput->addProcess( process );
+	processOutput->addCommandLine( cleanupCommand );
+    }
 
     logDebug() << "Starting \"" << process->program() << "\" with args \""
 	       << process->arguments().join( "\", \"" ) << "\""
@@ -274,12 +287,14 @@ void Cleanup::runCommand ( const FileInfo *  item,
 	    // performing the update prematurely, so we are starting this
 	    // process in blocking mode.
 
-	    QApplication::setOverrideCursor( Qt::WaitCursor );
 	    process->start();
+#if 0
+	    QApplication::setOverrideCursor( Qt::WaitCursor );
 	    logDebug() << "Waiting for process to finish..." << endl;
 	    process->waitForFinished( WAIT_TIMEOUT_MILLISEC );
 	    logDebug() << "Process finished" << endl;
 	    QApplication::restoreOverrideCursor();
+#endif
 	    break;
     }
 }
