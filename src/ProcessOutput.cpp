@@ -7,6 +7,7 @@
  */
 
 
+#include <QApplication>
 #include <QCloseEvent>
 
 #include "ProcessOutput.h"
@@ -40,6 +41,8 @@ ProcessOutput::ProcessOutput( QWidget * parent ):
     CONNECT_ACTION( _ui->actionZoomOut,	    this, zoomOut()   );
     CONNECT_ACTION( _ui->actionResetZoom,   this, resetZoom() );
     CONNECT_ACTION( _ui->actionKillProcess, this, killAll()   );
+
+    updateActions();
 }
 
 
@@ -76,6 +79,9 @@ void ProcessOutput::addProcess( QProcess * process )
 
     connect( process, SIGNAL( finished	     ( int, QProcess::ExitStatus ) ),
 	     this,    SLOT  ( processFinished( int, QProcess::ExitStatus ) ) );
+
+    if ( ! hasActiveProcess() )
+	startNextProcess();
 }
 
 
@@ -201,6 +207,8 @@ void ProcessOutput::processFinished( int exitCode, QProcess::ExitStatus exitStat
 
 	process->deleteLater();
     }
+
+    startNextProcess(); // this also calls updateActions()
 }
 
 
@@ -245,6 +253,7 @@ void ProcessOutput::processError( QProcess::ProcessError error )
 
     logError() << msg << endl;
     addStderr( msg );
+    startNextProcess(); // this also calls updateActions()
 
     if ( ! _showOnStderr && ! isVisible() && _processList.isEmpty() )
 	this->deleteLater();
@@ -328,6 +337,61 @@ bool ProcessOutput::hasActiveProcess() const
 }
 
 
+QProcess * ProcessOutput::pickQueuedProcess()
+{
+    foreach ( QProcess * process, _processList )
+    {
+	if ( process->state() == QProcess::NotRunning )
+	    return process;
+    }
+
+    return 0;
+}
+
+
+QProcess * ProcessOutput::startNextProcess()
+{
+    QProcess * process = pickQueuedProcess();
+
+    if ( process )
+    {
+	QString dir = process->workingDirectory();
+
+	if ( dir != _lastWorkingDir )
+	{
+	    addCommandLine( "cd " + dir );
+	    _lastWorkingDir = dir;
+	}
+
+	addCommandLine( command( process ) );
+	logDebug() << "Starting " << process << endl;
+
+	process->start();
+	qApp->processEvents(); // Keep GUI responsive
+    }
+
+    updateActions();
+
+    return process;
+}
+
+
+QString ProcessOutput::command( QProcess * process )
+{
+    // The common case is to start an external command with
+    //	  /bin/sh -c theRealCommand arg1 arg2 arg3 ...
+    QStringList args = process->arguments();
+
+    if ( ! args.isEmpty() )
+	args.removeFirst();		// Remove the "-c"
+
+    if ( args.isEmpty() )		// Nothing left?
+	return process->program();	// Ok, use the program name
+    else
+	return args.join( " " );	// output only the real command and its args
+}
+
+
 bool ProcessOutput::autoClose() const
 {
     return _ui->autoCloseCheckBox->isChecked();
@@ -351,4 +415,10 @@ void ProcessOutput::closeEvent( QCloseEvent * event )
     // then deleteLater().
 
     event->accept();
+}
+
+
+void ProcessOutput::updateActions()
+{
+    _ui->killButton->setEnabled( hasActiveProcess() );
 }

@@ -214,12 +214,6 @@ void Cleanup::runCommand ( const FileInfo * item,
 			   const QString  & command,
 			   ProcessOutput  * processOutput ) const
 {
-    QString dir = itemDir( item );
-
-    if ( processOutput )
-	processOutput->addCommandLine( "cd " + dir );
-
-    DirSaver dirSaver( dir );  // chdir itemdir
     QString  cleanupCommand( expandVariables( item, command ));
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -234,12 +228,11 @@ void Cleanup::runCommand ( const FileInfo * item,
 
     process->setProgram( shell );
     process->setArguments( QStringList() << "-c" << cleanupCommand );
+    process->setWorkingDirectory( itemDir( item ) );
 
     if ( processOutput )
     {
 	processOutput->addProcess( process );
-	processOutput->addCommandLine( cleanupCommand );
-	qApp->processEvents();
     }
 
     logDebug() << "Starting \"" << process->program() << "\" with args \""
@@ -255,7 +248,8 @@ void Cleanup::runCommand ( const FileInfo * item,
 	    // finish, so we are starting the command as a pure
 	    // background process.
 
-	    process->start();
+	    if ( ! processOutput )
+		process->start();
 	    logDebug() << "Leaving process to run in the background" << endl;
 	    break;
 
@@ -268,8 +262,9 @@ void Cleanup::runCommand ( const FileInfo * item,
 	    // performing the update prematurely, so we are starting this
 	    // process in blocking mode.
 
-	    process->start();
 #if 0
+	    if ( ! processOutput )
+		process->start();
 	    QApplication::setOverrideCursor( Qt::WaitCursor );
 	    logDebug() << "Waiting for process to finish..." << endl;
 	    process->waitForFinished( WAIT_TIMEOUT_MILLISEC );

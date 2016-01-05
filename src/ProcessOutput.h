@@ -51,7 +51,8 @@ public:
 
     /**
      * Add a process to watch. Ownership of the process is transferred to this
-     * object.
+     * object. If the process is not started yet, it will be started as soon as
+     * there is no other one running.
      **/
     void addProcess( QProcess * process );
 
@@ -146,6 +147,13 @@ public:
      **/
     bool hasActiveProcess() const;
 
+    /**
+     * Get the command of the process. Since usually processes are started via
+     * a shell ("/bin/sh -c theRealCommand arg1 arg2 ..."), this is typically
+     * not QProcess::program(), but the arguments minus the "-c".
+     **/
+    static QString command( QProcess * process );
+
 
 public slots:
 
@@ -176,6 +184,11 @@ public slots:
      * Clear the output area, i.e. remove all previous output and commands.
      **/
     void clearOutput();
+
+    /**
+     * Enable or disable actions based on the internal status of this object.
+     **/
+    void updateActions();
 
 
 protected slots:
@@ -244,6 +257,18 @@ protected:
     QProcess * senderProcess( const char * callingFunctionName ) const;
 
     /**
+     * Pick the next inactive process that can be started. Return 0 if there is
+     * none.
+     **/
+    QProcess * pickQueuedProcess();
+
+    /**
+     * Try to start the next inactive process, if there is any. Return that
+     * process or 0 if there is none.
+     **/
+    QProcess * startNextProcess();
+
+    /**
      * Zoom the terminal font by the specified factor.
      **/
     void zoom( double factor = 1.0 );
@@ -258,6 +283,7 @@ protected:
     bool			  _showOnStderr;
     bool			  _noMoreProcesses;
     bool			  _closed;
+    QString			  _lastWorkingDir;
     QColor			  _terminalBackground;
     QColor			  _commandTextColor;
     QColor			  _stdoutColor;
@@ -270,23 +296,9 @@ protected:
 inline QTextStream & operator<< ( QTextStream & stream, QProcess * process )
 {
     if ( process )
-    {
-	// The common case is to start an external command with
-	//    /bin/sh -c theRealCommand arg1 arg2 arg3 ...
-	QStringList args = process->arguments();
-
-	if ( ! args.isEmpty() )
-	    args.removeFirst();		  // Remove the "-c"
-
-	if ( args.isEmpty() )		  // Nothing left?
-	    stream << process->program(); // Ok, use the program name
-	else
-	    stream << args.join( " " );	  // output only the real command and its args
-    }
+	stream << ProcessOutput::command( process );
     else
-    {
 	stream << "<NULL QProcess>";
-    }
 
     return stream;
 }
