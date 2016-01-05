@@ -20,10 +20,12 @@ latest Qt 5.
 
 ![Main Window Screenshot]
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png)
+
 _Main window screenshot_
 
 ![Cleanup Action Output Screenshot]
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-output.png)
+
 _Screenshot of output during cleanup actions. Of course this window is purely optional._
 
 
