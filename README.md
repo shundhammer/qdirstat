@@ -7,7 +7,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-04
+Updated: 2016-01-05
 
 
 ## Overview
@@ -16,15 +16,16 @@ This is a Qt-only port of the old Qt3/KDE3-based KDirStat, now based on the
 latest Qt 5.
 
 
-## Screenshot
+## Screenshots
 
-![Screenshot of preview:]
+![Main Window Screenshot]
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png)
-_Preview screenshot -- see also section "Development Status" below_
+_Main window screenshot_
 
-Since this is a screenshot of QDirStat in its own source directory, the
-screenshot date and time is always the "Last Modified" timestamp in the
-screenshot. Neat, huh? ;-)
+![Cleanup Action Output Screenshot]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-output.png)
+_Screenshot of output during cleanup actions. Of course this window is purely optional._
+
 
 
 ## Current Development Status
@@ -32,6 +33,19 @@ screenshot. Neat, huh? ;-)
 **Work in Progress**
 
 Usable, but still pre-Alpha. Use at your own risk. You have been warned. ;-)
+
+- 2016-01-05 I admit I had never really liked the way the output of cleanup
+  actions was typically hidden. Most of the times I couldn't care less, but
+  sometimes there were error messages that mostly went unnoticed - such as no
+  permissions to convert a directory into a compressed tarball. Now we have
+  something new: A process watcher window that looks very much like a terminal
+  window. The commands and their output are displayed there: Normal output
+  (stdout) in amber, error output (stderr) in red. It will be configurable for
+  each individual cleanup action if this window is desired: You can choose to
+  always open it, to not open it at all -- or to have it automatically open
+  when there is any output on stderr. And there is also a checkbox to
+  automatically close it when the cleanup process finishes successfully. This
+  is all not 100% perfect yet, but it works quite well already.
 
 - 2016-01-04 Cleanups are back. They still need some work, and you'll have to
   edit the config file in ~/.config/QDirStat/QDirStat.conf to configure
