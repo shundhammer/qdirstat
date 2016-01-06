@@ -114,7 +114,7 @@ int CleanupCollection::indexOf( const QString & id ) const
 	    return i;
     }
 
-    logError() << "No Cleanup with ID " << id << " in this collection" << endl;
+    // logDebug() << "No Cleanup with ID " << id << " in this collection" << endl;
     return -1;
 }
 

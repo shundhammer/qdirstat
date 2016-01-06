@@ -82,7 +82,7 @@ void OutputWindow::addProcess( QProcess * process )
     }
 
     _processList << process;
-    logDebug() << "Adding " << process << endl;
+    // logDebug() << "Adding " << process << endl;
 
     connect( process, SIGNAL( readyReadStandardOutput() ),
 	     this,    SLOT  ( readStdout()		) );
@@ -191,20 +191,30 @@ void OutputWindow::readStderr()
 
 void OutputWindow::processFinished( int exitCode, QProcess::ExitStatus exitStatus )
 {
-    logDebug() << "exitCode: " << exitCode
-	       << " exitStatus: "
-	       << ( exitStatus == QProcess::NormalExit ? "NormalExit" : "CrashExit" )
-	       << endl;
-
     switch ( exitStatus )
     {
 	case QProcess::NormalExit:
+	    logDebug() << "Process finished normally." << endl;
 	    addCommandLine( tr( "Process finished." ) );
 	    break;
 
 	case QProcess::CrashExit:
-	    _errorCount++;
-	    addStderr( tr( "Process crashed." ) );
+
+	    if ( exitCode == 0 )
+	    {
+		// Don't report an exit code of 0: Since we are starting all
+		// processes with a shell, that exit code would be the exit
+		// code of the shell; that would only be useful if the shell
+		// crashed or could not be started.
+
+		logError() << "Process crashed." << endl;
+		addStderr( tr( "Process crashed." ) );
+	    }
+	    else
+	    {
+		logError() << "Process crashed. Exit code: " << exitCode << endl;
+		addStderr( tr( "Process crashed. Exit code: %1" ).arg( exitCode ) );
+	    }
 	    break;
     }
 
@@ -230,8 +240,7 @@ void OutputWindow::processFinished( int exitCode, QProcess::ExitStatus exitStatu
 
 void OutputWindow::processError( QProcess::ProcessError error )
 {
-    _errorCount++;
-    QString msg = tr( "Unknown error." );
+    QString msg;
 
     switch ( error )
     {
@@ -239,8 +248,7 @@ void OutputWindow::processError( QProcess::ProcessError error )
 	    msg = tr( "Error: Process failed to start." );
 	    break;
 
-	case QProcess::Crashed:
-	    msg = tr( "Error: Process crashed." );
+	case QProcess::Crashed: // Already reported via processFinished()
 	    break;
 
 	case QProcess::Timedout:
@@ -260,6 +268,12 @@ void OutputWindow::processError( QProcess::ProcessError error )
 	    break;
     }
 
+    if ( ! msg.isEmpty() )
+    {
+	logError() << msg << endl;
+	addStderr( msg );
+    }
+
     QProcess * process = senderProcess( __FUNCTION__ );
 
     if ( process )
@@ -275,8 +289,6 @@ void OutputWindow::processError( QProcess::ProcessError error )
 	process->deleteLater();
     }
 
-    logError() << msg << endl;
-    addStderr( msg );
     startNextProcess(); // this also calls updateActions()
 
     if ( ! _showOnStderr && ! isVisible() )
@@ -503,7 +515,7 @@ void OutputWindow::readSettings()
     _stdoutColor	 = readColorEntry( settings, "StdoutTextColor"	 , QColor( 0xff, 0xaa, 0x00 ) );
     _stderrColor	 = readColorEntry( settings, "StdErrTextColor"	 , QColor( Qt::red    ) );
     _terminalDefaultFont = readFontEntry ( settings, "TerminalFont"	 , _ui->terminal->font() );
-    _defaultShowTimeout	 = settings.value( "DefaultShowTimeoutMillisec", 3000 ).toInt();
+    _defaultShowTimeout	 = settings.value( "DefaultShowTimeoutMillisec", 500 ).toInt();
 
     settings.endGroup();
 

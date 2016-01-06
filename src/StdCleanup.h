@@ -13,6 +13,8 @@
 #include <QObject>
 #include <QList>
 
+#define USE_DEBUG_ACTIONS 1
+
 
 namespace QDirStat
 {
@@ -38,11 +40,12 @@ namespace QDirStat
 	static Cleanup * deleteJunk	  ( QObject * parent = 0 );
 	static Cleanup * moveToTrash	  ( QObject * parent = 0 );
 	static Cleanup * hardDelete	  ( QObject * parent = 0 );
-#if 1
-	// DEBUG
+#if USE_DEBUG_ACTIONS
 	static Cleanup * echoargs	  ( QObject * parent = 0 );
-	static Cleanup * pwd		  ( QObject * parent = 0 );
-	// DEBUG
+	static Cleanup * echoargsMixed	  ( QObject * parent = 0 );
+	static Cleanup * segfaulter	  ( QObject * parent = 0 );
+	static Cleanup * commandNotFound  ( QObject * parent = 0 );
+	static Cleanup * sleepy           ( QObject * parent = 0 );
 #endif
 
 	/**

@@ -26,8 +26,13 @@ CleanupList StdCleanup::stdCleanups( QObject * parent )
 	     << compressSubtree	 ( parent )
 	     << makeClean	 ( parent )
 	     << deleteJunk	 ( parent )
+#if USE_DEBUG_ACTIONS
 	     << echoargs	 ( parent )
-	     << pwd		 ( parent )
+	     << echoargsMixed    ( parent )
+	     << segfaulter       ( parent )
+             << commandNotFound  ( parent )
+             << sleepy           ( parent )
+#endif
 	;
 
     return cleanups;
@@ -66,6 +71,7 @@ Cleanup * StdCleanup::openInTerminal( QObject * parent )
     cleanup->setRefreshPolicy( Cleanup::NoRefresh );
     cleanup->setIcon( ":/icons/terminal.png" );
     cleanup->setShortcut( Qt::CTRL + Qt::Key_T );
+    cleanup->setOutputWindowPolicy( Cleanup::ShowNever );
 
     return cleanup;
 }
@@ -106,8 +112,8 @@ Cleanup * StdCleanup::makeClean( QObject * parent )
 Cleanup * StdCleanup::deleteJunk( QObject * parent )
 {
     Cleanup *cleanup = new Cleanup( "cleanupDeleteJunk",
-				    "rm -f *.o *~ *.bak *.auto core",
-				    QObject::tr( "Delete T&rash Files" ),
+				    "/bin/bash -c 'rm -f *.o *~ *.bak *.auto core'",
+				    QObject::tr( "Delete &Junk Files" ),
 				    parent );
     CHECK_NEW( cleanup );
     cleanup->setWorksForDir	( true	);
@@ -157,6 +163,8 @@ Cleanup * StdCleanup::hardDelete( QObject * parent )
 }
 
 
+#if USE_DEBUG_ACTIONS
+
 Cleanup * StdCleanup::echoargs( QObject * parent )
 {
     Cleanup *cleanup = new Cleanup( "cleanupEchoargs",
@@ -167,18 +175,18 @@ Cleanup * StdCleanup::echoargs( QObject * parent )
     cleanup->setWorksForDir	( true	);
     cleanup->setWorksForFile	( true	);
     cleanup->setWorksForDotEntry( true );
-    cleanup->setAskForConfirmation( true );
+    cleanup->setAskForConfirmation( false );
     cleanup->setRefreshPolicy( Cleanup::NoRefresh );
 
     return cleanup;
 }
 
 
-Cleanup * StdCleanup::pwd( QObject * parent )
+Cleanup * StdCleanup::echoargsMixed( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupPwd",
-				    "pwd",
-				    QObject::tr( "pwd" ),
+    Cleanup *cleanup = new Cleanup( "cleanupEchoargsMixed",
+				    "echoargs_mixed %n one two three four",
+				    QObject::tr( "Output on stdout and stderr" ),
 				    parent );
     CHECK_NEW( cleanup );
     cleanup->setWorksForDir	( true	);
@@ -190,3 +198,53 @@ Cleanup * StdCleanup::pwd( QObject * parent )
     return cleanup;
 }
 
+
+Cleanup * StdCleanup::segfaulter( QObject * parent )
+{
+    Cleanup *cleanup = new Cleanup( "cleanupSegfaulter",
+				    "segfaulter",
+				    QObject::tr( "Segfaulter" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( true	);
+    cleanup->setWorksForDotEntry( true );
+    cleanup->setRefreshPolicy( Cleanup::NoRefresh );
+
+    return cleanup;
+}
+
+
+Cleanup * StdCleanup::commandNotFound( QObject * parent )
+{
+    Cleanup *cleanup = new Cleanup( "cleanupCommandNotFound",
+				    "wrglbrmpf",
+				    QObject::tr( "Nonexistent command" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( true	);
+    cleanup->setWorksForDotEntry( true );
+    cleanup->setRefreshPolicy( Cleanup::NoRefresh );
+
+    return cleanup;
+}
+
+
+Cleanup * StdCleanup::sleepy( QObject * parent )
+{
+    Cleanup *cleanup = new Cleanup( "cleanupSleepy",
+				    "sleep 1; echoargs %p",
+				    QObject::tr( "Sleepy echoargs" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( true	);
+    cleanup->setWorksForDotEntry( true );
+    cleanup->setRefreshPolicy( Cleanup::NoRefresh );
+
+    return cleanup;
+}
+
+
+#endif

@@ -187,7 +187,7 @@ QString Cleanup::expandVariables( const FileInfo * item,
     expanded.replace( "%p", escapeAndQuote( item->url()	 ) );
     expanded.replace( "%n", escapeAndQuote( item->name() ) );
 
-    logDebug() << "Expanded: \"" << expanded << "\"" << endl;
+    // logDebug() << "Expanded: \"" << expanded << "\"" << endl;
     return expanded;
 }
 
@@ -221,7 +221,7 @@ void Cleanup::runCommand ( const FileInfo * item,
     process->setProgram( shell );
     process->setArguments( QStringList() << "-c" << cleanupCommand );
     process->setWorkingDirectory( itemDir( item ) );
-    logDebug() << "New process \"" << process << endl;
+    // logDebug() << "New process \"" << process << endl;
 
     outputWindow->addProcess( process );
 
