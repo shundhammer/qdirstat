@@ -46,6 +46,7 @@ SOURCES	  = main.cpp			\
 	    MainWindow.cpp		\
 	    PercentBar.cpp		\
 	    ProcessOutput.cpp		\
+	    Refresher.cpp		\
 	    SelectionModel.cpp		\
 	    SettingsHelpers.cpp		\
 	    TreemapTile.cpp		\
@@ -75,6 +76,7 @@ HEADERS	  =				\
 	    MainWindow.h		\
 	    PercentBar.h		\
 	    ProcessOutput.h		\
+	    Refresher.h			\
 	    SelectionModel.h		\
 	    SettingsHelpers.h		\
 	    SignalBlocker.h		\

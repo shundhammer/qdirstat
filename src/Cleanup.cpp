@@ -86,19 +86,16 @@ void Cleanup::execute( FileInfo *item, ProcessOutput * processOutput )
 	switch ( _refreshPolicy )
 	{
 	    case NoRefresh:
-		// Do nothing.
+		// Do nothing (by definition).
 		break;
 
 	    case RefreshThis:
-
-		if ( item->isDirInfo() )
-		    tree->refresh( item->toDirInfo() );
-		else
-		    tree->refresh( item->parent() );
-		break;
-
 	    case RefreshParent:
-		tree->refresh( item->parent() );
+		// Done from CleanupCollection::execute() via a Refresher
+		// object that is triggered by the
+		// ProcessOutput::lastProcessFinished() signal.
+		//
+		// Nothing left to do here.
 		break;
 
 	    case AssumeDeleted:
@@ -107,14 +104,6 @@ void Cleanup::execute( FileInfo *item, ProcessOutput * processOutput )
 		// Modify the DirTree accordingly.
 
 		tree->deleteSubtree( item );
-
-		// Don't try to figure out a reasonable next selection - the
-		// views have to do that while handling the subtree
-		// deletion. Only the views have any knowledge about a
-		// reasonable strategy for choosing a next selection. Unlike
-		// the view items, the FileInfo items don't have an order that
-		// makes any sense to the user.
-
 		break;
 	}
     }
@@ -229,15 +218,10 @@ void Cleanup::runCommand ( const FileInfo * item,
     process->setProgram( shell );
     process->setArguments( QStringList() << "-c" << cleanupCommand );
     process->setWorkingDirectory( itemDir( item ) );
+    logDebug() << "New process \"" << process << endl;
 
-    if ( processOutput )
-    {
-	processOutput->addProcess( process );
-    }
+    processOutput->addProcess( process );
 
-    logDebug() << "Starting \"" << process->program() << "\" with args \""
-	       << process->arguments().join( "\", \"" ) << "\""
-	       << endl;
 
     switch ( _refreshPolicy )
     {
@@ -248,8 +232,6 @@ void Cleanup::runCommand ( const FileInfo * item,
 	    // finish, so we are starting the command as a pure
 	    // background process.
 
-	    if ( ! processOutput )
-		process->start();
 	    logDebug() << "Leaving process to run in the background" << endl;
 	    break;
 
@@ -263,8 +245,6 @@ void Cleanup::runCommand ( const FileInfo * item,
 	    // process in blocking mode.
 
 #if 0
-	    if ( ! processOutput )
-		process->start();
 	    QApplication::setOverrideCursor( Qt::WaitCursor );
 	    logDebug() << "Waiting for process to finish..." << endl;
 	    process->waitForFinished( WAIT_TIMEOUT_MILLISEC );

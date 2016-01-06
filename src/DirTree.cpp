@@ -127,10 +127,33 @@ void DirTree::startReading( const QString & rawUrl )
 }
 
 
-void DirTree::refresh( DirInfo *subtree )
+void DirTree::refresh( const FileInfoSet & refreshSet )
+{
+    FileInfoSet items = refreshSet.normalized();
+
+    foreach ( FileInfo * item, items )
+    {
+	if ( item && item->isDirInfo() )
+	    refresh( item->toDirInfo() );
+    }
+}
+
+
+void DirTree::refresh( DirInfo * subtree )
 {
     if ( ! _root )
 	return;
+
+    if ( ! subtree->checkMagicNumber() )
+    {
+	// Not using CHECK_MAGIC() here which would throw an exception since
+	// this might easily happen after cleanup actions with multi selection
+	// if one selected item is in the subtree of another, and that parent
+	// was already refreshed.
+
+	logWarning() << "Item is no longer valid - not refreshing subtree" << endl;
+	return;
+    }
 
     if ( ! subtree || ! subtree->parent() )	// Refresh all (from first toplevel)
     {
@@ -177,7 +200,7 @@ void DirTree::slotFinished()
 }
 
 
-void DirTree::childAddedNotify( FileInfo *newChild )
+void DirTree::childAddedNotify( FileInfo * newChild )
 {
     emit childAdded( newChild );
 
@@ -186,7 +209,7 @@ void DirTree::childAddedNotify( FileInfo *newChild )
 }
 
 
-void DirTree::deletingChildNotify( FileInfo *deletedChild )
+void DirTree::deletingChildNotify( FileInfo * deletedChild )
 {
     logDebug() << "Deleting child " << deletedChild << endl;
     emit deletingChild( deletedChild );

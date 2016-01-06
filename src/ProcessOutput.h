@@ -61,7 +61,7 @@ public:
      * one is finished and the "auto close" checkbox is checked, it may close
      * itself.
      **/
-    void noMoreProcesses() { _noMoreProcesses = true; }
+    void noMoreProcesses();
 
     /**
      * Return 'true' if this dialog closes itself automatically after the last
@@ -229,6 +229,15 @@ protected slots:
     void resetZoom();
 
 
+signals:
+
+    /**
+     * Emitted when the last process finished, no matter if that was successful
+     * or with an error.
+     **/
+    void lastProcessFinished();
+
+
 protected:
 
     /**
@@ -243,6 +252,11 @@ protected:
      * Reimplemented from QDialog / QWidget.
      **/
     void closeEvent( QCloseEvent * event ) Q_DECL_OVERRIDE;
+
+    /**
+     * Close if there are no more processes and there is no error to show.
+     **/
+    void closeIfDone();
 
     /**
      * Add one or more lines of text in text color 'textColor' to the output
@@ -282,6 +296,7 @@ protected:
     QList<QProcess *>		  _processList;
     bool			  _showOnStderr;
     bool			  _noMoreProcesses;
+    bool			  _hadError;
     bool			  _closed;
     QString			  _lastWorkingDir;
     QColor			  _terminalBackground;

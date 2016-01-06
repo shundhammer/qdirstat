@@ -88,12 +88,17 @@ namespace QDirStat
 	 * When 0 is passed, the entire tree will be refreshed, i.e. from the
 	 * first toplevel element on.
 	 **/
-	void refresh( DirInfo *subtree = 0 );
+	void refresh( DirInfo * subtree = 0 );
+
+	/**
+	 * Refresh a number of subtrees.
+	 **/
+	void refresh( const FileInfoSet & refreshSet );
 
 	/**
 	 * Delete a subtree.
 	 **/
-	void deleteSubtree( FileInfo *subtree );
+	void deleteSubtree( FileInfo * subtree );
 
 
     public:
@@ -113,7 +118,7 @@ namespace QDirStat
 	/**
 	 * Sets the root item of this tree.
 	 **/
-	void setRoot( DirInfo *newRoot );
+	void setRoot( DirInfo * newRoot );
 
 	/**
 	 * Return the first toplevel item of this tree or 0 if there is
@@ -165,7 +170,8 @@ namespace QDirStat
 	/**
 	 * Set or unset the "cross file systems" flag.
 	 **/
-	void setCrossFileSystems( bool doCross ) { _crossFileSystems = doCross; }
+	void setCrossFileSystems( bool doCross )
+	    { _crossFileSystems = doCross; }
 
 	/**
 	 * Notification that a child has been added.

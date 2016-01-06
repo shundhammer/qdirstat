@@ -17,6 +17,7 @@
 #include "SettingsHelpers.h"
 #include "SelectionModel.h"
 #include "ProcessOutput.h"
+#include "Refresher.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -186,15 +187,15 @@ void CleanupCollection::execute()
 	return;
     }
 
-    FileInfoSet sel = _selectionModel->selectedItems();
+    FileInfoSet selection = _selectionModel->selectedItems();
 
-    if ( sel.isEmpty() )
+    if ( selection.isEmpty() )
     {
 	logWarning() << "Nothing selected" << endl;
 	return;
     }
 
-    if ( cleanup->askForConfirmation() && ! confirmation( cleanup, sel ) )
+    if ( cleanup->askForConfirmation() && ! confirmation( cleanup, selection ) )
     {
 	logDebug() << "User declined confirmation" << endl;
 	return;
@@ -205,8 +206,20 @@ void CleanupCollection::execute()
     processOutput->show();
     processOutput->setAutoClose( false );
 
+    if ( cleanup->refreshPolicy() == Cleanup::RefreshThis ||
+	 cleanup->refreshPolicy() == Cleanup::RefreshParent )
+    {
+	FileInfoSet refreshSet =
+	    cleanup->refreshPolicy() == Cleanup::RefreshParent ?
+	    Refresher::parents( selection ) : selection;
 
-    foreach ( FileInfo * item, sel )
+	Refresher * refresher = new Refresher( refreshSet, this );
+
+	connect( processOutput, SIGNAL( lastProcessFinished() ),
+		 refresher,	SLOT  ( refresh()	      ) );
+    }
+
+    foreach ( FileInfo * item, selection )
     {
 	if ( cleanup->worksFor( item ) )
 	{

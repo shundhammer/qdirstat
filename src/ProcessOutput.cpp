@@ -24,6 +24,7 @@ ProcessOutput::ProcessOutput( QWidget * parent ):
     _ui( new Ui::ProcessOutputDialog ),
     _showOnStderr( true ),
     _noMoreProcesses( false ),
+    _hadError( false ),
     _closed( false )
 {
     _ui->setupUi( this );
@@ -99,6 +100,7 @@ void ProcessOutput::addStdout( const QString output )
 
 void ProcessOutput::addStderr( const QString output )
 {
+    _hadError = true;
     addText( output, _stderrColor );
 
     if ( _showOnStderr && ! isVisible() && ! _closed )
@@ -186,6 +188,7 @@ void ProcessOutput::processFinished( int exitCode, QProcess::ExitStatus exitStat
 	    break;
 
 	case QProcess::CrashExit:
+	    _hadError = true;
 	    addStderr( tr( "Process crashed." ) );
 	    break;
     }
@@ -196,16 +199,11 @@ void ProcessOutput::processFinished( int exitCode, QProcess::ExitStatus exitStat
     {
 	_processList.removeAll( process );
 
-	if ( _noMoreProcesses			&&
-	     autoClose()			&&
-	     _processList.isEmpty()		&&
-	     exitStatus == QProcess::NormalExit	  )
-	{
-	    logDebug() << "No more processes to watch. Auto-closing." << endl;
-	    close();
-	}
+	if ( _processList.isEmpty() && _noMoreProcesses )
+	    emit lastProcessFinished();
 
 	process->deleteLater();
+	closeIfDone();
     }
 
     startNextProcess(); // this also calls updateActions()
@@ -214,6 +212,7 @@ void ProcessOutput::processFinished( int exitCode, QProcess::ExitStatus exitStat
 
 void ProcessOutput::processError( QProcess::ProcessError error )
 {
+    _hadError = true;
     QString msg = tr( "Unknown error." );
 
     switch ( error )
@@ -248,6 +247,10 @@ void ProcessOutput::processError( QProcess::ProcessError error )
     if ( process )
     {
 	_processList.removeAll( process );
+
+	if ( _processList.isEmpty() && _noMoreProcesses )
+	    emit lastProcessFinished();
+
 	process->deleteLater();
     }
 
@@ -255,8 +258,29 @@ void ProcessOutput::processError( QProcess::ProcessError error )
     addStderr( msg );
     startNextProcess(); // this also calls updateActions()
 
-    if ( ! _showOnStderr && ! isVisible() && _processList.isEmpty() )
-	this->deleteLater();
+    if ( ! _showOnStderr && ! isVisible() )
+	closeIfDone();
+}
+
+
+void ProcessOutput::closeIfDone()
+{
+    if ( _processList.isEmpty() && _noMoreProcesses )
+    {
+	if ( ( autoClose() && ! _hadError ) ||
+	     _closed || ! isVisible() )
+	{
+	    logDebug() << "No more processes to watch. Auto-closing." << endl;
+	    this->deleteLater(); // It is safe to call this multiple times
+	}
+    }
+}
+
+
+void ProcessOutput::noMoreProcesses()
+{
+    _noMoreProcesses = true;
+    closeIfDone();
 }
 
 
@@ -408,7 +432,7 @@ void ProcessOutput::closeEvent( QCloseEvent * event )
 {
     _closed = true;
 
-    if ( _processList.isEmpty() )
+    if ( _processList.isEmpty() && _noMoreProcesses )
 	this->deleteLater();
 
     // If there are any more processes, wait until the last one is finished and

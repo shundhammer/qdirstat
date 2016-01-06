@@ -190,7 +190,7 @@ namespace QDirStat
 	 * 'processOutput' is the optional dialog to watch the commands and
 	 * their stdout and stderr output as they are executed.
 	 **/
-	void execute( FileInfo * item, ProcessOutput * processOutput = 0 );
+	void execute( FileInfo * item, ProcessOutput * processOutput );
 
 
     protected:
