@@ -17,7 +17,7 @@
 #include "FileInfo.h"
 #include "DirTree.h"
 #include "DirSaver.h"
-#include "ProcessOutput.h"
+#include "OutputWindow.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -45,7 +45,7 @@ Cleanup::Cleanup( QString   id,
     _askForConfirmation	   = false;
     _refreshPolicy	   = NoRefresh;
     _outputWindowPolicy	   = ShowAfterTimeout;
-    _outputWindowTimeout   = -1;
+    _outputWindowTimeout   = 0;
     _outputWindowAutoClose = false;
 
     QAction::setEnabled( true );
@@ -78,13 +78,13 @@ bool Cleanup::worksFor( FileInfo *item ) const
 }
 
 
-void Cleanup::execute( FileInfo *item, ProcessOutput * processOutput )
+void Cleanup::execute( FileInfo *item, OutputWindow * outputWindow )
 {
     if ( worksFor( item ) )
     {
 	DirTree * tree = item->tree();
 
-	executeRecursive( item, processOutput );
+	executeRecursive( item, outputWindow );
 
 	switch ( _refreshPolicy )
 	{
@@ -96,7 +96,7 @@ void Cleanup::execute( FileInfo *item, ProcessOutput * processOutput )
 	    case RefreshParent:
 		// Done from CleanupCollection::execute() via a Refresher
 		// object that is triggered by the
-		// ProcessOutput::lastProcessFinished() signal.
+		// OutputWindow::lastProcessFinished() signal.
 		//
 		// Nothing left to do here.
 		break;
@@ -113,7 +113,7 @@ void Cleanup::execute( FileInfo *item, ProcessOutput * processOutput )
 }
 
 
-void Cleanup::executeRecursive( FileInfo *item, ProcessOutput * processOutput )
+void Cleanup::executeRecursive( FileInfo *item, OutputWindow * outputWindow )
 {
     if ( worksFor( item ) )
     {
@@ -134,7 +134,7 @@ void Cleanup::executeRecursive( FileInfo *item, ProcessOutput * processOutput )
 		     * the dot entry) if there are no real subdirectories on
 		     * this directory level.
 		     **/
-		    executeRecursive( subdir, processOutput );
+		    executeRecursive( subdir, outputWindow );
 		}
 		subdir = subdir->next();
 	    }
@@ -143,7 +143,7 @@ void Cleanup::executeRecursive( FileInfo *item, ProcessOutput * processOutput )
 
 	// Perform cleanup for this directory.
 
-	runCommand( item, _command, processOutput );
+	runCommand( item, _command, outputWindow );
     }
 }
 
@@ -204,7 +204,7 @@ QString Cleanup::escapeAndQuote( const QString & unescaped ) const
 
 void Cleanup::runCommand ( const FileInfo * item,
 			   const QString  & command,
-			   ProcessOutput  * processOutput ) const
+			   OutputWindow	 * outputWindow ) const
 {
     QString  cleanupCommand( expandVariables( item, command ));
 
@@ -223,7 +223,7 @@ void Cleanup::runCommand ( const FileInfo * item,
     process->setWorkingDirectory( itemDir( item ) );
     logDebug() << "New process \"" << process << endl;
 
-    processOutput->addProcess( process );
+    outputWindow->addProcess( process );
 
 
     switch ( _refreshPolicy )

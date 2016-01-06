@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ProcessOutputDialog</class>
- <widget class="QDialog" name="ProcessOutputDialog">
+ <class>OutputWindow</class>
+ <widget class="QDialog" name="OutputWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -343,7 +343,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>closeButton</sender>
    <signal>clicked()</signal>
-   <receiver>ProcessOutputDialog</receiver>
+   <receiver>OutputWindow</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">

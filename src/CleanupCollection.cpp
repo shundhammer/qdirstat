@@ -16,7 +16,7 @@
 #include "StdCleanup.h"
 #include "SettingsHelpers.h"
 #include "SelectionModel.h"
-#include "ProcessOutput.h"
+#include "OutputWindow.h"
 #include "Refresher.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -201,10 +201,27 @@ void CleanupCollection::execute()
 	return;
     }
 
-    ProcessOutput * processOutput = new ProcessOutput( qApp->activeWindow() );
-    CHECK_NEW( processOutput );
-    processOutput->show();
-    processOutput->setAutoClose( false );
+    OutputWindow * outputWindow = new OutputWindow( qApp->activeWindow() );
+    CHECK_NEW( outputWindow );
+    outputWindow->setAutoClose( cleanup->outputWindowAutoClose() );
+
+    switch ( cleanup->outputWindowPolicy() )
+    {
+	case Cleanup::ShowAlways:
+	    outputWindow->show();
+	    break;
+
+	case Cleanup::ShowAfterTimeout:
+	    outputWindow->showAfterTimeout( cleanup->outputWindowTimeout() );
+	    break;
+
+	case Cleanup::ShowIfErrorOutput: // showOnStderr is default
+	    break;
+
+	case Cleanup::ShowNever:
+	    outputWindow->setShowOnStderr( false );
+	    break;
+    }
 
     if ( cleanup->refreshPolicy() == Cleanup::RefreshThis ||
 	 cleanup->refreshPolicy() == Cleanup::RefreshParent )
@@ -215,7 +232,7 @@ void CleanupCollection::execute()
 
 	Refresher * refresher = new Refresher( refreshSet, this );
 
-	connect( processOutput, SIGNAL( lastProcessFinished() ),
+	connect( outputWindow, SIGNAL( lastProcessFinished() ),
 		 refresher,	SLOT  ( refresh()	      ) );
     }
 
@@ -223,7 +240,7 @@ void CleanupCollection::execute()
     {
 	if ( cleanup->worksFor( item ) )
 	{
-	    cleanup->execute( item, processOutput );
+	    cleanup->execute( item, outputWindow );
 	}
 	else
 	{
@@ -232,7 +249,7 @@ void CleanupCollection::execute()
 	}
     }
 
-    processOutput->noMoreProcesses();
+    outputWindow->noMoreProcesses();
 }
 
 

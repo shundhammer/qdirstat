@@ -44,8 +44,8 @@ SOURCES	  = main.cpp			\
 	    FileInfoSorter.cpp		\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
+	    OutputWindow.cpp		\
 	    PercentBar.cpp		\
-	    ProcessOutput.cpp		\
 	    Refresher.cpp		\
 	    SelectionModel.cpp		\
 	    SettingsHelpers.cpp		\
@@ -74,8 +74,8 @@ HEADERS	  =				\
 	    FileInfoSorter.h		\
 	    Logger.h			\
 	    MainWindow.h		\
+	    OutputWindow.h		\
 	    PercentBar.h		\
-	    ProcessOutput.h		\
 	    Refresher.h			\
 	    SelectionModel.h		\
 	    SettingsHelpers.h		\
@@ -87,10 +87,7 @@ HEADERS	  =				\
 
 
 FORMS	  = main-window.ui		\
-	    process-output.ui		\
+	    output-window.ui		\
 
 
 RESOURCES = icons.qrc
-
-
-

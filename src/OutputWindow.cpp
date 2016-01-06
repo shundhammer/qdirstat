@@ -1,5 +1,5 @@
 /*
- *   File name: ProcessOutput.cpp
+ *   File name: OutputWindow.cpp
  *   Summary:	Terminal-like window to watch output of an external process
  *   License:	GPL V2 - See file LICENSE for details.
  *
@@ -12,7 +12,7 @@
 #include <QSettings>
 #include <QTimer>
 
-#include "ProcessOutput.h"
+#include "OutputWindow.h"
 #include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -27,9 +27,9 @@ using QDirStat::writeFontEntry;
     connect( (ACTION), SIGNAL( triggered() ), (RECEIVER), SLOT( RCVR_SLOT ) )
 
 
-ProcessOutput::ProcessOutput( QWidget * parent ):
+OutputWindow::OutputWindow( QWidget * parent ):
     QDialog( parent ),
-    _ui( new Ui::ProcessOutputDialog ),
+    _ui( new Ui::OutputWindow ),
     _showOnStderr( true ),
     _noMoreProcesses( false ),
     _hadError( false ),
@@ -51,7 +51,7 @@ ProcessOutput::ProcessOutput( QWidget * parent ):
 }
 
 
-ProcessOutput::~ProcessOutput()
+OutputWindow::~OutputWindow()
 {
     logDebug() << "Destructor" << endl;
 
@@ -69,7 +69,7 @@ ProcessOutput::~ProcessOutput()
 }
 
 
-void ProcessOutput::addProcess( QProcess * process )
+void OutputWindow::addProcess( QProcess * process )
 {
     CHECK_PTR( process );
 
@@ -101,19 +101,19 @@ void ProcessOutput::addProcess( QProcess * process )
 }
 
 
-void ProcessOutput::addCommandLine( const QString commandline )
+void OutputWindow::addCommandLine( const QString commandline )
 {
     addText( commandline, _commandTextColor );
 }
 
 
-void ProcessOutput::addStdout( const QString output )
+void OutputWindow::addStdout( const QString output )
 {
     addText( output, _stdoutColor );
 }
 
 
-void ProcessOutput::addStderr( const QString output )
+void OutputWindow::addStderr( const QString output )
 {
     _hadError = true;
     addText( output, _stderrColor );
@@ -123,7 +123,7 @@ void ProcessOutput::addStderr( const QString output )
 }
 
 
-void ProcessOutput::addText( const QString & rawText, const QColor & textColor )
+void OutputWindow::addText( const QString & rawText, const QColor & textColor )
 {
     if ( rawText.isEmpty() )
 	return;
@@ -143,13 +143,13 @@ void ProcessOutput::addText( const QString & rawText, const QColor & textColor )
 }
 
 
-void ProcessOutput::clearOutput()
+void OutputWindow::clearOutput()
 {
     _ui->terminal->clear();
 }
 
 
-QProcess * ProcessOutput::senderProcess( const char * function ) const
+QProcess * OutputWindow::senderProcess( const char * function ) const
 {
     QProcess * process = qobject_cast<QProcess *>( sender() );
 
@@ -171,7 +171,7 @@ QProcess * ProcessOutput::senderProcess( const char * function ) const
 }
 
 
-void ProcessOutput::readStdout()
+void OutputWindow::readStdout()
 {
     QProcess * process = senderProcess( __FUNCTION__ );
 
@@ -180,7 +180,7 @@ void ProcessOutput::readStdout()
 }
 
 
-void ProcessOutput::readStderr()
+void OutputWindow::readStderr()
 {
     QProcess * process = senderProcess( __FUNCTION__ );
 
@@ -189,7 +189,7 @@ void ProcessOutput::readStderr()
 }
 
 
-void ProcessOutput::processFinished( int exitCode, QProcess::ExitStatus exitStatus )
+void OutputWindow::processFinished( int exitCode, QProcess::ExitStatus exitStatus )
 {
     logDebug() << "exitCode: " << exitCode
 	       << " exitStatus: "
@@ -225,7 +225,7 @@ void ProcessOutput::processFinished( int exitCode, QProcess::ExitStatus exitStat
 }
 
 
-void ProcessOutput::processError( QProcess::ProcessError error )
+void OutputWindow::processError( QProcess::ProcessError error )
 {
     _hadError = true;
     QString msg = tr( "Unknown error." );
@@ -278,7 +278,7 @@ void ProcessOutput::processError( QProcess::ProcessError error )
 }
 
 
-void ProcessOutput::closeIfDone()
+void OutputWindow::closeIfDone()
 {
     if ( _processList.isEmpty() && _noMoreProcesses )
     {
@@ -292,14 +292,14 @@ void ProcessOutput::closeIfDone()
 }
 
 
-void ProcessOutput::noMoreProcesses()
+void OutputWindow::noMoreProcesses()
 {
     _noMoreProcesses = true;
     closeIfDone();
 }
 
 
-void ProcessOutput::zoom( double factor )
+void OutputWindow::zoom( double factor )
 {
     QFont font = _ui->terminal->font();
 
@@ -320,26 +320,26 @@ void ProcessOutput::zoom( double factor )
 }
 
 
-void ProcessOutput::zoomIn()
+void OutputWindow::zoomIn()
 {
     zoom( 1.1 );
 }
 
 
-void ProcessOutput::zoomOut()
+void OutputWindow::zoomOut()
 {
     zoom( 1.0/1.1 );
 }
 
 
-void ProcessOutput::resetZoom()
+void OutputWindow::resetZoom()
 {
     logDebug() << "Resetting font to normal" << endl;
     _ui->terminal->setFont( _terminalDefaultFont );
 }
 
 
-void ProcessOutput::killAll()
+void OutputWindow::killAll()
 {
     int killCount = 0;
 
@@ -360,7 +360,7 @@ void ProcessOutput::killAll()
 
 
 #if 0
-void ProcessOutput::setTerminalBackground( const QColor & newColor )
+void OutputWindow::setTerminalBackground( const QColor & newColor )
 {
     // TO DO
     // TO DO
@@ -369,7 +369,7 @@ void ProcessOutput::setTerminalBackground( const QColor & newColor )
 #endif
 
 
-bool ProcessOutput::hasActiveProcess() const
+bool OutputWindow::hasActiveProcess() const
 {
     foreach ( QProcess * process, _processList )
     {
@@ -384,7 +384,7 @@ bool ProcessOutput::hasActiveProcess() const
 }
 
 
-QProcess * ProcessOutput::pickQueuedProcess()
+QProcess * OutputWindow::pickQueuedProcess()
 {
     foreach ( QProcess * process, _processList )
     {
@@ -396,7 +396,7 @@ QProcess * ProcessOutput::pickQueuedProcess()
 }
 
 
-QProcess * ProcessOutput::startNextProcess()
+QProcess * OutputWindow::startNextProcess()
 {
     QProcess * process = pickQueuedProcess();
 
@@ -423,7 +423,7 @@ QProcess * ProcessOutput::startNextProcess()
 }
 
 
-QString ProcessOutput::command( QProcess * process )
+QString OutputWindow::command( QProcess * process )
 {
     // The common case is to start an external command with
     //	  /bin/sh -c theRealCommand arg1 arg2 arg3 ...
@@ -439,19 +439,19 @@ QString ProcessOutput::command( QProcess * process )
 }
 
 
-bool ProcessOutput::autoClose() const
+bool OutputWindow::autoClose() const
 {
     return _ui->autoCloseCheckBox->isChecked();
 }
 
 
-void ProcessOutput::setAutoClose( bool autoClose )
+void OutputWindow::setAutoClose( bool autoClose )
 {
     _ui->autoCloseCheckBox->setChecked( autoClose );
 }
 
 
-void ProcessOutput::closeEvent( QCloseEvent * event )
+void OutputWindow::closeEvent( QCloseEvent * event )
 {
     _closed = true;
 
@@ -465,13 +465,13 @@ void ProcessOutput::closeEvent( QCloseEvent * event )
 }
 
 
-void ProcessOutput::updateActions()
+void OutputWindow::updateActions()
 {
     _ui->killButton->setEnabled( hasActiveProcess() );
 }
 
 
-void ProcessOutput::showAfterTimeout( int timeoutMillisec )
+void OutputWindow::showAfterTimeout( int timeoutMillisec )
 {
     if ( timeoutMillisec == 0 )
 	timeoutMillisec = _defaultShowTimeout;
@@ -480,17 +480,17 @@ void ProcessOutput::showAfterTimeout( int timeoutMillisec )
 }
 
 
-void ProcessOutput::timeoutShow()
+void OutputWindow::timeoutShow()
 {
     if ( ! isVisible() && ! _closed )
 	show();
 }
 
 
-void ProcessOutput::readSettings()
+void OutputWindow::readSettings()
 {
     QSettings settings;
-    settings.beginGroup( "ProcessOutput" );
+    settings.beginGroup( "OutputWindow" );
 
     _terminalBackground	 = readColorEntry( settings, "TerminalBackground", QColor( Qt::black  ) );
     _commandTextColor	 = readColorEntry( settings, "CommandTextColor"	 , QColor( Qt::white  ) );
@@ -505,10 +505,10 @@ void ProcessOutput::readSettings()
 }
 
 
-void ProcessOutput::writeSettings()
+void OutputWindow::writeSettings()
 {
     QSettings settings;
-    settings.beginGroup( "ProcessOutput" );
+    settings.beginGroup( "OutputWindow" );
 
     writeColorEntry( settings, "TerminalBackground", _terminalBackground  );
     writeColorEntry( settings, "CommandTextColor"  , _commandTextColor	  );

@@ -20,7 +20,7 @@ namespace QDirStat
      * Helper class to refresh a number of subtrees:
      *
      * Store a FileInfoSet and when a signal is received (typically
-     * ProcessOutput::lastProcessFinished()), trigger refreshing all stored
+     * OutputWindow::lastProcessFinished()), trigger refreshing all stored
      * subtrees.
      *
      * Do not hold on to pointers to instances of this class since each

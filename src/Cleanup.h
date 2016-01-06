@@ -15,7 +15,7 @@
 #include <QList>
 #include <QTextStream>
 
-class ProcessOutput;
+class OutputWindow;
 
 
 namespace QDirStat
@@ -172,7 +172,7 @@ namespace QDirStat
 	enum RefreshPolicy refreshPolicy() const { return _refreshPolicy; }
 
 	/**
-	 * Return the policy when an output window (see also ProcessOutput) for
+	 * Return the policy when an output window (see also OutputWindow) for
 	 * this clean action is shown. Since cleanup actions start shell
 	 * commands, the output of those shell commands might be important,
 	 * especially if they report an error. In addition to that, if a
@@ -213,8 +213,8 @@ namespace QDirStat
 
 	/**
 	 * Return the timeout (in milliseconds) for the ShowAfterTimeout output
-	 * window policy. The default is -1 which means to use the
-	 * ProcessOutput dialog class default.
+	 * window policy. The default is 0 which means to use the
+	 * OutputWindow dialog class default.
 	 **/
 	int outputWindowTimeout() const { return _outputWindowTimeout; }
 
@@ -260,10 +260,10 @@ namespace QDirStat
 	 * The heart of the matter: Perform the cleanup with the FileInfo
 	 * specified.
 	 *
-	 * 'processOutput' is the optional dialog to watch the commands and
+	 * 'outputWindow' is the optional dialog to watch the commands and
 	 * their stdout and stderr output as they are executed.
 	 **/
-	void execute( FileInfo * item, ProcessOutput * processOutput );
+	void execute( FileInfo * item, OutputWindow * outputWindow );
 
 
     protected:
@@ -271,7 +271,7 @@ namespace QDirStat
 	/**
 	 * Recursively perform the cleanup.
 	 **/
-	void executeRecursive( FileInfo *item, ProcessOutput * processOutput );
+	void executeRecursive( FileInfo *item, OutputWindow * outputWindow );
 
 	/**
 	 * Retrieve the directory part of a FileInfo's path.
@@ -316,7 +316,7 @@ namespace QDirStat
 	 **/
 	void runCommand( const FileInfo * item,
 			 const QString	& command,
-			 ProcessOutput	* processOutput) const;
+			 OutputWindow	* outputWindow) const;
 
 
 	//
