@@ -40,6 +40,14 @@ namespace QDirStat
 	    AssumeDeleted
 	};
 
+	enum OutputWindowPolicy
+	{
+	    ShowAlways,
+	    ShowIfErrorOutput,
+	    ShowAfterTimeout,  // This includes ShowIfErrorOutput
+	    ShowNever
+	};
+
 	/**
 	 * Constructor.
 	 *
@@ -161,25 +169,90 @@ namespace QDirStat
 	 * hand, the user can easily at any time hit one of the explicit
 	 * refresh buttons and everything will be back into sync again.
 	 **/
-	enum RefreshPolicy refreshPolicy()	const { return _refreshPolicy; }
+	enum RefreshPolicy refreshPolicy() const { return _refreshPolicy; }
 
+	/**
+	 * Return the policy when an output window (see also ProcessOutput) for
+	 * this clean action is shown. Since cleanup actions start shell
+	 * commands, the output of those shell commands might be important,
+	 * especially if they report an error. In addition to that, if a
+	 * cleanup action takes a while, it might be a good idea to show the
+	 * user what is going on. Notice that there will always be only one
+	 * output window for all cleanup tasks that are to be started in one
+	 * user action; if multiple items are selected, the corresponding
+	 * command will be started for each of the selected items individually
+	 * one after another, but the output window will remain open and
+	 * collect the output of each one. Likewise, if a command is recursive,
+	 * it is started for each directory level, and the output is also
+	 * collected in the same output window.
+	 *
+	 * Possible values:
+	 *
+	 * ShowAlways: Always open an output window. This makes sense for
+	 * cleanup actions that take a while, like compressing files, recoding
+	 * videos, recompressing JPG images.
+	 *
+	 * ShowIfErrorOutput: Leave the output window hidden, but open it if
+	 * there is any error output (i.e. output on its stderr channel). This
+	 * is useful for most cleanup tasks that are typically quick, but that
+	 * might also go wrong - for example, due to insufficient permissions
+	 * in certain directories.
+	 *
+	 * ShowAfterTimeout: (This includes ShowIfErrorOutput) Leave the output
+	 * window hidden for a certain timeout (3 seconds by default), but open
+	 * it if it takes any longer than that. If there is error output, it is
+	 * opened immediately. This is the default and recommended setting. The
+	 * output can be configured with setOutputWindowTimeout().
+	 *
+	 * ShowNever: Never show the output window, no matter how long the
+	 * cleanup task takes or if there is any amount of error output, or
+	 * even if the cleanup process crashes or could not be started.
+	 **/
+	enum OutputWindowPolicy outputWindowPolicy() const
+	    { return _outputWindowPolicy; }
 
-	void setTitle		   ( const QString & title  );
-	void setId		   ( const QString & id	    )	   { _id		   = id;	   }
-	void setCommand		   ( const QString & command)	   { _command		   = command;	   }
-	void setIcon		   ( const QString & iconName );
-	void setActive		   ( bool active   )		   { _active		  = active;	   }
-	void setWorksForDir	   ( bool canDo	   )		   { _worksForDir	   = canDo;	   }
-	void setWorksForFile	   ( bool canDo	   )		   { _worksForFile	   = canDo;	   }
-	void setWorksForDotEntry   ( bool canDo	   )		   { _worksForDotEntry	   = canDo;	   }
-	void setRecurse		   ( bool recurse  )		   { _recurse		   = recurse;	   }
-	void setAskForConfirmation ( bool ask	   )		   { _askForConfirmation   = ask;	   }
-	void setRefreshPolicy	   ( RefreshPolicy refreshPolicy ) { _refreshPolicy = refreshPolicy;  }
+	/**
+	 * Return the timeout (in milliseconds) for the ShowAfterTimeout output
+	 * window policy. The default is -1 which means to use the
+	 * ProcessOutput dialog class default.
+	 **/
+	int outputWindowTimeout() const { return _outputWindowTimeout; }
+
+	/**
+	 * Return 'true' if the output window is closed automatically when the
+	 * cleanup task is done and there was no error.
+	 **/
+	bool outputWindowAutoClose() const { return _outputWindowAutoClose; }
 
 	/**
 	 * Return a mapping from RefreshPolicy to string.
 	 **/
 	static QMap<int, QString> refreshPolicyMapping();
+
+	/**
+	 * Return a mapping from OutputWindowPolicy to string.
+	 **/
+	static QMap<int, QString> outputWindowPolicyMapping();
+
+
+	//
+	// Setters (see the corresponding getter for documentation)
+	//
+
+	void setTitle		     ( const QString & title  );
+	void setId		     ( const QString & id     )	   { _id		    = id;	 }
+	void setCommand		     ( const QString & command)	   { _command		    = command;	 }
+	void setIcon		     ( const QString & iconName );
+	void setActive		     ( bool active   )		   { _active		    = active;	 }
+	void setWorksForDir	     ( bool canDo    )		   { _worksForDir	    = canDo;	 }
+	void setWorksForFile	     ( bool canDo    )		   { _worksForFile	    = canDo;	 }
+	void setWorksForDotEntry     ( bool canDo    )		   { _worksForDotEntry	    = canDo;	 }
+	void setRecurse		     ( bool recurse  )		   { _recurse		    = recurse;	 }
+	void setAskForConfirmation   ( bool ask	     )		   { _askForConfirmation    = ask;	 }
+	void setRefreshPolicy	     ( RefreshPolicy	  policy ) { _refreshPolicy	    = policy;	 }
+	void setOutputWindowPolicy   ( OutputWindowPolicy policy ) { _outputWindowPolicy    = policy;	 }
+	void setOutputWindowTimeout  ( int timeoutMillisec )	   { _outputWindowTimeout   = timeoutMillisec; }
+	void setOutputWindowAutoClose( bool autoClose )		   { _outputWindowAutoClose = autoClose; }
 
     public slots:
 
@@ -250,17 +323,20 @@ namespace QDirStat
 	// Data members
 	//
 
-	QString	      _id;
-	QString	      _command;
-	QString	      _title;
-	QString	      _iconName;
-	bool	      _active;
-	bool	      _worksForDir;
-	bool	      _worksForFile;
-	bool	      _worksForDotEntry;
-	bool	      _recurse;
-	bool	      _askForConfirmation;
-	RefreshPolicy _refreshPolicy;
+	QString		   _id;
+	QString		   _command;
+	QString		   _title;
+	QString		   _iconName;
+	bool		   _active;
+	bool		   _worksForDir;
+	bool		   _worksForFile;
+	bool		   _worksForDotEntry;
+	bool		   _recurse;
+	bool		   _askForConfirmation;
+	RefreshPolicy	   _refreshPolicy;
+	OutputWindowPolicy _outputWindowPolicy;
+	int		   _outputWindowTimeout;
+	bool		   _outputWindowAutoClose;
     };
 
 

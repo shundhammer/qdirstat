@@ -37,13 +37,16 @@ Cleanup::Cleanup( QString   id,
     _command( command ),
     _title( title )
 {
-    _active		= true;
-    _worksForDir	= true;
-    _worksForFile	= false;
-    _worksForDotEntry	= false;
-    _recurse		= false;
-    _askForConfirmation = false;
-    _refreshPolicy	= NoRefresh;
+    _active		   = true;
+    _worksForDir	   = true;
+    _worksForFile	   = false;
+    _worksForDotEntry	   = false;
+    _recurse		   = false;
+    _askForConfirmation	   = false;
+    _refreshPolicy	   = NoRefresh;
+    _outputWindowPolicy	   = ShowAfterTimeout;
+    _outputWindowTimeout   = -1;
+    _outputWindowAutoClose = false;
 
     QAction::setEnabled( true );
 }
@@ -268,3 +271,15 @@ QMap<int, QString> Cleanup::refreshPolicyMapping()
     return mapping;
 }
 
+
+QMap<int, QString> Cleanup::outputWindowPolicyMapping()
+{
+    QMap<int, QString> mapping;
+
+    mapping[ ShowAlways	       ] = "ShowAlways";
+    mapping[ ShowIfErrorOutput ] = "ShowIfErrorOutput";
+    mapping[ ShowAfterTimeout  ] = "ShowAfterTimeout";
+    mapping[ ShowNever	       ] = "ShowNever";
+
+    return mapping;
+}

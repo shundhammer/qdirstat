@@ -361,17 +361,22 @@ void CleanupCollection::readSettings()
 	    QString iconName = settings.value( "Icon"	 ).toString();
 	    QString hotkey   = settings.value( "Hotkey"	 ).toString();
 
-	    bool active		    = settings.value( "Active"		  , true  ).toBool();
-	    bool worksForDir	    = settings.value( "WorksForDir"	  , true  ).toBool();
-	    bool worksForFile	    = settings.value( "WorksForFile"	  , true  ).toBool();
-	    bool worksForDotEntry   = settings.value( "WorksForDotEntry"  , true  ).toBool();
-	    bool recurse	    = settings.value( "Recurse"		  , false ).toBool();
-	    bool askForConfirmation = settings.value( "AskForConfirmation", false ).toBool();
+	    bool active		       = settings.value( "Active"		, true	).toBool();
+	    bool worksForDir	       = settings.value( "WorksForDir"		, true	).toBool();
+	    bool worksForFile	       = settings.value( "WorksForFile"		, true	).toBool();
+	    bool worksForDotEntry      = settings.value( "WorksForDotEntry"	, true	).toBool();
+	    bool recurse	       = settings.value( "Recurse"		, false ).toBool();
+	    bool askForConfirmation    = settings.value( "AskForConfirmation"	, false ).toBool();
+	    bool outputWindowAutoClose = settings.value( "OutputWindowAutoClose", false ).toBool();
+	    int	 outputWindowTimeout   = settings.value( "OutputWindowTimeout"	, -1	).toInt();
 
-	    int refreshPolicy = readEnumEntry( settings, "RefreshPolicy",
-					       Cleanup::NoRefresh,
-					       Cleanup::refreshPolicyMapping() );
+	    int refreshPolicy	    = readEnumEntry( settings, "RefreshPolicy",
+						     Cleanup::NoRefresh,
+						     Cleanup::refreshPolicyMapping() );
 
+	    int outputWindowPolicy  = readEnumEntry( settings, "OutputWindowPolicy",
+						     Cleanup::ShowAfterTimeout,
+						     Cleanup::outputWindowPolicyMapping() );
 	    if ( ! id.isEmpty()	     &&
 		 ! command.isEmpty() &&
 		 ! title.isEmpty()     )
@@ -380,13 +385,16 @@ void CleanupCollection::readSettings()
 		CHECK_NEW( cleanup );
 		add( cleanup );
 
-		cleanup->setActive	    ( active   );
-		cleanup->setWorksForDir	    ( worksForDir );
-		cleanup->setWorksForFile    ( worksForFile );
+		cleanup->setActive	    ( active	       );
+		cleanup->setWorksForDir	    ( worksForDir      );
+		cleanup->setWorksForFile    ( worksForFile     );
 		cleanup->setWorksForDotEntry( worksForDotEntry );
-		cleanup->setRecurse	    ( recurse  );
-		cleanup->setAskForConfirmation( askForConfirmation );
-		cleanup->setRefreshPolicy( static_cast<Cleanup::RefreshPolicy>( refreshPolicy ) );
+		cleanup->setRecurse	    ( recurse	       );
+		cleanup->setAskForConfirmation	 ( askForConfirmation	 );
+		cleanup->setOutputWindowAutoClose( outputWindowAutoClose );
+		cleanup->setOutputWindowTimeout	 ( outputWindowTimeout	 );
+		cleanup->setRefreshPolicy     ( static_cast<Cleanup::RefreshPolicy>( refreshPolicy ) );
+		cleanup->setOutputWindowPolicy( static_cast<Cleanup::OutputWindowPolicy>( outputWindowPolicy ) );
 
 		if ( ! iconName.isEmpty() )
 		    cleanup->setIcon( iconName );
@@ -422,19 +430,25 @@ void CleanupCollection::writeSettings()
 	    settings.setArrayIndex( i );
 	    Cleanup * cleanup = _cleanupList.at( i );
 
-	    settings.setValue( "Command"	   , cleanup->command()		   );
-	    settings.setValue( "ID"		   , cleanup->id()		   );
-	    settings.setValue( "Title"		   , cleanup->title()		   );
-	    settings.setValue( "Active"		   , cleanup->active()		   );
-	    settings.setValue( "WorksForDir"	   , cleanup->worksForDir()	   );
-	    settings.setValue( "WorksForFile"	   , cleanup->worksForFile()	   );
-	    settings.setValue( "WorksForDotEntry"  , cleanup->worksForDotEntry()   );
-	    settings.setValue( "Recurse"	   , cleanup->recurse()		   );
-	    settings.setValue( "AskForConfirmation", cleanup->askForConfirmation() );
+	    settings.setValue( "Command"	      , cleanup->command()		 );
+	    settings.setValue( "ID"		      , cleanup->id()			 );
+	    settings.setValue( "Title"		      , cleanup->title()		 );
+	    settings.setValue( "Active"		      , cleanup->active()		 );
+	    settings.setValue( "WorksForDir"	      , cleanup->worksForDir()		 );
+	    settings.setValue( "WorksForFile"	      , cleanup->worksForFile()		 );
+	    settings.setValue( "WorksForDotEntry"     , cleanup->worksForDotEntry()	 );
+	    settings.setValue( "Recurse"	      , cleanup->recurse()		 );
+	    settings.setValue( "AskForConfirmation"   , cleanup->askForConfirmation()	 );
+	    settings.setValue( "OutputWindowAutoClose", cleanup->outputWindowAutoClose() );
+	    settings.setValue( "OutputWindowTimeout"  , cleanup->outputWindowTimeout()	 );
 
 	    writeEnumEntry( settings, "RefreshPolicy",
 			    cleanup->refreshPolicy(),
 			    Cleanup::refreshPolicyMapping() );
+
+	    writeEnumEntry( settings, "OutputWindowPolicy",
+			    cleanup->outputWindowPolicy(),
+			    Cleanup::outputWindowPolicyMapping() );
 
 	    if ( ! cleanup->iconName().isEmpty() )
 		 settings.setValue( "Icon", cleanup->iconName() );

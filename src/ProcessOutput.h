@@ -334,6 +334,7 @@ protected:
     bool			  _noMoreProcesses;
     bool			  _hadError;
     bool			  _closed;
+    bool                          _killedAll;
     QString			  _lastWorkingDir;
     QColor			  _terminalBackground;
     QColor			  _commandTextColor;

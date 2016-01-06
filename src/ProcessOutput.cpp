@@ -33,7 +33,8 @@ ProcessOutput::ProcessOutput( QWidget * parent ):
     _showOnStderr( true ),
     _noMoreProcesses( false ),
     _hadError( false ),
-    _closed( false )
+    _closed( false ),
+    _killedAll( false )
 {
     _ui->setupUi( this );
     logDebug() << "Creating" << endl;
@@ -71,6 +72,15 @@ ProcessOutput::~ProcessOutput()
 void ProcessOutput::addProcess( QProcess * process )
 {
     CHECK_PTR( process );
+
+    if ( _killedAll )
+    {
+        logDebug() << "User killed all processes - "
+                   << "no longer accepting new processes" << endl;
+        process->kill();
+        process->deleteLater();
+    }
+
     _processList << process;
     logDebug() << "Adding " << process << endl;
 
@@ -331,13 +341,21 @@ void ProcessOutput::resetZoom()
 
 void ProcessOutput::killAll()
 {
+    int killCount = 0;
+
     foreach ( QProcess * process, _processList )
     {
 	logDebug() << "Killing process " << process << endl;
 	process->kill();
 	_processList.removeAll( process );
 	process->deleteLater();
+        ++killCount;
     }
+
+    _killedAll = true;
+    addCommandLine( killCount == 1 ?
+                    tr( "Process killed." ) :
+                    tr( "Killed %1 processes." ).arg( killCount ) );
 }
 
 
