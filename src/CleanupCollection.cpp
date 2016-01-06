@@ -183,7 +183,8 @@ void CleanupCollection::execute()
 
     if ( ! cleanup )
     {
-	logError() << "Wrong sender type: " << sender()->metaObject()->className() << endl;
+	logError() << "Wrong sender type: "
+		   << sender()->metaObject()->className() << endl;
 	return;
     }
 
@@ -200,6 +201,8 @@ void CleanupCollection::execute()
 	logDebug() << "User declined confirmation" << endl;
 	return;
     }
+
+    emit startingCleanup( cleanup->cleanTitle() );
 
     OutputWindow * outputWindow = new OutputWindow( qApp->activeWindow() );
     CHECK_NEW( outputWindow );
@@ -232,9 +235,13 @@ void CleanupCollection::execute()
 
 	Refresher * refresher = new Refresher( refreshSet, this );
 
-	connect( outputWindow, SIGNAL( lastProcessFinished() ),
-		 refresher,	SLOT  ( refresh()	      ) );
+	connect( outputWindow, SIGNAL( lastProcessFinished( int ) ),
+		 refresher,	SLOT  ( refresh()		) );
+
     }
+
+    connect( outputWindow, SIGNAL( lastProcessFinished( int ) ),
+             this,	   SIGNAL( cleanupFinished    ( int ) ) );
 
     foreach ( FileInfo * item, selection )
     {

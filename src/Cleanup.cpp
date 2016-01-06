@@ -225,37 +225,8 @@ void Cleanup::runCommand ( const FileInfo * item,
 
     outputWindow->addProcess( process );
 
-
-    switch ( _refreshPolicy )
-    {
-	case NoRefresh:
-	case AssumeDeleted:
-
-	    // In either case it is no use waiting for the command to
-	    // finish, so we are starting the command as a pure
-	    // background process.
-
-	    logDebug() << "Leaving process to run in the background" << endl;
-	    break;
-
-
-	case RefreshThis:
-	case RefreshParent:
-
-	    // If a display refresh is due after the command, we need to
-	    // wait for the command to be finished in order to avoid
-	    // performing the update prematurely, so we are starting this
-	    // process in blocking mode.
-
-#if 0
-	    QApplication::setOverrideCursor( Qt::WaitCursor );
-	    logDebug() << "Waiting for process to finish..." << endl;
-	    process->waitForFinished( WAIT_TIMEOUT_MILLISEC );
-	    logDebug() << "Process finished" << endl;
-	    QApplication::restoreOverrideCursor();
-#endif
-	    break;
-    }
+    // The CleanupCollection will take care about refreshing if this is
+    // configured for this cleanup.
 }
 
 

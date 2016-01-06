@@ -34,7 +34,8 @@ namespace QDirStat
 	/**
 	 * Constructor.
 	 **/
-	CleanupCollection( SelectionModel * selectionModel, QObject * parent = 0 );
+	CleanupCollection( SelectionModel * selectionModel,
+                           QObject        * parent = 0 );
 
 	/**
 	 * Destructor
@@ -105,6 +106,21 @@ namespace QDirStat
 	 * Return the internal cleanup list.
 	 **/
 	const CleanupList & cleanupList() const { return _cleanupList; }
+
+    signals:
+
+        /**
+         * Emitted when a cleanup is started.
+         **/
+        void startingCleanup( const QString & cleanupName );
+
+        /**
+         * Emitted when the last process of a cleanup is finished.
+         *
+         * 'errorCount' is the total number of errors reported by all processes
+         * that were started.
+         **/
+        void cleanupFinished( int errorCount );
 
     public slots:
 

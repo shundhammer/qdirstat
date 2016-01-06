@@ -32,9 +32,9 @@ OutputWindow::OutputWindow( QWidget * parent ):
     _ui( new Ui::OutputWindow ),
     _showOnStderr( true ),
     _noMoreProcesses( false ),
-    _hadError( false ),
     _closed( false ),
-    _killedAll( false )
+    _killedAll( false ),
+    _errorCount( 0 )
 {
     _ui->setupUi( this );
     logDebug() << "Creating" << endl;
@@ -75,10 +75,10 @@ void OutputWindow::addProcess( QProcess * process )
 
     if ( _killedAll )
     {
-        logDebug() << "User killed all processes - "
-                   << "no longer accepting new processes" << endl;
-        process->kill();
-        process->deleteLater();
+	logDebug() << "User killed all processes - "
+		   << "no longer accepting new processes" << endl;
+	process->kill();
+	process->deleteLater();
     }
 
     _processList << process;
@@ -115,7 +115,7 @@ void OutputWindow::addStdout( const QString output )
 
 void OutputWindow::addStderr( const QString output )
 {
-    _hadError = true;
+    _errorCount++;
     addText( output, _stderrColor );
 
     if ( _showOnStderr && ! isVisible() && ! _closed )
@@ -203,7 +203,7 @@ void OutputWindow::processFinished( int exitCode, QProcess::ExitStatus exitStatu
 	    break;
 
 	case QProcess::CrashExit:
-	    _hadError = true;
+	    _errorCount++;
 	    addStderr( tr( "Process crashed." ) );
 	    break;
     }
@@ -215,7 +215,10 @@ void OutputWindow::processFinished( int exitCode, QProcess::ExitStatus exitStatu
 	_processList.removeAll( process );
 
 	if ( _processList.isEmpty() && _noMoreProcesses )
-	    emit lastProcessFinished();
+	{
+	    logDebug() << "Emitting lastProcessFinished() err: " << _errorCount << endl;
+	    emit lastProcessFinished( _errorCount );
+	}
 
 	process->deleteLater();
 	closeIfDone();
@@ -227,7 +230,7 @@ void OutputWindow::processFinished( int exitCode, QProcess::ExitStatus exitStatu
 
 void OutputWindow::processError( QProcess::ProcessError error )
 {
-    _hadError = true;
+    _errorCount++;
     QString msg = tr( "Unknown error." );
 
     switch ( error )
@@ -264,7 +267,10 @@ void OutputWindow::processError( QProcess::ProcessError error )
 	_processList.removeAll( process );
 
 	if ( _processList.isEmpty() && _noMoreProcesses )
-	    emit lastProcessFinished();
+	{
+	    logDebug() << "Emitting lastProcessFinished() err: " << _errorCount << endl;
+	    emit lastProcessFinished( _errorCount );
+	}
 
 	process->deleteLater();
     }
@@ -282,7 +288,7 @@ void OutputWindow::closeIfDone()
 {
     if ( _processList.isEmpty() && _noMoreProcesses )
     {
-	if ( ( autoClose() && ! _hadError ) ||
+	if ( ( autoClose() && _errorCount == 0 ) ||
 	     _closed || ! isVisible() )
 	{
 	    logDebug() << "No more processes to watch. Auto-closing." << endl;
@@ -349,13 +355,13 @@ void OutputWindow::killAll()
 	process->kill();
 	_processList.removeAll( process );
 	process->deleteLater();
-        ++killCount;
+	++killCount;
     }
 
     _killedAll = true;
     addCommandLine( killCount == 1 ?
-                    tr( "Process killed." ) :
-                    tr( "Killed %1 processes." ).arg( killCount ) );
+		    tr( "Process killed." ) :
+		    tr( "Killed %1 processes." ).arg( killCount ) );
 }
 
 
@@ -473,10 +479,10 @@ void OutputWindow::updateActions()
 
 void OutputWindow::showAfterTimeout( int timeoutMillisec )
 {
-    if ( timeoutMillisec == 0 )
+    if ( timeoutMillisec <= 0 )
 	timeoutMillisec = _defaultShowTimeout;
 
-    QTimer::singleShot( timeoutMillisec, this, SLOT( timeoutShow ) );
+    QTimer::singleShot( timeoutMillisec, this, SLOT( timeoutShow() ) );
 }
 
 

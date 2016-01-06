@@ -64,6 +64,11 @@ public:
     void noMoreProcesses();
 
     /**
+     * Return the number of errors the processes reported.
+     **/
+    int errorCount() const { return _errorCount; }
+
+    /**
      * Return 'true' if this dialog closes itself automatically after the last
      * process finished successfully.
      **/
@@ -269,9 +274,10 @@ signals:
 
     /**
      * Emitted when the last process finished, no matter if that was successful
-     * or with an error.
+     * or with an error. 'totalErrorCount' is the accumulated error count of
+     * all processes this OutputWindow watched.
      **/
-    void lastProcessFinished();
+    void lastProcessFinished( int totalErrorCount );
 
 
 protected:
@@ -332,9 +338,9 @@ protected:
     QList<QProcess *>	_processList;
     bool		_showOnStderr;
     bool		_noMoreProcesses;
-    bool		_hadError;
     bool		_closed;
     bool		_killedAll;
+    int			_errorCount;
     QString		_lastWorkingDir;
     QColor		_terminalBackground;
     QColor		_commandTextColor;

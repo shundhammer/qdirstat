@@ -169,6 +169,19 @@ protected slots:
     void showTreemapView();
 
     /**
+     * Notification that a cleanup action was started.
+     **/
+    void startingCleanup( const QString & cleanupName );
+
+    /**
+     * Notification that the last process of a cleanup action is finished.
+     *
+     * 'errorCount' is the total number of errors reported by all processes
+     * that were started.
+     **/
+    void cleanupFinished( int errorCount );
+
+    /**
      * Open a popup dialog with a message that this feature is not implemented.
      **/
     void notImplemented();

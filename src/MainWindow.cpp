@@ -90,6 +90,12 @@ MainWindow::MainWindow():
     connect( _ui->treemapView, SIGNAL( treemapChanged() ),
 	     this,	       SLOT  ( updateActions()	 ) );
 
+    connect( _cleanupCollection, SIGNAL( startingCleanup( QString ) ),
+	     this,		 SLOT  ( startingCleanup( QString ) ) );
+
+    connect( _cleanupCollection, SIGNAL( cleanupFinished( int ) ),
+	     this,		 SLOT  ( cleanupFinished( int ) ) );
+
 
     // Debug connections
 
@@ -501,6 +507,23 @@ void MainWindow::showSummary()
 				     .arg( count )
 				     .arg( formatSize( sel.totalSize() ) ) );
     }
+}
+
+
+void MainWindow::startingCleanup( const QString & cleanupName )
+{
+    showProgress( tr( "Starting cleanup action %1" ).arg( cleanupName ) );
+}
+
+
+void MainWindow::cleanupFinished( int errorCount )
+{
+    logDebug() << "Error count: " << errorCount << endl;
+
+    if ( errorCount == 0 )
+	showProgress( tr( "Cleanup action finished successfully." ) );
+    else
+	showProgress( tr( "Cleanup action finished with %1 errors." ).arg( errorCount ) );
 }
 
 
