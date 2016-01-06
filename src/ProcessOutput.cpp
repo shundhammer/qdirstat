@@ -9,10 +9,18 @@
 
 #include <QApplication>
 #include <QCloseEvent>
+#include <QSettings>
+#include <QTimer>
 
 #include "ProcessOutput.h"
+#include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
+
+using QDirStat::readColorEntry;
+using QDirStat::writeColorEntry;
+using QDirStat::readFontEntry;
+using QDirStat::writeFontEntry;
 
 
 #define CONNECT_ACTION(ACTION, RECEIVER, RCVR_SLOT) \
@@ -29,12 +37,7 @@ ProcessOutput::ProcessOutput( QWidget * parent ):
 {
     _ui->setupUi( this );
     logDebug() << "Creating" << endl;
-
-    _terminalBackground	 = Qt::black;
-    _commandTextColor	 = Qt::white;
-    _stdoutColor	 = QColor( 0xff, 0xaa, 0x00 );
-    _stderrColor	 = Qt::red;
-    _terminalDefaultFont = _ui->terminal->font();
+    readSettings();
 
     _ui->terminal->clear();
 
@@ -60,6 +63,8 @@ ProcessOutput::~ProcessOutput()
 
 	qDeleteAll( _processList );
     }
+
+    writeSettings();
 }
 
 
@@ -445,4 +450,54 @@ void ProcessOutput::closeEvent( QCloseEvent * event )
 void ProcessOutput::updateActions()
 {
     _ui->killButton->setEnabled( hasActiveProcess() );
+}
+
+
+void ProcessOutput::showAfterTimeout( int timeoutMillisec )
+{
+    if ( timeoutMillisec == 0 )
+	timeoutMillisec = _defaultShowTimeout;
+
+    QTimer::singleShot( timeoutMillisec, this, SLOT( timeoutShow ) );
+}
+
+
+void ProcessOutput::timeoutShow()
+{
+    if ( ! isVisible() && ! _closed )
+	show();
+}
+
+
+void ProcessOutput::readSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "ProcessOutput" );
+
+    _terminalBackground	 = readColorEntry( settings, "TerminalBackground", QColor( Qt::black  ) );
+    _commandTextColor	 = readColorEntry( settings, "CommandTextColor"	 , QColor( Qt::white  ) );
+    _stdoutColor	 = readColorEntry( settings, "StdoutTextColor"	 , QColor( 0xff, 0xaa, 0x00 ) );
+    _stderrColor	 = readColorEntry( settings, "StdErrTextColor"	 , QColor( Qt::red    ) );
+    _terminalDefaultFont = readFontEntry ( settings, "TerminalFont"	 , _ui->terminal->font() );
+    _defaultShowTimeout	 = settings.value( "DefaultShowTimeoutMillisec", 3000 ).toInt();
+
+    settings.endGroup();
+
+    _ui->terminal->setFont( _terminalDefaultFont );
+}
+
+
+void ProcessOutput::writeSettings()
+{
+    QSettings settings;
+    settings.beginGroup( "ProcessOutput" );
+
+    writeColorEntry( settings, "TerminalBackground", _terminalBackground  );
+    writeColorEntry( settings, "CommandTextColor"  , _commandTextColor	  );
+    writeColorEntry( settings, "StdoutTextColor"   , _stdoutColor	  );
+    writeColorEntry( settings, "StdErrTextColor"   , _stderrColor	  );
+    writeFontEntry ( settings, "TerminalFont"	   , _terminalDefaultFont );
+    settings.setValue( "DefaultShowTimeoutMillisec", _defaultShowTimeout  );
+
+    settings.endGroup();
 }

@@ -10,6 +10,7 @@
 #define SettingsHelpers_h
 
 #include <QColor>
+#include <QFont>
 #include <QList>
 
 class QSettings;
@@ -46,6 +47,23 @@ namespace QDirStat
     void writeColorListEntry( QSettings		  & settings,
 			      const char	  * entryName,
 			      const QList<QColor> & colors );
+
+    /**
+     * Read a font in string format  from the settings.
+     * Example: "DejaVu Sans Mono,10,-1,5,50,0,0,0,0,0"
+     **/
+    QFont readFontEntry( const QSettings & settings,
+                         const char	 * entryName,
+                         const QFont     & fallback );
+
+    /**
+     * Write a font in string format to the settings.
+     * Example: "DejaVu Sans Mono,10,-1,5,50,0,0,0,0,0"
+     **/
+    void writeFontEntry( QSettings   & settings,
+                         const char  * entryName,
+                         const QFont & font );
+
 
     /**
      * Read an enum value in string format from the settings.

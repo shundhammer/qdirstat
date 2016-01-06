@@ -93,6 +93,26 @@ public:
     bool showOnStderr() const { return _showOnStderr; }
 
     /**
+     * Show window (if not already shown) after the specified timeout has
+     * elapsed. This is useful for operations that might be very short, so no
+     * output window is desired, but that sometimes might also take a while.
+     *
+     * If 'timeoutMillisec' is 0, defaultShowTimeout() is used.
+     **/
+    void showAfterTimeout( int timeoutMillisec = 0 );
+
+    /**
+     * Return the default show timeout in milliseconds.
+     **/
+    int defaultShowTimeout() const { return _defaultShowTimeout; }
+
+    /**
+     * set the default show timeout (in milliseconds).
+     **/
+    void setDefaultShowTimeout( int newTimeoutMillisec )
+        { _defaultShowTimeout = newTimeoutMillisec; }
+
+    /**
      * Return the text color for commands in the terminal area.
      **/
     QColor commandTextColor() const { return _commandTextColor; }
@@ -190,6 +210,16 @@ public slots:
      **/
     void updateActions();
 
+    /**
+     * Read parameters from the settings.
+     **/
+    void readSettings();
+
+    /**
+     * Write parameters to the settings.
+     **/
+    void writeSettings();
+
 
 protected slots:
 
@@ -227,6 +257,12 @@ protected slots:
      * Reset the output area zoom, i.e. restore its default font.
      **/
     void resetZoom();
+
+    /**
+     * Show after timeout has elapsed (unless the user closed this dialog
+     * before)
+     **/
+    void timeoutShow();
 
 
 signals:
@@ -304,6 +340,7 @@ protected:
     QColor			  _stdoutColor;
     QColor			  _stderrColor;
     QFont			  _terminalDefaultFont;
+    int                           _defaultShowTimeout;
 
 };	// class ProcessOutput
 
