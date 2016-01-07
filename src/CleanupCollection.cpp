@@ -241,7 +241,7 @@ void CleanupCollection::execute()
     }
 
     connect( outputWindow, SIGNAL( lastProcessFinished( int ) ),
-             this,	   SIGNAL( cleanupFinished    ( int ) ) );
+	     this,	   SIGNAL( cleanupFinished    ( int ) ) );
 
     foreach ( FileInfo * item, selection )
     {
@@ -368,16 +368,31 @@ void CleanupCollection::moveToBottom( Cleanup * cleanup )
 void CleanupCollection::readSettings()
 {
     QSettings settings;
-    settings.beginGroup( "Cleanups" );
-    int size = settings.beginReadArray( "Cleanup" );
 
-    if ( size > 0 )
+    while ( ! settings.group().isEmpty() )  // ensure using toplevel settings
+	settings.endGroup();
+
+    // Find all [Cleanup_xx] groups
+
+    QStringList cleanupGroups;
+
+    foreach ( const QString & group, settings.childGroups() )
+    {
+	if ( group.startsWith( "Cleanup_" ) )
+	    cleanupGroups << group;
+    }
+
+    if ( ! cleanupGroups.isEmpty() ) // Keep defaults (StdCleanups) if settings empty
     {
 	clear();
 
-	for ( int i=0; i < size; ++i )
+	// Read all settings groups [Cleanup_xx] that were found
+
+	foreach ( const QString & groupName, cleanupGroups )
 	{
-	    settings.setArrayIndex( i );
+	    settings.beginGroup( groupName );
+
+	    // Read one cleanup
 
 	    QString command  = settings.value( "Command" ).toString();
 	    QString id	     = settings.value( "ID"	 ).toString();
@@ -425,64 +440,83 @@ void CleanupCollection::readSettings()
 
 		if ( ! hotkey.isEmpty() )
 		    cleanup->setShortcut( hotkey );
+
 	    }
 	    else
 	    {
 		logError() << "Need at least Command, ID, Title for a cleanup" << endl;
 	    }
+
+	    settings.endGroup(); // [Cleanup_01], [Cleanup_02], ...
 	}
     }
-
-    settings.endArray();
-    settings.endGroup();
 }
 
 
 void CleanupCollection::writeSettings()
 {
     QSettings settings;
-    settings.beginGroup( "Cleanups" );
 
-    if ( _cleanupList.isEmpty() )
-	settings.remove( "Cleanup" );
-    else
+    while ( ! settings.group().isEmpty() )  // ensure using toplevel settings
+	settings.endGroup();
+
+    // Remove all leftover cleanup descriptions:
+    // Remove all settings groups starting with "Cleanup".
+
+    foreach ( const QString & group, settings.childGroups() )
     {
-	settings.beginWriteArray( "Cleanup", _cleanupList.size() );
-
-	for ( int i=0; i < _cleanupList.size(); ++i )
-	{
-	    settings.setArrayIndex( i );
-	    Cleanup * cleanup = _cleanupList.at( i );
-
-	    settings.setValue( "Command"	      , cleanup->command()		 );
-	    settings.setValue( "ID"		      , cleanup->id()			 );
-	    settings.setValue( "Title"		      , cleanup->title()		 );
-	    settings.setValue( "Active"		      , cleanup->active()		 );
-	    settings.setValue( "WorksForDir"	      , cleanup->worksForDir()		 );
-	    settings.setValue( "WorksForFile"	      , cleanup->worksForFile()		 );
-	    settings.setValue( "WorksForDotEntry"     , cleanup->worksForDotEntry()	 );
-	    settings.setValue( "Recurse"	      , cleanup->recurse()		 );
-	    settings.setValue( "AskForConfirmation"   , cleanup->askForConfirmation()	 );
-	    settings.setValue( "OutputWindowAutoClose", cleanup->outputWindowAutoClose() );
-	    settings.setValue( "OutputWindowTimeout"  , cleanup->outputWindowTimeout()	 );
-
-	    writeEnumEntry( settings, "RefreshPolicy",
-			    cleanup->refreshPolicy(),
-			    Cleanup::refreshPolicyMapping() );
-
-	    writeEnumEntry( settings, "OutputWindowPolicy",
-			    cleanup->outputWindowPolicy(),
-			    Cleanup::outputWindowPolicyMapping() );
-
-	    if ( ! cleanup->iconName().isEmpty() )
-		 settings.setValue( "Icon", cleanup->iconName() );
-
-	    if ( ! cleanup->shortcut().isEmpty() )
-		settings.setValue( "Hotkey" , cleanup->shortcut().toString() );
-	}
-
-	settings.endArray();
+	if ( group.startsWith( "Cleanup_" ) )
+	    settings.remove( group );
     }
-    settings.endGroup();
+
+    // Using a separate group for each cleanup for better readability in the
+    // file.
+    //
+    // QSettings arrays are hard to read and to edit if there are more than,
+    // say, 2-3 entries for each array index. Plus, a user editing the file
+    // would have to take care of the array count - which is very error prone.
+    //
+    // We are using [Cleanup_01], [Cleanup_02], ... here just because that's
+    // easiest to generate automatically; upon reading, the numbers are
+    // irrelevant. It's just important that each group name is
+    // unique. readSettings() will happily pick up any group that starts with
+    // "Cleanup_".
+
+    for ( int i=0; i < _cleanupList.size(); ++i )
+    {
+	QString groupName;
+	groupName.sprintf( "Cleanup_%02d", i+1 );
+	settings.beginGroup( groupName );
+
+	Cleanup * cleanup = _cleanupList.at(i);
+
+	settings.setValue( "Command"		  , cleanup->command()		     );
+	settings.setValue( "ID"			  , cleanup->id()		     );
+	settings.setValue( "Title"		  , cleanup->title()		     );
+	settings.setValue( "Active"		  , cleanup->active()		     );
+	settings.setValue( "WorksForDir"	  , cleanup->worksForDir()	     );
+	settings.setValue( "WorksForFile"	  , cleanup->worksForFile()	     );
+	settings.setValue( "WorksForDotEntry"	  , cleanup->worksForDotEntry()	     );
+	settings.setValue( "Recurse"		  , cleanup->recurse()		     );
+	settings.setValue( "AskForConfirmation"	  , cleanup->askForConfirmation()    );
+	settings.setValue( "OutputWindowAutoClose", cleanup->outputWindowAutoClose() );
+	settings.setValue( "OutputWindowTimeout"  , cleanup->outputWindowTimeout()   );
+
+	writeEnumEntry( settings, "RefreshPolicy",
+			cleanup->refreshPolicy(),
+			Cleanup::refreshPolicyMapping() );
+
+	writeEnumEntry( settings, "OutputWindowPolicy",
+			cleanup->outputWindowPolicy(),
+			Cleanup::outputWindowPolicyMapping() );
+
+	if ( ! cleanup->iconName().isEmpty() )
+	    settings.setValue( "Icon", cleanup->iconName() );
+
+	if ( ! cleanup->shortcut().isEmpty() )
+	    settings.setValue( "Hotkey" , cleanup->shortcut().toString() );
+
+	settings.endGroup(); // [Cleanup_01], [Cleanup_02], ...
+    }
 }
 
