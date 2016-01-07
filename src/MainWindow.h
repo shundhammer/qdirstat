@@ -233,7 +233,7 @@ private:
     QDirStat::CleanupCollection * _cleanupCollection;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
-    int				  _statusBarTimeOut; // millisec
+    int				  _statusBarTimeout; // millisec
     QSignalMapper	       * _treeLevelMapper;
 };
 

@@ -40,7 +40,7 @@ MainWindow::MainWindow():
     QMainWindow(),
     _ui( new Ui::MainWindow ),
     _modified( false ),
-    _statusBarTimeOut( 3000 ), // millisec
+    _statusBarTimeout( 3000 ), // millisec
     _treeLevelMapper(0)
 {
     _ui->setupUi( this );
@@ -255,7 +255,7 @@ void MainWindow::readSettings()
     QSettings settings;
     settings.beginGroup( "MainWindow" );
 
-    _statusBarTimeOut	 = settings.value( "StatusBarTimeOutMillisec", 3000 ).toInt();
+    _statusBarTimeout	 = settings.value( "StatusBarTimeoutMillisec", 3000 ).toInt();
     bool   showTreemap	 = settings.value( "ShowTreemap"	     , true ).toBool();
     QPoint winPos	 = settings.value( "WindowPos"		     , QPoint( -99, -99 ) ).toPoint();
     QSize  winSize	 = settings.value( "WindowSize"		     , QSize (	 0,   0 ) ).toSize();
@@ -279,7 +279,7 @@ void MainWindow::writeSettings()
     QSettings settings;
     settings.beginGroup( "MainWindow" );
 
-    settings.setValue( "StatusBarTimeOutMillisec", _statusBarTimeOut );
+    settings.setValue( "StatusBarTimeoutMillisec", _statusBarTimeout );
     settings.setValue( "ShowTreemap"		 , _ui->actionShowTreemap->isChecked() );
     settings.setValue( "WindowPos"		 , pos()  );
     settings.setValue( "WindowSize"		 , size() );
@@ -457,7 +457,7 @@ void MainWindow::askWriteCache()
 
 	QString msg = ok ? tr( "Directory tree written to file %1" ).arg( fileName ) :
 			   tr( "ERROR writing cache file %1").arg( fileName );
-	_ui->statusBar->showMessage( msg, _statusBarTimeOut );
+	_ui->statusBar->showMessage( msg, _statusBarTimeout );
     }
 }
 
@@ -473,7 +473,7 @@ void MainWindow::expandTreeToLevel( int level )
 
 void MainWindow::showProgress( const QString & text )
 {
-    _ui->statusBar->showMessage( text, _statusBarTimeOut );
+    _ui->statusBar->showMessage( text, _statusBarTimeout );
 }
 
 
