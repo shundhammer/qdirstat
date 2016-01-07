@@ -25,6 +25,8 @@ INSTALLS	    += TARGET
 
 SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
+            ConfigDialog.cpp            \
+            CleanupConfigPage.cpp       \
 	    Cleanup.cpp			\
 	    CleanupCollection.cpp	\
 	    StdCleanup.cpp		\
@@ -55,6 +57,8 @@ SOURCES	  = main.cpp			\
 
 HEADERS	  =				\
 	    ActionManager.h		\
+            ConfigDialog.h              \
+            CleanupConfigPage.h         \
 	    Cleanup.h			\
 	    CleanupCollection.h		\
 	    StdCleanup.h		\
@@ -89,7 +93,7 @@ HEADERS	  =				\
 FORMS	  = main-window.ui		\
 	    output-window.ui		\
 	    config-dialog.ui		\
-	    cleanups-config-page.ui	\
+	    cleanup-config-page.ui	\
 	    general-config-page.ui	\
 
 

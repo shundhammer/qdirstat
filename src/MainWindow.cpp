@@ -18,6 +18,8 @@
 #include "MainWindow.h"
 #include "ActionManager.h"
 #include "CleanupCollection.h"
+#include "CleanupConfigPage.h"
+#include "ConfigDialog.h"
 #include "DataColumns.h"
 #include "DebugHelpers.h"
 #include "DirTree.h"
@@ -39,10 +41,13 @@ using QDirStat::CleanupCollection;
 MainWindow::MainWindow():
     QMainWindow(),
     _ui( new Ui::MainWindow ),
+    _configDialog(0),
     _modified( false ),
     _statusBarTimeout( 3000 ), // millisec
     _treeLevelMapper(0)
 {
+    CHECK_PTR( _ui );
+
     _ui->setupUi( this );
     ActionManager::instance()->addWidgetTree( this );
     readSettings();
@@ -202,6 +207,11 @@ void MainWindow::connectActions()
     CONNECT_ACTION( _ui->actionTreemapZoomOut,	 _ui->treemapView, zoomOut()	    );
     CONNECT_ACTION( _ui->actionResetTreemapZoom, _ui->treemapView, resetZoom()	    );
     CONNECT_ACTION( _ui->actionTreemapRebuild,	 _ui->treemapView, rebuildTreemap() );
+
+    // "Settings" menu
+
+    CONNECT_ACTION( _ui->actionConfigure, this, openConfigDialog() );
+
 
     // "Help" menu
 
@@ -573,6 +583,23 @@ void MainWindow::navigateToToplevel()
 	expandTreeToLevel( 1 );
 	_selectionModel->setCurrentItem( toplevel,
 					 true ); // select
+    }
+}
+
+
+void MainWindow::openConfigDialog()
+{
+    if ( ! _configDialog )
+    {
+	_configDialog = new ConfigDialog( this );
+	CHECK_PTR( _configDialog );
+        _configDialog->cleanupConfigPage()->setCleanupCollection( _cleanupCollection );
+    }
+
+    if ( ! _configDialog->isVisible() )
+    {
+	_configDialog->setup();
+	_configDialog->show();
     }
 }
 

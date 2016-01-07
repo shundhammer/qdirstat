@@ -136,12 +136,19 @@
      <string>&amp;Clean Up</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>&amp;Settings</string>
+    </property>
+    <addaction name="actionConfigure"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuGoTo"/>
    <addaction name="menuTreemap"/>
    <addaction name="menuCleanup"/>
+   <addaction name="menuSettings"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -517,6 +524,18 @@
    </property>
    <property name="text">
     <string>Continue Reading at &amp;Mount Point</string>
+   </property>
+  </action>
+  <action name="actionConfigure">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/preferences.png</normaloff>:/icons/preferences.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Configure QDirStat</string>
+   </property>
+   <property name="toolTip">
+    <string>Configure QDirStat</string>
    </property>
   </action>
  </widget>

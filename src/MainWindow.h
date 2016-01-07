@@ -23,7 +23,14 @@ class QCloseEvent;
 class QSortFilterProxyModel;
 class QSignalMapper;
 
+
+namespace QDirStat
+{
+    class ConfigDialog;
+}
+
 using QDirStat::FileInfo;
+
 
 
 class MainWindow: public QMainWindow
@@ -182,6 +189,11 @@ protected slots:
     void cleanupFinished( int errorCount );
 
     /**
+     * Open the config dialog.
+     **/
+    void openConfigDialog();
+
+    /**
      * Open a popup dialog with a message that this feature is not implemented.
      **/
     void notImplemented();
@@ -231,6 +243,7 @@ private:
     QDirStat::DirTreeModel	* _dirTreeModel;
     QDirStat::SelectionModel	* _selectionModel;
     QDirStat::CleanupCollection * _cleanupCollection;
+    QDirStat::ConfigDialog      * _configDialog;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
     int				  _statusBarTimeout; // millisec

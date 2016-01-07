@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>cleanupsPage</class>
- <widget class="QWidget" name="cleanupsPage">
+ <class>CleanupConfigPage</class>
+ <widget class="QWidget" name="CleanupConfigPage">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>681</width>
+    <width>688</width>
     <height>608</height>
    </rect>
   </property>
@@ -32,7 +32,7 @@ part of this window smaller or larger.</string>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QListWidget" name="cleanupsListWidget">
+        <widget class="QListWidget" name="cleanupListWidget">
          <property name="minimumSize">
           <size>
            <width>250</width>
