@@ -16,6 +16,10 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QSplitter" name="splitter">
+     <property name="toolTip">
+      <string>Drag this to make the left or right
+part of this window smaller or larger.</string>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -41,6 +45,9 @@
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
           <widget class="QToolButton" name="moveToTopButton">
+           <property name="toolTip">
+            <string>Move the current cleanup action to the top of the list.</string>
+           </property>
            <property name="text">
             <string>...</string>
            </property>
@@ -51,7 +58,10 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="moveCleanupUpButton">
+          <widget class="QToolButton" name="moveUpButton">
+           <property name="toolTip">
+            <string>Move the current cleanup action one position up in the list.</string>
+           </property>
            <property name="text">
             <string>...</string>
            </property>
@@ -76,6 +86,10 @@
          </item>
          <item>
           <widget class="QToolButton" name="addButton">
+           <property name="toolTip">
+            <string>Create a new cleanup action.
+You can create as many as you like.</string>
+           </property>
            <property name="text">
             <string>...</string>
            </property>
@@ -87,6 +101,9 @@
          </item>
          <item>
           <widget class="QToolButton" name="deleteButton">
+           <property name="toolTip">
+            <string>Delete the current cleanup action.</string>
+           </property>
            <property name="text">
             <string>...</string>
            </property>
@@ -111,6 +128,9 @@
          </item>
          <item>
           <widget class="QToolButton" name="moveDownButton">
+           <property name="toolTip">
+            <string>Move the current cleanup action one position down in the list.</string>
+           </property>
            <property name="text">
             <string>...</string>
            </property>
@@ -122,6 +142,9 @@
          </item>
          <item>
           <widget class="QToolButton" name="moveToBottomButton">
+           <property name="toolTip">
+            <string>Move the current cleanup action to the bottom of the list.</string>
+           </property>
            <property name="text">
             <string>...</string>
            </property>
@@ -136,6 +159,9 @@
       </layout>
      </widget>
      <widget class="QGroupBox" name="activeGroupBox">
+      <property name="toolTip">
+       <string>Uncheck to disable this cleanup action completely.</string>
+      </property>
       <property name="title">
        <string>&amp;Active</string>
       </property>
@@ -154,7 +180,13 @@
         </widget>
        </item>
        <item row="0" column="1" colspan="2">
-        <widget class="QLineEdit" name="titleLineEdit"/>
+        <widget class="QLineEdit" name="titleLineEdit">
+         <property name="toolTip">
+          <string>Enter a title for this cleanup action.
+This will show up in the menus.
+You can add a hotkey with &quot;&amp;&quot;.</string>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0" colspan="2">
         <widget class="QLabel" name="commandCaption">
@@ -167,7 +199,15 @@
         </widget>
        </item>
        <item row="2" column="0" colspan="3">
-        <widget class="QLineEdit" name="commandLineEdit"/>
+        <widget class="QLineEdit" name="commandLineEdit">
+         <property name="toolTip">
+          <string>Enter the command to be executed here.
+Each command will be executed with a shell.
+
+If multiple items are selected, the command
+will be executed once for each selected item.</string>
+         </property>
+        </widget>
        </item>
        <item row="3" column="0">
         <spacer name="horizontalSpacer">
@@ -189,6 +229,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QLabel" name="miniHelpLabel">
+           <property name="toolTip">
+            <string>These are the macros you can use in the command.
+Both %p and %n always contain only one item.
+If multiple items are selected, the command will be
+executed multiple times.</string>
+           </property>
            <property name="text">
             <string>%p  Full Path
 %n  File / Directory Name Without Path
@@ -220,12 +266,21 @@
           <string>&amp;Shell:</string>
          </property>
          <property name="buddy">
-          <cstring>comboBox</cstring>
+          <cstring>shellComboBox</cstring>
          </property>
         </widget>
        </item>
        <item row="4" column="1" colspan="2">
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="shellComboBox">
+         <property name="toolTip">
+          <string>Select a shell here or enter your favourite one.
+
+Each command will be executed with a shell and the &quot;-c&quot; option.
+Shells may behave differently for wildcards and special characters.
+
+If you are setting this up for other users, better be safe and select
+a shell with a well-known behaviour like /bin/bash.</string>
+         </property>
          <property name="editable">
           <bool>true</bool>
          </property>
@@ -248,6 +303,11 @@
        </item>
        <item row="5" column="0" colspan="3">
         <widget class="QCheckBox" name="recursiveCheckBox">
+         <property name="toolTip">
+          <string>Select if the command should be executed recursively
+for each directory in the selected branch.
+The command will be called separately for each directory level.</string>
+         </property>
          <property name="text">
           <string>&amp;Recurse Into Subdirectories</string>
          </property>
@@ -255,6 +315,13 @@
        </item>
        <item row="6" column="0" colspan="3">
         <widget class="QCheckBox" name="askForConfirmationCheckBox">
+         <property name="toolTip">
+          <string>Check this if a confirmation dialog should be
+opened before executing the command.
+There will be only one confirmation dialog,
+even if multiple items are selected or if
+the command is executed recursively.</string>
+         </property>
          <property name="text">
           <string>As&amp;k For Confirmation</string>
          </property>
@@ -287,20 +354,30 @@
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QCheckBox" name="worksForDirCheckBox">
+            <property name="toolTip">
+             <string>Check this if the command can be applied to directories.</string>
+            </property>
             <property name="text">
              <string>&amp;Directories</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="worksForDotEntriesCheckBox">
+           <widget class="QCheckBox" name="worksForFilesCheckBox">
+            <property name="toolTip">
+             <string>Check this if the command can be applied to files.</string>
+            </property>
             <property name="text">
              <string>&amp;Files</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="worksForDirCheckBox_2">
+           <widget class="QCheckBox" name="worksForDotEntriesCheckBox">
+            <property name="toolTip">
+             <string>Check this if the command can be applied to the &lt;Files&gt; entries in the tree.
+Note that they don't really have a counterpart on the disk.</string>
+            </property>
             <property name="text">
              <string>&lt;Files&gt; Pse&amp;udo Entries</string>
             </property>
@@ -323,7 +400,7 @@
         </spacer>
        </item>
        <item row="10" column="0" colspan="3">
-        <widget class="QGroupBox" name="OutputWindowGroupBox">
+        <widget class="QGroupBox" name="outputWindowGroupBox">
          <property name="title">
           <string>Output Window</string>
          </property>
@@ -340,6 +417,12 @@
           </item>
           <item row="0" column="1">
            <widget class="QComboBox" name="outputWindowPolicyComboBox">
+            <property name="toolTip">
+             <string>Select if and when to open a window for the output of the command.
+If there is an error, the output window is always opened unless
+&quot;Never Show&quot; is selected here.
+&quot;Show After Timeout&quot; is a useful setting for most cases.</string>
+            </property>
             <property name="currentIndex">
              <number>2</number>
             </property>
@@ -377,6 +460,13 @@
           </item>
           <item row="1" column="1">
            <widget class="QDoubleSpinBox" name="outputWindowTimeoutSpinBox">
+            <property name="toolTip">
+             <string>Set the timeout for the &quot;Show After Timeout&quot; setting.
+Don't underestimate your computer: It can get more
+done in half a second than you might think.
+On the other hand, waiting for half a second feels
+longer than you might think.</string>
+            </property>
             <property name="suffix">
              <string> sec</string>
             </property>
@@ -393,6 +483,12 @@
           </item>
           <item row="2" column="0" colspan="2">
            <widget class="QCheckBox" name="outputWindowAutoCloseCheckBox">
+            <property name="toolTip">
+             <string>Check this to automatically close the
+output window if there was no error.
+If you are interested in the output of your
+command, uncheck this.</string>
+            </property>
             <property name="text">
              <string>Auto C&amp;lose If No Error</string>
             </property>
@@ -418,6 +514,10 @@
          </item>
          <item>
           <widget class="QComboBox" name="refreshPolicyComboBox">
+           <property name="toolTip">
+            <string>This specifies if and how the directory tree should be
+re-read from disk after the cleanup action is finished.</string>
+           </property>
            <property name="currentIndex">
             <number>1</number>
            </property>
