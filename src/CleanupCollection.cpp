@@ -371,7 +371,7 @@ void CleanupCollection::readSettings()
 	    bool recurse	       = settings.value( "Recurse"		, false ).toBool();
 	    bool askForConfirmation    = settings.value( "AskForConfirmation"	, false ).toBool();
 	    bool outputWindowAutoClose = settings.value( "OutputWindowAutoClose", false ).toBool();
-	    int	 outputWindowTimeout   = settings.value( "OutputWindowTimeout"	, -1	).toInt();
+	    int	 outputWindowTimeout   = settings.value( "OutputWindowTimeout"	, 0	).toInt();
 
 	    int refreshPolicy	    = readEnumEntry( settings, "RefreshPolicy",
 						     Cleanup::NoRefresh,
@@ -463,7 +463,9 @@ void CleanupCollection::writeSettings()
 	settings.setValue( "Recurse"		  , cleanup->recurse()		     );
 	settings.setValue( "AskForConfirmation"	  , cleanup->askForConfirmation()    );
 	settings.setValue( "OutputWindowAutoClose", cleanup->outputWindowAutoClose() );
-	settings.setValue( "OutputWindowTimeout"  , cleanup->outputWindowTimeout()   );
+
+        if ( cleanup->outputWindowTimeout() > 0 )
+            settings.setValue( "OutputWindowTimeout"  , cleanup->outputWindowTimeout()   );
 
 	writeEnumEntry( settings, "RefreshPolicy",
 			cleanup->refreshPolicy(),
