@@ -7,7 +7,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-05
+Updated: 2016-01-07
 
 
 ## Overview
@@ -275,14 +275,52 @@ will be configurable.
 
 Stuff that can be configured in ~/.config/QDirStat/QDirStat.conf:
 
-    [Data_Columns]
+    [Cleanup_01]
+    Active=true
+    AskForConfirmation=false
+    Command=xdg-open %p
+    Hotkey=Ctrl+K
+    ID=cleanupOpenInFileManager
+    Icon=:/icons/file-manager.png
+    OutputWindowAutoClose=false
+    OutputWindowPolicy=ShowAfterTimeout
+    OutputWindowTimeout=0
+    Recurse=false
+    RefreshPolicy=NoRefresh
+    Title=Open in &File Manager
+    WorksForDir=true
+    WorksForDotEntry=true
+    WorksForFile=true
+
+    [Cleanup_02]
+    Active=true
+    AskForConfirmation=false
+    Command=x-terminal-emulator --workdir %p
+    Hotkey=Ctrl+T
+    ID=cleanupOpenInTerminal
+    Icon=:/icons/terminal.png
+    OutputWindowAutoClose=false
+    OutputWindowPolicy=ShowNever
+    OutputWindowTimeout=0
+    Recurse=false
+    RefreshPolicy=NoRefresh
+    Title=Open in &Terminal
+    WorksForDir=true
+    WorksForDotEntry=true
+    WorksForFile=false
+
+    ...
+    ...
+
+    [DataColumns]
     Columns=NameCol, PercentBarCol, PercentNumCol, TotalSizeCol, OwnSizeCol, TotalItemsCol, TotalFilesCol, TotalSubDirsCol, LatestMTimeCol
 
-    [Directory_Tree]
+    [DirectoryTree]
+    CrossFileSystems=false
     TreeIconDir=:/icons/tree-medium/
     UpdateTimerMillisec=333
 
-    [Exclude_Rules]
+    [ExcludeRules]
     Rules\1\CaseSensitive=true
     Rules\1\Pattern=.snapshot
     Rules\1\Syntax=FixedString
@@ -291,10 +329,18 @@ Stuff that can be configured in ~/.config/QDirStat/QDirStat.conf:
     [MainWindow]
     ShowTreemap=true
     StatusBarTimeOutMillisec=3000
-    WindowPos=@Point(388 60)
+    WindowPos=@Point(-2 0)
     WindowSize=@Size(1157 650)
 
-    [Percent_Bar]
+    [OutputWindow]
+    CommandTextColor=#ffffff
+    DefaultShowTimeoutMillisec=500
+    StdErrTextColor=#ff0000
+    StdoutTextColor=#ffaa00
+    TerminalBackground=#000000
+    TerminalFont="DejaVu Sans Mono,10,-1,5,50,0,0,0,0,0"
+
+    [PercentBar]
     Background=#a0a0a0
     Colors=#0000ff, #800080, #e7932b, #047100, #b00000, #ccbb00, #a2621e, #009492, #d95e00, #00c241, #c26cbb, #00b3ff
     PercentBarColumnWidth=180
