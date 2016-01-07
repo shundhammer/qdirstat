@@ -155,6 +155,9 @@ void DirTree::refresh( DirInfo * subtree )
 	return;
     }
 
+    if ( subtree->isDotEntry() )
+	subtree = subtree->parent();
+
     if ( ! subtree || ! subtree->parent() )	// Refresh all (from first toplevel)
     {
 	startReading( QDir::cleanPath( firstToplevel()->url() ) );
