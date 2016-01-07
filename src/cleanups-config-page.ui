@@ -6,444 +6,447 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>717</width>
-    <height>636</height>
+    <width>681</width>
+    <height>608</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_4">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QListWidget" name="cleanupsListWidget">
-     <property name="minimumSize">
-      <size>
-       <width>250</width>
-       <height>400</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
-     <item>
-      <widget class="QToolButton" name="moveToTopButton">
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="icons.qrc">
-         <normaloff>:/icons/go-top.png</normaloff>:/icons/go-top.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="moveCleanupUpButton">
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="icons.qrc">
-         <normaloff>:/icons/go-up.png</normaloff>:/icons/go-up.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_1">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QToolButton" name="addButton">
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="icons.qrc">
-         <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="deleteButton">
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="icons.qrc">
-         <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QToolButton" name="moveDownButton">
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="icons.qrc">
-         <normaloff>:/icons/go-down.png</normaloff>:/icons/go-down.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="moveToBottomButton">
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="icons.qrc">
-         <normaloff>:/icons/go-bottom.png</normaloff>:/icons/go-bottom.png</iconset>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <spacer name="horizontalSpacer_3">
+    <widget class="QSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Maximum</enum>
+     <property name="handleWidth">
+      <number>12</number>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>10</width>
-       <height>20</height>
-      </size>
+     <property name="childrenCollapsible">
+      <bool>false</bool>
      </property>
-    </spacer>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="activeGroupBox">
-     <property name="title">
-      <string>&amp;Active</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_4">
-      <item>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="titleCaption">
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QListWidget" name="cleanupsListWidget">
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>400</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QToolButton" name="moveToTopButton">
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/icons/go-top.png</normaloff>:/icons/go-top.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="moveCleanupUpButton">
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/icons/go-up.png</normaloff>:/icons/go-up.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_1">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="addButton">
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="deleteButton">
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="moveDownButton">
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/icons/go-down.png</normaloff>:/icons/go-down.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="moveToBottomButton">
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="icons.qrc">
+             <normaloff>:/icons/go-bottom.png</normaloff>:/icons/go-bottom.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QGroupBox" name="activeGroupBox">
+      <property name="title">
+       <string>&amp;Active</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="titleCaption">
+         <property name="text">
+          <string>&amp;Title:</string>
+         </property>
+         <property name="buddy">
+          <cstring>titleLineEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="2">
+        <widget class="QLineEdit" name="titleLineEdit"/>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="commandCaption">
+         <property name="text">
+          <string>&amp;Command Line:</string>
+         </property>
+         <property name="buddy">
+          <cstring>commandLineEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="3">
+        <widget class="QLineEdit" name="commandLineEdit"/>
+       </item>
+       <item row="3" column="0">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>34</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="3" column="1" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="miniHelpLabel">
+           <property name="text">
+            <string>%p  Full Path
+%n  File / Directory Name Without Path
+</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>&amp;Shell:</string>
+         </property>
+         <property name="buddy">
+          <cstring>comboBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" colspan="2">
+        <widget class="QComboBox" name="comboBox">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <item>
           <property name="text">
-           <string>&amp;Title:</string>
+           <string>$SHELL (Login Shell)</string>
           </property>
-          <property name="buddy">
-           <cstring>titleLineEdit</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="titleLineEdit"/>
-        </item>
-        <item row="1" column="0" colspan="2">
-         <widget class="QLabel" name="commandCaption">
+         </item>
+         <item>
           <property name="text">
-           <string>&amp;Command Line:</string>
+           <string>/bin/bash</string>
           </property>
-          <property name="buddy">
-           <cstring>commandLineEdit</cstring>
+         </item>
+         <item>
+          <property name="text">
+           <string>/bin/sh</string>
           </property>
-         </widget>
-        </item>
-        <item row="2" column="0" colspan="2">
-         <widget class="QLineEdit" name="commandLineEdit"/>
-        </item>
-        <item row="3" column="0" colspan="2">
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         </item>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="3">
+        <widget class="QCheckBox" name="recursiveCheckBox">
+         <property name="text">
+          <string>&amp;Recurse Into Subdirectories</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="3">
+        <widget class="QCheckBox" name="askForConfirmationCheckBox">
+         <property name="text">
+          <string>As&amp;k For Confirmation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="8" column="0" colspan="3">
+        <widget class="QGroupBox" name="worksForGroupBox">
+         <property name="title">
+          <string>Works For...</string>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLabel" name="miniHelpLabel">
+           <widget class="QCheckBox" name="worksForDirCheckBox">
             <property name="text">
-             <string>Substitutions For Selected Item:
-
-%p  Full Path
-%n  File / Directory Name Without Path</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <string>&amp;Directories</string>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+           <widget class="QCheckBox" name="worksForDotEntriesCheckBox">
+            <property name="text">
+             <string>&amp;Files</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="worksForDirCheckBox_2">
+            <property name="text">
+             <string>&lt;Files&gt; Pse&amp;udo Entries</string>
             </property>
-           </spacer>
+           </widget>
           </item>
          </layout>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>&amp;Shell:</string>
-          </property>
-          <property name="buddy">
-           <cstring>comboBox</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QComboBox" name="comboBox">
-          <property name="editable">
-           <bool>true</bool>
-          </property>
-          <item>
-           <property name="text">
-            <string>$SHELL (Login Shell)</string>
-           </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="10" column="0" colspan="3">
+        <widget class="QGroupBox" name="OutputWindowGroupBox">
+         <property name="title">
+          <string>Output Window</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="outputWindowPolicyCaption">
+            <property name="text">
+             <string>&amp;Policy:</string>
+            </property>
+            <property name="buddy">
+             <cstring>outputWindowPolicyComboBox</cstring>
+            </property>
+           </widget>
           </item>
-          <item>
-           <property name="text">
-            <string>/bin/bash</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>/bin/sh</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="recursiveCheckBox">
-        <property name="text">
-         <string>&amp;Recurse Into Subdirectories</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="askForConfirmationCheckBox">
-        <property name="text">
-         <string>&amp;Ask For Confirmation</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>7</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="worksForGroupBox">
-        <property name="title">
-         <string>Works For...</string>
-        </property>
-        <property name="flat">
-         <bool>false</bool>
-        </property>
-        <property name="checkable">
-         <bool>false</bool>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <item>
-          <widget class="QCheckBox" name="worksForDirCheckBox">
-           <property name="text">
-            <string>&amp;Directories</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="worksForDotEntriesCheckBox">
-           <property name="text">
-            <string>&amp;Files</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="worksForDirCheckBox_2">
-           <property name="text">
-            <string>&lt;Files&gt; &amp;Pseudo Entries</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>7</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="OutputWindowGroupBox">
-        <property name="title">
-         <string>&amp;Output Window</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QComboBox" name="outputWindowPolicyComboBox">
-           <property name="currentIndex">
-            <number>2</number>
-           </property>
-           <item>
-            <property name="text">
-             <string>Show Always</string>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="outputWindowPolicyComboBox">
+            <property name="currentIndex">
+             <number>2</number>
             </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Show If Error Output</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Show After Timeout</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Never Show</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QLabel" name="outputWindowTimeoutCaption">
+            <item>
              <property name="text">
-              <string>&amp;Timeout:</string>
+              <string>Show Always</string>
              </property>
-             <property name="buddy">
-              <cstring>outputWindowTimeoutSpinBox</cstring>
+            </item>
+            <item>
+             <property name="text">
+              <string>Show If Error Output</string>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QDoubleSpinBox" name="outputWindowTimeoutSpinBox">
-             <property name="suffix">
-              <string> sec</string>
+            </item>
+            <item>
+             <property name="text">
+              <string>Show After Timeout</string>
              </property>
-             <property name="decimals">
-              <number>1</number>
+            </item>
+            <item>
+             <property name="text">
+              <string>Never Show</string>
              </property>
-             <property name="maximum">
-              <double>300.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="outputWindowTimeoutCaption">
+            <property name="text">
+             <string>Ti&amp;meout:</string>
+            </property>
+            <property name="buddy">
+             <cstring>outputWindowTimeoutSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDoubleSpinBox" name="outputWindowTimeoutSpinBox">
+            <property name="suffix">
+             <string> sec</string>
+            </property>
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <double>300.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.500000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QCheckBox" name="outputWindowAutoCloseCheckBox">
+            <property name="text">
+             <string>Auto C&amp;lose If No Error</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="11" column="0" colspan="3">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QCheckBox" name="outputWindowAutoCloseCheckBox">
+          <widget class="QLabel" name="refreshPolicyCaption">
            <property name="text">
-            <string>Auto C&amp;lose If No Error</string>
+            <string>R&amp;efresh Policy:</string>
            </property>
-           <property name="checked">
-            <bool>true</bool>
+           <property name="buddy">
+            <cstring>refreshPolicyComboBox</cstring>
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QComboBox" name="refreshPolicyComboBox">
+           <property name="currentIndex">
+            <number>1</number>
+           </property>
+           <item>
+            <property name="text">
+             <string>No Refresh</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Refresh This Item</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Refresh This Item's Parent</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Assume Item Has Been Deleted</string>
+            </property>
+           </item>
+          </widget>
+         </item>
         </layout>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="refreshPolicyCaption">
-          <property name="text">
-           <string>R&amp;efresh Policy:</string>
-          </property>
-          <property name="buddy">
-           <cstring>refreshPolicyComboBox</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="refreshPolicyComboBox">
-          <property name="currentIndex">
-           <number>1</number>
-          </property>
-          <item>
-           <property name="text">
-            <string>No Refresh</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Refresh This Item</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Refresh This Item's Parent</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Assume Item Has Been Deleted</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
