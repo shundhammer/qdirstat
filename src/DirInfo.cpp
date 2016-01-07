@@ -29,6 +29,9 @@ DirInfo::DirInfo( DirTree * tree,
     {
 	_isDotEntry = true;
 	_name	    = dotEntryName();
+
+        if ( parent )
+            _device = parent->device();
     }
     else
     {
