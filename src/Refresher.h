@@ -31,6 +31,8 @@ namespace QDirStat
      **/
     class Refresher: public QObject
     {
+	Q_OBJECT
+
     public:
 
 	/**
@@ -55,6 +57,10 @@ namespace QDirStat
 	void refresh();
 
     protected:
+	/**
+	 * Convert the items to string for logging.
+	 **/
+	QString itemsToString() const;
 
 	FileInfoSet _items;
     };

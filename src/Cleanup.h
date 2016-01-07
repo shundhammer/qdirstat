@@ -314,11 +314,11 @@ namespace QDirStat
 	 **/
 	const QString itemDir( const FileInfo * item ) const;
 
-        /**
-         * Choose a suitable shell. Try this->shell() and fall back to
-         * defaultShell(). Return an empty string if no usable shell is found.
-         **/
-        QString chooseShell( OutputWindow * outputWindow ) const;
+	/**
+	 * Choose a suitable shell. Try this->shell() and fall back to
+	 * defaultShell(). Return an empty string if no usable shell is found.
+	 **/
+	QString chooseShell( OutputWindow * outputWindow ) const;
 
 	/**
 	 * Expand some variables in string 'unexpanded' to information from

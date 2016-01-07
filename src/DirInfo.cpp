@@ -156,7 +156,7 @@ void DirInfo::reset()
 
 void DirInfo::recalc()
 {
-    logDebug() << this << endl;
+    // logDebug() << this << endl;
 
     _totalSize	  = _size;
     _totalBlocks  = _blocks;
