@@ -12,6 +12,7 @@
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QSettings>
+#include <QFileInfo>
 
 #include "Cleanup.h"
 #include "FileInfo.h"
@@ -202,21 +203,50 @@ QString Cleanup::escapeAndQuote( const QString & unescaped ) const
 }
 
 
+QString Cleanup::chooseShell( OutputWindow * outputWindow ) const
+{
+    QString errMsg;
+    QString shell = this->shell();
+
+    if ( ! shell.isEmpty() && ! isExecutable( shell ) )
+    {
+	errMsg = tr( "ERROR: Shell %1 is not executable" ).arg( shell );
+	shell = defaultShell();
+
+	if ( ! shell.isEmpty() )
+	    errMsg += "\n" + tr( "Using fallback %1" ).arg( shell );
+    }
+
+    if ( shell.isEmpty() )
+	shell = defaultShell();
+
+    if ( ! errMsg.isEmpty() )
+    {
+	outputWindow->show(); // Regardless of user settings
+	outputWindow->addStderr( errMsg );
+    }
+
+    return shell;
+}
+
+
 void Cleanup::runCommand ( const FileInfo * item,
 			   const QString  & command,
-			   OutputWindow	 * outputWindow ) const
+			   OutputWindow	  * outputWindow ) const
 {
-    QString  cleanupCommand( expandVariables( item, command ));
+    QString shell = chooseShell( outputWindow );
 
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    QString shell = env.value( "SHELL", "/bin/sh" );
+    if ( shell.isEmpty() )
+    {
+	outputWindow->show(); // Regardless of user settings
+	outputWindow->addStderr( tr( "No usable shell - aborting cleanup action" ) );
+	logError() << "ERROR: No usable shell" << endl;
+	return;
+    }
 
+    QString cleanupCommand( expandVariables( item, command ));
     QProcess * process = new QProcess( parent() );
     CHECK_NEW( process );
-
-    // Starting the cleanup command with the user's login shell to have
-    // everything available that users are used to from their shell, including
-    // their normal environment.
 
     process->setProgram( shell );
     process->setArguments( QStringList() << "-c" << cleanupCommand );
@@ -253,4 +283,74 @@ QMap<int, QString> Cleanup::outputWindowPolicyMapping()
     mapping[ ShowNever	       ] = "ShowNever";
 
     return mapping;
+}
+
+
+bool Cleanup::isExecutable( const QString & programName )
+{
+    if ( programName.isEmpty() )
+	return false;
+
+    QFileInfo fileInfo( programName );
+    return fileInfo.isExecutable();
+}
+
+
+QString Cleanup::loginShell()
+{
+    static bool cached = false;
+    static QString shell;
+
+    if ( ! cached )
+    {
+	cached = true;
+	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+	shell = env.value( "SHELL", "" );
+
+	if ( ! isExecutable( shell ) )
+	{
+	    logError() << "ERROR: Shell \"" << shell << "\" is not executable" << endl;
+	    shell = "";
+	}
+    }
+
+    return shell;
+}
+
+
+const QStringList & Cleanup::defaultShells()
+{
+    static bool cached = false;
+    static QStringList shells;
+
+    if ( ! cached )
+    {
+	cached = true;
+	QStringList candidates;
+	candidates << loginShell() << "/bin/bash" << "/bin/sh";
+
+	foreach ( const QString & shell, candidates )
+	{
+	    if ( isExecutable( shell ) )
+		 shells << shell;
+	    else if ( ! shell.isEmpty() )
+	    {
+		logWarning() << "Shell " << shell << " is not executable" << endl;
+	    }
+	}
+
+	if ( ! shells.isEmpty() )
+	    logDebug() << "Default shell: " << shells.first() << endl;
+    }
+
+    if ( shells.isEmpty() )
+	logError() << "ERROR: No usable shell" << endl;
+
+    return shells;
+}
+
+
+QString Cleanup::defaultShell()
+{
+    return defaultShells().isEmpty() ? QString() : defaultShells().first();
 }

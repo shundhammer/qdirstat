@@ -112,7 +112,7 @@ Cleanup * StdCleanup::makeClean( QObject * parent )
 Cleanup * StdCleanup::deleteJunk( QObject * parent )
 {
     Cleanup *cleanup = new Cleanup( "cleanupDeleteJunk",
-				    "/bin/bash -c 'rm -f *.o *~ *.bak *.auto core'",
+				    "rm -f *.o *~ *.bak *.auto core",
 				    QObject::tr( "Delete &Junk Files" ),
 				    parent );
     CHECK_NEW( cleanup );
@@ -121,6 +121,7 @@ Cleanup * StdCleanup::deleteJunk( QObject * parent )
     cleanup->setWorksForDotEntry( true	);
     cleanup->setRefreshPolicy( Cleanup::RefreshThis );
     cleanup->setRecurse( true );
+    cleanup->setShell( "/bin/bash" );
 
     return cleanup;
 }

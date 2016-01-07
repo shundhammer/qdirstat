@@ -141,6 +141,41 @@ namespace QDirStat
 	bool askForConfirmation() const { return _askForConfirmation; }
 
 	/**
+	 * Return the shell to use to invoke the command of this cleanup.
+	 * If this is is empty, use defaultShells().first().
+	 *
+	 * Regardless of which shell is used, the command is always started
+	 * with the shell and the "-c" option.
+	 **/
+	QString shell() const { return _shell; }
+
+	/**
+	 * Return the full path name to the user's login shell.
+	 * The $SHELL environment variable is used to obtain this value.
+	 * If this is empty, this defaults to defaultShells().first().
+	 **/
+	static QString loginShell();
+
+	/**
+	 * Return the full paths to the available (and executable) shells:
+	 *     loginShell()	($SHELL)
+	 *     /bin/bash
+	 *     /bin/sh
+	 **/
+	static const QStringList & defaultShells();
+
+	/**
+	 * Return the first default shell or an empty string if there is no
+	 * usable shell at all.
+	 **/
+	static QString defaultShell();
+
+	/**
+	 * Return 'true' if programName is non-empty and executable.
+	 **/
+	static bool isExecutable( const QString & programName );
+
+	/**
 	 * Return the refresh policy of this cleanup action - i.e. the action
 	 * to perform after each call to Cleanup::execute(). This is supposed
 	 * to bring the corresponding DirTree back into sync after the cleanup
@@ -249,6 +284,7 @@ namespace QDirStat
 	void setWorksForDotEntry     ( bool canDo    )		   { _worksForDotEntry	    = canDo;	 }
 	void setRecurse		     ( bool recurse  )		   { _recurse		    = recurse;	 }
 	void setAskForConfirmation   ( bool ask	     )		   { _askForConfirmation    = ask;	 }
+	void setShell		     ( const QString &	  shell	 ) { _shell		    = shell;	 }
 	void setRefreshPolicy	     ( RefreshPolicy	  policy ) { _refreshPolicy	    = policy;	 }
 	void setOutputWindowPolicy   ( OutputWindowPolicy policy ) { _outputWindowPolicy    = policy;	 }
 	void setOutputWindowTimeout  ( int timeoutMillisec )	   { _outputWindowTimeout   = timeoutMillisec; }
@@ -277,6 +313,12 @@ namespace QDirStat
 	 * Retrieve the directory part of a FileInfo's path.
 	 **/
 	const QString itemDir( const FileInfo * item ) const;
+
+        /**
+         * Choose a suitable shell. Try this->shell() and fall back to
+         * defaultShell(). Return an empty string if no usable shell is found.
+         **/
+        QString chooseShell( OutputWindow * outputWindow ) const;
 
 	/**
 	 * Expand some variables in string 'unexpanded' to information from
@@ -333,6 +375,7 @@ namespace QDirStat
 	bool		   _worksForDotEntry;
 	bool		   _recurse;
 	bool		   _askForConfirmation;
+	QString		   _shell;
 	RefreshPolicy	   _refreshPolicy;
 	OutputWindowPolicy _outputWindowPolicy;
 	int		   _outputWindowTimeout;

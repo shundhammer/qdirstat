@@ -234,10 +234,10 @@ void CleanupCollection::execute()
 	    Refresher::parents( selection ) : selection;
 
 	Refresher * refresher = new Refresher( refreshSet, this );
+	CHECK_NEW( refresher );
 
 	connect( outputWindow, SIGNAL( lastProcessFinished( int ) ),
-		 refresher,	SLOT  ( refresh()		) );
-
+		 refresher,    SLOT  ( refresh()		) );
     }
 
     connect( outputWindow, SIGNAL( lastProcessFinished( int ) ),
@@ -399,6 +399,7 @@ void CleanupCollection::readSettings()
 	    QString title    = settings.value( "Title"	 ).toString();
 	    QString iconName = settings.value( "Icon"	 ).toString();
 	    QString hotkey   = settings.value( "Hotkey"	 ).toString();
+	    QString shell    = settings.value( "Shell"	 ).toString();
 
 	    bool active		       = settings.value( "Active"		, true	).toBool();
 	    bool worksForDir	       = settings.value( "WorksForDir"		, true	).toBool();
@@ -429,6 +430,7 @@ void CleanupCollection::readSettings()
 		cleanup->setWorksForFile    ( worksForFile     );
 		cleanup->setWorksForDotEntry( worksForDotEntry );
 		cleanup->setRecurse	    ( recurse	       );
+		cleanup->setShell	    ( shell	       );
 		cleanup->setAskForConfirmation	 ( askForConfirmation	 );
 		cleanup->setOutputWindowAutoClose( outputWindowAutoClose );
 		cleanup->setOutputWindowTimeout	 ( outputWindowTimeout	 );
@@ -509,6 +511,9 @@ void CleanupCollection::writeSettings()
 	writeEnumEntry( settings, "OutputWindowPolicy",
 			cleanup->outputWindowPolicy(),
 			Cleanup::outputWindowPolicyMapping() );
+
+	if ( ! cleanup->shell().isEmpty() )
+	     settings.setValue( "Shell", cleanup->shell() );
 
 	if ( ! cleanup->iconName().isEmpty() )
 	    settings.setValue( "Icon", cleanup->iconName() );

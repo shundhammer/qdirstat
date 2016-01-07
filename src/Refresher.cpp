@@ -18,7 +18,7 @@ Refresher::Refresher( const FileInfoSet items, QObject * parent ):
     QObject( parent ),
     _items( items )
 {
-
+    logDebug() << "Creating refresher for " << _items.first() << endl;
 }
 
 
@@ -26,6 +26,7 @@ void Refresher::refresh()
 {
     if ( ! _items.isEmpty() )
     {
+	logDebug() << "Refreshing " << _items.first() << endl;
 	DirTree * tree = _items.first()->tree();
 	tree->refresh( _items );
     }
