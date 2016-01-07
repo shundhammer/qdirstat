@@ -53,17 +53,6 @@ CleanupCollection::~CleanupCollection()
 void CleanupCollection::add( Cleanup * cleanup )
 {
     CHECK_PTR( cleanup );
-
-    int index = indexOf( cleanup->id() );
-
-    if ( index != -1 ) // Replacing an existing ID?
-    {
-	logDebug() << "Replacing cleanup " << cleanup->id() << endl;
-	Cleanup * oldCleanup = _cleanupList.at( index );
-	_cleanupList.removeAt( index );
-	delete oldCleanup;
-    }
-
     _cleanupList << cleanup;
 
     connect( cleanup, SIGNAL( triggered() ),
@@ -91,31 +80,6 @@ void CleanupCollection::addStdCleanups()
     {
 	add( cleanup );
     }
-}
-
-
-
-Cleanup * CleanupCollection::findById( const QString & id ) const
-{
-    int index = indexOf( id );
-
-    if ( index == -1 )
-	return 0;
-    else
-	return _cleanupList.at( index );
-}
-
-
-int CleanupCollection::indexOf( const QString & id ) const
-{
-    for ( int i=0; i < _cleanupList.size(); ++i )
-    {
-	if ( id == _cleanupList.at(i)->id() )
-	    return i;
-    }
-
-    // logDebug() << "No Cleanup with ID " << id << " in this collection" << endl;
-    return -1;
 }
 
 
@@ -395,7 +359,6 @@ void CleanupCollection::readSettings()
 	    // Read one cleanup
 
 	    QString command  = settings.value( "Command" ).toString();
-	    QString id	     = settings.value( "ID"	 ).toString();
 	    QString title    = settings.value( "Title"	 ).toString();
 	    QString iconName = settings.value( "Icon"	 ).toString();
 	    QString hotkey   = settings.value( "Hotkey"	 ).toString();
@@ -417,11 +380,10 @@ void CleanupCollection::readSettings()
 	    int outputWindowPolicy  = readEnumEntry( settings, "OutputWindowPolicy",
 						     Cleanup::ShowAfterTimeout,
 						     Cleanup::outputWindowPolicyMapping() );
-	    if ( ! id.isEmpty()	     &&
-		 ! command.isEmpty() &&
+	    if ( ! command.isEmpty() &&
 		 ! title.isEmpty()     )
 	    {
-		Cleanup * cleanup = new Cleanup( id, command, title, this );
+		Cleanup * cleanup = new Cleanup( command, title, this );
 		CHECK_NEW( cleanup );
 		add( cleanup );
 
@@ -446,7 +408,7 @@ void CleanupCollection::readSettings()
 	    }
 	    else
 	    {
-		logError() << "Need at least Command, ID, Title for a cleanup" << endl;
+		logError() << "Need at least Command and Title for a cleanup" << endl;
 	    }
 
 	    settings.endGroup(); // [Cleanup_01], [Cleanup_02], ...
@@ -493,7 +455,6 @@ void CleanupCollection::writeSettings()
 	Cleanup * cleanup = _cleanupList.at(i);
 
 	settings.setValue( "Command"		  , cleanup->command()		     );
-	settings.setValue( "ID"			  , cleanup->id()		     );
 	settings.setValue( "Title"		  , cleanup->title()		     );
 	settings.setValue( "Active"		  , cleanup->active()		     );
 	settings.setValue( "WorksForDir"	  , cleanup->worksForDir()	     );

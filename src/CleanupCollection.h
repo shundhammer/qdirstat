@@ -35,7 +35,7 @@ namespace QDirStat
 	 * Constructor.
 	 **/
 	CleanupCollection( SelectionModel * selectionModel,
-                           QObject        * parent = 0 );
+			   QObject	  * parent = 0 );
 
 	/**
 	 * Destructor
@@ -62,18 +62,6 @@ namespace QDirStat
 	 * Add all actions to the specified menu.
 	 **/
 	void addToMenu( QMenu * menu );
-
-	/**
-	 * Retrieve a cleanup by its ID (internal name).
-	 * Returns 0 if there is no such cleanup.
-	 **/
-	Cleanup * findById( const QString & id ) const;
-
-	/**
-	 * Return the index of the cleanup with ID 'id' or -1 if there is no
-	 * such cleanup.
-	 **/
-	int indexOf( const QString & id ) const;
 
 	/**
 	 * Return the index of a cleanup or -1 if it is not part of this
@@ -109,18 +97,18 @@ namespace QDirStat
 
     signals:
 
-        /**
-         * Emitted when a cleanup is started.
-         **/
-        void startingCleanup( const QString & cleanupName );
+	/**
+	 * Emitted when a cleanup is started.
+	 **/
+	void startingCleanup( const QString & cleanupName );
 
-        /**
-         * Emitted when the last process of a cleanup is finished.
-         *
-         * 'errorCount' is the total number of errors reported by all processes
-         * that were started.
-         **/
-        void cleanupFinished( int errorCount );
+	/**
+	 * Emitted when the last process of a cleanup is finished.
+	 *
+	 * 'errorCount' is the total number of errors reported by all processes
+	 * that were started.
+	 **/
+	void cleanupFinished( int errorCount );
 
     public slots:
 

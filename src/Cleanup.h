@@ -51,24 +51,15 @@ namespace QDirStat
 	/**
 	 * Constructor.
 	 *
-	 * 'id' is the unique name of this cleanup action as used in the
-	 * settings file, 'title' is the human readable menu title. 'command'
-	 * is the shell command to execute.
+	 * 'title' is the human readable menu title.
+	 * 'command' is the shell command to execute.
 	 **/
-	Cleanup( QString   id	   = "",
-		 QString   command = "",
+	Cleanup( QString   command = "",
 		 QString   title   = "",
 		 QObject * parent  = 0 );
 
 	/**
-	 * Return the ID (name) of this cleanup action as used for setup files
-	 * and the XML UI description. This ID should be unique within the
-	 * application.
-	 **/
-	const QString & id() const { return _id; }
-
-	/**
-	 * Return the command line that will be executed upon calling @ref
+	 * Return the command line that will be executed upon calling
 	 * Cleanup::execute(). This command line may contain %p for the
 	 * complete path of the directory or file concerned or %n for the pure
 	 * file or directory name without path.
@@ -275,7 +266,6 @@ namespace QDirStat
 	//
 
 	void setTitle		     ( const QString & title  );
-	void setId		     ( const QString & id     )	   { _id		    = id;	 }
 	void setCommand		     ( const QString & command)	   { _command		    = command;	 }
 	void setIcon		     ( const QString & iconName );
 	void setActive		     ( bool active   )		   { _active		    = active;	 }
@@ -365,7 +355,6 @@ namespace QDirStat
 	// Data members
 	//
 
-	QString		   _id;
 	QString		   _command;
 	QString		   _title;
 	QString		   _iconName;
@@ -390,7 +379,7 @@ namespace QDirStat
     inline QTextStream & operator<< ( QTextStream & stream, const Cleanup * cleanup )
     {
 	if ( cleanup )
-	    stream << cleanup->id();
+	    stream << cleanup->cleanTitle();
 	else
 	    stream << "<NULL Cleanup *>";
 

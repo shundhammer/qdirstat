@@ -28,10 +28,10 @@ CleanupList StdCleanup::stdCleanups( QObject * parent )
 	     << deleteJunk	 ( parent )
 #if USE_DEBUG_ACTIONS
 	     << echoargs	 ( parent )
-	     << echoargsMixed    ( parent )
-	     << segfaulter       ( parent )
-             << commandNotFound  ( parent )
-             << sleepy           ( parent )
+	     << echoargsMixed	 ( parent )
+	     << segfaulter	 ( parent )
+	     << commandNotFound	 ( parent )
+	     << sleepy		 ( parent )
 #endif
 	;
 
@@ -42,8 +42,7 @@ CleanupList StdCleanup::stdCleanups( QObject * parent )
 
 Cleanup * StdCleanup::openInFileManager( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupOpenInFileManager",
-				    "xdg-open %p",
+    Cleanup *cleanup = new Cleanup( "xdg-open %p",
 				    QObject::tr( "Open in &File Manager" ),
 				    parent );
     CHECK_NEW( cleanup );
@@ -60,8 +59,7 @@ Cleanup * StdCleanup::openInFileManager( QObject * parent )
 
 Cleanup * StdCleanup::openInTerminal( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupOpenInTerminal",
-				    "x-terminal-emulator --workdir %p",
+    Cleanup *cleanup = new Cleanup( "x-terminal-emulator --workdir %p",
 				    QObject::tr( "Open in &Terminal" ),
 				    parent );
     CHECK_NEW( cleanup );
@@ -79,8 +77,7 @@ Cleanup * StdCleanup::openInTerminal( QObject * parent )
 
 Cleanup * StdCleanup::compressSubtree( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupCompressSubtree",
-				    "cd ..; tar cjvf %n.tar.bz2 %n && rm -rf %n",
+    Cleanup *cleanup = new Cleanup( "cd ..; tar cjvf %n.tar.bz2 %n && rm -rf %n",
 				    QObject::tr( "&Compress" ),
 				    parent );
     CHECK_NEW( cleanup );
@@ -95,8 +92,7 @@ Cleanup * StdCleanup::compressSubtree( QObject * parent )
 
 Cleanup * StdCleanup::makeClean( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupMakeClean",
-				    "make clean",
+    Cleanup *cleanup = new Cleanup( "make clean",
 				    QObject::tr( "&make clean" ),
 				    parent );
     CHECK_NEW( cleanup );
@@ -111,8 +107,7 @@ Cleanup * StdCleanup::makeClean( QObject * parent )
 
 Cleanup * StdCleanup::deleteJunk( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupDeleteJunk",
-				    "rm -f *.o *~ *.bak *.auto core",
+    Cleanup *cleanup = new Cleanup( "rm -f *.o *~ *.bak *.auto core",
 				    QObject::tr( "Delete &Junk Files" ),
 				    parent );
     CHECK_NEW( cleanup );
@@ -129,8 +124,7 @@ Cleanup * StdCleanup::deleteJunk( QObject * parent )
 
 Cleanup * StdCleanup::moveToTrash( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupMoveToTrash",
-				    "kfmclient move %p %t",
+    Cleanup *cleanup = new Cleanup( "kfmclient move %p %t",
 				    QObject::tr( "Delete (to Trash &Bin)" ),
 				    parent );
     CHECK_NEW( cleanup );
@@ -147,8 +141,7 @@ Cleanup * StdCleanup::moveToTrash( QObject * parent )
 
 Cleanup * StdCleanup::hardDelete( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupHardDelete",
-				    "rm -rf %p",
+    Cleanup *cleanup = new Cleanup( "rm -rf %p",
 				    QObject::tr( "&Delete (no way to undelete!)" ),
 				    parent );
     CHECK_NEW( cleanup );
@@ -168,8 +161,7 @@ Cleanup * StdCleanup::hardDelete( QObject * parent )
 
 Cleanup * StdCleanup::echoargs( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupEchoargs",
-				    "echoargs %p",
+    Cleanup *cleanup = new Cleanup( "echoargs %p",
 				    QObject::tr( "echoargs" ),
 				    parent );
     CHECK_NEW( cleanup );
@@ -185,8 +177,7 @@ Cleanup * StdCleanup::echoargs( QObject * parent )
 
 Cleanup * StdCleanup::echoargsMixed( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupEchoargsMixed",
-				    "echoargs_mixed %n one two three four",
+    Cleanup *cleanup = new Cleanup( "echoargs_mixed %n one two three four",
 				    QObject::tr( "Output on stdout and stderr" ),
 				    parent );
     CHECK_NEW( cleanup );
@@ -202,8 +193,7 @@ Cleanup * StdCleanup::echoargsMixed( QObject * parent )
 
 Cleanup * StdCleanup::segfaulter( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupSegfaulter",
-				    "segfaulter",
+    Cleanup *cleanup = new Cleanup( "segfaulter",
 				    QObject::tr( "Segfaulter" ),
 				    parent );
     CHECK_NEW( cleanup );
@@ -218,8 +208,7 @@ Cleanup * StdCleanup::segfaulter( QObject * parent )
 
 Cleanup * StdCleanup::commandNotFound( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupCommandNotFound",
-				    "wrglbrmpf",
+    Cleanup *cleanup = new Cleanup( "wrglbrmpf",
 				    QObject::tr( "Nonexistent command" ),
 				    parent );
     CHECK_NEW( cleanup );
@@ -234,8 +223,7 @@ Cleanup * StdCleanup::commandNotFound( QObject * parent )
 
 Cleanup * StdCleanup::sleepy( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "cleanupSleepy",
-				    "sleep 1; echoargs %p",
+    Cleanup *cleanup = new Cleanup( "sleep 1; echoargs %p",
 				    QObject::tr( "Sleepy echoargs" ),
 				    parent );
     CHECK_NEW( cleanup );

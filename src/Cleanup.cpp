@@ -29,12 +29,10 @@
 using namespace QDirStat;
 
 
-Cleanup::Cleanup( QString   id,
-		  QString   command,
+Cleanup::Cleanup( QString   command,
 		  QString   title,
 		  QObject * parent ):
     QAction( title, parent ),
-    _id( id ),
     _command( command ),
     _title( title )
 {
@@ -169,9 +167,7 @@ QString Cleanup::cleanTitle() const
     QString title = _title;
 
     if ( title.isEmpty() )
-    {
-	title = _id;
-    }
+	title = _command;
 
     // Get rid of any "&" characters in the text that denote keyboard
     // shortcuts in menus.
