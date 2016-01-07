@@ -88,6 +88,9 @@ HEADERS	  =				\
 
 FORMS	  = main-window.ui		\
 	    output-window.ui		\
+	    config-dialog.ui		\
+	    cleanups-config-page.ui	\
+	    general-config-page.ui	\
 
 
 RESOURCES = icons.qrc
