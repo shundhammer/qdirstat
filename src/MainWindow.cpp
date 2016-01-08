@@ -69,7 +69,7 @@ MainWindow::MainWindow():
     _cleanupCollection = new CleanupCollection( _selectionModel );
     CHECK_NEW( _cleanupCollection );
     _cleanupCollection->addToMenu( _ui->menuCleanup,
-                                   true ); // keepUpdated
+				   true ); // keepUpdated
 
     _ui->dirTreeView->setCleanupCollection( _cleanupCollection );
     _ui->treemapView->setCleanupCollection( _cleanupCollection );
@@ -142,7 +142,7 @@ MainWindow::~MainWindow()
     //	segfault; there was probably a problem in the deletion order.
 
     if ( _configDialog )
-        delete _configDialog;
+	delete _configDialog;
 
     delete _ui->dirTreeView;
     delete _cleanupCollection;
@@ -594,12 +594,23 @@ void MainWindow::navigateToToplevel()
 
 void MainWindow::openConfigDialog()
 {
-    if ( ! _configDialog )
-    {
-	_configDialog = new ConfigDialog( this );
-	CHECK_PTR( _configDialog );
-        _configDialog->cleanupConfigPage()->setCleanupCollection( _cleanupCollection );
-    }
+    if ( _configDialog && _configDialog->isVisible() )
+	return;
+
+    // For whatever crazy reason it is considerably faster to delete that
+    // complex dialog and recreate it from scratch than to simply leave it
+    // alive and just show it again. Well, whatever - so be it.
+    //
+    // And yes, I added debug logging here, in the dialog's setup(), in
+    // showEvent(); I added update(). No result whatsoever.
+    // Okay, then let's take the long way around.
+
+    if ( _configDialog )
+	delete _configDialog;
+
+    _configDialog = new ConfigDialog( this );
+    CHECK_PTR( _configDialog );
+    _configDialog->cleanupConfigPage()->setCleanupCollection( _cleanupCollection );
 
     if ( ! _configDialog->isVisible() )
     {
