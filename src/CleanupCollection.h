@@ -9,7 +9,10 @@
 #ifndef CleanupCollection_h
 #define CleanupCollection_h
 
-#include "QList"
+#include <QList>
+#include <QSet>
+#include <QPointer>
+
 #include "Cleanup.h"
 #include "FileInfo.h"
 
@@ -60,8 +63,15 @@ namespace QDirStat
 
 	/**
 	 * Add all actions to the specified menu.
+	 *
+	 * If 'keepUpdated' is false, the cleanup collection will keep the
+	 * pointer to the menu (as guarded pointer, so it may safely be
+	 * deleted) and update the menu whenever cleanups are added, removed,
+	 * or reordered. That means that for every such operation, all cleanups
+	 * in the menu will be removed and added to the end of the menu in the
+	 * current order of the cleanup collection.
 	 **/
-	void addToMenu( QMenu * menu );
+	void addToMenu( QMenu * menu, bool keepUpdated = false );
 
 	/**
 	 * Return the index of a cleanup or -1 if it is not part of this
@@ -167,13 +177,19 @@ namespace QDirStat
 	 **/
 	bool confirmation( Cleanup * cleanup, const FileInfoSet & items );
 
+	/**
+	 * Update all menus that had the 'keepUpdated' flag set.
+	 **/
+	void updateMenus();
+
 
 	//
 	// Data members
 	//
 
-	SelectionModel * _selectionModel;
-	CleanupList	 _cleanupList;
+	SelectionModel *	_selectionModel;
+	CleanupList		_cleanupList;
+	QList<QPointer<QMenu> > _menus;
     };
 }	// namespace QDirStat
 

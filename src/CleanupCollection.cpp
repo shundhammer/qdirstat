@@ -57,6 +57,8 @@ void CleanupCollection::add( Cleanup * cleanup )
 
     connect( cleanup, SIGNAL( triggered() ),
 	     this,    SLOT  ( execute()	  ) );
+
+    updateMenus();
 }
 
 
@@ -71,6 +73,9 @@ void CleanupCollection::remove( Cleanup * cleanup )
     }
 
     _cleanupList.removeAt( index );
+
+    // No need for updateMenus() since QObject/QWidget will take care of
+    // deleted actions all by itself.
 }
 
 
@@ -107,6 +112,9 @@ void CleanupCollection::clear()
 {
     qDeleteAll( _cleanupList );
     _cleanupList.clear();
+
+    // No need for updateMenus() since QObject/QWidget will take care of
+    // deleted actions all by itself.
 }
 
 
@@ -136,6 +144,31 @@ void CleanupCollection::updateActions()
 		enabled = false;
 
 	    cleanup->setEnabled( enabled );
+	}
+    }
+}
+
+
+void CleanupCollection::updateMenus()
+{
+    _menus.removeAll( 0 ); // Remove QPointers that have become invalid
+
+    foreach ( QMenu * menu, _menus )
+    {
+	if ( menu )
+	{
+	    // Remove all Cleanups from this menu
+
+	    foreach ( QAction * action, menu->actions() )
+	    {
+		Cleanup * cleanup = dynamic_cast<Cleanup *>( action );
+
+		if ( cleanup )
+		    menu->removeAction( cleanup );
+	    }
+
+	    // Add the current cleanups in the current order
+	    addToMenu( menu );
 	}
     }
 }
@@ -269,7 +302,7 @@ bool CleanupCollection::confirmation( Cleanup * cleanup, const FileInfoSet & ite
 
 
 
-void CleanupCollection::addToMenu( QMenu * menu )
+void CleanupCollection::addToMenu( QMenu * menu, bool keepUpdated )
 {
     CHECK_PTR( menu );
 
@@ -278,6 +311,9 @@ void CleanupCollection::addToMenu( QMenu * menu )
 	if ( cleanup->active() )
 	    menu->addAction( cleanup );
     }
+
+    if ( keepUpdated && ! _menus.contains( menu ) )
+	_menus << menu;
 }
 
 
@@ -289,6 +325,7 @@ void CleanupCollection::moveUp( Cleanup * cleanup )
     {
 	_cleanupList.removeAt( oldPos );
 	_cleanupList.insert( oldPos - 1, cleanup );
+	updateMenus();
     }
 }
 
@@ -301,6 +338,7 @@ void CleanupCollection::moveDown( Cleanup * cleanup )
     {
 	_cleanupList.removeAt( oldPos );
 	_cleanupList.insert( oldPos + 1, cleanup );
+	updateMenus();
     }
 }
 
@@ -313,6 +351,7 @@ void CleanupCollection::moveToTop( Cleanup * cleanup )
     {
 	_cleanupList.removeAt( oldPos );
 	_cleanupList.insert( 0, cleanup );
+	updateMenus();
     }
 }
 
@@ -325,7 +364,8 @@ void CleanupCollection::moveToBottom( Cleanup * cleanup )
     {
 	_cleanupList.removeAt( oldPos );
 	_cleanupList.insert( _cleanupList.size(), cleanup );
-    }
+	updateMenus();
+   }
 }
 
 
@@ -464,8 +504,8 @@ void CleanupCollection::writeSettings()
 	settings.setValue( "AskForConfirmation"	  , cleanup->askForConfirmation()    );
 	settings.setValue( "OutputWindowAutoClose", cleanup->outputWindowAutoClose() );
 
-        if ( cleanup->outputWindowTimeout() > 0 )
-            settings.setValue( "OutputWindowTimeout"  , cleanup->outputWindowTimeout()   );
+	if ( cleanup->outputWindowTimeout() > 0 )
+	    settings.setValue( "OutputWindowTimeout"  , cleanup->outputWindowTimeout()	 );
 
 	writeEnumEntry( settings, "RefreshPolicy",
 			cleanup->refreshPolicy(),
