@@ -34,17 +34,17 @@ namespace QDirStat
 	CleanupConfigPage( QWidget * parent = 0 );
 	~CleanupConfigPage();
 
-        /**
-         * Set the CleanupCollection to work on.
-         **/
+	/**
+	 * Set the CleanupCollection to work on.
+	 **/
 	void setCleanupCollection( CleanupCollection * collection )
-            { _cleanupCollection = collection; }
+	    { _cleanupCollection = collection; }
 
-        /**
-         * Return the internal CleanupCollection.
-         **/
-        CleanupCollection * cleanupCollection() const
-            { return _cleanupCollection; }
+	/**
+	 * Return the internal CleanupCollection.
+	 **/
+	CleanupCollection * cleanupCollection() const
+	    { return _cleanupCollection; }
 
     public slots:
 
@@ -65,11 +65,45 @@ namespace QDirStat
 
     protected slots:
 
-        /**
-         * Notification that the current item in the cleanup list changed.
-         **/
-        void currentItemChanged( QListWidgetItem * current,
-                                 QListWidgetItem * previous);
+	/**
+	 * Notification that the current item in the cleanup list changed.
+	 **/
+	void currentItemChanged( QListWidgetItem * current,
+				 QListWidgetItem * previous);
+	/**
+	 * Enable or disable buttons depending on internal status.
+	 **/
+	void updateActions();
+
+	/**
+	 * Move the current list item one position up.
+	 **/
+	void moveUp();
+
+	/**
+	 * Move the current list item one position down.
+	 **/
+	void moveDown();
+
+	/**
+	 * Move the current list item to the top of the list.
+	 **/
+	void moveToTop();
+
+	/**
+	 * Move the current list item to the bottom of the list.
+	 **/
+	void moveToBottom();
+
+	/**
+	 * Create a new cleanup.
+	 **/
+	void addCleanup();
+
+	/**
+	 * Delete the current cleanup.
+	 **/
+	void deleteCleanup();
 
     protected:
 
@@ -78,21 +112,28 @@ namespace QDirStat
 	 **/
 	void fillCleanupList();
 
-        /**
-         * Save the contents of the widgets to the specified cleanup.
-         **/
-        void saveCleanup( Cleanup * cleanup );
+	/**
+	 * Convert 'item' to a CleanupListItem and return its cleanup.
+	 **/
+	Cleanup * cleanup( QListWidgetItem * item );
 
-        /**
-         * Load the content of the widgets from the specified cleanup.
-         **/
-        void loadCleanup( Cleanup * cleanup );
+	/**
+	 * Save the contents of the widgets to the specified cleanup.
+	 **/
+	void saveCleanup( Cleanup * cleanup );
+
+	/**
+	 * Load the content of the widgets from the specified cleanup.
+	 **/
+	void loadCleanup( Cleanup * cleanup );
 
 
 	// Data
 
 	Ui::CleanupConfigPage	* _ui;
 	CleanupCollection	* _cleanupCollection;
+	QListWidget		* _listWidget;
+	bool			  _updatesLocked;
 
     };	// class CleanupConfigPage
 
@@ -108,9 +149,9 @@ namespace QDirStat
 	 * cleanup.
 	 **/
 	CleanupListItem( Cleanup * cleanup ):
-            QListWidgetItem( cleanup->cleanTitle() ),
-            _cleanup( cleanup )
-            {}
+	    QListWidgetItem( cleanup->cleanTitle() ),
+	    _cleanup( cleanup )
+	    {}
 
 	/**
 	 * Return the associated cleanup.
