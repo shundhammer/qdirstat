@@ -17,6 +17,8 @@
 
 using namespace QDirStat;
 
+#define DEFAULT_OUTPUT_WINDOW_SHOW_TIMEOUT      500
+
 
 CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
     QWidget( parent ),
@@ -38,6 +40,7 @@ CleanupConfigPage::~CleanupConfigPage()
 
 }
 
+
 void CleanupConfigPage::setup()
 {
     fillCleanupList();
@@ -47,12 +50,18 @@ void CleanupConfigPage::setup()
 void CleanupConfigPage::applyChanges()
 {
     logDebug() << endl;
+    _cleanupCollection->writeSettings();
 }
 
 
 void CleanupConfigPage::discardChanges()
 {
     logDebug() << endl;
+
+    _ui->cleanupListWidget->clear();
+    _cleanupCollection->clear();
+    _cleanupCollection->addStdCleanups();
+    _cleanupCollection->readSettings();
 }
 
 
@@ -98,12 +107,43 @@ void CleanupConfigPage::saveCleanup( Cleanup * cleanup )
 
     if ( ! cleanup )
         return;
+
+    cleanup->setActive ( _ui->activeGroupBox->isChecked() );
+    cleanup->setTitle  ( _ui->titleLineEdit->text()       );
+    cleanup->setCommand( _ui->commandLineEdit->text()     );
+
+    if ( _ui->shellComboBox->currentIndex() == 0 )
+        cleanup->setShell( "" );
+    else
+        cleanup->setShell( _ui->shellComboBox->currentText() );
+
+    cleanup->setRecurse( _ui->recursiveCheckBox->isChecked() );
+
+    cleanup->setAskForConfirmation( _ui->askForConfirmationCheckBox->isChecked() );
+    cleanup->setWorksForDir       ( _ui->worksForDirCheckBox->isChecked()        );
+    cleanup->setWorksForFile      ( _ui->worksForFilesCheckBox->isChecked()      );
+    cleanup->setWorksForDotEntry  ( _ui->worksForDotEntriesCheckBox->isChecked() );
+
+    int policy = _ui->outputWindowPolicyComboBox->currentIndex();
+    cleanup->setOutputWindowPolicy( static_cast<Cleanup::OutputWindowPolicy>( policy ) );
+
+    int timeout = qRound( _ui->outputWindowTimeoutSpinBox->value() * 1000.0 );
+
+    if ( timeout == DEFAULT_OUTPUT_WINDOW_SHOW_TIMEOUT ) // FIXME: Get this from OutputWindow
+        timeout = 0;
+
+    cleanup->setOutputWindowTimeout( timeout );
+
+    cleanup->setOutputWindowAutoClose( _ui->outputWindowAutoCloseCheckBox->isChecked() );
+
+    policy = _ui->refreshPolicyComboBox->currentIndex();
+    cleanup->setRefreshPolicy( static_cast<Cleanup::RefreshPolicy>( policy ) );
 }
 
 
 void CleanupConfigPage::loadCleanup( Cleanup * cleanup )
 {
-    logDebug() << cleanup << endl;
+    // logDebug() << cleanup << endl;
 
     if ( ! cleanup )
         return;
@@ -124,7 +164,13 @@ void CleanupConfigPage::loadCleanup( Cleanup * cleanup )
     _ui->worksForDotEntriesCheckBox->setChecked( cleanup->worksForDotEntry()   );
 
     _ui->outputWindowPolicyComboBox->setCurrentIndex( cleanup->outputWindowPolicy() );
-    _ui->outputWindowTimeoutSpinBox->setValue( cleanup->outputWindowTimeout() / 1000.0 );
+
+    int timeout = cleanup->outputWindowTimeout();
+
+    if ( timeout == 0 )
+        timeout = DEFAULT_OUTPUT_WINDOW_SHOW_TIMEOUT; // FIXME: Get this from OutputWindow
+
+    _ui->outputWindowTimeoutSpinBox->setValue( timeout / 1000.0 );
     _ui->outputWindowAutoCloseCheckBox->setChecked( cleanup->outputWindowAutoClose() );
 
     _ui->refreshPolicyComboBox->setCurrentIndex( cleanup->refreshPolicy() );
