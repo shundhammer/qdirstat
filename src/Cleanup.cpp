@@ -38,7 +38,7 @@ Cleanup::Cleanup( QString   command,
 {
     _active		   = true;
     _worksForDir	   = true;
-    _worksForFile	   = false;
+    _worksForFile	   = true;
     _worksForDotEntry	   = false;
     _recurse		   = false;
     _askForConfirmation	   = false;

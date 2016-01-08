@@ -62,6 +62,7 @@ CleanupConfigPage::~CleanupConfigPage()
 void CleanupConfigPage::setup()
 {
     fillCleanupList();
+    _ui->toolBox->setCurrentIndex( 0 );
     updateActions();
 }
 
@@ -167,7 +168,7 @@ void CleanupConfigPage::saveCleanup( Cleanup * cleanup )
     else
 	cleanup->setShell( _ui->shellComboBox->currentText() );
 
-    cleanup->setRecurse( _ui->recursiveCheckBox->isChecked() );
+    cleanup->setRecurse( _ui->recurseCheckBox->isChecked() );
 
     cleanup->setAskForConfirmation( _ui->askForConfirmationCheckBox->isChecked() );
     cleanup->setWorksForDir	  ( _ui->worksForDirCheckBox->isChecked()	 );
@@ -207,7 +208,7 @@ void CleanupConfigPage::loadCleanup( Cleanup * cleanup )
     else
 	_ui->shellComboBox->setCurrentText( cleanup->shell() );
 
-    _ui->recursiveCheckBox->setChecked	       ( cleanup->recurse()	       );
+    _ui->recurseCheckBox->setChecked	       ( cleanup->recurse()	       );
     _ui->askForConfirmationCheckBox->setChecked( cleanup->askForConfirmation() );
     _ui->worksForDirCheckBox->setChecked       ( cleanup->worksForDir()	       );
     _ui->worksForFilesCheckBox->setChecked     ( cleanup->worksForFile()       );
