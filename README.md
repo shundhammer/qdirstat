@@ -41,15 +41,36 @@ _Screenshot of cleanup configuration._
 
 Usable, but still Alpha.
 
-- 2016-01-08 Cleanups are now configurable - see screenshot. Cleanup actions
-  can now be added, deleted, and moved up or down the list.  In addition to the
-  old cleanup parameters, you can now configure the output window behaviour.
-  The default is "show after timeout" with a timeout of half a second. This may
-  sound pretty short, but I started with 3 seconds and found that it felt
-  sluggish. A modern PC can get a lot of things done in half a second; yet
-  waiting for more than that feels like an eternity. So if any action takes
-  longer than that, an output window pops up. Of course, if there is any error,
-  it pops up anyway.
+- 2016-01-08 Cleanups are now configurable - see screenshot.
+
+  - Cleanup actions can now be added, deleted, and moved up or down the list.
+    There is no longer a hard limit to the number of cleanup actions;
+    create as many as you like. Of course, your screen size is still the limit
+    for those menus. ;-)
+
+  - In addition to the old cleanup parameters, you can now configure the output
+    window behaviour.  The default is "show after timeout" with a timeout of
+    half a second. This may sound pretty short, but I started with 3 seconds
+    and found that it felt sluggish. A modern PC can get a lot of things done
+    in half a second; yet waiting for more than that feels like an eternity. So
+    if any action takes longer than that, an output window pops up. Of course,
+    if there is any error, it pops up anyway.
+
+  - You can now configure the shell to use. I was weighing the pros and cons of
+    always using either /bin/sh or the user's login shell, and I found that
+    there is no killer argument in favour or against either option. For
+    example, I use the _zsh_, and while it's a great interactive shell, it did
+    give me problems for that "remove junk files" cleanup: "rm -f *.o *.bak *~"
+    -- when any of the wildcards cannot be expanded because there is no such
+    file, it complains. Okay, you can wrap the whole command in "/bin/bash -c",
+    but that's yet another indirection, so now you can configuare /bin/bash for
+    that particular cleanup action. On the other hand, for some things I might
+    want my original shell environment, so I do want my login shell by default.
+    This is now the default behaviour: Try $SHELL (the user's login shell), and
+    if that environment variable is not set or whatever is set there is not
+    executable, it falls back to /bin/bash and then /bin/sh. And you can still
+    enter your own in an editable combo box (but not "ruby" or "perl" because
+    the "-c" option is still added automatically).
 
 - 2016-01-05 I admit I had never really liked the way the output of cleanup
   actions was typically hidden. Most of the times I couldn't care less, but
