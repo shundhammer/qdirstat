@@ -7,7 +7,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-07
+Updated: 2016-01-08
 
 
 ## Overview
@@ -28,13 +28,28 @@ _Main window screenshot_
 
 _Screenshot of output during cleanup actions. Of course this window is purely optional._
 
+![Cleanup Action Configuration Screenshot]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-config.png)
+
+_Screenshot of cleanup configuration._
+
 
 
 ## Current Development Status
 
-**Work in Progress**
+**Alpha Quality -- V0.8 **
 
-Usable, but still pre-Alpha. Use at your own risk. You have been warned. ;-)
+Usable, but still Alpha.
+
+- 2016-01-08 Cleanups are now configurable - see screenshot. Cleanup actions
+  can now be added, deleted, and moved up or down the list.  In addition to the
+  old cleanup parameters, you can now configure the output window behaviour.
+  The default is "show after timeout" with a timeout of half a second. This may
+  sound pretty short, but I started with 3 seconds and found that it felt
+  sluggish. A modern PC can get a lot of things done in half a second; yet
+  waiting for more than that feels like an eternity. So if any action takes
+  longer than that, an output window pops up. Of course, if there is any error,
+  it pops up anyway.
 
 - 2016-01-05 I admit I had never really liked the way the output of cleanup
   actions was typically hidden. Most of the times I couldn't care less, but
