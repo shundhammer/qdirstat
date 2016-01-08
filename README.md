@@ -37,7 +37,7 @@ _Screenshot of cleanup configuration._
 
 ## Current Development Status
 
-**Alpha Quality -- V0.8 **
+**Alpha Quality -- V0.8**
 
 Usable, but still Alpha.
 
