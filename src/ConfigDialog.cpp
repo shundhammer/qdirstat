@@ -25,6 +25,7 @@ ConfigDialog::ConfigDialog( QWidget * parent ):
     _ui->setupUi( this );
 
     _cleanupConfigPage = new CleanupConfigPage();
+    CHECK_NEW( _cleanupConfigPage );
     _ui->pagesTabWidget->addTab( _cleanupConfigPage, tr( "Cleanup Actions" ) );
 
     connect( _ui->applyButton,   SIGNAL( clicked() ),
@@ -43,7 +44,8 @@ ConfigDialog::ConfigDialog( QWidget * parent ):
 
 ConfigDialog::~ConfigDialog()
 {
-    logDebug() << "ConfigDialog destructor" << endl;
+    // logDebug() << "ConfigDialog destructor" << endl;
+    delete _cleanupConfigPage;
 }
 
 

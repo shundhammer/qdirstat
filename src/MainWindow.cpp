@@ -139,6 +139,10 @@ MainWindow::~MainWindow()
 
     // Relying on the QObject hierarchy to properly clean this up resulted in a
     //	segfault; there was probably a problem in the deletion order.
+
+    if ( _configDialog )
+        delete _configDialog;
+
     delete _ui->dirTreeView;
     delete _cleanupCollection;
     delete _selectionModel;

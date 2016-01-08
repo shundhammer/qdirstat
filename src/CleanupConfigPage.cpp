@@ -41,6 +41,9 @@ CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
 	     this,	  SLOT	( currentItemChanged( QListWidgetItem *,
 						      QListWidgetItem *	 ) ) );
 
+    connect( _ui->titleLineEdit, SIGNAL( textChanged ( QString ) ),
+	     this,		 SLOT  ( titleChanged( QString ) ) );
+
     CONNECT_BUTTON( _ui->moveUpButton,	     moveUp()	     );
     CONNECT_BUTTON( _ui->moveDownButton,     moveDown()	     );
     CONNECT_BUTTON( _ui->moveToTopButton,    moveToTop()     );
@@ -52,7 +55,7 @@ CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
 
 CleanupConfigPage::~CleanupConfigPage()
 {
-
+    // logDebug() << "CleanupConfigPage destructor" << endl;
 }
 
 
@@ -123,10 +126,23 @@ void CleanupConfigPage::currentItemChanged(QListWidgetItem * currentItem,
 }
 
 
+void CleanupConfigPage::titleChanged( const QString & newTitle )
+{
+    QListWidgetItem * currentItem = _listWidget->currentItem();
+
+    if ( currentItem )
+    {
+	Cleanup * cleanup = this->cleanup( currentItem );
+	cleanup->setTitle( newTitle );
+	currentItem->setText( cleanup->cleanTitle() );
+    }
+}
+
+
 void CleanupConfigPage::updateActions()
 {
     int currentRow = _listWidget->currentRow();
-    int count      = _listWidget->count();
+    int count	   = _listWidget->count();
 
     _ui->moveToTopButton->setEnabled   ( currentRow > 0 );
     _ui->moveUpButton->setEnabled      ( currentRow > 0 );

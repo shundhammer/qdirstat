@@ -70,6 +70,13 @@ namespace QDirStat
 	 **/
 	void currentItemChanged( QListWidgetItem * current,
 				 QListWidgetItem * previous);
+
+	/**
+	 * Notification that the user changed the "Title" field of the
+	 * current cleanup.
+	 **/
+	void titleChanged( const QString & newTitle );
+
 	/**
 	 * Enable or disable buttons depending on internal status.
 	 **/
