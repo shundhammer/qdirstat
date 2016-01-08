@@ -44,9 +44,9 @@ Usable, but still Alpha.
 - 2016-01-08 Cleanups are now configurable - see screenshot.
 
   - Cleanup actions can now be added, deleted, and moved up or down the list.
-    There is no longer a hard limit to the number of cleanup actions;
-    create as many as you like. Of course, your screen size is still the limit
-    for those menus. ;-)
+    There is no longer a hard limit to the number of cleanup actions; create as
+    many as you like. Of course, your screen size is still the limit for those
+    menus. ;-)
 
   - In addition to the old cleanup parameters, you can now configure the output
     window behaviour.  The default is "show after timeout" with a timeout of
