@@ -13,7 +13,7 @@
 #include <QObject>
 #include <QList>
 
-#define USE_DEBUG_ACTIONS 1
+#define USE_DEBUG_ACTIONS 0
 
 
 namespace QDirStat
