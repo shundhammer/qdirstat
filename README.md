@@ -169,9 +169,9 @@ Yes, there is a Qt4 / Qt5 port of KDirStat called K4DirStat. K4DirStat is an
 independent project that started when I had not worked on the old KDirStat for
 a long time (my last KDirStat release had been in mid-2006).
 
-QDirStat is based on that same code base from the 2006 KDirStat. It's an 80%
-rewrite using a lot of newer Qt technologies. And there was a lot of cleaning
-up that old code base that had been long overdue.
+QDirStat is based on that same code from the 2006 KDirStat. It's an 80% rewrite
+using a lot of newer Qt technologies. And there was a lot of cleaning up that
+old code base that had been long overdue.
 
 
 
