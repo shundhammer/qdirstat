@@ -2,7 +2,7 @@
 
 TEMPLATE   = app
 TARGET     =
-doc.files  = *.txt
+doc.files  = *.txt ../*.md ../LICENSE
 
 # Ubuntu / Debian pkg doc path
 doc.path = /usr/share/doc/qdirstat
