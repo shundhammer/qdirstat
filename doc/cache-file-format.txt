@@ -1,8 +1,8 @@
-			The QDirStat Cache File Format
-		       ================================
+                        The QDirStat Cache File Format
+                       ================================
 
 Author:  Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
-Updated: 2015-12-24
+Updated: 2016-01-09
 
 
 QDirStat can read cache files in either gzip or plain text (uncompressed)
@@ -11,44 +11,49 @@ format. The file format is line oriented.
 Empty lines as well as lines with a '#' character as their first
 non-whitespace character are ignored.
 
+To generate a cache file, you can use QDirstat ("File" -> "Write Cache File")
+or the supplied qdirstat-cache-writer script in the scripts/ directory of the
+QDirStat sources.
+
+
 Example:
 
 
 [qdirstat 1.0 cache file]
 # Do not edit!
 #
-# Type	path		size	mtime	<optional fields>
+# Type  path            size    mtime   <optional fields>
 
-D /work/home/sh/kde/kdirstat	159	0x43aea3d3
-F 	ChangeLog	19288	0x43ae9a3b
-F 	.cvsignore	207	0x41c194f3
-F 	stamp-h1	23	0x43ae9d73
-F 	acinclude.m4	357171	0x43ae9d52
-F 	Makefile.am	1237	0x43ad58a0
-F 	config.h	5460	0x43ae9977
-D /work/home/sh/kde/kdirstat/kdirstat	549	0x43aea73b
-F 	.cvsignore	108	0x3b7bda58
-F 	kcleanupcollection.cpp	7615	0x41a3322d
-F 	kdirstatapp.cpp	24254	0x43aea372
-F 	kdirtree.cpp	33083	0x43adc843
-F 	kdirstatsettings.cpp	30519	0x3e39540c
-F 	kdirtreeiterators.cpp	7191	0x3e1ad131
-F 	ktreemapview.cpp	17100	0x3f93ee7b
-D /work/home/sh/kde/kdirstat/kdirstat/.libs	24	0x43ae9900
-D /work/home/sh/kde/kdirstat/kdirstat/.deps	504	0x43aea73a
-F 	ktreemaptile.Po	18074	0x43ae99a0
-F 	kdirtree.Po	18134	0x43aea0ba
-D /work/home/sh/kde/kdirstat/kdirstat/pics	144	0x43ae9d72
-F 	hi32-action-symlink.png	1141	0x3c0b5152
-F 	Makefile.am	59	0x41a47537
-D /work/home/sh/kde/kdirstat/kdirstat/pics/CVS	64	0x41c194fc
-F 	Entries	447	0x41c194fc
-F 	Repository	23	0x41c194fb
-F 	Root	54	0x41c194fb
-D /work/home/sh/kde/kdirstat/kdirstat/CVS	64	0x434657ca
-F 	Entries	2020	0x434657ca
-F 	Repository	18	0x41c194f8
-F 	Root	54	0x41c194f8
+D /work/home/sh/kde/kdirstat    159     0x43aea3d3
+F       ChangeLog       19288   0x43ae9a3b
+F       .cvsignore      207     0x41c194f3
+F       stamp-h1        23      0x43ae9d73
+F       acinclude.m4    357171  0x43ae9d52
+F       Makefile.am     1237    0x43ad58a0
+F       config.h        5460    0x43ae9977
+D /work/home/sh/kde/kdirstat/kdirstat   549     0x43aea73b
+F       .cvsignore      108     0x3b7bda58
+F       kcleanupcollection.cpp  7615    0x41a3322d
+F       kdirstatapp.cpp 24254   0x43aea372
+F       kdirtree.cpp    33083   0x43adc843
+F       kdirstatsettings.cpp    30519   0x3e39540c
+F       kdirtreeiterators.cpp   7191    0x3e1ad131
+F       ktreemapview.cpp        17100   0x3f93ee7b
+D /work/home/sh/kde/kdirstat/kdirstat/.libs     24      0x43ae9900
+D /work/home/sh/kde/kdirstat/kdirstat/.deps     504     0x43aea73a
+F       ktreemaptile.Po 18074   0x43ae99a0
+F       kdirtree.Po     18134   0x43aea0ba
+D /work/home/sh/kde/kdirstat/kdirstat/pics      144     0x43ae9d72
+F       hi32-action-symlink.png 1141    0x3c0b5152
+F       Makefile.am     59      0x41a47537
+D /work/home/sh/kde/kdirstat/kdirstat/pics/CVS  64      0x41c194fc
+F       Entries 447     0x41c194fc
+F       Repository      23      0x41c194fb
+F       Root    54      0x41c194fb
+D /work/home/sh/kde/kdirstat/kdirstat/CVS       64      0x434657ca
+F       Entries 2020    0x434657ca
+F       Repository      18      0x41c194f8
+F       Root    54      0x41c194f8
 
 
 (End of example)
@@ -99,13 +104,13 @@ Type
 
 Any of:
 
-"F"		plain file
-"D"		directory
-"L"		(symbolic) link
-"BlockDev"	block device i-node
-"CharDev"	character device i-node
-"FIFO"		FIFO (named pipe)
-"Socket"	socket
+"F"             plain file
+"D"             directory
+"L"             (symbolic) link
+"BlockDev"      block device i-node
+"CharDev"       character device i-node
+"FIFO"          FIFO (named pipe)
+"Socket"        socket
 
 The type field is case insensitive.
 
@@ -130,8 +135,8 @@ Paths and names are URL-encoded, i.e. any character (in particular whitespace)
 that might otherwise be some kind of delimiter is specified as its hex code
 with preceding "%":
 
-	with blank	->	with%20blank
-	with%percent	->	with%25percent
+        with blank      ->      with%20blank
+        with%percent    ->      with%25percent
 
 Take special care for blanks, tabs, newlines, and percent characters. It
 does not hurt to escape a few more characters than would strictly be
@@ -179,10 +184,10 @@ part, use the next-lower unit that fits without fraction.
 
 Examples:
 
-1024		->	1K
-1025		->	1025	(NOT 1.01K or something like this!)
-8589934592	->	8G
-8589934593	->	8589934593	(bad luck)
+1024            ->      1K
+1025            ->      1025    (NOT 1.01K or something like this!)
+8589934592      ->      8G
+8589934593      ->      8589934593      (bad luck)
 
 
 MTime
@@ -211,7 +216,7 @@ A block size of 512 bytes is assumed.
 
 Example:
 
-	blocks:	17
+        blocks: 17
 
 This file has 17*512 bytes allocated.
 
@@ -222,5 +227,5 @@ Links
 If a non-directory entry has more than one hard link, the entry has a
 "links:" field indicating the number of hard links:
 
-	links:	7
+        links:  7
 

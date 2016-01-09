@@ -1,4 +1,6 @@
-# TO DO
+# QDirStat To Do List
+
+This is roughly ordered by priority.
 
 
 ## Config Dialog
@@ -36,6 +38,14 @@
 
 - Implement XDG trash spec, however old and abandoned it is
 
+
+## Ready-made Packages for SUSE and Ubuntu
+
+- Write a .spec file for SUSE RPMs
+
+- Write a .control file for Ubuntu .deb packages
+
+- Use the openSUSE build service to create RPMs (and .deb packages?)
 
 
 ## General
@@ -76,44 +86,13 @@ way to maintain that much text in any more languages.
 - Text, CSV, YaML?
 
 
+### Windows / MacOS X Support
 
+- Create DirReadJob subclass that strictly uses Qt classes (QFileInfo) and no
+  POSIX system calls
 
+- 2015-12-25: Suy (Alejandro Exojo) suggested to use QStorageInfo (available
+  since Qt 5.4) to find out platform-independently on what device a directory
+  is. This doesn't sound too bad. This is something worthwhile to investigate
+  in more detail.
 
-## Intentionally Omitted
-
-- KPacMan
-
-- KioDirReadJob
-
-- KFeedback
-
-- KActivityTracker
-
-
-KPacMan looked out of place pretty soon after it got to KDirStat. I know that
-it does have its fans, but unless a graphics designer joins the project who can
-do that right, this will not come back.
-
-KioDirReadJob depended on KIO slaves to read directories on remote servers -
-FTP, HTTP, even Fish (ssh-based). This functionality is gone without
-KDE. That's a pity, but this is a little price to be paid to avoid the rest of
-the hassle with using the KDE libs.
-
-KFeedback was that form where users could tell their opinion about
-KDirstat. But that was not used that often anyway - not nearly enough to
-justify the effort that has gone into that part. And the KDE usability people,
-like usability people generally tend to do, first discussed that to death and
-then decided they didn't want anything like that in general in KDE
-applications. So be it.
-
-KActivityTracker was a supporting class for KFeedback that kept track of how
-much a user was using the program and after a while (when it was determined
-that it made sense) asked if the user wouldn't like to give his feedback about
-the program.
-
-Don't you all just hate those dumbass web designers who tell you to do a survey
-how much you like their grand web page before you even had a chance to look at
-it? Shove a pop-up up your face covering the stuff you are interesting in with
-their self-loving marketing bullshit? -- KActivityTracker was made to avoid
-exactly this: Ask the user only once you know that he actually used the program
-for a while.

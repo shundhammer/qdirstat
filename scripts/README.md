@@ -26,13 +26,17 @@ all those home directories. So do that with the qdirstat-cache-writer Perl
 script in a cron job running in the middle of the night and view the result
 with QDirStat during your normal office hours.
 
+ 
+For large directories (archives etc.) that don't change that much, you can also
+generate a QDirStat cache file (either with the Perl script or with QDirStat
+itself) and save it to that corresponding directory.
 
-_TO DO:_ Check if the following is still up to date
+If QDirStat finds a file .qdirstat.cache.gz in a directory, it checks if the
+toplevel directory in that cache file is the same as the current directory, and
+if it is, it uses the cache file for that directory rather than reading all
+subdirectories from disk. If you or the users that machine user QDirStat often,
+this might take a lot of I/O load from the server.
 
-
-Right now, this feature is currently integrated into the QDirStat user
-interface only very crudely: There are two entries in the "File" menu, "Write
-to Cache File..." and "Read Cache File...".
 
 There is currently no indication that cached values are displayed. This will
 have to change.
