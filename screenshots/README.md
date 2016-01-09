@@ -31,5 +31,7 @@ _Screenshot of output during cleanup actions. Of course this window is purely op
 
 ## More Information
 
-![QDirStat main page at github.com]
-(https://github.com/shundhammer/qdirstat)
+QDirStat main page:
+
+https://github.com/shundhammer/qdirstat
+
