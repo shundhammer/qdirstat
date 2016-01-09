@@ -21,6 +21,16 @@ This is a Qt-only port of the old Qt3/KDE3-based KDirStat, now based on the
 latest Qt 5. It does not need any KDE libs or infrastructure. It runs on every
 X11-based desktop on Linux, BSD and other Unix-like systems.
 
+QDirStat has a number of new features compared to KDirStat:
+
+- Multi-selection in both the tree and the treemap.
+- No more restriction on the number of user-defined cleanup actions.
+- Properly show errors of cleanup actions (and their output, if desired).
+- Only one binary file required. It contains everything including icons etc. 
+  (Qt runtime libs are still required to be installed).
+
+See section _New Features_ for more details.
+
 
 
 ## Screenshots
@@ -28,7 +38,7 @@ X11-based desktop on Linux, BSD and other Unix-like systems.
 ![Main Window Screenshot]
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png)
 
-_Main window screenshot_
+_Main window screenshot - notice the multi-selection in the tree and the treemap_
 
 
 ![Cleanup Action Output Screenshot]
@@ -217,8 +227,8 @@ up that old code base that had been long overdue.
 
 - Exclude rules are now greatly simplified. They no longer get the entire path
   to match which requires quite complex regexps, they only get the last path
-  component - i.e., no longer "/work/home/sh/src/qdirstat/src/.git", but only
-  ".git". You can now even tell the exclude rule to use a simplfied syntax:
+  component -- i.e., no longer "/work/home/sh/src/qdirstat/src/.git", but only
+  ".git". You can now even tell the exclude rule to use a simplified syntax:
   "FixedString" or "Wildcard" in addition to the normal "RegExp".
 
 - Actions to go one directory level higher or to the toplevel: Context menu and
