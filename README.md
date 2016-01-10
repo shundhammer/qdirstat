@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-09
+Updated: 2016-01-10
 
 
 ## Overview
@@ -26,7 +26,7 @@ QDirStat has a number of new features compared to KDirStat:
 - Multi-selection in both the tree and the treemap.
 - No more restriction on the number of user-defined cleanup actions.
 - Properly show errors of cleanup actions (and their output, if desired).
-- Only one binary file required. It contains everything including icons etc. 
+- Only one binary file required. It contains everything including icons etc.
   (Qt runtime libs are still required to be installed).
 
 See section _New Features_ for more details.
@@ -217,8 +217,7 @@ old code base that had been long overdue.
     - Ctrl+Left click:      Add item to selection or toggle selection.
     - Middle click:         Select the current item's parent. Cycle back at toplevel.
     - Double click left:    Zoom treemap in.
-    - Double click right:   Zoom treemap out.
-    - Double click middle:  Reset treemap zoom.
+    - Double click middle:  Zoom treemap out.
     - Mouse wheel:          Zoom treemap in or out.
 
 - You can configure what columns to display in the tree view and in which

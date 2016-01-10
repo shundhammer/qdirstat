@@ -682,11 +682,12 @@ void TreemapTile::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event )
 	    break;
 
 	case Qt::MidButton:
-	    _parentView->resetZoom();
+	    _parentView->zoomOut();
 	    break;
 
 	case Qt::RightButton:
-	    _parentView->zoomOut();
+            // This doesn't work at all since the first click already opens the
+            // context menu which grabs the focus to that pop-up menu.
 	    break;
 
 	default:

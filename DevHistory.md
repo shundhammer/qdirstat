@@ -94,8 +94,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     - Ctrl+Left click: Add item to selection or toggle selection.
     - Middle click: Select the current item's parent. Cycle back at toplevel.
     - Double click left: Zoom treemap in.
-    - Double click right: Zoom treemap out.
-    - Double click middle: Reset treemap zoom.
+    - Double click middle: Zoom treemap out. 
     - Mouse wheel: Zoom treemap in or out.
 
   - Reliably sort by pending read jobs while reading.
