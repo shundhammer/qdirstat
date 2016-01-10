@@ -274,7 +274,7 @@ namespace QDirStat
 	void setWorksForDotEntry     ( bool canDo    )		   { _worksForDotEntry	    = canDo;	 }
 	void setRecurse		     ( bool recurse  )		   { _recurse		    = recurse;	 }
 	void setAskForConfirmation   ( bool ask	     )		   { _askForConfirmation    = ask;	 }
-	void setShell		     ( const QString &	  shell	 ) { _shell		    = shell;	 }
+	void setShell		     ( const QString &	  sh	 ) { _shell		    = sh;	 }
 	void setRefreshPolicy	     ( RefreshPolicy	  policy ) { _refreshPolicy	    = policy;	 }
 	void setOutputWindowPolicy   ( OutputWindowPolicy policy ) { _outputWindowPolicy    = policy;	 }
 	void setOutputWindowTimeout  ( int timeoutMillisec )	   { _outputWindowTimeout   = timeoutMillisec; }

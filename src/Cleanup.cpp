@@ -204,21 +204,29 @@ QString Cleanup::chooseShell( OutputWindow * outputWindow ) const
     QString errMsg;
     QString shell = this->shell();
 
-    if ( ! shell.isEmpty() && ! isExecutable( shell ) )
+    if ( ! shell.isEmpty() )
     {
-	errMsg = tr( "ERROR: Shell %1 is not executable" ).arg( shell );
-	shell = defaultShell();
+	logDebug() << "Using custom shell " << shell << endl;
 
-	if ( ! shell.isEmpty() )
-	    errMsg += "\n" + tr( "Using fallback %1" ).arg( shell );
+	if ( ! isExecutable( shell ) )
+	{
+	    errMsg = tr( "ERROR: Shell %1 is not executable" ).arg( shell );
+	    shell = defaultShell();
+
+	    if ( ! shell.isEmpty() )
+		errMsg += "\n" + tr( "Using fallback %1" ).arg( shell );
+	}
     }
 
     if ( shell.isEmpty() )
+    {
 	shell = defaultShell();
+	logDebug() << "No custom shell configured - using " << shell << endl;
+    }
 
     if ( ! errMsg.isEmpty() )
     {
-	outputWindow->show(); // Regardless of user settings
+	outputWindow->show(); // Show error regardless of user settings
 	outputWindow->addStderr( errMsg );
     }
 
@@ -226,9 +234,9 @@ QString Cleanup::chooseShell( OutputWindow * outputWindow ) const
 }
 
 
-void Cleanup::runCommand ( const FileInfo * item,
-			   const QString  & command,
-			   OutputWindow	  * outputWindow ) const
+void Cleanup::runCommand( const FileInfo * item,
+			  const QString	 & command,
+			  OutputWindow	 * outputWindow ) const
 {
     QString shell = chooseShell( outputWindow );
 
