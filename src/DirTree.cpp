@@ -134,8 +134,13 @@ void DirTree::refresh( const FileInfoSet & refreshSet )
 
     foreach ( FileInfo * item, items )
     {
-	if ( item && item->isDirInfo() )
-	    refresh( item->toDirInfo() );
+	if ( item )
+        {
+            if( item->isDirInfo() )
+                refresh( item->toDirInfo() );
+            else if ( item->parent() )
+                refresh( item->parent() );
+        }
     }
 }
 
