@@ -63,6 +63,16 @@ namespace QDirStat
 	 **/
 	DirTreeModel * dirTreeModel() const { return _dirTreeModel; }
 
+	/**
+	 * Set 'verbose' mode: Log each selection change.
+	 **/
+	void setVerbose( bool verbose ) { _verbose = verbose; }
+
+	/**
+	 * Return 'true' if verbose mode is set.
+	 **/
+	bool verbose() const { return _verbose; }
+
 
     public slots:
 
@@ -164,6 +174,7 @@ namespace QDirStat
 	FileInfo	* _currentItem;
 	FileInfoSet	  _selectedItems;
 	bool		  _selectedItemsDirty;
+	bool		  _verbose;
 
     };	// class SelectionModel
 

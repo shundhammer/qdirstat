@@ -612,12 +612,12 @@ void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	    // here.
 
 	    QGraphicsRectItem::mousePressEvent( event );
-	    logDebug() << this << " mouse pressed" << endl;
+	    // logDebug() << this << " mouse pressed" << endl;
 	    _parentView->setCurrentItem( this );
 	    break;
 
 	case Qt::RightButton:
-	    logDebug() << this << " right mouse pressed" << endl;
+	    // logDebug() << this << " right mouse pressed" << endl;
 	    _parentView->setCurrentItem( this );
 	    break;
 
@@ -646,11 +646,12 @@ void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 
 	case Qt::MidButton:
 	    {
+		logDebug() << "Selecting parent" << endl;
+
 		TreemapTile * oldCurrentTile = _parentView->currentItem();
 		TreemapTile * newCurrentTile = this;
 
 		// Select the next-higher ancestor if possible
-
 		if ( oldCurrentTile &&
 		     oldCurrentTile->parentTile() &&
 		     _orig->isInSubtree( oldCurrentTile->parentTile()->orig() ) )
@@ -678,16 +679,18 @@ void TreemapTile::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event )
     switch ( event->button() )
     {
 	case Qt::LeftButton:
+	    logDebug() << "Zooming treemap in" << endl;
 	    _parentView->zoomIn();
 	    break;
 
 	case Qt::MidButton:
+	    logDebug() << "Zooming treemap out" << endl;
 	    _parentView->zoomOut();
 	    break;
 
 	case Qt::RightButton:
-            // This doesn't work at all since the first click already opens the
-            // context menu which grabs the focus to that pop-up menu.
+	    // This doesn't work at all since the first click already opens the
+	    // context menu which grabs the focus to that pop-up menu.
 	    break;
 
 	default:
@@ -744,9 +747,9 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
     ActionManager::instance()->addActions( &menu, actions );
 
     if ( _parentView->cleanupCollection() &&
-         ! _parentView->cleanupCollection()->isEmpty() )
+	 ! _parentView->cleanupCollection()->isEmpty() )
     {
-        menu.addSeparator();
+	menu.addSeparator();
 	_parentView->cleanupCollection()->addToMenu( &menu );
     }
 

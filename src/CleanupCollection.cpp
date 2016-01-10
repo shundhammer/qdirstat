@@ -446,6 +446,8 @@ void CleanupCollection::readSettings()
 		if ( ! hotkey.isEmpty() )
 		    cleanup->setShortcut( hotkey );
 
+                // if ( ! shell.isEmpty() )
+                //    logDebug() << "Using custom shell " << shell << " for " << cleanup << endl;
 	    }
 	    else
 	    {

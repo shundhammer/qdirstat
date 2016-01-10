@@ -538,6 +538,20 @@
     <string>Configure QDirStat</string>
    </property>
   </action>
+  <action name="actionVerboseSelection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Verbose Selection</string>
+   </property>
+   <property name="toolTip">
+    <string>Switch verbose logging of selecting and unselecting items on or off.</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+F7</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

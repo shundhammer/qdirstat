@@ -43,6 +43,7 @@ MainWindow::MainWindow():
     _ui( new Ui::MainWindow ),
     _configDialog(0),
     _modified( false ),
+    _verboseSelection( false ),
     _statusBarTimeout( 3000 ), // millisec
     _treeLevelMapper(0)
 {
@@ -126,6 +127,7 @@ MainWindow::MainWindow():
     if ( ! _ui->actionShowTreemap->isChecked() )
 	_ui->treemapView->disable();
 
+    toggleVerboseSelection();
     updateActions();
 }
 
@@ -219,6 +221,14 @@ void MainWindow::connectActions()
 
     CONNECT_ACTION( _ui->actionAbout,	this, showAboutDialog() );
     CONNECT_ACTION( _ui->actionAboutQt, qApp, aboutQt() );
+
+
+    // Invisible debug actions
+
+    addAction( _ui->actionVerboseSelection );
+
+    connect( _ui->actionVerboseSelection, SIGNAL( toggled( bool )	   ),  // Shift-F7
+	     this,			  SLOT	( toggleVerboseSelection() ) );
 }
 
 
@@ -271,10 +281,12 @@ void MainWindow::readSettings()
     bool   showTreemap	 = settings.value( "ShowTreemap"	     , true ).toBool();
     QPoint winPos	 = settings.value( "WindowPos"		     , QPoint( -99, -99 ) ).toPoint();
     QSize  winSize	 = settings.value( "WindowSize"		     , QSize (	 0,   0 ) ).toSize();
+    _verboseSelection	 = settings.value( "VerboseSelection"	     , false ).toBool();
 
     settings.endGroup();
 
     _ui->actionShowTreemap->setChecked( showTreemap );
+    _ui->actionVerboseSelection->setChecked( _verboseSelection );
 
     if ( winSize.height() > 100 && winSize.width() > 100 )
 	resize( winSize );
@@ -295,6 +307,7 @@ void MainWindow::writeSettings()
     settings.setValue( "ShowTreemap"		 , _ui->actionShowTreemap->isChecked() );
     settings.setValue( "WindowPos"		 , pos()  );
     settings.setValue( "WindowSize"		 , size() );
+    settings.setValue( "VerboseSelection"	 , _verboseSelection );
 
     settings.endGroup();
 }
@@ -617,6 +630,20 @@ void MainWindow::openConfigDialog()
 }
 
 
+void MainWindow::toggleVerboseSelection()
+{
+    // Verbose selection is toggled with Shift-F7
+
+    _verboseSelection = _ui->actionVerboseSelection->isChecked();
+
+    if ( _selectionModel )
+	_selectionModel->setVerbose( _verboseSelection );
+
+    logDebug() << "Verbose selection is now " << ( _verboseSelection ? "on" : "off" )
+               << ". Change this with Shift-F7." << endl;
+}
+
+
 void MainWindow::showAboutDialog()
 {
     QString homePage = "https://github.com/shundhammer/qdirstat";
@@ -627,7 +654,7 @@ void MainWindow::showAboutDialog()
     text += tr( "Qt-based directory statistics -- showing where all your disk space has gone "
 		" and trying to help you to clean it up." );
     text += "</p><p>";
-    text += "(c) 2015 Stefan Hundhammer";
+    text += "(c) 2015-2016 Stefan Hundhammer";
     text += "</p><p>";
     text += tr( "Contact: " ) + QString( "<a href=\"mailto:%1\">%2</a>" ).arg( mailTo ).arg( mailTo );
     text += "</p><p>";
@@ -659,6 +686,9 @@ void MainWindow::showAboutDialog()
 
 void MainWindow::itemClicked( const QModelIndex & index )
 {
+    if ( ! _verboseSelection )
+	return;
+
     if ( index.isValid() )
     {
 	FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
@@ -682,6 +712,9 @@ void MainWindow::itemClicked( const QModelIndex & index )
 
 void MainWindow::selectionChanged()
 {
+    if ( ! _verboseSelection )
+	return;
+
     logDebug() << endl;
     showSummary();
     _selectionModel->dumpSelectedItems();
@@ -690,6 +723,9 @@ void MainWindow::selectionChanged()
 
 void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurrent )
 {
+    if ( ! _verboseSelection )
+	return;
+
     logDebug() << "new current: " << newCurrent << endl;
     logDebug() << "old current: " << oldCurrent << endl;
     showSummary();

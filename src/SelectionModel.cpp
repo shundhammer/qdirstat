@@ -14,6 +14,7 @@
 #include "Exception.h"
 #include "Logger.h"
 
+#define VERBOSE_SELECTION	0
 
 using namespace QDirStat;
 
@@ -168,7 +169,9 @@ void SelectionModel::setSelectedItems( const FileInfoSet & selectedItems )
 
 void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 {
-    logDebug() << item << endl;
+    if ( _verbose )
+	logDebug() << item << endl;
+
     _currentItem = item;
 
     if ( item )
@@ -177,7 +180,9 @@ void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 
 	if ( index.isValid() )
 	{
-	    logDebug() << "Setting current to " << index << endl;
+	    if ( _verbose )
+		logDebug() << "Setting current to " << index << endl;
+
 	    setCurrentIndex( index, select ? ( Current | Select | Rows ) : Current );
 	}
 	else

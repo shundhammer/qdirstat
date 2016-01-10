@@ -194,6 +194,16 @@ protected slots:
     void openConfigDialog();
 
     /**
+     * Switch verbose logging for selection changes on or off.
+     *
+     * This is normally done by the invisible checkable action
+     * _ui->actionVerboseSelection in the main window UI file.
+     *
+     * The hotkey for this is Shift-F7.
+     **/
+    void toggleVerboseSelection();
+
+    /**
      * Open a popup dialog with a message that this feature is not implemented.
      **/
     void notImplemented();
@@ -246,6 +256,7 @@ private:
     QDirStat::ConfigDialog      * _configDialog;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
+    bool                          _verboseSelection;
     int				  _statusBarTimeout; // millisec
     QSignalMapper	       * _treeLevelMapper;
 };
