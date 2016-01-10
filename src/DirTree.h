@@ -215,12 +215,6 @@ namespace QDirStat
 	void sendAborted();
 
 	/**
-	 * Send a @ref progressInfo() signal to keep the user entertained while
-	 * directories are being read.
-	 **/
-	void sendProgressInfo( const QString &infoLine );
-
-	/**
 	 * Send a @ref startingReading( DirInfo * ) signal.
 	 **/
 	void sendStartingReading( DirInfo * dir );

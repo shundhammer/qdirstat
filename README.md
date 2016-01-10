@@ -60,6 +60,14 @@ _Screenshot of cleanup configuration._
 
 Usable, but still Alpha.
 
+- 2016-01-10 Went through the old KDirStat changelog and found a few bugs that
+  I had fixed there -- and promptly repeated with the new QDirStat:
+
+  - Disable cleanups while reading directories. This would result in a segfault.
+
+  - No longer showing the path of the current directory being read. This sped
+    up reading /usr on my machine from 9.5 sec to 1.5 sec (!).
+
 - 2016-01-09 Cleaned up this README.md file. It had grown much too long.
 
 - 2016-01-08 Cleanups are now configurable - see screenshot.

@@ -295,12 +295,6 @@ void DirTree::addJob( DirReadJob * job )
 }
 
 
-void DirTree::sendProgressInfo( const QString &infoLine )
-{
-    emit progressInfo( infoLine );
-}
-
-
 void DirTree::sendFinalizeLocal( DirInfo *dir )
 {
     emit finalizeLocal( dir );

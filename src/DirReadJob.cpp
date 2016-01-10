@@ -116,7 +116,6 @@ void LocalDirReadJob::startReading()
 
     if ( ( _diskDir = opendir( dirName.toUtf8() ) ) )
     {
-	_tree->sendProgressInfo( dirName );
 	_dir->setReadState( DirReading );
 
 	while ( ( entry = readdir( _diskDir ) ) )
@@ -387,7 +386,6 @@ CacheReadJob::read()
 
     // logDebug() << "Reading 1000 cache lines" << endl;
     _reader->read( 1000 );
-    _tree->sendProgressInfo( "" );
 
     if ( _reader->eof() || ! _reader->ok() )
     {

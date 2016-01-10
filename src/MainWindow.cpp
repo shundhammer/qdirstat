@@ -84,9 +84,6 @@ MainWindow::MainWindow():
     connect( _dirTreeModel->tree(),	SIGNAL( aborted()	  ),
 	     this,			SLOT  ( readingAborted()  ) );
 
-    connect( _dirTreeModel->tree(),	SIGNAL( progressInfo( QString ) ),
-	     this,			SLOT  ( showProgress( QString ) ) );
-
     connect( _selectionModel,  SIGNAL( selectionChanged() ),
 	     this,	       SLOT  ( updateActions()	 ) );
 
