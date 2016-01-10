@@ -70,6 +70,8 @@ void CleanupConfigPage::setup()
 void CleanupConfigPage::applyChanges()
 {
     logDebug() << endl;
+
+    saveCleanup( cleanup( _listWidget->currentItem() ) );
     _cleanupCollection->writeSettings();
 }
 
