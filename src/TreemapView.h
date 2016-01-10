@@ -42,6 +42,7 @@ namespace QDirStat
     class SelectionModel;
     class SelectionModelProxy;
     class CleanupCollection;
+    class FileInfoSet;
 
 
     /**

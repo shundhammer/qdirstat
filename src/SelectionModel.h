@@ -12,7 +12,7 @@
 
 #include <QItemSelectionModel>
 
-#include "FileInfo.h"
+#include "FileInfoSet.h"
 
 
 namespace QDirStat

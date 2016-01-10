@@ -12,6 +12,7 @@
 #include <QSettings>
 
 #include "DirTree.h"
+#include "FileInfoSet.h"
 #include "Exception.h"
 #include "DirTreeCache.h"
 

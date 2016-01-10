@@ -9,6 +9,7 @@
 
 #include "Refresher.h"
 #include "DirTree.h"
+#include "FileInfoSet.h"
 #include "Logger.h"
 
 using namespace QDirStat;

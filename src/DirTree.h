@@ -23,8 +23,8 @@
 
 namespace QDirStat
 {
-    // Forward declarations
     class DirReadJob;
+    class FileInfoSet;
 
 
     /**

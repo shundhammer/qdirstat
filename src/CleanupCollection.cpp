@@ -125,6 +125,7 @@ void CleanupCollection::updateActions()
     bool dirSelected	  = sel.containsDir();
     bool fileSelected	  = sel.containsFile();
     bool dotEntrySelected = sel.containsDotEntry();
+    bool busy             = sel.containsBusyItem();
 
     foreach ( Cleanup * cleanup, _cleanupList )
     {
@@ -132,7 +133,7 @@ void CleanupCollection::updateActions()
 	    cleanup->setEnabled( false );
 	else
 	{
-	    bool enabled = true;
+	    bool enabled = ! busy;
 
 	    if ( dirSelected && ! cleanup->worksForDir() )
 		enabled = false;

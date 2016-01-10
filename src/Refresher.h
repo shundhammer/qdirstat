@@ -11,11 +11,14 @@
 #define Refresher_h
 
 #include <QObject>
-#include "FileInfo.h"
+#include "FileInfoSet.h"
 
 
 namespace QDirStat
 {
+    class FileInfo;
+
+
     /**
      * Helper class to refresh a number of subtrees:
      *

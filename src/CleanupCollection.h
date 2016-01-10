@@ -14,7 +14,6 @@
 #include <QPointer>
 
 #include "Cleanup.h"
-#include "FileInfo.h"
 
 
 class QMenu;
@@ -23,6 +22,7 @@ class QMenu;
 namespace QDirStat
 {
     class SelectionModel;
+    class FileInfoSet;
 
     /**
      * Set of Cleanup actions to be performed for DirTree items, consisting of
