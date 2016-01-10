@@ -582,7 +582,7 @@ QVariant TreemapTile::itemChange( GraphicsItemChange   change,
 	    {
 		if ( ! _highlighter )
 		{
-		    logDebug() << "Creating highlighter for " << this << endl;
+		    // logDebug() << "Creating highlighter for " << this << endl;
 		    _highlighter = new SelectedItemHighlighter( this, _parentView->selectedItemsColor() );
 		    CHECK_NEW( _highlighter );
 		}
