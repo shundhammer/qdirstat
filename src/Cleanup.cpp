@@ -42,9 +42,9 @@ Cleanup::Cleanup( QString   command,
     _worksForDotEntry	   = false;
     _recurse		   = false;
     _askForConfirmation	   = false;
-    _refreshPolicy	   = NoRefresh;
+    _refreshPolicy	   = RefreshThis;
     _outputWindowPolicy	   = ShowAfterTimeout;
-    _outputWindowTimeout   = 0;
+    _outputWindowTimeout   = 500;
     _outputWindowAutoClose = false;
 
     QAction::setEnabled( true );
