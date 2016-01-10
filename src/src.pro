@@ -43,6 +43,7 @@ SOURCES	  = main.cpp			\
 	    ExcludeRules.cpp		\
 	    FileInfo.cpp		\
 	    FileInfoIterator.cpp	\
+	    FileInfoSet.cpp		\
 	    FileInfoSorter.cpp		\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
@@ -75,6 +76,7 @@ HEADERS	  =				\
 	    ExcludeRules.h		\
 	    FileInfo.h			\
 	    FileInfoIterator.h		\
+	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
 	    Logger.h			\
 	    MainWindow.h		\
