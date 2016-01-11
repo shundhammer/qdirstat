@@ -640,7 +640,7 @@ void MainWindow::toggleVerboseSelection()
 	_selectionModel->setVerbose( _verboseSelection );
 
     logDebug() << "Verbose selection is now " << ( _verboseSelection ? "on" : "off" )
-               << ". Change this with Shift-F7." << endl;
+	       << ". Change this with Shift-F7." << endl;
 }
 
 
@@ -712,24 +712,26 @@ void MainWindow::itemClicked( const QModelIndex & index )
 
 void MainWindow::selectionChanged()
 {
-    if ( ! _verboseSelection )
-	return;
-
-    logDebug() << endl;
     showSummary();
-    _selectionModel->dumpSelectedItems();
+
+    if ( _verboseSelection )
+    {
+	logDebug() << endl;
+	_selectionModel->dumpSelectedItems();
+    }
 }
 
 
 void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurrent )
 {
-    if ( ! _verboseSelection )
-	return;
-
-    logDebug() << "new current: " << newCurrent << endl;
-    logDebug() << "old current: " << oldCurrent << endl;
     showSummary();
-    _selectionModel->dumpSelectedItems();
+
+    if ( _verboseSelection )
+    {
+	logDebug() << "new current: " << newCurrent << endl;
+	logDebug() << "old current: " << oldCurrent << endl;
+	_selectionModel->dumpSelectedItems();
+    }
 }
 
 
