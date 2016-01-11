@@ -165,7 +165,7 @@ void CleanupConfigPage::saveCleanup( Cleanup * cleanup )
     cleanup->setTitle  ( _ui->titleLineEdit->text()	  );
     cleanup->setCommand( _ui->commandLineEdit->text()	  );
 
-    if ( _ui->shellComboBox->currentIndex() == 0 )
+    if ( _ui->shellComboBox->currentText().startsWith( "$SHELL" ) )
 	cleanup->setShell( "" );
     else
 	cleanup->setShell( _ui->shellComboBox->currentText() );
