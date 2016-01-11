@@ -92,7 +92,7 @@ Usable, but still Alpha.
     give me problems for that "remove junk files" cleanup: "rm -f *.o *.bak *~"
     -- when any of the wildcards cannot be expanded because there is no such
     file, it complains. Okay, you can wrap the whole command in "/bin/bash -c",
-    but that's yet another indirection, so now you can configuare /bin/bash for
+    but that's yet another indirection, so now you can configure /bin/bash for
     that particular cleanup action. On the other hand, for some things I might
     want my original shell environment, so I do want my login shell by default.
     This is now the default behaviour: Try $SHELL (the user's login shell), and
