@@ -742,6 +742,8 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	    << "actionTreemapZoomIn"
 	    << "actionTreemapZoomOut"
 	    << "actionResetTreemapZoom"
+            << "---"
+            << "actionMoveToTrash"
 	;
 
     ActionManager::instance()->addActions( &menu, actions );

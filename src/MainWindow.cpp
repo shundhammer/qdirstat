@@ -27,6 +27,9 @@
 #include "Exception.h"
 #include "ExcludeRules.h"
 #include "Logger.h"
+#include "Trash.h"
+#include "OutputWindow.h"
+#include "Refresher.h"
 #include "Version.h"
 
 
@@ -194,6 +197,7 @@ void MainWindow::connectActions()
     // "Edit" menu
 
     CONNECT_ACTION( _ui->actionCopyUrlToClipboard, this, copyCurrentUrlToClipboard() );
+    CONNECT_ACTION( _ui->actionMoveToTrash,	   this, moveToTrash() );
 
 
     // "Go To" menu
@@ -259,6 +263,7 @@ void MainWindow::updateActions()
     FileInfo * sel = selectedItems.first();
     bool oneDirSelected = ( selectedItems.size() == 1 ) && ( sel->isDir() );
 
+    _ui->actionMoveToTrash->setEnabled( sel && ! sel->isDotEntry() );
     _ui->actionRefreshSelected->setEnabled( oneDirSelected && ! sel->isExcluded() && ! sel->isMountPoint() );
     _ui->actionContinueReadingAtMountPoint->setEnabled( oneDirSelected && sel->isMountPoint() );
     _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
@@ -599,6 +604,42 @@ void MainWindow::navigateToToplevel()
 	_selectionModel->setCurrentItem( toplevel,
 					 true ); // select
     }
+}
+
+
+void MainWindow::moveToTrash()
+{
+    FileInfoSet selectedItems = _selectionModel->selectedItems().normalized();
+
+    // Prepare output window
+
+    OutputWindow * outputWindow = new OutputWindow( qApp->activeWindow() );
+    CHECK_NEW( outputWindow );
+
+    // Prepare refresher
+
+    FileInfoSet refreshSet = Refresher::parents( selectedItems );
+    Refresher * refresher  = new Refresher( refreshSet, this );
+    CHECK_NEW( refresher );
+
+    connect( outputWindow, SIGNAL( lastProcessFinished( int ) ),
+	     refresher,	   SLOT	 ( refresh()		      ) );
+
+    outputWindow->showAfterTimeout();
+
+    // Move all selected items to trash
+
+    foreach ( FileInfo * item, selectedItems )
+    {
+	bool success = Trash::trash( item->url() );
+
+	if ( success )
+	    outputWindow->addStdout( tr( "Moved to trash: %1" ).arg( item->url() ) );
+	else
+	    outputWindow->addStderr( tr( "Moving to trash failed for %1" ).arg( item->url() ) );
+    }
+
+    outputWindow->noMoreProcesses();
 }
 
 

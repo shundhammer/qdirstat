@@ -86,7 +86,17 @@ way to maintain that much text in any more languages.
 - Text, CSV, YaML?
 
 
-### Windows / MacOS X Support
+### MacOS X Support
+
+- Find out how well "make install" works, in particular for the other subdirs
+  (doc/, scripts/) fix any problems with that
+
+- Find out how to package a MacOS app
+
+- Find a volunteer for a MacOS X platform maintainer
+
+
+### Windows Support
 
 - Create DirReadJob subclass that strictly uses Qt classes (QFileInfo) and no
   POSIX system calls

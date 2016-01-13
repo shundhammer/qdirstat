@@ -86,6 +86,8 @@ void DirTreeView::contextMenu( const QPoint & pos )
 	    << "actionRefreshSelected"
 	    << "actionReadExcludedDirectory"
 	    << "actionContinueReadingAtMountPoint"
+            << "---"
+            << "actionMoveToTrash"
 	;
 
     ActionManager::instance()->addActions( &menu, actions );

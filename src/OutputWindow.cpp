@@ -41,6 +41,7 @@ OutputWindow::OutputWindow( QWidget * parent ):
     readSettings();
 
     _ui->terminal->clear();
+    setAutoClose( false );
 
     CONNECT_ACTION( _ui->actionZoomIn,	    this, zoomIn()    );
     CONNECT_ACTION( _ui->actionZoomOut,	    this, zoomOut()   );
@@ -313,6 +314,13 @@ void OutputWindow::closeIfDone()
 void OutputWindow::noMoreProcesses()
 {
     _noMoreProcesses = true;
+
+    if ( _processList.isEmpty() && _noMoreProcesses )
+    {
+	logDebug() << "Emitting lastProcessFinished() err: " << _errorCount << endl;
+	emit lastProcessFinished( _errorCount );
+    }
+
     closeIfDone();
 }
 

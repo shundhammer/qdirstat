@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-10
+Updated: 2016-01-14
 
 
 ## Overview
@@ -59,6 +59,17 @@ _Screenshot of cleanup configuration._
 **Alpha Quality -- V0.8**
 
 Usable, but still Alpha.
+
+- 2016-01-13 Added "move to trash", this time as a normal action in the "Edit"
+  menu, the toolbar and the context menus. This is a real implementation of the
+  XDG Trash specification. It does not rely on outside tools that might or
+  might not be available.
+
+- 2016-01-12 We have a first MacOS X port! Sonja Krause-Harder volunteered to
+  install a Qt development environment (11 GB! Yikes!) on her MacBook. I would
+  have expected some changes, but a simple "qmake; make" just did the
+  job. Amazing! -- The major challenge was to find where "qmake" gets installed
+  in that MacOS Qt environment.
 
 - 2016-01-10 Went through the old KDirStat changelog and found a few bugs that
   I had fixed there -- and promptly repeated with the new QDirStat:
@@ -432,19 +443,39 @@ Features ported from the old KDirStat:
 
 
 
-## Windows / MacOS X Compatibility
+## MacOS X Compatibility
 
-None yet. This might be added in the future, but for the time being, there are
-more important things on the "to-do" list.
+I was amazed to find that it doesn't take more than the normal "qmake" and then
+"make" to build QDirStat for MacOS X. We (Sonja Krause-Harder and I) did some
+basic testing, and it seems to work.
 
-The limiting factor at present is directory reading. This is now based on POSIX
-system calls like opendir(), closedir(), lstat() to be able to limit reading
-directory trees to one file system -- because that's what users are interested
-in when they get that dreaded "out of disk space" error.
+The cleanups may need some adaptation, but this is something that might even be
+configured by the user.
 
-Unfortunately, there is no Qt class that can find out that crucial information
-on what device a file is so QDirStat can check when it is crossing file system
-boundaries while reading directories.
+If anybody wants to give it a try, download Qt for MacOS X, install it, open a
+shell window, search the _qmake_ command:
+
+    find . -name qmake
+
+Add this to your $PATH, then do the normal
+
+    qmake
+    make
+
+Not sure how well "make install" works, though.
+
+**Architecture maintainer wanted for QDirStat for MacOS X**
+
+
+## Windows Compatibility
+
+None for the forseeable future.
+
+Directory reading might be quite easy to replace for Windows; we don't have
+that problem with devices and crossing filesystems on that platform.
+
+But the cleanups might be a challenge, "move to trash" works completely
+differently, and we'd need an installer for a Windows version.
 
 
 

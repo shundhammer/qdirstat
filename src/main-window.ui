@@ -37,7 +37,7 @@
      <x>0</x>
      <y>0</y>
      <width>1157</width>
-     <height>28</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -96,6 +96,7 @@
      <bool>true</bool>
     </property>
     <addaction name="actionCopyUrlToClipboard"/>
+    <addaction name="actionMoveToTrash"/>
    </widget>
    <widget class="QMenu" name="menuTreemap">
     <property name="title">
@@ -135,6 +136,8 @@
     <property name="title">
      <string>&amp;Clean Up</string>
     </property>
+    <addaction name="actionMoveToTrash"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -163,9 +166,12 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionGoUp"/>
+   <addaction name="separator"/>
    <addaction name="actionTreemapZoomIn"/>
    <addaction name="actionTreemapZoomOut"/>
    <addaction name="actionResetTreemapZoom"/>
+   <addaction name="separator"/>
+   <addaction name="actionMoveToTrash"/>
   </widget>
   <action name="actionQuit">
    <property name="icon">
@@ -550,6 +556,21 @@
    </property>
    <property name="shortcut">
     <string>Shift+F7</string>
+   </property>
+  </action>
+  <action name="actionMoveToTrash">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/trashcan.png</normaloff>:/icons/trashcan.png</iconset>
+   </property>
+   <property name="text">
+    <string>Move to &amp;Trash</string>
+   </property>
+   <property name="toolTip">
+    <string>Move the selected items to the trash bin.</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
    </property>
   </action>
  </widget>

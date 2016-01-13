@@ -38,7 +38,6 @@ namespace QDirStat
 	static Cleanup * compressSubtree  ( QObject * parent = 0 );
 	static Cleanup * makeClean	  ( QObject * parent = 0 );
 	static Cleanup * deleteJunk	  ( QObject * parent = 0 );
-	static Cleanup * moveToTrash	  ( QObject * parent = 0 );
 	static Cleanup * hardDelete	  ( QObject * parent = 0 );
 #if USE_DEBUG_ACTIONS
 	static Cleanup * echoargs	  ( QObject * parent = 0 );

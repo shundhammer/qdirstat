@@ -21,7 +21,6 @@ CleanupList StdCleanup::stdCleanups( QObject * parent )
 
     cleanups << openInFileManager( parent )
 	     << openInTerminal	 ( parent )
-	     << moveToTrash	 ( parent )
 	     << hardDelete	 ( parent )
 	     << compressSubtree	 ( parent )
 	     << makeClean	 ( parent )
@@ -117,23 +116,6 @@ Cleanup * StdCleanup::deleteJunk( QObject * parent )
     cleanup->setRefreshPolicy( Cleanup::RefreshThis );
     cleanup->setRecurse( true );
     cleanup->setShell( "/bin/bash" );
-
-    return cleanup;
-}
-
-
-Cleanup * StdCleanup::moveToTrash( QObject * parent )
-{
-    Cleanup *cleanup = new Cleanup( "kfmclient move %p %t",
-				    QObject::tr( "Delete (to Trash &Bin)" ),
-				    parent );
-    CHECK_NEW( cleanup );
-    cleanup->setWorksForDir	( true	);
-    cleanup->setWorksForFile	( true	);
-    cleanup->setWorksForDotEntry( false );
-    cleanup->setRefreshPolicy( Cleanup::AssumeDeleted );
-    cleanup->setIcon( ":/icons/trash.png" );
-    cleanup->setShortcut( Qt::Key_Delete );
 
     return cleanup;
 }

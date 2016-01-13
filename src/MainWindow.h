@@ -108,6 +108,11 @@ public slots:
     void copyCurrentUrlToClipboard();
 
     /**
+     * Move the selected items to the trash bin.
+     **/
+    void moveToTrash();
+
+    /**
      * Navigate one directory level up.
      **/
     void navigateUp();

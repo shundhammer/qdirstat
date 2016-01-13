@@ -52,6 +52,7 @@ SOURCES	  = main.cpp			\
 	    Refresher.cpp		\
 	    SelectionModel.cpp		\
 	    SettingsHelpers.cpp		\
+            Trash.cpp                   \
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
 
@@ -86,6 +87,7 @@ HEADERS	  =				\
 	    SelectionModel.h		\
 	    SettingsHelpers.h		\
 	    SignalBlocker.h		\
+            Trash.h                     \
 	    TreemapTile.h		\
 	    TreemapView.h		\
 	    Version.h			\
