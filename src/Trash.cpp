@@ -94,6 +94,9 @@ QString Trash::toplevel( const QString & rawPath )
 	path = "/" + components.join( "/" );
     }
 
+    if ( components.isEmpty() && device( "/" ) == dev )
+	lastPath = "/";
+
     return lastPath;
 }
 
@@ -108,55 +111,70 @@ TrashDir * Trash::trashDir( const QString & path )
     QString topDir = toplevel( path );
 
     if ( topDir == "/" )	// Don't create a new trash dir in /
+    {
+	// logDebug() << "Not creating trash dir in /" << endl;
 	return _homeTrashDir;
-
-    // Check if there is $TOPDIR/.Trash
-
-    QString trashPath = topDir + "/.Trash";
-
-    struct stat statBuf;
-    int result = stat( trashPath.toUtf8(), &statBuf );
-
-    if ( result < 0 && errno == ENOENT ) // No such file or directory
-    {
-	// No $TOPDIR/.Trash: Use $TOPDIR/.Trash-$UID
-
-	logDebug() << "No " << trashPath << endl;
-	trashPath = topDir + QString( "/.Trash-%1" ).arg( getuid() );
-	logDebug() << "Using << " << trashPath << endl;
     }
-    else if ( result < 0 )
-    {
-	// stat() failed for some other reason (not "no such file or directory")
 
-	THROW( FileException( trashPath, "stat() failed for " + trashPath
-			      + ": " + strerror( errno ) ) );
-    }
-    else // stat() was successful
+    try
     {
-	mode_t mode = statBuf.st_mode;
+	// Check if there is $TOPDIR/.Trash
 
-	if ( S_ISDIR( mode ) &&
-	     ( mode & S_ISVTX	) ) // Check sticky bit
+	QString trashPath = topDir + "/.Trash";
+
+	struct stat statBuf;
+	int result = stat( trashPath.toUtf8(), &statBuf );
+
+	if ( result < 0 && errno == ENOENT ) // No such file or directory
 	{
-	    // Use $TOPDIR/.Trash/$UID
+	    // No $TOPDIR/.Trash: Use $TOPDIR/.Trash-$UID
 
-	    trashPath += QString( "/%1" ).arg( getuid() );
+	    logDebug() << "No " << trashPath << endl;
+	    trashPath = topDir + QString( "/.Trash-%1" ).arg( getuid() );
+	    logDebug() << "Using " << trashPath << endl;
 	}
-	else // Not a directory or sticky bit not set
+	else if ( result < 0 )
 	{
-	    if ( ! S_ISDIR( mode ) )
-		THROW( FileException( trashPath, trashPath + " is not a directory" ) );
-	    else
-		THROW( FileException( trashPath, "Sticky bit required on " + trashPath ) );
+	    // stat() failed for some other reason (not "no such file or directory")
+
+	    THROW( FileException( trashPath, "stat() failed for " + trashPath
+				  + ": " + strerror( errno ) ) );
 	}
+	else // stat() was successful
+	{
+	    mode_t mode = statBuf.st_mode;
+
+	    if ( S_ISDIR( mode ) &&
+		 ( mode & S_ISVTX	) ) // Check sticky bit
+	    {
+		// Use $TOPDIR/.Trash/$UID
+
+		trashPath += QString( "/%1" ).arg( getuid() );
+		logDebug() << "Using " << trashPath << endl;
+	    }
+	    else // Not a directory or sticky bit not set
+	    {
+		if ( ! S_ISDIR( mode ) )
+		    THROW( FileException( trashPath, trashPath + " is not a directory" ) );
+		else
+		    THROW( FileException( trashPath, "Sticky bit required on " + trashPath ) );
+	    }
+	}
+
+	TrashDir * trashDir = new TrashDir( trashPath, dev );
+	CHECK_NEW( trashDir );
+	_trashDirs[ dev ] = trashDir;
+
+	return trashDir;
     }
+    catch ( const FileException &ex )
+    {
+	CAUGHT( ex );
+	logWarning() << "Falling back to home trash dir: "
+		     << _homeTrashDir->path() << endl;
 
-    TrashDir * trashDir = new TrashDir( trashPath, dev );
-    CHECK_NEW( trashDir );
-    _trashDirs[ dev ] = trashDir;
-
-    return trashDir;
+	return _homeTrashDir;
+    }
 }
 
 
@@ -212,7 +230,7 @@ TrashDir::TrashDir( const QString & path, dev_t device ):
     _path( path ),
     _device( device )
 {
-    logDebug() << "Created TrashDir " << path << endl;
+    // logDebug() << "Created TrashDir " << path << endl;
 
     ensureDirExists( path,	  0700, true );
     ensureDirExists( filesPath(), 0700, true );
@@ -227,18 +245,18 @@ QString TrashDir::uniqueName( const QString & path )
 
     QString baseName  = file.baseName();
     QString extension = file.completeSuffix();
-    int     count     = 0;
+    int	    count     = 0;
     QString name      = baseName;
 
     if ( ! extension.isEmpty() )
-        name += "." + extension;
+	name += "." + extension;
 
     while ( filesDir.exists( name ) )
     {
 	name = QString( "%1_%2" ).arg( baseName ).arg( ++count );
 
-        if ( ! extension.isEmpty() )
-            name += "." + extension;
+	if ( ! extension.isEmpty() )
+	    name += "." + extension;
     }
 
     // We don't care if a .trashinfo file with that name already exists in the
@@ -288,14 +306,14 @@ void TrashDir::createTrashInfo( const QString & path,
 }
 
 
-bool TrashDir::move( const QString & path,
+void TrashDir::move( const QString & path,
 		     const QString & targetName )
 {
     QFile file( path );
-    bool success = file.rename( filesPath() + "/" + targetName );
+    QString targetPath = filesPath() + "/" + targetName;
+
+    bool success = file.rename( targetPath );
 
     if ( ! success )
-	logError() << "Couldn't move " << path << " to " << filesPath() << endl;
-
-    return success;
+	THROW( FileException( path, "Could not move " + path + " to " + targetPath ) );
 }

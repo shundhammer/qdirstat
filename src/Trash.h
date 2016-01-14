@@ -175,9 +175,9 @@ public:
      * /files subdirectory. If both are on different devices, copy the file and
      * then delete the original.
      *
-     * Return 'true' on success, 'false' on error.
+     * This might throw a FileException.
      **/
-    bool move( const QString & path, const QString & targetName );
+    void move( const QString & path, const QString & targetName );
 
 
 protected:
