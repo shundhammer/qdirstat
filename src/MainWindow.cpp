@@ -636,7 +636,7 @@ void MainWindow::moveToTrash()
 	if ( success )
 	    outputWindow->addStdout( tr( "Moved to trash: %1" ).arg( item->url() ) );
 	else
-	    outputWindow->addStderr( tr( "Moving to trash failed for %1" ).arg( item->url() ) );
+	    outputWindow->addStderr( tr( "Move to trash failed for %1" ).arg( item->url() ) );
     }
 
     outputWindow->noMoreProcesses();
