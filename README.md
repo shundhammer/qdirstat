@@ -661,7 +661,9 @@ system. If it is mounted at /data, do this:
     sudo chmod 01777 .Trash
 
 Permissions '01777' means "rwx for all plus sticky bit". The sticky bit for a
-directory means that only the owner of a file can remove it.
+directory means that only the owner of a file can remove it. The sticky bit is
+required for security reasons and the XDG trash spec (it's also required by the
+spec that applications like QDirStat use it if it is not set).
 
 Now you can move directory trees from /data/somewhere to the trash with
 QDirStat. It will end up in /data/.Trash/1000/files/somewhere (if 1000 is your
@@ -670,12 +672,16 @@ trash application (your trash icon on the desktop and the file manager window
 you get when you click on it) should show it, and you can empty the trash from
 there.
 
-For USB sticks, this is usually not necessary; if you have write permission on
-its toplevel directory, QDirStat will (again in compliance to the XDG trash
-specification) create a trash directory .Trash-1000 in its toplevel directory
-which is the fallback if there is no .Trash directory there with the sticky bit
-set. This would also happen automatically on /data and / if you had write
-permission there (which is uncommon).
+In Xfce, this works out of the box. KDE might need a forced refresh (press F5)
+in that window.
+
+For USB sticks, this explicit toplevel .Trash directory is usually not
+necessary: If you have write permission on its toplevel directory, QDirStat
+will (again in compliance to the XDG trash specification) create a trash
+directory .Trash-1000 in its toplevel directory which is the fallback if there
+is no .Trash directory there with the sticky bit set. This would also happen
+automatically on /data and / if you had write permission there (which is
+uncommon).
 
 What the major desktops (KDE, GNOME, Xfce) usually do with their native file
 managers is to recreate the entire directory tree in your home trash directory
@@ -709,3 +715,8 @@ Sources: https://github.com/shundhammer/kdirstat
 Home page: https://bitbucket.org/jeromerobert/k4dirstat/wiki/Home
 
 Sources: https://bitbucket.org/jeromerobert/k4dirstat/src
+
+
+### XDG Trash Spec
+
+http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
