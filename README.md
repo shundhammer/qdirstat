@@ -120,8 +120,8 @@ Usable, but still Alpha.
         export QDIRSTAT_DESKTOP="Xfce"
 
   - Of course, you can still simply use your favourite file manager if you
-    simply change %filemanager in the default "Open File Manager Here" cleanup
-    action to the command to start it.
+    simply use its command instead of %filemanager in the default "Open File
+    Manager Here" cleanup action.
 
   - Added new standard cleanup actions:
 
@@ -138,7 +138,7 @@ Usable, but still Alpha.
   - Redefined the semantics of the _file manager_ cleanup action: It no longer
     tries to open files with the corresponding application depending on MIME
     type, it now always opens a file manager in that directory (which can open
-    the file in its app if you want that.). It's now also renamed to "open file
+    the file in its app if you want that). It's now also renamed to "open file
     manager here". If you still want the old behaviour, you can easily add your
     own cleanup action with the "xdg-open %p" command.
 
