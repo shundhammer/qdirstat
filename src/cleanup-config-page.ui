@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>654</width>
-    <height>562</height>
+    <height>569</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -253,6 +253,7 @@ executed multiple times.</string>
              <property name="text">
               <string>%p  Full Path
 %n  File / Directory Name Without Path
+%d  Directory Name With Full Path
 </string>
              </property>
              <property name="alignment">
@@ -408,7 +409,7 @@ re-read from disk after the cleanup action is finished.</string>
             <x>0</x>
             <y>0</y>
             <width>330</width>
-            <height>150</height>
+            <height>147</height>
            </rect>
           </property>
           <attribute name="label">
@@ -622,7 +623,7 @@ command, uncheck this.</string>
             <x>0</x>
             <y>0</y>
             <width>330</width>
-            <height>150</height>
+            <height>142</height>
            </rect>
           </property>
           <attribute name="label">

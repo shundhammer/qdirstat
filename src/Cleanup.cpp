@@ -181,8 +181,18 @@ QString Cleanup::expandVariables( const FileInfo * item,
 				  const QString	 & unexpanded ) const
 {
     QString expanded = unexpanded;
+    QString dirName = "";
+
+    if ( item->isDir() )
+        dirName = item->url();
+    else if ( item->parent() )
+        dirName = item->parent()->url();
+
     expanded.replace( "%p", escapeAndQuote( item->url()	 ) );
     expanded.replace( "%n", escapeAndQuote( item->name() ) );
+
+    if ( ! dirName.isEmpty() )
+        expanded.replace( "%d", escapeAndQuote( dirName ) );
 
     // logDebug() << "Expanded: \"" << expanded << "\"" << endl;
     return expanded;
