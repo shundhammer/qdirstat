@@ -110,12 +110,6 @@ TrashDir * Trash::trashDir( const QString & path )
 
     QString topDir = toplevel( path );
 
-    if ( topDir == "/" )	// Don't create a new trash dir in /
-    {
-	// logDebug() << "Not creating trash dir in /" << endl;
-	return _homeTrashDir;
-    }
-
     try
     {
 	// Check if there is $TOPDIR/.Trash
@@ -129,9 +123,9 @@ TrashDir * Trash::trashDir( const QString & path )
 	{
 	    // No $TOPDIR/.Trash: Use $TOPDIR/.Trash-$UID
 
-	    logDebug() << "No " << trashPath << endl;
+	    logInfo() << "No " << trashPath << endl;
 	    trashPath = topDir + QString( "/.Trash-%1" ).arg( getuid() );
-	    logDebug() << "Using " << trashPath << endl;
+	    logInfo() << "Using " << trashPath << endl;
 	}
 	else if ( result < 0 )
 	{
@@ -150,7 +144,7 @@ TrashDir * Trash::trashDir( const QString & path )
 		// Use $TOPDIR/.Trash/$UID
 
 		trashPath += QString( "/%1" ).arg( getuid() );
-		logDebug() << "Using " << trashPath << endl;
+		logInfo() << "Using " << trashPath << endl;
 	    }
 	    else // Not a directory or sticky bit not set
 	    {
@@ -194,10 +188,12 @@ bool Trash::trash( const QString & path )
     catch ( const FileException & ex )
     {
 	CAUGHT( ex );
-	logError() << "move to trash failed for " << path << endl;
+	logError() << "Move to trash failed for " << path << endl;
 
 	return false;
     }
+
+    logInfo() << "Successfully moved to trash: " << path << endl;
 
     return true;
 }
@@ -277,7 +273,7 @@ bool TrashDir::ensureDirExists( const QString & path,
     if ( dir.exists() )
 	return true;
 
-    logDebug() << "mkdir " << path << endl;
+    logInfo() << "mkdir " << path << endl;
     int result = mkdir( path.toUtf8(), mode );
 
     if ( result < 0 && doThrow )
