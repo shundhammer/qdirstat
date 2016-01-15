@@ -76,8 +76,8 @@ void OutputWindow::addProcess( QProcess * process )
 
     if ( _killedAll )
     {
-	logDebug() << "User killed all processes - "
-		   << "no longer accepting new processes" << endl;
+	logInfo() << "User killed all processes - "
+                  << "no longer accepting new processes" << endl;
 	process->kill();
 	process->deleteLater();
     }
@@ -118,6 +118,7 @@ void OutputWindow::addStderr( const QString output )
 {
     _errorCount++;
     addText( output, _stderrColor );
+    logWarning() << output << ( output.endsWith( "\n" ) ? "" : "\n" );
 
     if ( _showOnStderr && ! isVisible() && ! _closed )
 	show();
@@ -371,7 +372,7 @@ void OutputWindow::killAll()
 
     foreach ( QProcess * process, _processList )
     {
-	logDebug() << "Killing process " << process << endl;
+	logInfo() << "Killing process " << process << endl;
 	process->kill();
 	_processList.removeAll( process );
 	process->deleteLater();
@@ -437,7 +438,7 @@ QProcess * OutputWindow::startNextProcess()
 	}
 
 	addCommandLine( command( process ) );
-	logDebug() << "Starting " << process << endl;
+	logInfo() << "Starting: " << process << endl;
 
 	process->start();
 	qApp->processEvents(); // Keep GUI responsive
