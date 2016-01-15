@@ -118,6 +118,7 @@ Cleanup * StdCleanup::gitClean( QObject * parent )
     cleanup->setWorksForDotEntry( true	);
     cleanup->setAskForConfirmation( true );
     cleanup->setRefreshPolicy( Cleanup::RefreshThis );
+    cleanup->setOutputWindowPolicy( Cleanup::ShowAlways );
 
     return cleanup;
 }

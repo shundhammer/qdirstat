@@ -91,7 +91,7 @@ void DirTree::startReading( const QString & rawUrl )
     QFileInfo fileInfo( rawUrl );
     QString url = fileInfo.absoluteFilePath();
     // logDebug() << "rawUrl: \"" << rawUrl << "\"" << endl;
-    logDebug() << "   url: \"" << url	 << "\"" << endl;
+    logInfo() << "   url: \"" << url	 << "\"" << endl;
 
     _isBusy = true;
 
@@ -135,12 +135,12 @@ void DirTree::refresh( const FileInfoSet & refreshSet )
     foreach ( FileInfo * item, items )
     {
 	if ( item )
-        {
-            if( item->isDirInfo() )
-                refresh( item->toDirInfo() );
-            else if ( item->parent() )
-                refresh( item->parent() );
-        }
+	{
+	    if( item->isDirInfo() )
+		refresh( item->toDirInfo() );
+	    else if ( item->parent() )
+		refresh( item->parent() );
+	}
     }
 }
 

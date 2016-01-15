@@ -398,7 +398,7 @@ const QMap<QString, QString> & Cleanup::desktopSpecificApps()
 	}
 	else
 	{
-	    logDebug() << "Detected desktop \"" << desktop << "\"" << endl;
+	    logInfo() << "Detected desktop \"" << desktop << "\"" << endl;
 	    desktop = desktop.toLower();
 
 	    if ( desktop == "kde" )
@@ -451,7 +451,7 @@ const QMap<QString, QString> & Cleanup::desktopSpecificApps()
 	      it != apps.constEnd();
 	      ++it )
 	{
-	    logDebug() << it.key() << " => \"" << it.value() << "\"" << endl;
+	    logInfo() << it.key() << " => \"" << it.value() << "\"" << endl;
 	}
     }
 

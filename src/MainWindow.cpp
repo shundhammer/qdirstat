@@ -391,7 +391,7 @@ void MainWindow::startingReading()
 
 void MainWindow::readingFinished()
 {
-    logDebug() << endl;
+    logInfo() << endl;
 
     idleDisplay();
     _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1")
@@ -403,7 +403,7 @@ void MainWindow::readingFinished()
 
 void MainWindow::readingAborted()
 {
-    logDebug() << endl;
+    logInfo() << endl;
 
     idleDisplay();
     _ui->statusBar->showMessage( tr( "Aborted. Elapsed time: %1")
@@ -680,8 +680,8 @@ void MainWindow::toggleVerboseSelection()
     if ( _selectionModel )
 	_selectionModel->setVerbose( _verboseSelection );
 
-    logDebug() << "Verbose selection is now " << ( _verboseSelection ? "on" : "off" )
-	       << ". Change this with Shift-F7." << endl;
+    logInfo() << "Verbose selection is now " << ( _verboseSelection ? "on" : "off" )
+	      << ". Change this with Shift-F7." << endl;
 }
 
 

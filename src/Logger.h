@@ -27,6 +27,7 @@ enum LogSeverity
 {
     LogSeverityVerbose,
     LogSeverityDebug,
+    LogSeverityInfo,
     LogSeverityWarning,
     LogSeverityError
 };
@@ -42,6 +43,7 @@ enum LogSeverity
 
 #define logVerbose()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityVerbose   )
 #define logDebug()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityDebug     )
+#define logInfo()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityInfo      )
 #define logWarning()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityWarning   )
 #define logError()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityError     )
 #define logNewline()	Logger::newline( 0 )

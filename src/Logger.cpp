@@ -67,7 +67,7 @@ Logger::Logger( const QString &filename ):
 	    fprintf( stderr, "Logging to %s\n", qPrintable( filename ) );
 	    _logStream.setDevice( &_logFile );
 	    _logStream << "\n\n";
-	    log( __FILE__, __LINE__, __FUNCTION__, LogSeverityDebug )
+	    log( __FILE__, __LINE__, __FUNCTION__, LogSeverityInfo )
 		<< "-- Log Start --" << endl;
 	}
 	else
@@ -82,7 +82,7 @@ Logger::~Logger()
 {
     if ( _logFile.isOpen() )
     {
-	logDebug() << "-- Log End --\n" << endl;
+	logInfo() << "-- Log End --\n" << endl;
 	_logFile.close();
     }
 
@@ -133,6 +133,7 @@ QTextStream & Logger::log( const QString &srcFile,
     {
 	case LogSeverityVerbose:   sev = "<Verbose>"; break;
 	case LogSeverityDebug:	   sev = "<Debug>  "; break;
+	case LogSeverityInfo:	   sev = "<Info>   "; break;
 	case LogSeverityWarning:   sev = "<WARNING>"; break;
 	case LogSeverityError:	   sev = "<ERROR>  "; break;
 	    // Intentionally omitting 'default' branch so the compiler can
@@ -226,7 +227,7 @@ static void qt_logger( QtMsgType msgType,
 	case QtCriticalMsg: severity = LogSeverityError;   break;
 	case QtFatalMsg:    severity = LogSeverityError;   break;
 #if QT_VERSION >= 0x050500
-	case QtInfoMsg:	    severity = LogSeverityDebug;   break;
+	case QtInfoMsg:	    severity = LogSeverityInfo;	   break;
 #endif
     }
 

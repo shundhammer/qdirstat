@@ -729,8 +729,8 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	selectedItems = _parentView->selectionModel()->selectedItems();
     }
 
-    _parentView->selectionModel()->dumpSelectedItems();
-
+    if ( _parentView->selectionModel()->verbose() )
+	_parentView->selectionModel()->dumpSelectedItems();
 
     logDebug() << "Context menu for " << this << endl;
 
@@ -742,8 +742,8 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	    << "actionTreemapZoomIn"
 	    << "actionTreemapZoomOut"
 	    << "actionResetTreemapZoom"
-            << "---"
-            << "actionMoveToTrash"
+	    << "---"
+	    << "actionMoveToTrash"
 	;
 
     ActionManager::instance()->addActions( &menu, actions );
