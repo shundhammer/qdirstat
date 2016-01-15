@@ -110,7 +110,7 @@ Usable, but still Alpha.
     - Unity
     - Xfce
     - Lxde
-    - Enlightenment 
+    - Enlightenment
       (no clue how to start its file manager, though - using xdg-open here)
 
   - Users can override this with the _$QDIRSTAT_DESKTOP_ environment variable,
@@ -141,6 +141,8 @@ Usable, but still Alpha.
     the file in its app if you want that). It's now also renamed to "open file
     manager here". If you still want the old behaviour, you can easily add your
     own cleanup action with the "xdg-open %p" command.
+
+  - Added "Troubleshooting" section in this document.
 
 
 - 2016-01-13 Added "move to trash", this time as a normal action in the "Edit"
@@ -635,6 +637,62 @@ See file TODO.md :
 
 https://github.com/shundhammer/qdirstat/blob/master/TODO.md
 
+
+## Troubleshooting
+
+### Can't Move a Directory to Trash
+
+QDirStat does not copy entire directory trees to the trash directory in your
+home directory. It tries its best to copy single files there, but for anything
+larger, it strictly sticks to the XDG trash specification. So, if you have a
+separate /home partition (which is strongly recommended for a lot of reasons),
+you cannot move a directory from /tmp to trash because that would mean to move
+a directory across file systems -- from /tmp/somewhere to your
+~/.local/share/Trash .
+
+But there is an easy workaround. It's described in the XDG trash spec, but here
+is a simple recipe what you can do:
+
+Create a dedicated trash directory on the toplevel (mount point) of that file
+system. If it is mounted at /data, do this:
+
+    cd /data
+    sudo mkdir .Trash
+    sudo chmod 01777 .Trash
+
+Permissions '01777' means "rwx for all plus sticky bit". The sticky bit for a
+directory means that only the owner of a file can remove it.
+
+Now you can move directory trees from /data/somewhere to the trash with
+QDirStat. It will end up in /data/.Trash/1000/files/somewhere (if 1000 is your
+numerical user ID which is common for most Linux users). Your desktop's native
+trash application (your trash icon on the desktop and the file manager window
+you get when you click on it) should show it, and you can empty the trash from
+there.
+
+For USB sticks, this is usually not necessary; if you have write permission on
+its toplevel directory, QDirStat will (again in compliance to the XDG trash
+specification) create a trash directory .Trash-1000 in its toplevel directory
+which is the fallback if there is no .Trash directory there with the sticky bit
+set. This would also happen automatically on /data and / if you had write
+permission there (which is uncommon).
+
+What the major desktops (KDE, GNOME, Xfce) usually do with their native file
+managers is to recreate the entire directory tree in your home trash directory
+and then move the original. Not only is this time-consuming and wasteful (copy
+stuff before deleting?!), it might also be error-prone if that directory tree
+contains symlinks, sockets or even just sparse files; and permissions and
+timestamps (mtime, ctime, not to mention atime) might or might not be the same
+as before. This might become a problem if you decide to restore that directory
+tree from trash.
+
+I thought about emulating this behaviour, but this basically means to
+reimplement large parts of what the _rsync_ command does (calling _rsync_ from
+within QDirStat might not be such a good idea - what if it's not available or
+anything goes wrong?), and frankly, I don't think I want to do that - in
+particular not for something that typically gets deleted shortly afterwards
+anyway ("empty trash"). So, if you have this problem, please use the .Trash
+directory workaround described above.
 
 
 ## Reference
