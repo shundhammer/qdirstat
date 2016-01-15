@@ -577,7 +577,7 @@ QModelIndex DirTreeModel::modelIndex( FileInfo * item, int column ) const
     CHECK_PTR( _tree );
     CHECK_PTR( _tree->root() );
 
-    if (  ! item || item == _tree->root() )
+    if (  ! item || ! item->checkMagicNumber() || item == _tree->root() )
 	return QModelIndex();
     else
     {

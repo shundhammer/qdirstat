@@ -114,7 +114,7 @@ namespace QDirStat
 	 * Notice that this is intentionally not a virtual function to avoid
 	 * a segfault via the vptr if it is not valid.
 	 **/
-	bool checkMagicNumber();
+	bool checkMagicNumber() const;
 
 	/**
 	 * Returns whether or not this is a local file (protocol "file:").
@@ -645,7 +645,12 @@ namespace QDirStat
     inline QTextStream & operator<< ( QTextStream & stream, const FileInfo * info )
     {
 	if ( info )
-	    stream << info->debugUrl();
+	{
+	    if ( info->checkMagicNumber() )
+		stream << info->debugUrl();
+	    else
+		stream << "<INVALID FileInfo *>";
+	}
 	else
 	    stream << "<NULL FileInfo *>";
 

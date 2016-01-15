@@ -33,6 +33,11 @@ CleanupCollection::CleanupCollection( SelectionModel * selectionModel,
 {
     readSettings();
 
+    // Just initialize to show the current status in the log;
+    // the contents are cached anyway.
+
+    (void) Cleanup::desktopSpecificApps();
+
     if ( _cleanupList.isEmpty() )
 	addStdCleanups();
 

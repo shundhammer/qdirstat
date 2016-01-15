@@ -158,7 +158,7 @@ FileInfo::~FileInfo()
 }
 
 
-bool FileInfo::checkMagicNumber()
+bool FileInfo::checkMagicNumber() const
 {
     return _magic == FileInfoMagic;
 }
