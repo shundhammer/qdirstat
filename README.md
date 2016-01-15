@@ -144,6 +144,10 @@ Usable, but still Alpha.
 
   - Added "Troubleshooting" section in this document.
 
+  - Cleanup actions that have an icon are now added to the tool bar. Right now,
+    only some of the predefined actions have an icon. There is currently no way
+    for the user to specify an icon for a cleanup action.
+
 
 - 2016-01-13 Added "move to trash", this time as a normal action in the "Edit"
   menu, the toolbar and the context menus. This is a real implementation of the
