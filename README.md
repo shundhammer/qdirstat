@@ -86,11 +86,21 @@ Usable, but still Alpha.
     directory's %p.
 
   - %terminal : Terminal window application of the current desktop; one of
-    "konsole", "gnome-terminal", "xfce4-terminal", "lxterminal", "eterm".
-    The fallback is "xterm".
+
+      - konsole
+      - gnome-terminal
+      - xfce4-terminal
+      - lxterminal
+      - eterm
+      - xterm  (fallback)
 
   - %filemanager : File manager application of the current desktop; one of
-    "konqueror", "nautilus", "thunar", "pcmanfm". The fallback is "xdg-open".
+
+      - konqueror
+      - nautilus
+      - thunar
+      - pcmanfm
+      - xdg-open (fallback)
 
   - Which desktop is used is determined by the _$XDG_CURRENT_DESKTOP_
     environment variable. Currently supported:
