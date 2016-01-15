@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-14
+Updated: 2016-01-15
 
 
 ## Overview
@@ -60,6 +60,79 @@ _Screenshot of cleanup configuration._
 
 Usable, but still Alpha.
 
+- 2016-01-15
+
+  - Added new macros for use within cleanups: %terminal and %filemanager. They
+    are expanded to the terminal window or file manager application,
+    respectively, of the current desktop (KDE, GNOME, Xfce, ...).  I just
+    wasted four hours (that could have been put to better use adding missing
+    features - grrrr) because KDE's konsole misbehaves in every way possible
+    (leading today's WTF count with 3):
+
+    - It won't let me start it in the background from within QDirStat; it
+      simply exits. I tried all kinds of command line arguments (--nofork,
+      --hold), I tried to wrap it into a subshell, into the _nohup_ command -
+      nothing helped. WTF?
+
+    - It exits when QDirStat exits. Well, since it won't let me start it in the
+      background, that's not too surprising. Still, if it does its own fork(),
+      WTF?
+
+    - It doesn't give a damn about the current directory you start it from, it
+      needs its --workdir command line argument. WTF?
+
+  - Added %d macro for cleanups: This is the directory name with full path. For
+    directories, this is the same as %p. For files, this is their parent
+    directory's %p.
+
+  - %terminal : Terminal window application of the current desktop; one of
+    "konsole", "gnome-terminal", "xfce4-terminal", "lxterminal", "eterm".
+    The fallback is "xterm".
+
+  - %filemanager : File manager application of the current desktop; one of
+    "konqueror", "nautilus", "thunar", "pcmanfm". The fallback is "xdg-open".
+
+  - Which desktop is used is determined by the _$XDG_CURRENT_DESKTOP_
+    environment variable. Currently supported:
+
+    - KDE
+    - GNOME
+    - Unity
+    - Xfce
+    - Lxde
+    - Enlightenment 
+      (no clue how to start its file manager, though - using xdg-open here)
+
+  - Users can override this with the _$QDIRSTAT_DESKTOP_ environment variable,
+    so you can get, say, the Xfce terminal or file manager despite currently
+    running KDE if you set
+
+        export QDIRSTAT_DESKTOP="Xfce"
+
+  - Of course, you can still simply use your favourite file manager if you
+    simply change %filemanager in the default "Open File Manager Here" cleanup
+    action to the command to start it.
+
+  - Added new standard cleanup actions:
+
+    - Git clean. Start "git clean -dfx" in the current item's directory. This
+      is relevant for developers or for people who regularly build software
+      from Git repositories.
+
+    - Clear directory contents. This removes everything inside a directory, but
+      leaves the directory itself intact. ~/.thumbnails or browser cache
+      directories are typical candidates for this with their ever-growing
+      content: You probably want to keep the directory, but get rid of
+      everything inside it.
+
+  - Redefined the semantics of the _file manager_ cleanup action: It no longer
+    tries to open files with the corresponding application depending on MIME
+    type, it now always opens a file manager in that directory (which can open
+    the file in its app if you want that.). It's now also renamed to "open file
+    manager here". If you still want the old behaviour, you can easily add your
+    own cleanup action with the "xdg-open %p" command.
+
+
 - 2016-01-13 Added "move to trash", this time as a normal action in the "Edit"
   menu, the toolbar and the context menus. This is a real implementation of the
   XDG Trash specification. It does not rely on outside tools that might or
@@ -70,47 +143,6 @@ Usable, but still Alpha.
   have expected some changes, but a simple "qmake; make" just did the
   job. Amazing! -- The major challenge was to find where "qmake" gets installed
   in that MacOS Qt environment.
-
-- 2016-01-10 Went through the old KDirStat changelog and found a few bugs that
-  I had fixed there -- and promptly repeated with the new QDirStat:
-
-  - Disable cleanups while reading directories. This would result in a segfault.
-
-  - No longer showing the path of the current directory being read. This sped
-    up reading /usr on my machine from 9.5 sec to 1.5 sec (!).
-
-- 2016-01-09 Cleaned up this README.md file. It had grown much too long.
-
-- 2016-01-08 Cleanups are now configurable - see screenshot.
-
-  - Cleanup actions can now be added, deleted, and moved up or down the list.
-    There is no longer a hard limit to the number of cleanup actions; create as
-    many as you like. Of course, your screen size is still the limit for those
-    menus. ;-)
-
-  - In addition to the old cleanup parameters, you can now configure the output
-    window behaviour.  The default is "show after timeout" with a timeout of
-    half a second. This may sound pretty short, but I started with 3 seconds
-    and found that it felt sluggish. A modern PC can get a lot of things done
-    in half a second; yet waiting for more than that feels like an eternity. So
-    if any action takes longer than that, an output window pops up. Of course,
-    if there is any error, it pops up anyway.
-
-  - You can now configure the shell to use. I was weighing the pros and cons of
-    always using either /bin/sh or the user's login shell, and I found that
-    there is no killer argument in favour or against either option. For
-    example, I use the _zsh_, and while it's a great interactive shell, it did
-    give me problems for that "remove junk files" cleanup: "rm -f *.o *.bak *~"
-    -- when any of the wildcards cannot be expanded because there is no such
-    file, it complains. Okay, you can wrap the whole command in "/bin/bash -c",
-    but that's yet another indirection, so now you can configure /bin/bash for
-    that particular cleanup action. On the other hand, for some things I might
-    want my original shell environment, so I do want my login shell by default.
-    This is now the default behaviour: Try $SHELL (the user's login shell), and
-    if that environment variable is not set or whatever is set there is not
-    executable, it falls back to /bin/bash and then /bin/sh. And you can still
-    enter your own in an editable combo box (but not "ruby" or "perl" because
-    the "-c" option is still added automatically).
 
 
 _See file DevHistory.md for older entries:_
@@ -221,6 +253,29 @@ old code base that had been long overdue.
   at all, of course. If things go wrong, you can kill the external command
   started by the cleanup action from there. You can zoom in and out (increase
   or decrease the font size) as you like.
+
+- New macros to use in cleanup actions:
+
+  - %d : Directory name with full path. For directories, this is the same as
+    %p. For files, this is their parent directory's %p.
+
+  - %terminal : Terminal window application of the current desktop; one of
+    "konsole", "gnome-terminal", "xfce4-terminal", "lxterminal", "eterm".
+    The fallback is "xterm".
+
+  - %filemanager : File manager application of the current desktop; one of
+    "konqueror", "nautilus", "thunar", "pcmanfm". The fallback is "xdg-open".
+
+- Which desktop is used is determined by the _$XDG_CURRENT_DESKTOP_ environment
+  variable. Users can override this with the _$QDIRSTAT_DESKTOP_ environment
+  variable, so you can get, say, the Xfce terminal or file manager despite
+  currently running KDE if you set
+
+    export QDIRSTAT_DESKTOP="Xfce"
+
+- Of course, you can still simply use your favourite file manager if you simply
+  change %filemanager in the default "Open File Manager Here" cleanup action to
+  the command to start it.
 
 - You can now select the shell to use for the cleanup commands:
 
@@ -356,17 +411,20 @@ Features ported from the old KDirStat:
   investigate further if you can safely delete a file. You can create your own
   cleanup actions (as many as you like), and there are some predefined ones:
 
-  - Open in file manager. If the selected item is a directory, this will
-    typically be opened in the file manager of your desktop. If it is a known
-    MIME type (text document, spreadsheet, video, image), typically the
-    application associated with that MIME type will open (the text processor,
-    the spreadsheet application, the video player, the image viewer).
+  - Open file manager here. This will start a file manager in the directory of
+    the current item. QDirStat tries its best to guess the name of the relevant
+    file manager application for the current desktop, based on the
+    $XDG_CURRENT_DESKTOP environment variable. You can override this with the
+    $QDIRSTAT_DESKTOP environment variable.
 
-  - Open a terminal window there. In most cases, this is much easier than to
+  - Open terminal window here. In most cases, this is much easier than to
     navigate to that directory with 'cd' in an already open terminal window and
-    using tab-completion numerous times.
+    using tab-completion numerous times. As with the file manager application,
+    QDirStat tries its best to guess the name of the relevant terminal window
+    application for the current desktop.
 
-  - Move to trash bin.
+  - Move to trash bin. QDirStat has its own implementation of the XDG trash
+    specification.
 
   - Delete immediately.
 

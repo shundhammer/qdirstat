@@ -19,18 +19,20 @@ CleanupList StdCleanup::stdCleanups( QObject * parent )
 {
     CleanupList cleanups;
 
-    cleanups << openInFileManager( parent )
-	     << openInTerminal	 ( parent )
-	     << hardDelete	 ( parent )
-	     << compressSubtree	 ( parent )
-	     << makeClean	 ( parent )
-	     << deleteJunk	 ( parent )
+    cleanups << openFileManagerHere( parent )
+	     << openTerminalHere   ( parent )
+	     << compressSubtree	   ( parent )
+	     << makeClean	   ( parent )
+	     << gitClean	   ( parent )
+	     << deleteJunk	   ( parent )
+	     << hardDelete	   ( parent )
+	     << clearDirContents   ( parent )
 #if USE_DEBUG_ACTIONS
-	     << echoargs	 ( parent )
-	     << echoargsMixed	 ( parent )
-	     << segfaulter	 ( parent )
-	     << commandNotFound	 ( parent )
-	     << sleepy		 ( parent )
+	     << echoargs	   ( parent )
+	     << echoargsMixed	   ( parent )
+	     << segfaulter	   ( parent )
+	     << commandNotFound	   ( parent )
+	     << sleepy		   ( parent )
 #endif
 	;
 
@@ -39,10 +41,10 @@ CleanupList StdCleanup::stdCleanups( QObject * parent )
 
 
 
-Cleanup * StdCleanup::openInFileManager( QObject * parent )
+Cleanup * StdCleanup::openFileManagerHere( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "xdg-open %p",
-				    QObject::tr( "Open in &File Manager" ),
+    Cleanup *cleanup = new Cleanup( "%filemanager %d &",
+				    QObject::tr( "Open &File Manager Here" ),
 				    parent );
     CHECK_NEW( cleanup );
     cleanup->setWorksForDir	( true );
@@ -51,24 +53,25 @@ Cleanup * StdCleanup::openInFileManager( QObject * parent )
     cleanup->setRefreshPolicy( Cleanup::NoRefresh );
     cleanup->setIcon( ":/icons/file-manager.png" );
     cleanup->setShortcut( Qt::CTRL + Qt::Key_K );
+    cleanup->setOutputWindowPolicy( Cleanup::ShowNever );
 
     return cleanup;
 }
 
 
-Cleanup * StdCleanup::openInTerminal( QObject * parent )
+Cleanup * StdCleanup::openTerminalHere( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "x-terminal-emulator --workdir %p",
-				    QObject::tr( "Open in &Terminal" ),
+    Cleanup *cleanup = new Cleanup( "%terminal",
+				    QObject::tr( "Open &Terminal Here" ),
 				    parent );
     CHECK_NEW( cleanup );
     cleanup->setWorksForDir	( true );
-    cleanup->setWorksForFile	( false );
+    cleanup->setWorksForFile	( true );
     cleanup->setWorksForDotEntry( true );
     cleanup->setRefreshPolicy( Cleanup::NoRefresh );
     cleanup->setIcon( ":/icons/terminal.png" );
     cleanup->setShortcut( Qt::CTRL + Qt::Key_T );
-    cleanup->setOutputWindowPolicy( Cleanup::ShowNever );
+    cleanup->setOutputWindowPolicy( Cleanup::ShowNever ); // Make KDE konsole shut up
 
     return cleanup;
 }
@@ -104,6 +107,22 @@ Cleanup * StdCleanup::makeClean( QObject * parent )
 }
 
 
+Cleanup * StdCleanup::gitClean( QObject * parent )
+{
+    Cleanup *cleanup = new Cleanup( "git clean -dfx",
+				    QObject::tr( "&git clean" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( false );
+    cleanup->setWorksForDotEntry( true	);
+    cleanup->setAskForConfirmation( true );
+    cleanup->setRefreshPolicy( Cleanup::RefreshThis );
+
+    return cleanup;
+}
+
+
 Cleanup * StdCleanup::deleteJunk( QObject * parent )
 {
     Cleanup *cleanup = new Cleanup( "rm -f *.o *~ *.bak *.auto core",
@@ -131,9 +150,25 @@ Cleanup * StdCleanup::hardDelete( QObject * parent )
     cleanup->setWorksForFile	( true	);
     cleanup->setWorksForDotEntry( false );
     cleanup->setAskForConfirmation( true );
-    cleanup->setRefreshPolicy( Cleanup::AssumeDeleted );
+    cleanup->setRefreshPolicy( Cleanup::RefreshParent );
     cleanup->setIcon( ":/icons/delete.png" );
     cleanup->setShortcut( Qt::CTRL + Qt::Key_Delete );
+
+    return cleanup;
+}
+
+
+Cleanup * StdCleanup::clearDirContents( QObject * parent )
+{
+    Cleanup *cleanup = new Cleanup( "rm -rf %d/*",
+				    QObject::tr( "Clear Directory C&ontents" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( false );
+    cleanup->setWorksForDotEntry( false );
+    cleanup->setAskForConfirmation( true );
+    cleanup->setRefreshPolicy( Cleanup::RefreshThis );
 
     return cleanup;
 }

@@ -260,6 +260,38 @@ namespace QDirStat
 	 **/
 	static QMap<int, QString> outputWindowPolicyMapping();
 
+	/**
+	 * Return a mapping from macros to applications that may be specific
+	 * for different desktops (KDE, GNOME, Xfce, Unity, LXDE).
+	 * Incomplete list:
+	 *
+	 *   %terminal
+	 *	KDE:	"konsole --workdir %d"
+	 *	GNOME:	"gnome-terminal"
+	 *	Unity:	"gnome-terminal"
+	 *	Xfce:	"xfce4-terminal"
+	 *	LXDE:	"lxterminal"
+	 *
+	 *   %filemanager
+	 *	KDE:	"konqueror --profile filemanagement" // not that dumbed-down Dolphin
+	 *	GNOME:	"nautilus"
+	 *	Unity:	"nautilus"
+	 *	Xfcd:	"thunar"
+	 *	LXDE:	"pcmanfm"
+	 *
+	 * What deskop is currently used is guessed from $XDG_CURRENT_DESKTOP.
+	 **/
+	static const QMap<QString, QString> & desktopSpecificApps();
+
+	/**
+	 * Return a mapping from macros to fallback applications in case the
+	 * current desktop cannot be determined:
+	 *
+	 *   %terminal	   "xterm"
+	 *   %filemanager  "xdg-open"
+	 **/
+	static const QMap<QString, QString> & fallbackApps();
+
 
 	//
 	// Setters (see the corresponding getter for documentation)
@@ -316,17 +348,30 @@ namespace QDirStat
 	 * string may contain more than one variable to expand. The resulting
 	 * string is returned.
 	 *
-	 * %p expands to item->path() (in single quotes), i.e. the item's full
-	 * path name.
+	 *   %p expands to item->path() (in single quotes), i.e. the item's
+	 *   full path name.
 	 *
 	 *     '/usr/local/bin'	      for that directory
 	 *     '/usr/local/bin/doit'  for a file within it
 	 *
-	 * %n expands to item->name() (in single quotes), i.e. the last
-	 * component of the pathname. The examples above would expand to:
+	 *   %n expands to item->name() (in single quotes), i.e. the last
+	 *   component of the pathname. The examples above would expand to:
 	 *
 	 *     'bin'
 	 *     'doit'
+	 *
+	 *   %d expands to the directory name with full path. For directories,
+	 *   this is the same as %p. For files or dot entries, this is the same
+	 *   as their parent's %p:
+	 *
+	 *    '/usr/local/bin'	for a file /usr/local/bin/doit
+	 *    '/usr/local/bin'	for directory /usr/local/bin.
+	 *
+	 *
+	 *   %terminal	  "konsole" or "gnome-terminal" or "xfce4-terminal" ...
+	 *
+	 *   %filemanager "konqueror" or "nautilus" or "thunar" ...
+	 *
 	 *
 	 * For commands that are to be executed from within the 'Clean up'
 	 * menu, you might specify something like:
@@ -338,10 +383,24 @@ namespace QDirStat
 				  const QString	 & unexpanded ) const;
 
 	/**
-	 * Escape all occurences of a single quote with backslash and surround
-	 * the resulting string in single quotes.
+	 * Expand some variables in string 'unexpanded' to application that are
+	 * typically different from one desktop (KDE, Gnome, Xfce) to the next:
+	 *
+	 *   %terminal	  "konsole" or "gnome-terminal" or "xfce4-terminal" ...
+	 *   %filemanager "konqueror" or "nautilus" or "thunar" ...
 	 **/
-	QString escapeAndQuote( const QString & unescaped ) const;
+	QString expandDesktopSpecificApps( const QString & unexpanded ) const;
+
+	/**
+	 * Return a string with all occurences of a single quote escaped with
+	 * backslash.
+	 **/
+	QString escaped( const QString & unescaped ) const;
+
+	/**
+	 * Return a string in single quotes.
+	 **/
+	QString quoted( const QString & unquoted ) const;
 
 	/**
 	 * Run a command with 'item' as base to expand variables.

@@ -33,18 +33,20 @@ namespace QDirStat
     {
     public:
 
-	static Cleanup * openInFileManager( QObject * parent = 0 );
-	static Cleanup * openInTerminal	  ( QObject * parent = 0 );
-	static Cleanup * compressSubtree  ( QObject * parent = 0 );
-	static Cleanup * makeClean	  ( QObject * parent = 0 );
-	static Cleanup * deleteJunk	  ( QObject * parent = 0 );
-	static Cleanup * hardDelete	  ( QObject * parent = 0 );
+	static Cleanup * openFileManagerHere( QObject * parent = 0 );
+	static Cleanup * openTerminalHere   ( QObject * parent = 0 );
+	static Cleanup * compressSubtree    ( QObject * parent = 0 );
+	static Cleanup * makeClean	    ( QObject * parent = 0 );
+	static Cleanup * gitClean	    ( QObject * parent = 0 );
+	static Cleanup * deleteJunk	    ( QObject * parent = 0 );
+	static Cleanup * hardDelete	    ( QObject * parent = 0 );
+	static Cleanup * clearDirContents   ( QObject * parent = 0 );
 #if USE_DEBUG_ACTIONS
-	static Cleanup * echoargs	  ( QObject * parent = 0 );
-	static Cleanup * echoargsMixed	  ( QObject * parent = 0 );
-	static Cleanup * segfaulter	  ( QObject * parent = 0 );
-	static Cleanup * commandNotFound  ( QObject * parent = 0 );
-	static Cleanup * sleepy           ( QObject * parent = 0 );
+	static Cleanup * echoargs	    ( QObject * parent = 0 );
+	static Cleanup * echoargsMixed	    ( QObject * parent = 0 );
+	static Cleanup * segfaulter	    ( QObject * parent = 0 );
+	static Cleanup * commandNotFound    ( QObject * parent = 0 );
+	static Cleanup * sleepy		    ( QObject * parent = 0 );
 #endif
 
 	/**

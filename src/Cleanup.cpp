@@ -180,30 +180,35 @@ QString Cleanup::cleanTitle() const
 QString Cleanup::expandVariables( const FileInfo * item,
 				  const QString	 & unexpanded ) const
 {
-    QString expanded = unexpanded;
+    QString expanded = expandDesktopSpecificApps( unexpanded );
     QString dirName = "";
 
     if ( item->isDir() )
-        dirName = item->url();
+	dirName = item->url();
     else if ( item->parent() )
-        dirName = item->parent()->url();
+	dirName = item->parent()->url();
 
-    expanded.replace( "%p", escapeAndQuote( item->url()	 ) );
-    expanded.replace( "%n", escapeAndQuote( item->name() ) );
+    expanded.replace( "%p", quoted( escaped( item->url()  ) ) );
+    expanded.replace( "%n", quoted( escaped( item->name() ) ) );
 
     if ( ! dirName.isEmpty() )
-        expanded.replace( "%d", escapeAndQuote( dirName ) );
+	expanded.replace( "%d", quoted( escaped( dirName ) ) );
 
     // logDebug() << "Expanded: \"" << expanded << "\"" << endl;
     return expanded;
 }
 
 
-QString Cleanup::escapeAndQuote( const QString & unescaped ) const
+QString Cleanup::quoted( const QString & unquoted) const
+{
+    return "'" + unquoted + "'";
+}
+
+
+QString Cleanup::escaped( const QString & unescaped ) const
 {
     QString escaped = unescaped;
     escaped.replace( "'", "\\'" );
-    escaped = "'" + escaped + "'";
 
     return escaped;
 }
@@ -367,4 +372,118 @@ const QStringList & Cleanup::defaultShells()
 QString Cleanup::defaultShell()
 {
     return defaultShells().isEmpty() ? QString() : defaultShells().first();
+}
+
+
+const QMap<QString, QString> & Cleanup::desktopSpecificApps()
+{
+    static QMap<QString, QString> apps;
+
+    if ( apps.isEmpty() )
+    {
+	QString desktop = QString::fromUtf8( qgetenv( "QDIRSTAT_DESKTOP" ) );
+
+	if ( desktop.isEmpty() )
+	     desktop = QString::fromUtf8( qgetenv( "XDG_CURRENT_DESKTOP" ) );
+	else
+	{
+	    logDebug() << "Overriding $XDG_CURRENT_DESKTOP with $QDIRSTAT_DESKTOP (\""
+		       << desktop << "\")" << endl;
+	}
+
+	if ( desktop.isEmpty() )
+	{
+	    logWarning() << "$XDG_CURRENT_DESKTOP is not set - using fallback apps" << endl;
+	    apps = fallbackApps();
+	}
+	else
+	{
+	    logDebug() << "Detected desktop \"" << desktop << "\"" << endl;
+	    desktop = desktop.toLower();
+
+	    if ( desktop == "kde" )
+	    {
+		// KDE konsole is a dumb piece of shit:
+		//
+		// It cannot be started in the background from a cleanup action,
+		// it will terminate when QDirStat terminates,
+		// and it doesn't give a shit about its current working directory.
+		//
+		// After having wasted four hours to get this piece of crap to
+		// cooperate, I simply don't care any more: The other terminals
+		// will get the & added here rather than in the cleanup command
+		// line where it would be appropriate. All this just because
+		// KDE konsole misbehaves in every manner possible.
+
+		apps[ "%terminal"    ] = "konsole --workdir %d";
+		apps[ "%filemanager" ] = "konqueror --profile filemanagement";
+	    }
+	    else if ( desktop == "gnome" ||
+		      desktop == "unity"   )
+	    {
+		apps[ "%terminal"    ] = "gnome-terminal &";
+		apps[ "%filemanager" ] = "nautilus";
+	    }
+	    else if ( desktop == "xfce" )
+	    {
+		apps[ "%terminal"    ] = "xfce4-terminal &";
+		apps[ "%filemanager" ] = "thunar";
+	    }
+	    else if ( desktop == "lxde" )
+	    {
+		apps[ "%terminal"    ] = "lxterminal &";
+		apps[ "%filemanager" ] = "pcmanfm";
+	    }
+	    else if ( desktop == "enlightenment" )
+	    {
+		apps[ "%terminal"    ] = "eterm &";
+		apps[ "%filemanager" ] = "xdg-open";
+	    }
+
+	    if ( apps.isEmpty() )
+	    {
+		logWarning() << "No mapping available for this desktop - using fallback apps" << endl;
+		apps = fallbackApps();
+	    }
+	}
+
+	for ( QMap<QString, QString>::const_iterator it = apps.constBegin();
+	      it != apps.constEnd();
+	      ++it )
+	{
+	    logDebug() << it.key() << " => \"" << it.value() << "\"" << endl;
+	}
+    }
+
+    return apps;
+}
+
+
+const QMap<QString, QString> & Cleanup::fallbackApps()
+{
+    static QMap<QString, QString> apps;
+
+    if ( apps.isEmpty() )
+    {
+	apps[ "%terminal"    ] = "xterm";
+	apps[ "%filemanager" ] = "xdg-open";
+    }
+
+    return apps;
+}
+
+
+QString Cleanup::expandDesktopSpecificApps( const QString & unexpanded ) const
+{
+    QString expanded = unexpanded;
+    const QMap<QString, QString> & apps = desktopSpecificApps();
+
+    for ( QMap<QString, QString>::const_iterator it = apps.constBegin();
+	  it != apps.constEnd();
+	  ++it )
+    {
+	expanded.replace( it.key(), it.value() );
+    }
+
+    return expanded;
 }
