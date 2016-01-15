@@ -8,6 +8,7 @@
 
 
 #include <QMenu>
+#include <QToolBar>
 #include <QSettings>
 #include <QMessageBox>
 
@@ -63,7 +64,7 @@ void CleanupCollection::add( Cleanup * cleanup )
     connect( cleanup, SIGNAL( triggered() ),
 	     this,    SLOT  ( execute()	  ) );
 
-    updateMenus();
+    updateMenusAndToolBars();
 }
 
 
@@ -79,7 +80,7 @@ void CleanupCollection::remove( Cleanup * cleanup )
 
     _cleanupList.removeAt( index );
 
-    // No need for updateMenus() since QObject/QWidget will take care of
+    // No need for updateMenusAndToolBars() since QObject/QWidget will take care of
     // deleted actions all by itself.
 }
 
@@ -118,8 +119,15 @@ void CleanupCollection::clear()
     qDeleteAll( _cleanupList );
     _cleanupList.clear();
 
-    // No need for updateMenus() since QObject/QWidget will take care of
-    // deleted actions all by itself.
+    // No need for updateMenusAndToolBars() since QObject/QWidget will take
+    // care of deleted actions all by itself.
+}
+
+
+void CleanupCollection::updateMenusAndToolBars()
+{
+    updateMenus();
+    updateToolBars();
 }
 
 
@@ -130,7 +138,7 @@ void CleanupCollection::updateActions()
     bool dirSelected	  = sel.containsDir();
     bool fileSelected	  = sel.containsFile();
     bool dotEntrySelected = sel.containsDotEntry();
-    bool busy             = sel.containsBusyItem();
+    bool busy		  = sel.containsBusyItem();
 
     foreach ( Cleanup * cleanup, _cleanupList )
     {
@@ -175,6 +183,31 @@ void CleanupCollection::updateMenus()
 
 	    // Add the current cleanups in the current order
 	    addToMenu( menu );
+	}
+    }
+}
+
+
+void CleanupCollection::updateToolBars()
+{
+    _toolBars.removeAll( 0 ); // Remove QPointers that have become invalid
+
+    foreach ( QToolBar * toolBar, _toolBars )
+    {
+	if ( toolBar )
+	{
+	    // Remove all Cleanups from this tool bar
+
+	    foreach ( QAction * action, toolBar->actions() )
+	    {
+		Cleanup * cleanup = dynamic_cast<Cleanup *>( action );
+
+		if ( cleanup )
+		    toolBar->removeAction( cleanup );
+	    }
+
+	    // Add the current cleanups in the current order
+	    addToToolBar( toolBar );
 	}
     }
 }
@@ -323,6 +356,27 @@ void CleanupCollection::addToMenu( QMenu * menu, bool keepUpdated )
 }
 
 
+void CleanupCollection::addToToolBar( QToolBar * toolBar, bool keepUpdated )
+{
+    CHECK_PTR( toolBar );
+
+    foreach ( Cleanup * cleanup, _cleanupList )
+    {
+	if ( cleanup->active() &&
+	     ! cleanup->icon().isNull() )
+	{
+	    // Add only cleanups that have an icon to avoid overcrowding the
+	    // toolbar with actions that only have a text.
+
+	    toolBar->addAction( cleanup );
+	}
+    }
+
+    if ( keepUpdated && ! _toolBars.contains( toolBar ) )
+	_toolBars << toolBar;
+}
+
+
 void CleanupCollection::moveUp( Cleanup * cleanup )
 {
     int oldPos = indexOf( cleanup );
@@ -331,7 +385,7 @@ void CleanupCollection::moveUp( Cleanup * cleanup )
     {
 	_cleanupList.removeAt( oldPos );
 	_cleanupList.insert( oldPos - 1, cleanup );
-	updateMenus();
+	updateMenusAndToolBars();
     }
 }
 
@@ -344,7 +398,7 @@ void CleanupCollection::moveDown( Cleanup * cleanup )
     {
 	_cleanupList.removeAt( oldPos );
 	_cleanupList.insert( oldPos + 1, cleanup );
-	updateMenus();
+	updateMenusAndToolBars();
     }
 }
 
@@ -357,7 +411,7 @@ void CleanupCollection::moveToTop( Cleanup * cleanup )
     {
 	_cleanupList.removeAt( oldPos );
 	_cleanupList.insert( 0, cleanup );
-	updateMenus();
+	updateMenusAndToolBars();
     }
 }
 
@@ -370,7 +424,7 @@ void CleanupCollection::moveToBottom( Cleanup * cleanup )
     {
 	_cleanupList.removeAt( oldPos );
 	_cleanupList.insert( _cleanupList.size(), cleanup );
-	updateMenus();
+	updateMenusAndToolBars();
    }
 }
 
@@ -451,8 +505,8 @@ void CleanupCollection::readSettings()
 		if ( ! hotkey.isEmpty() )
 		    cleanup->setShortcut( hotkey );
 
-                // if ( ! shell.isEmpty() )
-                //    logDebug() << "Using custom shell " << shell << " for " << cleanup << endl;
+		// if ( ! shell.isEmpty() )
+		//    logDebug() << "Using custom shell " << shell << " for " << cleanup << endl;
 	    }
 	    else
 	    {

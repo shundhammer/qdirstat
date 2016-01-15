@@ -17,6 +17,7 @@
 
 
 class QMenu;
+class QToolBar;
 
 
 namespace QDirStat
@@ -72,6 +73,12 @@ namespace QDirStat
 	 * current order of the cleanup collection.
 	 **/
 	void addToMenu( QMenu * menu, bool keepUpdated = false );
+
+	/**
+	 * Add all actions that have an icon to the specified tool bar.
+	 * The semantics of 'keepUpdated' are analog to addToMenu().
+	 **/
+	void addToToolBar( QToolBar * toolBar, bool keepUpdated = false );
 
 	/**
 	 * Return the index of a cleanup or -1 if it is not part of this
@@ -180,16 +187,27 @@ namespace QDirStat
 	/**
 	 * Update all menus that had the 'keepUpdated' flag set.
 	 **/
+	void updateMenusAndToolBars();
+
+	/**
+	 * Update all menus that had the 'keepUpdated' flag set.
+	 **/
 	void updateMenus();
+
+	/**
+	 * Update all tool bars that had the 'keepUpdated' flag set.
+	 **/
+	void updateToolBars();
 
 
 	//
 	// Data members
 	//
 
-	SelectionModel *	_selectionModel;
-	CleanupList		_cleanupList;
-	QList<QPointer<QMenu> > _menus;
+	SelectionModel *	   _selectionModel;
+	CleanupList		   _cleanupList;
+	QList<QPointer<QMenu> >	   _menus;
+	QList<QPointer<QToolBar> > _toolBars;
     };
 }	// namespace QDirStat
 

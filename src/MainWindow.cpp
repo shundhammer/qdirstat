@@ -72,8 +72,12 @@ MainWindow::MainWindow():
 
     _cleanupCollection = new CleanupCollection( _selectionModel );
     CHECK_NEW( _cleanupCollection );
-    _cleanupCollection->addToMenu( _ui->menuCleanup,
-				   true ); // keepUpdated
+
+    _cleanupCollection->addToMenu   ( _ui->menuCleanup,
+				      true ); // keepUpdated
+    _cleanupCollection->addToToolBar( _ui->toolBar,
+				      true ); // keepUpdated
+
 
     _ui->dirTreeView->setCleanupCollection( _cleanupCollection );
     _ui->treemapView->setCleanupCollection( _cleanupCollection );
