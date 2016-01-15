@@ -52,7 +52,7 @@ Cleanup * StdCleanup::openFileManagerHere( QObject * parent )
     cleanup->setWorksForDotEntry( true );
     cleanup->setRefreshPolicy( Cleanup::NoRefresh );
     cleanup->setIcon( ":/icons/file-manager.png" );
-    cleanup->setShortcut( Qt::CTRL + Qt::Key_K );
+    cleanup->setShortcut( Qt::CTRL + Qt::Key_F );
     cleanup->setOutputWindowPolicy( Cleanup::ShowNever );
 
     return cleanup;
