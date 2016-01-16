@@ -467,7 +467,7 @@ void TreemapView::setCurrentItem( TreemapTile * tile )
 	    _currentItemRect->highlight( _currentItem );
     }
 
-    if ( oldCurrent != _currentItem )
+    if ( oldCurrent != _currentItem && _selectionModelProxy )
     {
 	// logDebug() << "Sending currentItemChanged " << _currentItem << endl;
 
@@ -530,7 +530,7 @@ void TreemapView::updateSelection( const FileInfoSet & newSelection )
 
 void TreemapView::sendSelection()
 {
-    if ( ! scene() )
+    if ( ! scene() || ! _selectionModel )
 	return;
 
     SignalBlocker sigBlocker( _selectionModelProxy );
