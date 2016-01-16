@@ -7,8 +7,11 @@
  */
 
 
+#include <QSettings>
+
 #include "MimeCategorizer.h"
 #include "FileInfo.h"
+#include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -169,6 +172,32 @@ void MimeCategorizer::addSuffixes( QMap<QString, MimeCategory *> & suffixMap,
 
 void MimeCategorizer::readSettings()
 {
+    QSettings settings;
+    QStringList mimeCategoryGroups = findSettingsGroups( settings, "MimeCategory_" );
+
+    clear();
+
+    // Read all settings groups [MimeCategory_xx] that were found
+
+    foreach ( const QString & groupName, mimeCategoryGroups )
+    {
+	settings.beginGroup( groupName );
+
+	QString name  = settings.value( "Name", groupName ).toString();
+	QColor	color = readColorEntry( settings, "Color", QColor( "#b0b0b0" ) );
+	QStringList patternsCaseInsensitive = settings.value( "PatternsCaseInsensitive" ).toStringList();
+	QStringList patternsCaseSensitive   = settings.value( "PatternsCaseSensitive"	).toStringList();
+
+	MimeCategory * category = new MimeCategory( name, color );
+	CHECK_NEW( category );
+
+	add( category );
+	category->addPatterns( patternsCaseInsensitive, Qt::CaseInsensitive );
+	category->addPatterns( patternsCaseSensitive,	Qt::CaseSensitive   );
+
+	settings.endGroup(); // [MimeCategory_01], [MimeCategory_02], ...
+    }
+
     if ( _categories.isEmpty() )
 	addDefaultCategories();
 }
@@ -176,7 +205,38 @@ void MimeCategorizer::readSettings()
 
 void MimeCategorizer::writeSettings()
 {
+    QSettings settings;
 
+    // Remove all leftover cleanup descriptions
+    removeSettingsGroups( settings, "MimeCategory_" );
+
+    for ( int i=0; i < _categories.size(); ++i )
+    {
+	QString groupName;
+	groupName.sprintf( "MimeCategory_%02d", i+1 );
+	settings.beginGroup( groupName );
+
+	MimeCategory * category = _categories.at(i);
+
+	settings.setValue( "Name", category->name() );
+	writeColorEntry( settings, "Color", category->color() );
+
+	QStringList patterns = category->humanReadablePatternList( Qt::CaseInsensitive );
+
+	if ( patterns.isEmpty() )
+	    patterns << "";
+
+	settings.setValue( "PatternsCaseInsensitive", patterns );
+
+	patterns = category->humanReadablePatternList( Qt::CaseSensitive );
+
+	if ( patterns.isEmpty() )
+	    patterns << "";
+
+	settings.setValue( "PatternsCaseSensitive", patterns );
+
+	settings.endGroup(); // [MimeCategory_01], [MimeCategory_02], ...
+    }
 }
 
 
@@ -262,29 +322,29 @@ void MimeCategorizer::addDefaultCategories()
     add( videos );
 
     videos->addSuffixes( QStringList()
-                         << "asf"
-                         << "avi"
-                         << "divx"
-                         << "flc"
-                         << "fli"
-                         << "flv"
-                         << "mk3d"
-                         << "mkv"
-                         << "mng"
-                         << "mov"
-                         << "mp2"
-                         << "mp4"
-                         << "mpeg"
-                         << "mpg"
-                         << "ogm"
-                         << "ogv"
-                         << "rm"
-                         << "vdr"
-                         << "vob"
-                         << "webm"
-                         << "wmp"
-                         << "wmv"
-                         );
+			 << "asf"
+			 << "avi"
+			 << "divx"
+			 << "flc"
+			 << "fli"
+			 << "flv"
+			 << "mk3d"
+			 << "mkv"
+			 << "mng"
+			 << "mov"
+			 << "mp2"
+			 << "mp4"
+			 << "mpeg"
+			 << "mpg"
+			 << "ogm"
+			 << "ogv"
+			 << "rm"
+			 << "vdr"
+			 << "vob"
+			 << "webm"
+			 << "wmp"
+			 << "wmv"
+			 );
 
 
     MimeCategory * music = new MimeCategory( tr( "Music" ), Qt::yellow );

@@ -432,19 +432,7 @@ void CleanupCollection::moveToBottom( Cleanup * cleanup )
 void CleanupCollection::readSettings()
 {
     QSettings settings;
-
-    while ( ! settings.group().isEmpty() )  // ensure using toplevel settings
-	settings.endGroup();
-
-    // Find all [Cleanup_xx] groups
-
-    QStringList cleanupGroups;
-
-    foreach ( const QString & group, settings.childGroups() )
-    {
-	if ( group.startsWith( "Cleanup_" ) )
-	    cleanupGroups << group;
-    }
+    QStringList cleanupGroups = findSettingsGroups( settings, "Cleanup_" );
 
     if ( ! cleanupGroups.isEmpty() ) // Keep defaults (StdCleanups) if settings empty
     {
@@ -523,17 +511,8 @@ void CleanupCollection::writeSettings()
 {
     QSettings settings;
 
-    while ( ! settings.group().isEmpty() )  // ensure using toplevel settings
-	settings.endGroup();
-
-    // Remove all leftover cleanup descriptions:
-    // Remove all settings groups starting with "Cleanup".
-
-    foreach ( const QString & group, settings.childGroups() )
-    {
-	if ( group.startsWith( "Cleanup_" ) )
-	    settings.remove( group );
-    }
+    // Remove all leftover cleanup descriptions
+    removeSettingsGroups( settings, "Cleanup_" );
 
     // Using a separate group for each cleanup for better readability in the
     // file.

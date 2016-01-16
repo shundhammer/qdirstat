@@ -91,17 +91,17 @@ namespace QDirStat
 
 
     QFont readFontEntry( const QSettings & settings,
-                         const char	 * entryName,
-                         const QFont     & fallback )
+			 const char	 * entryName,
+			 const QFont	 & fallback )
     {
-        if ( settings.contains( entryName ) )
-        {
-            QString fontName = settings.value( entryName ).toString();
-            QFont font;
+	if ( settings.contains( entryName ) )
+	{
+	    QString fontName = settings.value( entryName ).toString();
+	    QFont font;
 
-            if ( font.fromString( fontName ) )
-                return font;
-        }
+	    if ( font.fromString( fontName ) )
+		return font;
+	}
 
 	return fallback;
     }
@@ -154,6 +154,39 @@ namespace QDirStat
 	}
 
 	settings.setValue( entryName, enumMapping.value( enumValue ) );
+    }
+
+
+    QStringList findSettingsGroups( QSettings	  & settings,
+				    const QString & groupPrefix )
+    {
+	while ( ! settings.group().isEmpty() )	// ensure using toplevel settings
+	    settings.endGroup();
+
+	QStringList result;;
+
+	foreach ( const QString & group, settings.childGroups() )
+	{
+	    if ( group.startsWith( groupPrefix ) )
+		result << group;
+	}
+
+	return result;
+    }
+
+
+    void removeSettingsGroups( QSettings     & settings,
+			       const QString & groupPrefix )
+    {
+
+	while ( ! settings.group().isEmpty() )	// ensure using toplevel settings
+	    settings.endGroup();
+
+	foreach ( const QString & group, settings.childGroups() )
+	{
+	    if ( group.startsWith( groupPrefix ) )
+		settings.remove( group );
+	}
     }
 
 
