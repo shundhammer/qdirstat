@@ -43,6 +43,7 @@ namespace QDirStat
     class SelectionModelProxy;
     class CleanupCollection;
     class FileInfoSet;
+    class MimeCategorizer;
 
 
     /**
@@ -129,6 +130,25 @@ namespace QDirStat
 	 * (according to filename extension, MIME type or permissions).
 	 **/
 	QColor tileColor( FileInfo * file );
+
+	/**
+	 * Return the MimeCategorizer (the class that maps filenames to treemap
+	 * colors) or 0 if it is not created yet. The MimeCategorizer is
+	 * created lazily when needed.
+	 **/
+	MimeCategorizer * mimeCategorizer() const { return _mimeCategorizer; }
+
+	/**
+	 * Set the MimeCategorizer (the class that maps filenames to treemap
+	 * colors).
+	 **/
+	void setMimeCategorizer( MimeCategorizer * categorizer );
+
+        /**
+         * Use a fixed color for all tiles. To undo this, set an invalid QColor
+         * with the QColor default constructor.
+         **/
+	void setFixedColor( const QColor & fixedColor );
 
 
     public slots:
@@ -415,6 +435,7 @@ namespace QDirStat
 	SelectionModel	    * _selectionModel;
 	SelectionModelProxy * _selectionModelProxy;
 	CleanupCollection   * _cleanupCollection;
+	MimeCategorizer	    * _mimeCategorizer;
 	TreemapTile	    * _rootTile;
 	TreemapTile	    * _currentItem;
 	HighlightRect	    * _currentItemRect;
@@ -424,6 +445,7 @@ namespace QDirStat
 	bool   _doCushionShading;
 	bool   _forceCushionGrid;
 	bool   _ensureContrast;
+	bool   _useFixedColor;
 	int    _minTileSize;
 
 	QColor _currentItemColor;
@@ -432,6 +454,7 @@ namespace QDirStat
 	QColor _outlineColor;
 	QColor _fileFillColor;
 	QColor _dirFillColor;
+	QColor _fixedColor;
 
 	int    _ambientLight;
 

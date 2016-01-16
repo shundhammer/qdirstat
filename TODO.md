@@ -32,12 +32,6 @@ This is roughly ordered by priority.
   favourite editor.
 
 
-## Cleanups
-
-### Move to Trash
-
-- Implement XDG trash spec, however old and abandoned it is
-
 
 ## Ready-made Packages for SUSE and Ubuntu
 
@@ -88,15 +82,14 @@ way to maintain that much text in any more languages.
 
 ### MacOS X Support
 
-- Find out how well "make install" works, in particular for the other subdirs
-  (doc/, scripts/) fix any problems with that
-
 - Find out how to package a MacOS app
 
 - Find a volunteer for a MacOS X platform maintainer
 
 
 ### Windows Support
+
+**Postponed to the very far future**
 
 - Create DirReadJob subclass that strictly uses Qt classes (QFileInfo) and no
   POSIX system calls
@@ -105,4 +98,8 @@ way to maintain that much text in any more languages.
   since Qt 5.4) to find out platform-independently on what device a directory
   is. This doesn't sound too bad. This is something worthwhile to investigate
   in more detail.
+
+- Find out how to package a windows app
+
+- Installer
 

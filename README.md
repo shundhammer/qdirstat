@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-15
+Updated: 2016-01-16
 
 
 ## Overview
@@ -59,6 +59,21 @@ _Screenshot of cleanup configuration._
 **Alpha Quality -- V0.8**
 
 Usable, but still Alpha.
+
+- 2016-01-16
+
+   - Treemap colors are now no longer fixed; there is now a rules engine called
+     MimeCategorizer. It uses a new class MimeCategory that groups MIME types
+     (by filename, not by magic numbers in the file) into broad categories like
+     "Documents", "Videos", "Music", "Images". Each of these categories has a
+     list of filename extensions that belong to it ("*.mp4", "*.wmv", "*.mov"
+     etc. for "Videos", for example). The categorizer uses a very fast lookup
+     map for the vast majority of the rules (simple file extensions), but it
+     can also use more powerful wildcards like "lib*.so.*".
+
+   - The log file is now created per user: It's now /tmp/qdirstat-$UID.log,
+     which for most Linux home users (with only one user account on the
+     machien) is typically /tmp/qdirstat-1000.log .
 
 - 2016-01-15
 
@@ -347,10 +362,10 @@ old code base that had been long overdue.
   own with constantly having to change back and forth between source and build
   directories.
 
-- QDirStat now has its own log file. Right now it logs to /tmp/qdirstat.log,
-  but this will probably change in the future. No more messages on stdout that
-  either clobber the shell you started the program from or that simply go
-  missing.
+- QDirStat now has its own log file. It now logs to /tmp/qdirstat-$UID.log,
+  which for most Linux home users (with only one user account on the machine)
+  is typically /tmp/qdirstat-1000.log . No more messages on stdout that either
+  clobber the shell you started the program from or that simply go missing.
 
 - No longer depending on dozens of KDE libs and a lot of KDE infrastructure; it
   now only requires Qt which is typically installed anyway on a Linux / BSD /

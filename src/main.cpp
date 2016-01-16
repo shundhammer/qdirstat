@@ -7,6 +7,9 @@
  */
 
 
+#include <unistd.h>     // getuid()
+#include <sys/types.h>  // uid_t
+
 #include <QApplication>
 #include "MainWindow.h"
 #include "Logger.h"
@@ -14,7 +17,7 @@
 
 int main( int argc, char *argv[] )
 {
-    Logger logger( "/tmp/qdirstat.log" );
+    Logger logger( QString( "/tmp/qdirstat-%1.log" ).arg( getuid() ) );
 
     // Set org/app name for QSettings
     QCoreApplication::setOrganizationName( "QDirStat" );

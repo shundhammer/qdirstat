@@ -19,6 +19,7 @@
 #include "SettingsHelpers.h"
 #include "SignalBlocker.h"
 #include "TreemapTile.h"
+#include "MimeCategorizer.h"
 
 
 using namespace QDirStat;
@@ -32,9 +33,11 @@ TreemapView::TreemapView( QWidget * parent ):
     _selectionModel(0),
     _selectionModelProxy(0),
     _cleanupCollection(0),
+    _mimeCategorizer(0),
     _rootTile(0),
     _currentItem(0),
-    _currentItemRect(0)
+    _currentItemRect(0),
+    _useFixedColor( false )
 {
     logDebug() << endl;
     readSettings();
@@ -57,6 +60,9 @@ TreemapView::~TreemapView()
     // There is no settings dialog for this class because the settings are all
     // pretty obscure - strictly for experts.
     writeSettings();
+
+    if ( _mimeCategorizer )
+	delete _mimeCategorizer;
 }
 
 
@@ -593,101 +599,47 @@ QSize TreemapView::visibleSize()
 }
 
 
+void TreemapView::setMimeCategorizer( MimeCategorizer * newCategorizer )
+{
+    if ( _mimeCategorizer )
+	delete _mimeCategorizer;
+
+    _mimeCategorizer = newCategorizer;
+}
+
+
+void TreemapView::setFixedColor( const QColor & color )
+{
+    _fixedColor	   = color;
+    _useFixedColor = _fixedColor.isValid();
+}
+
+
 QColor TreemapView::tileColor( FileInfo * file )
 {
+    if ( _useFixedColor )
+	return _fixedColor;
+
     if ( file )
     {
 	if ( file->isFile() )
 	{
-	    // Find the filename extension: Everything after the first '.'
-	    QString ext = file->name().section( '.', 1 );
-
-	    while ( ! ext.isEmpty() )
+	    if ( ! _mimeCategorizer )
 	    {
-		QString lowerExt = ext.toLower();
-
-		// Try case sensitive comparisions first
-
-		if ( ext == "~"		)	return Qt::red;
-		if ( ext == "bak"	)	return Qt::red;
-
-		if ( ext == "c"		)	return Qt::blue;
-		if ( ext == "cpp"	)	return Qt::blue;
-		if ( ext == "cc"	)	return Qt::blue;
-		if ( ext == "h"		)	return Qt::blue;
-		if ( ext == "hpp"	)	return Qt::blue;
-		if ( ext == "el"	)	return Qt::blue;
-
-		if ( ext == "o"		)	return QColor( 0xff, 0xa0, 0x00 );
-		if ( ext == "lo"	)	return QColor( 0xff, 0xa0, 0x00 );
-		if ( ext == "Po"	)	return QColor( 0xff, 0xa0, 0x00 );
-		if ( ext == "al"	)	return QColor( 0xff, 0xa0, 0x00 );
-		if ( ext == "moc.cpp"	)	return QColor( 0xff, 0xa0, 0x00 );
-		if ( ext == "moc.cc"	)	return QColor( 0xff, 0xa0, 0x00 );
-		if ( ext == "elc"	)	return QColor( 0xff, 0xa0, 0x00 );
-		if ( ext == "la"	)	return QColor( 0xff, 0xa0, 0x00 );
-		if ( ext == "a"		)	return QColor( 0xff, 0xa0, 0x00 );
-		if ( ext == "rpm"	)	return QColor( 0xff, 0xa0, 0x00 );
-
-		if ( lowerExt == "tar.bz2" )	return Qt::green;
-		if ( lowerExt == "tar.gz"  )	return Qt::green;
-		if ( lowerExt == "tgz"	)	return Qt::green;
-		if ( lowerExt == "bz2"	)	return Qt::green;
-		if ( lowerExt == "bz"	)	return Qt::green;
-		if ( lowerExt == "gz"	)	return Qt::green;
-
-		if ( lowerExt == "html" )	return Qt::blue;
-		if ( lowerExt == "htm"	)	return Qt::blue;
-		if ( lowerExt == "txt"	)	return Qt::blue;
-		if ( lowerExt == "doc"	)	return Qt::blue;
-
-		if ( lowerExt == "png"	)	return Qt::cyan;
-		if ( lowerExt == "jpg"	)	return Qt::cyan;
-		if ( lowerExt == "jpeg" )	return Qt::cyan;
-		if ( lowerExt == "gif"	)	return Qt::cyan;
-		if ( lowerExt == "tif"	)	return Qt::cyan;
-		if ( lowerExt == "tiff" )	return Qt::cyan;
-		if ( lowerExt == "bmp"	)	return Qt::cyan;
-		if ( lowerExt == "xpm"	)	return Qt::cyan;
-		if ( lowerExt == "tga"	)	return Qt::cyan;
-
-		if ( lowerExt == "wav"	)	return Qt::yellow;
-		if ( lowerExt == "mp3"	)	return Qt::yellow;
-
-		if ( lowerExt == "avi"	)	return QColor( 0xa0, 0xff, 0x00 );
-		if ( lowerExt == "mov"	)	return QColor( 0xa0, 0xff, 0x00 );
-		if ( lowerExt == "mpg"	)	return QColor( 0xa0, 0xff, 0x00 );
-		if ( lowerExt == "mpeg" )	return QColor( 0xa0, 0xff, 0x00 );
-
-		if ( lowerExt == "pdf"	)	return Qt::blue;
-		if ( lowerExt == "ps"	)	return Qt::cyan;
-
-
-		// Some DOS/Windows types
-
-		if ( lowerExt == "exe"	)	return Qt::magenta;
-		if ( lowerExt == "com"	)	return Qt::magenta;
-		if ( lowerExt == "dll"	)	return QColor( 0xff, 0xa0, 0x00 );
-		if ( lowerExt == "zip"	)	return Qt::green;
-		if ( lowerExt == "arj"	)	return Qt::green;
-
-
-		// No match so far? Try the next extension. Some files might have
-		// more than one, e.g., "tar.bz2" - if there is no match for
-		// "tar.bz2", there might be one for just "bz2".
-
-		ext = ext.section( '.', 1 );
+		_mimeCategorizer = new MimeCategorizer();
+		CHECK_NEW( _mimeCategorizer );
 	    }
 
-	    // Shared libs
-	    if ( QRegExp( "lib.*\\.so.*" ).exactMatch( file->name() ) )
-		return QColor( 0xff, 0xa0, 0x00 );
+	    MimeCategory * category = _mimeCategorizer->category( file );
 
-	    // Very special, but common: Core dumps
-	    if ( file->name() == "core" )	return Qt::red;
-
-	    // Special case: Executables
-	    if ( ( file->mode() & S_IXUSR  ) == S_IXUSR )	return Qt::magenta;
+	    if ( category )
+		return category->color();
+	    else
+	    {
+		// Special case: Executables
+		if ( ( file->mode() & S_IXUSR  ) == S_IXUSR )
+		    return Qt::magenta;		// TO DO: Configurable
+	    }
 	}
 	else // Directories
 	{

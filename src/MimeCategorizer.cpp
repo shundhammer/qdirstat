@@ -84,7 +84,7 @@ MimeCategory * MimeCategorizer::category( const QString & filename )
     if ( ! category ) // No match yet?
 	category = matchPatterns( filename );
 
-#if 1
+#if 0
     if ( category )
 	logVerbose() << "Found " << category << " for " << filename << endl;
 #endif
