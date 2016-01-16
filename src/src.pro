@@ -48,6 +48,7 @@ SOURCES	  = main.cpp			\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
 	    MimeCategory.cpp		\
+	    MimeCategorizer.cpp		\
 	    OutputWindow.cpp		\
 	    PercentBar.cpp		\
 	    Refresher.cpp		\
@@ -83,6 +84,7 @@ HEADERS	  =				\
 	    Logger.h			\
 	    MainWindow.h		\
 	    MimeCategory.h		\
+	    MimeCategorizer.h		\
 	    OutputWindow.h		\
 	    PercentBar.h		\
 	    Refresher.h			\

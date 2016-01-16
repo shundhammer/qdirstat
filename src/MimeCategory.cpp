@@ -15,11 +15,12 @@
 using namespace QDirStat;
 
 
-MimeCategory::MimeCategory( const QString & name ):
+MimeCategory::MimeCategory( const QString & name, const QColor & color ):
     _name( name ),
-    _color( Qt::white )
+    _color( color )
 {
-
+    if ( ! _color.isValid() )
+        _color = Qt::white;
 }
 
 
@@ -94,6 +95,14 @@ void MimeCategory::addPatterns( const QStringList & patterns,
 {
     foreach ( const QString & pattern, patterns )
 	addPattern( pattern, caseSensitivity );
+}
+
+
+void MimeCategory::addSuffixes( const QStringList & suffixes,
+				Qt::CaseSensitivity caseSensitivity )
+{
+    foreach ( const QString & suffix, suffixes )
+	addSuffix( suffix, caseSensitivity );
 }
 
 

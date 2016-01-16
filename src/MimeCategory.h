@@ -15,6 +15,7 @@
 #include <QStringList>
 #include <QColor>
 #include <QRegExp>
+#include <QTextStream>
 
 
 namespace QDirStat
@@ -43,9 +44,10 @@ namespace QDirStat
     {
     public:
 	/**
-	 * Constructor. Create a MimeCategory with the specified name.
+	 * Create a MimeCategory with the specified name and optional color.
 	 **/
-	MimeCategory( const QString & name );
+	MimeCategory( const QString & name,
+                      const QColor  & color = QColor() );
 
 	/**
 	 * Destructor.
@@ -77,7 +79,7 @@ namespace QDirStat
 	 * A leading "*." or "*" is cut off.
 	 **/
 	void addSuffix( const QString &	    suffix,
-			Qt::CaseSensitivity caseSensitivity );
+			Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive );
 
 	/**
 	 * Add a filename pattern to this category. If the pattern starts with
@@ -85,7 +87,7 @@ namespace QDirStat
 	 * suffix. Otherwise, this will become a QRegExp::Wildcard regexp.
 	 **/
 	void addPattern( const QString &     pattern,
-			 Qt::CaseSensitivity caseSensitivity );
+			 Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive );
 
 	/**
 	 * Add a list of patterns. See addPattern() for details.
@@ -93,6 +95,13 @@ namespace QDirStat
 	void addPatterns( const QStringList & patterns,
 			  Qt::CaseSensitivity caseSensitivity );
 
+        /**
+         * Add a list of filename suffixes (extensions) to this category.
+	 * A leading "*." or "*" is cut off.
+         **/
+	void addSuffixes( const QStringList & suffixes,
+                          Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive );
+        
 	/**
 	 * Clear any suffixes or patterns for this category.
 	 **/
@@ -161,7 +170,26 @@ namespace QDirStat
 	QStringList	_caseInsensitiveSuffixList;
 	QStringList	_caseSensitiveSuffixList;
 	QRegExpList	_patternList;
-    };
+
+    };	// class MimeCategory
+
+    
+    typedef QList<MimeCategory *> MimeCategoryList;
+
+
+    /**
+     * Human-readable output of a MimeCategory in a debug stream.
+     **/
+    inline QTextStream & operator<< ( QTextStream & str, MimeCategory * category )
+    {
+        if ( category )
+            str << "<MimeCategory " << category->name() << ">";
+        else
+            str << "<NULL MimeCategory *>";
+
+	return str;
+    }
+
 
 }	// namespace QDirStat
 
