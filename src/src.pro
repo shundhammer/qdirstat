@@ -25,8 +25,8 @@ INSTALLS	    += TARGET
 
 SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
-            ConfigDialog.cpp            \
-            CleanupConfigPage.cpp       \
+	    ConfigDialog.cpp		\
+	    CleanupConfigPage.cpp	\
 	    Cleanup.cpp			\
 	    CleanupCollection.cpp	\
 	    StdCleanup.cpp		\
@@ -47,20 +47,21 @@ SOURCES	  = main.cpp			\
 	    FileInfoSorter.cpp		\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
+	    MimeCategory.cpp		\
 	    OutputWindow.cpp		\
 	    PercentBar.cpp		\
 	    Refresher.cpp		\
 	    SelectionModel.cpp		\
 	    SettingsHelpers.cpp		\
-            Trash.cpp                   \
+	    Trash.cpp			\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
 
 
 HEADERS	  =				\
 	    ActionManager.h		\
-            ConfigDialog.h              \
-            CleanupConfigPage.h         \
+	    ConfigDialog.h		\
+	    CleanupConfigPage.h		\
 	    Cleanup.h			\
 	    CleanupCollection.h		\
 	    StdCleanup.h		\
@@ -81,13 +82,14 @@ HEADERS	  =				\
 	    FileInfoSorter.h		\
 	    Logger.h			\
 	    MainWindow.h		\
+	    MimeCategory.h		\
 	    OutputWindow.h		\
 	    PercentBar.h		\
 	    Refresher.h			\
 	    SelectionModel.h		\
 	    SettingsHelpers.h		\
 	    SignalBlocker.h		\
-            Trash.h                     \
+	    Trash.h			\
 	    TreemapTile.h		\
 	    TreemapView.h		\
 	    Version.h			\
