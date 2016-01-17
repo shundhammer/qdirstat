@@ -79,10 +79,10 @@ Usable, but still Alpha.
      MimeCategorizer. It uses a new class MimeCategory that groups MIME types
      (by filename, not by magic numbers in the file) into broad categories like
      "Documents", "Videos", "Music", "Images". Each of these categories has a
-     list of filename extensions that belong to it ("*.mp4", "*.wmv", "*.mov"
+     list of filename extensions that belong to it (".mp4", ".wmv", ".mov"
      etc. for "Videos", for example). The categorizer uses a very fast lookup
      map for the vast majority of the rules (simple file extensions), but it
-     can also use more powerful wildcards like "lib*.so.*".
+     can also use more powerful wildcards wherever you like them.
 
    - The log file is now created per user: It's now /tmp/qdirstat-$UID.log,
      which for most Linux home users (with only one user account on the
