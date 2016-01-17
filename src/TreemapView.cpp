@@ -60,9 +60,6 @@ TreemapView::~TreemapView()
     // There is no settings dialog for this class because the settings are all
     // pretty obscure - strictly for experts.
     writeSettings();
-
-    if ( _mimeCategorizer )
-	delete _mimeCategorizer;
 }
 
 
