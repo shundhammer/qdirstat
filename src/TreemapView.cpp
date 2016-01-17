@@ -625,7 +625,7 @@ QColor TreemapView::tileColor( FileInfo * file )
 	{
 	    if ( ! _mimeCategorizer )
 	    {
-		_mimeCategorizer = new MimeCategorizer();
+		_mimeCategorizer = new MimeCategorizer( this );
 		CHECK_NEW( _mimeCategorizer );
 	    }
 
