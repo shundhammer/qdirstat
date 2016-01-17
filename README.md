@@ -86,7 +86,7 @@ Usable, but still Alpha.
 
    - The log file is now created per user: It's now /tmp/qdirstat-$UID.log,
      which for most Linux home users (with only one user account on the
-     machien) is typically /tmp/qdirstat-1000.log .
+     machine) is typically /tmp/qdirstat-1000.log .
 
 - 2016-01-15
 
