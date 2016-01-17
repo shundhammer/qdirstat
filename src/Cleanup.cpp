@@ -403,17 +403,17 @@ const QMap<QString, QString> & Cleanup::desktopSpecificApps()
 
 	    if ( desktop == "kde" )
 	    {
-		// KDE konsole is a dumb piece of shit:
+		// KDE konsole misbehaves in every way possible:
 		//
 		// It cannot be started in the background from a cleanup action,
 		// it will terminate when QDirStat terminates,
 		// and it doesn't give a shit about its current working directory.
 		//
-		// After having wasted four hours to get this piece of crap to
-		// cooperate, I simply don't care any more: The other terminals
-		// will get the & added here rather than in the cleanup command
-		// line where it would be appropriate. All this just because
-		// KDE konsole misbehaves in every manner possible.
+		// After having wasted four hours to get that thing to cooperate,
+		// I simply don't care any more: The other terminals will get
+		// the & added here rather than in the cleanup command line
+		// where it would be appropriate. All this just because KDE
+		// konsole doesn't comply with any standards whatsoever.
 
 		apps[ "%terminal"    ] = "konsole --workdir %d";
 		apps[ "%filemanager" ] = "konqueror --profile filemanagement";
