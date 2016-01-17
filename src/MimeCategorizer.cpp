@@ -261,6 +261,7 @@ void MimeCategorizer::addDefaultCategories()
 			   << "cab"
 			   << "cpio.gz"
 			   << "deb"
+			   << "jar"
 			   << "rar"
 			   << "rpm"
 			   << "tar.bz2"
