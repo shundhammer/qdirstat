@@ -20,7 +20,7 @@ MimeCategory::MimeCategory( const QString & name, const QColor & color ):
     _color( color )
 {
     if ( ! _color.isValid() )
-        _color = Qt::white;
+	_color = Qt::white;
 }
 
 
@@ -35,7 +35,7 @@ void MimeCategory::addSuffix( const QString &	  rawSuffix,
 {
     // Normalize suffix: Remove leading "*." or "."
 
-    QString suffix = rawSuffix;
+    QString suffix = rawSuffix.trimmed();
 
     if ( suffix.startsWith( "*." ) )
 	suffix.remove( 0, 2 );
@@ -76,9 +76,11 @@ bool MimeCategory::isSuffixPattern( const QString & pattern )
 }
 
 
-void MimeCategory::addPattern( const QString &	   pattern,
+void MimeCategory::addPattern( const QString &	   rawPattern,
 			       Qt::CaseSensitivity caseSensitivity )
 {
+    QString pattern = rawPattern.trimmed();
+
     if ( isSuffixPattern( pattern ) )
 	addSuffix( pattern, caseSensitivity );
     else
