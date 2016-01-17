@@ -97,6 +97,7 @@ void DirTree::startReading( const QString & rawUrl )
 
     if ( _root->hasChildren() )
 	clear();
+
     emit startingReading();
 
     FileInfo * item = LocalDirReadJob::stat( url, this, _root );

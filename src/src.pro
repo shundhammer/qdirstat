@@ -49,6 +49,7 @@ SOURCES	  = main.cpp			\
 	    MainWindow.cpp		\
 	    MimeCategory.cpp		\
 	    MimeCategorizer.cpp		\
+	    MimeCategoryConfigPage.cpp	\
 	    OutputWindow.cpp		\
 	    PercentBar.cpp		\
 	    Refresher.cpp		\
@@ -85,6 +86,7 @@ HEADERS	  =				\
 	    MainWindow.h		\
 	    MimeCategory.h		\
 	    MimeCategorizer.h		\
+	    MimeCategoryConfigPage.h	\
 	    OutputWindow.h		\
 	    PercentBar.h		\
 	    Refresher.h			\
@@ -98,11 +100,12 @@ HEADERS	  =				\
 
 
 
-FORMS	  = main-window.ui		\
-	    output-window.ui		\
-	    config-dialog.ui		\
-	    cleanup-config-page.ui	\
-	    general-config-page.ui	\
+FORMS	  = main-window.ui		   \
+	    output-window.ui		   \
+	    config-dialog.ui		   \
+	    cleanup-config-page.ui	   \
+	    mime-category-config-page.ui   \
+	    general-config-page.ui	   \
 
 
 RESOURCES = icons.qrc

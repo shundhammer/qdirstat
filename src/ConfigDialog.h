@@ -18,6 +18,7 @@ namespace QDirStat
 {
     class GeneralConfigPage;
     class CleanupConfigPage;
+    class MimeCategoryConfigPage;
 
 
     /**
@@ -44,8 +45,17 @@ namespace QDirStat
 	 **/
 	virtual ~ConfigDialog();
 
+	/**
+	 * Return the cleanup config page.
+	 **/
 	CleanupConfigPage * cleanupConfigPage() const
-            { return _cleanupConfigPage; }
+	    { return _cleanupConfigPage; }
+
+	/**
+	 * Return the mime category config page.
+	 **/
+	MimeCategoryConfigPage * mimeCategoryConfigPage() const
+	    { return _mimeCategoryConfigPage; }
 
     public slots:
 
@@ -101,9 +111,14 @@ namespace QDirStat
 
     protected:
 
+	//
+	// Data members
+	//
+
 	Ui::ConfigDialog	* _ui;
 	// GeneralConfigPage	* _generalConfigPage;
 	CleanupConfigPage	* _cleanupConfigPage;
+	MimeCategoryConfigPage	* _mimeCategoryConfigPage;
 
     };	// class ConfigDialog
 

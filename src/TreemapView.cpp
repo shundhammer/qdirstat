@@ -79,9 +79,11 @@ void TreemapView::clear()
 
 void TreemapView::setDirTree( DirTree * newTree )
 {
-    logDebug() << endl;
+    // logDebug() << endl;
     _tree = newTree;
-    CHECK_PTR( _tree );
+
+    if ( ! _tree )
+	return;
 
     if ( _tree->firstToplevel() )
     {
@@ -399,7 +401,7 @@ void TreemapView::resizeEvent( QResizeEvent * event )
 
     if ( tooSmall && _rootTile )
     {
-	logDebug() << "Suppressing treemap contents" << endl;
+	// logDebug() << "Suppressing treemap contents" << endl;
 	rebuildTreemap( _rootTile->orig() );
     }
     else if ( ! tooSmall && ! _rootTile )

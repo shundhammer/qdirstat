@@ -14,9 +14,6 @@
 #include <QString>
 #include <QElapsedTimer>
 
-#include "DirTreeModel.h"
-#include "SelectionModel.h"
-#include "FileInfo.h"
 #include "ui_main-window.h"
 
 class QCloseEvent;
@@ -26,7 +23,12 @@ class QSignalMapper;
 
 namespace QDirStat
 {
+    class CleanupCollection;
     class ConfigDialog;
+    class DirTreeModel;
+    class FileInfo;
+    class MimeCategorizer;
+    class SelectionModel;
 }
 
 using QDirStat::FileInfo;
@@ -258,10 +260,11 @@ private:
     QDirStat::DirTreeModel	* _dirTreeModel;
     QDirStat::SelectionModel	* _selectionModel;
     QDirStat::CleanupCollection * _cleanupCollection;
-    QDirStat::ConfigDialog      * _configDialog;
+    QDirStat::MimeCategorizer	* _mimeCategorizer;
+    QDirStat::ConfigDialog	* _configDialog;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
-    bool                          _verboseSelection;
+    bool			  _verboseSelection;
     int				  _statusBarTimeout; // millisec
     QSignalMapper	       * _treeLevelMapper;
 };

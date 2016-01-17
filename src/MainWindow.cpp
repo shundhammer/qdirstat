@@ -24,12 +24,17 @@
 #include "DebugHelpers.h"
 #include "DirTree.h"
 #include "DirTreeCache.h"
+#include "DirTreeModel.h"
 #include "Exception.h"
 #include "ExcludeRules.h"
+#include "FileInfo.h"
 #include "Logger.h"
-#include "Trash.h"
+#include "MimeCategorizer.h"
+#include "MimeCategoryConfigPage.h"
 #include "OutputWindow.h"
 #include "Refresher.h"
+#include "SelectionModel.h"
+#include "Trash.h"
 #include "Version.h"
 
 
@@ -81,6 +86,12 @@ MainWindow::MainWindow():
 
     _ui->dirTreeView->setCleanupCollection( _cleanupCollection );
     _ui->treemapView->setCleanupCollection( _cleanupCollection );
+
+    _mimeCategorizer = new MimeCategorizer();
+    CHECK_NEW( _mimeCategorizer );
+
+    _ui->treemapView->setMimeCategorizer( _mimeCategorizer );
+
 
 
     connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
@@ -152,6 +163,7 @@ MainWindow::~MainWindow()
 
     delete _ui->dirTreeView;
     delete _cleanupCollection;
+    delete _mimeCategorizer;
     delete _selectionModel;
     delete _dirTreeModel;
 }
@@ -666,6 +678,7 @@ void MainWindow::openConfigDialog()
     _configDialog = new ConfigDialog( this );
     CHECK_PTR( _configDialog );
     _configDialog->cleanupConfigPage()->setCleanupCollection( _cleanupCollection );
+    _configDialog->mimeCategoryConfigPage()->setMimeCategorizer( _mimeCategorizer );
 
     if ( ! _configDialog->isVisible() )
     {
