@@ -441,7 +441,7 @@ void MimeCategorizer::addDefaultCategories()
 		      , Qt::CaseSensitive );
 
 
-    MimeCategory * libs = new MimeCategory( tr( "Shared libraries" ), QColor( 0xff, 0xa0, 0x00 ) );
+    MimeCategory * libs = new MimeCategory( tr( "Shared Libraries" ), QColor( 0xff, 0xa0, 0x00 ) );
     CHECK_NEW( libs );
     add( libs );
 
