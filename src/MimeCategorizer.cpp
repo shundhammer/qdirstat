@@ -407,6 +407,7 @@ void MimeCategorizer::addDefaultCategories()
 		      << "sla"
 		      << "sla.gz"
 		      << "slaz"
+                      << "sxi"
 		      << "txt"
 		      << "xls"
 		      << "xlsx"
