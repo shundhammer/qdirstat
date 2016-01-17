@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-16
+Updated: 2016-01-17
 
 
 ## Overview
@@ -52,6 +52,12 @@ _Screenshot of output during cleanup actions. Of course this window is purely op
 
 _Screenshot of cleanup configuration._
 
+![MIME Categories Configuration Screenshot]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-mime-config.png)
+
+_Screenshot of MIME category configuration where you can set the treemap colors
+for different file types (MIME types), complete with a real treemap widget as
+preview._
 
 
 ## Current Development Status
@@ -61,6 +67,13 @@ _Screenshot of cleanup configuration._
 Usable, but still Alpha.
 
 - 2016-01-16
+
+   - The MIME categories and the corresponding treemap colors can now be
+     configured - see screenshot above. Yes, this is a real treemap widget as a
+     preview for the colors, complete with a demo directory tree with a random
+     number of files with random sizes (i.e. it looks different for each
+     invocation). That part was the last major feature that was missing; now
+     it's only little stuff that's left (still quite a number of it, though).
 
    - Treemap colors are now no longer fixed; there is now a rules engine called
      MimeCategorizer. It uses a new class MimeCategory that groups MIME types

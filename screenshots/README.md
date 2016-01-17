@@ -28,6 +28,14 @@ _Screenshot of output during cleanup actions. Of course this window is purely op
 ![Cleanup Action Configuration Screenshot]
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-config.png)
 
+_Screenshot of cleanup actions configuration._
+
+![MIME Categories Configuration Screenshot]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-mime-config.png)
+
+_Screenshot of MIME category configuration where you can set the treemap colors
+for different file types (MIME types), complete with a real treemap widget as preview._
+
 
 ## More Information
 
