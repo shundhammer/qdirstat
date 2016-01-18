@@ -264,7 +264,7 @@ void Cleanup::runCommand( const FileInfo * item,
     }
 
     QString cleanupCommand( expandVariables( item, command ));
-    QProcess * process = new QProcess( parent() );
+    DProcess * process = new DProcess( parent() );
     CHECK_NEW( process );
 
     process->setProgram( shell );
