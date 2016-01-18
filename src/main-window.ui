@@ -44,9 +44,6 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <property name="toolTipsVisible">
-     <bool>true</bool>
-    </property>
     <addaction name="actionOpen"/>
     <addaction name="actionRefreshAll"/>
     <addaction name="actionRefreshSelected"/>
@@ -64,15 +61,9 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <property name="toolTipsVisible">
-     <bool>true</bool>
-    </property>
     <widget class="QMenu" name="menuExpandTreeToLevel">
      <property name="title">
       <string>E&amp;xpand Tree To Level</string>
-     </property>
-     <property name="toolTipsVisible">
-      <bool>true</bool>
      </property>
      <addaction name="actionExpandTreeLevel0"/>
      <addaction name="actionExpandTreeLevel1"/>
@@ -92,18 +83,12 @@
     <property name="title">
      <string>&amp;Edit</string>
     </property>
-    <property name="toolTipsVisible">
-     <bool>true</bool>
-    </property>
     <addaction name="actionCopyUrlToClipboard"/>
     <addaction name="actionMoveToTrash"/>
    </widget>
    <widget class="QMenu" name="menuTreemap">
     <property name="title">
      <string>Tree&amp;map</string>
-    </property>
-    <property name="toolTipsVisible">
-     <bool>true</bool>
     </property>
     <addaction name="actionShowTreemap"/>
     <addaction name="separator"/>
@@ -115,9 +100,6 @@
    <widget class="QMenu" name="menuGoTo">
     <property name="title">
      <string>&amp;Go To</string>
-    </property>
-    <property name="toolTipsVisible">
-     <bool>true</bool>
     </property>
     <addaction name="actionGoUp"/>
     <addaction name="actionGoToToplevel"/>
