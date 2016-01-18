@@ -367,7 +367,7 @@ void CacheReader::addItem()
     }
 
     QString path = QUrl::fromEncoded( raw_path ).path();
-    QString name = QUrl::fromEncoded( raw_name ).fileName();
+    QString name = QUrl::fromEncoded( raw_name ).path();
 
     if ( _lastExcludedDir )
     {

@@ -208,7 +208,7 @@ void CleanupConfigPage::loadCleanup( Cleanup * cleanup )
     if ( cleanup->shell().isEmpty() )
 	_ui->shellComboBox->setCurrentIndex( 0 );
     else
-	_ui->shellComboBox->setCurrentText( cleanup->shell() );
+	_ui->shellComboBox->setEditText( cleanup->shell() );
 
     _ui->recurseCheckBox->setChecked	       ( cleanup->recurse()	       );
     _ui->askForConfirmationCheckBox->setChecked( cleanup->askForConfirmation() );

@@ -335,7 +335,8 @@ bool CleanupCollection::confirmation( Cleanup * cleanup, const FileInfoSet & ite
 
     int ret = QMessageBox::question( qApp->activeWindow(),
 				     tr( "Please Confirm" ), // title
-				     msg );		     // text
+				     msg,		     // text
+				     QMessageBox::Yes | QMessageBox::No );
     return ret == QMessageBox::Yes;
 }
 
