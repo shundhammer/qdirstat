@@ -18,7 +18,8 @@ namespace QDirStat
     /**
      * Thin compatibility layer around QProcess to maintain backwards
      * compatibility to Qt4: Enable creating a process with program to start
-     * and arguments supplied in the constructor, but started later with those.
+     * and arguments supplied in the constructor and store them for later use
+     * with a plain start() without any more arguments.
      **/
     class Process: public QProcess
     {

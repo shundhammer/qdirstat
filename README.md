@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-17
+Updated: 2016-01-18
 
 
 ## Overview
@@ -65,6 +65,11 @@ preview._
 **Alpha Quality -- V0.8**
 
 Usable, but still Alpha.
+
+- 2016-01-18 Applied Qt4 compatibility patches from Michael Matz. The only
+  nontrivial issue was a thin wrapper around QProcess to make it store the
+  program to execute and its arguments in the constructor and use those later
+  with a plain start() without any more arguments.
 
 - 2016-01-16
 
@@ -384,12 +389,9 @@ old code base that had been long overdue.
   now only requires Qt which is typically installed anyway on a Linux / BSD /
   Unix machine with any X11 (graphical) desktop.
 
-- It should still compile and work with Qt4. I didn't test it, nor is this a
-  supported scenario. But given the emphasis on QML / Qt Quick with Qt5, not
-  much changed in the general area of item views or the other widgets used
-  here. If anybody needs Qt4 support and is willing to invest the time,
-  (reasonably small) patches for Qt4 compatibility are welcome -- see also
-  section "Contributing" below.
+- It should still compile and work with Qt4. We now have a contributor who is
+  very interested in that (Michael Matz), so it should be possible to maintain
+  this compatibility.
 
 
 ## Old Features
