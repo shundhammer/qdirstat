@@ -19,9 +19,13 @@
 #include <sys/types.h>	// pid_t
 
 
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
+static void qt_logger( QtMsgType msgType, const char *msg);
+#else
 static void qt_logger( QtMsgType msgType,
 		       const QMessageLogContext &context,
 		       const QString & msg );
+#endif
 
 Logger * Logger::_defaultLogger = 0;
 
@@ -89,7 +93,11 @@ Logger::~Logger()
     if ( this == _defaultLogger )
     {
 	_defaultLogger = 0;
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
+	qInstallMsgHandler(0);
+#else
 	qInstallMessageHandler(0); // Restore default message handler
+#endif
     }
 }
 
@@ -97,7 +105,11 @@ Logger::~Logger()
 void Logger::setDefaultLogger()
 {
     _defaultLogger = this;
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
+    qInstallMsgHandler( qt_logger );
+#else
     qInstallMessageHandler( qt_logger );
+#endif
 }
 
 
@@ -214,9 +226,13 @@ QString Logger::indentLines( int indentWidth,
 }
 
 
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
+static void qt_logger( QtMsgType msgType, const char *msg)
+#else
 static void qt_logger( QtMsgType msgType,
 		       const QMessageLogContext &context,
 		       const QString & msg )
+#endif
 {
     LogSeverity severity;
 
@@ -232,7 +248,11 @@ static void qt_logger( QtMsgType msgType,
     }
 
     Logger::log( 0, // use default logger
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
+		 "", 0, "",
+#else
 		 context.file, context.line, context.function,
+#endif
 		 severity )
 	<< msg << endl;
 

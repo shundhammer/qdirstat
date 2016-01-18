@@ -450,8 +450,10 @@ Qt::ItemFlags DirTreeModel::flags( const QModelIndex &index ) const
 
     Qt::ItemFlags baseFlags = Qt::ItemIsEnabled;
 
+#if (QT_VERSION >= QT_VERSION_CHECK( 5, 1, 0 ))
     if ( ! item->isDirInfo() )
 	baseFlags |= Qt::ItemNeverHasChildren;
+#endif
 
     // logDebug() << "Flags for " << index << endl;
     DataColumn col = DataColumns::fromViewCol( index.column() );
@@ -808,11 +810,15 @@ void DirTreeModel::dataChangedNotify( DirInfo * dir )
 	QModelIndex topLeft	= modelIndex( dir, 0 );
 	QModelIndex bottomRight = createIndex( topLeft.row(), DataColumns::instance()->colCount() - 1, dir );
 
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 1, 0))
+	emit dataChanged( topLeft, bottomRight );
+#else
 	QVector<int> roles;
 	roles << Qt::DisplayRole;
 
-	// logDebug() << "Data changed for " << dir << endl;
 	emit dataChanged( topLeft, bottomRight, roles );
+#endif
+	// logDebug() << "Data changed for " << dir << endl;
 
 	// If the view is still interested in this dir, it will fetch data, and
 	// then the dir will be touched again. For all we know now, this dir

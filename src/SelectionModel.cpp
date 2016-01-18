@@ -192,7 +192,11 @@ void SelectionModel::setCurrentItem( FileInfo * item, bool select )
     }
     else
     {
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
+	setCurrentIndex( QModelIndex(), Current );
+#else
 	clearCurrentIndex();
+#endif
     }
 }
 

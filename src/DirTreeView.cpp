@@ -45,7 +45,11 @@ DirTreeView::DirTreeView( QWidget * parent ):
     header()->setStretchLastSection( false );
 
     // TO DO: This is too strict. But it's better than the brain-dead defaults.
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
+    header()->setResizeMode( QHeaderView::ResizeToContents );
+#else
     header()->setSectionResizeMode( QHeaderView::ResizeToContents );
+#endif
 
     connect( this , SIGNAL( customContextMenuRequested( const QPoint & ) ),
 	     this,  SLOT  ( contextMenu		      ( const QPoint & ) ) );
