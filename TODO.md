@@ -9,6 +9,15 @@ This is roughly ordered by priority.
 
 - (Done) Maybe use a separate designer form for each tab page
 
+- Find a better way to get objects like CleanupCollection and MimeCategorizer
+  to the respective config pages; the main window shouldn't need to know that
+  much about the internal structure of those pages.
+
+- Create a subclass for things common to all the config pages:
+  - setup()
+  - apply()
+  - discardChanges()
+
 - Check if tab pages are a good option, or if it should be a selection widget
 
 - Data columns to display + order (NameCol is alwas there and #1)
@@ -23,7 +32,7 @@ This is roughly ordered by priority.
 
 - Config dialog page for exclude rules
 
-- Config dialog page for treemap colors: Map MIME types to colors
+- Config dialog page for OutputWindow colors
 
 - Not sure if all those crazy treemap parameters need to be user
   configurable. They are pretty much expert-only, and most of them look pretty
@@ -36,6 +45,7 @@ This is roughly ordered by priority.
 ## Ready-made Packages for SUSE and Ubuntu
 
 - Write a .spec file for SUSE RPMs
+  dmacvicar provided one - see github issue
 
 - Write a .control file for Ubuntu .deb packages
 
@@ -93,11 +103,6 @@ way to maintain that much text in any more languages.
 
 - Create DirReadJob subclass that strictly uses Qt classes (QFileInfo) and no
   POSIX system calls
-
-- 2015-12-25: Suy (Alejandro Exojo) suggested to use QStorageInfo (available
-  since Qt 5.4) to find out platform-independently on what device a directory
-  is. This doesn't sound too bad. This is something worthwhile to investigate
-  in more detail.
 
 - Find out how to package a windows app
 
