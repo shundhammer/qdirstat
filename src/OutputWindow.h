@@ -10,32 +10,16 @@
 #define OutputWindow_h
 
 #include <QDialog>
-#include <QProcess>
 #include <QList>
 #include <QTextStream>
 #include <QStringList>
 
 #include "ui_output-window.h"
+#include "Process.h"
 
 class QCloseEvent;
+using QDirStat::Process;
 
-class DProcess: public QProcess
-{
-    Q_OBJECT
-
-public:
-    explicit DProcess(QObject *parent = 0) : QProcess( parent ) {}
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 1, 0))
-    void start() { QProcess::start(prog, arglist); }
-    const QStringList &arguments() { return arglist; }
-    const QString &program() { return prog; }
-    void setProgram (const QString &s) { prog = s; }
-    void setArguments (const QStringList &l) { arglist = l; }
-private:
-    QString prog;
-    QStringList arglist;
-#endif
-};
 
 /**
  * Terminal-like window to watch output of external processes started via
@@ -71,7 +55,7 @@ public:
      * object. If the process is not started yet, it will be started as soon as
      * there is no other one running.
      **/
-    void addProcess( DProcess * process );
+    void addProcess( Process * process );
 
     /**
      * Tell this dialog that no more processes will be added, so when the last
@@ -182,7 +166,7 @@ public:
     /**
      * Return the internal process list.
      **/
-    const QList<DProcess *> & processList() const { return _processList; }
+    const QList<Process *> & processList() const { return _processList; }
 
     /**
      * Return 'true' if any process in the internal process is still active.
@@ -194,7 +178,7 @@ public:
      * a shell ("/bin/sh -c theRealCommand arg1 arg2 ..."), this is typically
      * not QProcess::program(), but the arguments minus the "-c".
      **/
-    static QString command( DProcess * process );
+    static QString command( Process * process );
 
 
 public slots:
@@ -327,19 +311,19 @@ protected:
      * Obtain the process to use from sender(). Return 0 if this is not a
      * QProcess.
      **/
-    DProcess * senderProcess( const char * callingFunctionName ) const;
+    Process * senderProcess( const char * callingFunctionName ) const;
 
     /**
      * Pick the next inactive process that can be started. Return 0 if there is
      * none.
      **/
-    DProcess * pickQueuedProcess();
+    Process * pickQueuedProcess();
 
     /**
      * Try to start the next inactive process, if there is any. Return that
      * process or 0 if there is none.
      **/
-    DProcess * startNextProcess();
+    Process * startNextProcess();
 
     /**
      * Zoom the terminal font by the specified factor.
@@ -352,7 +336,7 @@ protected:
     //
 
     Ui::OutputWindow  * _ui;
-    QList<DProcess *>	_processList;
+    QList<Process *>	_processList;
     bool		_showOnStderr;
     bool		_noMoreProcesses;
     bool		_closed;
@@ -369,7 +353,7 @@ protected:
 };	// class OutputWindow
 
 
-inline QTextStream & operator<< ( QTextStream & stream, DProcess * process )
+inline QTextStream & operator<< ( QTextStream & stream, Process * process )
 {
     if ( process )
 	stream << OutputWindow::command( process );

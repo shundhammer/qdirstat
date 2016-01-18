@@ -55,6 +55,7 @@ SOURCES	  = main.cpp			\
 	    MimeCategoryConfigPage.cpp	\
 	    OutputWindow.cpp		\
 	    PercentBar.cpp		\
+            Process.cpp                 \
 	    Refresher.cpp		\
 	    SelectionModel.cpp		\
 	    SettingsHelpers.cpp		\
@@ -92,6 +93,7 @@ HEADERS	  =				\
 	    MimeCategoryConfigPage.h	\
 	    OutputWindow.h		\
 	    PercentBar.h		\
+            Process.h                   \
 	    Refresher.h			\
 	    SelectionModel.h		\
 	    SettingsHelpers.h		\

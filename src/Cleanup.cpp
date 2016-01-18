@@ -9,7 +9,6 @@
 
 #include <QApplication>
 #include <QRegExp>
-#include <QProcess>
 #include <QProcessEnvironment>
 #include <QSettings>
 #include <QFileInfo>
@@ -19,6 +18,7 @@
 #include "DirTree.h"
 #include "DirSaver.h"
 #include "OutputWindow.h"
+#include "Process.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -264,7 +264,7 @@ void Cleanup::runCommand( const FileInfo * item,
     }
 
     QString cleanupCommand( expandVariables( item, command ));
-    DProcess * process = new DProcess( parent() );
+    Process * process = new Process( parent() );
     CHECK_NEW( process );
 
     process->setProgram( shell );

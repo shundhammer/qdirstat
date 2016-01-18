@@ -60,7 +60,7 @@ OutputWindow::~OutputWindow()
     {
 	logWarning() << _processList.size() << " processes left over" << endl;
 
-	foreach ( DProcess * process, _processList )
+	foreach ( Process * process, _processList )
 	    logWarning() << "Left over: " << process << endl;
 
 	qDeleteAll( _processList );
@@ -70,7 +70,7 @@ OutputWindow::~OutputWindow()
 }
 
 
-void OutputWindow::addProcess( DProcess * process )
+void OutputWindow::addProcess( Process * process )
 {
     CHECK_PTR( process );
 
@@ -151,9 +151,9 @@ void OutputWindow::clearOutput()
 }
 
 
-DProcess * OutputWindow::senderProcess( const char * function ) const
+Process * OutputWindow::senderProcess( const char * function ) const
 {
-    DProcess * process = qobject_cast<DProcess *>( sender() );
+    Process * process = qobject_cast<Process *>( sender() );
 
     if ( ! process )
     {
@@ -175,7 +175,7 @@ DProcess * OutputWindow::senderProcess( const char * function ) const
 
 void OutputWindow::readStdout()
 {
-    DProcess * process = senderProcess( __FUNCTION__ );
+    Process * process = senderProcess( __FUNCTION__ );
 
     if ( process )
 	addStdout( QString::fromUtf8( process->readAllStandardOutput() ) );
@@ -184,7 +184,7 @@ void OutputWindow::readStdout()
 
 void OutputWindow::readStderr()
 {
-    DProcess * process = senderProcess( __FUNCTION__ );
+    Process * process = senderProcess( __FUNCTION__ );
 
     if ( process )
 	addStderr( QString::fromUtf8( process->readAllStandardError() ) );
@@ -220,7 +220,7 @@ void OutputWindow::processFinished( int exitCode, QProcess::ExitStatus exitStatu
 	    break;
     }
 
-    DProcess * process = senderProcess( __FUNCTION__ );
+    Process * process = senderProcess( __FUNCTION__ );
 
     if ( process )
     {
@@ -276,7 +276,7 @@ void OutputWindow::processError( QProcess::ProcessError error )
 	addStderr( msg );
     }
 
-    DProcess * process = senderProcess( __FUNCTION__ );
+    Process * process = senderProcess( __FUNCTION__ );
 
     if ( process )
     {
@@ -370,7 +370,7 @@ void OutputWindow::killAll()
 {
     int killCount = 0;
 
-    foreach ( DProcess * process, _processList )
+    foreach ( Process * process, _processList )
     {
 	logInfo() << "Killing process " << process << endl;
 	process->kill();
@@ -398,7 +398,7 @@ void OutputWindow::setTerminalBackground( const QColor & newColor )
 
 bool OutputWindow::hasActiveProcess() const
 {
-    foreach ( DProcess * process, _processList )
+    foreach ( Process * process, _processList )
     {
 	if ( process->state() == QProcess::Starting ||
 	     process->state() == QProcess::Running )
@@ -411,9 +411,9 @@ bool OutputWindow::hasActiveProcess() const
 }
 
 
-DProcess * OutputWindow::pickQueuedProcess()
+Process * OutputWindow::pickQueuedProcess()
 {
-    foreach ( DProcess * process, _processList )
+    foreach ( Process * process, _processList )
     {
 	if ( process->state() == QProcess::NotRunning )
 	    return process;
@@ -423,9 +423,9 @@ DProcess * OutputWindow::pickQueuedProcess()
 }
 
 
-DProcess * OutputWindow::startNextProcess()
+Process * OutputWindow::startNextProcess()
 {
-    DProcess * process = pickQueuedProcess();
+    Process * process = pickQueuedProcess();
 
     if ( process )
     {
@@ -450,7 +450,7 @@ DProcess * OutputWindow::startNextProcess()
 }
 
 
-QString OutputWindow::command( DProcess * process )
+QString OutputWindow::command( Process * process )
 {
     // The common case is to start an external command with
     //	  /bin/sh -c theRealCommand arg1 arg2 arg3 ...
