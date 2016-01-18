@@ -19,13 +19,13 @@
 
 class QCloseEvent;
 
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 1, 0))
 class DProcess: public QProcess
 {
     Q_OBJECT
 
 public:
     explicit DProcess(QObject *parent = 0) : QProcess( parent ) {}
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 1, 0))
     void start() { QProcess::start(prog, arglist); }
     const QStringList &arguments() { return arglist; }
     const QString &program() { return prog; }
@@ -34,10 +34,8 @@ public:
 private:
     QString prog;
     QStringList arglist;
-};
-#else
-class DProcess: public QProcess {Q_OBJECT};
 #endif
+};
 
 /**
  * Terminal-like window to watch output of external processes started via
