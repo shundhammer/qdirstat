@@ -1,7 +1,7 @@
 # qmake .pro file for qdirstat/doc
 
 TEMPLATE   = app
-TARGET     =
+TARGET     = $(nothing)
 doc.files  = *.txt ../*.md ../LICENSE
 
 # Ubuntu / Debian pkg doc path
