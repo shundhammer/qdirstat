@@ -269,6 +269,7 @@ void CleanupCollection::execute()
 	    cleanup->refreshPolicy() == Cleanup::RefreshParent ?
 	    Refresher::parents( selection ) : selection;
 
+	_selectionModel->prepareRefresh( refreshSet );
 	Refresher * refresher = new Refresher( refreshSet, this );
 	CHECK_NEW( refresher );
 

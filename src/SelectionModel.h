@@ -132,6 +132,23 @@ namespace QDirStat
 	FileInfo * currentBranch() const { return _currentBranch; }
 
 	/**
+	 * Prepare refreshing a set of items: Select a suitable item that will
+	 * still be in the tree after refreshing is finished. The idea is to
+	 * avoid having no selected item or branch which means having the tree
+	 * widget jumping wildly and thus disorienting the user.
+	 *
+	 * This is done in preparation of refreshing subtrees after cleanup
+	 * actions are finished. Refreshing subtrees means deleting the items
+	 * in the subtrees.
+	 *
+	 * 'refreshSet' is the set of items that will be refreshed. Depending
+	 * on the refresh policy in a cleanup action, this might be the items
+	 * on which the cleanup action is performed, or their respective
+	 * parents.
+	 **/
+	void prepareRefresh( const FileInfoSet & refreshSet );
+
+	/**
 	 * For debugging: Dump the currently selected items and the current
 	 * item to the log.
 	 **/
@@ -185,7 +202,6 @@ namespace QDirStat
 
 
     protected:
-
 
 	// Data members
 

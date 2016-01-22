@@ -94,7 +94,7 @@ MainWindow::MainWindow():
 
 
     connect( _selectionModel,  SIGNAL( currentBranchChanged( QModelIndex ) ),
-	     _ui->dirTreeView, SLOT  ( closeAllExcept      ( QModelIndex ) ) );
+	     _ui->dirTreeView, SLOT  ( closeAllExcept	   ( QModelIndex ) ) );
 
     connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
 	     this,			SLOT  ( startingReading() ) );
@@ -385,17 +385,26 @@ void MainWindow::busyDisplay()
     int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::PercentBarCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
 
-    // Wait until the toplevel entry has some children, then expand to level 1
-    QTimer::singleShot( 200, _ui->actionExpandTreeLevel1, SLOT( trigger() ) );
+    if ( ! _selectionModel->currentBranch() )
+    {
+	// Wait until the toplevel entry has some children, then expand to level 1
+	QTimer::singleShot( 200, _ui->actionExpandTreeLevel1, SLOT( trigger() ) );
+    }
 }
 
 
 void MainWindow::idleDisplay()
 {
     updateActions();
-    expandTreeToLevel( 1 );
     int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::PercentNumCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
+
+    if ( ! _selectionModel->currentBranch() )
+    {
+	logDebug() << "No current branch - expanding tree to level 1" << endl;
+	expandTreeToLevel( 1 );
+    }
+
     showTreemapView();
 }
 
@@ -512,6 +521,8 @@ void MainWindow::askWriteCache()
 
 void MainWindow::expandTreeToLevel( int level )
 {
+    logDebug() << "Expanding tree to level " << level << endl;
+
     if ( level < 1 )
 	_ui->dirTreeView->collapseAll();
     else
@@ -637,6 +648,7 @@ void MainWindow::moveToTrash()
     // Prepare refresher
 
     FileInfoSet refreshSet = Refresher::parents( selectedItems );
+    _selectionModel->prepareRefresh( refreshSet );
     Refresher * refresher  = new Refresher( refreshSet, this );
     CHECK_NEW( refresher );
 

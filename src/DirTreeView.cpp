@@ -138,6 +138,7 @@ void DirTreeView::closeAllExcept( const QModelIndex & branch )
 
     while ( index.isValid() )
     {
+	// logDebug() << "Not closing " << index << endl;
 	branchesToClose.removeAll( index );
 	index = index.parent();
     }
@@ -146,6 +147,7 @@ void DirTreeView::closeAllExcept( const QModelIndex & branch )
 
     foreach ( index, branchesToClose )
     {
+	// logDebug() << "Closing " << index << endl;
 	collapse( index );
     }
 }

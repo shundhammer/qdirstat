@@ -48,6 +48,8 @@ namespace QDirStat
 
 	/**
 	 * Return a FileInfoSet of all parents of all items of 'children'.
+	 * If a parent is a dot entry, use the true parent, i.e. the dot
+	 * entry's parent.
 	 **/
 	static FileInfoSet parents( const FileInfoSet children );
 

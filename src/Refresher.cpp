@@ -50,7 +50,15 @@ FileInfoSet Refresher::parents( const FileInfoSet children )
     foreach ( FileInfo * child, children )
     {
 	if ( child && child->parent() )
-	    parents << child->parent();
+        {
+            FileInfo * parent = child->parent();
+
+            if ( parent->isDotEntry() )
+                parent = parent->parent();
+
+            if ( parent )
+                parents << parent;
+        }
     }
 
     return parents.normalized();

@@ -903,7 +903,7 @@ void DirTreeModel::deletingChild( FileInfo * child )
 	beginRemoveRows( parentIndex, row, row );
     }
 
-    invalidatePersistent( child );
+    invalidatePersistent( child, true );
 }
 
 
@@ -930,7 +930,7 @@ void DirTreeModel::clearingSubtree( DirInfo * subtree )
 	}
     }
 
-    invalidatePersistent( subtree );
+    invalidatePersistent( subtree, false );
 }
 
 
@@ -943,10 +943,9 @@ void DirTreeModel::subtreeCleared( DirInfo * subtree )
 }
 
 
-void DirTreeModel::invalidatePersistent( FileInfo * subtree )
+void DirTreeModel::invalidatePersistent( FileInfo * subtree,
+                                         bool       includeParent )
 {
-    logDebug() << "Subtree: " << subtree << endl;
-
     foreach ( const QModelIndex & index, persistentIndexList() )
     {
 	FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
@@ -955,10 +954,13 @@ void DirTreeModel::invalidatePersistent( FileInfo * subtree )
 	if ( ! item->checkMagicNumber() ||
 	     item->isInSubtree( subtree ) )
 	{
+            if ( item != subtree || includeParent )
+            {
 #if 1
-	    logDebug() << "Invalidating " << index << endl;
+                logDebug() << "Invalidating " << index << endl;
 #endif
-	    changePersistentIndex( index, QModelIndex() );
+                changePersistentIndex( index, QModelIndex() );
+            }
 	}
     }
 

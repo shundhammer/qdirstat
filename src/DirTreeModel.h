@@ -197,6 +197,16 @@ namespace QDirStat
 	 **/
 	QModelIndex modelIndex( FileInfo * item, int column = 0 ) const;
 
+	/**
+	 * Return the current sort column.
+	 **/
+	DataColumn sortColumn() const { return _sortCol; }
+
+	/**
+	 * Return the current sort order
+	 * (Qt::AscendingOrder or Qt::DescendingOrder).
+	 **/
+	Qt::SortOrder sortOrder() const { return _sortOrder; }
 
 	//
 	// Reimplented from QAbstractItemModel:
@@ -312,9 +322,11 @@ namespace QDirStat
 	void subtreeCleared( DirInfo * subtree );
 
 	/**
-	 * Invalidate all persistent indexes in 'subtree'.
+	 * Invalidate all persistent indexes in 'subtree'. 'includeParent'
+         * indicates if 'subtree' itself will become invalid.
 	 **/
-	void invalidatePersistent( FileInfo * subtree );
+	void invalidatePersistent( FileInfo * subtree,
+                                   bool includeParent );
 
 
     protected:

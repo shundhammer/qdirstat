@@ -51,6 +51,7 @@ void SelectionModel::clear()
     _selectedItems.clear();
     _selectedItemsDirty = true;
     _currentItem = 0;
+    _currentBranch = 0;
 
     clearSelection();
 }
@@ -152,7 +153,8 @@ void SelectionModel::extendSelection( FileInfo * item, bool clear )
 
 void SelectionModel::setSelectedItems( const FileInfoSet & selectedItems )
 {
-    logDebug() << "Selecting " << selectedItems.size() << " items" << endl;
+    if ( _verbose )
+	logDebug() << "Selecting " << selectedItems.size() << " items" << endl;
 
     QItemSelection sel;
 
@@ -204,10 +206,40 @@ void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 
 void SelectionModel::setCurrentBranch( FileInfo * item )
 {
+    _currentBranch = item;
     QModelIndex index = _dirTreeModel->modelIndex( item, 0 );
 
-    emit currentBranchChanged( item );
+    emit currentBranchChanged( item  );
     emit currentBranchChanged( index );
+}
+
+
+void SelectionModel::prepareRefresh( const FileInfoSet & refreshSet )
+{
+    FileInfo * current = _currentItem ? _currentItem : refreshSet.first();
+    DirInfo  * dir = 0;
+
+    if ( current )
+    {
+	dir = current->isDirInfo() ? current->toDirInfo() : current->parent();
+
+	if ( dir && dir->isDotEntry() )
+	    dir = dir->parent();
+
+	// Go one directory up from the current item as long as there is an
+	// ancestor (but not that item itself) in the refreshSet.
+
+	while ( dir && refreshSet.containsAncestorOf( dir ) )
+	{
+	    dir = dir->parent();
+	}
+    }
+
+    if ( _verbose )
+	logDebug() << "Selecting " << dir << endl;
+
+    setCurrentItem( dir, true );
+    setCurrentBranch( dir );
 }
 
 
