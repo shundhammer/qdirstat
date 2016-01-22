@@ -248,9 +248,12 @@ void MainWindow::connectActions()
     // Invisible debug actions
 
     addAction( _ui->actionVerboseSelection );
+    addAction( _ui->actionDumpSelection );
 
     connect( _ui->actionVerboseSelection, SIGNAL( toggled( bool )	   ),  // Shift-F7
 	     this,			  SLOT	( toggleVerboseSelection() ) );
+
+    CONNECT_ACTION( _ui->actionDumpSelection, _selectionModel, dumpSelectedItems() ); // F7
 }
 
 

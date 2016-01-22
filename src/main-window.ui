@@ -555,6 +555,14 @@
     <string>Del</string>
    </property>
   </action>
+  <action name="actionDumpSelection">
+   <property name="text">
+    <string>Dump Selection to Log</string>
+   </property>
+   <property name="shortcut">
+    <string>F7</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
