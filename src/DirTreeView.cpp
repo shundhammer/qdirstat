@@ -27,9 +27,6 @@ using namespace QDirStat;
 DirTreeView::DirTreeView( QWidget * parent ):
     QTreeView( parent ),
     _cleanupCollection(0)
-#if 0
-    , _selectionModelProxy(0)
-#endif
 {
     _percentBarDelegate = new PercentBarDelegate( this );
     CHECK_NEW( _percentBarDelegate );
@@ -90,15 +87,15 @@ void DirTreeView::contextMenu( const QPoint & pos )
 	    << "actionRefreshSelected"
 	    << "actionReadExcludedDirectory"
 	    << "actionContinueReadingAtMountPoint"
-            << "---"
-            << "actionMoveToTrash"
+	    << "---"
+	    << "actionMoveToTrash"
 	;
 
     ActionManager::instance()->addActions( &menu, actions );
 
     if ( _cleanupCollection && ! _cleanupCollection->isEmpty() )
     {
-        menu.addSeparator();
+	menu.addSeparator();
 	_cleanupCollection->addToMenu( &menu );
     }
 
@@ -106,30 +103,50 @@ void DirTreeView::contextMenu( const QPoint & pos )
 }
 
 
-#if 0
-void DirTreeView::setSelectionModel( QItemSelectionModel * selectionModel )
+QModelIndexList DirTreeView::expandedIndexes() const
 {
-    QTreeView::setSelectionModel( selectionModel );
-    selectionModel->disconnect( this );
+    QModelIndexList expandedList;
 
-    if ( _selectionModelProxy )
-	delete _selectionModelProxy;
+    if ( ! model() )
+	return QModelIndexList();
 
-    SelectionModel * master = dynamic_cast<SelectionModel *>( selectionModel );
-    CHECK_DYNAMIC_CAST( master, "SelectionModel *" );
+    DirTreeModel * dirTreeModel = dynamic_cast<DirTreeModel *>( model() );
 
-    _selectionModelProxy = new SelectionModelProxy( master, this );
+    if ( ! dirTreeModel )
+    {
+	logError() << "Wrong model type to get this information" << endl;
+	return QModelIndexList();
+    }
 
-    connect( _selectionModelProxy, SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ),
-	     this,		   SLOT	 ( selectionChanged( QItemSelection, QItemSelection ) ) );
+    foreach ( const QModelIndex & index, dirTreeModel->persistentIndexList() )
+    {
+	if ( isExpanded( index ) )
+	    expandedList << index;
+    }
 
-    connect( _selectionModelProxy, SIGNAL( currentChanged( QModelIndex, QModelIndex ) ),
-	     this,		   SLOT	 ( currentChanged( QModelIndex, QModelIndex ) ) );
-
-    connect( _selectionModelProxy, SIGNAL( currentColumnChanged( QModelIndex, QModelIndex ) ),
-	     this,		   SLOT	 ( currentColumnChanged( QModelIndex, QModelIndex ) ) );
-
-    connect( _selectionModelProxy, SIGNAL( currentRowChanged( QModelIndex, QModelIndex ) ),
-	     this,		   SLOT	 ( currentRowChanged( QModelIndex, QModelIndex ) ) );
+    return expandedList;
 }
-#endif
+
+
+void DirTreeView::closeAllExcept( const QModelIndex & branch )
+{
+    QModelIndexList branchesToClose = expandedIndexes();
+
+    // Remove all ancestors of 'branch' from branchesToClose
+
+    QModelIndex index = branch;
+
+    while ( index.isValid() )
+    {
+	branchesToClose.removeAll( index );
+	index = index.parent();
+    }
+
+    // Close all items in branchesToClose
+
+    foreach ( index, branchesToClose )
+    {
+	collapse( index );
+    }
+}
+

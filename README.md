@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-18
+Updated: 2016-01-22
 
 
 ## Overview
@@ -66,10 +66,30 @@ preview._
 
 Usable, but still Alpha.
 
-- 2016-01-18 Applied Qt4 compatibility patches from Michael Matz. The only
-  nontrivial issue was a thin wrapper around QProcess to make it store the
-  program to execute and its arguments in the constructor and use those later
-  with a plain start() without any more arguments.
+- 2016-01-22
+
+  - Improved usability of the tree widget: When an item in the treemap is
+    selected, all other branches in the tree are now collapsed before the new
+    branch is opened. But this required working around some design flaws in the
+    underlying QTreeView.
+
+**Rant** Trolls, didn't it ever occur to you if you are _constantly_ using that
+d->expandedIndexes from QTreeViewPrivate in the QTreeView public class, derived
+widgets might need that information, too? There is **no way** to access the
+currently expanded items other than cheating in some creative way. Seriously, I
+am not going to duplicate that bookkeeping with the expanded() and collapsed()
+signals, always being off by some items or not getting the information that
+items were removed (or listen to half a dozen more signals for even more
+advanced bookkeeping). If a widget class cannot provide that information to its
+derived classes, it's poorly designed. Period.
+
+
+- 2016-01-18
+
+  - Applied Qt4 compatibility patches from Michael Matz. The only nontrivial
+    issue was a thin wrapper around QProcess to make it store the program to
+    execute and its arguments in the constructor and use those later with a
+    plain start() without any more arguments.
 
 - 2016-01-16
 

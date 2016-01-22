@@ -120,6 +120,18 @@ namespace QDirStat
 	void setCurrentItem( FileInfo * item, bool select = false );
 
 	/**
+	 * Make 'item' the current branch. This is meant to notify connected
+	 * tree views to close all other branches. See also the
+	 * currentBranchChanged() signal.
+	 **/
+	void setCurrentBranch( FileInfo * item );
+
+	/**
+	 * Return the current branch or 0 if there is none.
+	 **/
+	FileInfo * currentBranch() const { return _currentBranch; }
+
+	/**
 	 * For debugging: Dump the currently selected items and the current
 	 * item to the log.
 	 **/
@@ -138,6 +150,13 @@ namespace QDirStat
 	 **/
 	void selectionChanged();
 	void selectionChanged( const FileInfoSet & selectedItems );
+
+	/**
+	 * Emitted when the current branch changes. Tree views can use this to
+	 * close all other branches.
+	 **/
+	void currentBranchChanged( const QModelIndex & newCurrentBranch );
+	void currentBranchChanged( FileInfo * newCurrentBranch );
 
     protected slots:
 
@@ -172,6 +191,7 @@ namespace QDirStat
 
 	DirTreeModel	* _dirTreeModel;
 	FileInfo	* _currentItem;
+	FileInfo	* _currentBranch;
 	FileInfoSet	  _selectedItems;
 	bool		  _selectedItemsDirty;
 	bool		  _verbose;

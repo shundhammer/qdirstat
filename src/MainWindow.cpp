@@ -93,6 +93,8 @@ MainWindow::MainWindow():
     _ui->treemapView->setMimeCategorizer( _mimeCategorizer );
 
 
+    connect( _selectionModel,  SIGNAL( currentBranchChanged( QModelIndex ) ),
+	     _ui->dirTreeView, SLOT  ( closeAllExcept      ( QModelIndex ) ) );
 
     connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
 	     this,			SLOT  ( startingReading() ) );

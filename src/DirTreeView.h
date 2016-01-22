@@ -59,14 +59,25 @@ namespace QDirStat
 	 **/
 	CleanupCollection * cleanupCollection() const { return _cleanupCollection; }
 
-#if 0
 	/**
-	 * Set the selection model.
+	 * Return the list of items that are currently expanded.
 	 *
-	 * Reimplemented from QTreeView to use a SelectionModelProxy.
+	 * This is well-known in the base class, but due to poor design that
+	 * information is not accessible in derived classes. Well, I got
+	 * creative.
+	 *
+	 * This method being public is more to spite the "masterminds" who in
+	 * their infinite wisdom considered this information not worthy of
+	 * being exported to the public because "it doesn't kneed to
+	 * know". WTF?
 	 **/
-	virtual void setSelectionModel( QItemSelectionModel * selectionModel ) Q_DECL_OVERRIDE;
-#endif
+	QModelIndexList expandedIndexes() const;
+
+    public slots:
+	/**
+	 * Close (collapse) all branches except the one that 'branch' is in.
+	 **/
+	void closeAllExcept( const QModelIndex & branch );
 
     protected slots:
 
@@ -89,9 +100,6 @@ namespace QDirStat
 
 	PercentBarDelegate	* _percentBarDelegate;
 	CleanupCollection	* _cleanupCollection;
-#if 0
-	SelectionModelProxy	* _selectionModelProxy;
-#endif
 
     };	// class DirTreeView
 

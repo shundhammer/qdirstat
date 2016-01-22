@@ -126,6 +126,9 @@ void TreemapView::setSelectionModel( SelectionModel * selectionModel )
     connect( this,	      SIGNAL( currentItemChanged( FileInfo * ) ),
 	     _selectionModel, SLOT  ( setCurrentItem	( FileInfo * ) ) );
 
+    connect( this,	      SIGNAL( currentItemChanged( FileInfo * ) ),
+	     _selectionModel, SLOT  ( setCurrentBranch  ( FileInfo * ) ) );
+
 
     // Use the proxy for all receiving signals!
 

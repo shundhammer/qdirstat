@@ -76,6 +76,48 @@ namespace QDirStat
 	 */
 	void setColumns( const DataColumnList & columns );
 
+	/**
+	 * This is protected in the base class, but it's the only reasonable
+	 * way for the view to figure out what items are expanded: The
+	 * QTreeViewPrivate knows, but IT DOESN'T TELL that secret.
+	 *
+	 * Trolltech, you fucked up big time here. Seriously, that QTreeView is
+	 * the most limiting tree widget you ever made. It's a far cry of the
+	 * Qt3 QListView: It can't do shit. No wonder all apps using it suffer
+	 * from poor usability! No way to set a separate icon for expanded
+	 * vs. collapsed items, no way to close all branches except the current
+	 * one.
+	 *
+	 * I am not going to reimplement all that stuff the private class
+	 * already does. Seriously, life is too short for that kind of
+	 * bullshit. I am not going to do my own bookkeeping based on
+	 * expanded() and collapsed() signals and always suffer from not
+	 * receiving the odd one and being out of sync with lists that are kept
+	 * in the private class. No fucking way.
+	 *
+	 * Trolls, if you ever actually used your own stuff like you did in the
+	 * old days before you abandoned the X11 widgets and spent all your
+	 * time and energy on that QML crap, you'd know that this QTreeView is
+	 * a sorry excuse for the old QListView.
+	 *
+	 * Didn't it ever occur to you that if you are constantly using
+	 * d->expandedIndexes in your QTreeView.cpp, derived classes might have
+	 * the same need to know about that? Why hide it in the private class
+	 * if it's that obvious that this is frequently needed information?
+	 *
+	 * It doesn't happen often in Qt - in all other aspects, it's a great,
+	 * well thought-out and very practical oriented framework. But
+	 * QTreeView is poorly designed in many aspects; hiding this
+	 * d->expandedIndexes is just one example.
+	 *
+	 * OK, I'm fed up with working around this poor design. Let's make our
+	 * own kludge to find out what items are expanded: Check the persisten
+	 * model indexes: The private class creates a persistend model index
+	 * for each item that is expanded.
+	 **/
+	QModelIndexList persistentIndexList() const
+	    { return QAbstractItemModel::persistentIndexList(); }
+
 
     public slots:
 	/**

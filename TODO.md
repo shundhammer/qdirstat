@@ -75,8 +75,6 @@ way to maintain that much text in any more languages.
 
 ## DirTreeView
 
-- closeAllExcept()
-
 - Column widths
   - Add context menu to header to unlock widths?
 

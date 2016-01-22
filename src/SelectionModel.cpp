@@ -23,6 +23,7 @@ SelectionModel::SelectionModel( DirTreeModel * dirTreeModel, QObject * parent ):
     QItemSelectionModel( dirTreeModel, parent ),
     _dirTreeModel( dirTreeModel ),
     _currentItem(0),
+    _currentBranch(0),
     _selectedItemsDirty(false)
 {
     connect( this, SIGNAL( currentChanged	  ( QModelIndex, QModelIndex ) ),
@@ -198,6 +199,15 @@ void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 	clearCurrentIndex();
 #endif
     }
+}
+
+
+void SelectionModel::setCurrentBranch( FileInfo * item )
+{
+    QModelIndex index = _dirTreeModel->modelIndex( item, 0 );
+
+    emit currentBranchChanged( item );
+    emit currentBranchChanged( index );
 }
 
 
