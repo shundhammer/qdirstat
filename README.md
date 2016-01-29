@@ -92,16 +92,16 @@ Usable, but still Alpha.
     branch is opened. But this required working around some design flaws in the
     underlying _QTreeView_ class.
 
-**Rant:** Trolls, didn't it ever occur to you that if you are _constantly_
-using that _d->expandedIndexes_ from _QTreeViewPrivate_ in the _QTreeView_
-public class, derived widgets might need that information, too? There is **no
-way** to access the currently expanded items other than cheating in some
-creative way. Seriously, I am not going to duplicate that bookkeeping with the
-_expanded()_ and _collapsed()_ signals, always being off by some items or not
-getting the information that items were removed (or listen to half a dozen more
-signals for even more advanced bookkeeping). If a widget class cannot provide
-that kind of elementary information to its derived classes, it's poorly
-designed. Period.
+    **Rant:** Trolls, didn't it ever occur to you that if you are _constantly_
+    using that _d->expandedIndexes_ from _QTreeViewPrivate_ in the _QTreeView_
+    public class, derived widgets might need that information, too? There is
+    **no way** to access the currently expanded items other than cheating in
+    some creative way. Seriously, I am not going to duplicate that bookkeeping
+    with the _expanded()_ and _collapsed()_ signals, always being off by some
+    items or not getting the information that items were removed (or listen to
+    half a dozen more signals for even more advanced bookkeeping). If a widget
+    class cannot provide that kind of elementary information to its derived
+    classes, it's poorly designed. Period.
 
 
 - 2016-01-18
