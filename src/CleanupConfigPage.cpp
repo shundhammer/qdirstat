@@ -351,9 +351,8 @@ void CleanupConfigPage::remove()
 
 	_updatesLocked = true;
 	_listWidget->takeItem( currentRow );
-	_cleanupCollection->remove( cleanup );
 	delete currentItem;
-	delete cleanup;
+	_cleanupCollection->remove( cleanup );
 	_updatesLocked = false;
 
 	load( this->cleanup( _listWidget->currentItem() ) );

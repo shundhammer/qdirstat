@@ -88,12 +88,12 @@ namespace QDirStat
 	/**
 	 * Create a new category.
 	 **/
-	void addCategory();
+	void add();
 
 	/**
-	 * Delete the current category.
+	 * Remove the current category.
 	 **/
-	void deleteCategory();
+	void remove();
 
     protected slots:
 
@@ -108,7 +108,7 @@ namespace QDirStat
 	/**
 	 * Fill the category list widget from the category collection.
 	 **/
-	void fillCategoryList();
+	void fillList();
 
 	/**
 	 * Convert 'item' to a CategoryListItem and return its category.
@@ -118,12 +118,12 @@ namespace QDirStat
 	/**
 	 * Save the contents of the widgets to the specified category.
 	 **/
-	void saveCategory( MimeCategory * category );
+	void save( MimeCategory * category );
 
 	/**
 	 * Load the content of the widgets from the specified category.
 	 **/
-	void loadCategory( MimeCategory * category );
+	void load( MimeCategory * category );
 
 	/**
 	 * Convert 'patternList' into a newline-separated string and set it as

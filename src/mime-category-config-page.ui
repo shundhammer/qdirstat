@@ -43,12 +43,12 @@
            <string>MIME C&amp;ategory</string>
           </property>
           <property name="buddy">
-           <cstring>categoryListWidget</cstring>
+           <cstring>listWidget</cstring>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QListWidget" name="categoryListWidget">
+         <widget class="QListWidget" name="listWidget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -79,7 +79,7 @@
            <number>8</number>
           </property>
           <item>
-           <widget class="QToolButton" name="addCategoryButton">
+           <widget class="QToolButton" name="addButton">
             <property name="toolTip">
              <string>Create a new category.</string>
             </property>
@@ -93,9 +93,9 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="deleteCategoryButton">
+           <widget class="QToolButton" name="removeButton">
             <property name="toolTip">
-             <string>Delete the current category.</string>
+             <string>Remove the current category.</string>
             </property>
             <property name="text">
              <string>...</string>

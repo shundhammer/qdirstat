@@ -37,7 +37,7 @@ MimeCategoryConfigPage::MimeCategoryConfigPage( QWidget * parent ):
     CHECK_NEW( _ui );
 
     _ui->setupUi( this );
-    _listWidget = _ui->categoryListWidget; // shortcut for a frequently needed widget
+    _listWidget = _ui->listWidget; // shortcut for a frequently needed widget
     _ui->treemapView->setFixedColor( Qt::white );
     populateTreemapView();
 
@@ -52,9 +52,9 @@ MimeCategoryConfigPage::MimeCategoryConfigPage( QWidget * parent ):
     connect( _ui->colorLineEdit, SIGNAL( textChanged ( QString ) ),
 	     this,		 SLOT  ( colorChanged( QString ) ) );
 
-    CONNECT_BUTTON( _ui->addCategoryButton,    addCategory()	);
-    CONNECT_BUTTON( _ui->deleteCategoryButton, deleteCategory() );
-    CONNECT_BUTTON( _ui->colorButton,	       pickColor()	);
+    CONNECT_BUTTON( _ui->addButton,    add()	   );
+    CONNECT_BUTTON( _ui->removeButton, remove()    );
+    CONNECT_BUTTON( _ui->colorButton,  pickColor() );
 }
 
 
@@ -71,7 +71,7 @@ MimeCategoryConfigPage::~MimeCategoryConfigPage()
 
 void MimeCategoryConfigPage::setup()
 {
-    fillCategoryList();
+    fillList();
     updateActions();
 }
 
@@ -80,7 +80,7 @@ void MimeCategoryConfigPage::applyChanges()
 {
     logDebug() << endl;
 
-    saveCategory( category( _listWidget->currentItem() ) );
+    save( category( _listWidget->currentItem() ) );
     _categorizer->writeSettings();
 }
 
@@ -95,11 +95,9 @@ void MimeCategoryConfigPage::discardChanges()
 }
 
 
-void MimeCategoryConfigPage::fillCategoryList()
+void MimeCategoryConfigPage::fillList()
 {
     CHECK_PTR( _categorizer );
-
-    CategoryListItem * firstItem = 0;
     _listWidget->clear();
 
     foreach ( MimeCategory * category, _categorizer->categories() )
@@ -107,12 +105,12 @@ void MimeCategoryConfigPage::fillCategoryList()
 	CategoryListItem * item = new CategoryListItem( category );
 	CHECK_NEW( item );
 	_listWidget->addItem( item );
-
-	if ( ! firstItem )
-	    firstItem = item;
     }
 
-    _listWidget->setCurrentItem( firstItem );
+    QListWidgetItem * firstItem = _listWidget->item(0);
+
+    if ( firstItem )
+        _listWidget->setCurrentItem( firstItem );
 }
 
 
@@ -131,8 +129,8 @@ MimeCategory * MimeCategoryConfigPage::category( QListWidgetItem * item )
 void MimeCategoryConfigPage::currentItemChanged(QListWidgetItem * currentItem,
 						QListWidgetItem * previousItem )
 {
-    saveCategory( category( previousItem ) );
-    loadCategory( category( currentItem	 ) );
+    save( category( previousItem ) );
+    load( category( currentItem	 ) );
     updateActions();
 }
 
@@ -202,7 +200,7 @@ void MimeCategoryConfigPage::updateActions()
 }
 
 
-void MimeCategoryConfigPage::saveCategory( MimeCategory * category )
+void MimeCategoryConfigPage::save( MimeCategory * category )
 {
     // logDebug() << category << endl;
 
@@ -218,7 +216,7 @@ void MimeCategoryConfigPage::saveCategory( MimeCategory * category )
 }
 
 
-void MimeCategoryConfigPage::loadCategory( MimeCategory * category )
+void MimeCategoryConfigPage::load( MimeCategory * category )
 {
     // logDebug() << category << endl;
 
@@ -248,7 +246,7 @@ void MimeCategoryConfigPage::setPatternList( QPlainTextEdit    * textEdit,
 }
 
 
-void MimeCategoryConfigPage::addCategory()
+void MimeCategoryConfigPage::add()
 {
     MimeCategory * category = new MimeCategory( "", Qt::white );
     CHECK_NEW( category );
@@ -262,7 +260,7 @@ void MimeCategoryConfigPage::addCategory()
 }
 
 
-void MimeCategoryConfigPage::deleteCategory()
+void MimeCategoryConfigPage::remove()
 {
     QListWidgetItem * currentItem = _listWidget->currentItem();
     int currentRow		  = _listWidget->currentRow();
@@ -288,12 +286,11 @@ void MimeCategoryConfigPage::deleteCategory()
 
 	_updatesLocked = true;
 	_listWidget->takeItem( currentRow );
-	_categorizer->remove( category );
 	delete currentItem;
-	delete category;
+	_categorizer->remove( category );
 	_updatesLocked = false;
 
-	loadCategory( this->category( _listWidget->currentItem() ) );
+	load( this->category( _listWidget->currentItem() ) );
     }
 }
 

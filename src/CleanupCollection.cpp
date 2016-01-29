@@ -79,6 +79,7 @@ void CleanupCollection::remove( Cleanup * cleanup )
     }
 
     _cleanupList.removeAt( index );
+    delete _cleanup;
 
     // No need for updateMenusAndToolBars() since QObject/QWidget will take care of
     // deleted actions all by itself.
