@@ -28,7 +28,7 @@
      <widget class="QWidget" name="layoutWidget">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QListWidget" name="cleanupListWidget">
+        <widget class="QListWidget" name="listWidget">
          <property name="minimumSize">
           <size>
            <width>200</width>
@@ -96,9 +96,9 @@ You can create as many as you like.</string>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="deleteButton">
+          <widget class="QToolButton" name="removeButton">
            <property name="toolTip">
-            <string>Delete the current cleanup action.</string>
+            <string>Remove the current cleanup action.</string>
            </property>
            <property name="text">
             <string>...</string>

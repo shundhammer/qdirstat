@@ -105,19 +105,19 @@ namespace QDirStat
 	/**
 	 * Create a new cleanup.
 	 **/
-	void addCleanup();
+	void add();
 
 	/**
-	 * Delete the current cleanup.
+	 * Remove the current cleanup.
 	 **/
-	void deleteCleanup();
+	void remove();
 
     protected:
 
 	/**
 	 * Fill the cleanup list widget from the cleanup collection.
 	 **/
-	void fillCleanupList();
+	void fillListWidget();
 
 	/**
 	 * Convert 'item' to a CleanupListItem and return its cleanup.
@@ -127,12 +127,12 @@ namespace QDirStat
 	/**
 	 * Save the contents of the widgets to the specified cleanup.
 	 **/
-	void saveCleanup( Cleanup * cleanup );
+	void save( Cleanup * cleanup );
 
 	/**
 	 * Load the content of the widgets from the specified cleanup.
 	 **/
-	void loadCleanup( Cleanup * cleanup );
+	void load( Cleanup * cleanup );
 
 
 	// Data
@@ -140,6 +140,7 @@ namespace QDirStat
 	Ui::CleanupConfigPage	* _ui;
 	CleanupCollection	* _cleanupCollection;
 	QListWidget		* _listWidget;
+        int                       _firstRow;
 	bool			  _updatesLocked;
 
     };	// class CleanupConfigPage

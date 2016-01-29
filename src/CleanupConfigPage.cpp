@@ -29,12 +29,13 @@ using namespace QDirStat;
 CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
     QWidget( parent ),
     _ui( new Ui::CleanupConfigPage ),
+    _firstRow( 0 ),
     _updatesLocked( false )
 {
     CHECK_NEW( _ui );
 
     _ui->setupUi( this );
-    _listWidget = _ui->cleanupListWidget; // shortcut for a frequently needed widget
+    _listWidget = _ui->listWidget; // shortcut for a frequently needed widget
 
     connect( _listWidget, SIGNAL( currentItemChanged( QListWidgetItem *,
 						      QListWidgetItem *	 ) ),
@@ -48,8 +49,8 @@ CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
     CONNECT_BUTTON( _ui->moveDownButton,     moveDown()	     );
     CONNECT_BUTTON( _ui->moveToTopButton,    moveToTop()     );
     CONNECT_BUTTON( _ui->moveToBottomButton, moveToBottom()  );
-    CONNECT_BUTTON( _ui->addButton,	     addCleanup()    );
-    CONNECT_BUTTON( _ui->deleteButton,	     deleteCleanup() );
+    CONNECT_BUTTON( _ui->addButton,	     add()           );
+    CONNECT_BUTTON( _ui->removeButton,	     remove()        );
 }
 
 
@@ -61,7 +62,7 @@ CleanupConfigPage::~CleanupConfigPage()
 
 void CleanupConfigPage::setup()
 {
-    fillCleanupList();
+    fillListWidget();
     _ui->toolBox->setCurrentIndex( 0 );
     updateActions();
 }
@@ -71,7 +72,7 @@ void CleanupConfigPage::applyChanges()
 {
     logDebug() << endl;
 
-    saveCleanup( cleanup( _listWidget->currentItem() ) );
+    save( cleanup( _listWidget->currentItem() ) );
     _cleanupCollection->writeSettings();
 }
 
@@ -87,7 +88,7 @@ void CleanupConfigPage::discardChanges()
 }
 
 
-void CleanupConfigPage::fillCleanupList()
+void CleanupConfigPage::fillListWidget()
 {
     CHECK_PTR( _cleanupCollection );
 
@@ -120,11 +121,11 @@ Cleanup * CleanupConfigPage::cleanup( QListWidgetItem * item )
 }
 
 
-void CleanupConfigPage::currentItemChanged(QListWidgetItem * currentItem,
-					   QListWidgetItem * previousItem )
+void CleanupConfigPage::currentItemChanged( QListWidgetItem * currentItem,
+                                            QListWidgetItem * previousItem )
 {
-    saveCleanup( cleanup( previousItem ) );
-    loadCleanup( cleanup( currentItem  ) );
+    save( cleanup( previousItem ) );
+    load( cleanup( currentItem  ) );
     updateActions();
 }
 
@@ -145,16 +146,16 @@ void CleanupConfigPage::titleChanged( const QString & newTitle )
 void CleanupConfigPage::updateActions()
 {
     int currentRow = _listWidget->currentRow();
-    int count	   = _listWidget->count();
+    int lastRow    = _listWidget->count() - 1;
 
-    _ui->moveToTopButton->setEnabled   ( currentRow > 0 );
-    _ui->moveUpButton->setEnabled      ( currentRow > 0 );
-    _ui->moveDownButton->setEnabled    ( currentRow < count - 1 );
-    _ui->moveToBottomButton->setEnabled( currentRow < count - 1 );
+    _ui->moveToTopButton->setEnabled   ( currentRow > _firstRow );
+    _ui->moveUpButton->setEnabled      ( currentRow > _firstRow );
+    _ui->moveDownButton->setEnabled    ( currentRow < lastRow );
+    _ui->moveToBottomButton->setEnabled( currentRow < lastRow );
 }
 
 
-void CleanupConfigPage::saveCleanup( Cleanup * cleanup )
+void CleanupConfigPage::save( Cleanup * cleanup )
 {
     // logDebug() << cleanup << endl;
 
@@ -194,7 +195,7 @@ void CleanupConfigPage::saveCleanup( Cleanup * cleanup )
 }
 
 
-void CleanupConfigPage::loadCleanup( Cleanup * cleanup )
+void CleanupConfigPage::load( Cleanup * cleanup )
 {
     // logDebug() << cleanup << endl;
 
@@ -310,7 +311,7 @@ void CleanupConfigPage::moveToBottom()
 }
 
 
-void CleanupConfigPage::addCleanup()
+void CleanupConfigPage::add()
 {
     Cleanup * cleanup = new Cleanup();
     CHECK_NEW( cleanup );
@@ -324,7 +325,7 @@ void CleanupConfigPage::addCleanup()
 }
 
 
-void CleanupConfigPage::deleteCleanup()
+void CleanupConfigPage::remove()
 {
     QListWidgetItem * currentItem = _listWidget->currentItem();
     int currentRow		  = _listWidget->currentRow();
@@ -355,6 +356,6 @@ void CleanupConfigPage::deleteCleanup()
 	delete cleanup;
 	_updatesLocked = false;
 
-	loadCleanup( this->cleanup( _listWidget->currentItem() ) );
+	load( this->cleanup( _listWidget->currentItem() ) );
     }
 }
