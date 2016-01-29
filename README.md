@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-22
+Updated: 2016-01-29
 
 
 ## Overview
@@ -65,6 +65,18 @@ preview._
 **Alpha Quality -- V0.8**
 
 Usable, but still Alpha.
+
+- 2016-01-29
+
+  - Since the missing tabs in the config dialog will also have a list of things
+    at the left and details of the one current item of those things at the
+    right, I tried to move out the common part of this as a base class. Since
+    the things those config tabs manage have different types, I tried a C++
+    template class. But **it turns out that in this year 2016 Qt's moc still
+    does not support templates. WTF?!**
+
+    Yet another day of develpment completely wasted due to insufficiencies of
+    underlying tools. Just great. I am getting fed up with this.
 
 - 2016-01-22
 
