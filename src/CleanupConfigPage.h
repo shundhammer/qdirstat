@@ -10,8 +10,7 @@
 #ifndef CleanupConfigPage_h
 #define CleanupConfigPage_h
 
-#include <QWidget>
-#include <QListWidgetItem>
+#include "ListEditor.h"
 #include "ui_cleanup-config-page.h"
 #include "Cleanup.h"
 
@@ -25,7 +24,7 @@ namespace QDirStat
      * Configuration page (tab) for cleanups:
      * Edit, add, delete, reorder cleanups in the cleanup collection.
      **/
-    class CleanupConfigPage: public QWidget
+    class CleanupConfigPage: public ListEditor<Cleanup *>
     {
 	Q_OBJECT
 
@@ -66,109 +65,79 @@ namespace QDirStat
     protected slots:
 
 	/**
-	 * Notification that the current item in the cleanup list changed.
-	 **/
-	void currentItemChanged( QListWidgetItem * current,
-				 QListWidgetItem * previous);
-
-	/**
 	 * Notification that the user changed the "Title" field of the
 	 * current cleanup.
 	 **/
 	void titleChanged( const QString & newTitle );
 
-	/**
-	 * Enable or disable buttons depending on internal status.
-	 **/
-	void updateActions();
-
-	/**
-	 * Move the current list item one position up.
-	 **/
-	void moveUp();
-
-	/**
-	 * Move the current list item one position down.
-	 **/
-	void moveDown();
-
-	/**
-	 * Move the current list item to the top of the list.
-	 **/
-	void moveToTop();
-
-	/**
-	 * Move the current list item to the bottom of the list.
-	 **/
-	void moveToBottom();
-
-	/**
-	 * Create a new cleanup.
-	 **/
-	void add();
-
-	/**
-	 * Remove the current cleanup.
-	 **/
-	void remove();
 
     protected:
 
 	/**
 	 * Fill the cleanup list widget from the cleanup collection.
+	 *
+	 * Implemented from ListEditor.
 	 **/
-	void fillListWidget();
+	virtual void fillListWidget() Q_DECL_OVERRIDE;
 
 	/**
-	 * Convert 'item' to a CleanupListItem and return its cleanup.
+	 * Save the contents of the widgets to the specified value.
+	 *
+	 * Implemented from ListEditor.
 	 **/
-	Cleanup * cleanup( QListWidgetItem * item );
+	virtual void save( Value_t value ) Q_DECL_OVERRIDE;
 
 	/**
-	 * Save the contents of the widgets to the specified cleanup.
+	 * Load the content of the widgets from the specified value.
+	 *
+	 * Implemented from ListEditor.
 	 **/
-	void save( Cleanup * cleanup );
+	virtual void load( Value_t value ) Q_DECL_OVERRIDE;
 
 	/**
-	 * Load the content of the widgets from the specified cleanup.
+	 * Create a new Value_t item with default values.
+	 * This is called when the 'Add' button is clicked.
+	 *
+	 * Implemented from ListEditor.
 	 **/
-	void load( Cleanup * cleanup );
+	virtual Cleanup * createValue() Q_DECL_OVERRIDE;
+
+	/**
+	 * Remove a value from the internal list and delete it.
+	 *
+	 * This is called when the 'Remove' button is clicked and the user
+	 * confirms the confirmation pop-up.
+	 *
+	 * Implemented from ListEditor.
+	 **/
+	virtual void removeValue( Value_t value );
+
+	/**
+	 * Return a text for the list item of 'value'.
+	 *
+	 * Implemented from ListEditor.
+	 **/
+
+	virtual QString valueText( Cleanup * cleanup ) Q_DECL_OVERRIDE;
+
+	/**
+	 * Return the message for the 'really delete?' message for the current
+	 * item ('value'). If this returns an empty string, the item cannot be
+	 * deleted.
+	 *
+	 * Implemented from ListEditor.
+	 **/
+	virtual QString deleteConfirmationMessage( Value_t value ) Q_DECL_OVERRIDE;
 
 
-	// Data
+	//
+	// Data members
+	//
 
 	Ui::CleanupConfigPage	* _ui;
 	CleanupCollection	* _cleanupCollection;
-	QListWidget		* _listWidget;
-        int                       _firstRow;
-	bool			  _updatesLocked;
 
     };	// class CleanupConfigPage
-
-
-    /**
-     * Helper class to match items in the cleanups list to a cleanup.
-     **/
-    class CleanupListItem: public QListWidgetItem
-    {
-    public:
-	/**
-	 * Create a new CleanupListItem. The text will be taken from the
-	 * cleanup.
-	 **/
-	CleanupListItem( Cleanup * cleanup ):
-	    QListWidgetItem( cleanup->cleanTitle() ),
-	    _cleanup( cleanup )
-	    {}
-
-	/**
-	 * Return the associated cleanup.
-	 **/
-	Cleanup * cleanup() const { return _cleanup; }
-
-    protected:
-	Cleanup * _cleanup;
-    };
 
 }	// namespace QDirStat
 

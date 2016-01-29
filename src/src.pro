@@ -86,6 +86,7 @@ HEADERS	  =				\
 	    FileInfoIterator.h		\
 	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
+            ListEditor.h                \
 	    Logger.h			\
 	    MainWindow.h		\
 	    MimeCategory.h		\
