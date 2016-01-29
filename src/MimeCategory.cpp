@@ -95,16 +95,26 @@ void MimeCategory::addPattern( const QString &	   rawPattern,
 void MimeCategory::addPatterns( const QStringList & patterns,
 				Qt::CaseSensitivity caseSensitivity )
 {
-    foreach ( const QString & pattern, patterns )
-	addPattern( pattern, caseSensitivity );
+    foreach ( const QString & rawPattern, patterns )
+    {
+	QString pattern = rawPattern.trimmed();
+
+	if ( ! pattern.isEmpty() )
+	    addPattern( pattern, caseSensitivity );
+    }
 }
 
 
 void MimeCategory::addSuffixes( const QStringList & suffixes,
 				Qt::CaseSensitivity caseSensitivity )
 {
-    foreach ( const QString & suffix, suffixes )
-	addSuffix( suffix, caseSensitivity );
+    foreach ( const QString & rawSuffix, suffixes )
+    {
+	QString suffix = rawSuffix.trimmed();
+
+	if ( ! suffix.isEmpty() )
+	    addSuffix( suffix, caseSensitivity );
+    }
 }
 
 
