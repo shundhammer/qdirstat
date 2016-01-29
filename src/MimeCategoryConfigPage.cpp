@@ -24,27 +24,26 @@
 using namespace QDirStat;
 
 
-#define CONNECT_BUTTON(BUTTON, RCVR_SLOT) \
-    connect( (BUTTON), SIGNAL( clicked() ), this, SLOT( RCVR_SLOT ) )
+// This is a mess that became necessary because Qt's moc cannot handle template
+// classes. Yes, this is ugly.
+#define CATEGORY_CAST(VOID_PTR) (static_cast<MimeCategory *>(VOID_PTR))
+
 
 
 MimeCategoryConfigPage::MimeCategoryConfigPage( QWidget * parent ):
-    QWidget( parent ),
+    ListEditor( parent ),
     _ui( new Ui::MimeCategoryConfigPage ),
-    _dirTree( 0 ),
-    _updatesLocked( false )
+    _dirTree( 0 )
 {
     CHECK_NEW( _ui );
 
     _ui->setupUi( this );
-    _listWidget = _ui->listWidget; // shortcut for a frequently needed widget
+    setListWidget  ( _ui->listWidget   );
+    setAddButton   ( _ui->addButton    );
+    setRemoveButton( _ui->removeButton );
+
     _ui->treemapView->setFixedColor( Qt::white );
     populateTreemapView();
-
-    connect( _listWidget, SIGNAL( currentItemChanged( QListWidgetItem *,
-						      QListWidgetItem *	 ) ),
-	     this,	  SLOT	( currentItemChanged( QListWidgetItem *,
-						      QListWidgetItem *	 ) ) );
 
     connect( _ui->nameLineEdit,	 SIGNAL( textChanged ( QString ) ),
 	     this,		 SLOT  ( nameChanged( QString ) ) );
@@ -52,9 +51,8 @@ MimeCategoryConfigPage::MimeCategoryConfigPage( QWidget * parent ):
     connect( _ui->colorLineEdit, SIGNAL( textChanged ( QString ) ),
 	     this,		 SLOT  ( colorChanged( QString ) ) );
 
-    CONNECT_BUTTON( _ui->addButton,    add()	   );
-    CONNECT_BUTTON( _ui->removeButton, remove()    );
-    CONNECT_BUTTON( _ui->colorButton,  pickColor() );
+    connect( _ui->colorButton,	 SIGNAL( clicked()   ),
+	     this,		 SLOT  ( pickColor() ) );
 }
 
 
@@ -71,7 +69,7 @@ MimeCategoryConfigPage::~MimeCategoryConfigPage()
 
 void MimeCategoryConfigPage::setup()
 {
-    fillList();
+    fillListWidget();
     updateActions();
 }
 
@@ -80,7 +78,7 @@ void MimeCategoryConfigPage::applyChanges()
 {
     logDebug() << endl;
 
-    save( category( _listWidget->currentItem() ) );
+    save( value( listWidget()->currentItem() ) );
     _categorizer->writeSettings();
 }
 
@@ -89,59 +87,38 @@ void MimeCategoryConfigPage::discardChanges()
 {
     logDebug() << endl;
 
-    _listWidget->clear();
+    listWidget()->clear();
     _categorizer->clear();
     _categorizer->readSettings();
 }
 
 
-void MimeCategoryConfigPage::fillList()
+void MimeCategoryConfigPage::fillListWidget()
 {
     CHECK_PTR( _categorizer );
-    _listWidget->clear();
+    listWidget()->clear();
 
     foreach ( MimeCategory * category, _categorizer->categories() )
     {
-	CategoryListItem * item = new CategoryListItem( category );
+	QListWidgetItem * item = new ListEditorItem( category->name(), category );
 	CHECK_NEW( item );
-	_listWidget->addItem( item );
+	listWidget()->addItem( item );
     }
 
-    QListWidgetItem * firstItem = _listWidget->item(0);
+    QListWidgetItem * firstItem = listWidget()->item(0);
 
     if ( firstItem )
-        _listWidget->setCurrentItem( firstItem );
-}
-
-
-MimeCategory * MimeCategoryConfigPage::category( QListWidgetItem * item )
-{
-    if ( ! item )
-	return 0;
-
-    CategoryListItem * configListItem = dynamic_cast<CategoryListItem *>( item );
-    CHECK_DYNAMIC_CAST( configListItem, "CategoryListItem *" );
-
-    return configListItem->category();
-}
-
-
-void MimeCategoryConfigPage::currentItemChanged(QListWidgetItem * currentItem,
-						QListWidgetItem * previousItem )
-{
-    save( category( previousItem ) );
-    load( category( currentItem	 ) );
-    updateActions();
+	listWidget()->setCurrentItem( firstItem );
 }
 
 
 void MimeCategoryConfigPage::nameChanged( const QString & newName )
 {
-    QListWidgetItem * currentItem = _listWidget->currentItem();
+    QListWidgetItem * currentItem = listWidget()->currentItem();
 
     if ( currentItem )
     {
-	MimeCategory * category = this->category( currentItem );
+	MimeCategory * category = CATEGORY_CAST( value( currentItem ) );
 	category->setName( newName );
 	currentItem->setText( newName );
     }
@@ -150,7 +127,7 @@ void MimeCategoryConfigPage::nameChanged( const QString & newName )
 
 void MimeCategoryConfigPage::colorChanged( const QString & newColor )
 {
-    QListWidgetItem * currentItem = _listWidget->currentItem();
+    QListWidgetItem * currentItem = listWidget()->currentItem();
 
     if ( currentItem )
     {
@@ -158,7 +135,7 @@ void MimeCategoryConfigPage::colorChanged( const QString & newColor )
 
 	if ( color.isValid() )
 	{
-	    MimeCategory * category = this->category( currentItem );
+	    MimeCategory * category = CATEGORY_CAST( value( currentItem ) );
 	    category->setColor( color );
 	    _ui->treemapView->setFixedColor( color );
 	    _ui->treemapView->rebuildTreemap();
@@ -169,11 +146,11 @@ void MimeCategoryConfigPage::colorChanged( const QString & newColor )
 
 void MimeCategoryConfigPage::pickColor()
 {
-    QListWidgetItem * currentItem = _listWidget->currentItem();
+    QListWidgetItem * currentItem = listWidget()->currentItem();
 
     if ( currentItem )
     {
-	MimeCategory * category = this->category( currentItem );
+	MimeCategory * category = CATEGORY_CAST( value( currentItem ) );
 	QColor color = category->color();
 	color = QColorDialog::getColor( color,
 					window(), // parent
@@ -181,7 +158,6 @@ void MimeCategoryConfigPage::pickColor()
 
 	if ( color.isValid() )
 	{
-	    MimeCategory * category = this->category( currentItem );
 	    category->setColor( color );
 	    _ui->colorLineEdit->setText( color.name() );
 	    _ui->treemapView->setFixedColor( color );
@@ -191,20 +167,12 @@ void MimeCategoryConfigPage::pickColor()
 }
 
 
-void MimeCategoryConfigPage::updateActions()
+void MimeCategoryConfigPage::save( void * value )
 {
-#if 0
-    int currentRow = _listWidget->currentRow();
-    int count	   = _listWidget->count();
-#endif
-}
-
-
-void MimeCategoryConfigPage::save( MimeCategory * category )
-{
+    MimeCategory * category = CATEGORY_CAST( value );
     // logDebug() << category << endl;
 
-    if ( ! category || _updatesLocked )
+    if ( ! category || updatesLocked() )
 	return;
 
     category->clear();
@@ -216,11 +184,12 @@ void MimeCategoryConfigPage::save( MimeCategory * category )
 }
 
 
-void MimeCategoryConfigPage::load( MimeCategory * category )
+void MimeCategoryConfigPage::load( void * value )
 {
+    MimeCategory * category = CATEGORY_CAST( value );
     // logDebug() << category << endl;
 
-    if ( ! category || _updatesLocked )
+    if ( ! category || updatesLocked() )
 	return;
 
     _ui->nameLineEdit->setText( category->name() );
@@ -246,52 +215,38 @@ void MimeCategoryConfigPage::setPatternList( QPlainTextEdit    * textEdit,
 }
 
 
-void MimeCategoryConfigPage::add()
+void * MimeCategoryConfigPage::createValue()
 {
     MimeCategory * category = new MimeCategory( "", Qt::white );
     CHECK_NEW( category );
-
-    CategoryListItem * item = new CategoryListItem( category );
-    CHECK_NEW( item );
-
     _categorizer->add( category );
-    _listWidget->addItem( item );
-    _listWidget->setCurrentItem( item );
+
+    return category;
 }
 
 
-void MimeCategoryConfigPage::remove()
+void MimeCategoryConfigPage::removeValue( void * value )
 {
-    QListWidgetItem * currentItem = _listWidget->currentItem();
-    int currentRow		  = _listWidget->currentRow();
+    MimeCategory * category = CATEGORY_CAST( value );
+    CHECK_PTR( category );
 
-    if ( ! currentItem )
-	return;
+    _categorizer->remove( category );
+}
 
-    MimeCategory * category = this->category( currentItem );
 
-    //
-    // Confirmation popup
-    //
+QString MimeCategoryConfigPage::valueText( void * value )
+{
+    MimeCategory * category = CATEGORY_CAST( value );
+    CHECK_PTR( category );
 
-    QString msg = tr( "Really delete category \"%1\"?" ).arg( category->name() );
-    int ret = QMessageBox::question( window(),
-				     tr( "Please Confirm" ), // title
-				     msg );
-    if ( ret == QMessageBox::Yes )
-    {
-	//
-	// Delete current category
-	//
+    return category->name();
+}
 
-	_updatesLocked = true;
-	_listWidget->takeItem( currentRow );
-	delete currentItem;
-	_categorizer->remove( category );
-	_updatesLocked = false;
 
-	load( this->category( _listWidget->currentItem() ) );
-    }
+QString MimeCategoryConfigPage::deleteConfirmationMessage( void * value )
+{
+    MimeCategory * category = CATEGORY_CAST( value );
+    return tr( "Really delete category \"%1\"?" ).arg( category->name() );
 }
 
 

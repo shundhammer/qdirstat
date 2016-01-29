@@ -10,8 +10,7 @@
 #ifndef MimeCategoryConfigPage_h
 #define MimeCategoryConfigPage_h
 
-#include <QWidget>
-#include <QListWidgetItem>
+#include "ListEditor.h"
 #include "ui_mime-category-config-page.h"
 #include "MimeCategorizer.h"
 
@@ -22,7 +21,7 @@ namespace QDirStat
      * Configuration page (tab) for MimeCategories:
      * Edit, add, delete categories in the MimeCategorizer.
      **/
-    class MimeCategoryConfigPage: public QWidget
+    class MimeCategoryConfigPage: public ListEditor
     {
 	Q_OBJECT
 
@@ -63,12 +62,6 @@ namespace QDirStat
     protected slots:
 
 	/**
-	 * Notification that the current item in the category list changed.
-	 **/
-	void currentItemChanged( QListWidgetItem * current,
-				 QListWidgetItem * previous);
-
-	/**
 	 * Notification that the user changed the "Name" field of the
 	 * current category.
 	 **/
@@ -80,20 +73,6 @@ namespace QDirStat
 	 **/
 	void colorChanged( const QString & newColor );
 
-	/**
-	 * Enable or disable buttons depending on internal status.
-	 **/
-	void updateActions();
-
-	/**
-	 * Create a new category.
-	 **/
-	void add();
-
-	/**
-	 * Remove the current category.
-	 **/
-	void remove();
 
     protected slots:
 
@@ -107,23 +86,55 @@ namespace QDirStat
 
 	/**
 	 * Fill the category list widget from the category collection.
+	 *
+	 * Implemented from ListEditor.
 	 **/
-	void fillList();
-
-	/**
-	 * Convert 'item' to a CategoryListItem and return its category.
-	 **/
-	MimeCategory * category( QListWidgetItem * item );
+	virtual void fillListWidget() Q_DECL_OVERRIDE;
 
 	/**
 	 * Save the contents of the widgets to the specified category.
 	 **/
-	void save( MimeCategory * category );
+	virtual void save( void * value ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Load the content of the widgets from the specified category.
 	 **/
-	void load( MimeCategory * category );
+	virtual void load( void * value ) Q_DECL_OVERRIDE;
+
+	/**
+	 * Create a new value with default values.
+	 * This is called when the 'Add' button is clicked.
+	 *
+	 * Implemented from ListEditor.
+	 **/
+	virtual void * createValue() Q_DECL_OVERRIDE;
+
+	/**
+	 * Remove a value from the internal list and delete it.
+	 *
+	 * This is called when the 'Remove' button is clicked and the user
+	 * confirms the confirmation pop-up.
+	 *
+	 * Implemented from ListEditor.
+	 **/
+	virtual void removeValue( void * value );
+
+	/**
+	 * Return a text for the list item of 'value'.
+	 *
+	 * Implemented from ListEditor.
+	 **/
+
+	virtual QString valueText( void * value ) Q_DECL_OVERRIDE;
+
+	/**
+	 * Return the message for the 'really delete?' message for the current
+	 * item ('value'). If this returns an empty string, the item cannot be
+	 * deleted.
+	 *
+	 * Implemented from ListEditor.
+	 **/
+	virtual QString deleteConfirmationMessage( void * value ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Convert 'patternList' into a newline-separated string and set it as
@@ -142,36 +153,9 @@ namespace QDirStat
 
 	Ui::MimeCategoryConfigPage * _ui;
 	MimeCategorizer		   * _categorizer;
-	QListWidget		   * _listWidget;
 	DirTree			   * _dirTree;
-	bool			     _updatesLocked;
 
     };	// class MimeCategoryConfigPage
-
-
-    /**
-     * Helper class to match items in the category list to a category.
-     **/
-    class CategoryListItem: public QListWidgetItem
-    {
-    public:
-	/**
-	 * Create a new CategoryListItem. The text will be taken from the
-	 * category.
-	 **/
-	CategoryListItem( MimeCategory * category ):
-	    QListWidgetItem( category->name() ),
-	    _category( category )
-	    {}
-
-	/**
-	 * Return the associated category.
-	 **/
-	MimeCategory * category() const { return _category; }
-
-    protected:
-	MimeCategory * _category;
-    };
 
 }	// namespace QDirStat
 

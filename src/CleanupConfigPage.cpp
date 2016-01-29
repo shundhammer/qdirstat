@@ -24,6 +24,7 @@ using namespace QDirStat;
 #define CLEANUP_CAST(VOID_PTR) (static_cast<Cleanup *>(VOID_PTR))
 
 
+
 CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
     ListEditor( parent ),
     _ui( new Ui::CleanupConfigPage )
@@ -88,7 +89,6 @@ void CleanupConfigPage::discardChanges()
 void CleanupConfigPage::fillListWidget()
 {
     CHECK_PTR( _cleanupCollection );
-
     listWidget()->clear();
 
     foreach ( Cleanup * cleanup, _cleanupCollection->cleanupList() )
@@ -121,7 +121,6 @@ void CleanupConfigPage::titleChanged( const QString & newTitle )
 void CleanupConfigPage::save( void * value )
 {
     Cleanup * cleanup = CLEANUP_CAST( value );
-
     // logDebug() << cleanup << endl;
 
     if ( ! cleanup || updatesLocked() )
@@ -163,7 +162,6 @@ void CleanupConfigPage::save( void * value )
 void CleanupConfigPage::load( void * value )
 {
     Cleanup * cleanup = CLEANUP_CAST( value );
-
     // logDebug() << cleanup << endl;
 
     if ( ! cleanup || updatesLocked() )
@@ -211,8 +209,8 @@ void * CleanupConfigPage::createValue()
 void CleanupConfigPage::removeValue( void * value )
 {
     Cleanup * cleanup = CLEANUP_CAST( value );
-
     CHECK_PTR( cleanup );
+
     _cleanupCollection->remove( cleanup );
 }
 
@@ -220,7 +218,6 @@ void CleanupConfigPage::removeValue( void * value )
 QString CleanupConfigPage::valueText( void * value )
 {
     Cleanup * cleanup = CLEANUP_CAST( value );
-
     CHECK_PTR( cleanup );
 
     return cleanup->cleanTitle();
@@ -230,7 +227,6 @@ QString CleanupConfigPage::valueText( void * value )
 QString CleanupConfigPage::deleteConfirmationMessage( void * value )
 {
     Cleanup * cleanup = CLEANUP_CAST( value );
-
     return tr( "Really delete cleanup \"%1\"?" ).arg( cleanup->cleanTitle() );
 }
 
@@ -240,7 +236,7 @@ void CleanupConfigPage::moveValue( void * value, const char * operation )
     Cleanup * cleanup = CLEANUP_CAST( value );
 
     QMetaObject::invokeMethod( _cleanupCollection,
-                               operation,
-                               Qt::DirectConnection,
-                               Q_ARG( Cleanup *, cleanup ) );
+			       operation,
+			       Qt::DirectConnection,
+			       Q_ARG( Cleanup *, cleanup ) );
 }
