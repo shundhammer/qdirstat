@@ -211,7 +211,12 @@ void MimeCategoryConfigPage::load( void * value )
 void MimeCategoryConfigPage::setPatternList( QPlainTextEdit    * textEdit,
 					     const QStringList & patternList )
 {
-    textEdit->setPlainText( patternList.join( "\n" ) );
+    QString text = patternList.join( "\n" );
+
+    if ( ! text.isEmpty() )
+	text += "\n";	   // Let the user begin writing on a new line
+
+    textEdit->setPlainText( text );
 }
 
 
