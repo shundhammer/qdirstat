@@ -24,7 +24,7 @@ namespace QDirStat
      * Configuration page (tab) for cleanups:
      * Edit, add, delete, reorder cleanups in the cleanup collection.
      **/
-    class CleanupConfigPage: public ListEditor<Cleanup *>
+    class CleanupConfigPage: public ListEditor
     {
 	Q_OBJECT
 
@@ -36,8 +36,7 @@ namespace QDirStat
 	/**
 	 * Set the CleanupCollection to work on.
 	 **/
-	void setCleanupCollection( CleanupCollection * collection )
-	    { _cleanupCollection = collection; }
+	void setCleanupCollection( CleanupCollection * collection );
 
 	/**
 	 * Return the internal CleanupCollection.
@@ -85,22 +84,22 @@ namespace QDirStat
 	 *
 	 * Implemented from ListEditor.
 	 **/
-	virtual void save( Value_t value ) Q_DECL_OVERRIDE;
+	virtual void save( void * value ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Load the content of the widgets from the specified value.
 	 *
 	 * Implemented from ListEditor.
 	 **/
-	virtual void load( Value_t value ) Q_DECL_OVERRIDE;
+	virtual void load( void * value ) Q_DECL_OVERRIDE;
 
 	/**
-	 * Create a new Value_t item with default values.
+	 * Create a new value with default values.
 	 * This is called when the 'Add' button is clicked.
 	 *
 	 * Implemented from ListEditor.
 	 **/
-	virtual Cleanup * createValue() Q_DECL_OVERRIDE;
+	virtual void * createValue() Q_DECL_OVERRIDE;
 
 	/**
 	 * Remove a value from the internal list and delete it.
@@ -110,7 +109,7 @@ namespace QDirStat
 	 *
 	 * Implemented from ListEditor.
 	 **/
-	virtual void removeValue( Value_t value );
+	virtual void removeValue( void * value );
 
 	/**
 	 * Return a text for the list item of 'value'.
@@ -118,7 +117,7 @@ namespace QDirStat
 	 * Implemented from ListEditor.
 	 **/
 
-	virtual QString valueText( Cleanup * cleanup ) Q_DECL_OVERRIDE;
+	virtual QString valueText( void * value ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Return the message for the 'really delete?' message for the current
@@ -127,7 +126,19 @@ namespace QDirStat
 	 *
 	 * Implemented from ListEditor.
 	 **/
-	virtual QString deleteConfirmationMessage( Value_t value ) Q_DECL_OVERRIDE;
+	virtual QString deleteConfirmationMessage( void * value ) Q_DECL_OVERRIDE;
+
+	/**
+	 * Move a value in the internal list. This is called from moveUp(),
+	 * moveDown() etc.; 'operation' is one of 'moveUp()', moveDown()
+	 * etc. that can be called with QMetaObject::invokeMethod().
+	 *
+	 * Implemented from ListEditor.
+	 *
+	 * This is a kludge - a workaround of not being able to use C++
+	 * templates.
+	 **/
+	virtual void moveValue( void * value, const char * operation ) Q_DECL_OVERRIDE;
 
 
 	//

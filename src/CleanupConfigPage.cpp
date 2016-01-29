@@ -7,8 +7,6 @@
  */
 
 
-#include <QMessageBox>
-
 #include "CleanupConfigPage.h"
 #include "CleanupCollection.h"
 #include "Cleanup.h"
@@ -21,6 +19,9 @@ using namespace QDirStat;
 
 #define DEFAULT_OUTPUT_WINDOW_SHOW_TIMEOUT	500
 
+// This is a mess that became necessary because Qt's moc cannot handle template
+// classes. Yes, this is ugly.
+#define CLEANUP_CAST(VOID_PTR) (static_cast<Cleanup *>(VOID_PTR))
 
 
 CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
@@ -32,12 +33,12 @@ CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
     _ui->setupUi( this );
     setListWidget( _ui->listWidget );
 
-    void setMoveUpButton      ( _ui->moveUpButton	);
-    void setMoveDownButton    ( _ui->moveDownButton	);
-    void setMoveToTopButton   ( _ui->moveToTopButton	);
-    void setMoveToBottomButton( _ui->moveToBottomButton );
-    void setAddButton	      ( _ui->addButton		);
-    void setRemoveButton      ( _ui->removeButton	);
+    setMoveUpButton	 ( _ui->moveUpButton	   );
+    setMoveDownButton	 ( _ui->moveDownButton	   );
+    setMoveToTopButton	 ( _ui->moveToTopButton	   );
+    setMoveToBottomButton( _ui->moveToBottomButton );
+    setAddButton	 ( _ui->addButton	   );
+    setRemoveButton	 ( _ui->removeButton	   );
 
     connect( _ui->titleLineEdit, SIGNAL( textChanged ( QString ) ),
 	     this,		 SLOT  ( titleChanged( QString ) ) );
@@ -47,6 +48,12 @@ CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
 CleanupConfigPage::~CleanupConfigPage()
 {
     // logDebug() << "CleanupConfigPage destructor" << endl;
+}
+
+
+void CleanupConfigPage::setCleanupCollection( CleanupCollection * collection )
+{
+    _cleanupCollection = collection;
 }
 
 
@@ -86,7 +93,7 @@ void CleanupConfigPage::fillListWidget()
 
     foreach ( Cleanup * cleanup, _cleanupCollection->cleanupList() )
     {
-	QListWidgetItem * item = new ListEditorItem<Cleanup *>( cleanup->cleanTitle(), cleanup );
+	QListWidgetItem * item = new ListEditorItem( cleanup->cleanTitle(), cleanup );
 	CHECK_NEW( item );
 	listWidget()->addItem( item );
     }
@@ -104,15 +111,17 @@ void CleanupConfigPage::titleChanged( const QString & newTitle )
 
     if ( currentItem )
     {
-	Cleanup * cleanup = value( currentItem );
+	Cleanup * cleanup = CLEANUP_CAST( value( currentItem ) );
 	cleanup->setTitle( newTitle );
 	currentItem->setText( cleanup->cleanTitle() );
     }
 }
 
 
-void CleanupConfigPage::save( Cleanup * cleanup )
+void CleanupConfigPage::save( void * value )
 {
+    Cleanup * cleanup = CLEANUP_CAST( value );
+
     // logDebug() << cleanup << endl;
 
     if ( ! cleanup || updatesLocked() )
@@ -151,8 +160,10 @@ void CleanupConfigPage::save( Cleanup * cleanup )
 }
 
 
-void CleanupConfigPage::load( Cleanup * cleanup )
+void CleanupConfigPage::load( void * value )
 {
+    Cleanup * cleanup = CLEANUP_CAST( value );
+
     // logDebug() << cleanup << endl;
 
     if ( ! cleanup || updatesLocked() )
@@ -187,7 +198,7 @@ void CleanupConfigPage::load( Cleanup * cleanup )
 }
 
 
-Cleanup * CleanupConfigPage::createValue()
+void * CleanupConfigPage::createValue()
 {
     Cleanup * cleanup = new Cleanup();
     CHECK_NEW( cleanup );
@@ -197,23 +208,39 @@ Cleanup * CleanupConfigPage::createValue()
 }
 
 
-void CleanupConfigPage::removeValue( Cleanup * cleanup )
+void CleanupConfigPage::removeValue( void * value )
 {
+    Cleanup * cleanup = CLEANUP_CAST( value );
+
     CHECK_PTR( cleanup );
     _cleanupCollection->remove( cleanup );
 }
 
 
-QString CleanupConfigPage::valueText( Cleanup * cleanup )
+QString CleanupConfigPage::valueText( void * value )
 {
+    Cleanup * cleanup = CLEANUP_CAST( value );
+
     CHECK_PTR( cleanup );
 
     return cleanup->cleanTitle();
 }
 
 
-QString CleanupConfigPage::deleteConfirmationMessage( Cleanup * cleanup )
+QString CleanupConfigPage::deleteConfirmationMessage( void * value )
 {
+    Cleanup * cleanup = CLEANUP_CAST( value );
+
     return tr( "Really delete cleanup \"%1\"?" ).arg( cleanup->cleanTitle() );
 }
 
+
+void CleanupConfigPage::moveValue( void * value, const char * operation )
+{
+    Cleanup * cleanup = CLEANUP_CAST( value );
+
+    QMetaObject::invokeMethod( _cleanupCollection,
+                               operation,
+                               Qt::DirectConnection,
+                               Q_ARG( Cleanup *, cleanup ) );
+}

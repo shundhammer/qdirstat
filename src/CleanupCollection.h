@@ -13,6 +13,7 @@
 #include <QSet>
 #include <QPointer>
 
+#include "ListMover.h"
 #include "Cleanup.h"
 
 
@@ -112,6 +113,13 @@ namespace QDirStat
 	 **/
 	const CleanupList & cleanupList() const { return _cleanupList; }
 
+        /**
+         * Return the ListMover for this object that takes care of moving
+         * cleanups up, down, to the top, or to the bottom of this cleanup
+         * list.
+         **/
+        ListMover<Cleanup *> * listMover() { return &_listMover; }
+
     signals:
 
 	/**
@@ -155,7 +163,6 @@ namespace QDirStat
 	 **/
 	void moveToBottom( Cleanup * cleanup );
 
-
 	/**
 	 * Read configuration for all cleanups.
 	 **/
@@ -185,19 +192,19 @@ namespace QDirStat
 	bool confirmation( Cleanup * cleanup, const FileInfoSet & items );
 
 	/**
-	 * Update all menus that had the 'keepUpdated' flag set.
-	 **/
-	void updateMenusAndToolBars();
-
-	/**
-	 * Update all menus that had the 'keepUpdated' flag set.
+	 * Update all menus that have the 'keepUpdated' flag set.
 	 **/
 	void updateMenus();
 
 	/**
-	 * Update all tool bars that had the 'keepUpdated' flag set.
+	 * Update all tool bars that have the 'keepUpdated' flag set.
 	 **/
 	void updateToolBars();
+
+	/**
+	 * Update all menus that have the 'keepUpdated' flag set.
+	 **/
+	void updateMenusAndToolBars();
 
 
 	//
@@ -206,6 +213,7 @@ namespace QDirStat
 
 	SelectionModel *	   _selectionModel;
 	CleanupList		   _cleanupList;
+        ListMover<Cleanup *>       _listMover;
 	QList<QPointer<QMenu> >	   _menus;
 	QList<QPointer<QToolBar> > _toolBars;
     };

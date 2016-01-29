@@ -48,6 +48,7 @@ SOURCES	  = main.cpp			\
 	    FileInfoIterator.cpp	\
 	    FileInfoSet.cpp		\
 	    FileInfoSorter.cpp		\
+            ListEditor.cpp              \
 	    Logger.cpp			\
 	    MainWindow.cpp		\
 	    MimeCategory.cpp		\
@@ -87,6 +88,7 @@ HEADERS	  =				\
 	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
             ListEditor.h                \
+            ListMover.h                 \
 	    Logger.h			\
 	    MainWindow.h		\
 	    MimeCategory.h		\

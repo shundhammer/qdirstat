@@ -11,11 +11,9 @@
 #define ListEditor_h
 
 #include <QWidget>
-#include <QAbstractButton>
 #include <QListWidgetItem>
 
-#include "Exception.h"
-#include "Logger.h"
+class QAbstractButton;
 
 
 namespace QDirStat
@@ -30,10 +28,6 @@ namespace QDirStat
      * list items, and optionally moving the current item up, down, to the
      * top, and to the bottom of the list.
      *
-     * The template parameter 'Value_t' is a pointer type of the class that is
-     * being displayed and edited - in the context of QDirStat a Cleanup * or a
-     * MimeCategory *.
-     *
      * This class does not own, create or destroy any widgets; it only uses
      * widgets that have been created elsewhere, typically via a Qt Designer
      * .ui file. The widgets should be set with any of the appropriate setter
@@ -41,8 +35,16 @@ namespace QDirStat
      *
      * This class contains pure virtual methods; derived classes are required
      * to implement them.
+     *
+     * This class was first designed as a template class, but since even in
+     * 2016 Qt's moc still cannot handle templates, ugly void * and nightmarish
+     * type casts had to be used. This is due to deficiencies of the underlying
+     * tools, not by design. Yes, this is ugly. But it's the best that can be
+     * done with that moc preprocessor that dates back to 1995 or so. You'd
+     * think that with C++11 and whatnot those limitations could be lifted, but
+     * it doesn't look like anybody cares enough.
      **/
-    template<class Value_t> class ListEditor: public QWidget
+    class ListEditor: public QWidget
     {
 	Q_OBJECT
 
@@ -51,23 +53,12 @@ namespace QDirStat
 	/**
 	 * Constructor.
 	 **/
-	ListEditor( QWidget * parent ):
-	    QWidget( parent ),
-	    _listWidget(0),
-	    _firstRow(0),
-	    _updatesLocked(false),
-	    _moveUpButton(0),
-	    _moveDownButton(0),
-	    _moveToTopButton(0),
-	    _moveToBottomButton(0),
-	    _addButton(0),
-	    _removeButton(0)
-	    {}
+	ListEditor( QWidget * parent );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~ListEditor() {}
+	virtual ~ListEditor();
 
 
     protected:
@@ -79,11 +70,9 @@ namespace QDirStat
 
 
 	/**
-	 * Fill the list widget.
-	 * Derived classes are required to implement this.
+	 * Fill the list widget: Create a ListEditorItem for each value.
 	 *
-	 * For each item, Create a ListEditorItem<Value_t> with the same
-	 * Value_t as this ListEditor.
+	 * Derived classes are required to implement this.
 	 **/
 	virtual void fillListWidget() = 0;
 
@@ -92,14 +81,14 @@ namespace QDirStat
 	 *
 	 * Derived classes are required to implement this.
 	 **/
-	virtual void save( Value_t value ) = 0;
+	virtual void save( void * value ) = 0;
 
 	/**
 	 * Load the content of the widgets from the specified value.
 	 *
 	 * Derived classes are required to implement this.
 	 **/
-	virtual void load( Value_t value ) = 0;
+	virtual void load( void * value ) = 0;
 
 	/**
 	 * Create a new Value_t item with default values and add it to the
@@ -109,7 +98,7 @@ namespace QDirStat
 	 *
 	 * Derived classes are required to implement this.
 	 **/
-	virtual Value_t createValue() = 0;
+	virtual void * createValue() = 0;
 
 	/**
 	 * Remove a value from the internal list and delete it.
@@ -119,21 +108,37 @@ namespace QDirStat
 	 *
 	 * Derived classes are required to implement this.
 	 **/
-	virtual void removeValue( Value_t value ) = 0;
+	virtual void removeValue( void * value ) = 0;
 
 	/**
 	 * Return a text for the list item of 'value'.
 	 *
 	 * Derived classes are required to implement this.
 	 **/
-	virtual QString valueText( Value_t value ) = 0;
+	virtual QString valueText( void * value ) = 0;
 
 	/**
 	 * Return the message for the 'really delete?' message for the current
 	 * item ('value'). If this returns an empty string, the item cannot be
 	 * deleted.
+	 *
+	 * Derived classes are required to implement this.
 	 **/
-	virtual QString deleteConfirmationMessage( Value_t value ) = 0;
+	virtual QString deleteConfirmationMessage( void * value ) = 0;
+
+	/**
+	 * Move a value in the internal list. This is called from moveUp(),
+	 * moveDown() etc.; 'operation' is one of 'moveUp()', moveDown()
+	 * etc. that can be called with QMetaObject::invokeMethod().
+	 *
+	 * Derived classes that should implement this if the move operations
+	 * are to be supported. They should cast 'value' to the proper type and
+	 * pass it to the operation that is invoked.
+	 *
+	 * This is a kludge - a workaround of not being able to use C++
+	 * templates.
+	 **/
+	virtual void moveValue( void * value, const char * operation );
 
 
 	//--------------------------------------------------------------------
@@ -144,15 +149,7 @@ namespace QDirStat
 	/**
 	 * Set the QListWidget to work on.
 	 **/
-	void setListWidget( QListWidget * listWidget )
-	{
-	    _listWidget = listWidget;
-
-	    connect( _listWidget, SIGNAL( currentItemChanged( QListWidgetItem *,
-							      QListWidgetItem *	 ) ),
-		     this,	  SLOT	( currentItemChanged( QListWidgetItem *,
-							      QListWidgetItem *	 ) ) );
-	}
+	void setListWidget( QListWidget * listWidget );
 
 	/**
 	 * Return the QListWidget.
@@ -183,171 +180,49 @@ namespace QDirStat
 	void setFirstRow( int newFirstRow ) { _firstRow = newFirstRow; }
 
 
-#define CON( RCVR_SLOT) \
-	connect( button, SIGNAL( clicked() ), this, SLOT( RCVR_SLOT ) )
-
 	//
 	// Set the various buttons and connect them to the appropriate slot.
 	//
 
-	void setMoveUpButton	  ( QAbstractButton * button ) { _moveUpButton	     = button; CON( moveUp()	   ); }
-	void setMoveDownButton	  ( QAbstractButton * button ) { _moveDownButton     = button; CON( moveDown()	   ); }
-	void setMoveToTopButton	  ( QAbstractButton * button ) { _moveToTopButton    = button; CON( moveToTop()	   ); }
-	void setMoveToBottomButton( QAbstractButton * button ) { _moveToBottomButton = button; CON( moveToBottom() ); }
-	void setAddButton	  ( QAbstractButton * button ) { _addButton	     = button; CON( add()	   ); }
-	void setRemoveButton	  ( QAbstractButton * button ) { _removeButton	     = button; CON( remove()	   ); }
+	void setMoveUpButton	  ( QAbstractButton * button );
+	void setMoveDownButton	  ( QAbstractButton * button );
+	void setMoveToTopButton	  ( QAbstractButton * button );
+	void setMoveToBottomButton( QAbstractButton * button );
+	void setAddButton	  ( QAbstractButton * button );
+	void setRemoveButton	  ( QAbstractButton * button );
 
-#undef CON
 
     public slots:
 
 	/**
 	 * Move the current list item one position up.
 	 **/
-	void moveUp()
-	{
-	    QListWidgetItem * currentItem = _listWidget->currentItem();
-	    int currentRow		  = _listWidget->currentRow();
-
-	    if ( ! currentItem )
-		return;
-
-	    if ( currentRow > 0 )
-	    {
-		_updatesLocked = true;
-		_listWidget->takeItem( currentRow );
-		_listWidget->insertItem( currentRow - 1, currentItem );
-		_listWidget->setCurrentItem( currentItem );
-		// _listMover->moveUp( cleanup( currentItem ) );
-		_updatesLocked = false;
-	    }
-	}
-
+	void moveUp();
 
 	/**
 	 * Move the current list item one position down.
 	 **/
-	void moveDown()
-	{
-	    QListWidgetItem * currentItem = _listWidget->currentItem();
-	    int currentRow		  = _listWidget->currentRow();
-
-	    if ( ! currentItem )
-		return;
-
-	    if ( currentRow < _listWidget->count() - 1 )
-	    {
-		_updatesLocked = true;
-		_listWidget->takeItem( currentRow );
-		_listWidget->insertItem( currentRow + 1, currentItem );
-		_listWidget->setCurrentItem( currentItem );
-		// _listMover->moveDown( cleanup( currentItem ) );
-		_updatesLocked = false;
-	    }
-	}
-
+	void moveDown();
 
 	/**
 	 * Move the current list item to the top of the list.
 	 **/
-	void moveToTop()
-	{
-	    QListWidgetItem * currentItem = _listWidget->currentItem();
-	    int currentRow		  = _listWidget->currentRow();
-
-	    if ( ! currentItem )
-		return;
-
-	    if ( currentRow > 0 )
-	    {
-		_updatesLocked = true;
-		_listWidget->takeItem( currentRow );
-		_listWidget->insertItem( 0, currentItem );
-		_listWidget->setCurrentItem( currentItem );
-		// _listMover->moveToTop( cleanup( currentItem ) );
-		_updatesLocked = false;
-	    }
-	}
-
+	void moveToTop();
 
 	/**
 	 * Move the current list item to the bottom of the list.
 	 **/
-	void moveToBottom()
-	{
-	    QListWidgetItem * currentItem = _listWidget->currentItem();
-	    int currentRow		  = _listWidget->currentRow();
-
-	    if ( ! currentItem )
-		return;
-
-	    if ( currentRow < _listWidget->count() - 1 )
-	    {
-		_updatesLocked = true;
-		_listWidget->takeItem( currentRow );
-		_listWidget->addItem( currentItem );
-		_listWidget->setCurrentItem( currentItem );
-		// _listMover->moveToBottom( cleanup( currentItem ) );
-		_updatesLocked = false;
-	    }
-	}
-
+	void moveToBottom();
 
 	/**
 	 * Create a new list item.
 	 **/
-	void add()
-	{
-	    Value_t value = createValue();
-	    CHECK_NEW( value );
-
-	    ListEditorItem<Value_t> item = new ListEditorItem<Value_t>( valueText( value ), value );
-	    CHECK_NEW( item );
-
-	    _listWidget->addItem( item );
-	    _listWidget->setCurrentItem( item );
-	}
+	void add();
 
 	/**
 	 * Remove the current list item.
 	 **/
-	void remove()
-	{
-	    QListWidgetItem * currentItem = _listWidget->currentItem();
-	    int currentRow		  = _listWidget->currentRow();
-
-	    if ( ! currentItem )
-		return;
-
-	    Value_t value = this->value( currentItem );
-
-	    //
-	    // Confirmation popup
-	    //
-
-	    QString msg = deleteConfirmationMessage( value );
-
-	    if ( ! msg.isEmtpy() )
-	    {
-		int ret = QMessageBox::question( window(),
-						 tr( "Please Confirm" ), // title
-						 msg );
-		if ( ret == QMessageBox::Yes )
-		{
-		    //
-		    // Delete current cleanup
-		    //
-
-		    _updatesLocked = true;
-		    _listWidget->takeItem( currentRow );
-		    delete currentItem;
-		    removeValue( value );
-		    _updatesLocked = false;
-
-		    load( this->value( _listWidget->currentItem() ) );
-		}
-	    }
-	}
+	void remove();
 
 
     protected slots:
@@ -355,53 +230,25 @@ namespace QDirStat
 	/**
 	 * Enable or disable buttons depending on internal status.
 	 **/
-	virtual void updateActions()
-	{
-	    int currentRow = _listWidget->currentRow();
-	    int lastRow	   = _listWidget->count() - 1;
-
-	    enableButton( _moveToTopButton,    currentRow > _firstRow );
-	    enableButton( _moveUpButton,       currentRow > _firstRow );
-	    enableButton( _moveDownButton,     currentRow < lastRow   );
-	    enableButton( _moveToBottomButton, currentRow < lastRow   );
-	}
+	virtual void updateActions();
 
 
 	/**
 	 * Notification that the current item in the list widget changed.
 	 **/
 	virtual void currentItemChanged( QListWidgetItem * current,
-					 QListWidgetItem * previous)
-	{
-	    save( value( previousItem ) );
-	    load( value( currentItem  ) );
-	    updateActions();
-	}
-
+					 QListWidgetItem * previous);
 
     protected:
 	/**
-	 * Convert 'item' to a ListEditorItem<Value_t> and return its value.
+	 * Convert 'item' to a ListEditorItem<void *> and return its value.
 	 **/
-	Value_t value( QListWidgetItem * item )
-	{
-	    if ( ! item )
-		return 0;
-
-	    ListEditorItem<Value_t> editorItem = dynamic_cast<ListEditorItem<Value_t> >( item );
-	    CHECK_DYNAMIC_CAST( editorItem, "Value_t" );
-
-	    return editorItem->value();
-	}
+	void * value( QListWidgetItem * item );
 
 	/**
 	 * Enable or disable a button if it is non-null.
 	 **/
-	void enableButton( QAbstractButton * button, bool enabled )
-	{
-	    if ( button )
-		button->setEnabled( enabled );
-	}
+	void enableButton( QAbstractButton * button, bool enabled );
 
 
     private:
@@ -413,7 +260,6 @@ namespace QDirStat
 	QListWidget	* _listWidget;
 	int		  _firstRow;
 	bool		  _updatesLocked;
-
 	QAbstractButton * _moveUpButton;
 	QAbstractButton * _moveDownButton;
 	QAbstractButton * _moveToTopButton;
@@ -426,15 +272,15 @@ namespace QDirStat
 
     /**
      * Item class for the QListWidget in a ListEditor. This connects the
-     * QListWidgetItem with the Value_t pointer.
+     * QListWidgetItem with the void * pointer.
      **/
-    template<class Value_t> class ListEditorItem: public QListWidgetItem
+    class ListEditorItem: public QListWidgetItem
     {
     public:
 	/**
 	 * Create a new item with the specified text and store the value.
 	 **/
-	ListEditorItem( const QString & text, Value_t value ):
+	ListEditorItem( const QString & text, void * value ):
 	    QListWidgetItem( text ),
 	    _value( value )
 	    {}
@@ -442,10 +288,10 @@ namespace QDirStat
 	/**
 	 * Return the associated value.
 	 **/
-	Value_t value() const { return _value; }
+	void * value() const { return _value; }
 
     protected:
-	Value_t _value;
+	void * _value;
     };
 
 }	// namespace QDirStat

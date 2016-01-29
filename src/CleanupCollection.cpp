@@ -30,7 +30,8 @@ using namespace QDirStat;
 CleanupCollection::CleanupCollection( SelectionModel * selectionModel,
 				      QObject	     * parent ):
     QObject( parent ),
-    _selectionModel( selectionModel )
+    _selectionModel( selectionModel ),
+    _listMover( _cleanupList )
 {
     readSettings();
 
@@ -79,7 +80,7 @@ void CleanupCollection::remove( Cleanup * cleanup )
     }
 
     _cleanupList.removeAt( index );
-    delete _cleanup;
+    delete cleanup;
 
     // No need for updateMenusAndToolBars() since QObject/QWidget will take care of
     // deleted actions all by itself.
@@ -382,53 +383,29 @@ void CleanupCollection::addToToolBar( QToolBar * toolBar, bool keepUpdated )
 
 void CleanupCollection::moveUp( Cleanup * cleanup )
 {
-    int oldPos = indexOf( cleanup );
-
-    if ( oldPos > 0 )
-    {
-	_cleanupList.removeAt( oldPos );
-	_cleanupList.insert( oldPos - 1, cleanup );
-	updateMenusAndToolBars();
-    }
+    _listMover.moveUp( cleanup );
+    updateMenusAndToolBars();
 }
 
 
 void CleanupCollection::moveDown( Cleanup * cleanup )
 {
-    int oldPos = indexOf( cleanup );
-
-    if ( oldPos < _cleanupList.size() - 1 )
-    {
-	_cleanupList.removeAt( oldPos );
-	_cleanupList.insert( oldPos + 1, cleanup );
-	updateMenusAndToolBars();
-    }
+    _listMover.moveDown( cleanup );
+    updateMenusAndToolBars();
 }
 
 
 void CleanupCollection::moveToTop( Cleanup * cleanup )
 {
-    int oldPos = indexOf( cleanup );
-
-    if ( oldPos > 0 )
-    {
-	_cleanupList.removeAt( oldPos );
-	_cleanupList.insert( 0, cleanup );
-	updateMenusAndToolBars();
-    }
+    _listMover.moveToTop( cleanup );
+    updateMenusAndToolBars();
 }
 
 
 void CleanupCollection::moveToBottom( Cleanup * cleanup )
 {
-    int oldPos = indexOf( cleanup );
-
-    if ( oldPos < _cleanupList.size() - 1 )
-    {
-	_cleanupList.removeAt( oldPos );
-	_cleanupList.insert( _cleanupList.size(), cleanup );
-	updateMenusAndToolBars();
-   }
+    _listMover.moveToBottom( cleanup );
+    updateMenusAndToolBars();
 }
 
 
