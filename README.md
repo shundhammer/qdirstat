@@ -75,8 +75,21 @@ Usable, but still Alpha.
     template class. But **it turns out that in this year 2016 Qt's moc still
     does not support templates. WTF?!**
 
+  - 21:00 (Grrrr) Okay, I found a workaround, albeit a pretty ugly one: Work
+    with void pointers and forced type casts. Yuck. That's being bombed back to
+    the early 1990s - we had to do this kind of stuff back with OSF/Motif in
+    plain C all the time. Type safety was unknown back then; you could get all
+    kinds of nasty surprises by casting pointers slightly wrong, and the
+    compiler had no choice (even if it hadn't been that crappy SunOS C
+    compiler, but a decent GCC) to catch any of this.
+
+    25 years later, and we are still stuck with that kind of stone age
+    programming - just because some tool never got ported to the 21st
+    century. Sigh.
+
     Yet another day of develpment completely wasted due to insufficiencies of
     underlying tools. Just great. I am getting fed up with this.
+
 
 - 2016-01-22
 
