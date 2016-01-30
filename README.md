@@ -72,6 +72,10 @@ Usable, but still Alpha.
     you can now turn off auto-resizing of the tree columns for the current
     session.
 
+  - Added a .desktop file so QDirStat should now show up in the menu of the
+    major desktop environments (KDE, GNOME, Xfce, Unity, ...) and in their file
+    managers' "Open With" menus when you right-click a directory.
+
 - 2016-01-29
 
   - Since the missing tabs in the config dialog will also have a list of things
