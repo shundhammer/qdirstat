@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-29
+Updated: 2016-01-30
 
 
 ## Overview
@@ -65,6 +65,12 @@ preview._
 **Alpha Quality -- V0.8**
 
 Usable, but still Alpha.
+
+- 2016-01-30
+
+  - Added a context menu for the tree view header. It's still very limited, but
+    you can now turn off auto-resizing of the tree columns for the current
+    session.
 
 - 2016-01-29
 
