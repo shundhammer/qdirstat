@@ -9,6 +9,7 @@
 
 #include <QHeaderView>
 #include <QMenu>
+#include <QAction>
 
 #include "DirTreeView.h"
 #include "DirTreeModel.h"
@@ -26,7 +27,8 @@ using namespace QDirStat;
 
 DirTreeView::DirTreeView( QWidget * parent ):
     QTreeView( parent ),
-    _cleanupCollection(0)
+    _cleanupCollection(0),
+    _allColumnsAutoSize(true)
 {
     _percentBarDelegate = new PercentBarDelegate( this );
     CHECK_NEW( _percentBarDelegate );
@@ -40,23 +42,33 @@ DirTreeView::DirTreeView( QWidget * parent ):
 
     header()->setSortIndicator( NameCol, Qt::AscendingOrder );
     header()->setStretchLastSection( false );
+    header()->setContextMenuPolicy( Qt::CustomContextMenu );
 
-    // TO DO: This is too strict. But it's better than the brain-dead defaults.
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-    header()->setResizeMode( QHeaderView::ResizeToContents );
-#else
-    header()->setSectionResizeMode( QHeaderView::ResizeToContents );
-#endif
+    setAllColumnsAutoSize( true );
+    createActions();
 
     connect( this , SIGNAL( customContextMenuRequested( const QPoint & ) ),
 	     this,  SLOT  ( contextMenu		      ( const QPoint & ) ) );
 
+    connect( header(), SIGNAL( customContextMenuRequested( const QPoint & ) ),
+	     this,     SLOT  ( headerContextMenu	 ( const QPoint & ) ) );
 }
 
 
 DirTreeView::~DirTreeView()
 {
     delete _percentBarDelegate;
+}
+
+
+void DirTreeView::createActions()
+{
+    _actionAllColumnsAutoSize = new QAction( tr( "Auto Size for all Columns" ), this );
+    _actionAllColumnsAutoSize->setCheckable( true );
+    _actionAllColumnsAutoSize->setChecked( allColumnsAutoSize() );
+
+    connect( _actionAllColumnsAutoSize, SIGNAL( toggled		     ( bool ) ),
+	     this,			SLOT  ( setAllColumnsAutoSize( bool ) ) );
 }
 
 
@@ -100,6 +112,23 @@ void DirTreeView::contextMenu( const QPoint & pos )
     }
 
     menu.exec( mapToGlobal( pos ) );
+}
+
+
+void DirTreeView::headerContextMenu( const QPoint & pos )
+{
+    int section = header()->logicalIndexAt( pos );
+    DataColumn col = DataColumns::instance()->reverseMappedCol( static_cast<DataColumn>( section ) );
+    QString colName = model()->headerData( col,
+					   Qt::Horizontal,
+					   Qt::DisplayRole ).toString();
+    QMenu menu;
+    menu.addAction( QString( "Column \"%1\"" ).arg( colName ) );
+    menu.addSeparator();
+    menu.addSeparator();
+    menu.addAction( _actionAllColumnsAutoSize );
+
+    menu.exec( header()->mapToGlobal( pos ) );
 }
 
 
@@ -152,3 +181,23 @@ void DirTreeView::closeAllExcept( const QModelIndex & branch )
     }
 }
 
+
+void DirTreeView::setAllColumnsAutoSize( bool autoSize )
+{
+    _allColumnsAutoSize = autoSize;
+    QHeaderView::ResizeMode resizeMode = autoSize ?
+	QHeaderView::ResizeToContents :
+	QHeaderView::Interactive;
+
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
+    header()->setResizeMode( resizeMode );
+#else
+    header()->setSectionResizeMode( resizeMode );
+#endif
+}
+
+
+bool DirTreeView::allColumnsAutoSize() const
+{
+    return _allColumnsAutoSize;
+}

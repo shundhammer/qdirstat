@@ -12,6 +12,8 @@
 
 #include <QTreeView>
 
+class QAction;
+
 
 /**
  * Tree view widget for the QDirStat directory tree.
@@ -86,7 +88,27 @@ namespace QDirStat
 	 **/
 	void contextMenu( const QPoint & pos );
 
+	/**
+	 * Post a context menu for the header at 'pos'.
+	 **/
+	void headerContextMenu( const QPoint & pos );
+
+	/**
+	 * Set auto size mode for all columns on or off.
+	 **/
+	void setAllColumnsAutoSize( bool autoSize );
+
+	/**
+	 * Return 'true' if auto size mode for all columns is on.
+	 **/
+	bool allColumnsAutoSize() const;
+
     protected:
+
+	/**
+	 * Create internally used actions and connect them to the appropriate slots.
+	 **/
+	void createActions();
 
 	/**
 	 * Change the current item. Overwritten from QTreeView to make sure
@@ -98,8 +120,10 @@ namespace QDirStat
 
 	// Data members
 
-	PercentBarDelegate	* _percentBarDelegate;
-	CleanupCollection	* _cleanupCollection;
+	PercentBarDelegate * _percentBarDelegate;
+	CleanupCollection  * _cleanupCollection;
+	bool		     _allColumnsAutoSize;
+	QAction		   * _actionAllColumnsAutoSize;
 
     };	// class DirTreeView
 
