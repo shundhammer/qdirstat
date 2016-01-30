@@ -9,22 +9,22 @@
 #     make
 #
 
-TEMPLATE	     = app
+TEMPLATE	 = app
 
-QT		    += widgets
-CONFIG		    += debug
-DEPENDPATH	    += .
-MOC_DIR		     = .moc
-OBJECTS_DIR	     = .obj
-LIBS		    += -lz
+QT		+= widgets
+CONFIG		+= debug
+DEPENDPATH	+= .
+MOC_DIR		 = .moc
+OBJECTS_DIR      = .obj
+LIBS		+= -lz
 
 major_is_less_5 = $$find(QT_MAJOR_VERSION, [234])
 !isEmpty(major_is_less_5):DEFINES += 'Q_DECL_OVERRIDE=""'
 
-TARGET		     = qdirstat
-TARGET.files	     = qdirstat
-TARGET.path	     = /usr/bin
-INSTALLS	    += TARGET
+TARGET		 = qdirstat
+TARGET.files	 = qdirstat
+TARGET.path	 = /usr/bin
+INSTALLS	+= TARGET desktop icons
 
 SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
@@ -117,3 +117,9 @@ FORMS	  = main-window.ui		   \
 
 
 RESOURCES = icons.qrc
+
+desktop.files = *.desktop
+desktop.path  = /usr/share/applications
+
+icons.files   = icons/qdirstat.png
+icons.path    = /usr/share/icons
