@@ -229,13 +229,9 @@ CacheReader::~CacheReader()
 
     if ( _toplevel )
     {
+        logDebug() << "Finalizing recursive for " << _toplevel << endl;
+	finalizeRecursive( _toplevel );
 	_toplevel->finalizeAll();
-
-	if ( _toplevel->readState() == DirReading )
-	    _toplevel->setReadState( DirCached );
-
-	logDebug() << "Sending read job finished for " << _toplevel << endl;
-	_tree->sendReadJobFinished( _toplevel );
     }
 
     emit finished();
@@ -414,7 +410,7 @@ void CacheReader::addItem()
 	// logDebug() << "Creating DirInfo  for " << url << " with parent " << parent << endl;
 	DirInfo * dir = new DirInfo( _tree, parent, url,
 				     mode, size, mtime );
-	dir->setReadState( DirCached );
+	dir->setReadState( DirReading );
 	_lastDir = dir;
 
 	if ( parent )
@@ -665,3 +661,25 @@ void CacheReader::killTrailingWhiteSpace( char * cptr )
 	*cptr-- = 0;
 }
 
+
+void CacheReader::finalizeRecursive( DirInfo * dir )
+{
+    if ( dir->readState() != DirOnRequestOnly )
+    {
+	dir->setReadState( DirCached );
+	_tree->sendFinalizeLocal( dir );
+	dir->finalizeLocal();
+	_tree->sendReadJobFinished( dir );
+    }
+
+    FileInfo * child = dir->firstChild();
+
+    while ( child )
+    {
+	if ( child->isDirInfo() )
+	    finalizeRecursive( child->toDirInfo() );
+
+	child = child->next();
+    }
+
+}

@@ -219,6 +219,13 @@ namespace QDirStat
 	 **/
 	int fieldsCount() const { return _fieldsCount; }
 
+	/**
+	 * Recursively set the read status of all dirs from 'dir' on, send tree
+	 * signals and finalize local (i.e. clean up empty or unneded dot
+	 * entries).
+	 **/
+	void finalizeRecursive( DirInfo * dir );
+
 
 	//
 	// Data members
