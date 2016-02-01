@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-01-30
+Updated: 2016-02-01
 
 
 ## Overview
@@ -65,6 +65,12 @@ preview._
 **Alpha Quality -- V0.8**
 
 Usable, but still Alpha.
+
+- 2016-02-01
+
+  - (Hopefully) fixed GitHub issue #6: NullPointerException when reading cache
+    file. The DirTreeModel and the DirCacheReader were somewhat out of sync
+    with regard to which directory is ready for display in the tree view.
 
 - 2016-01-30
 
