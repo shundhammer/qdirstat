@@ -229,7 +229,7 @@ CacheReader::~CacheReader()
 
     if ( _toplevel )
     {
-	logDebug() << "Finalizing recursive for " << _toplevel << endl;
+	// logDebug() << "Finalizing recursive for " << _toplevel << endl;
 	finalizeRecursive( _toplevel );
 	_toplevel->finalizeAll();
     }
