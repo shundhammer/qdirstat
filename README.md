@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-02-01
+Updated: 2016-02-02
 
 
 ## Overview
@@ -66,9 +66,20 @@ preview._
 
 Usable, but still Alpha.
 
+- 2016-02-02
+
+  - Much improved performance for treemaps of large directory trees: Now not
+    rebuilding the treemap immediately when the user resizes the window or
+    drags the splitter dividing the main window, but just scheduling an update
+    in 200 milliseconds. If another rebuild is requested during this time, the
+    previous one is discarded. The net effect is that the treemap now is
+    rebuilt only once, not for every pixel size change of the treemap
+    subwindow, so the application remains responsive during dragging the
+    splitter or resizing the main window.
+
 - 2016-02-01
 
-  - (Hopefully) fixed GitHub issue #6: NullPointerException when reading cache
+  - Fixed GitHub issue #6: NullPointerException when reading cache
     file. The DirTreeModel and the DirCacheReader were somewhat out of sync
     with regard to which directory is ready for display in the tree view.
 

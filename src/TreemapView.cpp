@@ -10,6 +10,7 @@
 #include <QResizeEvent>
 #include <QRegExp>
 #include <QSettings>
+#include <QTimer>
 
 #include "TreemapView.h"
 #include "DirTree.h"
@@ -24,7 +25,8 @@
 
 using namespace QDirStat;
 
-#define UpdateMinSize	20
+#define UpdateMinSize	      20
+#define RebuildDelayMillisec 200
 
 
 TreemapView::TreemapView( QWidget * parent ):
@@ -37,7 +39,9 @@ TreemapView::TreemapView( QWidget * parent ):
     _rootTile(0),
     _currentItem(0),
     _currentItemRect(0),
-    _useFixedColor( false )
+    _newRoot(0),
+    _useFixedColor(false),
+    _pendingRebuildCount(0)
 {
     logDebug() << endl;
     readSettings();
@@ -351,6 +355,24 @@ void TreemapView::rebuildTreemap( FileInfo *	 newRoot,
 }
 
 
+void TreemapView::scheduleRebuildTreemap( FileInfo * newRoot )
+{
+    ++_pendingRebuildCount;
+    _newRoot = newRoot;
+    QTimer::singleShot( RebuildDelayMillisec, this, SLOT( rebuildTreemapDelayed() ) );
+}
+
+
+void TreemapView::rebuildTreemapDelayed()
+{
+    if ( --_pendingRebuildCount > 0 ) // Yet another rebuild scheduled (by timer)?
+        return;                       // -> do nothing, it will be in vain anyway
+
+    _pendingRebuildCount = 0;
+    rebuildTreemap( _newRoot );
+}
+
+
 void TreemapView::deleteNotify( FileInfo * )
 {
     if ( _rootTile )
@@ -402,20 +424,20 @@ void TreemapView::resizeEvent( QResizeEvent * event )
     if ( tooSmall && _rootTile )
     {
 	// logDebug() << "Suppressing treemap contents" << endl;
-	rebuildTreemap( _rootTile->orig() );
+	scheduleRebuildTreemap( _rootTile->orig() );
     }
     else if ( ! tooSmall && ! _rootTile )
     {
 	if ( _tree && _tree->firstToplevel() )
 	{
 	    // logDebug() << "Redisplaying suppressed treemap contents" << endl;
-	    rebuildTreemap( _tree->firstToplevel() );
+	    scheduleRebuildTreemap( _tree->firstToplevel() );
 	}
     }
     else if ( _rootTile )
     {
 	// logDebug() << "Auto-resizing treemap" << endl;
-	rebuildTreemap( _rootTile->orig() );
+	scheduleRebuildTreemap( _rootTile->orig() );
     }
 }
 

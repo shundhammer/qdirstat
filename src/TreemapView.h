@@ -144,10 +144,10 @@ namespace QDirStat
 	 **/
 	void setMimeCategorizer( MimeCategorizer * categorizer );
 
-        /**
-         * Use a fixed color for all tiles. To undo this, set an invalid QColor
-         * with the QColor default constructor.
-         **/
+	/**
+	 * Use a fixed color for all tiles. To undo this, set an invalid QColor
+	 * with the QColor default constructor.
+	 **/
 	void setFixedColor( const QColor & fixedColor );
 
 
@@ -262,6 +262,17 @@ namespace QDirStat
 	 **/
 	void rebuildTreemap( FileInfo *	    newRoot,
 			     const QSizeF & newSize = QSize() );
+
+	/**
+	 * Schedule a rebuild of the treemap with 'newRoot'. If another rebuild
+	 * is scheduled before the timout is over, nothing will happen until
+	 * the last scheduled timeout has elapsed.
+	 *
+	 * The purpose of this is to avoid unnecessary rebuilds when the user
+	 * resizes the window or the treemap subwindow: Only the last rebuild
+	 * is really executed (when all the resizing has settled somehow).
+	 **/
+	void scheduleRebuildTreemap( FileInfo * newRoot );
 
 	/**
 	 * Returns the visible size of the viewport presuming no scrollbars are
@@ -417,6 +428,13 @@ namespace QDirStat
 	void contextMenu( TreemapTile * tile, const QPoint & pos );
 
 
+    protected slots:
+
+	/**
+	 * Rebuild the treemap if no more pendung rebuilds are scheduled.
+	 **/
+	void rebuildTreemapDelayed();
+
     protected:
 
 	/**
@@ -439,6 +457,7 @@ namespace QDirStat
 	TreemapTile	    * _rootTile;
 	TreemapTile	    * _currentItem;
 	HighlightRect	    * _currentItemRect;
+	FileInfo	    * _newRoot;
 	QString		      _savedRootUrl;
 
 	bool   _squarify;
@@ -447,6 +466,7 @@ namespace QDirStat
 	bool   _ensureContrast;
 	bool   _useFixedColor;
 	int    _minTileSize;
+	int    _pendingRebuildCount;
 
 	QColor _currentItemColor;
 	QColor _selectedItemsColor;
