@@ -68,6 +68,10 @@ Usable, but still Alpha.
 
 - 2016-02-02
 
+  - Fixed a bug where directory names with a colon ":" were cut off when
+    reading a cache file, thus all files and directories below that point could
+    not find their parent directory, so that complete branch was cut off.
+
   - Much improved performance for treemaps of large directory trees: Now not
     rebuilding the treemap immediately when the user resizes the window or
     drags the splitter dividing the main window, but just scheduling an update
@@ -230,7 +234,7 @@ Usable, but still Alpha.
     so you can get, say, the Xfce terminal or file manager despite currently
     running KDE if you set
 
-        export QDIRSTAT_DESKTOP="Xfce"
+	export QDIRSTAT_DESKTOP="Xfce"
 
   - Of course, you can still simply use your favourite file manager if you
     simply use its command instead of %filemanager in the default "Open File
@@ -283,7 +287,7 @@ https://github.com/shundhammer/qdirstat/blob/master/DevHistory.md
 ## Motivation / Rant
 
 After having used KDE since its early days (since about 1998), I don't like the
-direction any more that KDE is taking.  I loved KDE 1, KDE 2, KDE 3. When KDE 4
+direction any more that KDE is taking.	I loved KDE 1, KDE 2, KDE 3. When KDE 4
 came along, it took me a long time to try to adopt it, and when I did, I moved
 back to KDE 3 after a short while, then tried again with the next release,
 moved back again -- several times.
@@ -415,13 +419,13 @@ old code base that had been long overdue.
 
 - Mouse actions in the treemap window:
 
-    - Left click:           Select item and make it the current item.
-    - Right click:          Open the context menu with cleanup actions and more.
-    - Ctrl+Left click:      Add item to selection or toggle selection.
-    - Middle click:         Select the current item's parent. Cycle back at toplevel.
+    - Left click:	    Select item and make it the current item.
+    - Right click:	    Open the context menu with cleanup actions and more.
+    - Ctrl+Left click:	    Add item to selection or toggle selection.
+    - Middle click:	    Select the current item's parent. Cycle back at toplevel.
     - Double click left:    Zoom treemap in.
     - Double click middle:  Zoom treemap out.
-    - Mouse wheel:          Zoom treemap in or out.
+    - Mouse wheel:	    Zoom treemap in or out.
 
 - You can configure what columns to display in the tree view and in which
   order. The only thing that is fixed is the "Name" column which is always

@@ -229,7 +229,7 @@ CacheReader::~CacheReader()
 
     if ( _toplevel )
     {
-        logDebug() << "Finalizing recursive for " << _toplevel << endl;
+	logDebug() << "Finalizing recursive for " << _toplevel << endl;
 	finalizeRecursive( _toplevel );
 	_toplevel->finalizeAll();
     }
@@ -362,8 +362,12 @@ void CacheReader::addItem()
 	    raw_name = raw_path;
     }
 
-    QString path = QUrl::fromEncoded( raw_path ).path();
-    QString name = QUrl::fromEncoded( raw_name ).path();
+    // Using a protocol part to avoid directory names with a colon ":"
+    // being cut off because it looks like a URL protocol.
+    QByteArray protocol = "foo:";
+
+    QString path = QUrl::fromEncoded( protocol + raw_path ).path();
+    QString name = QUrl::fromEncoded( protocol + raw_name ).path();
 
     if ( _lastExcludedDir )
     {
