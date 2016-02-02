@@ -366,8 +366,8 @@ void CacheReader::addItem()
     // being cut off because it looks like a URL protocol.
     QByteArray protocol = "foo:";
 
-    QString path = QUrl::fromEncoded( protocol + raw_path ).path();
-    QString name = QUrl::fromEncoded( protocol + raw_name ).path();
+    QString path = QUrl::fromEncoded( protocol + QByteArray( raw_path ) ).path();
+    QString name = QUrl::fromEncoded( protocol + QByteArray( raw_name ) ).path();
 
     if ( _lastExcludedDir )
     {
