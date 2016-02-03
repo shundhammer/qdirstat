@@ -236,8 +236,12 @@ void LocalDirReadJob::startReading()
 		     * Not much we can do when lstat() didn't work; let's at
 		     * least create an (almost empty) entry as a placeholder.
 		     */
-		    DirInfo *child = new DirInfo( _tree, _dir, entry->d_name );
+		    DirInfo *child = new DirInfo( _tree, _dir, entryName,
+                                                  0,   // mode
+                                                  0,   // size
+                                                  0 ); // mtime
 		    CHECK_NEW( child );
+                    child->finalizeLocal();
 		    child->setReadState( DirError );
 		    _dir->insertChild( child );
 		    childAdded( child );

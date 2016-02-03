@@ -683,11 +683,12 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
     }
     else // ! item->isDir()
     {
-	if	( item->isFile()	)  icon = _fileIcon;
-	else if ( item->isSymLink()	)  icon = _symlinkIcon;
-	else if ( item->isBlockDevice() )  icon = _blockDeviceIcon;
-	else if ( item->isCharDevice()	)  icon = _charDeviceIcon;
-	else if ( item->isSpecial()	)  icon = _specialIcon;
+	if	( item->readState() == DirError	  )   icon = _unreadableDirIcon;
+	else if	( item->isFile()		  )   icon = _fileIcon;
+	else if ( item->isSymLink()		  )   icon = _symlinkIcon;
+	else if ( item->isBlockDevice()		  )   icon = _blockDeviceIcon;
+	else if ( item->isCharDevice()		  )   icon = _charDeviceIcon;
+	else if ( item->isSpecial()		  )   icon = _specialIcon;
     }
 
     return icon.isNull() ? QVariant() : icon;
@@ -944,7 +945,7 @@ void DirTreeModel::subtreeCleared( DirInfo * subtree )
 
 
 void DirTreeModel::invalidatePersistent( FileInfo * subtree,
-                                         bool       includeParent )
+					 bool	    includeParent )
 {
     foreach ( const QModelIndex & index, persistentIndexList() )
     {
@@ -954,13 +955,13 @@ void DirTreeModel::invalidatePersistent( FileInfo * subtree,
 	if ( ! item->checkMagicNumber() ||
 	     item->isInSubtree( subtree ) )
 	{
-            if ( item != subtree || includeParent )
-            {
+	    if ( item != subtree || includeParent )
+	    {
 #if 1
-                logDebug() << "Invalidating " << index << endl;
+		logDebug() << "Invalidating " << index << endl;
 #endif
-                changePersistentIndex( index, QModelIndex() );
-            }
+		changePersistentIndex( index, QModelIndex() );
+	    }
 	}
     }
 

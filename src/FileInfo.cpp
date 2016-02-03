@@ -393,6 +393,9 @@ DirInfo * FileInfo::toDirInfo()
 
 QString QDirStat::formatTime( time_t rawTime )
 {
+    if ( rawTime == (time_t) 0 )
+	return "";
+
     QDateTime time = QDateTime::fromTime_t( rawTime );
     return time.toString( Qt::DefaultLocaleShortDate );
 }
