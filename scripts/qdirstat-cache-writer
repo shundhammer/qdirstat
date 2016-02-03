@@ -284,7 +284,7 @@ sub write_dir_entry()
     my ( $dir ) = @_;
     my @lstat_result = lstat( $dir );
 
-    if ( scalar @lstat_result eq 0 ) # Empty array -> lstat() failed
+    if ( scalar @lstat_result == 0 ) # Empty array -> lstat() failed
     {
         my $msg = "lstat() failed for $dir";
         print CACHE "# $msg\n";
@@ -346,7 +346,7 @@ sub write_file_entry()
     my ( $dir, $name ) = @_;
     my @lstat_result = lstat( $dir . "/" . $name );
 
-    if ( scalar @lstat_result eq 0 ) # Empty array -> lstat() failed
+    if ( scalar @lstat_result == 0 ) # Empty array -> lstat() failed
     {
         my $msg = "lstat() failed for $dir/$name";
         print CACHE "# $msg\n";
