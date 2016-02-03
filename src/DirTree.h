@@ -236,6 +236,14 @@ namespace QDirStat
 	 **/
 	bool isBusy() { return _isBusy; }
 
+        /**
+         * Return 'true' if the filesystem this dir tree is on can report sizes
+         * in blocks. This is not 100% fool proof: If reading across file
+         * system boundaries is enabled, this will return 'true' if any of the
+         * file systems in this tree can report blocks.
+         **/
+        bool fileSystemCanReportBlocks() const { return _fileSystemCanReportBlocks; }
+
 	/**
 	 * Write the complete tree to a cache file.
 	 *
@@ -351,6 +359,7 @@ namespace QDirStat
 	DirReadJobQueue _jobQueue;
 	bool		_crossFileSystems;
 	bool		_isBusy;
+        bool            _fileSystemCanReportBlocks;
 
     };	// class DirTree
 
