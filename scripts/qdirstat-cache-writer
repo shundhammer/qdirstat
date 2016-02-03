@@ -282,6 +282,16 @@ sub write_cache_tree($)
 sub write_dir_entry()
 {
     my ( $dir ) = @_;
+    my @lstat_result = lstat( $dir );
+
+    if ( scalar @lstat_result eq 0 ) # Empty array -> lstat() failed
+    {
+        my $msg = "lstat() failed for $dir";
+        print CACHE "# $msg\n";
+        logf( $msg );
+
+        return;
+    }
 
     my ( $dev,
 	 $ino,
@@ -295,7 +305,7 @@ sub write_dir_entry()
 	 $mtime,
 	 $ctime,
 	 $blksize,
-	 $blocks ) = lstat( $dir );
+	 $blocks ) = @lstat_result;
 
 
     if ( ! defined( $toplevel_device ) )
@@ -334,6 +344,16 @@ sub write_dir_entry()
 sub write_file_entry()
 {
     my ( $dir, $name ) = @_;
+    my @lstat_result = lstat( $dir . "/" . $name );
+
+    if ( scalar @lstat_result eq 0 ) # Empty array -> lstat() failed
+    {
+        my $msg = "lstat() failed for $dir/$name";
+        print CACHE "# $msg\n";
+        logf( $msg );
+
+        return;
+    }
 
     my ( $dev,
 	 $ino,
@@ -347,7 +367,7 @@ sub write_file_entry()
 	 $mtime,
 	 $ctime,
 	 $blksize,
-	 $blocks ) = lstat( $dir . "/" . $name );
+	 $blocks ) = @lstat_result;
 
     my $type = "F";
 
