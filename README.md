@@ -59,6 +59,11 @@ _Screenshot of MIME category configuration where you can set the treemap colors
 for different file types (MIME types), complete with a real treemap widget as
 preview._
 
+![Tree Column Configuration Screenshot]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-column-config.png)
+
+_Context menu of the tree header where you can configure the columns._
+
 
 ## Current Development Status
 
@@ -67,6 +72,13 @@ preview._
 Usable, but still Alpha.
 
 - 2016-02-05
+
+  - Extended the context menu of the tree view header columns -- see latest
+    screenshot above. The configuration is now saved and restored when entering
+    the program. You can move the columns around (i.e. change their order),
+    hide columns, and choose between automatic column width ("auto size") or
+    setting it manually ("interactive size") for each column individually or
+    for all columns at once.
 
   - You can now read a cache file directly from the command line:
 
@@ -445,7 +457,9 @@ old code base that had been long overdue.
 
 - You can configure what columns to display in the tree view and in which
   order. The only thing that is fixed is the "Name" column which is always
-  there and always the first (leftmost).
+  there and always the first (leftmost). Use the context menu in the tree
+  header to unlock column widths. Drag columns to the left or right to change
+  their order.
 
 - Exclude rules are now greatly simplified. They no longer get the entire path
   to match which requires quite complex regexps, they only get the last path
