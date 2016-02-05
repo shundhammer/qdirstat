@@ -578,7 +578,6 @@ namespace QDirStat
 
     protected:
 
-
 	// Data members.
 	//
 	// Keep this short in order to use as little memory as possible -
@@ -595,7 +594,7 @@ namespace QDirStat
 	FileSize	_blocks;		// 512 bytes blocks
 	time_t		_mtime;			// modification time
 
-	DirInfo	 *	_parent;		// pointer to the parent entry
+	DirInfo  *	_parent;		// pointer to the parent entry
 	FileInfo *	_next;			// pointer to the next entry
 	DirTree	 *	_tree;			// pointer to the parent tree
 

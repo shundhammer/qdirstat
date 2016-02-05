@@ -20,12 +20,11 @@ using namespace QDirStat;
 
 
 
-DirTree::DirTree():
-    QObject(),
-    _isBusy( false ),
-    _fileSystemCanReportBlocks( false )
+DirTree::DirTree()
+    : QObject()
 {
-    _root = new DirInfo( this );
+    _isBusy    = false;
+    _root      = new DirInfo( this );
     CHECK_NEW( _root );
 
     connect( & _jobQueue, SIGNAL( finished()	 ),
@@ -213,9 +212,6 @@ void DirTree::slotFinished()
 
 void DirTree::childAddedNotify( FileInfo * newChild )
 {
-    if ( newChild && newChild->blocks() > 0 )
-	_fileSystemCanReportBlocks = true;
-
     emit childAdded( newChild );
 
     if ( newChild->dotEntry() )
