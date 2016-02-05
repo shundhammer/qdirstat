@@ -80,7 +80,7 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
 	_size		= statInfo->st_size;
 	_blocks		= statInfo->st_blocks;
 	_isSparseFile	= isFile()
-	    && _blocks > 0				// if file system can't report blocks
+	    && _blocks >= 0				// if file system can report blocks
 	    && allocatedSize() + FRAGMENT_SIZE < _size; // allow for intelligent fragment handling
 
 	if ( _isSparseFile )

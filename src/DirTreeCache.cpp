@@ -324,6 +324,7 @@ void CacheReader::addItem()
 	    case 'K':	size *= KB; break;
 	    case 'M':	size *= MB; break;
 	    case 'G':	size *= GB; break;
+	    case 'T':	size *= TB; break;
 	    default: break;
 	}
     }
