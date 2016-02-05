@@ -36,6 +36,11 @@ _Screenshot of cleanup actions configuration._
 _Screenshot of MIME category configuration where you can set the treemap colors
 for different file types (MIME types), complete with a real treemap widget as preview._
 
+![Tree Column Configuration Screenshot]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-column-config.png)
+
+_Context menu of the tree header where you can configure the columns._
+
 
 ## More Information
 
