@@ -67,9 +67,10 @@ _Context menu of the tree header where you can configure the columns._
 
 ## Current Development Status
 
-**Alpha Quality -- V0.8**
+**Approaching Beta status -- V0.85**
 
-Usable, but still Alpha.
+Still missing some important features, but pretty stable. So technically, it's
+still Alpha, but in terms of stability, it's well usable.
 
 - 2016-02-05
 
