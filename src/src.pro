@@ -48,6 +48,7 @@ SOURCES	  = main.cpp			\
 	    FileInfoIterator.cpp	\
 	    FileInfoSet.cpp		\
 	    FileInfoSorter.cpp		\
+            HeaderTweaker.cpp           \
             ListEditor.cpp              \
 	    Logger.cpp			\
 	    MainWindow.cpp		\
@@ -87,6 +88,7 @@ HEADERS	  =				\
 	    FileInfoIterator.h		\
 	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
+            HeaderTweaker.h             \
             ListEditor.h                \
             ListMover.h                 \
 	    Logger.h			\

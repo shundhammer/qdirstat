@@ -7,9 +7,7 @@
  */
 
 
-#include <QHeaderView>
 #include <QMenu>
-#include <QAction>
 
 #include "DirTreeView.h"
 #include "DirTreeModel.h"
@@ -17,6 +15,7 @@
 #include "ActionManager.h"
 #include "CleanupCollection.h"
 #include "PercentBar.h"
+#include "HeaderTweaker.h"
 #include "DirTree.h"
 #include "Exception.h"
 #include "Logger.h"
@@ -27,12 +26,10 @@ using namespace QDirStat;
 
 DirTreeView::DirTreeView( QWidget * parent ):
     QTreeView( parent ),
-    _cleanupCollection(0),
-    _allColumnsAutoSize(true)
+    _cleanupCollection(0)
 {
     _percentBarDelegate = new PercentBarDelegate( this );
     CHECK_NEW( _percentBarDelegate );
-
     setItemDelegate( _percentBarDelegate );
 
     setRootIsDecorated( true );
@@ -40,35 +37,18 @@ DirTreeView::DirTreeView( QWidget * parent ):
     setSelectionMode( ExtendedSelection );
     setContextMenuPolicy( Qt::CustomContextMenu );
 
-    header()->setSortIndicator( NameCol, Qt::AscendingOrder );
-    header()->setStretchLastSection( false );
-    header()->setContextMenuPolicy( Qt::CustomContextMenu );
-
-    setAllColumnsAutoSize( true );
-    createActions();
+    _headerTweaker = new HeaderTweaker( header(), this );
+    CHECK_NEW( _headerTweaker );
 
     connect( this , SIGNAL( customContextMenuRequested( const QPoint & ) ),
 	     this,  SLOT  ( contextMenu		      ( const QPoint & ) ) );
-
-    connect( header(), SIGNAL( customContextMenuRequested( const QPoint & ) ),
-	     this,     SLOT  ( headerContextMenu	 ( const QPoint & ) ) );
 }
 
 
 DirTreeView::~DirTreeView()
 {
     delete _percentBarDelegate;
-}
-
-
-void DirTreeView::createActions()
-{
-    _actionAllColumnsAutoSize = new QAction( tr( "Auto Size for all Columns" ), this );
-    _actionAllColumnsAutoSize->setCheckable( true );
-    _actionAllColumnsAutoSize->setChecked( allColumnsAutoSize() );
-
-    connect( _actionAllColumnsAutoSize, SIGNAL( toggled		     ( bool ) ),
-	     this,			SLOT  ( setAllColumnsAutoSize( bool ) ) );
+    delete _headerTweaker;
 }
 
 
@@ -112,23 +92,6 @@ void DirTreeView::contextMenu( const QPoint & pos )
     }
 
     menu.exec( mapToGlobal( pos ) );
-}
-
-
-void DirTreeView::headerContextMenu( const QPoint & pos )
-{
-    int section = header()->logicalIndexAt( pos );
-    DataColumn col = DataColumns::instance()->reverseMappedCol( static_cast<DataColumn>( section ) );
-    QString colName = model()->headerData( col,
-					   Qt::Horizontal,
-					   Qt::DisplayRole ).toString();
-    QMenu menu;
-    menu.addAction( QString( "Column \"%1\"" ).arg( colName ) );
-    menu.addSeparator();
-    menu.addSeparator();
-    menu.addAction( _actionAllColumnsAutoSize );
-
-    menu.exec( header()->mapToGlobal( pos ) );
 }
 
 
@@ -181,23 +144,3 @@ void DirTreeView::closeAllExcept( const QModelIndex & branch )
     }
 }
 
-
-void DirTreeView::setAllColumnsAutoSize( bool autoSize )
-{
-    _allColumnsAutoSize = autoSize;
-    QHeaderView::ResizeMode resizeMode = autoSize ?
-	QHeaderView::ResizeToContents :
-	QHeaderView::Interactive;
-
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-    header()->setResizeMode( resizeMode );
-#else
-    header()->setSectionResizeMode( resizeMode );
-#endif
-}
-
-
-bool DirTreeView::allColumnsAutoSize() const
-{
-    return _allColumnsAutoSize;
-}

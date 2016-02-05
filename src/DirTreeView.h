@@ -15,24 +15,26 @@
 class QAction;
 
 
-/**
- * Tree view widget for the QDirStat directory tree.
- *
- * This is a thin wrapper around TreeView that takes care about basic setup and
- * configuration of the tree view and adds support for synchronizing current /
- * selected items between the DirTree, the DirTreeMap and this DirTreeView.
- *
- * The Qt model / view abstraction is kept up as good as possible, but this
- * widget is really meant to be used with a QDirStat::DirTreeModel and not just
- * any random subclass of QAbstractItemModel.
- **/
 namespace QDirStat
 {
     class PercentBarDelegate;
+    class HeaderTweaker;
     class SelectionModelProxy;
     class CleanupCollection;
 
 
+    /**
+     * Tree view widget for the QDirStat directory tree.
+     *
+     * This is a thin wrapper around TreeView that takes care about basic setup
+     * and configuration of the tree view and adds support for synchronizing
+     * current / selected items between the DirTree, the DirTreeMap and this
+     * DirTreeView.
+     *
+     * The Qt model / view abstraction is kept up as good as possible, but this
+     * widget is really meant to be used with a QDirStat::DirTreeModel and not
+     * just any random subclass of QAbstractItemModel.
+     **/
     class DirTreeView: public QTreeView
     {
 	Q_OBJECT
@@ -88,27 +90,7 @@ namespace QDirStat
 	 **/
 	void contextMenu( const QPoint & pos );
 
-	/**
-	 * Post a context menu for the header at 'pos'.
-	 **/
-	void headerContextMenu( const QPoint & pos );
-
-	/**
-	 * Set auto size mode for all columns on or off.
-	 **/
-	void setAllColumnsAutoSize( bool autoSize );
-
-	/**
-	 * Return 'true' if auto size mode for all columns is on.
-	 **/
-	bool allColumnsAutoSize() const;
-
     protected:
-
-	/**
-	 * Create internally used actions and connect them to the appropriate slots.
-	 **/
-	void createActions();
 
 	/**
 	 * Change the current item. Overwritten from QTreeView to make sure
@@ -121,9 +103,8 @@ namespace QDirStat
 	// Data members
 
 	PercentBarDelegate * _percentBarDelegate;
+        HeaderTweaker      * _headerTweaker;
 	CleanupCollection  * _cleanupCollection;
-	bool		     _allColumnsAutoSize;
-	QAction		   * _actionAllColumnsAutoSize;
 
     };	// class DirTreeView
 
