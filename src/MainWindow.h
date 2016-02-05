@@ -72,6 +72,12 @@ public slots:
     void stopReading();
 
     /**
+     * Clear the current tree and replace it with the content of the specified
+     * cache file.
+     **/
+    void readCache( const QString & cacheFileName );
+
+    /**
      * Open a file selection dialog to ask for a cache file, clear the
      * current tree and replace it with the content of the cache file.
      **/

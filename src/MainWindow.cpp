@@ -493,16 +493,22 @@ void MainWindow::stopReading()
 }
 
 
+void MainWindow::readCache( const QString & cacheFileName )
+{
+    _dirTreeModel->clear();
+
+    if ( ! cacheFileName.isEmpty() )
+	_dirTreeModel->tree()->readCache( cacheFileName );
+}
+
+
 void MainWindow::askReadCache()
 {
     QString fileName = QFileDialog::getOpenFileName( this, // parent
 						     tr( "Select QDirStat cache file" ),
 						     DEFAULT_CACHE_NAME );
     if ( ! fileName.isEmpty() )
-    {
-	_dirTreeModel->clear();
-	_dirTreeModel->tree()->readCache( fileName );
-    }
+	readCache( fileName );
 }
 
 
