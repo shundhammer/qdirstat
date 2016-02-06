@@ -616,7 +616,11 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	    case TotalSizeCol:	  return prefix + formatSize( item->totalSize() );
 	    case TotalItemsCol:	  return prefix + QString( "%1" ).arg( item->totalItems() );
 	    case TotalFilesCol:	  return prefix + QString( "%1" ).arg( item->totalFiles() );
-	    case TotalSubDirsCol: return prefix + QString( "%1" ).arg( item->totalSubDirs() );
+	    case TotalSubDirsCol:
+                if ( item->isDotEntry() )
+                    return QVariant();
+                else
+                    return prefix + QString( "%1" ).arg( item->totalSubDirs() );
 	}
     }
 
