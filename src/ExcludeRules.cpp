@@ -9,9 +9,10 @@
 
 #include <QSettings>
 
+#include "ExcludeRules.h"
 #include "SettingsHelpers.h"
 #include "Logger.h"
-#include "ExcludeRules.h"
+#include "Exception.h"
 
 
 #define VERBOSE_EXCLUDE_MATCHES	1
@@ -48,12 +49,21 @@ bool ExcludeRule::match( const QString & fullPath, const QString & fileName )
     if ( matchText.isEmpty() )
 	return false;
 
+    if ( _regexp.pattern().isEmpty() )
+	return false;
+
     return _regexp.exactMatch( matchText );
 }
 
 
+//
+//---------------------------------------------------------------------------
+//
 
-ExcludeRules::ExcludeRules()
+
+ExcludeRules::ExcludeRules():
+    QObject(),
+    _listMover( _rules )
 {
     _lastMatchingRule = 0;
 }
@@ -89,14 +99,16 @@ void ExcludeRules::clear()
 
 void ExcludeRules::add( ExcludeRule * rule )
 {
-    if ( rule )
-	_rules << rule;
+    CHECK_PTR( rule );
+    _rules << rule;
 }
 
 
 void ExcludeRules::add( const QRegExp & regexp, bool useFullPath )
 {
     ExcludeRule * rule = new ExcludeRule( regexp, useFullPath );
+    CHECK_NEW( rule );
+
     instance()->add( rule );
 }
 
@@ -104,6 +116,15 @@ void ExcludeRules::add( const QRegExp & regexp, bool useFullPath )
 void ExcludeRules::add( const QString & regexp, bool useFullPath )
 {
     add( QRegExp( regexp ), useFullPath );
+}
+
+
+void ExcludeRules::remove( ExcludeRule * rule )
+{
+    CHECK_PTR( rule );
+
+    _rules.removeAll( rule );
+    delete rule;
 }
 
 
@@ -144,6 +165,30 @@ const ExcludeRule * ExcludeRules::matchingRule( const QString & fullPath,
     }
 
     return 0;
+}
+
+
+void ExcludeRules::moveUp( ExcludeRule * rule )
+{
+    _listMover.moveUp( rule );
+}
+
+
+void ExcludeRules::moveDown( ExcludeRule * rule )
+{
+    _listMover.moveDown( rule );
+}
+
+
+void ExcludeRules::moveToTop( ExcludeRule * rule )
+{
+    _listMover.moveToTop( rule );
+}
+
+
+void ExcludeRules::moveToBottom( ExcludeRule * rule )
+{
+    _listMover.moveToBottom( rule );
 }
 
 
@@ -202,21 +247,24 @@ void ExcludeRules::writeSettings()
 
     for ( int i=0; i < _rules.size(); ++i )
     {
-	QString groupName;
-	groupName.sprintf( "ExcludeRule_%02d", i+1 );
-	settings.beginGroup( groupName );
-
 	ExcludeRule * rule = _rules.at(i);
 	QRegExp regexp = rule->regexp();
 
-	settings.setValue( "Pattern"	  , regexp.pattern() );
-	settings.setValue( "CaseSensitive", regexp.caseSensitivity() == Qt::CaseSensitive );
-	settings.setValue( "UseFullPath",   rule->useFullPath() );
+	if ( ! regexp.pattern().isEmpty() )
+	{
+	    QString groupName;
+	    groupName.sprintf( "ExcludeRule_%02d", i+1 );
+	    settings.beginGroup( groupName );
 
-	writeEnumEntry( settings, "Syntax",
-			regexp.patternSyntax(),
-			patternSyntaxMapping() );
+	    settings.setValue( "Pattern",	regexp.pattern() );
+	    settings.setValue( "CaseSensitive", regexp.caseSensitivity() == Qt::CaseSensitive );
+	    settings.setValue( "UseFullPath",	rule->useFullPath() );
 
-	settings.endGroup(); // [ExcludeRule_01], [ExcludeRule_02], ...
+	    writeEnumEntry( settings, "Syntax",
+			    regexp.patternSyntax(),
+			    patternSyntaxMapping() );
+
+	    settings.endGroup(); // [ExcludeRule_01], [ExcludeRule_02], ...
+	}
     }
 }

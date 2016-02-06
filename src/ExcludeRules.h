@@ -10,10 +10,13 @@
 #ifndef ExcludeRules_h
 #define ExcludeRules_h
 
-
+#include <QObject>
 #include <QString>
 #include <QRegExp>
 #include <QList>
+#include <QTextStream>
+
+#include "ListMover.h"
 
 
 namespace QDirStat
@@ -59,7 +62,7 @@ namespace QDirStat
 	/**
 	 * Returns this rule's regular expression.
 	 **/
-	QRegExp regexp() const { return _regexp; }
+	const QRegExp & regexp() const { return _regexp; }
 
 	/**
 	 * Change this rule's regular expression.
@@ -89,7 +92,8 @@ namespace QDirStat
 
 
     /**
-     * Container for multiple exclude rules.
+     * Container for multiple exclude rules. This is a singleton class. Use the
+     * static methods or instance() to access the singleton.
      *
      * Normal usage:
      *
@@ -100,8 +104,10 @@ namespace QDirStat
      *	       // exclude this file
      *	   }
      **/
-    class ExcludeRules
+    class ExcludeRules: public QObject
     {
+	Q_OBJECT
+
     protected:
 	/**
 	 * Constructor.
@@ -116,7 +122,7 @@ namespace QDirStat
 	/**
 	 * Destructor.
 	 **/
-	~ExcludeRules();
+	virtual ~ExcludeRules();
 
 	/**
 	 * Return the singleton object of this class.
@@ -130,6 +136,11 @@ namespace QDirStat
 	 * it will be destroyed with 'delete' after use.
 	 **/
 	void add( ExcludeRule * rule );
+
+	/**
+	 * Remove an exclude rule from this rule set and delete it.
+	 **/
+	void remove( ExcludeRule * rule );
 
 	/**
 	 * Create a new rule with 'regexp' and 'useFullPath' and add it to this
@@ -186,6 +197,28 @@ namespace QDirStat
 	 **/
 	ExcludeRuleListIterator end()	{ return _rules.constEnd(); }
 
+    public slots:
+
+	/**
+	 * Move an exclude rule one position up in the list.
+	 **/
+	void moveUp( ExcludeRule * rule );
+
+	/**
+	 * Move an exclude rule one position down in the list.
+	 **/
+	void moveDown( ExcludeRule * rule );
+
+	/**
+	 * Move an exclude rule to the top of the list.
+	 **/
+	void moveToTop( ExcludeRule * rule );
+
+	/**
+	 * Move an exclude rule to the bottom of the list.
+	 **/
+	void moveToBottom( ExcludeRule * rule );
+
 	/**
 	 * Clear all existing exclude rules and read exclude rules from the
 	 * settings file.
@@ -199,8 +232,9 @@ namespace QDirStat
 
     private:
 
-	ExcludeRuleList _rules;
-	ExcludeRule *	_lastMatchingRule;
+	ExcludeRuleList		 _rules;
+	ListMover<ExcludeRule *> _listMover;
+	ExcludeRule *		 _lastMatchingRule;
     };
 
 

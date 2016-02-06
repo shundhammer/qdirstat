@@ -10,6 +10,7 @@
 #include "ConfigDialog.h"
 #include "CleanupConfigPage.h"
 #include "MimeCategoryConfigPage.h"
+#include "ExcludeRulesConfigPage.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -31,6 +32,10 @@ ConfigDialog::ConfigDialog( QWidget * parent ):
     _mimeCategoryConfigPage = new MimeCategoryConfigPage();
     CHECK_NEW( _mimeCategoryConfigPage );
     _ui->pagesTabWidget->addTab( _mimeCategoryConfigPage, tr( "MIME Categories" ) );
+
+    _excludeRulesConfigPage = new ExcludeRulesConfigPage();
+    CHECK_NEW( _excludeRulesConfigPage );
+    _ui->pagesTabWidget->addTab( _excludeRulesConfigPage, tr( "Exclude Rules" ) );
 
     connect( _ui->applyButton,	 SIGNAL( clicked() ),
 	     this,		 SLOT  ( apply()   ) );
@@ -60,6 +65,19 @@ ConfigDialog::ConfigDialog( QWidget * parent ):
 
     connect( this,		      SIGNAL( discardChanges() ),
 	     _mimeCategoryConfigPage, SLOT  ( discardChanges() ) );
+    
+    //
+    // Connect exclude rules config page
+    //
+
+    connect( this,		      SIGNAL( reinit() ),
+	     _excludeRulesConfigPage, SLOT  ( setup()  ) );
+
+    connect( this,		      SIGNAL( applyChanges() ),
+	     _excludeRulesConfigPage, SLOT  ( applyChanges() ) );
+
+    connect( this,		      SIGNAL( discardChanges() ),
+	     _excludeRulesConfigPage, SLOT  ( discardChanges() ) );
 }
 
 
@@ -68,6 +86,7 @@ ConfigDialog::~ConfigDialog()
     // logDebug() << "ConfigDialog destructor" << endl;
     delete _cleanupConfigPage;
     delete _mimeCategoryConfigPage;
+    delete _excludeRulesConfigPage;
 }
 
 

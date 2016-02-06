@@ -1,5 +1,5 @@
 /*
- *   File name: CleanupConfigPage.h
+ *   File name: ExcludeRulesConfigPage.h
  *   Summary:	QDirStat configuration dialog classes
  *   License:	GPL V2 - See file LICENSE for details.
  *
@@ -7,12 +7,12 @@
  */
 
 
-#ifndef CleanupConfigPage_h
-#define CleanupConfigPage_h
+#ifndef ExcludeRulesConfigPage_h
+#define ExcludeRulesConfigPage_h
 
 #include "ListEditor.h"
-#include "ui_cleanup-config-page.h"
-#include "Cleanup.h"
+#include "ui_exclude-rules-config-page.h"
+#include "ExcludeRules.h"
 
 
 namespace QDirStat
@@ -24,25 +24,15 @@ namespace QDirStat
      * Configuration page (tab) for cleanups:
      * Edit, add, delete, reorder cleanups in the cleanup collection.
      **/
-    class CleanupConfigPage: public ListEditor
+    class ExcludeRulesConfigPage: public ListEditor
     {
 	Q_OBJECT
 
     public:
 
-	CleanupConfigPage( QWidget * parent = 0 );
-	virtual ~CleanupConfigPage();
+	ExcludeRulesConfigPage( QWidget * parent = 0 );
+	virtual ~ExcludeRulesConfigPage();
 
-	/**
-	 * Set the CleanupCollection to work on.
-	 **/
-	void setCleanupCollection( CleanupCollection * collection );
-
-	/**
-	 * Return the internal CleanupCollection.
-	 **/
-	CleanupCollection * cleanupCollection() const
-	    { return _cleanupCollection; }
 
     public slots:
 
@@ -64,16 +54,16 @@ namespace QDirStat
     protected slots:
 
 	/**
-	 * Notification that the user changed the "Title" field of the
-	 * current cleanup.
+	 * Notification that the user changed the "Pattern" field of the
+	 * current exclude rule.
 	 **/
-	void titleChanged( const QString & newTitle );
+	void patternChanged( const QString & newPattern );
 
 
     protected:
 
 	/**
-	 * Fill the cleanup list widget from the cleanup collection.
+	 * Fill the exclude rule list widget from the ExcludeRules.
 	 *
 	 * Implemented from ListEditor.
 	 **/
@@ -145,11 +135,10 @@ namespace QDirStat
 	// Data members
 	//
 
-	Ui::CleanupConfigPage	* _ui;
-	CleanupCollection	* _cleanupCollection;
+	Ui::ExcludeRulesConfigPage * _ui;
 
-    };	// class CleanupConfigPage
+    };	// class ExcludeRulesConfigPage
 
 }	// namespace QDirStat
 
-#endif	// CleanupConfigPage_h
+#endif	// ExcludeRulesConfigPage_h

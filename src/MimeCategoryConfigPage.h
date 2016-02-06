@@ -28,7 +28,7 @@ namespace QDirStat
     public:
 
 	MimeCategoryConfigPage( QWidget * parent = 0 );
-	~MimeCategoryConfigPage();
+	virtual ~MimeCategoryConfigPage();
 
 	/**
 	 * Set the MimeCategorizer to work on.

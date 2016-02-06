@@ -15,7 +15,7 @@ QT		+= widgets
 CONFIG		+= debug
 DEPENDPATH	+= .
 MOC_DIR		 = .moc
-OBJECTS_DIR      = .obj
+OBJECTS_DIR	 = .obj
 LIBS		+= -lz
 
 major_is_less_5 = $$find(QT_MAJOR_VERSION, [234])
@@ -28,13 +28,12 @@ INSTALLS	+= TARGET desktop icons
 
 SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
-	    ConfigDialog.cpp		\
-	    CleanupConfigPage.cpp	\
 	    Cleanup.cpp			\
 	    CleanupCollection.cpp	\
-	    StdCleanup.cpp		\
-	    DebugHelpers.cpp		\
+	    CleanupConfigPage.cpp	\
+	    ConfigDialog.cpp		\
 	    DataColumns.cpp		\
+	    DebugHelpers.cpp		\
 	    DirInfo.cpp			\
 	    DirReadJob.cpp		\
 	    DirSaver.cpp		\
@@ -43,24 +42,26 @@ SOURCES	  = main.cpp			\
 	    DirTreeModel.cpp		\
 	    DirTreeView.cpp		\
 	    Exception.cpp		\
+	    ExcludeRulesConfigPage.cpp	\
 	    ExcludeRules.cpp		\
 	    FileInfo.cpp		\
 	    FileInfoIterator.cpp	\
 	    FileInfoSet.cpp		\
 	    FileInfoSorter.cpp		\
-            HeaderTweaker.cpp           \
-            ListEditor.cpp              \
+	    HeaderTweaker.cpp		\
+	    ListEditor.cpp		\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
-	    MimeCategory.cpp		\
 	    MimeCategorizer.cpp		\
+	    MimeCategory.cpp		\
 	    MimeCategoryConfigPage.cpp	\
 	    OutputWindow.cpp		\
 	    PercentBar.cpp		\
-            Process.cpp                 \
+	    Process.cpp			\
 	    Refresher.cpp		\
 	    SelectionModel.cpp		\
 	    SettingsHelpers.cpp		\
+	    StdCleanup.cpp		\
 	    Trash.cpp			\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
@@ -68,13 +69,12 @@ SOURCES	  = main.cpp			\
 
 HEADERS	  =				\
 	    ActionManager.h		\
-	    ConfigDialog.h		\
-	    CleanupConfigPage.h		\
 	    Cleanup.h			\
 	    CleanupCollection.h		\
-	    StdCleanup.h		\
-	    DebugHelpers.h		\
+	    CleanupConfigPage.h		\
+	    ConfigDialog.h		\
 	    DataColumns.h		\
+	    DebugHelpers.h		\
 	    DirInfo.h			\
 	    DirReadJob.h		\
 	    DirSaver.h			\
@@ -84,25 +84,27 @@ HEADERS	  =				\
 	    DirTreeView.h		\
 	    Exception.h			\
 	    ExcludeRules.h		\
+	    ExcludeRulesConfigPage.h	\
 	    FileInfo.h			\
 	    FileInfoIterator.h		\
 	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
-            HeaderTweaker.h             \
-            ListEditor.h                \
-            ListMover.h                 \
+	    HeaderTweaker.h		\
+	    ListEditor.h		\
+	    ListMover.h			\
 	    Logger.h			\
 	    MainWindow.h		\
-	    MimeCategory.h		\
 	    MimeCategorizer.h		\
+	    MimeCategory.h		\
 	    MimeCategoryConfigPage.h	\
 	    OutputWindow.h		\
 	    PercentBar.h		\
-            Process.h                   \
+	    Process.h			\
 	    Refresher.h			\
 	    SelectionModel.h		\
 	    SettingsHelpers.h		\
 	    SignalBlocker.h		\
+	    StdCleanup.h		\
 	    Trash.h			\
 	    TreemapTile.h		\
 	    TreemapView.h		\
@@ -115,6 +117,7 @@ FORMS	  = main-window.ui		   \
 	    config-dialog.ui		   \
 	    cleanup-config-page.ui	   \
 	    mime-category-config-page.ui   \
+	    exclude-rules-config-page.ui   \
 	    general-config-page.ui	   \
 
 
