@@ -36,6 +36,7 @@ DirTreeView::DirTreeView( QWidget * parent ):
     setSortingEnabled( true );
     setSelectionMode( ExtendedSelection );
     setContextMenuPolicy( Qt::CustomContextMenu );
+    setTextElideMode( Qt::ElideMiddle );
 
     _headerTweaker = new HeaderTweaker( header(), this );
     CHECK_NEW( _headerTweaker );
