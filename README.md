@@ -59,6 +59,14 @@ _Screenshot of MIME category configuration where you can set the treemap colors
 for different file types (MIME types), complete with a real treemap widget as
 preview._
 
+![Exclude Rules Configuration Screenshot]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-exclude-rules-config.png)
+
+_Screenshot of the exclude rules configuration where you can define rules which
+directories to exclude when reading directory trees._
+
+-----------------------
+
 ![Tree Column Configuration Screenshot]
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-column-config.png)
 
@@ -67,12 +75,24 @@ _Context menu of the tree header where you can configure the columns._
 
 ## Current Development Status
 
-**Approaching Beta status -- V0.85**
+**Beta status -- V0.86 (Beta 1)**
 
-Still missing some important features, but pretty stable. So technically, it's
-still Alpha, but in terms of stability, it's well usable.
 
 - 2016-02-06
+
+  - Added tab for exclude rules configuration to the config dialog (see
+    screenshot above). That's it: That was the last missing major feature.
+
+    **I hereby declare QDirStat to be Beta.**
+
+    _Please use the GitHub issue tracker for any bug reports._
+
+
+  - Exclude rules can now optionally match against the full path again. I had
+    changed this for just the directory name without the path by default, which
+    makes regexps a lot simpler. You can now select the old behaviour, too, if
+    you wish. This is configurable in the exclude rules tab of the config
+    dialog.
 
   - Made the config file format of the new view header columns human readable
     and editable. The first version from yesterday used the native format of
@@ -487,11 +507,15 @@ old code base that had been long overdue.
   header to unlock column widths. Drag columns to the left or right to change
   their order.
 
-- Exclude rules are now greatly simplified. They no longer get the entire path
-  to match which requires quite complex regexps, they only get the last path
-  component -- i.e., no longer "/work/home/sh/src/qdirstat/src/.git", but only
-  ".git". You can now even tell the exclude rule to use a simplified syntax:
-  "FixedString" or "Wildcard" in addition to the normal "RegExp".
+- Exclude rules are now greatly simplified. They no longer always get the
+  entire path to match which requires quite complex regexps; by default, they
+  only get the last path component -- i.e., no longer
+  "/work/home/sh/src/qdirstat/src/.git", but only ".git". You can now even tell
+  the exclude rule to use a simplified syntax: "FixedString" or "Wildcard" in
+  addition to the normal "RegExp". The old behaviour (matching against the full
+  path) is still available, though.
+
+- Configuration dialog for exclude rules -- see screenshots.
 
 - Actions to go one directory level higher or to the toplevel: Context menu and
   menu "Go To" -> "Up One Level" or "Toplevel". This is useful if you clicked

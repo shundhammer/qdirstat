@@ -3,20 +3,6 @@
 This is roughly ordered by priority.
 
 
-## DirTreeView
-
-- Column widths
-
-
-## Config Dialog
-
-- Config dialog page for exclude rules
-
-- Data columns to display + order (NameCol is alwas there and #1)
-
-- General parameters config page
-
-
 ## Ready-made Packages for SUSE and Ubuntu
 
 - Write a .spec file for SUSE RPMs
@@ -72,6 +58,10 @@ way to maintain that much text in any more languages.
 
 
 ### Config Dialog
+
+
+- General parameters config page - postponed for the time being. There are
+  currently not enough worthwhile parameters to be configured.
 
 - Config dialog page for OutputWindow colors
 
