@@ -34,11 +34,22 @@ DataColumns * DataColumns::instance()
 DataColumns::DataColumns():
     QObject()
 {
+    _columns = defaultColumns();
+
+#if 0
+    // Reading and writing settings for the columns has been taken over by the
+    // HeaderTweaker which works with the DirTreeView's QHeaderView. There, the
+    // user can choose the columns interactively, move them around, resize them
+    // etc. without any model->reset() which would be required with the
+    // DataColumns.
+
+
     readSettings();
 
     // Write settings immediately back since the destructor of this singleton
     // is very likely never called.
     writeSettings();
+#endif
 }
 
 
@@ -71,13 +82,8 @@ void DataColumns::readSettings()
 
     if ( _columns.isEmpty() )
 	_columns = defaultColumns();
-    else if ( _columns.first() != NameCol )
-    {
-	logError() << "NameCol is required to be first!" << endl;
-	_columns.removeAll( NameCol );
-	_columns.prepend( NameCol );
-	logError() << "Fixed column list: " << toStringList( _columns ) << endl;
-    }
+    else
+	_columns = fixup( _columns );
 }
 
 
@@ -184,4 +190,20 @@ DataColumnList DataColumns::fromStringList( const QStringList & strList )
     }
 
     return colList;
+}
+
+
+DataColumnList DataColumns::fixup( const DataColumnList & colList )
+{
+    DataColumnList fixedList = colList;
+
+    if ( fixedList.first() != NameCol )
+    {
+	logError() << "NameCol is required to be first!" << endl;
+	fixedList.removeAll( NameCol );
+	fixedList.prepend( NameCol );
+	logError() << "Fixed column list: " << toStringList( fixedList ) << endl;
+    }
+
+    return fixedList;
 }

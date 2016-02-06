@@ -11,6 +11,7 @@
 
 
 #include <QHeaderView>
+#include "DataColumns.h"
 
 class QHeaderView;
 class QAction;
@@ -41,6 +42,12 @@ namespace QDirStat
 	 * Destructor.
 	 **/
 	virtual ~HeaderTweaker();
+
+	/**
+	 * Order the columns according to 'colOrderList'.
+	 **/
+	void setColumnOrder( const DataColumnList & colOrderList);
+
 
     public slots:
 
@@ -140,6 +147,12 @@ namespace QDirStat
 	 * Return 'true' if logical section no. 'section' has auto resize mode.
 	 **/
 	bool autoSizeCol( int section ) const;
+
+	/**
+	 * Add any columns that are missing from the default columns to
+	 * 'colList'.
+	 **/
+	void addMissingColumns( DataColumnList & colList );
 
 	/**
 	 * Return the resize mode for the specified section.

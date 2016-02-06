@@ -145,6 +145,12 @@ namespace QDirStat
 	 **/
 	static DataColumnList fromStringList( const QStringList & strList );
 
+	/**
+	 * Fix a data column list to make sure it contains NameCol at the first
+	 * position.
+	 **/
+	static DataColumnList fixup( const DataColumnList & colList );
+
 
     public slots:
 
