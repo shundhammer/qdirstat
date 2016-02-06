@@ -36,6 +36,14 @@ _Screenshot of cleanup actions configuration._
 _Screenshot of MIME category configuration where you can set the treemap colors
 for different file types (MIME types), complete with a real treemap widget as preview._
 
+![Exclude Rules Configuration Screenshot]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-exclude-rules-config.png)
+
+_Screenshot of the exclude rules configuration where you can define rules which
+directories to exclude when reading directory trees._
+
+------------------
+
 ![Tree Column Configuration Screenshot]
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-column-config.png)
 
