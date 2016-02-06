@@ -626,7 +626,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
 QVariant DirTreeModel::ownSizeColText( FileInfo * item ) const
 {
-    if ( item->isDevice() )
+    if ( item->isDevice() || item->isDotEntry() )
 	return QVariant();
 
     QString text;
