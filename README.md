@@ -112,7 +112,7 @@ _Context menu of the tree header where you can configure the columns._
     text at the start in common. So, now it's no longer "VeryLongTextBlurb...",
     but "VeryLongTe...foo.o" if anything needs to be cut off. Of course, this
     makes most sense with the new column width modes, otherwise your column
-    will simple be resized wide enough to fit everything in.
+    will simply be resized wide enough to fit everything in.
 
 - 2016-02-05
 
