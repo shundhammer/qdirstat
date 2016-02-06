@@ -137,7 +137,7 @@ void LocalDirReadJob::startReading()
 			_dir->insertChild( subDir );
 			childAdded( subDir );
 
-			if ( ExcludeRules::instance()->match( entryName ) )
+			if ( ExcludeRules::instance()->match( fullName, entryName ) )
 			{
 			    subDir->setExcluded();
 			    subDir->setReadState( DirOnRequestOnly );
@@ -237,11 +237,11 @@ void LocalDirReadJob::startReading()
 		     * least create an (almost empty) entry as a placeholder.
 		     */
 		    DirInfo *child = new DirInfo( _tree, _dir, entryName,
-                                                  0,   // mode
-                                                  0,   // size
-                                                  0 ); // mtime
+						  0,   // mode
+						  0,   // size
+						  0 ); // mtime
 		    CHECK_NEW( child );
-                    child->finalizeLocal();
+		    child->finalizeLocal();
 		    child->setReadState( DirError );
 		    _dir->insertChild( child );
 		    childAdded( child );

@@ -19,15 +19,17 @@
 using namespace QDirStat;
 
 
-ExcludeRule::ExcludeRule( const QRegExp & regexp ):
-    _regexp( regexp )
+ExcludeRule::ExcludeRule( const QRegExp & regexp, bool useFullPath ):
+    _regexp( regexp ),
+    _useFullPath( useFullPath )
 {
     // NOP
 }
 
 
-ExcludeRule::ExcludeRule( const QString & regexp ):
-    _regexp( QRegExp( regexp ) )
+ExcludeRule::ExcludeRule( const QString & regexp, bool useFullPath ):
+    _regexp( QRegExp( regexp ) ),
+    _useFullPath( useFullPath )
 {
     // NOP
 }
@@ -39,12 +41,14 @@ ExcludeRule::~ExcludeRule()
 }
 
 
-bool ExcludeRule::match( const QString & text )
+bool ExcludeRule::match( const QString & fullPath, const QString & fileName )
 {
-    if ( text.isEmpty() )
+    QString matchText = _useFullPath ? fullPath : fileName;
+
+    if ( matchText.isEmpty() )
 	return false;
 
-    return _regexp.exactMatch( text );
+    return _regexp.exactMatch( matchText );
 }
 
 
@@ -86,37 +90,37 @@ void ExcludeRules::clear()
 void ExcludeRules::add( ExcludeRule * rule )
 {
     if ( rule )
-	_rules.append( rule );
+	_rules << rule;
 }
 
 
-void ExcludeRules::add( const QRegExp & regexp )
+void ExcludeRules::add( const QRegExp & regexp, bool useFullPath )
 {
-    ExcludeRule * rule = new ExcludeRule( regexp );
+    ExcludeRule * rule = new ExcludeRule( regexp, useFullPath );
     instance()->add( rule );
 }
 
 
-void ExcludeRules::add( const QString & regexp )
+void ExcludeRules::add( const QString & regexp, bool useFullPath )
 {
-    add( QRegExp( regexp ) );
+    add( QRegExp( regexp ), useFullPath );
 }
 
 
-bool ExcludeRules::match( const QString & text )
+bool ExcludeRules::match( const QString & fullPath, const QString & fileName )
 {
     _lastMatchingRule = 0;
-    if ( text.isEmpty() )
+    if ( fullPath.isEmpty() || fileName.isEmpty() )
 	return false;
 
     foreach ( ExcludeRule * rule, _rules )
     {
-	if ( rule->match( text ) )
+	if ( rule->match( fullPath, fileName ) )
 	{
 	    _lastMatchingRule = rule;
 #if VERBOSE_EXCLUDE_MATCHES
 
-	    logDebug() << text << " matches " << rule << endl;
+	    logDebug() << fullPath << " matches " << rule << endl;
 
 #endif
 	    return true;
@@ -127,14 +131,15 @@ bool ExcludeRules::match( const QString & text )
 }
 
 
-const ExcludeRule * ExcludeRules::matchingRule( const QString & text )
+const ExcludeRule * ExcludeRules::matchingRule( const QString & fullPath,
+						const QString & fileName )
 {
-    if ( text.isEmpty() )
+    if ( fullPath.isEmpty() || fileName.isEmpty() )
 	return 0;
 
     foreach ( ExcludeRule * rule, _rules )
     {
-	if ( rule->match( text ) )
+	if ( rule->match( fullPath, fileName ) )
 	    return rule;
     }
 
@@ -157,6 +162,7 @@ void ExcludeRules::readSettings()
 	    settings.setArrayIndex( i );
 	    QString pattern    = settings.value( "Pattern"	       ).toString();
 	    bool caseSensitive = settings.value( "CaseSensitive", true ).toBool();
+	    bool useFullPath   = settings.value( "UseFullPath",	 false ).toBool();
 	    int syntax = readEnumEntry( settings, "Syntax",
 					QRegExp::RegExp,
 					patternSyntaxMapping() );
@@ -166,7 +172,7 @@ void ExcludeRules::readSettings()
 			    static_cast<QRegExp::PatternSyntax>( syntax ) );
 
 	    if ( ! pattern.isEmpty() && regexp.isValid() )
-		add( regexp );
+		add( regexp, useFullPath );
 	    else
 	    {
 		logError() << "Invalid regexp: \"" << regexp.pattern()
@@ -189,10 +195,12 @@ void ExcludeRules::writeSettings()
 
     for ( int i=0; i < _rules.size(); ++i )
     {
-	QRegExp regexp = _rules.at(i)->regexp();
+	ExcludeRule * rule = _rules.at(i);
+	QRegExp regexp = rule->regexp();
 	settings.setArrayIndex( i );
 	settings.setValue( "Pattern"	  , regexp.pattern() );
 	settings.setValue( "CaseSensitive", regexp.caseSensitivity() == Qt::CaseSensitive );
+	settings.setValue( "UseFullPath",   rule->useFullPath() );
 
 	writeEnumEntry( settings, "Syntax",
 			regexp.patternSyntax(),

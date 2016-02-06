@@ -27,13 +27,19 @@ namespace QDirStat
 
 	/**
 	 * Constructor from a QRegExp.
+	 *
+	 * 'useFullPath' indicates if this exclude rule uses the full path
+	 * ('true') or only the file name without path ('false') for matching.
 	 **/
-	ExcludeRule( const QRegExp & regexp );
+	ExcludeRule( const QRegExp & regexp, bool useFullPath = false );
 
 	/**
 	 * Constructor from a QString. The string will be used as a regexp.
+	 *
+	 * 'useFullPath' indicates if this exclude rule uses the full path
+	 * ('true') or only the file name without path ('false') for matching.
 	 **/
-	ExcludeRule( const QString & regexp );
+	ExcludeRule( const QString & regexp, bool useFullPath = false );
 
 	/**
 	 * Destructor.
@@ -41,11 +47,14 @@ namespace QDirStat
 	virtual ~ExcludeRule();
 
 	/**
-	 * Check a string (usually a file name) against this exclude rule.
-	 * Returns 'true' if the string matches, i.e. if the object this string
-	 * belongs to should be excluded.
+	 * Check a file name with or without its full path against this exclude
+	 * rule: If useFullPath() is 'true', the 'fullPath' parameter is used
+	 * for matching, if it is 'false', 'fileName' is used.
+	 *
+	 * Returns 'true' if the string matches, i.e. the file should be
+	 * excluded.
 	 **/
-	bool match( const QString & text );
+	bool match( const QString & fullPath, const QString & fileName );
 
 	/**
 	 * Returns this rule's regular expression.
@@ -57,9 +66,21 @@ namespace QDirStat
 	 **/
 	void setRegexp( const QRegExp & regexp ) { _regexp = regexp; }
 
+	/**
+	 * Return 'true' if this exclude rule uses the full path to match
+	 * against, 'false' if it only uses the file name without path.
+	 **/
+	bool useFullPath() const { return _useFullPath; }
+
+	/**
+	 * Set the 'full path' flag.
+	 **/
+	void setUseFullPath( bool useFullPath ) { _useFullPath = useFullPath; }
+
     private:
 
 	QRegExp _regexp;
+	bool	_useFullPath;
     };
 
 
@@ -111,18 +132,23 @@ namespace QDirStat
 	void add( ExcludeRule * rule );
 
 	/**
-	 * Create a new rule with 'regexp' and add it to this rule set.
+	 * Create a new rule with 'regexp' and 'useFullPath' and add it to this
+	 * rule set.
 	 **/
-	static void add( const QRegExp & regexp );
-	static void add( const QString & regexp );
+	static void add( const QRegExp & regexp, bool useFullPath = false );
+	static void add( const QString & regexp, bool useFullPath = false );
 
 	/**
-	 * Check a string against the exclude rules.
+	 * Check a file name against the exclude rules. Each exclude rule
+	 * decides individually based on its configuration if it checks against
+	 * the full path or against the file name without path, so both have to
+	 * be provided here.
+	 *
 	 * This will return 'true' if the text matches any rule.
 	 *
 	 * Note that this operation will move current().
 	 **/
-	bool match( const QString & text );
+	bool match( const QString & fullPath, const QString & fileName );
 
 	/**
 	 * Find the exclude rule that matches 'text'.
@@ -130,7 +156,8 @@ namespace QDirStat
 	 *
 	 * This is intended to explain to the user which rule matched.
 	 **/
-	const ExcludeRule * matchingRule( const QString & text );
+	const ExcludeRule * matchingRule( const QString & fullPath,
+					  const QString & fileName );
 
 	/**
 	 * Return the last matching rule or 0 if there was none.

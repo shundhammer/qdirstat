@@ -434,7 +434,7 @@ void CacheReader::addItem()
 
 	if ( dir != _toplevel )
 	{
-	    if ( ExcludeRules::instance()->match( dir->url() ) )
+	    if ( ExcludeRules::instance()->match( dir->url(), dir->name() ) )
 	    {
 		logDebug() << "Excluding " << name << endl;
 		dir->setExcluded();
