@@ -465,7 +465,7 @@ void TreemapView::enable()
 	if ( parentWidget )
 	    resize( parentWidget->height(), width() );
 
-	rebuildTreemap( _tree->firstToplevel() );
+	scheduleRebuildTreemap( _tree->firstToplevel() );
     }
 }
 
