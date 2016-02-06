@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-02-05
+Updated: 2016-02-06
 
 
 ## Overview
@@ -72,6 +72,28 @@ _Context menu of the tree header where you can configure the columns._
 Still missing some important features, but pretty stable. So technically, it's
 still Alpha, but in terms of stability, it's well usable.
 
+- 2016-02-06
+
+  - Made the config file format of the new view header columns human readable
+    and editable. The first version from yesterday used the native format of
+    Qt's QHeaderView -- a QByteArray in hex encoding. This was a sorry excuse
+    for a settings format - not usable for anybody, not legible, much less
+    editable. Trolls, WTF? Pretty and usable formats everywhere else, and a
+    glorified (well, not even glorified) hexdump here?
+
+    I hope some admins who might want to provide ready-made config files for
+    their users will appreciate that. If not, this is just for consistency's
+    sake; I want to be able to read and edit my config file as I like, even
+    without any graphical config dialogs.
+
+  - The tree view now uses "middle eliding" for texts that don't fit into a
+    column. It used to elide at the end of the text, but that's not necessarily
+    useful for long file names; they often differ only at the end with lots of
+    text at the start in common. So, now it's no longer "VeryLongTextBlurb...",
+    but "VeryLongTe...foo.o" if anything needs to be cut off. Of course, this
+    makes most sense with the new column width modes, otherwise your column
+    will simple be resized wide enough to fit everything in.
+
 - 2016-02-05
 
   - Extended the context menu of the tree view header columns -- see latest
@@ -112,9 +134,12 @@ still Alpha, but in terms of stability, it's well usable.
 
 - 2016-02-01
 
-  - Fixed GitHub issue #6: NullPointerException when reading cache
-    file. The DirTreeModel and the DirCacheReader were somewhat out of sync
-    with regard to which directory is ready for display in the tree view.
+  - Fixed GitHub issue #6:
+    [NullPointerException when reading cache file]
+    (https://github.com/shundhammer/qdirstat/issues/6)
+
+    The DirTreeModel and the DirCacheReader were somewhat out of sync with
+    regard to which directory is ready for display in the tree view.
 
 - 2016-01-30
 
