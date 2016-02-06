@@ -150,16 +150,20 @@ const ExcludeRule * ExcludeRules::matchingRule( const QString & fullPath,
 void ExcludeRules::readSettings()
 {
     QSettings settings;
-    settings.beginGroup( "ExcludeRules" );
-    int size = settings.beginReadArray( "Rules" );
+    QStringList excludeRuleGroups = findSettingsGroups( settings, "ExcludeRule_" );
 
-    if ( size > 0 )
+    if ( ! excludeRuleGroups.isEmpty() ) // Keep defaults if settings empty
     {
 	clear();
 
-	for ( int i=0; i < size; ++i )
+	// Read all settings groups [ExcludeRule_xx] that were found
+
+	foreach ( const QString & groupName, excludeRuleGroups )
 	{
-	    settings.setArrayIndex( i );
+	    settings.beginGroup( groupName );
+
+	    // Read one exclude rule
+
 	    QString pattern    = settings.value( "Pattern"	       ).toString();
 	    bool caseSensitive = settings.value( "CaseSensitive", true ).toBool();
 	    bool useFullPath   = settings.value( "UseFullPath",	 false ).toBool();
@@ -179,25 +183,32 @@ void ExcludeRules::readSettings()
 			   << "\": " << regexp.errorString()
 			   << endl;
 	    }
+
+	    settings.endGroup(); // [ExcludeRule_01], [ExcludeRule_02], ...
 	}
     }
-
-    settings.endArray();
-    settings.endGroup();
 }
 
 
 void ExcludeRules::writeSettings()
 {
     QSettings settings;
-    settings.beginGroup( "ExcludeRules" );
-    settings.beginWriteArray( "Rules", _rules.size() );
+
+    // Remove all leftover cleanup descriptions
+    removeSettingsGroups( settings, "ExcludeRule_" );
+
+    // Similar to CleanupCollection::writeSettings(), using a separate group
+    // for each exclude rule for better readability in the settings file.
 
     for ( int i=0; i < _rules.size(); ++i )
     {
+	QString groupName;
+	groupName.sprintf( "ExcludeRule_%02d", i+1 );
+	settings.beginGroup( groupName );
+
 	ExcludeRule * rule = _rules.at(i);
 	QRegExp regexp = rule->regexp();
-	settings.setArrayIndex( i );
+
 	settings.setValue( "Pattern"	  , regexp.pattern() );
 	settings.setValue( "CaseSensitive", regexp.caseSensitivity() == Qt::CaseSensitive );
 	settings.setValue( "UseFullPath",   rule->useFullPath() );
@@ -205,8 +216,7 @@ void ExcludeRules::writeSettings()
 	writeEnumEntry( settings, "Syntax",
 			regexp.patternSyntax(),
 			patternSyntaxMapping() );
-    }
 
-    settings.endArray();
-    settings.endGroup();
+	settings.endGroup(); // [ExcludeRule_01], [ExcludeRule_02], ...
+    }
 }
