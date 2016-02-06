@@ -135,7 +135,7 @@ void ExcludeRulesConfigPage::save( void * value )
 void ExcludeRulesConfigPage::load( void * value )
 {
     ExcludeRule * excludeRule = EXCLUDE_RULE_CAST( value );
-    logDebug() << excludeRule << endl;
+    // logDebug() << excludeRule << endl;
 
     if ( ! excludeRule || updatesLocked() )
 	return;
