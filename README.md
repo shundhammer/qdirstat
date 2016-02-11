@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-02-06
+Updated: 2016-02-11
 
 
 ## Overview
@@ -21,13 +21,14 @@ This is a Qt-only port of the old Qt3/KDE3-based KDirStat, now based on the
 latest Qt 5. It does not need any KDE libs or infrastructure. It runs on every
 X11-based desktop on Linux, BSD and other Unix-like systems.
 
-QDirStat has a number of new features compared to KDirStat:
+QDirStat has a number of new features compared to KDirStat. To name a few:
 
 - Multi-selection in both the tree and the treemap.
-- No more restriction on the number of user-defined cleanup actions.
+- Unlimited number of user-defined cleanup actions.
 - Properly show errors of cleanup actions (and their output, if desired).
-- Only one binary file required. It contains everything including icons etc.
-  (Qt runtime libs are still required to be installed).
+- File categories (MIME types) and their treemap color are now configurable.
+- Exclude rules for directories are easily configurable.
+- Desktop-agnostic; no longer relies on KDE or any other specific desktop.
 
 See section _New Features_ for more details.
 
@@ -760,11 +761,31 @@ differently, and we'd need an installer for a Windows version.
 
 ## Ready-made Packages
 
-None yet. Stay tuned.
+### openSUSE 
 
-There will be RPMs for openSUSE (+Tumbleweed +SLES/SLED) using the openSUSE
-build service. I know it supports Ubuntu/Debian, too, but I never tried this,
-so this will be something to explore.
+- [QDirStat for openSUSE 13.2]
+  (http://download.opensuse.org/repositories/home:/shundhammer/openSUSE_13.2/)
+
+- [QDirStat for openSUSE Tumbleweed]
+  (http://download.opensuse.org/repositories/home:/shundhammer/openSUSE_Tumbleweed/)
+
+- [QDirStat for openSUSE Leap 42.1]
+  (http://download.opensuse.org/repositories/home:/shundhammer/openSUSE_Leap_42.1/)
+
+
+### SUSE Linux Enterprise
+
+- [QDirStat for SUSE Linux Enterprise (SLE) 12 SP1]
+  (http://download.opensuse.org/repositories/home:/shundhammer/SLE_12_SP1/)
+
+
+
+### Ubuntu
+
+None yet, but coming up. Stay tuned.
+
+The openSUSE build service supports Ubuntu/Debian, too, but I never tried this,
+so this is be something to explore.
 
 
 ## Building
