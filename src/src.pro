@@ -127,4 +127,4 @@ desktop.files = *.desktop
 desktop.path  = /usr/share/applications
 
 icons.files   = icons/qdirstat.png
-icons.path    = /usr/share/icons
+icons.path    = /usr/share/icons/hicolor/32x32/apps
