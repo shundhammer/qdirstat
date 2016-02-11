@@ -7,5 +7,5 @@ X-DocPath=qdirstat/README.md
 GenericName=QDirStat Directory Statistics
 Terminal=false
 MimeType=inode/directory;
-Categories=Utility;
+Categories=System;Filesystem;
 Keywords=disk usage, file system, cleanup;
