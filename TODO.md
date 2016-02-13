@@ -5,17 +5,9 @@ This is roughly ordered by priority.
 
 ## Ready-made Packages for SUSE and Ubuntu
 
-- Write a .spec file for SUSE RPMs
-  dmacvicar provided one - see github issue
-
 - Write a .control file for Ubuntu .deb packages
 
-- Use the openSUSE build service to create RPMs (and .deb packages?)
-
-
-## Announce Beta Release
-
-It's about time QDirStat hits the broader public.
+- Use the openSUSE build service to create .deb packages
 
 
 ## General
