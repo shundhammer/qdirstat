@@ -757,7 +757,7 @@ that problem with devices and crossing filesystems on that platform.
 But the cleanups might be a challenge, "move to trash" works completely
 differently, and we'd need an installer for a Windows version.
 
-
+On Windows, the [WinDirStat](https://windirstat.info/) is one alternative to the QDirStat.
 
 ## Ready-made Packages
 
