@@ -309,9 +309,7 @@ _Context menu of the tree header where you can configure the columns._
     so you can get, say, the Xfce terminal or file manager despite currently
     running KDE if you set
 
-        ````
         export QDIRSTAT_DESKTOP="Xfce"
-        ````
 
   - Of course, you can still simply use your favourite file manager if you
     simply use its command instead of %filemanager in the default "Open File
