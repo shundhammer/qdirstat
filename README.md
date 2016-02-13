@@ -761,6 +761,10 @@ that problem with devices and crossing filesystems on that platform.
 But the cleanups might be a challenge, "move to trash" works completely
 differently, and we'd need an installer for a Windows version.
 
+So, for the time being, use [WinDirStat](https://windirstat.info/) instead.
+WinDirStat is a close relative to the KDirStat family anyway; the author had
+liked KDirStat on Linux so much that he decided to write a Windows clone and
+called it WinDirStat.
 
 
 ## Ready-made Packages
@@ -946,6 +950,11 @@ Sources: https://github.com/shundhammer/kdirstat
 Home page: https://bitbucket.org/jeromerobert/k4dirstat/wiki/Home
 
 Sources: https://bitbucket.org/jeromerobert/k4dirstat/src
+
+
+### WinDirStat (for Windows)
+
+Home page: https://windirstat.info/
 
 
 ### XDG Trash Spec
