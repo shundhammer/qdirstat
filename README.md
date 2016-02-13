@@ -479,9 +479,7 @@ old code base that had been long overdue.
   variable, so you can get, say, the Xfce terminal or file manager despite
   currently running KDE if you set
 
-      ````
       export QDIRSTAT_DESKTOP="Xfce"
-      ````
 
 - Of course, you can still simply use your favourite file manager if you simply
   change %filemanager in the default "Open File Manager Here" cleanup action to
