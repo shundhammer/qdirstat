@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-02-11
+Updated: 2016-02-13
 
 
 ## Overview
@@ -309,7 +309,9 @@ _Context menu of the tree header where you can configure the columns._
     so you can get, say, the Xfce terminal or file manager despite currently
     running KDE if you set
 
+        ````
         export QDIRSTAT_DESKTOP="Xfce"
+        ````
 
   - Of course, you can still simply use your favourite file manager if you
     simply use its command instead of %filemanager in the default "Open File
@@ -479,7 +481,9 @@ old code base that had been long overdue.
   variable, so you can get, say, the Xfce terminal or file manager despite
   currently running KDE if you set
 
-    export QDIRSTAT_DESKTOP="Xfce"
+      ````
+      export QDIRSTAT_DESKTOP="Xfce"
+      ````
 
 - Of course, you can still simply use your favourite file manager if you simply
   change %filemanager in the default "Open File Manager Here" cleanup action to
@@ -761,23 +765,18 @@ differently, and we'd need an installer for a Windows version.
 
 ## Ready-made Packages
 
-### openSUSE 
+### openSUSE / SUSE Linux Enterprise
 
-- [QDirStat for openSUSE 13.2]
-  (http://download.opensuse.org/repositories/home:/shundhammer/openSUSE_13.2/)
+QDirStat packages for:
 
-- [QDirStat for openSUSE Tumbleweed]
-  (http://download.opensuse.org/repositories/home:/shundhammer/openSUSE_Tumbleweed/)
+- openSUSE Tumbleweed
+- openSUSE Leap 42.1
+- openSUSE 13.2
+- SUSE Linux Enterprise (SLE) 12 SP1
+- SUSE Linux Enterprise (SLE) 12
 
-- [QDirStat for openSUSE Leap 42.1]
-  (http://download.opensuse.org/repositories/home:/shundhammer/openSUSE_Leap_42.1/)
-
-
-### SUSE Linux Enterprise
-
-- [QDirStat for SUSE Linux Enterprise (SLE) 12 SP1]
-  (http://download.opensuse.org/repositories/home:/shundhammer/SLE_12_SP1/)
-
+[**Download page**]
+(https://software.opensuse.org/download/package?project=home:shundhammer&package=qdirstat)
 
 
 ### Ubuntu
