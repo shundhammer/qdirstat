@@ -443,11 +443,13 @@ void MimeCategorizer::addDefaultCategories()
 		      , Qt::CaseSensitive );
 
 
-    MimeCategory * libs = new MimeCategory( tr( "Shared Libraries" ), QColor( 0xff, 0xa0, 0x00 ) );
+    MimeCategory * libs = new MimeCategory( tr( "Libraries" ), QColor( 0xff, 0xa0, 0x00 ) );
     CHECK_NEW( libs );
     add( libs );
 
     libs->addPattern( "lib*.so.*", Qt::CaseSensitive );
+    libs->addPattern( "lib*.so",   Qt::CaseSensitive );
+    libs->addPattern( "lib*.a",    Qt::CaseSensitive );
     libs->addSuffix ( "dll" );
 
 }
