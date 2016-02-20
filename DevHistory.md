@@ -10,6 +10,244 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
 ## QDirStat History
 
+
+- 2016-02-05
+
+  - Extended the context menu of the tree view header columns -- see latest
+    screenshot above. The configuration is now saved and restored when entering
+    the program. You can move the columns around (i.e. change their order),
+    hide columns, and choose between automatic column width ("auto size") or
+    setting it manually ("interactive size") for each column individually or
+    for all columns at once.
+
+  - You can now read a cache file directly from the command line:
+
+        ````
+        qdirstat --cache cache-file
+        ````
+
+  - Fixed GitHub issue #9:
+    [qdirstat-cache-writer creates broken cache file if some directory lacks Exec flag]
+    (https://github.com/shundhammer/qdirstat/issues/9)
+
+  - Fixed GitHub issue #10:
+    [incorrect handling of sparse files with 0 allocated blocks]
+    (https://github.com/shundhammer/qdirstat/issues/10)
+
+- 2016-02-02
+
+  - Fixed a bug where directory names with a colon ":" were cut off when
+    reading a cache file, thus all files and directories below that point could
+    not find their parent directory, so that complete branch was cut off.
+
+  - Much improved performance for treemaps of large directory trees: Now not
+    rebuilding the treemap immediately when the user resizes the window or
+    drags the splitter dividing the main window, but just scheduling an update
+    in 200 milliseconds. If another rebuild is requested during this time, the
+    previous one is discarded. The net effect is that the treemap now is
+    rebuilt only once, not for every pixel size change of the treemap
+    subwindow, so the application remains responsive during dragging the
+    splitter or resizing the main window.
+
+- 2016-02-01
+
+  - Fixed GitHub issue #6:
+    [NullPointerException when reading cache file]
+    (https://github.com/shundhammer/qdirstat/issues/6)
+
+    The DirTreeModel and the DirCacheReader were somewhat out of sync with
+    regard to which directory is ready for display in the tree view.
+
+- 2016-01-30
+
+  - Added a context menu for the tree view header. It's still very limited, but
+    you can now turn off auto-resizing of the tree columns for the current
+    session.
+
+  - Added a .desktop file so QDirStat should now show up in the menu of the
+    major desktop environments (KDE, GNOME, Xfce, Unity, ...) and in their file
+    managers' "Open With" menus when you right-click a directory.
+
+- 2016-01-29
+
+  - Since the missing tabs in the config dialog will also have a list of things
+    at the left and details of the one current item of those things at the
+    right, I tried to move out the common part of this as a base class. Since
+    the things those config tabs manage have different types, I tried a C++
+    template class. But **it turns out that in this year 2016 Qt's moc still
+    does not support templates. WTF?!**
+
+  - 21:00 (Grrrr) Okay, I found a workaround, albeit a pretty ugly one: Work
+    with void pointers and forced type casts. Yuck. That's being bombed back to
+    the early 1990s - we had to do this kind of stuff back with OSF/Motif in
+    plain C all the time. Type safety was unknown back then; you could get all
+    kinds of nasty surprises by casting pointers slightly wrong, and the
+    compiler had no chance (even if it hadn't been that crappy SunOS C
+    compiler, but a decent GCC) to catch any of this.
+
+    25 years later, and we are still stuck with that kind of stone age
+    programming - just because some tool never got ported to the 21st
+    century. Sigh.
+
+    Yet another day of develpment completely wasted due to insufficiencies of
+    underlying tools. Just great. I am getting fed up with this.
+
+
+- 2016-01-22
+
+  - Improved usability of refreshing the tree after cleanup actions: They used
+    to leave the tree behind with nothing selected, the branch the user just
+    worked in closed (which is natural since it needed to be re-read from disk)
+    and scrolled to another position - maximum disorientation for the user. Now
+    the parent directory is selected, giving at least some hint where the
+    action took place. It's not optimal yet, but much better than before.
+
+  - Improved usability of the tree widget: When an item in the treemap is
+    selected, all other branches in the tree are now collapsed before the new
+    branch is opened. But this required working around some design flaws in the
+    underlying _QTreeView_ class.
+
+    **Rant:** Trolls, didn't it ever occur to you that if you are _constantly_
+    using that _d->expandedIndexes_ from _QTreeViewPrivate_ in the _QTreeView_
+    public class, derived widgets might need that information, too? There is
+    **no way** to access the currently expanded items other than cheating in
+    some creative way. Seriously, I am not going to duplicate that bookkeeping
+    with the _expanded()_ and _collapsed()_ signals, always being off by some
+    items or not getting the information that items were removed (or listen to
+    half a dozen more signals for even more advanced bookkeeping). If a widget
+    class cannot provide that kind of elementary information to its derived
+    classes, it's poorly designed. Period.
+
+
+- 2016-01-18
+
+  - Applied Qt4 compatibility patches from Michael Matz. The only nontrivial
+    issue was a thin wrapper around QProcess to make it store the program to
+    execute and its arguments in the constructor and use those later with a
+    plain start() without any more arguments.
+
+- 2016-01-16
+
+   - The MIME categories and the corresponding treemap colors can now be
+     configured - see screenshot above. Yes, this is a real treemap widget as a
+     preview for the colors, complete with a demo directory tree with a random
+     number of files with random sizes (i.e. it looks different for each
+     invocation). That part was the last major feature that was missing; now
+     it's only little stuff that's left (still quite a number of it, though).
+
+   - Treemap colors are now no longer fixed; there is now a rules engine called
+     MimeCategorizer. It uses a new class MimeCategory that groups MIME types
+     (by filename, not by magic numbers in the file) into broad categories like
+     "Documents", "Videos", "Music", "Images". Each of these categories has a
+     list of filename extensions that belong to it (".mp4", ".wmv", ".mov"
+     etc. for "Videos", for example). The categorizer uses a very fast lookup
+     map for the vast majority of the rules (simple file extensions), but it
+     can also use more powerful wildcards wherever you like them.
+
+   - The log file is now created per user: It's now /tmp/qdirstat-$UID.log,
+     which for most Linux home users (with only one user account on the
+     machine) is typically /tmp/qdirstat-1000.log .
+
+- 2016-01-15
+
+  - Added new macros for use within cleanups: %terminal and %filemanager. They
+    are expanded to the terminal window or file manager application,
+    respectively, of the current desktop (KDE, GNOME, Xfce, ...).  I just
+    wasted four hours (that could have been put to better use adding missing
+    features - grrrr) because KDE's konsole misbehaves in every way possible
+    (leading today's WTF count with 3):
+
+    - It won't let me start it in the background from within QDirStat; it
+      simply exits. I tried all kinds of command line arguments (--nofork,
+      --hold), I tried to wrap it into a subshell, into the _nohup_ command -
+      nothing helped. WTF?
+
+    - It exits when QDirStat exits. Well, since it won't let me start it in the
+      background, that's not too surprising. Still, if it does its own fork(),
+      WTF?
+
+    - It doesn't give a damn about the current directory you start it from, it
+      needs its --workdir command line argument. WTF?
+
+  - Added %d macro for cleanups: This is the directory name with full path. For
+    directories, this is the same as %p. For files, this is their parent
+    directory's %p.
+
+  - %terminal : Terminal window application of the current desktop; one of
+
+      - konsole
+      - gnome-terminal
+      - xfce4-terminal
+      - lxterminal
+      - eterm
+      - xterm  (fallback)
+
+  - %filemanager : File manager application of the current desktop; one of
+
+      - konqueror
+      - nautilus
+      - thunar
+      - pcmanfm
+      - xdg-open (fallback)
+
+  - Which desktop is used is determined by the _$XDG_CURRENT_DESKTOP_
+    environment variable. Currently supported:
+
+    - KDE
+    - GNOME
+    - Unity
+    - Xfce
+    - Lxde
+    - Enlightenment
+      (no clue how to start its file manager, though - using xdg-open here)
+
+  - Users can override this with the _$QDIRSTAT_DESKTOP_ environment variable,
+    so you can get, say, the Xfce terminal or file manager despite currently
+    running KDE if you set
+
+        export QDIRSTAT_DESKTOP="Xfce"
+
+  - Of course, you can still simply use your favourite file manager if you
+    simply use its command instead of %filemanager in the default "Open File
+    Manager Here" cleanup action.
+
+  - Added new standard cleanup actions:
+
+    - Git clean. Start "git clean -dfx" in the current item's directory. This
+      is relevant for developers or for people who regularly build software
+      from Git repositories.
+
+    - Clear directory contents. This removes everything inside a directory, but
+      leaves the directory itself intact. ~/.thumbnails or browser cache
+      directories are typical candidates for this with their ever-growing
+      content: You probably want to keep the directory, but get rid of
+      everything inside it.
+
+  - Redefined the semantics of the _file manager_ cleanup action: It no longer
+    tries to open files with the corresponding application depending on MIME
+    type, it now always opens a file manager in that directory (which can open
+    the file in its app if you want that). It's now also renamed to "open file
+    manager here". If you still want the old behaviour, you can easily add your
+    own cleanup action with the "xdg-open %p" command.
+
+  - Added "Troubleshooting" section in this document.
+
+  - Cleanup actions that have an icon are now added to the tool bar. Right now,
+    only some of the predefined actions have an icon. There is currently no way
+    for the user to specify an icon for a cleanup action.
+
+
+- 2016-01-13 Added "move to trash", this time as a normal action in the "Edit"
+  menu, the toolbar and the context menus. This is a real implementation of the
+  XDG Trash specification. It does not rely on outside tools that might or
+  might not be available.
+
+- 2016-01-12 We have a first MacOS X port! Sonja Krause-Harder volunteered to
+  install a Qt development environment (11 GB! Yikes!) on her MacBook. I would
+  have expected some changes, but a simple "qmake; make" just did the
+  job. Amazing! -- The major challenge was to find where "qmake" gets installed
+  in that MacOS Qt environment.
+
 - 2016-01-10 Went through the old KDirStat changelog and found a few bugs that
   I had fixed there -- and promptly repeated with the new QDirStat:
 
@@ -104,7 +342,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     - Ctrl+Left click: Add item to selection or toggle selection.
     - Middle click: Select the current item's parent. Cycle back at toplevel.
     - Double click left: Zoom treemap in.
-    - Double click middle: Zoom treemap out. 
+    - Double click middle: Zoom treemap out.
     - Mouse wheel: Zoom treemap in or out.
 
   - Reliably sort by pending read jobs while reading.
