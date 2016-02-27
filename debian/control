@@ -1,0 +1,17 @@
+Source: qdirstat
+Maintainer: Nathan Rennie-Waldock <nathan.renniewaldock@gmail.com>
+Section: utils
+Priority: extra
+Build-Depends: debhelper (>= 8), zlib1g-dev, libqt5-dev | libqt4-dev
+Homepage: https://github.com/shundhammer/qdirstat
+
+Package: qdirstat
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description:  graphical disk usage display with cleanup facilities
+ QDirStat (Qt Directory Statistics) is a small utility program that sums
+ up disk usage for directory trees, very much like the Unix 'du' command.
+ It displays the disk space used up by a directory tree, both numerically
+ and graphically.  It is network transparent (i.e., you can use it to sum
+ up FTP servers), and comes with predefined and user configurable cleanup
+ actions.
