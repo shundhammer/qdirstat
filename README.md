@@ -84,7 +84,7 @@ _Context menu of the tree header where you can configure the columns._
   - Beta 2
 
     Beta 1 has now been out for 6 weeks, and I have not received one single bug
-    report during that time. Maybe it's just business as usually, and people
+    report during that time. Maybe it's just business as usual, and people
     just keep waiting for others to do the testing, while they themselves are
     waiting for a stable release. Well, okay, so let them have their way: The
     current code is now officially V0.92 Beta 2. And it won't be another 6
