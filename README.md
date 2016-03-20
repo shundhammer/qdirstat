@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-02-20
+Updated: 2016-03-20
 
 
 ## Overview
@@ -76,7 +76,31 @@ _Context menu of the tree header where you can configure the columns._
 
 ## Current Development Status
 
-**Beta status -- V0.86 (Beta 1)**
+**Beta status -- V0.92 (Beta 2)**
+
+
+- 2016-03-20
+
+  - Beta 2
+
+    Beta 1 has now been out for 6 weeks, and I have not received one single bug
+    report during that time. Maybe it's just business as usually, and people
+    just keep waiting for others to do the testing, while they themselves are
+    waiting for a stable release. Well, okay, so let them have their way: The
+    current code is now officially V0.92 Beta 2. And it won't be another 6
+    weeks; the next versions will come a lot more quickly. Once V1.0 final is
+    out, any bug reports will have to wait until there is time to work on
+    them. So, folks, use those Betas wisely.
+
+    BTW those who actually did test it will find that QDirStat is a lot more
+    stable even in Beta 1 than other pieces of software in their official final
+    release.
+
+- 2016-02-27
+
+  - Debian / Ubuntu packaging contributed by Nathan Rennie-Waldock.
+    He also made a PPA repository available for various Ubuntu versions - see
+    [Ubuntu packages](https://github.com/shundhammer/qdirstat#ubuntu) below.
 
 
 - 2016-02-06
@@ -544,10 +568,9 @@ QDirStat packages for:
 
 ### Ubuntu
 
-None yet, but coming up. Stay tuned.
-
-The openSUSE build service supports Ubuntu/Debian, too, but I never tried this,
-so this is be something to explore.
+See Nathan Rennie-Waldock's
+[**QDirStat PPA**]
+(https://launchpad.net/~nathan-renniewaldock/+archive/ubuntu/qdirstat)
 
 
 ## Building
