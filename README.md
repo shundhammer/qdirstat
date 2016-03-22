@@ -742,3 +742,11 @@ Home page: https://windirstat.info/
 ### XDG Trash Spec
 
 http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
+
+
+## Reviews
+
+### YouTube
+
+[Spatry: _Quick Look: QDirStat_]
+(https://www.youtube.com/watch?v=ysm4-x_5ftI)
