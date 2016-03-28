@@ -15,6 +15,7 @@
 #include <QStringList>
 
 #include <stdio.h>	// stderr, fprintf()
+#include <stdlib.h>     // abort()
 #include <unistd.h>	// getpid()
 #include <sys/types.h>	// pid_t
 
