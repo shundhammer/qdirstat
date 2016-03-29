@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-03-20
+Updated: 2016-03-29
 
 
 ## Overview
@@ -583,6 +583,11 @@ Make sure you have a working Qt 5 build environment installed. This includes:
 - Qt 5 runtime environment
 - Qt 5 header files
 - libz (compression lib) runtime and header file
+
+If anything doesn't work, first of all **make sure you can build any of the
+simple examples supplied with Qt**, e.g. the
+[calculator example]
+(http://doc.qt.io/qt-5/qtwidgets-widgets-calculator-example.html).
 
 
 #### Ubuntu
