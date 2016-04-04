@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-03-29
+Updated: 2016-04-04
 
 
 ## Overview
@@ -531,7 +531,20 @@ Add this to your $PATH, then do the normal
 
 Not sure how well "make install" works, though.
 
-**Architecture maintainer wanted for QDirStat for MacOS X**
+**_Be advised that QDirStat on MacOS X is purely experimental at this stage._**
+
+There is no support. If you try this, you are on your own. Even more so than
+with the other platforms, you will have to make sure that your Qt build
+environment is set up correctly.
+
+_There be dragons._ ;-)
+
+
+### Architecture maintainer wanted for QDirStat for MacOS X
+
+If you are a developer with some prior C++ and Qt know-how on the MacOS X
+platform and you'd like to see QDirStat working there, please consider joining
+the team.
 
 
 ## Windows Compatibility
