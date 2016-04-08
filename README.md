@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-04-04
+Updated: 2016-04-08
 
 
 ## Overview
@@ -76,8 +76,36 @@ _Context menu of the tree header where you can configure the columns._
 
 ## Current Development Status
 
-**Beta status -- V0.92 (Beta 2)**
+**Beta status -- V0.98 (Beta 3)**
+**The final release is coming closer!**
 
+- 2016-04-08
+
+  - Beta 3
+
+  - Fixed
+    [GitHub issue #15](https://github.com/shundhammer/qdirstat/issues/15):
+
+    After a cleanup action is executed that needs refreshing the affected
+    subtree, the parent directory is selected, which is intentional so the
+    user's focus is not thrown off completely. There was a bug when you
+    selected an item in the treemap afterwards, that change was not correctly
+    propagated to the internal selection model: The parent directory remained
+    selected (which was wrong), and the newly selected item was just added to
+    the selection, i.e. that item and (typically) its parent directory was
+    selected. When a potentially dangerous cleanup operation was now started,
+    it would affect not only that item, but also the directory; and, worse,
+    that directory often went out of the visible scope of the tree view. Yes,
+    the confirmation popup would ask for both of them, but you all know how
+    quickly users click away those popups without really reading them.
+    This bug is now fixed.
+
+  - Improved the confirmation popup. Now highlighting directories much more if
+    there is a "mixed" selection, i.e., both directories and non-directories
+    are selected at the same time:
+
+    ![New cleanup confirmation popup]
+    (https://cloud.githubusercontent.com/assets/11538225/14390476/8b022c9a-fdb7-11e5-8eef-a5ba304d3bab.png)
 
 - 2016-03-20
 
