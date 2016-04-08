@@ -9,6 +9,6 @@
 #ifndef Version_h
 #define Version_h
 
-#define QDIRSTAT_VERSION "0.92"
+#define QDIRSTAT_VERSION "0.98"
 
 #endif // Version_h
