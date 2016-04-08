@@ -72,7 +72,7 @@ FileInfoSet SelectionModel::selectedItems()
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
 		CHECK_MAGIC( item );
 
-		//logDebug() << "Adding " << item << " to selected items" << endl;
+		// logDebug() << "Adding " << item << " col " << index.column() << " to selected items" << endl;
 		_selectedItems << item;
 	    }
 	}
@@ -173,7 +173,10 @@ void SelectionModel::setSelectedItems( const FileInfoSet & selectedItems )
 void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 {
     if ( _verbose )
-	logDebug() << item << endl;
+	logDebug() << item << " select: " << select << endl;
+
+    if ( select )
+        clear();
 
     _currentItem = item;
 

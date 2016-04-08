@@ -39,8 +39,10 @@ FileInfoSet FileInfoSet::normalized() const
     {
 	if ( ! containsAncestorOf( item ) )
 	    normalized << item;
+#if 0
 	else
 	    logDebug() << "Removing " << item << " with ancestors in the set" << endl;
+#endif
     }
 
     return normalized;
