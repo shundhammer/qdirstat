@@ -12,6 +12,7 @@
 #include <QList>
 #include <QSet>
 #include <QPointer>
+#include <QStringList>
 
 #include "ListMover.h"
 #include "Cleanup.h"
@@ -190,6 +191,18 @@ namespace QDirStat
 	 * 'items'. Returns 'true' if user accepts, 'false' otherwise.
 	 **/
 	bool confirmation( Cleanup * cleanup, const FileInfoSet & items );
+
+        /**
+         * Return the URLs for the selected item types in 'items':
+         * Directories, non-directories, or both.
+         *
+         * 'extraHighlight' indicates that some very strong extra highlighting
+         * should be done to mark directories.
+         **/
+        QStringList filteredUrls( const FileInfoSet & items,
+                                  bool                dirs,
+                                  bool                nonDirs,
+                                  bool                extraHighlight = false ) const;
 
 	/**
 	 * Update all menus that have the 'keepUpdated' flag set.

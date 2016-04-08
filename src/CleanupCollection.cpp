@@ -301,7 +301,7 @@ void CleanupCollection::execute()
 
 bool CleanupCollection::confirmation( Cleanup * cleanup, const FileInfoSet & items )
 {
-    QString msg;
+    QString msg = "<html>";
     QString title = cleanup->cleanTitle();
 
     if ( items.size() == 1 ) // The most common case
@@ -309,31 +309,44 @@ bool CleanupCollection::confirmation( Cleanup * cleanup, const FileInfoSet & ite
 	FileInfo * item = items.first();
 
 	if ( item->isDir() || item->isDotEntry() )
-	    msg = tr( "%1\nin directory %2" ).arg( title ).arg( item->url() );
+	    msg += tr( "<h3>%1</h3>for <b>directory</b> %2" ).arg( title ).arg( item->url() );
 	else
-	    msg = tr( "%1\nfor file %2" ).arg( title ).arg( item->url() );
+	    msg += tr( "<h3>%1</h3>for file %2" ).arg( title ).arg( item->url() );
+
+        msg += "<br>";
     }
     else // Multiple items selected
     {
-	// Build a list of the first couple (7 max)
 
-	QStringList urls;
+        QStringList urls;
+        bool isMixed = items.containsDir() && items.containsFile();
 
-	for ( FileInfoSet::const_iterator it = items.begin();
-	      it != items.end() && urls.size() <= MAX_URLS_IN_CONFIRMATION_POPUP;
-	      ++it )
-	{
-	    urls << (*it)->url();
-	}
+        if ( isMixed )
+        {
+            QStringList dirs    = filteredUrls( items, true, false,    // dibs, nonDirs
+                                                true );                // extraHighlight
+            QStringList nonDirs = filteredUrls( items, false, true  ); // dirs, nonDirs
+
+            dirs    = dirs.mid   ( 0, MAX_URLS_IN_CONFIRMATION_POPUP );
+            nonDirs = nonDirs.mid( 0, MAX_URLS_IN_CONFIRMATION_POPUP );
+
+            urls << dirs << "" << nonDirs;
+        }
+        else // ! isMixed
+        {
+            // Build a list of the first couple of selected items (7 max)
+
+            urls = filteredUrls( items, true, true ); // dirs, nonDirs
+            urls = urls.mid( 0, MAX_URLS_IN_CONFIRMATION_POPUP );
+        }
 
 	if ( urls.size() < items.size() ) // Only displaying part of the items?
 	{
 	    urls << "...";
-	    urls << tr( "(%1 items total)" ).arg( items.size() );
+	    urls << tr( "<i>(%1 items total)</i>" ).arg( items.size() );
 	}
 
-
-	msg = tr( "%1 for:\n\n%2" ).arg( title ).arg( urls.join( "\n" ) );
+	msg += tr( "<h3>%1</h3> for:<br>\n%2<br>" ).arg( title ).arg( urls.join( "<br>" ) );
     }
 
     int ret = QMessageBox::question( qApp->activeWindow(),
@@ -343,6 +356,35 @@ bool CleanupCollection::confirmation( Cleanup * cleanup, const FileInfoSet & ite
     return ret == QMessageBox::Yes;
 }
 
+
+QStringList CleanupCollection::filteredUrls( const FileInfoSet & items,
+                                             bool                dirs,
+                                             bool                nonDirs,
+                                             bool                extraHighlight ) const
+{
+    QStringList urls;
+
+    for ( FileInfoSet::const_iterator it = items.begin(); it != items.end(); ++it )
+    {
+        if ( ( dirs    &&   (*it)->isDir() ) ||
+             ( nonDirs && ! (*it)->isDir() )   )
+        {
+            QString name = (*it)->url();
+
+            if ( (*it)->isDir() )
+            {
+                if ( extraHighlight )
+                    urls << tr( "<b>Directory <font color=blue>%1</font></b>" ).arg( name );
+                else
+                    urls << tr( "<b>Directory</b> %1" ).arg( name );
+            }
+            else
+                urls << name;
+        }
+    }
+
+    return urls;
+}
 
 
 void CleanupCollection::addToMenu( QMenu * menu, bool keepUpdated )
