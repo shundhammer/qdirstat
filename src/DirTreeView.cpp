@@ -143,6 +143,7 @@ void DirTreeView::closeAllExcept( const QModelIndex & branch )
 	// logDebug() << "Closing " << index << endl;
 	collapse( index );
     }
+
     scrollTo( currentIndex() );
 }
 

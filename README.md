@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-04-08
+Updated: 2016-04-11
 
 
 ## Overview
@@ -77,7 +77,16 @@ _Context menu of the tree header where you can configure the columns._
 ## Current Development Status
 
 **Beta status -- V0.98 (Beta 3)**
+
 **The final release is coming closer!**
+
+- 2016-04-11
+
+  - _buxit_ reported
+    [GitHub issue #16](https://github.com/shundhammer/qdirstat/issues/16)
+    and contributed the fix for it shortly afterwards:
+    When clicking in the treemap, the corresponding item in the tree view was
+    not always scrolled into the visible area. Now it is.
 
 - 2016-04-08
 
