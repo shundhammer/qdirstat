@@ -33,6 +33,10 @@
 #	-h	help (usage message)
 #
 # Author:  Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+#
+# This script is freeware. Fuck the lawyers and their legalese bullshit.
+# All they ever contribute to software is those legalese headers that are just
+# in the way of people working with the code.
 
 
 # TO DO:
