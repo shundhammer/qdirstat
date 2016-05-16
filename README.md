@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-04-11
+Updated: 2016-05-16
 
 
 ## Overview
@@ -76,9 +76,20 @@ _Context menu of the tree header where you can configure the columns._
 
 ## Current Development Status
 
-**Beta status -- V0.98 (Beta 3)**
+**Stable release: V1.0**
 
-**The final release is coming closer!**
+- 2016-05-16 **First stable release: V1.0**
+
+  After 3 months of Beta phase and 3 Beta releases, here is finally the
+  official first stable release of QDirStat: Version 1.0.
+
+  In terms of source code, there were very little changes from the last Beta
+  (0.98-Beta3 from 2016-04-08) and no real code change (only the version number
+  increased) from the last check-in from 2016-04-11. This version can really be
+  considered stable in the truest sense of the word. It was not rushed out the
+  door, and there were no hectic last minute changes. It is well tested, and
+  the community had ample opportunity to report any problems.
+
 
 - 2016-04-11
 
