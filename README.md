@@ -623,8 +623,15 @@ QDirStat packages for:
 - SUSE Linux Enterprise (SLE) 12 SP1
 - SUSE Linux Enterprise (SLE) 12
 
-[**Download page**]
+[Download page for the **latest stable release**: QDirStat 1.0]
+(https://software.opensuse.org/download/package?project=home:shundhammer&package=qdirstat-stable)
+
+[Download page for the **current development version** (git master)]
 (https://software.opensuse.org/download/package?project=home:shundhammer&package=qdirstat)
+
+Since this version is in development, it may be not quite as stable and
+reliable as the latest official stable release, although the QDirStat
+developers try their best to keep it as stable as possible.
 
 
 ### Ubuntu
