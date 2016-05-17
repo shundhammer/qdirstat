@@ -9,6 +9,6 @@
 #ifndef Version_h
 #define Version_h
 
-#define QDIRSTAT_VERSION "1.0"
+#define QDIRSTAT_VERSION "1.0-git"
 
 #endif // Version_h
