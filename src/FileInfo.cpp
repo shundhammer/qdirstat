@@ -307,7 +307,7 @@ FileInfo * FileInfo::locate( QString url, bool findDotEntries )
 	// if the rest of the URL consists of several pathname components.
 
 	if ( dotEntry() &&
-	     url.contains( "/" ) < 0 )	   // No (more) "/" in this URL
+	     ! url.contains( "/" ) )	   // No (more) "/" in this URL
 	{
 	    return dotEntry()->locate( url, findDotEntries );
 	}
