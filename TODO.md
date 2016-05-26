@@ -102,7 +102,9 @@ really wants to change any of them will need to use his favourite editor.
 
 ### Support for non-UTF-8 Locales
 
-See also Github Issue #19
+See also
+[Github Issue #19]
+(https://github.com/shundhammer/qdirstat/issues/19)
 
 This might be useful for some users, in particular in Japan (Shift-JIS
 encoding). But this has large potential to bring back nasty problems for users
