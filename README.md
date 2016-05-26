@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-05-17
+Updated: 2016-05-26
 
 
 ## Overview
@@ -274,9 +274,9 @@ old code base that had been long overdue.
 - Multi-selection:
 
   - Both views (the tree and the treemap) now support _extended_ selection,
-  i.e. you can select more than one item. This was the most requested feature
-  for the last KDirStat. Now you can now select more than one item at once to
-  move it to the trash can, to directly delete it or whatever.
+    i.e. you can select more than one item. This was the most requested feature
+    for the last KDirStat. Now you can select more than one item at the same
+    time to move it to the trash can, to directly delete it or whatever.
 
   - Tree view:
     - Shift-click: Select a range of items.
@@ -448,9 +448,9 @@ Features ported from the old KDirStat:
   Treemap" or F9 key)
 
 - Treemap and tree list view communicate. Select an item in one view, and it is
-  also selected in another. If you click on that large blob in the treemap, it
-  is located in the tree view, all branches up to its directory are opened, and
-  the tree view scrolls to that item.
+  also selected in the other. If you click on that large blob in the treemap,
+  it is located in the tree view, all branches up to its directory are opened,
+  and the tree view scrolls to that item.
 
 - Cleanup actions. Once you know what is consuming the disk space, you can
   start cleanup actions from within QDirStat to reclaim disk space - or to
@@ -590,7 +590,7 @@ _There be dragons._ ;-)
 
 ### Architecture maintainer wanted for QDirStat for MacOS X
 
-If you are a developer with some prior C++ and Qt know-how on the MacOS X
+If you are a developer with some prior C++ and Qt knowledge on the MacOS X
 platform and you'd like to see QDirStat working there, please consider joining
 the team.
 
