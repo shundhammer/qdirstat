@@ -117,8 +117,9 @@ FORMS	  = main-window.ui		   \
 	    config-dialog.ui		   \
 	    cleanup-config-page.ui	   \
 	    mime-category-config-page.ui   \
-	    exclude-rules-config-page.ui   \
-	    general-config-page.ui	   \
+	    exclude-rules-config-page.ui
+
+#	    general-config-page.ui
 
 
 RESOURCES = icons.qrc
