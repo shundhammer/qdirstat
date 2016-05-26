@@ -97,3 +97,24 @@ really wants to change any of them will need to use his favourite editor.
 
 - Installer
 
+
+## Unclassified / Undecided
+
+### Support for non-UTF-8 Locales
+
+See also Github Issue #19
+
+This might be useful for some users, in particular in Japan (Shift-JIS
+encoding). But this has large potential to bring back nasty problems for users
+using a UTF-8 locale, but who not really aware of all the implications: If
+their environment is not set up correctly, the might have the opposite problem
+of that lone user who requested this (unaware that he has been using an
+outdated locale environment for a very long time).
+
+It might or might not be worthwhile to introduce a large risk of breaking
+things for the great majority of users (who have a modern UTF-8 setup) to maybe
+make a small number of users happy (who just never bothered to update to a
+modern UTF-8 locale environment).
+
+This might warrant a poll (polldaddy?) how many users are actually interested
+in this.
