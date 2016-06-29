@@ -7,10 +7,9 @@
  */
 
 
-#include <QSettings>
-
 #include "MimeCategorizer.h"
 #include "FileInfo.h"
+#include "Settings.h"
 #include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -172,8 +171,8 @@ void MimeCategorizer::addSuffixes( QMap<QString, MimeCategory *> & suffixMap,
 
 void MimeCategorizer::readSettings()
 {
-    QSettings settings;
-    QStringList mimeCategoryGroups = findSettingsGroups( settings, "MimeCategory_" );
+    MimeCategorySettings settings;
+    QStringList mimeCategoryGroups = settings.findGroups( settings.groupPrefix() );
 
     clear();
 
@@ -205,10 +204,10 @@ void MimeCategorizer::readSettings()
 
 void MimeCategorizer::writeSettings()
 {
-    QSettings settings;
+    MimeCategorySettings settings;
 
     // Remove all leftover cleanup descriptions
-    removeSettingsGroups( settings, "MimeCategory_" );
+    settings.removeGroups( settings.groupPrefix() );
 
     for ( int i=0; i < _categories.size(); ++i )
     {

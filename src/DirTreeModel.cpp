@@ -7,13 +7,13 @@
  */
 
 
-#include <QSettings>
 
 #include "DirTreeModel.h"
 #include "DirTree.h"
 #include "FileInfoIterator.h"
 #include "DataColumns.h"
 #include "SelectionModel.h"
+#include "Settings.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "DebugHelpers.h"
@@ -52,7 +52,7 @@ DirTreeModel::~DirTreeModel()
 
 void DirTreeModel::readSettings()
 {
-    QSettings settings;
+    Settings settings;
     settings.beginGroup( "DirectoryTree" );
 
     _tree->setCrossFileSystems( settings.value( "CrossFileSystems", false ).toBool() );
@@ -65,7 +65,7 @@ void DirTreeModel::readSettings()
 
 void DirTreeModel::writeSettings()
 {
-    QSettings settings;
+    Settings settings;
     settings.beginGroup( "DirectoryTree" );
 
     settings.setValue( "CrossFileSystems",    _tree->crossFileSystems() );

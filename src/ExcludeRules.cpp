@@ -7,9 +7,9 @@
  */
 
 
-#include <QSettings>
 
 #include "ExcludeRules.h"
+#include "Settings.h"
 #include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -194,8 +194,8 @@ void ExcludeRules::moveToBottom( ExcludeRule * rule )
 
 void ExcludeRules::readSettings()
 {
-    QSettings settings;
-    QStringList excludeRuleGroups = findSettingsGroups( settings, "ExcludeRule_" );
+    Settings settings;
+    QStringList excludeRuleGroups = settings.findGroups( "ExcludeRule_" );
 
     if ( ! excludeRuleGroups.isEmpty() ) // Keep defaults if settings empty
     {
@@ -237,10 +237,10 @@ void ExcludeRules::readSettings()
 
 void ExcludeRules::writeSettings()
 {
-    QSettings settings;
+    Settings settings;
 
     // Remove all leftover cleanup descriptions
-    removeSettingsGroups( settings, "ExcludeRule_" );
+    settings.removeGroups( "ExcludeRule_" );
 
     // Similar to CleanupCollection::writeSettings(), using a separate group
     // for each exclude rule for better readability in the settings file.

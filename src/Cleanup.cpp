@@ -10,7 +10,6 @@
 #include <QApplication>
 #include <QRegExp>
 #include <QProcessEnvironment>
-#include <QSettings>
 #include <QFileInfo>
 
 #include "Cleanup.h"

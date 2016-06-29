@@ -7,9 +7,9 @@
  */
 
 
-#include <QSettings>
 
 #include "DataColumns.h"
+#include "Settings.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -73,7 +73,7 @@ const DataColumnList DataColumns::defaultColumns() const
 
 void DataColumns::readSettings()
 {
-    QSettings settings;
+    Settings settings;
     settings.beginGroup( "DataColumns" );
     QStringList strColList = settings.value( "Columns" ).toStringList();
     settings.endGroup();
@@ -89,7 +89,7 @@ void DataColumns::readSettings()
 
 void DataColumns::writeSettings()
 {
-    QSettings settings;
+    Settings settings;
     settings.beginGroup( "DataColumns" );
     settings.setValue( "Columns", toStringList( _columns ) );
     settings.endGroup();

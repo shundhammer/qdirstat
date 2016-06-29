@@ -60,6 +60,7 @@ SOURCES	  = main.cpp			\
 	    Process.cpp			\
 	    Refresher.cpp		\
 	    SelectionModel.cpp		\
+            Settings.cpp                \
 	    SettingsHelpers.cpp		\
 	    StdCleanup.cpp		\
 	    Trash.cpp			\
@@ -101,7 +102,8 @@ HEADERS	  =				\
 	    PercentBar.h		\
 	    Process.h			\
 	    Refresher.h			\
-	    SelectionModel.h		\
+            SelectionModel.h		\
+            Settings.h                  \
 	    SettingsHelpers.h		\
 	    SignalBlocker.h		\
 	    StdCleanup.h		\

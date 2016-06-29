@@ -9,7 +9,6 @@
 
 #include <QDir>
 #include <QFileInfo>
-#include <QSettings>
 
 #include "DirTree.h"
 #include "FileInfoSet.h"

@@ -1,5 +1,5 @@
 /*
- *   File name: SettingsHelpers.cpp
+ *   File name: SettingsHelpers.h
  *   Summary:	Helper functions for QSettings for QDirStat
  *   License:	GPL V2 - See file LICENSE for details.
  *
@@ -82,18 +82,6 @@ namespace QDirStat
 			 const char * entryName,
 			 int	      enumValue,
 			 const QMap<int, QString> & enumMapping );
-
-    /**
-     * Find all settings groups that start with 'groupPrefix'.
-     **/
-    QStringList findSettingsGroups( QSettings     & settings,
-                                    const QString & groupPrefix );
-
-    /**
-     * Remove all settings groups that start with 'groupPrefix'.
-     **/
-    void removeSettingsGroups( QSettings     & settings,
-                               const QString & groupPrefix );
 
     /**
      * Return the enum mapping for QRegExp::PatternSyntax.

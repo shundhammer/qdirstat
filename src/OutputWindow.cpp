@@ -9,10 +9,10 @@
 
 #include <QApplication>
 #include <QCloseEvent>
-#include <QSettings>
 #include <QTimer>
 
 #include "OutputWindow.h"
+#include "Settings.h"
 #include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -516,7 +516,7 @@ void OutputWindow::timeoutShow()
 
 void OutputWindow::readSettings()
 {
-    QSettings settings;
+    QDirStat::Settings settings;
     settings.beginGroup( "OutputWindow" );
 
     _terminalBackground	 = readColorEntry( settings, "TerminalBackground", QColor( Qt::black  ) );
@@ -534,7 +534,7 @@ void OutputWindow::readSettings()
 
 void OutputWindow::writeSettings()
 {
-    QSettings settings;
+    QDirStat::Settings settings;
     settings.beginGroup( "OutputWindow" );
 
     writeColorEntry( settings, "TerminalBackground", _terminalBackground  );

@@ -9,12 +9,12 @@
 
 #include <QMenu>
 #include <QToolBar>
-#include <QSettings>
 #include <QMessageBox>
 
 #include "CleanupCollection.h"
 #include "Cleanup.h"
 #include "StdCleanup.h"
+#include "Settings.h"
 #include "SettingsHelpers.h"
 #include "SelectionModel.h"
 #include "OutputWindow.h"
@@ -453,8 +453,8 @@ void CleanupCollection::moveToBottom( Cleanup * cleanup )
 
 void CleanupCollection::readSettings()
 {
-    QSettings settings;
-    QStringList cleanupGroups = findSettingsGroups( settings, "Cleanup_" );
+    CleanupSettings settings;
+    QStringList cleanupGroups = settings.findGroups( settings.groupPrefix() );
 
     if ( ! cleanupGroups.isEmpty() ) // Keep defaults (StdCleanups) if settings empty
     {
@@ -531,15 +531,15 @@ void CleanupCollection::readSettings()
 
 void CleanupCollection::writeSettings()
 {
-    QSettings settings;
+    CleanupSettings settings;
 
     // Remove all leftover cleanup descriptions
-    removeSettingsGroups( settings, "Cleanup_" );
+    settings.removeGroups( settings.groupPrefix() );
 
     // Using a separate group for each cleanup for better readability in the
     // file.
     //
-    // QSettings arrays are hard to read and to edit if there are more than,
+    // Settings arrays are hard to read and to edit if there are more than,
     // say, 2-3 entries for each array index. Plus, a user editing the file
     // would have to take care of the array count - which is very error prone.
     //

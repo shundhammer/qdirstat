@@ -157,39 +157,6 @@ namespace QDirStat
     }
 
 
-    QStringList findSettingsGroups( QSettings	  & settings,
-				    const QString & groupPrefix )
-    {
-	while ( ! settings.group().isEmpty() )	// ensure using toplevel settings
-	    settings.endGroup();
-
-	QStringList result;;
-
-	foreach ( const QString & group, settings.childGroups() )
-	{
-	    if ( group.startsWith( groupPrefix ) )
-		result << group;
-	}
-
-	return result;
-    }
-
-
-    void removeSettingsGroups( QSettings     & settings,
-			       const QString & groupPrefix )
-    {
-
-	while ( ! settings.group().isEmpty() )	// ensure using toplevel settings
-	    settings.endGroup();
-
-	foreach ( const QString & group, settings.childGroups() )
-	{
-	    if ( group.startsWith( groupPrefix ) )
-		settings.remove( group );
-	}
-    }
-
-
     QMap<int, QString> patternSyntaxMapping()
     {
 	static QMap<int, QString> mapping;

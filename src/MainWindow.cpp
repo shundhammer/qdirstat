@@ -12,7 +12,6 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSignalMapper>
-#include <QSettings>
 #include <QClipboard>
 
 #include "MainWindow.h"
@@ -34,6 +33,7 @@
 #include "OutputWindow.h"
 #include "Refresher.h"
 #include "SelectionModel.h"
+#include "Settings.h"
 #include "Trash.h"
 #include "Version.h"
 
@@ -300,7 +300,7 @@ void MainWindow::updateActions()
 
 void MainWindow::readSettings()
 {
-    QSettings settings;
+    QDirStat::Settings settings;
     settings.beginGroup( "MainWindow" );
 
     _statusBarTimeout	 = settings.value( "StatusBarTimeoutMillisec", 3000 ).toInt();
@@ -326,7 +326,7 @@ void MainWindow::readSettings()
 
 void MainWindow::writeSettings()
 {
-    QSettings settings;
+    QDirStat::Settings settings;
     settings.beginGroup( "MainWindow" );
 
     settings.setValue( "StatusBarTimeoutMillisec", _statusBarTimeout );

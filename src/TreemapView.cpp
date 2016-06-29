@@ -9,7 +9,6 @@
 
 #include <QResizeEvent>
 #include <QRegExp>
-#include <QSettings>
 #include <QTimer>
 
 #include "TreemapView.h"
@@ -17,6 +16,7 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "SelectionModel.h"
+#include "Settings.h"
 #include "SettingsHelpers.h"
 #include "SignalBlocker.h"
 #include "TreemapTile.h"
@@ -146,7 +146,7 @@ void TreemapView::setSelectionModel( SelectionModel * selectionModel )
 
 void TreemapView::readSettings()
 {
-    QSettings settings;
+    Settings settings;
     settings.beginGroup( "Treemaps" );
 
     _ambientLight	= settings.value( "AmbientLight"     , DefaultAmbientLight ).toInt();
@@ -172,7 +172,7 @@ void TreemapView::writeSettings()
 {
     logDebug() << endl;
 
-    QSettings settings;
+    Settings settings;
     settings.beginGroup( "Treemaps" );
 
     settings.setValue( "AmbientLight"	   , _ambientLight	 );

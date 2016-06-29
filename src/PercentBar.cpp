@@ -9,14 +9,14 @@
 
 #include <QPainter>
 #include <QTreeView>
-#include <QSettings>
 
 #include "PercentBar.h"
 #include "DirTreeModel.h"
+#include "Settings.h"
+#include "SettingsHelpers.h"
 #include "Exception.h"
 #include "FileInfo.h"
 #include "Logger.h"
-#include "SettingsHelpers.h"
 
 
 using namespace QDirStat;
@@ -63,7 +63,7 @@ ColorList PercentBarDelegate::defaultFillColors() const
 
 void PercentBarDelegate::readSettings()
 {
-    QSettings settings;
+    Settings settings;
     settings.beginGroup( "PercentBar" );
 
     _fillColors	   = readColorListEntry( settings, "Colors"    , defaultFillColors() );
@@ -76,7 +76,7 @@ void PercentBarDelegate::readSettings()
 
 void PercentBarDelegate::writeSettings()
 {
-    QSettings settings;
+    Settings settings;
     settings.beginGroup( "PercentBar" );
 
     writeColorListEntry( settings, "Colors"    , _fillColors	);

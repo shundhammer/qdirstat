@@ -9,10 +9,10 @@
 
 #include <QMenu>
 #include <QAction>
-#include <QSettings>
 
 #include "HeaderTweaker.h"
 #include "DirTreeView.h"
+#include "Settings.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "SignalBlocker.h"
@@ -303,7 +303,7 @@ void HeaderTweaker::setColumnOrder( const DataColumnList & colOrderList)
 
 void HeaderTweaker::clearSettings()
 {
-    QSettings settings;
+    Settings settings;
     settings.beginGroup( "TreeViewColumns" );
     remove( "" ); // Remove all keys in this settings group
     settings.endGroup();
@@ -312,7 +312,7 @@ void HeaderTweaker::clearSettings()
 
 void HeaderTweaker::readSettings()
 {
-    QSettings settings;
+    Settings settings;
     settings.beginGroup( "TreeViewColumns" );
 
     QStringList strList = settings.value( "ColumnOrder" ).toStringList();
@@ -386,7 +386,7 @@ void HeaderTweaker::readSettings()
 
 void HeaderTweaker::writeSettings()
 {
-    QSettings settings;
+    Settings settings;
     settings.beginGroup( "TreeViewColumns" );
 
     QStringList colOrderList;
