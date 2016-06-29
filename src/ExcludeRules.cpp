@@ -194,8 +194,8 @@ void ExcludeRules::moveToBottom( ExcludeRule * rule )
 
 void ExcludeRules::readSettings()
 {
-    Settings settings;
-    QStringList excludeRuleGroups = settings.findGroups( "ExcludeRule_" );
+    ExcludeRuleSettings settings;
+    QStringList excludeRuleGroups = settings.findGroups( settings.groupPrefix() );
 
     if ( ! excludeRuleGroups.isEmpty() ) // Keep defaults if settings empty
     {
@@ -237,10 +237,10 @@ void ExcludeRules::readSettings()
 
 void ExcludeRules::writeSettings()
 {
-    Settings settings;
+    ExcludeRuleSettings settings;
 
     // Remove all leftover cleanup descriptions
-    settings.removeGroups( "ExcludeRule_" );
+    settings.removeGroups( settings.groupPrefix() );
 
     // Similar to CleanupCollection::writeSettings(), using a separate group
     // for each exclude rule for better readability in the settings file.
