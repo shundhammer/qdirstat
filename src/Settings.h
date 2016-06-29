@@ -79,20 +79,10 @@ namespace QDirStat
     protected:
 
 	/**
-	 * Migrate (move) all settings groups starting with 'groupPrefix' from
-	 * settings object 'from' to settings object 'to'.
+	 * Mmove all settings groups starting with 'groupPrefix' from settings
+	 * object 'from' to settings object 'to'.
 	 **/
-	void migrate( const QString & groupPrefix, Settings & from, Settings & to );
-
-	/**
-	 * Migrate settings of the generic settings (the main config file) to
-	 * this one. Derived classes can reimplement this to make sure no
-	 * duplicates of their separate config file remain in the main config
-	 * file.
-	 *
-	 * This default implementation does nothing.
-	 **/
-	virtual void migrate() {}
+	void moveGroups( const QString & groupPrefix, Settings * from, Settings * to );
 
 
 	// Data members
@@ -126,10 +116,10 @@ namespace QDirStat
 
     protected:
 	/**
-	 * Migrate settings of the generic settings (the main config file) to
-	 * this one. Reimplemented from Settings.
+	 * Migrate settings of the common settings (the main config file) to
+	 * this one.
 	 **/
-	virtual void migrate() Q_DECL_OVERRIDE;
+	void migrate();
     };
 
 
@@ -157,10 +147,41 @@ namespace QDirStat
 
     protected:
 	/**
-	 * Migrate settings of the generic settings (the main config file) to
-	 * this one. Reimplemented from Settings.
+	 * Migrate settings of the common settings (the main config file) to
+	 * this one.
 	 **/
-	virtual void migrate() Q_DECL_OVERRIDE;
+	void migrate();
+    };
+
+
+    /**
+     * Specialized settings class for exclude rules.
+     *
+     * The general idea is that those settings are stored in a separate file so
+     * that entire file can easily replaced by a site administrator.
+     **/
+    class ExcludeRuleSettings: public Settings
+    {
+	Q_OBJECT
+
+    public:
+
+	/**
+	 * Constructor.
+	 **/
+	ExcludeRuleSettings();
+
+	/**
+	 * Destructor.
+	 **/
+	virtual ~ExcludeRuleSettings();
+
+    protected:
+	/**
+	 * Migrate settings of the common settings (the main config file) to
+	 * this one.
+	 **/
+	void migrate();
     };
 
 }	// namespace QDirStat

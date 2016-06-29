@@ -11,6 +11,9 @@
 
 #include <QCoreApplication>
 
+#include "Logger.h"
+#include "Exception.h"
+
 
 using namespace QDirStat;
 
@@ -78,13 +81,47 @@ void Settings::removeGroups( const QString & groupPrefix )
 }
 
 
-void Settings::migrate( const QString & groupPrefix,
-			Settings & from,
-			Settings & to )
+void Settings::moveGroups( const QString & groupPrefix,
+			   Settings * from,
+			   Settings * to )
 {
-    Q_UNUSED( groupPrefix );
-    Q_UNUSED( from );
-    Q_UNUSED( to );
+    CHECK_PTR( from );
+    CHECK_PTR( to   );
+
+
+    if ( ! hasGroup( groupPrefix ) )
+    {
+	logInfo() << "Migrating " << groupPrefix << "* to " << to->name() << endl;
+	QStringList groups = from->findGroups( groupPrefix );
+
+	foreach ( const QString & group, groups )
+	{
+	    // logVerbose() << "  Migrating " << group << endl;
+
+	    from->beginGroup( group );
+	    to->beginGroup( group );
+
+	    QStringList keys = from->allKeys();
+
+	    foreach( const QString & key, keys )
+	    {
+		// logVerbose() << "	Copying " << key << endl;
+		to->setValue( key, from->value( key ) );
+	    }
+
+	    to->endGroup();
+	    from->endGroup();
+	}
+    }
+    else
+    {
+	logVerbose() << "Target settings " << to->name()
+		     << " have group " << groupPrefix
+		     << " - nothing to migrate"
+		     << endl;
+    }
+
+    from->removeGroups( groupPrefix );
 }
 
 
@@ -94,6 +131,7 @@ CleanupSettings::CleanupSettings():
     Settings( QCoreApplication::applicationName() + "-cleanup" )
 {
     _groupPrefix = "Cleanup_";
+    migrate();
 }
 
 
@@ -105,7 +143,8 @@ CleanupSettings::~CleanupSettings()
 
 void CleanupSettings::migrate()
 {
-
+    Settings commonSettings;
+    moveGroups( _groupPrefix, &commonSettings, this );
 }
 
 
@@ -115,6 +154,7 @@ MimeCategorySettings::MimeCategorySettings():
     Settings( QCoreApplication::applicationName() + "-mime" )
 {
     _groupPrefix = "MimeCategory_";
+    migrate();
 }
 
 
@@ -126,5 +166,29 @@ MimeCategorySettings::~MimeCategorySettings()
 
 void MimeCategorySettings::migrate()
 {
+    Settings commonSettings;
+    moveGroups( _groupPrefix, &commonSettings, this );
+}
 
+
+
+
+ExcludeRuleSettings::ExcludeRuleSettings():
+    Settings( QCoreApplication::applicationName() + "-exclude" )
+{
+    _groupPrefix = "ExcludeRule_";
+    migrate();
+}
+
+
+ExcludeRuleSettings::~ExcludeRuleSettings()
+{
+
+}
+
+
+void ExcludeRuleSettings::migrate()
+{
+    Settings commonSettings;
+    moveGroups( _groupPrefix, &commonSettings, this );
 }
