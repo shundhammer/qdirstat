@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-05-26
+Updated: 2016-06-29
 
 
 ## Overview
@@ -77,6 +77,43 @@ _Context menu of the tree header where you can configure the columns._
 ## Current Development Status
 
 **Stable release: V1.0**
+
+- 2016-06-29
+
+  - V1.01 (Development version)
+
+  - Split up config file into four separate ones below ~/.config/QDirStat:
+
+    - QDirStat.conf
+    - QDirStat-cleanup.conf
+    - QDirStat-exclude.conf
+    - QDirStat-mime.conf
+
+    This should make it much easier for site administrators to provide their
+    own site-wide cleanup actions, exclude rules, or MIME categories. I did
+    this with this in mind:
+
+      http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html
+
+    Here, they describe how users should overwrite their KDirStat config file
+    with one provided by the site admin so all users have those carefully
+    crafted cleanup actions. But that also means that all other settings get
+    lost each time there is a change in any of those commands, and users have
+    to update that config file again.
+
+    With the latest change, it is now possible to only replace the cleanup
+    action config (QDirStat-cleanup.conf) and leave everything else untouched.
+
+    Notice that this is far from a perfect solution; all cleanup actions the
+    user added himself still get lost. But doing this perfectly might pretty
+    quickly become an overengineered solution that would be hard to understand
+    for everybody.
+
+    As for migration from previous single-file configurations, QDirStat does
+    that automatically: It reads the single file and moves the respective parts
+    where they belong. No need to bother with any migration scrips or anything
+    like that.
+
 
 - 2016-05-16 **First stable release: V1.0**
 
@@ -823,3 +860,8 @@ http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
 
 [Spatry: _Quick Look: QDirStat_]
 (https://www.youtube.com/watch?v=ysm4-x_5ftI)
+
+
+## Misc
+
+http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html
