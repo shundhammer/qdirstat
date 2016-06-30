@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-06-29
+Updated: 2016-06-30
 
 
 ## Overview
@@ -444,8 +444,8 @@ Features ported from the old KDirStat:
   from the "File" menu -- or configure QDirStat to always read across file
   systems.
 
-- Efficent memory usage. A modern Linux root file system has well over 200,000
-  objects (files, directories, symlinks, ...) and well over 20,000
+- Efficent memory usage. A modern Linux root file system has well over 500,000
+  objects (files, directories, symlinks, ...) and well over 40,000
   directories. This calls for minimalistic C++ objects to represent each one of
   them. QDirStat / KDirStat do their best to minimize that memory footprint.
 
