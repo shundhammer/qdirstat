@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-06-30
+Updated: 2016-07-02
 
 
 ## Overview
@@ -77,6 +77,21 @@ _Context menu of the tree header where you can configure the columns._
 ## Current Development Status
 
 **Stable release: V1.0**
+
+
+- 2016-07-02
+
+  - Fixed [GitHub issue #21](https://github.com/shundhammer/qdirstat/issues/21):
+
+    When started from a desktop menu, i.e. without any command line parameters,
+    QDirStat would not prompt for a directory to read, but read the current
+    directory (typically the user's home directory) right away.
+
+  - More graceful handling for nonexisting paths specified on the commmand
+    line: It now no longer just throws an exception right after starting the
+    program (which looks like a crash to the unwary user), but posts an error
+    popup instead and then asks for a directory to read.
+
 
 - 2016-06-29
 
