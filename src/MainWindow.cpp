@@ -443,7 +443,24 @@ void MainWindow::readingAborted()
 
 void MainWindow::openUrl( const QString & url )
 {
-    _dirTreeModel->openUrl( url );
+    try
+    {
+	_dirTreeModel->openUrl( url );
+    }
+    catch ( const SysCallFailedException & ex )
+    {
+        CAUGHT( ex );
+        
+	QMessageBox errorPopup( QMessageBox::Warning,   // icon
+                                tr( "Error" ),		// title
+                                tr( "Could not open directory %1" ).arg( ex.resourceName() ), // text
+                                QMessageBox::Ok,	// buttons
+                                this );                 // parent
+	errorPopup.setDetailedText( ex.what() );
+	errorPopup.exec();
+        askOpenUrl();
+    }
+
     updateActions();
     expandTreeToLevel( 1 );
 }

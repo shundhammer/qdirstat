@@ -11,6 +11,7 @@
 #define Exception_h
 
 #include "Logger.h"
+
 #include <QString>
 
 
@@ -130,6 +131,38 @@ public:
 
 private:
     QString _filename;
+};
+
+
+class SysCallFailedException: public Exception
+{
+public:
+    SysCallFailedException( const QString & sysCall,
+			    const QString & resourceName ):
+	Exception( errMsg( sysCall, resourceName ) ),
+	_sysCall( sysCall ),
+	_resourceName( resourceName )
+	{}
+
+    virtual ~SysCallFailedException() throw()
+	{}
+
+    /**
+     * Return the resource for which this syscall failed. This is typically a
+     * file name.
+     **/
+    QString resourceName() const { return _resourceName; }
+
+    QString sysCall() const { return _sysCall; }
+
+protected:
+    QString errMsg( const QString & sysCall,
+		    const QString & resourceName ) const;
+
+private:
+
+    QString _sysCall;
+    QString _resourceName;
 };
 
 

@@ -7,6 +7,9 @@
  */
 
 
+#include <sys/errno.h>
+#include <string.h>	// strerror()
+
 #include "Exception.h"
 
 
@@ -26,3 +29,25 @@ void Exception::setSrcLocation( const QString &srcFile,
     _srcFunction = srcFunction;
 }
 
+
+QString SysCallFailedException::errMsg( const QString & sysCall,
+					const QString & resourceName ) const
+{
+    QString msg;
+
+    if ( errno != 0 )
+    {
+	msg = QObject::tr( "%1( %2 ) failed: %3" )
+	    .arg( sysCall )
+	    .arg( resourceName )
+	    .arg( strerror( errno ) );
+    }
+    else
+    {
+	msg = QObject::tr( "%1( %2 ) failed" )
+	    .arg( sysCall )
+	    .arg( resourceName );
+    }
+
+    return msg;
+}

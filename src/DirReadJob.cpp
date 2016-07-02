@@ -317,8 +317,8 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
     }
     else // lstat() failed
     {
-	logError() << "lstat() failed for \"" << url << "\"" << endl;
-	return 0;
+        THROW( SysCallFailedException( "lstat", url ) );
+	return 0; // NOTREACHED
     }
 }
 
