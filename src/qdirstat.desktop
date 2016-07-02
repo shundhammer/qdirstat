@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
 Name=QDirStat
-Exec=qdirstat "%u"
+Exec=qdirstat %u
 Icon=qdirstat
 GenericName=QDirStat Directory Statistics
 Terminal=false
-MimeType=inode/directory;
+MimeType=inode/directory;inode/mount-point;
 Categories=Qt;System;Filesystem;

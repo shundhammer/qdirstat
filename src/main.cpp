@@ -72,7 +72,7 @@ int main( int argc, char *argv[] )
 	    usage( argList );
 	else if ( arg.startsWith( "-" ) )
 	    usage( argList );
-	else
+	else if ( ! arg.isEmpty() )
 	{
 	    mainWin.openUrl( arg );
 	}
