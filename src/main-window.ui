@@ -148,6 +148,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionGoUp"/>
+   <addaction name="actionRefreshAll"/>
    <addaction name="separator"/>
    <addaction name="actionTreemapZoomIn"/>
    <addaction name="actionTreemapZoomOut"/>
