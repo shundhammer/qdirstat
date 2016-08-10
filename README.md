@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-07-02
+Updated: 2016-08-10
 
 
 ## Overview
@@ -77,6 +77,20 @@ _Context menu of the tree header where you can configure the columns._
 ## Current Development Status
 
 **Stable release: V1.0**
+
+- 2016-08-10
+
+  - Fixed [GitHub issue #22](https://github.com/shundhammer/qdirstat/issues/22):
+
+    Cache files containing the root file system would not display correctly or
+    segfault under certain conditions. This is now fixed.
+
+  - Added "Refresh All" action to the main window tool bar. I had consciously
+    avoided that because it's just too tempting to re-read the complete
+    directory tree rather than think about what actually might have changed and
+    then refresh just that, but it has become so common to use that action in
+    web browsers that I found myself missing that more and more. And re-reading
+    is not that expensive on today's mainstream PCs.
 
 
 - 2016-07-02
