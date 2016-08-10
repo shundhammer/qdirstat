@@ -15,11 +15,17 @@
 #include "DirTreeCache.h"
 #include "DirTree.h"
 #include "ExcludeRules.h"
+#include "Exception.h"
 
 #define KB 1024LL
 #define MB (1024LL*1024)
 #define GB (1024LL*1024*1024)
 #define TB (1024LL*1024*1024*1024)
+
+#define VERBOSE_READ			0
+#define VERBOSE_CACHE_DIRS		0
+#define VERBOSE_CACHE_FILE_INFOS	0
+#define DEBUG_LOCATE_PARENT		0
 
 
 using namespace QDirStat;
@@ -192,8 +198,9 @@ QString CacheWriter::formatSize( FileSize size )
 
 CacheReader::CacheReader( const QString & fileName,
 			  DirTree *	  tree,
-			  DirInfo *	  parent )
-    : QObject()
+			  DirInfo *	  parent ):
+    QObject(),
+    _multiSlash( "//+" ) // cache regexp for multiple use
 {
     _fileName		= fileName;
     _buffer[0]		= 0;
@@ -311,7 +318,6 @@ void CacheReader::addItem()
 	_lastDir = 0;
 
 
-
     // Size
 
     char * end = 0;
@@ -349,26 +355,10 @@ void CacheReader::addItem()
     // Create a new item
     //
 
-    char * raw_name = raw_path;
-
-    if ( *raw_path == '/' && _tree->root() )
-    {
-	// Split raw_path in path + name
-
-	raw_name = strrchr( raw_path, '/' );
-
-	if ( raw_name )
-	    *raw_name++ = 0;	// Overwrite the last '/' with 0 byte - split string there
-	else			// No '/' found
-	    raw_name = raw_path;
-    }
-
-    // Using a protocol part to avoid directory names with a colon ":"
-    // being cut off because it looks like a URL protocol.
-    QByteArray protocol = "foo:";
-
-    QString path = QUrl::fromEncoded( protocol + QByteArray( raw_path ) ).path();
-    QString name = QUrl::fromEncoded( protocol + QByteArray( raw_name ) ).path();
+    QString fullPath = unescapedPath( raw_path );
+    QString path;
+    QString name;
+    splitPath( fullPath, path, name );
 
     if ( _lastExcludedDir )
     {
@@ -393,26 +383,43 @@ void CacheReader::addItem()
 	if ( ! parent && _toplevel )
 	    parent = dynamic_cast<DirInfo *> ( _toplevel->locate( path ) );
 
+#if DEBUG_LOCATE_PARENT
+	if ( parent )
+	    logDebug() << "Using cache starting point as parent for " << fullPath << endl;
+#endif
+
 
 	// Fallback: Search the entire tree
 
 	if ( ! parent )
+	{
 	    parent = dynamic_cast<DirInfo *> ( _tree->locate( path ) );
 
+#if DEBUG_LOCATE_PARENT
+	    if ( parent )
+		logDebug() << "Located parent " << path << " in tree" << endl;
+#endif
+	}
 
 	if ( ! parent ) // Still nothing?
 	{
 	    logError() << _fileName << ":" << _lineNo << ": "
-		       << "Could not locate parent " << path << endl;
+		       << "Could not locate parent \"" << path << "\" for "
+		       << name << endl;
 
+#if DEBUG_LOCATE_PARENT
+	    THROW( Exception( "Could not locate cache item parent" ) );
+#endif
 	    return;	// Ignore this cache line completely
 	}
     }
 
     if ( strcasecmp( type, "D" ) == 0 )
     {
-	QString url = ( parent == _tree->root() ) ? path + "/" + name : name;
-	// logDebug() << "Creating DirInfo  for " << url << " with parent " << parent << endl;
+	QString url = ( parent == _tree->root() ) ? buildPath( path, name ) : name;
+#if VERBOSE_CACHE_DIRS
+	logDebug() << "Creating DirInfo for " << url << " with parent " << parent << endl;
+#endif
 	DirInfo * dir = new DirInfo( _tree, parent, url,
 				     mode, size, mtime );
 	dir->setReadState( DirReading );
@@ -453,7 +460,10 @@ void CacheReader::addItem()
     {
 	if ( parent )
 	{
-	    // logDebug() << "Creating FileInfo for " << parent->debugUrl() << "/" << name << endl;
+#if VERBOSE_CACHE_FILE_INFOS
+	    logDebug() << "Creating FileInfo for "
+		       << buildPath( parent->debugUrl(), name ) << endl;
+#endif
 
 	    FileInfo * item = new FileInfo( _tree, parent, name,
 					    mode, size, mtime,
@@ -664,6 +674,59 @@ void CacheReader::killTrailingWhiteSpace( char * cptr )
 
     while ( cptr >= start && isspace( *cptr ) )
 	*cptr-- = 0;
+}
+
+
+void CacheReader::splitPath( const QString & fileNameWithPath,
+			     QString	   & path_ret,
+			     QString	   & name_ret ) const
+{
+    bool absolutePath = fileNameWithPath.startsWith( "/" );
+    QStringList components = fileNameWithPath.split( "/", QString::SkipEmptyParts );
+
+    if ( components.isEmpty() )
+    {
+	path_ret = "";
+	name_ret = absolutePath ? "/" : "";
+    }
+    else
+    {
+	name_ret = components.takeLast();
+	path_ret = components.join( "/" );
+
+	if ( absolutePath )
+	    path_ret.prepend( "/" );
+    }
+}
+
+
+QString CacheReader::buildPath( const QString & path, const QString & name ) const
+{
+    if ( path.isEmpty() )
+	return name;
+    else if ( name.isEmpty() )
+	return path;
+    else if ( path == "/" )
+	return path + name;
+    else return path + "/" + name;
+}
+
+
+QString CacheReader::unescapedPath( const QString & rawPath ) const
+{
+    // Using a protocol part to avoid directory names with a colon ":"
+    // being cut off because it looks like a URL protocol.
+    QString protocol = "foo:";
+    QString url = protocol + cleanPath( rawPath );
+
+    return QUrl::fromEncoded( url.toUtf8() ).path();
+}
+
+
+QString CacheReader::cleanPath( const QString & rawPath ) const
+{
+    QString clean = rawPath;
+    return clean.replace( _multiSlash, "/" );
 }
 
 

@@ -215,6 +215,34 @@ namespace QDirStat
 	char * field( int no );
 
 	/**
+	 * Split up a file name with path into its path and its name component
+	 * and return them in path_ret and name_ret, respectively.
+	 *
+	 * Example:
+	 *     "/some/dir/somewhere/myfile.obj"
+	 * ->  "/some/dir/somewhere", "myfile.obj"
+	 **/
+	void splitPath( const QString & fileNameWithPath,
+			QString	      & path_ret,
+			QString	      & name_ret ) const;
+
+	/**
+	 * Build a full path from path + file name (without path).
+	 **/
+	QString buildPath( const QString & path, const QString & name ) const;
+
+	/**
+	 * Return an unescaped version of 'rawPath'.
+	 **/
+	QString unescapedPath( const QString & rawPath ) const;
+
+	/**
+	 * Clean a path: Replace duplicate (or triplicate or more) slashes with
+	 * just one. QUrl doesn't seem to handle those well.
+	 **/
+	QString cleanPath( const QString & rawPath ) const;
+
+	/**
 	 * Returns the number of fields in the current input line after splitLine().
 	 **/
 	int fieldsCount() const { return _fieldsCount; }
@@ -244,6 +272,7 @@ namespace QDirStat
 	DirInfo *	_lastDir;
 	DirInfo *	_lastExcludedDir;
 	QString		_lastExcludedDirUrl;
+        QRegExp         _multiSlash;
     };
 
 }	// namespace QDirStat
