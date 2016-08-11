@@ -198,8 +198,10 @@ namespace QDirStat
 	void addItem();
 
 	/**
-	 * Read the next line that is not empty or a comment and store it in _line.
-	 * Returns true if OK, false if error.
+	 * Read the next line that is not empty or a comment and store it in
+	 * _line.
+         *
+         * Returns true if OK, false if error.
 	 **/
 	bool readLine();
 
@@ -243,7 +245,8 @@ namespace QDirStat
 	QString cleanPath( const QString & rawPath ) const;
 
 	/**
-	 * Returns the number of fields in the current input line after splitLine().
+	 * Returns the number of fields in the current input line after
+	 * splitLine().
 	 **/
 	int fieldsCount() const { return _fieldsCount; }
 
@@ -268,6 +271,7 @@ namespace QDirStat
 	char *		_fields[ MAX_FIELDS_PER_LINE ];
 	int		_fieldsCount;
 	bool		_ok;
+        int             _errorCount;
 	DirInfo *	_toplevel;
 	DirInfo *	_lastDir;
 	DirInfo *	_lastExcludedDir;

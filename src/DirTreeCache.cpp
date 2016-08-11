@@ -22,10 +22,13 @@
 #define GB (1024LL*1024*1024)
 #define TB (1024LL*1024*1024*1024)
 
+#define MAX_ERROR_COUNT                 1000
+
 #define VERBOSE_READ			0
 #define VERBOSE_CACHE_DIRS		0
 #define VERBOSE_CACHE_FILE_INFOS	0
 #define DEBUG_LOCATE_PARENT		0
+
 
 
 using namespace QDirStat;
@@ -279,7 +282,14 @@ void CacheReader::addItem()
         logError() << "Syntax error in " << _fileName << ":" << _lineNo
                    << ": Expected at least 4 fields, saw only " << fieldsCount()
                    << endl;
-	emit error();
+
+        if ( ++_errorCount > MAX_ERROR_COUNT )
+        {
+            logError() << "Too many syntax errors. Giving up." << endl;
+            _ok = false;
+            emit error();
+        }
+
 	return;
     }
 
