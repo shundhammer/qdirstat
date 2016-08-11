@@ -278,11 +278,22 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 	    count = 0;
 	    break;
 
+	case DirError:
+
+            // This is a hybrid case: Depending on the dir reader, the dir may
+            // or may not be finished at this time. For a local dir, it most
+            // likely is; for a cache reader, there might be more to come.
+
+            if ( _tree->isBusy() )
+                count = 0;
+            else
+                count = countDirectChildren( item );
+            break;
+
 	case DirFinished:
 	case DirOnRequestOnly:
 	case DirCached:
 	case DirAborted:
-	case DirError:
 	    count = countDirectChildren( item );
 	    break;
 

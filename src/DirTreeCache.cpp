@@ -22,7 +22,7 @@
 #define GB (1024LL*1024*1024)
 #define TB (1024LL*1024*1024*1024)
 
-#define MAX_ERROR_COUNT                 1000
+#define MAX_ERROR_COUNT			1000
 
 #define VERBOSE_READ			0
 #define VERBOSE_CACHE_DIRS		0
@@ -279,16 +279,18 @@ void CacheReader::addItem()
 {
     if ( fieldsCount() < 4 )
     {
-        logError() << "Syntax error in " << _fileName << ":" << _lineNo
-                   << ": Expected at least 4 fields, saw only " << fieldsCount()
-                   << endl;
+	logError() << "Syntax error in " << _fileName << ":" << _lineNo
+		   << ": Expected at least 4 fields, saw only " << fieldsCount()
+		   << endl;
 
-        if ( ++_errorCount > MAX_ERROR_COUNT )
-        {
-            logError() << "Too many syntax errors. Giving up." << endl;
-            _ok = false;
-            emit error();
-        }
+	setReadError( _lastDir );
+
+	if ( ++_errorCount > MAX_ERROR_COUNT )
+	{
+	    logError() << "Too many syntax errors. Giving up." << endl;
+	    _ok = false;
+	    emit error();
+	}
 
 	return;
     }
@@ -746,7 +748,9 @@ void CacheReader::finalizeRecursive( DirInfo * dir )
 {
     if ( dir->readState() != DirOnRequestOnly )
     {
-	dir->setReadState( DirCached );
+	if ( dir->readState() != DirError )
+	    dir->setReadState( DirCached );
+
 	_tree->sendFinalizeLocal( dir );
 	dir->finalizeLocal();
 	_tree->sendReadJobFinished( dir );
@@ -762,4 +766,20 @@ void CacheReader::finalizeRecursive( DirInfo * dir )
 	child = child->next();
     }
 
+}
+
+
+void CacheReader::setReadError( DirInfo * dir )
+{
+    logDebug() << "Setting read error for " << dir << endl;
+
+    while ( dir )
+    {
+	dir->setReadState( DirError );
+
+	if ( dir == _toplevel )
+	    return;
+
+	dir = dir->parent();
+    }
 }

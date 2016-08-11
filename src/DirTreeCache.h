@@ -257,6 +257,12 @@ namespace QDirStat
 	 **/
 	void finalizeRecursive( DirInfo * dir );
 
+        /**
+         * Cascade a read error up to the toplevel directory node read by this
+         * cache file.
+         **/
+        void setReadError( DirInfo * dir );
+
 
 	//
 	// Data members
