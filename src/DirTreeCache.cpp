@@ -276,7 +276,9 @@ void CacheReader::addItem()
 {
     if ( fieldsCount() < 4 )
     {
-	_ok = false;
+        logError() << "Syntax error in " << _fileName << ":" << _lineNo
+                   << ": Expected at least 4 fields, saw only " << fieldsCount()
+                   << endl;
 	emit error();
 	return;
     }
