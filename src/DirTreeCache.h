@@ -72,6 +72,12 @@ namespace QDirStat
 	 **/
 	void writeItem( gzFile cache, FileInfo * item );
 
+        /**
+         * Return the 'path' in an URL-encoded form, i.e. with some special
+         * characters escaped in percent notation (" " -> "%20").
+         **/
+        QByteArray urlEncoded( const QString & path );
+
 	//
 	// Data members
 	//

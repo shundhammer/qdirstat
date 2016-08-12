@@ -130,13 +130,13 @@ void CacheWriter::writeItem( gzFile cache, FileInfo * item )
     {
 	// Use absolute path
 
-	gzprintf( cache, " %s", QUrl( item->url() ).toEncoded().data() );
+	gzprintf( cache, " %s", urlEncoded( item->url() ).data() );
     }
     else
     {
 	// Use relative path
 
-	gzprintf( cache, "\t%s", QUrl( item->name() ).toEncoded().data() );
+	gzprintf( cache, "\t%s", urlEncoded( item->name() ).data() );
     }
 
 
@@ -158,6 +158,26 @@ void CacheWriter::writeItem( gzFile cache, FileInfo * item )
 	gzprintf( cache, "\tlinks: %u", (unsigned) item->links() );
 
     gzputc( cache, '\n' );
+}
+
+
+QByteArray CacheWriter::urlEncoded( const QString & path )
+{
+    // Using a protocol ("scheme") part to avoid directory names with a colon
+    // ":" being cut off because it looks like a URL protocol.
+    QUrl url;
+    url.setScheme( "foo" );
+    url.setPath( path );
+
+    QByteArray encoded = url.toEncoded( QUrl::RemoveScheme );
+
+    if ( encoded.isEmpty() )
+    {
+        logError() << "Invalid file/dir name: " << path << endl;
+    }
+
+    return encoded;
+
 }
 
 
