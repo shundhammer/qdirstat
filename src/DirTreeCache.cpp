@@ -210,6 +210,7 @@ CacheReader::CacheReader( const QString & fileName,
     _line		= _buffer;
     _lineNo		= 0;
     _ok			= true;
+    _errorCount         = 0;
     _tree		= tree;
     _toplevel		= parent;
     _lastDir		= 0;
