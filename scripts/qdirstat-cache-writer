@@ -320,6 +320,7 @@ sub write_dir_entry()
     if ( $dev == $toplevel_device || $scan_mounted )
     {
 	$dir = uri_escape( $dir, $unsafe_chars );
+        $dir =~ s://+:/:g;    # Replace multiple // with one
 
 	print CACHE "D $dir";
 	print CACHE "\t$size";
@@ -389,7 +390,10 @@ sub write_file_entry()
     if ( $long_format )
     {
 	$dir = uri_escape( $dir, $unsafe_chars );
-	print CACHE " $dir/$name";
+        my $full_path = $dir . "/" . $name;
+        $full_path =~ s://+:/:g; # Replace multiple // with one
+
+	print CACHE " full_path";
     }
     else
     {
