@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-08-10
+Updated: 2016-08-12
 
 
 ## Overview
@@ -77,6 +77,20 @@ _Context menu of the tree header where you can configure the columns._
 ## Current Development Status
 
 **Stable release: V1.0**
+
+- 2016-08-12
+
+  - Fixed [GitHub issue #23](https://github.com/shundhammer/qdirstat/issues/23):
+
+    The internal cache writer would sometimes generate incorrect cache files
+    because of buggy URL escaping resulting in an empty file name and thus
+    invalid cache file syntax. This affected file names with colons (which is
+    weird, but legal).
+
+    One of these days I'm going to throw out all that QUrl stuff and replace the
+    few things that I need with something that actually works consistently and
+    not just under optimum conditions.
+
 
 - 2016-08-10
 
