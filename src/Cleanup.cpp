@@ -207,7 +207,22 @@ QString Cleanup::quoted( const QString & unquoted) const
 QString Cleanup::escaped( const QString & unescaped ) const
 {
     QString escaped = unescaped;
-    escaped.replace( "'", "\\'" );
+
+    // Escape single quote characters (') in the string.
+    //
+    // While any sane person would expect this should be done with a backslash
+    // in front of the single quote, i.e. \', this is not how shells do it.
+    // Instead, you have to terminate the string with one single quote, then
+    // put the single quote in a new quoted string that, but this time using
+    // double quotes, and finally reopen the original string with another
+    // single quote.
+    //
+    // Thus, 'Don't do this' becomes 'Don'"'"'t do this'.
+    //
+    // This does not exactly become any prettier with the C compiler requiring
+    // a backslash for an embedded double quote.
+
+    escaped.replace( "'", "'\"'\"'" );
 
     return escaped;
 }

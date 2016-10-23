@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-08-12
+Updated: 2016-10-23
 
 
 ## Overview
@@ -76,7 +76,34 @@ _Context menu of the tree header where you can configure the columns._
 
 ## Current Development Status
 
-**Stable release: V1.0**
+**Latest stable release: V1.0**
+
+- 2016-10-23
+
+  - Fixed [GitHub issue #32](https://github.com/shundhammer/qdirstat/issues/32):
+    %p does not escape single quotes properly
+
+    If you have a file name like `Don't do this.txt` (with a quote character in
+    the string), the shell used when executing a cleanup action with this would
+    complain about unmatched single quotes.
+
+    QDirStat had always escaped such single quotes, but not the way common
+    shells (Bash, Zsh) expect it: They don't want a backslash in front of that
+    embedded single quote. Rather, you need to terminate the string with a
+    single quote, start a new one with double quotes only containing the
+    embedded single quote, and then re-open the old string.
+
+    Thus, `'Don't do this'` becomes `'Don'"'"'t do this'`.
+
+    Yikes. This is so utterly broken by design I can't find proper words for
+    it. I just wonder how much other software is out there that does it the way
+    most people would expect it: Trying to use a backslash to escape that
+    embedded single quote (`'Don\'t do this.txt'`).
+
+    Of course, such file names should be avoided entirely, but you can't help
+    some slightly broken MP3 ripper program doing it, so it needs to be handled
+    correctly.
+
 
 - 2016-08-12
 
