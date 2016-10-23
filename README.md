@@ -84,7 +84,7 @@ _Context menu of the tree header where you can configure the columns._
     %p does not escape single quotes properly
 
     If you have a file name like `Don't do this.txt` (with a quote character in
-    the string), the shell used when executing a cleanup action with this would
+    the name), the shell used when executing a cleanup action with this would
     complain about unmatched single quotes.
 
     QDirStat had always escaped such single quotes, but not the way common
@@ -96,8 +96,8 @@ _Context menu of the tree header where you can configure the columns._
     Thus, `'Don't do this'` becomes `'Don'\''t do this'`.
 
     This is certainly not what most people expect. I just wonder how much other
-    software is out there that does it the intuitive way: Just escape the
-    single quote with a backslash (`'Don\'t do this'`).
+    software is out there that does it the intuitive (yet wrong) way: Just
+    escape the single quote with a backslash (`'Don\'t do this'`).
 
     Of course, such file names should be avoided entirely, but you can't help
     some slightly broken MP3 ripper program doing it, so it needs to be handled
