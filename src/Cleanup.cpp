@@ -222,7 +222,7 @@ QString Cleanup::escaped( const QString & unescaped ) const
     // This does not exactly become any prettier with the C compiler requiring
     // a backslash for an embedded double quote.
 
-    escaped.replace( "'", "'\"'\"'" );
+    escaped.replace( "'", "'\\''" );
 
     return escaped;
 }

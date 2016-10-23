@@ -90,15 +90,14 @@ _Context menu of the tree header where you can configure the columns._
     QDirStat had always escaped such single quotes, but not the way common
     shells (Bash, Zsh) expect it: They don't want a backslash in front of that
     embedded single quote. Rather, you need to terminate the string with a
-    single quote, start a new one with double quotes only containing the
-    embedded single quote, and then re-open the old string.
+    single quote, escape the embedded quote with a backslash (or put it into
+    double quotes), and then re-open the old string with another single quote.
 
-    Thus, `'Don't do this'` becomes `'Don'"'"'t do this'`.
+    Thus, `'Don't do this'` becomes `'Don'\''t do this'`.
 
-    Yikes. This is so utterly broken by design I can't find proper words for
-    it. I just wonder how much other software is out there that does it the way
-    most people would expect it: Trying to use a backslash to escape that
-    embedded single quote (`'Don\'t do this'`).
+    This is certainly not what most people expect. I just wonder how much other
+    software is out there that does it the intuitive way: Just escape the
+    single quote with a backslash (`'Don\'t do this'`).
 
     Of course, such file names should be avoided entirely, but you can't help
     some slightly broken MP3 ripper program doing it, so it needs to be handled
