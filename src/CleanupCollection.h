@@ -114,12 +114,12 @@ namespace QDirStat
 	 **/
 	const CleanupList & cleanupList() const { return _cleanupList; }
 
-        /**
-         * Return the ListMover for this object that takes care of moving
-         * cleanups up, down, to the top, or to the bottom of this cleanup
-         * list.
-         **/
-        ListMover<Cleanup *> * listMover() { return &_listMover; }
+	/**
+	 * Return the ListMover for this object that takes care of moving
+	 * cleanups up, down, to the top, or to the bottom of this cleanup
+	 * list.
+	 **/
+	ListMover<Cleanup *> * listMover() { return &_listMover; }
 
     signals:
 
@@ -192,17 +192,17 @@ namespace QDirStat
 	 **/
 	bool confirmation( Cleanup * cleanup, const FileInfoSet & items );
 
-        /**
-         * Return the URLs for the selected item types in 'items':
-         * Directories, non-directories, or both.
-         *
-         * 'extraHighlight' indicates that some very strong extra highlighting
-         * should be done to mark directories.
-         **/
-        QStringList filteredUrls( const FileInfoSet & items,
-                                  bool                dirs,
-                                  bool                nonDirs,
-                                  bool                extraHighlight = false ) const;
+	/**
+	 * Return the URLs for the selected item types in 'items':
+	 * Directories, non-directories, or both.
+	 *
+	 * 'extraHighlight' indicates that some very strong extra highlighting
+	 * should be done to mark directories.
+	 **/
+	QStringList filteredUrls( const FileInfoSet & items,
+				  bool		      dirs,
+				  bool		      nonDirs,
+				  bool		      extraHighlight = false ) const;
 
 	/**
 	 * Update all menus that have the 'keepUpdated' flag set.
@@ -226,7 +226,7 @@ namespace QDirStat
 
 	SelectionModel *	   _selectionModel;
 	CleanupList		   _cleanupList;
-        ListMover<Cleanup *>       _listMover;
+	ListMover<Cleanup *>	   _listMover;
 	QList<QPointer<QMenu> >	   _menus;
 	QList<QPointer<QToolBar> > _toolBars;
     };

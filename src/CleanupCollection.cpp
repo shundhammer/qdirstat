@@ -141,6 +141,7 @@ void CleanupCollection::updateActions()
     bool fileSelected	  = sel.containsFile();
     bool dotEntrySelected = sel.containsDotEntry();
     bool busy		  = sel.containsBusyItem();
+    bool treeBusy	  = sel.treeIsBusy();
 
     foreach ( Cleanup * cleanup, _cleanupList )
     {
@@ -149,6 +150,9 @@ void CleanupCollection::updateActions()
 	else
 	{
 	    bool enabled = ! busy;
+
+	    if ( treeBusy && cleanup->refreshPolicy() != Cleanup::NoRefresh )
+		enabled = false;
 
 	    if ( dirSelected && ! cleanup->worksForDir() )
 		enabled = false;
@@ -313,32 +317,32 @@ bool CleanupCollection::confirmation( Cleanup * cleanup, const FileInfoSet & ite
 	else
 	    msg += tr( "<h3>%1</h3>for file %2" ).arg( title ).arg( item->url() );
 
-        msg += "<br>";
+	msg += "<br>";
     }
     else // Multiple items selected
     {
 
-        QStringList urls;
-        bool isMixed = items.containsDir() && items.containsFile();
+	QStringList urls;
+	bool isMixed = items.containsDir() && items.containsFile();
 
-        if ( isMixed )
-        {
-            QStringList dirs    = filteredUrls( items, true, false,    // dibs, nonDirs
-                                                true );                // extraHighlight
-            QStringList nonDirs = filteredUrls( items, false, true  ); // dirs, nonDirs
+	if ( isMixed )
+	{
+	    QStringList dirs	= filteredUrls( items, true, false,    // dibs, nonDirs
+						true );		       // extraHighlight
+	    QStringList nonDirs = filteredUrls( items, false, true  ); // dirs, nonDirs
 
-            dirs    = dirs.mid   ( 0, MAX_URLS_IN_CONFIRMATION_POPUP );
-            nonDirs = nonDirs.mid( 0, MAX_URLS_IN_CONFIRMATION_POPUP );
+	    dirs    = dirs.mid	 ( 0, MAX_URLS_IN_CONFIRMATION_POPUP );
+	    nonDirs = nonDirs.mid( 0, MAX_URLS_IN_CONFIRMATION_POPUP );
 
-            urls << dirs << "" << nonDirs;
-        }
-        else // ! isMixed
-        {
-            // Build a list of the first couple of selected items (7 max)
+	    urls << dirs << "" << nonDirs;
+	}
+	else // ! isMixed
+	{
+	    // Build a list of the first couple of selected items (7 max)
 
-            urls = filteredUrls( items, true, true ); // dirs, nonDirs
-            urls = urls.mid( 0, MAX_URLS_IN_CONFIRMATION_POPUP );
-        }
+	    urls = filteredUrls( items, true, true ); // dirs, nonDirs
+	    urls = urls.mid( 0, MAX_URLS_IN_CONFIRMATION_POPUP );
+	}
 
 	if ( urls.size() < items.size() ) // Only displaying part of the items?
 	{
@@ -358,29 +362,29 @@ bool CleanupCollection::confirmation( Cleanup * cleanup, const FileInfoSet & ite
 
 
 QStringList CleanupCollection::filteredUrls( const FileInfoSet & items,
-                                             bool                dirs,
-                                             bool                nonDirs,
-                                             bool                extraHighlight ) const
+					     bool		 dirs,
+					     bool		 nonDirs,
+					     bool		 extraHighlight ) const
 {
     QStringList urls;
 
     for ( FileInfoSet::const_iterator it = items.begin(); it != items.end(); ++it )
     {
-        if ( ( dirs    &&   (*it)->isDir() ) ||
-             ( nonDirs && ! (*it)->isDir() )   )
-        {
-            QString name = (*it)->url();
+	if ( ( dirs    &&   (*it)->isDir() ) ||
+	     ( nonDirs && ! (*it)->isDir() )   )
+	{
+	    QString name = (*it)->url();
 
-            if ( (*it)->isDir() )
-            {
-                if ( extraHighlight )
-                    urls << tr( "<b>Directory <font color=blue>%1</font></b>" ).arg( name );
-                else
-                    urls << tr( "<b>Directory</b> %1" ).arg( name );
-            }
-            else
-                urls << name;
-        }
+	    if ( (*it)->isDir() )
+	    {
+		if ( extraHighlight )
+		    urls << tr( "<b>Directory <font color=blue>%1</font></b>" ).arg( name );
+		else
+		    urls << tr( "<b>Directory</b> %1" ).arg( name );
+	    }
+	    else
+		urls << name;
+	}
     }
 
     return urls;

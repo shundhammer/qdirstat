@@ -10,6 +10,7 @@
 #include "FileInfoSet.h"
 #include "FileInfo.h"
 #include "DirInfo.h"
+#include "DirTree.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -117,6 +118,14 @@ bool FileInfoSet::containsBusyItem() const
     return false;
 }
 
+
+bool FileInfoSet::treeIsBusy() const
+{
+    if ( isEmpty() )
+	return false;
+
+    return first()->tree()->isBusy();
+}
 
 
 FileSize FileInfoSet::totalSize() const

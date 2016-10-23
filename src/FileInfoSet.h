@@ -78,6 +78,11 @@ namespace QDirStat
 	bool containsBusyItem() const;
 
 	/**
+	 * Return 'true' if this set is non-empty and the dir tree is busy.
+	 **/
+	bool treeIsBusy() const;
+
+	/**
 	 * Return a 'normalized' set, i.e. with all items removed that have
 	 * ancestors in the set.
 	 **/

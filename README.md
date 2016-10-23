@@ -103,6 +103,17 @@ _Context menu of the tree header where you can configure the columns._
     some slightly broken MP3 ripper program doing it, so it needs to be handled
     correctly.
 
+  - Fixed [GitHub issue #31](https://github.com/shundhammer/qdirstat/issues/31):
+    Segfault with cleanup action while reading directories
+
+    Now disabling cleanups that have a refresh policy other than "No Refresh"
+    while directory reading is in progress; otherwise the re-read when the
+    cleanup action has finished clashes with the directory read alreay in
+    progress.
+
+    This is not an optimal solution, but a very pragmatic one; the optimal
+    solution might queue updates and execute them after the main read is done.
+
 
 - 2016-08-12
 
