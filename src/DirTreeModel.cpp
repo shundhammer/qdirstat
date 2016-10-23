@@ -28,6 +28,8 @@ DirTreeModel::DirTreeModel( QObject * parent ):
     _selectionModel(0),
     _readJobsCol( PercentBarCol ),
     _updateTimerMillisec( 333 ),
+    _slowUpdateMillisec( 3000 ),
+    _slowUpdate( false ),
     _sortCol( NameCol ),
     _sortOrder( Qt::AscendingOrder )
 {
@@ -58,6 +60,7 @@ void DirTreeModel::readSettings()
     _tree->setCrossFileSystems( settings.value( "CrossFileSystems", false ).toBool() );
     _treeIconDir	 = settings.value( "TreeIconDir" , ":/icons/tree-medium/" ).toString();
     _updateTimerMillisec = settings.value( "UpdateTimerMillisec", 333 ).toInt();
+    _slowUpdateMillisec  = settings.value( "SlowUpdateMillisec", 3000 ).toInt();
 
     settings.endGroup();
 }
@@ -71,8 +74,19 @@ void DirTreeModel::writeSettings()
     settings.setValue( "CrossFileSystems",    _tree->crossFileSystems() );
     settings.setValue( "TreeIconDir" ,	      _treeIconDir	   );
     settings.setValue( "UpdateTimerMillisec", _updateTimerMillisec );
+    settings.setValue( "SlowUpdateMillisec",  _slowUpdateMillisec  );
 
     settings.endGroup();
+}
+
+
+void DirTreeModel::setSlowUpdate( bool slow )
+{
+    _slowUpdate = slow;
+    _updateTimer.setInterval( _slowUpdate ? _slowUpdateMillisec : _updateTimerMillisec );
+
+    if ( slow )
+        logInfo() << "Display update every " << _updateTimer.interval() << " millisec" << endl;
 }
 
 

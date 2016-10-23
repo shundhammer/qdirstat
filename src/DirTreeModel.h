@@ -166,6 +166,16 @@ namespace QDirStat
 	 **/
 	void refreshSelected();
 
+        /**
+         * Set the update speed to slow (3 sec instead of 333 millisec).
+         **/
+        void setSlowUpdate( bool slow = true );
+
+        /**
+         * Return the slow update flag.
+         **/
+        bool slowUpdate() const { return _slowUpdate; }
+
     public:
 
 	// Mapping of tree items to model rows and vice versa.
@@ -397,6 +407,8 @@ namespace QDirStat
 	QSet<DirInfo *>	 _pendingUpdates;
 	QTimer		 _updateTimer;
 	int		 _updateTimerMillisec;
+        int              _slowUpdateMillisec;
+        bool             _slowUpdate;
 	DataColumn	 _sortCol;
 	Qt::SortOrder	 _sortOrder;
 

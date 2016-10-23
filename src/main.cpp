@@ -13,6 +13,7 @@
 
 #include <QApplication>
 #include "MainWindow.h"
+#include "DirTreeModel.h"
 #include "Logger.h"
 
 using std::cerr;
@@ -25,7 +26,7 @@ void usage( const QStringList & argList )
     cerr << "\n"
 	 << "Usage: \n"
 	 << "\n"
-	 << "  " << progName << " [<directory-name>]\n"
+	 << "  " << progName << " [--slow-update|-s] [<directory-name>]\n"
 	 << "  " << progName << " --cache|-c <cache-file-name>\n"
 	 << "  " << progName << " --help|-h\n"
 	 << std::endl;
@@ -33,6 +34,30 @@ void usage( const QStringList & argList )
     logError() << "FATAL: Bad command line args: " << argList.join( " " ) << endl;
     // Simply exit(1) here results in a segfault (?).
     fatal = true;
+}
+
+
+/**
+ * Extract a command line switch (a command line argument without any
+ * additional parameter) from the command line and remove it from 'argList'.
+ **/
+bool commandLineSwitch( const QString & longName,
+			const QString & shortName,
+			QStringList   & argList )
+{
+    if ( argList.contains( longName  ) ||
+	 argList.contains( shortName )	 )
+    {
+	argList.removeAll( longName  );
+	argList.removeAll( shortName );
+        logDebug() << "Found " << longName << endl;
+	return true;
+    }
+    else
+    {
+        logDebug() << "No " << longName << endl;
+	return false;
+    }
 }
 
 
@@ -50,6 +75,9 @@ int main( int argc, char *argv[] )
 
     MainWindow mainWin;
     mainWin.show();
+
+    if ( commandLineSwitch( "--slow-update", "-s", argList ) )
+	mainWin.dirTreeModel()->setSlowUpdate();
 
     if ( argList.isEmpty() )
 	mainWin.askOpenUrl();
@@ -70,7 +98,7 @@ int main( int argc, char *argv[] )
 	}
 	else if ( arg == "--help" || arg == "-h" )
 	    usage( argList );
-	else if ( arg.startsWith( "-" ) )
+	else if ( arg.startsWith( "-" ) || argList.size() > 1 )
 	    usage( argList );
 	else if ( ! arg.isEmpty() )
 	{

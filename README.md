@@ -114,6 +114,9 @@ _Context menu of the tree header where you can configure the columns._
     This is not an optimal solution, but a very pragmatic one; the optimal
     solution might queue updates and execute them after the main read is done.
 
+  - Fixed [GitHub issue #33](https://github.com/shundhammer/qdirstat/issues/33):
+    Added command line option `--slow-update` (or `-s`) for slow remote X connections.
+
 
 - 2016-08-12
 
@@ -509,6 +512,15 @@ old code base that had been long overdue.
 - It should still compile and work with Qt4. We now have a contributor who is
   very interested in that (Michael Matz), so it should be possible to maintain
   this compatibility.
+
+- Slow down display update from 333 millisec (default) to 3 sec (default) with
+  `qdirstat --slow-update` or `qdirstat -s`. The slow update interval can be
+  customized in `~/.config/QDirStat/QDirStat.conf`:
+
+    [DirectoryTree]
+    SlowUpdateMillisec = 3000
+
+
 
 
 ## Old Features

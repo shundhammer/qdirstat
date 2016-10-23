@@ -450,7 +450,7 @@ void MainWindow::openUrl( const QString & url )
     catch ( const SysCallFailedException & ex )
     {
         CAUGHT( ex );
-        
+
 	QMessageBox errorPopup( QMessageBox::Warning,   // icon
                                 tr( "Error" ),		// title
                                 tr( "Could not open directory %1" ).arg( ex.resourceName() ), // text

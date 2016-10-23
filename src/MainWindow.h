@@ -44,6 +44,11 @@ public:
     MainWindow();
     virtual ~MainWindow();
 
+    /**
+     * Return the DirTreeModel used in this window.
+     **/
+    QDirStat::DirTreeModel * dirTreeModel() const { return _dirTreeModel; }
+
 public slots:
 
     /**
