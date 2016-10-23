@@ -98,7 +98,7 @@ _Context menu of the tree header where you can configure the columns._
     Yikes. This is so utterly broken by design I can't find proper words for
     it. I just wonder how much other software is out there that does it the way
     most people would expect it: Trying to use a backslash to escape that
-    embedded single quote (`'Don\'t do this.txt'`).
+    embedded single quote (`'Don\'t do this'`).
 
     Of course, such file names should be avoided entirely, but you can't help
     some slightly broken MP3 ripper program doing it, so it needs to be handled
