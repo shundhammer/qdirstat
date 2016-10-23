@@ -517,9 +517,10 @@ old code base that had been long overdue.
   `qdirstat --slow-update` or `qdirstat -s`. The slow update interval can be
   customized in `~/.config/QDirStat/QDirStat.conf`:
 
+    ```
     [DirectoryTree]
     SlowUpdateMillisec = 3000
-
+    ```
 
 
 
@@ -642,14 +643,14 @@ Features ported from the old KDirStat:
 
   - You can specify a cache file to read directly at the command line:
 
-        ````
+        ```
         qdirstat --cache cache-file
-        ````
+        ```
 
 - Other command line options: See
-    ````
+    ```
     qdirstat --help
-    ````
+    ```
 
 
 ## Features that are Gone
