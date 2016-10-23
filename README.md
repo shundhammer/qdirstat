@@ -108,7 +108,7 @@ _Context menu of the tree header where you can configure the columns._
 
     Now disabling cleanups that have a refresh policy other than "No Refresh"
     while directory reading is in progress; otherwise the re-read when the
-    cleanup action has finished clashes with the directory read alreay in
+    cleanup action has finished clashes with the directory read already in
     progress.
 
     This is not an optimal solution, but a very pragmatic one; the optimal
