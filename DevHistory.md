@@ -11,6 +11,102 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 ## QDirStat History
 
 
+- 2016-04-11
+
+  - _buxit_ reported
+    [GitHub issue #16](https://github.com/shundhammer/qdirstat/issues/16)
+    and contributed the fix for it shortly afterwards:
+    When clicking in the treemap, the corresponding item in the tree view was
+    not always scrolled into the visible area. Now it is.
+
+- 2016-04-08
+
+  - Beta 3
+
+  - Fixed
+    [GitHub issue #15](https://github.com/shundhammer/qdirstat/issues/15):
+
+    After a cleanup action is executed that needs refreshing the affected
+    subtree, the parent directory is selected, which is intentional so the
+    user's focus is not thrown off completely. There was a bug when you
+    selected an item in the treemap afterwards, that change was not correctly
+    propagated to the internal selection model: The parent directory remained
+    selected (which was wrong), and the newly selected item was just added to
+    the selection, i.e. that item and (typically) its parent directory was
+    selected. When a potentially dangerous cleanup operation was now started,
+    it would affect not only that item, but also the directory; and, worse,
+    that directory often went out of the visible scope of the tree view. Yes,
+    the confirmation popup would ask for both of them, but you all know how
+    quickly users click away those popups without really reading them.
+    This bug is now fixed.
+
+  - Improved the confirmation popup. Now highlighting directories much more if
+    there is a "mixed" selection, i.e., both directories and non-directories
+    are selected at the same time:
+
+    ![New cleanup confirmation popup]
+    (https://cloud.githubusercontent.com/assets/11538225/14390476/8b022c9a-fdb7-11e5-8eef-a5ba304d3bab.png)
+
+- 2016-03-20
+
+  - Beta 2
+
+    Beta 1 has now been out for 6 weeks, and I have not received one single bug
+    report during that time. Maybe it's just business as usual, and people
+    just keep waiting for others to do the testing, while they themselves are
+    waiting for a stable release. Well, okay, so let them have their way: The
+    current code is now officially V0.92 Beta 2. And it won't be another 6
+    weeks; the next versions will come a lot more quickly. Once V1.0 final is
+    out, any bug reports will have to wait until there is time to work on
+    them. So, folks, use those Betas wisely.
+
+    BTW those who actually did test it will find that QDirStat is a lot more
+    stable even in Beta 1 than other pieces of software in their official final
+    release.
+
+- 2016-02-27
+
+  - Debian / Ubuntu packaging contributed by Nathan Rennie-Waldock.
+    He also made a PPA repository available for various Ubuntu versions - see
+    [Ubuntu packages](https://github.com/shundhammer/qdirstat#ubuntu) below.
+
+
+- 2016-02-06
+
+  - Added tab for exclude rules configuration to the config dialog (see
+    screenshot above). That's it: That was the last missing major feature.
+
+    **I hereby declare QDirStat to be Beta.**
+
+    _Please use the GitHub issue tracker for any bug reports._
+
+
+  - Exclude rules can now optionally match against the full path again. I had
+    changed this for just the directory name without the path by default, which
+    makes regexps a lot simpler. You can now select the old behaviour, too, if
+    you wish. This is configurable in the exclude rules tab of the config
+    dialog.
+
+  - Made the config file format of the new view header columns human readable
+    and editable. The first version from yesterday used the native format of
+    Qt's QHeaderView -- a QByteArray in hex encoding. This was a sorry excuse
+    for a settings format - not usable for anybody, not legible, much less
+    editable. Trolls, WTF? Pretty and usable formats everywhere else, and a
+    glorified (well, not even glorified) hexdump here?
+
+    I hope some admins who might want to provide ready-made config files for
+    their users will appreciate that. If not, this is just for consistency's
+    sake; I want to be able to read and edit my config file as I like, even
+    without any graphical config dialogs.
+
+  - The tree view now uses "middle eliding" for texts that don't fit into a
+    column. It used to elide at the end of the text, but that's not necessarily
+    useful for long file names; they often differ only at the end with lots of
+    text at the start in common. So, now it's no longer "VeryLongTextBlurb...",
+    but "VeryLongTe...foo.o" if anything needs to be cut off. Of course, this
+    makes most sense with the new column width modes, otherwise your column
+    will simply be resized wide enough to fit everything in.
+
 - 2016-02-05
 
   - Extended the context menu of the tree view header columns -- see latest
