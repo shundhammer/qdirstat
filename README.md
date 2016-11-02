@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-10-31
+Updated: 2016-11-02
 
 
 ## Overview
@@ -574,10 +574,11 @@ Features ported from the old KDirStat:
 (Compared with the old KDirStat)
 
 
-- KPacman: That was that PacMan animation wile reading directory reading. This is
-  gone now. KPacMan looked out of place pretty soon after it got to KDirStat. I
-  know that it does have its fans, but unless a graphics designer joins the
-  project who can do that right, this will not come back.
+- KPacman: That was that PacMan animation wile reading directory reading. This
+  is gone now. KPacMan looked out of place pretty soon after it got to KDirStat
+  due to Qt styles doing fancy rendering of widget backgrounds with gradients
+  etc.  I know that it does have its fans, but it's unrealistic to get this
+  back without breaking the menu bar rendering.
 
 - KioDirReadJob: Network-transparent directory reading for network protocols
   like FTP, HTTP, Fish (ssh-based). This depended on KDE's KIO slaves, so this
