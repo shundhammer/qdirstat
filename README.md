@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-11-02
+Updated: 2016-12-06
 
 
 ## Overview
@@ -77,6 +77,39 @@ _Context menu of the tree header where you can configure the columns._
 ## Current Development Status
 
 **Latest stable release: V1.1**
+
+- 2016-12-06 **Warning to Btrfs users**
+
+  If you use QDirStat to scan a Btrfs partition,
+  [any subvolumes of that partition are not scanned](https://github.com/shundhammer/qdirstat/issues/39):
+  Btrfs subvolumes are treated just like ordinary
+  mount points (which, to all intents and purposes, they are). So you might
+  wonder why the _df_ command shows your 40 GB root filesystem as 97% full, yet
+  QDirStat shows only about 7 GB. The rest might be hidden in subvolumes.
+
+  QDirStat stops reading at mount points - which only makes sense because
+  normally you want to know what eats up the disk space on that one partition
+  that is filling up, not on any others like /home that are mounted
+  there. Unfortunately, a Btrfs subvolume is also just another mount point, and
+  QDirStat will start reading there, too - at /var/log, at /var/spool, at
+  /var/lib/libvirt etc.; a typical Btrfs root filesystem has about a dozen
+  subvolumes, and all files in them are currently disregarded by QDirStat. You
+  can of course click on "Continue reading at mount point" individually in
+  QDirStat's directory tree for each one of them, but that's tedious.
+
+  I am working on a solution. One approach would be to check if the current
+  filesystem is Btrfs and list its subvolumes, but the Btrfs developers in
+  their infinite wisdom decided that `btrfs subvolume list <path>` is a
+  privileged operation, so QDirStat would have to use `sudo` with it and prompt
+  for the root password (at which point I as a user would terminate the program
+  and not use it any more). **This is broken by design.** A simple info command
+  like that should not require root privileges.
+
+  Looking for a better approach. If anybody out there has a better idea, please
+  add a comment to
+  [GitHub issue #39](https://github.com/shundhammer/qdirstat/issues/39)
+  that I just opened for this problem.
+
 
 - 2016-10-31 (Halloween) **New stable release: V1.1-Pumpkin**
 
