@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-12-06
+Updated: 2016-12-07
 
 
 ## Overview
@@ -77,6 +77,21 @@ _Context menu of the tree header where you can configure the columns._
 ## Current Development Status
 
 **Latest stable release: V1.1**
+
+- 2016-12-07 Duplicating fatal error messages to stderr
+  Fixed [GitHub issue #40](https://github.com/shundhammer/qdirstat/issues/40):
+  Crash without useful error message when no display available
+
+  When ssh'ing without -X to a remote machine and starting QDirStat there, it
+  would just dump core and not issue any meaningful message. The fatal error
+  message was only in the log file:
+
+  `<ERROR>   :0 ():  QXcbConnection: Could not connect to display`
+
+  Now this message is also repeated on stderr, and in this particular case
+  ("Could not connect to display"), it does not dump core any more, but just
+  exits with error code 1.
+
 
 - 2016-12-06 **Warning to Btrfs users**
 
