@@ -55,6 +55,7 @@ SOURCES	  = main.cpp			\
 	    MimeCategorizer.cpp		\
 	    MimeCategory.cpp		\
 	    MimeCategoryConfigPage.cpp	\
+            MountPoints.cpp             \
 	    OutputWindow.cpp		\
 	    PercentBar.cpp		\
 	    Process.cpp			\
@@ -98,6 +99,7 @@ HEADERS	  =				\
 	    MimeCategorizer.h		\
 	    MimeCategory.h		\
 	    MimeCategoryConfigPage.h	\
+            MountPoints.h               \
 	    OutputWindow.h		\
 	    PercentBar.h		\
 	    Process.h			\
