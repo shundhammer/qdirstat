@@ -55,7 +55,7 @@ bool commandLineSwitch( const QString & longName,
     }
     else
     {
-        logDebug() << "No " << longName << endl;
+        // logDebug() << "No " << longName << endl;
 	return false;
     }
 }
