@@ -78,8 +78,7 @@ _Context menu of the tree header where you can configure the columns._
 
 **Latest stable release: V1.1**
 
-- 2016-12-07 Duplicating fatal error messages to stderr
-  Fixed [GitHub issue #40](https://github.com/shundhammer/qdirstat/issues/40):
+- 2016-12-07 Fixed [GitHub issue #40](https://github.com/shundhammer/qdirstat/issues/40):
   Crash without useful error message when no display available
 
   When ssh'ing without -X to a remote machine and starting QDirStat there, it
