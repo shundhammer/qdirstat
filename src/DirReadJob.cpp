@@ -19,6 +19,7 @@
 #include "DirReadJob.h"
 #include "DirTreeCache.h"
 #include "ExcludeRules.h"
+#include "MountPoints.h"
 #include "Exception.h"
 
 
@@ -89,6 +90,48 @@ void DirReadJob::deletingChild( FileInfo *deletedChild )
 }
 
 
+bool DirReadJob::crossingFileSystems( DirInfo * parent, DirInfo * child )
+{
+    if ( parent->device() == child->device() )
+        return false;
+
+    QString childDevice  = device( child );
+    QString parentDevice = device( parent->findNearestMountPoint() );;
+
+    if ( parentDevice.isEmpty() )
+        parentDevice = _tree->device();
+
+    if ( parentDevice.isEmpty() || childDevice.isEmpty() )
+        return true;
+
+    bool crossing = parentDevice != childDevice;
+
+    if ( ! crossing )
+    {
+        logInfo() << "Mount point " << child
+                  << " is still on the same device " << childDevice << endl;
+    }
+
+    return crossing;
+}
+
+
+QString DirReadJob::device( const DirInfo * dir ) const
+{
+    QString device;
+
+    if ( dir )
+    {
+        const MountPoint * mountPoint = MountPoints::findByPath( dir->url() );
+
+        if ( mountPoint )
+            device = mountPoint->device();
+    }
+
+    return device;
+}
+
+
 
 
 
@@ -145,7 +188,7 @@ void LocalDirReadJob::startReading()
 			}
 			else // No exclude rule matched
 			{
-			    if ( _dir->device() == subDir->device() )	// normal case
+			    if ( ! crossingFileSystems(_dir, subDir ) )	// normal case
 			    {
 				LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
 				CHECK_NEW( job );

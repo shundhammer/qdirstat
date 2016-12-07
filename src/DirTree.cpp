@@ -14,6 +14,7 @@
 #include "FileInfoSet.h"
 #include "Exception.h"
 #include "DirTreeCache.h"
+#include "MountPoints.h"
 
 using namespace QDirStat;
 
@@ -82,6 +83,7 @@ void DirTree::clear()
     }
 
     _isBusy = false;
+    _device.clear();
 }
 
 
@@ -91,6 +93,9 @@ void DirTree::startReading( const QString & rawUrl )
     QString url = fileInfo.absoluteFilePath();
     // logDebug() << "rawUrl: \"" << rawUrl << "\"" << endl;
     logInfo() << "   url: \"" << url	 << "\"" << endl;
+    const MountPoint * mountPoint = MountPoints::findNearestMountPoint( url );
+    _device = mountPoint ? mountPoint->device() : "";
+    logInfo() << "device: " << _device << endl;
 
     _isBusy = true;
 

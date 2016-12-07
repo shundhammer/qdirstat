@@ -133,6 +133,18 @@ namespace QDirStat
 	 **/
 	void finished();
 
+        /**
+         * Check if going from 'parent' to 'child' would cross a file system
+         * boundary. This take Btrfs subvolumes into account.
+         **/
+        bool crossingFileSystems( DirInfo * parent, DirInfo * child );
+
+        /**
+         * Return the device name where 'dir' is on if it's a mount point.
+         * This uses MountPoints which reads /proc/mounts.
+         **/
+        QString device( const DirInfo * dir ) const;
+
 
 	DirTree *	   _tree;
 	DirInfo *	   _dir;

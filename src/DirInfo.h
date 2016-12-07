@@ -144,6 +144,12 @@ namespace QDirStat
 	 **/
 	virtual void setMountPoint( bool isMountPoint = true ) Q_DECL_OVERRIDE;
 
+        /**
+         * Find the nearest parent that is a mount point or 0 if there is
+         * none. This may return this DirInfo itself.
+         **/
+        const DirInfo * findNearestMountPoint() const;
+
 	/**
 	 * Returns true if this subtree is finished reading.
 	 *

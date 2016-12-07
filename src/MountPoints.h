@@ -110,6 +110,16 @@ namespace QDirStat
         static const MountPoint * findByPath( const QString & path );
 
         /**
+         * Find the nearest mount point upwards in the directory hierarchy
+         * starting from 'path'. 'path' itself might be that mount point.
+         * Ownership of the returned object is not transferred to the caller.
+         *
+         * This might return 0 if none of the files containing mount
+         * information (/proc/mounts, /etc/mtab) could be read.
+         **/
+        static const MountPoint * findNearestMountPoint( const QString & path );
+
+        /**
          * Return 'true' if any mount point has filesystem type "btrfs".
          **/
         static bool hasBtrfs();
@@ -176,9 +186,10 @@ namespace QDirStat
     {
 	if ( mp )
         {
-            stream << "Mount point for " << mp->device()
+            stream << "<mount point for " << mp->device()
                    << " at " << mp->path()
-                   << " type " << mp->filesystemType();
+                   << " type " << mp->filesystemType()
+                   << ">";
         }
 	else
 	    stream << "<NULL MountPoint*>";

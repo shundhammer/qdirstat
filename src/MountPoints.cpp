@@ -9,6 +9,7 @@
 
 #include <QFile>
 #include <QRegExp>
+#include <QFileInfo>
 
 #include "MountPoints.h"
 #include "Logger.h"
@@ -103,6 +104,36 @@ const MountPoint * MountPoints::findByPath( const QString & path )
 }
 
 
+const MountPoint * MountPoints::findNearestMountPoint( const QString & startPath )
+{
+    QFileInfo fileInfo( startPath );
+    QString path = fileInfo.canonicalFilePath(); // absolute path without symlinks or ..
+
+    if ( path != startPath )
+        logDebug() << startPath << " canonicalized is " << path << endl;
+
+    const MountPoint * mountPoint = findByPath( path );
+
+    if ( ! mountPoint )
+    {
+        QStringList pathComponents = startPath.split( "/", QString::SkipEmptyParts );
+
+        while ( ! mountPoint )
+        {
+            // Try one level upwards
+            pathComponents.removeLast();
+            path = QString( "/" ) + pathComponents.join( "/" );
+
+            mountPoint = instance()->_mountPointMap.value( path, 0 );
+        }
+    }
+
+    // logDebug() << "Nearest mount point for " << startPath << " is " << mountPoint << endl;
+
+    return mountPoint;
+}
+
+
 bool MountPoints::hasBtrfs()
 {
     instance()->ensurePopulated();
@@ -140,8 +171,6 @@ bool MountPoints::read( const QString & filename )
         logWarning() << "Can't open " << filename << endl;
         return false;
     }
-
-    logDebug() << "Reading " << filename << endl;
 
     QTextStream in( &file );
     int lineNo = 0;

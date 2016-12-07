@@ -132,6 +132,11 @@ namespace QDirStat
 	 **/
 	bool isTopLevel( FileInfo *item ) const;
 
+        /**
+         * Return the device of this tree's root item ("/dev/sda3" etc.).
+         **/
+        QString device() const { return _device; }
+
 	/**
 	 * Clear all items of this tree.
 	 **/
@@ -351,6 +356,7 @@ namespace QDirStat
 	DirReadJobQueue _jobQueue;
 	bool		_crossFileSystems;
 	bool		_isBusy;
+        QString         _device;
 
     };	// class DirTree
 
