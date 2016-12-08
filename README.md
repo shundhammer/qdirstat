@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-12-07
+Updated: 2016-12-08
 
 
 ## Overview
@@ -78,6 +78,27 @@ _Context menu of the tree header where you can configure the columns._
 
 **Latest stable release: V1.1**
 
+- 2016-12-08 Fixed C++ (QDirStat binary) part of
+  [GitHub issue #39](https://github.com/shundhammer/qdirstat/issues/39):
+  QDirStat doesn't scan Btrfs subvolumes
+
+  This was a bit of a challenge since the relevant Btrfs commands to obtain any
+  useful information about subvolumes all require root privileges, and I really
+  wouldn't want to scare users off by prompting for a _sudo_ password. QDirStat
+  now fetches the information from /proc/mounts (or /etc/mtab if /proc/mounts
+  is unavailable) and does some heuristics (which are not completely fool
+  proof) to check if a potential mount point is still on the same device. That
+  means that it will no longer treat a Btrfs subvolume as an ordinary mount
+  point where it stops reading by default, but it just continues. On the other
+  hand, another Btrfs mounted into the current file system is of course treated
+  as a normal mount point. See also the corresponding
+  [GitHub issue](https://github.com/shundhammer/qdirstat/issues/39)
+  for details.
+
+  The Perl qdirstat-cache-writer still has the old behaviour, i.e. it still
+  stops at a subvolume mount point. This will be addressed next.
+
+
 - 2016-12-07 Fixed [GitHub issue #40](https://github.com/shundhammer/qdirstat/issues/40):
   Crash without useful error message when no display available
 
@@ -118,11 +139,6 @@ _Context menu of the tree header where you can configure the columns._
   for the root password (at which point I as a user would terminate the program
   and not use it any more). **This is broken by design.** A simple info command
   like that should not require root privileges.
-
-  Looking for a better approach. If anybody out there has a better idea, please
-  add a comment to
-  [GitHub issue #39](https://github.com/shundhammer/qdirstat/issues/39)
-  that I just opened for this problem.
 
 
 - 2016-10-31 (Halloween) **New stable release: V1.1-Pumpkin**
