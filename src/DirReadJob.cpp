@@ -101,12 +101,19 @@ bool DirReadJob::crossingFileSystems( DirInfo * parent, DirInfo * child )
     if ( parentDevice.isEmpty() )
         parentDevice = _tree->device();
 
-    if ( parentDevice.isEmpty() || childDevice.isEmpty() )
-        return true;
+    bool crossing = true;
 
-    bool crossing = parentDevice != childDevice;
+    if ( ! parentDevice.isEmpty() && ! childDevice.isEmpty() )
+        crossing = parentDevice != childDevice;
 
-    if ( ! crossing )
+    if ( crossing )
+    {
+        if ( childDevice.isEmpty() )
+            logInfo() << "Found mount point " << child << endl;
+        else
+            logInfo() << "Found mount point " << child << " on device " << childDevice << endl;
+    }
+    else
     {
         logInfo() << "Mount point " << child
                   << " is still on the same device " << childDevice << endl;
@@ -196,7 +203,6 @@ void LocalDirReadJob::startReading()
 			    }
 			    else	// The subdirectory we just found is a mount point.
 			    {
-				logDebug() << "Found mount point " << subDir << endl;
 				subDir->setMountPoint();
 
 				if ( _tree->crossFileSystems() )
