@@ -68,7 +68,8 @@ my $debug		= 0;
 
 my $default_cache_file_name = ".qdirstat.cache.gz";
 
-my $toplevel_device	= undef;
+my $toplevel_dev_no	= undef;
+my $toplevel_dev_name   = undef;
 my $unsafe_chars	= "\x00-\x20%";
 
 
@@ -297,7 +298,7 @@ sub write_dir_entry()
         return;
     }
 
-    my ( $dev,
+    my ( $dev_no,
 	 $ino,
 	 $mode,
 	 $links,
@@ -312,28 +313,71 @@ sub write_dir_entry()
 	 $blocks ) = @lstat_result;
 
 
-    if ( ! defined( $toplevel_device ) )
+    $dir =~ s://+:/:g;    # Replace multiple // with one
+    my $escaped_dir = uri_escape( $dir, $unsafe_chars );
+
+    # Write cache file entry for this directory (even if it's a mount point)
+
+    print CACHE "D $escaped_dir";
+    print CACHE "\t$size";
+    printf CACHE "\t0x%x\n", $mtime;
+
+    if ( ! defined( $toplevel_dev_no ) )
     {
-	$toplevel_device = $dev;
+	$toplevel_dev_no   = $dev_no;
+        $toplevel_dev_name = device_name( $dir );
+        print CACHE "# Device: $toplevel_dev_name\n\n";
     }
 
-    if ( $dev == $toplevel_device || $scan_mounted )
+    if ( $dev_no == $toplevel_dev_no || $scan_mounted )
     {
-	$dir = uri_escape( $dir, $unsafe_chars );
-        $dir =~ s://+:/:g;    # Replace multiple // with one
-
-	print CACHE "D $dir";
-	print CACHE "\t$size";
-	printf CACHE "\t0x%x\n", $mtime;
-
 	return 1;
+    }
+
+    my $dev_name = device_name( $dir );
+    my $fs_boundary = $dev_name ne $toplevel_dev_name;
+    my $msg;
+
+    if ( $fs_boundary )
+    {
+	$msg = "File system boundary at mount point $dir on device $dev_name";
     }
     else
     {
-	my $msg = "Not crossing mount point $dir (use -m to override)";
-	print CACHE "# $msg\n";
-	logf( $msg );
+        $msg = "Mount point $dir is still on the same device $dev_name";
     }
+
+    print CACHE "# $msg\n\n";
+    logf( $msg );
+
+    return ! $fs_boundary;
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Get the device name where a directory is on from the 'df' command.
+#
+# Parameters:
+#       $dir    directory
+#
+# Return value:
+#       device name ("/dev/sda3", "/dev/system/root")
+
+sub device_name()
+{
+    my ( $dir ) = @_;
+
+    my @df_output = `df "$dir" 2>/dev/null`;
+    return "<unknown>" if scalar @df_output < 1;
+
+    shift @df_output; # Remove header line
+    my ( $line ) = @df_output;
+    my ( $device_name ) = split( '\s+', $line );
+    deb( "Directory $dir is on device $device_name" );
+
+    return $device_name;
 }
 
 
