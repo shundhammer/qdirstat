@@ -78,7 +78,7 @@ _Context menu of the tree header where you can configure the columns._
 
 **Latest stable release: V1.1**
 
-- 2016-12-09 Fixed Perl (qdirstat-cache-writer) part of
+- 2016-12-09 Fixed Perl (_qdirstat-cache-writer_) part of
   [GitHub issue #39](https://github.com/shundhammer/qdirstat/issues/39):
   QDirStat doesn't scan Btrfs subvolumes
 
