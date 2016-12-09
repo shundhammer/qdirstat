@@ -129,7 +129,7 @@ _Context menu of the tree header where you can configure the columns._
   exits with error code 1.
 
 
-- 2016-12-06 **Warning to Btrfs users**
+- 2016-12-06 **Warning to Btrfs users** (Fixed as of 2012-12-09)
 
   If you use QDirStat to scan a Btrfs partition,
   [any subvolumes of that partition are not scanned](https://github.com/shundhammer/qdirstat/issues/39):
