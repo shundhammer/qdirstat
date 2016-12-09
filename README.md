@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-12-08
+Updated: 2016-12-09
 
 
 ## Overview
@@ -78,6 +78,22 @@ _Context menu of the tree header where you can configure the columns._
 
 **Latest stable release: V1.1**
 
+- 2016-12-09 Fixed Perl (qdirstat-cache-writer) part of
+  [GitHub issue #39](https://github.com/shundhammer/qdirstat/issues/39):
+  QDirStat doesn't scan Btrfs subvolumes
+
+  The _qdirstat-cache-writer_ script now also checks the device names of a
+  mount point and its parent directory, not only their major/minor device
+  numbers; so now it will not stop at Btrfs subvolumes while scanning.
+
+  That script uses a more simplistic approach than QDirStat itself: It invokes
+  the _df_ command with that path and parses its output. If the path contains
+  very weird special characters, this may fail, in which case that directory
+  (which at that point is already known to have a different device major/minor
+  number than its parent) is considered a filesystem boundary, and that branch
+  is not scanned.
+
+
 - 2016-12-08 Fixed C++ (QDirStat binary) part of
   [GitHub issue #39](https://github.com/shundhammer/qdirstat/issues/39):
   QDirStat doesn't scan Btrfs subvolumes
@@ -95,7 +111,7 @@ _Context menu of the tree header where you can configure the columns._
   [GitHub issue](https://github.com/shundhammer/qdirstat/issues/39)
   for details.
 
-  The Perl qdirstat-cache-writer still has the old behaviour, i.e. it still
+  The Perl _qdirstat-cache-writer_ still has the old behaviour, i.e. it still
   stops at a subvolume mount point. This will be addressed next.
 
 
