@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-12-09
+Updated: 2016-12-11
 
 
 ## Overview
@@ -77,6 +77,9 @@ _Context menu of the tree header where you can configure the columns._
 ## Current Development Status
 
 **Latest stable release: V1.1**
+
+- 2016-12-11 Bernhard Walle contributed some patches for MacOS X support.
+  Thanks, Bernhard!
 
 - 2016-12-09 Fixed Perl (_qdirstat-cache-writer_) part of
   [GitHub issue #39](https://github.com/shundhammer/qdirstat/issues/39):
