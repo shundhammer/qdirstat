@@ -479,8 +479,13 @@ const QMap<QString, QString> & Cleanup::fallbackApps()
 
     if ( apps.isEmpty() )
     {
+#ifdef Q_OS_MAC
+	apps[ "%terminal"    ] = "open -a Terminal.app .";
+	apps[ "%filemanager" ] = "open";
+#else
 	apps[ "%terminal"    ] = "xterm";
 	apps[ "%filemanager" ] = "xdg-open";
+#endif
     }
 
     return apps;

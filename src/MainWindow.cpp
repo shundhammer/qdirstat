@@ -92,6 +92,11 @@ MainWindow::MainWindow():
 
     _ui->treemapView->setMimeCategorizer( _mimeCategorizer );
 
+#ifdef Q_OS_MACX
+    // this makes the application to look like more "native" on macOS
+    setUnifiedTitleAndToolBarOnMac(true);
+    _ui->toolBar->setMovable(false);
+#endif
 
     connect( _selectionModel,  SIGNAL( currentBranchChanged( QModelIndex ) ),
 	     _ui->dirTreeView, SLOT  ( closeAllExcept	   ( QModelIndex ) ) );
