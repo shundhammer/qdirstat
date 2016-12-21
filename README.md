@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-12-11
+Updated: 2016-12-21
 
 
 ## Overview
@@ -145,7 +145,7 @@ _Context menu of the tree header where you can configure the columns._
   normally you want to know what eats up the disk space on that one partition
   that is filling up, not on any others like /home that are mounted
   there. Unfortunately, a Btrfs subvolume is also just another mount point, and
-  QDirStat will start reading there, too - at /var/log, at /var/spool, at
+  QDirStat will stop reading there, too - at /var/log, at /var/spool, at
   /var/lib/libvirt etc.; a typical Btrfs root filesystem has about a dozen
   subvolumes, and all files in them are currently disregarded by QDirStat. You
   can of course click on "Continue reading at mount point" individually in
