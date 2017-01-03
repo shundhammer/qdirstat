@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2016-12-27
+Updated: 2017-01-03
 
 
 ## Overview
@@ -76,7 +76,37 @@ _Context menu of the tree header where you can configure the columns._
 
 ## Current Development Status
 
-**Latest stable release: V1.1**
+**Latest stable release: V1.2**
+
+- 2017-01-03 **New stable release: V1.2**
+
+  _Upgrading to this release is highly recommended for Btrfs users:_
+
+  If you used QDirStat to scan a Btrfs partition, any subvolumes of that
+  partition were not scanned (see
+  [GitHub issue #39](https://github.com/shundhammer/qdirstat/issues/39)).
+
+  Btrfs subvolumes were treated just like ordinary mount points (which, to all
+  intents and purposes, they are). So you might have wondered why the _df_
+  command shows your 40 GB root filesystem as 97% full, yet QDirStat shows only
+  about 7 GB. The rest might be hidden in subvolumes.
+
+  QDirStat stops reading at mount points - which only makes sense because
+  normally you want to know what eats up the disk space on that one partition
+  that is filling up, not on any others like /home that are mounted
+  there. Unfortunately, a Btrfs subvolume is also just another mount point, and
+  QDirStat would stop reading there, too - at /var/log, at /var/spool, at
+  /var/lib/libvirt etc.; a typical Btrfs root filesystem has about a dozen
+  subvolumes, and all files in them were disregarded by QDirStat.
+
+  This is now fixed: Despite Btrfs doing its best to make this difficult (using
+  one single privileged system call for all its functionality, including simple
+  info calls), QDirStat now detects if a mount point is a Btrfs subvolume and
+  continues reading if it is. QDirStat uses /proc/mounts (or, if this is not
+  available, /etc/mtab) to find this out.
+
+  This is fixed in the _qdirstat-cache-writer_ script, too.
+
 
 - 2016-12-11 Bernhard Walle contributed some patches for MacOS X support.
   Thanks, Bernhard!
@@ -132,178 +162,7 @@ _Context menu of the tree header where you can configure the columns._
   exits with error code 1.
 
 
-- 2016-12-06 **Warning to Btrfs users** (Fixed as of 2012-12-09)
-
-  If you use QDirStat to scan a Btrfs partition,
-  [any subvolumes of that partition are not scanned](https://github.com/shundhammer/qdirstat/issues/39):
-  Btrfs subvolumes are treated just like ordinary
-  mount points (which, to all intents and purposes, they are). So you might
-  wonder why the _df_ command shows your 40 GB root filesystem as 97% full, yet
-  QDirStat shows only about 7 GB. The rest might be hidden in subvolumes.
-
-  QDirStat stops reading at mount points - which only makes sense because
-  normally you want to know what eats up the disk space on that one partition
-  that is filling up, not on any others like /home that are mounted
-  there. Unfortunately, a Btrfs subvolume is also just another mount point, and
-  QDirStat will stop reading there, too - at /var/log, at /var/spool, at
-  /var/lib/libvirt etc.; a typical Btrfs root filesystem has about a dozen
-  subvolumes, and all files in them are currently disregarded by QDirStat. You
-  can of course click on "Continue reading at mount point" individually in
-  QDirStat's directory tree for each one of them, but that's tedious.
-
-  I am working on a solution. One approach would be to check if the current
-  filesystem is Btrfs and list its subvolumes, but the Btrfs developers in
-  their infinite wisdom decided that `btrfs subvolume list <path>` is a
-  privileged operation, so QDirStat would have to use `sudo` with it and prompt
-  for the root password (at which point I as a user would terminate the program
-  and not use it any more). **This is broken by design.** A simple info command
-  like that should not require root privileges.
-
-
-- 2016-10-31 (Halloween) **New stable release: V1.1-Pumpkin**
-
-  It's about time for another official release to get the accumulated fixes and
-  small changes out into the world. Since today is Halloween, this release
-  shall be named _Pumpkin_ (as in the unforgettable Charlie Brown's _Great
-  Pumpkin_).
-
-  The last stable release, V1.0, was in mid-May (2016-05-16). Since then, there
-  were 5 bug fixes and one small feature (the config file split up into
-  independent parts so admins can provide presets to their users without
-  overwriting the complete configuration), all described in greater detail
-  below.
-
-- 2016-10-23
-
-  - Fixed [GitHub issue #32](https://github.com/shundhammer/qdirstat/issues/32):
-    %p does not escape single quotes properly
-
-    If you have a file name like `Don't do this.txt` (with a quote character in
-    the name), the shell used when executing a cleanup action with this would
-    complain about unmatched single quotes.
-
-    QDirStat had always escaped such single quotes, but not the way common
-    shells (Bash, Zsh) expect it: They don't want a backslash in front of that
-    embedded single quote. Rather, you need to terminate the string with a
-    single quote, escape the embedded quote with a backslash (or put it into
-    double quotes), and then re-open the old string with another single quote.
-
-    Thus, `'Don't do this'` becomes `'Don'\''t do this'`.
-
-    This is certainly not what most people expect. I just wonder how much other
-    software is out there that does it the intuitive (yet wrong) way: Just
-    escape the single quote with a backslash (`'Don\'t do this'`).
-
-    Of course, such file names should be avoided entirely, but you can't help
-    some slightly broken MP3 ripper program doing it, so it needs to be handled
-    correctly.
-
-  - Fixed [GitHub issue #31](https://github.com/shundhammer/qdirstat/issues/31):
-    Segfault with cleanup action while reading directories
-
-    Now disabling cleanups that have a refresh policy other than "No Refresh"
-    while directory reading is in progress; otherwise the re-read when the
-    cleanup action has finished clashes with the directory read already in
-    progress.
-
-    This is not an optimal solution, but a very pragmatic one; the optimal
-    solution might queue updates and execute them after the main read is done.
-
-  - Fixed [GitHub issue #33](https://github.com/shundhammer/qdirstat/issues/33):
-    Added command line option `--slow-update` (or `-s`) for slow remote X connections.
-
-
-- 2016-08-12
-
-  - Fixed [GitHub issue #23](https://github.com/shundhammer/qdirstat/issues/23):
-
-    The internal cache writer would sometimes generate incorrect cache files
-    because of buggy URL escaping resulting in an empty file name and thus
-    invalid cache file syntax. This affected file names with colons (which is
-    weird, but legal).
-
-    One of these days I'm going to throw out all that QUrl stuff and replace the
-    few things that I need with something that actually works consistently and
-    not just under optimum conditions.
-
-
-- 2016-08-10
-
-  - Fixed [GitHub issue #22](https://github.com/shundhammer/qdirstat/issues/22):
-
-    Cache files containing the root file system would not display correctly or
-    segfault under certain conditions. This is now fixed.
-
-  - Added "Refresh All" action to the main window tool bar. I had consciously
-    avoided that because it's just too tempting to re-read the complete
-    directory tree rather than think about what actually might have changed and
-    then refresh just that, but it has become so common to use that action in
-    web browsers that I found myself missing that more and more. And re-reading
-    is not that expensive on today's mainstream PCs.
-
-
-- 2016-07-02
-
-  - Fixed [GitHub issue #21](https://github.com/shundhammer/qdirstat/issues/21):
-
-    When started from a desktop menu, i.e. without any command line parameters,
-    QDirStat would not prompt for a directory to read, but read the current
-    directory (typically the user's home directory) right away.
-
-  - More graceful handling for nonexisting paths specified on the commmand
-    line: It now no longer just throws an exception right after starting the
-    program (which looks like a crash to the unwary user), but posts an error
-    popup instead and then asks for a directory to read.
-
-
-- 2016-06-29
-
-  - V1.01 (Development version)
-
-  - Split up config file into four separate ones below ~/.config/QDirStat:
-
-    - QDirStat.conf
-    - QDirStat-cleanup.conf
-    - QDirStat-exclude.conf
-    - QDirStat-mime.conf
-
-    This should make it much easier for site administrators to provide their
-    own site-wide cleanup actions, exclude rules, or MIME categories. I did
-    this with this in mind:
-
-      http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html
-
-    Here, they describe how users should overwrite their KDirStat config file
-    with one provided by the site admin so all users have those carefully
-    crafted cleanup actions. But that also means that all other settings get
-    lost each time there is a change in any of those commands, and users have
-    to update that config file again.
-
-    With the latest change, it is now possible to only replace the cleanup
-    action config (QDirStat-cleanup.conf) and leave everything else untouched.
-
-    Notice that this is far from a perfect solution; all cleanup actions the
-    user added himself still get lost. But doing this perfectly might pretty
-    quickly become an overengineered solution that would be hard to understand
-    for everybody.
-
-    As for migration from previous single-file configurations, QDirStat does
-    that automatically: It reads the single file and moves the respective parts
-    where they belong. No need to bother with any migration scrips or anything
-    like that.
-
-
-- 2016-05-16 **First stable release: V1.0**
-
-  After 3 months of Beta phase and 3 Beta releases, here is finally the
-  official first stable release of QDirStat: Version 1.0.
-
-  In terms of source code, there were very little changes from the last Beta
-  (0.98-Beta3 from 2016-04-08) and no real code change (only the version number
-  increased) from the last check-in from 2016-04-11. This version can really be
-  considered stable in the truest sense of the word. It was not rushed out the
-  door, and there were no hectic last minute changes. It is well tested, and
-  the community had ample opportunity to report any problems.
+- 2016-10-31 (Halloween) New stable release: V1.1-Pumpkin
 
 
 _See file DevHistory.md for older entries:_
@@ -470,6 +329,13 @@ old code base that had been long overdue.
   path) is still available, though.
 
 - Configuration dialog for exclude rules -- see screenshots.
+
+- Subvolume detection for Btrfs. Btrfs subvolumes are just ordinary mount
+  points, so normally QDirStat would stop scanning there, leaving a large part
+  of a Btrfs partition unaccounted for. But for each mount point found while
+  scanning a directory tree, QDirStat checks /proc/mounts or /etc/mtab if it
+  has the same device name as its parent directory, and if yes, considers it a
+  subvolume and continues scanning.
 
 - Actions to go one directory level higher or to the toplevel: Context menu and
   menu "Go To" -> "Up One Level" or "Toplevel". This is useful if you clicked
