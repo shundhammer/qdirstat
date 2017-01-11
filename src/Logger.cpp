@@ -261,7 +261,7 @@ static void qt_logger( QtMsgType msgType,
     {
         fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
 
-        if ( msg.contains( "Could not connect to display" ) )
+        if ( ((QString) msg).contains( "Could not connect to display" ) )
             exit( 1 );
         else
             abort();
