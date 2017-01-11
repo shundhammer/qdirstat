@@ -266,6 +266,12 @@ static void qt_logger( QtMsgType msgType,
         else
             abort();
     }
+
+    if ( msgType == QtWarningMsg && ((QString) msg).contains( "cannot connect to X server" ) )
+    {
+        fprintf( stderr, "WARNING: %s\n", qPrintable( msg ) );
+        exit( 1 );
+    }
 }
 
 
