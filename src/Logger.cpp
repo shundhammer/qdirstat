@@ -15,16 +15,18 @@
 #include <QStringList>
 
 #include <stdio.h>	// stderr, fprintf()
-#include <stdlib.h>     // abort()
+#include <stdlib.h>	// abort()
 #include <unistd.h>	// getpid()
 #include <sys/types.h>	// pid_t
 
+
+static LogSeverity toLogSeverity( QtMsgType msgType );
 
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
 static void qt_logger( QtMsgType msgType, const char *msg);
 #else
 static void qt_logger( QtMsgType msgType,
-		       const QMessageLogContext &context,
+		       const QMessageLogContext & context,
 		       const QString & msg );
 #endif
 
@@ -155,9 +157,20 @@ QTextStream & Logger::log( const QString &srcFile,
 
     _logStream << Logger::timeStamp() << " "
 	       << "[" << (int) getpid() << "] "
-	       << sev << " "
-	       << srcFile << ":" << srcLine << " "
-	       << srcFunction << "():  ";
+	       << sev << " ";
+
+    if ( ! srcFile.isEmpty() )
+    {
+	_logStream << srcFile;
+
+	if ( srcLine > 0 )
+	    _logStream << ":" << srcLine;
+
+	_logStream << " ";
+
+	if ( ! srcFunction.isEmpty() )
+	_logStream << srcFunction << "():  ";
+    }
 
     return _logStream;
 }
@@ -227,15 +240,10 @@ QString Logger::indentLines( int indentWidth,
 }
 
 
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-static void qt_logger( QtMsgType msgType, const char *msg)
-#else
-static void qt_logger( QtMsgType msgType,
-		       const QMessageLogContext &context,
-		       const QString & msg )
-#endif
+
+static LogSeverity toLogSeverity( QtMsgType msgType )
 {
-    LogSeverity severity;
+    LogSeverity severity = LogSeverityVerbose;
 
     switch ( msgType )
     {
@@ -248,31 +256,57 @@ static void qt_logger( QtMsgType msgType,
 #endif
     }
 
+    return severity;
+}
+
+
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )) // Qt 4.x
+
+static void qt_logger( QtMsgType msgType, const char *msg)
+{
     Logger::log( 0, // use default logger
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-		 "", 0, "",
-#else
-		 context.file, context.line, context.function,
-#endif
-		 severity )
+		 "[Qt]", 0, "", // file, line, function
+		 toLogSeverity( msgType ) )
 	<< msg << endl;
 
     if ( msgType == QtFatalMsg )
     {
-        fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
-
-        if ( ((QString) msg).contains( "Could not connect to display" ) )
-            exit( 1 );
-        else
-            abort();
+	fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
+	abort();
     }
 
-    if ( msgType == QtWarningMsg && ((QString) msg).contains( "cannot connect to X server" ) )
+    if ( msgType == QtWarningMsg &&
+	 QString( msg ).contains( "cannot connect to X server" ) )
     {
-        fprintf( stderr, "WARNING: %s\n", qPrintable( msg ) );
-        exit( 1 );
+	fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
+	exit( 1 );
     }
 }
+
+#else // Qt 5.x
+
+static void qt_logger( QtMsgType msgType,
+		       const QMessageLogContext & context,
+		       const QString & msg )
+{
+    Logger::log( 0, // use default logger
+		 context.file, context.line, context.function,
+		 toLogSeverity( msgType ) )
+	<< msg << endl;
+
+    if ( msgType == QtFatalMsg )
+    {
+	fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
+
+	if ( msg.contains( "Could not connect to display" ) )
+	    exit( 1 );
+	else
+	    abort();
+    }
+}
+
+#endif // Qt 5.x
+
 
 
 QTextStream & operator<<( QTextStream &str, const QStringList &stringList )
