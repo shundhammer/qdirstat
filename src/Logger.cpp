@@ -261,10 +261,16 @@ static void qt_logger( QtMsgType msgType,
     {
         fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
 
-        if ( msg.contains( "Could not connect to display" ) )
+        if ( ((QString) msg).contains( "Could not connect to display" ) )
             exit( 1 );
         else
             abort();
+    }
+
+    if ( msgType == QtWarningMsg && ((QString) msg).contains( "cannot connect to X server" ) )
+    {
+        fprintf( stderr, "WARNING: %s\n", qPrintable( msg ) );
+        exit( 1 );
     }
 }
 
