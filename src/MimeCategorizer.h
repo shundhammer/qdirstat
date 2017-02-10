@@ -48,8 +48,13 @@ namespace QDirStat
 	/**
 	 * Return the MimeCategory for a filename or 0 if it doesn't fit into
 	 * any of the available categories.
+         *
+         * If 'suffix_ret' is non-null, it returns the suffix used if the
+         * category was found by a suffix rule. If the category was not found
+         * or if a regexp (rather than a suffix rule) matched, this returns an
+         * empty string.
 	 **/
-	MimeCategory * category( const QString & filename );
+	MimeCategory * category( const QString & filename, QString * suffix_ret = 0 );
 
 	/**
 	 * Add a MimeCategory.

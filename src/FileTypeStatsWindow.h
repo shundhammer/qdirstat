@@ -20,6 +20,8 @@
 namespace QDirStat
 {
     class DirTree;
+    class MimeCategorizer;
+    class MimeCategory;
 
 
     /**
@@ -28,39 +30,39 @@ namespace QDirStat
      **/
     class FileTypeStatsWindow: public QDialog
     {
-        Q_OBJECT
+	Q_OBJECT
 
     public:
 
-        /**
-         * Constructor.
-         *
-         * Notice that this widget will destroy itself upon window close.
-         *
-         * It is advised to use a QPointer for storing a pointer to an instance
-         * of this class. The QPointer will keep track of this window
-         * auto-deleting itself when closed.
-         **/
-        FileTypeStatsWindow( DirTree * tree, QWidget * parent );
+	/**
+	 * Constructor.
+	 *
+	 * Notice that this widget will destroy itself upon window close.
+	 *
+	 * It is advised to use a QPointer for storing a pointer to an instance
+	 * of this class. The QPointer will keep track of this window
+	 * auto-deleting itself when closed.
+	 **/
+	FileTypeStatsWindow( DirTree * tree, QWidget * parent );
 
-        /**
-         * Destructor.
-         **/
-        virtual ~FileTypeStatsWindow();
+	/**
+	 * Destructor.
+	 **/
+	virtual ~FileTypeStatsWindow();
 
     public:
 
-        /**
-         * Return the corresponding DirTree.
-         **/
-        DirTree * tree() const { return _tree; }
+	/**
+	 * Return the corresponding DirTree.
+	 **/
+	DirTree * tree() const { return _tree; }
 
     public slots:
 
-        /**
-         * Calculate the statistics from the tree.
-         **/
-        void calc();
+	/**
+	 * Calculate the statistics from the tree.
+	 **/
+	void calc();
 
 	/**
 	 * Reject the dialog contents, i.e. the user clicked the "Cancel"
@@ -72,34 +74,56 @@ namespace QDirStat
 
     protected:
 
-        /**
-         * Clear all data and widget contents.
-         **/
-        void clear();
+	/**
+	 * Clear all data and widget contents.
+	 **/
+	void clear();
 
-        /**
-         * Collect information from the associated widget tree:
-         *
-         * Recursively go through the tree and collect sizes for each file type
-         * (filename extension).
-         **/
-        void collect( FileInfo * dir );
+	/**
+	 * Collect information from the associated widget tree:
+	 *
+	 * Recursively go through the tree and collect sizes for each file type
+	 * (filename extension).
+	 **/
+	void collect( FileInfo * dir );
 
-        /**
-         * Populate the widgets from the collected information.
-         **/
-        void populate();
+	/**
+	 * Remove useless content from the maps. On a Linux system, there tend
+	 * to be a lot of files that have a '.' in the name, but it's not a
+	 * meaningful suffix but a general-purpose separator for dates, SHAs,
+	 * version numbers or whatever. All that stuff accumulates in the maps,
+	 * and it's typically just a single file with that non-suffix. This
+	 * function tries a best effort to get rid of that stuff.
+	 **/
+	void removeCruft();
+
+	/**
+	 * Check if a suffix is cruft, i.e. a nonstandard suffix that is not
+	 * useful for display.
+	 *
+	 * Notice that this is a highly heuristical algorithm that might give
+	 * false positives.
+	 **/
+	bool isCruft( const QString & suffix );
+
+	/**
+	 * Populate the widgets from the collected information.
+	 **/
+	void populate();
 
 
-        //
-        // Data members
-        //
+	//
+	// Data members
+	//
 
-        Ui::FileTypeStatsWindow * _ui;
-        QMap<QString, FileSize>   _suffixSum;
-        QMap<QString, int>        _suffixCount;
+	Ui::FileTypeStatsWindow * _ui;
+	DirTree *		  _tree;
+	MimeCategorizer *	  _mimeCategorizer;
 
-        DirTree *                 _tree;
+	QMap<QString, FileSize>	       _suffixSum;
+	QMap<QString, int>	       _suffixCount;
+	QMap<MimeCategory *, FileSize> _categorySum;
+	QMap<MimeCategory *, int>      _categoryCount;
     };
 }
 
