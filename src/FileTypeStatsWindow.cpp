@@ -196,7 +196,7 @@ bool FileTypeStatsWindow::isCruft( const QString & suffix )
 	return true;
 
     // Forget long suffixes with mostly non-letters
-    if ( lettersPercent < 0.70 && count < len )
+    if ( lettersPercent < 70.0 && count < len )
 	return true;
 
     return false;
