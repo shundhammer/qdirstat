@@ -11,16 +11,17 @@
 #define FileTypeStatsWindow_h
 
 #include <QDialog>
+#include <QMap>
 
 #include "ui_file-type-stats-window.h"
-
+#include "DirInfo.h"
 
 
 namespace QDirStat
 {
     class DirTree;
 
-    
+
     /**
      * Modeless dialog to display file type statistics, such as how much disk
      * space is used for each kind of filename extension (*.jpg, *.mp4 etc.).
@@ -71,9 +72,34 @@ namespace QDirStat
 
     protected:
 
-        Ui::FileTypeStatsWindow * _ui;
+        /**
+         * Clear all data and widget contents.
+         **/
+        void clear();
 
-        DirTree *       _tree;
+        /**
+         * Collect information from the associated widget tree:
+         *
+         * Recursively go through the tree and collect sizes for each file type
+         * (filename extension).
+         **/
+        void collect( FileInfo * dir );
+
+        /**
+         * Populate the widgets from the collected information.
+         **/
+        void populate();
+
+
+        //
+        // Data members
+        //
+
+        Ui::FileTypeStatsWindow * _ui;
+        QMap<QString, FileSize>   _suffixSum;
+        QMap<QString, int>        _suffixCount;
+
+        DirTree *                 _tree;
     };
 }
 

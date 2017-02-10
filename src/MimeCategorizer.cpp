@@ -64,7 +64,8 @@ MimeCategory * MimeCategorizer::category( const QString & filename )
 
     MimeCategory * category = 0;
 
-    // Find the filename suffix: Everything after the first '.'
+    // Find the filename suffix: Section #1
+    // (ignoring any leading '.' separator)
     QString suffix = filename.section( '.', 1 );
 
     while ( ! suffix.isEmpty() )
