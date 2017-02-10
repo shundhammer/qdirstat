@@ -78,6 +78,8 @@
     </widget>
     <addaction name="actionCloseAllTreeLevels"/>
     <addaction name="menuExpandTreeToLevel"/>
+    <addaction name="separator"/>
+    <addaction name="actionFileTypeStats"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -562,6 +564,14 @@
    </property>
    <property name="shortcut">
     <string>F7</string>
+   </property>
+  </action>
+  <action name="actionFileTypeStats">
+   <property name="text">
+    <string>File &amp;Type Statistics</string>
+   </property>
+   <property name="toolTip">
+    <string>File Type Statistics</string>
    </property>
   </action>
  </widget>

@@ -48,6 +48,7 @@ SOURCES	  = main.cpp			\
 	    FileInfoIterator.cpp	\
 	    FileInfoSet.cpp		\
 	    FileInfoSorter.cpp		\
+            FileTypeStatsWindow.cpp     \
 	    HeaderTweaker.cpp		\
 	    ListEditor.cpp		\
 	    Logger.cpp			\
@@ -91,6 +92,7 @@ HEADERS	  =				\
 	    FileInfoIterator.h		\
 	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
+            FileTypeStatsWindow.h       \
 	    HeaderTweaker.h		\
 	    ListEditor.h		\
 	    ListMover.h			\
@@ -121,7 +123,8 @@ FORMS	  = main-window.ui		   \
 	    config-dialog.ui		   \
 	    cleanup-config-page.ui	   \
 	    mime-category-config-page.ui   \
-	    exclude-rules-config-page.ui
+	    exclude-rules-config-page.ui   \
+            file-type-stats-window.ui
 
 #	    general-config-page.ui
 
