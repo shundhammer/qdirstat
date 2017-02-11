@@ -14,15 +14,12 @@
 #include <QMap>
 
 #include "ui_file-type-stats-window.h"
-#include "DirInfo.h"
 
 
 namespace QDirStat
 {
     class DirTree;
-    class MimeCategorizer;
-    class MimeCategory;
-
+    class FileTypeStats;
 
     /**
      * Modeless dialog to display file type statistics, such as how much disk
@@ -80,33 +77,6 @@ namespace QDirStat
 	void clear();
 
 	/**
-	 * Collect information from the associated widget tree:
-	 *
-	 * Recursively go through the tree and collect sizes for each file type
-	 * (filename extension).
-	 **/
-	void collect( FileInfo * dir );
-
-	/**
-	 * Remove useless content from the maps. On a Linux system, there tend
-	 * to be a lot of files that have a '.' in the name, but it's not a
-	 * meaningful suffix but a general-purpose separator for dates, SHAs,
-	 * version numbers or whatever. All that stuff accumulates in the maps,
-	 * and it's typically just a single file with that non-suffix. This
-	 * function tries a best effort to get rid of that stuff.
-	 **/
-	void removeCruft();
-
-	/**
-	 * Check if a suffix is cruft, i.e. a nonstandard suffix that is not
-	 * useful for display.
-	 *
-	 * Notice that this is a highly heuristical algorithm that might give
-	 * false positives.
-	 **/
-	bool isCruft( const QString & suffix );
-
-	/**
 	 * Populate the widgets from the collected information.
 	 **/
 	void populate();
@@ -118,12 +88,7 @@ namespace QDirStat
 
 	Ui::FileTypeStatsWindow * _ui;
 	DirTree *		  _tree;
-	MimeCategorizer *	  _mimeCategorizer;
-
-	QMap<QString, FileSize>	       _suffixSum;
-	QMap<QString, int>	       _suffixCount;
-	QMap<MimeCategory *, FileSize> _categorySum;
-	QMap<MimeCategory *, int>      _categoryCount;
+	FileTypeStats *		  _stats;
     };
 }
 
