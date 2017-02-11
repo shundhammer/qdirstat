@@ -115,10 +115,12 @@ void Settings::moveGroups( const QString & groupPrefix,
     }
     else
     {
+#if 0
 	logVerbose() << "Target settings " << to->name()
 		     << " have group " << groupPrefix
 		     << " - nothing to migrate"
 		     << endl;
+#endif
     }
 
     from->removeGroups( groupPrefix );
