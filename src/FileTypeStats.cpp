@@ -16,8 +16,6 @@
 
 using namespace QDirStat;
 
-#define NO_SUFFIX "//<No Suffix>"	// A slash is illegal in Linux filenames
-
 
 FileTypeStats::FileTypeStats( DirTree * tree,
 			      QObject * parent ):

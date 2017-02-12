@@ -16,6 +16,8 @@
 #include "ui_file-type-stats-window.h"
 #include "DirInfo.h"
 
+#define NO_SUFFIX "//<No Suffix>" // A slash is illegal in Linux/Unix filenames
+
 
 namespace QDirStat
 {

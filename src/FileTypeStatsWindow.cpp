@@ -17,7 +17,6 @@
 
 using namespace QDirStat;
 
-#define NO_SUFFIX "//no suffix//"  // A slash is illegal in Linux/Unix filenames
 
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
 #  define setSectionResizeMode setResizeMode
