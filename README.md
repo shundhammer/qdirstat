@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-01-03
+Updated: 2017-02-12
 
 
 ## Overview
@@ -77,6 +77,39 @@ _Context menu of the tree header where you can configure the columns._
 ## Current Development Status
 
 **Latest stable release: V1.2**
+
+- 2017-02-12 Working on a _File Type Statistics_ window
+
+  People who know WinDirStat inevitably want that _File Type_ view in QDirStat,
+  too. I was really reluctant to do that because I didn't quite see the point;
+  in WinDirStat, it serves mostly as a legend to the treemap colors since they
+  are constantly changing in WinDirStat: The file type that consumes most disk
+  space always gets color #1, the next-most color #2 etc., so it depends which
+  directory you scan what color each file type gets. In QDirStat, the colors
+  are stable; they are predefined and configurable in the _MIME Type
+  Categories_ configuration dialog.
+
+  And as most of you probably know, filename extensions have a much stricter
+  meaning in Windows than on Linux/Unix systems; Linux people get very creative
+  when it comes to using dots in filenames. Sometimes those dots delimit a
+  filename's extension (suffix) from its base name, sometimes they are used for
+  entirely different purposes.
+
+  Anyway, there was one user who was insistent enough to make me reconsider,
+  and I did some experimenting this weekend, and now we have an (albeit still
+  experimental) **File Type Statistics** view. So far, that code lives in a Git
+  branch, but I think it will stabilize in the next one or two weeks, so I will
+  merge it to Git master.
+
+  Screenshot:
+
+  ![File Type Statistics Window Screenshot]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png)
+
+  See the whole discussion with more screenshots at
+  [GitHub issue #45](https://github.com/shundhammer/qdirstat/issues/45)
+
+
 
 - 2017-01-03 **New stable release: V1.2**
 
