@@ -12,14 +12,17 @@
 
 #include <QDialog>
 #include <QMap>
+#include <QTreeWidgetItem>
 
 #include "ui_file-type-stats-window.h"
+#include "FileInfo.h"
 
 
 namespace QDirStat
 {
     class DirTree;
     class FileTypeStats;
+
 
     /**
      * Modeless dialog to display file type statistics, such as how much disk
@@ -76,6 +79,11 @@ namespace QDirStat
 	 **/
 	void clear();
 
+        /**
+         * One-time initialization of the widgets in this window.
+         **/
+        void initWidgets();
+
 	/**
 	 * Populate the widgets from the collected information.
 	 **/
@@ -90,7 +98,61 @@ namespace QDirStat
 	DirTree *		  _tree;
 	FileTypeStats *		  _stats;
     };
-}
+
+
+    /**
+     * Column numbers for the file type tree widget
+     **/
+    enum FileTypeColumns
+    {
+        FT_NameCol = 0,
+        FT_CountCol,
+        FT_TotalSizeCol,
+        FT_PercentageCol,
+        FT_ColumnCount
+    };
+
+
+    /**
+     * Item class for the file type tree widget, representing either a MIME
+     * category or a suffix.
+     **/
+    class FileTypeItem: public QTreeWidgetItem
+    {
+    public:
+
+        /**
+         * Constructor. After creating, this item has to be inserted into the
+         * tree at the appropriate place: Toplevel for categories, below a
+         * category for suffixes.
+         **/
+        FileTypeItem( const QString & name,
+                      int             count,
+                      FileSize        totalSize,
+                      float           percentage );
+        //
+        // Getters
+        //
+
+        QString name()       const { return _name; }
+        int     count()      const { return _count; }
+        int     totalSize()  const { return _totalSize; }
+        float   percentage() const { return _percentage; }
+
+        /**
+         * Less-than operator for sorting.
+         **/
+        virtual bool operator<(const QTreeWidgetItem & other) const Q_DECL_OVERRIDE;
+
+    protected:
+
+        QString         _name;
+        int             _count;
+        FileSize        _totalSize;
+        float           _percentage;
+    };
+
+} // namespace QDirStat
 
 
 

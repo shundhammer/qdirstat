@@ -103,6 +103,11 @@ namespace QDirStat
 	 **/
 	FileSize categorySum( MimeCategory * category ) const;
 
+        /**
+         * Return the category for the specified suffix or 0 if there is none.
+         **/
+        MimeCategory * category( const QString & suffix ) const;
+
 	//
 	// Iterators
 	//
@@ -161,6 +166,7 @@ namespace QDirStat
 	//
 
 	DirTree *		_tree;
+        FileSize                _relevanceThreshold;
 	MimeCategorizer *	_mimeCategorizer;
 
 	StringFileSizeMap	_suffixSum;

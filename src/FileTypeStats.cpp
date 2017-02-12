@@ -16,7 +16,7 @@
 
 using namespace QDirStat;
 
-#define NO_SUFFIX "///"	 // Illegal in filenames in Linux filesystems
+#define NO_SUFFIX "//<No Suffix>"	// A slash is illegal in Linux filenames
 
 
 FileTypeStats::FileTypeStats( DirTree * tree,
@@ -39,6 +39,7 @@ FileTypeStats::~FileTypeStats()
 
 void FileTypeStats::clear()
 {
+    _relevanceThreshold = 1024LL;
     _suffixSum.clear();
     _suffixCount.clear();
     _categorySum.clear();
@@ -70,20 +71,26 @@ FileSize FileTypeStats::categorySum( MimeCategory * category ) const
 }
 
 
+MimeCategory * FileTypeStats::category( const QString & suffix ) const
+{
+    return _mimeCategorizer->category( "x." + suffix );
+}
+
+
 void FileTypeStats::calc()
 {
     clear();
 
-    if ( ! _tree )
+    if ( ! _tree || ! _tree->root() )
     {
 	logWarning() << "No tree" << endl;
 	return;
     }
 
-    logDebug() << "Calculating" << endl;
     collect( _tree->root() );
+    // _relevanceThreshold = qMax( _tree->root()->totalSize() / 10000LL, 1024LL );
+    logDebug() << "relevance threshold: " << formatSize( _relevanceThreshold ) << endl;
     removeCruft();
-    logDebug() << "Collecting done" << endl;
 
     emit calcFinished();
 }
@@ -161,34 +168,62 @@ void FileTypeStats::collect( FileInfo * dir )
 
 void FileTypeStats::removeCruft()
 {
-    QMap<QString, int>::iterator it = _suffixCount.begin();
-
-    while ( it != _suffixCount.end() )
     {
-	QString suffix = it.key();
+	QMap<QString, int>::iterator it = _suffixCount.begin();
+
+	while ( it != _suffixCount.end() )
+	{
+	    QString suffix = it.key();
+	    bool remove = false;
+
+	    if ( isCruft( suffix ) )
+	    {
+		// logVerbose() << "Removing cruft *." << suffix << endl;
+		remove = true;
+	    }
+	    else if ( isIrrelevant( suffix ) )
+	    {
+		// logVerbose() << "Removing irrelevant *." << suffix << endl;
+		remove = true;
+	    }
+
+	    if ( remove )
+	    {
+		it = _suffixCount.erase( it );
+		_suffixSum.remove( suffix );
+	    }
+	    else
+	    {
+		++it;
+	    }
+	}
+    }
+
+    QMap<MimeCategory *, FileSize>::iterator it = _categorySum.begin();
+
+    while ( it != _categorySum.end() )
+    {
+	MimeCategory * category = it.key();
+	FileSize sum = it.value();
 	bool remove = false;
 
-	if ( isCruft( suffix ) )
+	if ( sum < _relevanceThreshold )
 	{
-	    // logVerbose() << "Removing cruft *." << suffix << endl;
-	    remove = true;
-	}
-	else if ( isIrrelevant( suffix ) )
-	{
-	    // logVerbose() << "Removing irrelevant *." << suffix << endl;
+	    logDebug() << "Removing irrelevant " << category << endl;
 	    remove = true;
 	}
 
 	if ( remove )
 	{
-	    it = _suffixCount.erase( it );
-	    _suffixSum.remove( suffix );
+	    it = _categorySum.erase( it );
+	    _categoryCount.remove( category );
 	}
 	else
 	{
 	    ++it;
 	}
     }
+
 }
 
 
@@ -206,7 +241,7 @@ bool FileTypeStats::isCruft( const QString & suffix ) const
     int count	 = _suffixCount[ suffix ];
     int len	 = suffix.size();
     int letters	 = suffix.count( QRegExp( "[a-zA-Z]" ) );
-    float lettersPercent = letters > 0 ? (100.0 * len) / letters : 0.0;
+    float lettersPercent = len > 0 ? (100.0 * letters) / len : 0.0;
 
     if ( letters == 0 )
 	return true;
@@ -231,10 +266,7 @@ bool FileTypeStats::isCruft( const QString & suffix ) const
 
 bool FileTypeStats::isIrrelevant( const QString & suffix ) const
 {
-    if ( _suffixCount[ suffix ] < 2 )
-	return true;
-
-    if ( _suffixSum[ suffix ] < 1024LL )
+    if ( _suffixSum[ suffix ] < _relevanceThreshold )
 	return true;
 
     return false;
