@@ -120,6 +120,7 @@ void FileTypeStatsWindow::populate()
             CHECK_NEW( item );
 
             _ui->treeWidget->addTopLevelItem( item );
+            item->setBold();
             categoryItem[ category ] = item;
         }
     }
@@ -189,6 +190,7 @@ void FileTypeStatsWindow::populate()
         CHECK_NEW( otherCategoryItem );
 
         _ui->treeWidget->addTopLevelItem( otherCategoryItem );
+        otherCategoryItem->setBold();
         otherCategoryItem->addChildren( otherItems );
     }
 
@@ -245,4 +247,14 @@ bool FileTypeItem::operator<(const QTreeWidgetItem & rawOther) const
         case FT_PercentageCol:  return percentage() < other.percentage();
         default:                return QTreeWidgetItem::operator<( rawOther );
     }
+}
+
+
+void FileTypeItem::setBold()
+{
+    QFont boldFont = font( 0 );
+    boldFont.setBold( true );
+
+    for ( int col=0; col < FT_ColumnCount; ++col )
+        setFont( col, boldFont );
 }

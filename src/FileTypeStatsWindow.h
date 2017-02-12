@@ -140,6 +140,11 @@ namespace QDirStat
         float    percentage() const { return _percentage; }
 
         /**
+         * Set the font to bold face for all columns.
+         **/
+        void setBold();
+
+        /**
          * Less-than operator for sorting.
          **/
         virtual bool operator<(const QTreeWidgetItem & other) const Q_DECL_OVERRIDE;
