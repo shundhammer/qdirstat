@@ -39,7 +39,7 @@ FileTypeStats::~FileTypeStats()
 
 void FileTypeStats::clear()
 {
-    _relevanceThreshold = 1024LL;
+    _relevanceThreshold = 50*1024LL;
     _suffixSum.clear();
     _suffixCount.clear();
     _categorySum.clear();
