@@ -157,6 +157,16 @@ namespace QDirStat
         float           _percentage;
     };
 
+
+    /**
+     * Functor for std::sort to compare FileTypeItems by size descending.
+     **/
+    struct FileTypeItemCompare
+    {
+        bool operator() ( FileTypeItem * a, FileTypeItem * b )
+            { return a->totalSize() > b->totalSize(); }
+    };
+
 } // namespace QDirStat
 
 

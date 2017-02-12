@@ -14,9 +14,13 @@
 #include "Logger.h"
 #include "Exception.h"
 
+#include <algorithm>
+
 
 using namespace QDirStat;
 
+// Number of suffixes in the "other" category
+#define TOP_X   20
 
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
 #  define setSectionResizeMode setResizeMode
@@ -126,7 +130,7 @@ void FileTypeStatsWindow::populate()
 
     // Prepare to collect items for a category "other"
 
-    QList<QTreeWidgetItem *> otherItems;
+    QList<FileTypeItem *> otherItems;
     int      otherCount = 0;
     FileSize otherSum   = 0LL;
 
@@ -181,7 +185,9 @@ void FileTypeStatsWindow::populate()
 
     if ( ! otherItems.isEmpty() )
     {
-        QString name       = tr( "Other" );
+        FileTypeItemCompare cmp;
+        std::sort( otherItems.begin(), otherItems.end(), cmp );
+        QString name       = tr( "Other (Top %1)" ).arg( TOP_X );
         double  percentage = totalSize > 0.0 ? (100.0 * otherSum) / totalSize : 0.0;
 
         FileTypeItem * otherCategoryItem =
@@ -190,7 +196,25 @@ void FileTypeStatsWindow::populate()
 
         _ui->treeWidget->addTopLevelItem( otherCategoryItem );
         otherCategoryItem->setBold();
-        otherCategoryItem->addChildren( otherItems );
+
+        for ( int i=0; i < TOP_X; ++i )
+        {
+            FileTypeItem * item = otherItems.takeFirst();
+            otherCategoryItem->addChild( item );
+        }
+
+#if 1
+        QStringList suffixes;
+
+        foreach ( FileTypeItem * item, otherItems )
+            suffixes << item->text(0);
+
+        logDebug() << "Discarding " << otherItems.size()
+                   << " suffixes below <other>: "
+                   << suffixes.join( ", " )
+                   << endl;
+#endif
+        qDeleteAll( otherItems );
     }
 
     _ui->treeWidget->setSortingEnabled( true );
@@ -238,7 +262,9 @@ bool FileTypeItem::operator<(const QTreeWidgetItem & rawOther) const
     // error which should not be silently ignored.
     const FileTypeItem & other = dynamic_cast<const FileTypeItem &>( rawOther );
 
-    switch ( treeWidget()->sortColumn() )
+    int col = treeWidget() ? treeWidget()->sortColumn() : FT_TotalSizeCol;
+
+    switch ( col )
     {
         case FT_NameCol:        return name()       < other.name();
         case FT_CountCol:       return count()      < other.count();
