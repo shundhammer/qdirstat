@@ -134,10 +134,10 @@ namespace QDirStat
         // Getters
         //
 
-        QString name()       const { return _name; }
-        int     count()      const { return _count; }
-        int     totalSize()  const { return _totalSize; }
-        float   percentage() const { return _percentage; }
+        QString  name()       const { return _name; }
+        int      count()      const { return _count; }
+        FileSize totalSize()  const { return _totalSize; }
+        float    percentage() const { return _percentage; }
 
         /**
          * Less-than operator for sorting.
