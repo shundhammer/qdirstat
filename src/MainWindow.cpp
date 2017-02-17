@@ -216,6 +216,9 @@ void MainWindow::connectActions()
 
     mapTreeExpandAction( _ui->actionCloseAllTreeLevels, 0 );
 
+    CONNECT_ACTION( _ui->actionFileTypeStats,	   this, openFileTypeStats() );
+
+
 
     // "Edit" menu
 
@@ -730,6 +733,20 @@ void MainWindow::openConfigDialog()
 	_configDialog->setup();
 	_configDialog->show();
     }
+}
+
+
+void MainWindow::openFileTypeStats()
+{
+    if ( _fileTypeStatsWindow )
+        return;
+
+    // This window sets the WA_CloseOnDelete window attribute, so it deletes
+    // itself when the user closes it. The associated QPointer keeps track of
+    // that and sets the pointer to 0 when that happens.
+
+    _fileTypeStatsWindow = new QDirStat::FileTypeStatsWindow( _dirTreeModel->tree(), this );
+    _fileTypeStatsWindow->show();
 }
 
 

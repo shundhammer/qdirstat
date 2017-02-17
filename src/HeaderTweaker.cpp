@@ -17,6 +17,11 @@
 #include "Exception.h"
 #include "SignalBlocker.h"
 
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
+#  define setSectionResizeMode setResizeMode
+#  define sectionResizeMode    resizeMode
+#endif
+
 
 using namespace QDirStat;
 
@@ -438,19 +443,10 @@ void HeaderTweaker::addMissingColumns( DataColumnList & colList )
 
 QHeaderView::ResizeMode HeaderTweaker::resizeMode( int section ) const
 {
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-    return _header->resizeMode( section );
-#else
     return _header->sectionResizeMode( section );
-#endif
-
 }
 
 void HeaderTweaker::setResizeMode( int section, QHeaderView::ResizeMode resizeMode )
 {
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-    _header->setResizeMode( section, resizeMode );
-#else
     _header->setSectionResizeMode( section, resizeMode );
-#endif
 }

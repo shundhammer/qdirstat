@@ -79,7 +79,8 @@ namespace QDirStat
 	virtual void accept() Q_DECL_OVERRIDE;
 
 	/**
-	 * Reject the dialog contents, i.e. the user clicked the "Cancel" button.
+	 * Reject the dialog contents, i.e. the user clicked the "Cancel"
+	 * button.
 	 *
 	 * Reimplemented from QDialog.
 	 **/
@@ -106,7 +107,8 @@ namespace QDirStat
 	/**
 	 * Emitted when the "Cancel" button was clicked:
 	 *
-	 * This is the signal to discard all changes and re-apply the old settings.
+	 * This is the signal to discard all changes and re-apply the old
+	 * settings.
 	 **/
 	void discardChanges();
 

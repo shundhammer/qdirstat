@@ -48,6 +48,8 @@ SOURCES	  = main.cpp			\
 	    FileInfoIterator.cpp	\
 	    FileInfoSet.cpp		\
 	    FileInfoSorter.cpp		\
+	    FileTypeStats.cpp		\
+	    FileTypeStatsWindow.cpp	\
 	    HeaderTweaker.cpp		\
 	    ListEditor.cpp		\
 	    Logger.cpp			\
@@ -55,13 +57,13 @@ SOURCES	  = main.cpp			\
 	    MimeCategorizer.cpp		\
 	    MimeCategory.cpp		\
 	    MimeCategoryConfigPage.cpp	\
-            MountPoints.cpp             \
+	    MountPoints.cpp		\
 	    OutputWindow.cpp		\
 	    PercentBar.cpp		\
 	    Process.cpp			\
 	    Refresher.cpp		\
 	    SelectionModel.cpp		\
-            Settings.cpp                \
+	    Settings.cpp		\
 	    SettingsHelpers.cpp		\
 	    StdCleanup.cpp		\
 	    Trash.cpp			\
@@ -91,6 +93,8 @@ HEADERS	  =				\
 	    FileInfoIterator.h		\
 	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
+	    FileTypeStats.h		\
+	    FileTypeStatsWindow.h	\
 	    HeaderTweaker.h		\
 	    ListEditor.h		\
 	    ListMover.h			\
@@ -99,13 +103,13 @@ HEADERS	  =				\
 	    MimeCategorizer.h		\
 	    MimeCategory.h		\
 	    MimeCategoryConfigPage.h	\
-            MountPoints.h               \
+	    MountPoints.h		\
 	    OutputWindow.h		\
 	    PercentBar.h		\
 	    Process.h			\
 	    Refresher.h			\
-            SelectionModel.h		\
-            Settings.h                  \
+	    SelectionModel.h		\
+	    Settings.h			\
 	    SettingsHelpers.h		\
 	    SignalBlocker.h		\
 	    StdCleanup.h		\
@@ -121,7 +125,8 @@ FORMS	  = main-window.ui		   \
 	    config-dialog.ui		   \
 	    cleanup-config-page.ui	   \
 	    mime-category-config-page.ui   \
-	    exclude-rules-config-page.ui
+	    exclude-rules-config-page.ui   \
+	    file-type-stats-window.ui
 
 #	    general-config-page.ui
 

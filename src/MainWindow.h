@@ -13,8 +13,10 @@
 #include <QMainWindow>
 #include <QString>
 #include <QElapsedTimer>
+#include <QPointer>
 
 #include "ui_main-window.h"
+#include "FileTypeStatsWindow.h"
 
 class QCloseEvent;
 class QSortFilterProxyModel;
@@ -32,6 +34,7 @@ namespace QDirStat
 }
 
 using QDirStat::FileInfo;
+using QDirStat::FileTypeStatsWindow;
 
 
 
@@ -212,6 +215,11 @@ protected slots:
     void openConfigDialog();
 
     /**
+     * Open the file type statistics window.
+     **/
+    void openFileTypeStats();
+
+    /**
      * Switch verbose logging for selection changes on or off.
      *
      * This is normally done by the invisible checkable action
@@ -273,6 +281,7 @@ private:
     QDirStat::CleanupCollection * _cleanupCollection;
     QDirStat::MimeCategorizer	* _mimeCategorizer;
     QDirStat::ConfigDialog	* _configDialog;
+    QPointer<FileTypeStatsWindow> _fileTypeStatsWindow;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
     bool			  _verboseSelection;

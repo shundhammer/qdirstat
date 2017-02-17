@@ -52,8 +52,12 @@ MimeCategory * MimeCategorizer::category( FileInfo * item )
 }
 
 
-MimeCategory * MimeCategorizer::category( const QString & filename )
+MimeCategory * MimeCategorizer::category( const QString & filename,
+					  QString	* suffix_ret )
 {
+    if ( suffix_ret )
+	*suffix_ret = "";
+
     if ( filename.isEmpty() )
 	return 0;
 
@@ -64,7 +68,8 @@ MimeCategory * MimeCategorizer::category( const QString & filename )
 
     MimeCategory * category = 0;
 
-    // Find the filename suffix: Everything after the first '.'
+    // Find the filename suffix: Section #1
+    // (ignoring any leading '.' separator)
     QString suffix = filename.section( '.', 1 );
 
     while ( ! suffix.isEmpty() )
@@ -75,6 +80,9 @@ MimeCategory * MimeCategorizer::category( const QString & filename )
 
 	if ( ! category )
 	    category = _caseInsensitiveSuffixMap.value( suffix.toLower(), 0 );
+
+	if ( category && suffix_ret )
+	    *suffix_ret = suffix;
 
 	// No match so far? Try the next suffix. Some files might have more
 	// than one, e.g., "tar.bz2" - if there is no match for "tar.bz2",
@@ -406,7 +414,7 @@ void MimeCategorizer::addDefaultCategories()
 		      << "sla"
 		      << "sla.gz"
 		      << "slaz"
-                      << "sxi"
+		      << "sxi"
 		      << "txt"
 		      << "xls"
 		      << "xlsx"
@@ -448,7 +456,7 @@ void MimeCategorizer::addDefaultCategories()
 
     libs->addPattern( "lib*.so.*", Qt::CaseSensitive );
     libs->addPattern( "lib*.so",   Qt::CaseSensitive );
-    libs->addPattern( "lib*.a",    Qt::CaseSensitive );
+    libs->addPattern( "lib*.a",	   Qt::CaseSensitive );
     libs->addSuffix ( "dll" );
 
 }
