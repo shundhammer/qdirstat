@@ -210,7 +210,7 @@ _Full-size images and descriptions on the [Screenshots Page]
 
 _See file DevHistory.md for older entries:_
 
-https://github.com/shundhammer/qdirstat/blob/master/DevHistory.md
+https://github.com/shundhammer/qdirstat/blob/master/doc/DevHistory.md
 
 
 
@@ -764,13 +764,13 @@ or
 ## Contributing
 
 See file [Contributing.md]
-(https://github.com/shundhammer/qdirstat/blob/master/Contributing.md)
+(https://github.com/shundhammer/qdirstat/blob/master/doc/Contributing.md)
 
 
 ## To Do
 
 See file [TODO.md]
-(https://github.com/shundhammer/qdirstat/blob/master/TODO.md)
+(https://github.com/shundhammer/qdirstat/blob/master/doc/TODO.md)
 
 
 ## Troubleshooting
@@ -778,7 +778,7 @@ See file [TODO.md]
 ### Can't Move a Directory to Trash
 
 See file [Troubleshooting.md]
-(https://github.com/shundhammer/qdirstat/blob/master/Troubleshooting.md)
+(https://github.com/shundhammer/qdirstat/blob/master/doc/Troubleshooting.md)
 
 
 ## Reference
