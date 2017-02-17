@@ -58,6 +58,10 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-exclude-rules-config.png)
 
 
+_Full-size images and descriptions on the [Screenshots Page]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/README.md)_
+
+
 -----------------------
 
 
