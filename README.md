@@ -36,8 +36,8 @@ See section _New Features_ for more details.
 
 ## Screenshots
 
-![Main Window Screenshot]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png)
+[<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png" width="1241">]
+(https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-main-win.png)
 
 _Main window screenshot - notice the multi-selection in the tree and the treemap_
 
