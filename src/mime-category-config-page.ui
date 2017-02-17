@@ -35,7 +35,7 @@
       <property name="childrenCollapsible">
        <bool>false</bool>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="leftTopColumnWidget">
        <layout class="QVBoxLayout" name="leftTopColumnLayout" stretch="0,1,0,0">
         <item>
          <widget class="QLabel" name="mimeCategoryCaption">
@@ -189,7 +189,7 @@
       <property name="childrenCollapsible">
        <bool>false</bool>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="patternsTopWidget">
        <layout class="QVBoxLayout" name="patternsTopLayout">
         <item>
          <widget class="QLabel" name="caseInsensitivePatternsCaption">
@@ -218,7 +218,7 @@ Use * or ? as wildcards.</string>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="patternsBottomWidget">
        <layout class="QVBoxLayout" name="patternsBottomLayout">
         <item>
          <widget class="QLabel" name="caseSensitivePatternsCaption">
