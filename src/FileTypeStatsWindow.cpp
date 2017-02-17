@@ -103,6 +103,7 @@ void FileTypeStatsWindow::populate()
     //
 
     QMap<MimeCategory *, FileTypeItem *> categoryItem;
+    FileTypeItem * otherCategoryItem = 0;
 
     for ( CategoryFileSizeMapIterator it = _stats->categorySumBegin();
           it != _stats->categorySumEnd();
@@ -110,7 +111,7 @@ void FileTypeStatsWindow::populate()
     {
         MimeCategory * category = it.key();
 
-        if ( category && category )
+        if ( category )
         {
             QString  name       = category->name();
             FileSize sum        = it.value();
@@ -123,6 +124,9 @@ void FileTypeStatsWindow::populate()
             _ui->treeWidget->addTopLevelItem( item );
             item->setBold();
             categoryItem[ category ] = item;
+
+            if ( category == _stats->otherCategory() )
+                otherCategoryItem = item;
         }
     }
 
@@ -185,35 +189,46 @@ void FileTypeStatsWindow::populate()
     {
         FileTypeItemCompare cmp;
         std::sort( otherItems.begin(), otherItems.end(), cmp );
-        QString name       = tr( "Other (Top %1)" ).arg( TOP_X );
         double  percentage = _stats->percentage( otherSum );
+        QString name = otherItems.size() > TOP_X ?
+            tr( "Other (Top %1)" ).arg( TOP_X ) : tr( "Other" );
 
-        FileTypeItem * otherCategoryItem =
-            new FileTypeItem( name, otherCount, otherSum, percentage );
-        CHECK_NEW( otherCategoryItem );
+        if ( otherCategoryItem )
+        {
+            otherCategoryItem->setText( 0, name );
+        }
+        else
+        {
+            otherCategoryItem = new FileTypeItem( name, otherCount, otherSum, percentage );
+            CHECK_NEW( otherCategoryItem );
+        }
 
         _ui->treeWidget->addTopLevelItem( otherCategoryItem );
         otherCategoryItem->setBold();
-        int top = qMin( otherItems.size(), TOP_X );
 
-        for ( int i=0; i < top; ++i )
+        int top_x = qMin( TOP_X, otherItems.size() );
+
+        for ( int i=0; i < top_x; ++i )
         {
             FileTypeItem * item = otherItems.takeFirst();
             otherCategoryItem->addChild( item );
         }
 
+        if ( ! otherItems.empty() )
+        {
 #if 1
-        QStringList suffixes;
+            QStringList suffixes;
 
-        foreach ( FileTypeItem * item, otherItems )
-            suffixes << item->text(0);
+            foreach ( FileTypeItem * item, otherItems )
+                suffixes << item->text(0);
 
-        logDebug() << "Discarding " << otherItems.size()
-                   << " suffixes below <other>: "
-                   << suffixes.join( ", " )
-                   << endl;
+            logDebug() << "Discarding " << otherItems.size()
+                       << " suffixes below <other>: "
+                       << suffixes.join( ", " )
+                       << endl;
 #endif
-        qDeleteAll( otherItems );
+            qDeleteAll( otherItems );
+        }
     }
 
     _ui->treeWidget->setSortingEnabled( true );

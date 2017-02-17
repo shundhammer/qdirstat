@@ -105,25 +105,25 @@ namespace QDirStat
 	 **/
 	FileSize categorySum( MimeCategory * category ) const;
 
-        /**
-         * Return the category for the specified suffix or 0 if there is none.
-         **/
-        MimeCategory * category( const QString & suffix ) const;
+	/**
+	 * Return the category for the specified suffix or 0 if there is none.
+	 **/
+	MimeCategory * category( const QString & suffix ) const;
 
-        /**
-         * Return the special category for "other", i.e. unclassified files.
-         **/
-        MimeCategory * otherCategory() const { return _otherCategory; }
+	/**
+	 * Return the special category for "other", i.e. unclassified files.
+	 **/
+	MimeCategory * otherCategory() const { return _otherCategory; }
 
-        /**
-         * Return the total size of the tree.
-         **/
-        FileSize totalSize() const;
+	/**
+	 * Return the total size of the tree.
+	 **/
+	FileSize totalSize() const;
 
-        /**
-         * Return the percentage of 'size' of the tree total size.
-         **/
-        double percentage( FileSize size ) const;
+	/**
+	 * Return the percentage of 'size' of the tree total size.
+	 **/
+	double percentage( FileSize size ) const;
 
 	//
 	// Iterators
@@ -161,6 +161,11 @@ namespace QDirStat
 	 **/
 	void removeCruft();
 
+        /**
+         * Remove empty suffix entries from the internal maps.
+         **/
+        void removeEmpty();
+
 	/**
 	 * Check if a suffix is cruft, i.e. a nonstandard suffix that is not
 	 * useful for display.
@@ -171,11 +176,9 @@ namespace QDirStat
 	bool isCruft( const QString & suffix ) const;
 
 	/**
-	 * Check if a suffix is irrelevant for display, for example because
-	 * there is only a single file of that kind in the tree or because the
-	 * overall sum of those files in the tree is very small.
+	 * Check if the sums add up and how much is unaccounted for.
 	 **/
-	bool isIrrelevant( const QString & suffix ) const;
+	void sanityCheck();
 
 
 	//
@@ -183,9 +186,8 @@ namespace QDirStat
 	//
 
 	DirTree *		_tree;
-        FileSize                _relevanceThreshold;
+	MimeCategory *		_otherCategory;
 	MimeCategorizer *	_mimeCategorizer;
-        MimeCategory *          _otherCategory;
 
 	StringFileSizeMap	_suffixSum;
 	StringIntMap		_suffixCount;
@@ -193,7 +195,6 @@ namespace QDirStat
 	CategoryIntMap		_categoryCount;
     };
 }
-
 
 
 #endif // FileTypeStats_h

@@ -39,14 +39,13 @@ FileTypeStats::~FileTypeStats()
 {
     logDebug() << "destroying" << endl;
     clear();
+
     delete _otherCategory;
 }
 
 
 void FileTypeStats::clear()
 {
-    _relevanceThreshold = 50*1024LL;
-
     _suffixSum.clear();
     _suffixCount.clear();
     _categorySum.clear();
@@ -87,7 +86,7 @@ MimeCategory * FileTypeStats::category( const QString & suffix ) const
 FileSize FileTypeStats::totalSize() const
 {
     if ( ! _tree || ! _tree->root() )
-        return 0LL;
+	return 0LL;
 
     return _tree->root()->totalSize();
 }
@@ -98,9 +97,9 @@ double FileTypeStats::percentage( FileSize size ) const
     FileSize total = totalSize();
 
     if ( total == 0LL )
-        return 0.0;
+	return 0.0;
     else
-        return (100.0 * size) / (double) total;
+	return (100.0 * size) / (double) total;
 }
 
 
@@ -115,21 +114,9 @@ void FileTypeStats::calc()
     }
 
     collect( _tree->root() );
-    // _relevanceThreshold = qMax( _tree->root()->totalSize() / 10000LL, 1024LL );
-    logDebug() << "relevance threshold: " << formatSize( _relevanceThreshold ) << endl;
-    // removeCruft();
-
-    FileSize categoryTotal = 0LL;
-
-    foreach ( FileSize sum, _categorySum )
-        categoryTotal += sum;
-
-    FileSize missing = totalSize() - categoryTotal;
-
-    logDebug() << "Unaccounted in categories: " << formatSize( missing )
-               << " of " << formatSize( totalSize() )
-               << " (" << QString::number( percentage( missing ), 'f', 2 ) << "%)"
-               << endl;
+    removeCruft();
+    removeEmpty();
+    sanityCheck();
 
     emit calcFinished();
 }
@@ -144,7 +131,7 @@ void FileTypeStats::collect( FileInfo * dir )
 
     while ( *it )
     {
-        FileInfo * item = *it;
+	FileInfo * item = *it;
 
 	if ( item->hasChildren() )
 	{
@@ -170,13 +157,13 @@ void FileTypeStats::collect( FileInfo * dir )
 
 	    MimeCategory * category = _mimeCategorizer->category( item->name(), &suffix );
 
-            if ( ! category )
-                category = _otherCategory;
+	    if ( ! category )
+		category = _otherCategory;
 
-            _categorySum[ category ] += item->size();
-            ++_categoryCount[ category ];
+	    _categorySum[ category ] += item->size();
+	    ++_categoryCount[ category ];
 
-            if ( suffix.isEmpty() )
+	    if ( suffix.isEmpty() )
 	    {
 		if ( item->name().contains( '.' ) && ! item->name().startsWith( '.' ) )
 		{
@@ -203,62 +190,46 @@ void FileTypeStats::collect( FileInfo * dir )
 	}
 	// Disregard symlinks, block devices and other special files
 
-        ++it;
+	++it;
     }
 }
 
 
 void FileTypeStats::removeCruft()
 {
+    // Make sure those two already exist to avoid confusing the iterator
+    // (QMap::operator[] auto-inserts with default ctor if not already there)
+
+    _suffixSum	[ NO_SUFFIX ] += 0LL;
+    _suffixCount[ NO_SUFFIX ] += 0;
+
+    FileSize totalMergedSum   = 0LL;
+    int	     totalMergedCount = 0;
+
+    QStringList cruft;
+    QMap<QString, int>::iterator it = _suffixCount.begin();
+
+    while ( it != _suffixCount.end() )
     {
-	QMap<QString, int>::iterator it = _suffixCount.begin();
+	QString suffix = it.key();
+	bool merge = false;
 
-	while ( it != _suffixCount.end() )
+	if ( isCruft( suffix ) )
 	{
-	    QString suffix = it.key();
-	    bool remove = false;
-
-	    if ( isCruft( suffix ) )
-	    {
-		// logVerbose() << "Removing cruft *." << suffix << endl;
-		remove = true;
-	    }
-	    else if ( isIrrelevant( suffix ) )
-	    {
-		// logVerbose() << "Removing irrelevant *." << suffix << endl;
-		remove = true;
-	    }
-
-	    if ( remove )
-	    {
-		it = _suffixCount.erase( it );
-		_suffixSum.remove( suffix );
-	    }
-	    else
-	    {
-		++it;
-	    }
-	}
-    }
-
-    QMap<MimeCategory *, FileSize>::iterator it = _categorySum.begin();
-
-    while ( it != _categorySum.end() )
-    {
-	MimeCategory * category = it.key();
-	FileSize sum = it.value();
-	bool remove = false;
-
-	if ( sum < _relevanceThreshold )
-	{
-	    logDebug() << "Removing irrelevant " << category << endl;
-	    remove = true;
+            cruft << "*." + suffix;
+	    merge = true;
 	}
 
-	if ( remove )
+	if ( merge )
 	{
-	    it = _categorySum.erase( it );
-	    _categoryCount.remove( category );
+	    _suffixSum	[ NO_SUFFIX ] += _suffixSum  [ suffix ];
+	    _suffixCount[ NO_SUFFIX ] += _suffixCount[ suffix ];
+
+	    totalMergedSum   += _suffixSum  [ suffix ];
+	    totalMergedCount += _suffixCount[ suffix ];
+
+	    it = _suffixCount.erase( it );
+	    _suffixSum.remove( suffix );
 	}
 	else
 	{
@@ -266,6 +237,37 @@ void FileTypeStats::removeCruft()
 	}
     }
 
+#if 1
+    logDebug() << "Merged " << cruft.size() << " suffixes to <NO SUFFIX>: "
+               << cruft.join( ", " ) << endl;
+#endif
+    logDebug() << "Merged: " << totalMergedCount << " files "
+	       << "(" << formatSize( totalMergedSum ) << ")"
+	       << endl;
+}
+
+
+void FileTypeStats::removeEmpty()
+{
+    QMap<QString, int>::iterator it = _suffixCount.begin();
+
+    while ( it != _suffixCount.end() )
+    {
+        QString suffix = it.key();
+        int     count  = it.value();
+        bool    remove = count == 0;
+
+        if ( remove )
+        {
+            logDebug() << "Removing empty suffix *." << suffix << endl;
+            it = _suffixCount.erase( it );
+            _suffixSum.remove( suffix );
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 
@@ -306,11 +308,17 @@ bool FileTypeStats::isCruft( const QString & suffix ) const
 }
 
 
-bool FileTypeStats::isIrrelevant( const QString & suffix ) const
+void FileTypeStats::sanityCheck()
 {
-    if ( _suffixSum[ suffix ] < _relevanceThreshold )
-	return true;
+    FileSize categoryTotal = 0LL;
 
-    return false;
+    foreach ( FileSize sum, _categorySum )
+	categoryTotal += sum;
+
+    FileSize missing = totalSize() - categoryTotal;
+
+    logDebug() << "Unaccounted in categories: " << formatSize( missing )
+	       << " of " << formatSize( totalSize() )
+	       << " (" << QString::number( percentage( missing ), 'f', 2 ) << "%)"
+	       << endl;
 }
-
