@@ -22,6 +22,14 @@ License: GPL V2
 _Screenshot of output during cleanup actions. Of course this window is purely optional._
 
 
+## File Type Statistics
+
+![File Type Statistics Window Screenshot]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png)
+
+_Menu View -> File Type Statistics..._
+
+
 ## Configuration
 
 

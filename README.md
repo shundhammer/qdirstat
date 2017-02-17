@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-02-12
+Updated: 2017-02-17
 
 
 ## Overview
@@ -48,6 +48,12 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
 _Screenshot of output during cleanup actions. Of course this window is purely optional._
 
 
+![File Type Statistics Window Screenshot]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png)
+
+_Menu View -> File Type Statistics..._
+
+
 ![Cleanup Action Configuration Screenshot]
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-config.png)
 
@@ -78,6 +84,28 @@ _Context menu of the tree header where you can configure the columns._
 
 **Latest stable release: V1.2**
 
+- 2017-02-17 _File Type Statistics_ window merged to Git master
+
+  Latest screenshot:
+
+  ![File Type Statistics Window Screenshot]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png)
+
+  **Limitations:**
+
+  Since filename extensions (suffixes) don't have as much semantics in
+  Linux/Unix systems as they do in Windows, many files are categorized as
+  "Other". This is a known limitation, but it's a limitation of the whole
+  concept of using suffixes to categorize files by type. And no, checking file
+  headers for magic byte sequences like the "file" command does is not an
+  option here; QDirStat would have to do that for (at least) all the 30,000+
+  files typically listed under the "Other" category. So we'll have to live with
+  that limitation.
+
+  Next thing to come: Locating files with a specific suffix from there.
+  See [GitHub issue #48](https://github.com/shundhammer/qdirstat/issues/48)
+
+
 - 2017-02-12 Working on a _File Type Statistics_ window
 
   People who know WinDirStat inevitably want that _File Type_ view in QDirStat,
@@ -101,10 +129,6 @@ _Context menu of the tree header where you can configure the columns._
   branch, but I think it will stabilize in the next one or two weeks, so I will
   merge it to Git master.
 
-  Screenshot:
-
-  ![File Type Statistics Window Screenshot]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png)
 
   See the whole discussion with more screenshots at
   [GitHub issue #45](https://github.com/shundhammer/qdirstat/issues/45)
@@ -306,6 +330,16 @@ old code base that had been long overdue.
   at all, of course. If things go wrong, you can kill the external command
   started by the cleanup action from there. You can zoom in and out (increase
   or decrease the font size) as you like.
+
+- File type statistics window. WinDirStat has it, and users wanted it in
+  QDirStat, too. Since filename extensions (suffixes) don't have as much
+  semantics in Linux/Unix systems as they do in Windows, many files are
+  categorized as "Other". This is a known limitation, but it's a limitation of
+  the whole concept of using suffixes to categorize files by type. And no,
+  checking file headers for magic byte sequences like the "file" command does
+  is not an option here; QDirStat would have to do that for (at least) all the
+  30,000+ files typically listed under the "Other" category. So we'll have to
+  live with that limitation.
 
 - New macros to use in cleanup actions:
 
