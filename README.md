@@ -817,4 +817,6 @@ http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
 
 ## Misc
 
+http://moo.nac.uci.edu/~hjm/HOWTO_move_data.html#qdirstat
+
 http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html
