@@ -103,8 +103,6 @@ void FileTypeStatsWindow::populate()
     //
 
     QMap<MimeCategory *, FileTypeItem *> categoryItem;
-    double totalSize = _tree->root()->totalSize();
-    logDebug() << "Tree total size: " << formatSize( _tree->root()->totalSize() ) << endl;
 
     for ( CategoryFileSizeMapIterator it = _stats->categorySumBegin();
           it != _stats->categorySumEnd();
@@ -112,12 +110,12 @@ void FileTypeStatsWindow::populate()
     {
         MimeCategory * category = it.key();
 
-        if ( category )
+        if ( category && category )
         {
             QString  name       = category->name();
             FileSize sum        = it.value();
             int      count      = _stats->categoryCount( category );
-            double   percentage = totalSize > 0.0 ? (100.0 * sum) / totalSize : 0.0;
+            double   percentage = _stats->percentage( sum );
 
             FileTypeItem * item = new FileTypeItem( name, count, sum, percentage );
             CHECK_NEW( item );
@@ -146,7 +144,7 @@ void FileTypeStatsWindow::populate()
         QString  suffix     = it.key();
         FileSize sum        = it.value();
         int      count      = _stats->suffixCount( suffix );
-        double   percentage = totalSize > 0.0 ? (100.0 * sum) / totalSize : 0.0;
+        double   percentage = _stats->percentage( sum );
 
         MimeCategory * parentCategory = _stats->category( suffix );
 
@@ -188,7 +186,7 @@ void FileTypeStatsWindow::populate()
         FileTypeItemCompare cmp;
         std::sort( otherItems.begin(), otherItems.end(), cmp );
         QString name       = tr( "Other (Top %1)" ).arg( TOP_X );
-        double  percentage = totalSize > 0.0 ? (100.0 * otherSum) / totalSize : 0.0;
+        double  percentage = _stats->percentage( otherSum );
 
         FileTypeItem * otherCategoryItem =
             new FileTypeItem( name, otherCount, otherSum, percentage );
@@ -196,8 +194,9 @@ void FileTypeStatsWindow::populate()
 
         _ui->treeWidget->addTopLevelItem( otherCategoryItem );
         otherCategoryItem->setBold();
+        int top = qMin( otherItems.size(), TOP_X );
 
-        for ( int i=0; i < TOP_X; ++i )
+        for ( int i=0; i < top; ++i )
         {
             FileTypeItem * item = otherItems.takeFirst();
             otherCategoryItem->addChild( item );

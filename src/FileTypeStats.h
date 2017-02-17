@@ -110,6 +110,21 @@ namespace QDirStat
          **/
         MimeCategory * category( const QString & suffix ) const;
 
+        /**
+         * Return the special category for "other", i.e. unclassified files.
+         **/
+        MimeCategory * otherCategory() const { return _otherCategory; }
+
+        /**
+         * Return the total size of the tree.
+         **/
+        FileSize totalSize() const;
+
+        /**
+         * Return the percentage of 'size' of the tree total size.
+         **/
+        double percentage( FileSize size ) const;
+
 	//
 	// Iterators
 	//
@@ -170,6 +185,7 @@ namespace QDirStat
 	DirTree *		_tree;
         FileSize                _relevanceThreshold;
 	MimeCategorizer *	_mimeCategorizer;
+        MimeCategory *          _otherCategory;
 
 	StringFileSizeMap	_suffixSum;
 	StringIntMap		_suffixCount;

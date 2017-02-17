@@ -9,6 +9,7 @@
 
 #include "FileTypeStats.h"
 #include "DirTree.h"
+#include "FileInfoIterator.h"
 #include "MimeCategorizer.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -23,7 +24,13 @@ FileTypeStats::FileTypeStats( DirTree * tree,
     _tree( tree )
 {
     logDebug() << "init" << endl;
+
     _mimeCategorizer = new MimeCategorizer( this );
+    CHECK_NEW( _mimeCategorizer );
+
+    _otherCategory = new MimeCategory( tr( "Other" ) );
+    CHECK_NEW( _otherCategory );
+
     calc();
 }
 
@@ -32,12 +39,14 @@ FileTypeStats::~FileTypeStats()
 {
     logDebug() << "destroying" << endl;
     clear();
+    delete _otherCategory;
 }
 
 
 void FileTypeStats::clear()
 {
     _relevanceThreshold = 50*1024LL;
+
     _suffixSum.clear();
     _suffixCount.clear();
     _categorySum.clear();
@@ -75,6 +84,26 @@ MimeCategory * FileTypeStats::category( const QString & suffix ) const
 }
 
 
+FileSize FileTypeStats::totalSize() const
+{
+    if ( ! _tree || ! _tree->root() )
+        return 0LL;
+
+    return _tree->root()->totalSize();
+}
+
+
+double FileTypeStats::percentage( FileSize size ) const
+{
+    FileSize total = totalSize();
+
+    if ( total == 0LL )
+        return 0.0;
+    else
+        return (100.0 * size) / (double) total;
+}
+
+
 void FileTypeStats::calc()
 {
     clear();
@@ -88,7 +117,19 @@ void FileTypeStats::calc()
     collect( _tree->root() );
     // _relevanceThreshold = qMax( _tree->root()->totalSize() / 10000LL, 1024LL );
     logDebug() << "relevance threshold: " << formatSize( _relevanceThreshold ) << endl;
-    removeCruft();
+    // removeCruft();
+
+    FileSize categoryTotal = 0LL;
+
+    foreach ( FileSize sum, _categorySum )
+        categoryTotal += sum;
+
+    FileSize missing = totalSize() - categoryTotal;
+
+    logDebug() << "Unaccounted in categories: " << formatSize( missing )
+               << " of " << formatSize( totalSize() )
+               << " (" << QString::number( percentage( missing ), 'f', 2 ) << "%)"
+               << endl;
 
     emit calcFinished();
 }
@@ -99,11 +140,13 @@ void FileTypeStats::collect( FileInfo * dir )
     if ( ! dir )
 	return;
 
-    FileInfo * item = dir->firstChild();
+    FileInfoIterator it( dir );
 
-    while ( item )
+    while ( *it )
     {
-	if ( item->isDirInfo() )
+        FileInfo * item = *it;
+
+	if ( item->hasChildren() )
 	{
 	    collect( item );
 	}
@@ -127,12 +170,13 @@ void FileTypeStats::collect( FileInfo * dir )
 
 	    MimeCategory * category = _mimeCategorizer->category( item->name(), &suffix );
 
-	    if ( category )
-	    {
-		_categorySum[ category ] += item->size();
-		++_categoryCount[ category ];
-	    }
-	    else if ( suffix.isEmpty() )
+            if ( ! category )
+                category = _otherCategory;
+
+            _categorySum[ category ] += item->size();
+            ++_categoryCount[ category ];
+
+            if ( suffix.isEmpty() )
 	    {
 		if ( item->name().contains( '.' ) && ! item->name().startsWith( '.' ) )
 		{
@@ -159,7 +203,7 @@ void FileTypeStats::collect( FileInfo * dir )
 	}
 	// Disregard symlinks, block devices and other special files
 
-	item = item->next();
+        ++it;
     }
 }
 
