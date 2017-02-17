@@ -2,6 +2,8 @@
 
 This is roughly ordered by priority.
 
+** See also the GitHub issue tracker! **
+
 
 ## Ready-made Packages for SUSE and Ubuntu
 
@@ -34,10 +36,12 @@ This is roughly ordered by priority.
 
 ### Online Help
 
-I know that most users can't be bothered to read that stuff anyway, but I spent
-a lot of work for the old help files; porting them should be easy enough. But
-that will definitely be only for English and maybe (!)  for German. There is no
-way to maintain that much text in any more languages.
+Dropped. Nobody reads that anyway, and the few people who do just have to make
+do with the available online documentation (which is extensive enough IMHO).
+
+Maybe open a browser (`xdg-open`) with the QDirStat main page from the _Help_
+menu?
+
 
 
 ## Some Time in the Future
@@ -106,17 +110,5 @@ See also
 [Github Issue #19]
 (https://github.com/shundhammer/qdirstat/issues/19)
 
-This might be useful for some users, in particular in Japan (Shift-JIS
-encoding). But this has large potential to bring back nasty problems for users
-using a UTF-8 locale, but who not really aware of all the implications: If
-their environment is not set up correctly, the might have the opposite problem
-of that lone user who requested this (unaware that he has been using an
-outdated locale environment for a very long time).
-
-It might or might not be worthwhile to introduce a large risk of breaking
-things for the great majority of users (who have a modern UTF-8 setup) to maybe
-make a small number of users happy (who just never bothered to update to a
-modern UTF-8 locale environment).
-
-This might warrant a poll (polldaddy?) how many users are actually interested
-in this.
+Dropped. People who need that should finally try to arrive in the 21st century
+and use UTF-8 like the civilized part of the world.
