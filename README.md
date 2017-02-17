@@ -43,19 +43,19 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
 
 
 [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png" height="237">]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png)
+(https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-file-type-stats.png)
 [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-output.png" height="169">]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-output.png)
+(https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-cleanup-output.png)
 [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-column-config.png" height="170">]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-column-config.png)
+(https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-column-config.png)
 
 
 [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-config.png" height="245">]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-config.png)
+(https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-cleanup-config.png)
 [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-mime-config.png" height="245">]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-mime-config.png)
+(https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-mime-config.png)
 [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-exclude-rules-config.png" height="245">]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-exclude-rules-config.png)
+(https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-exclude-rules-config.png)
 
 
 _Full-size images and descriptions on the [Screenshots Page]
