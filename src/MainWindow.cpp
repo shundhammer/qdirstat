@@ -10,6 +10,7 @@
 #include <QApplication>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QProcess>
 #include <QFileDialog>
 #include <QSignalMapper>
 #include <QClipboard>
@@ -249,6 +250,7 @@ void MainWindow::connectActions()
 
     // "Help" menu
 
+    CONNECT_ACTION( _ui->actionHelp,	this, showHelp() );
     CONNECT_ACTION( _ui->actionAbout,	this, showAboutDialog() );
     CONNECT_ACTION( _ui->actionAboutQt, qApp, aboutQt() );
 
@@ -761,6 +763,15 @@ void MainWindow::toggleVerboseSelection()
 
     logInfo() << "Verbose selection is now " << ( _verboseSelection ? "on" : "off" )
 	      << ". Change this with Shift-F7." << endl;
+}
+
+
+void MainWindow::showHelp()
+{
+    QString helpUrl = "https://github.com/shundhammer/qdirstat/blob/master/README.md";
+    QString program = "/usr/bin/xdg-open";
+    logInfo() << "Starting " << program << " " << helpUrl << endl;
+    QProcess::startDetached( program, QStringList() << helpUrl );
 }
 
 

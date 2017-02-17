@@ -153,6 +153,11 @@ public slots:
      **/
     void writeSettings();
 
+    /**
+     * Show online help.
+     **/
+    void showHelp();
+
 
 protected slots:
 

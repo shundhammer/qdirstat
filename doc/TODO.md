@@ -19,10 +19,9 @@ This is roughly ordered by priority.
 - Add translation stuff. Setting up the Qt translator classes is easy
   enough. The translation file(s) will probably also end up in the resource
   file to avoid being dependent on external files (they can always go
-  missing). But then, since it's not KDE any more, the number of supported
-  languages will be really small: I can supply a German translation, and maybe
-  I can talk my Czech, Spanish and maybe Russian colleagues into contributing
-  their languages, but there won't be many more than that.
+  missing).
+
+- Check out available web services for Open Source translations.
 
 - Once translations are there, definitely add config option to "force English".
   As much as translations are welcomed, I do not agree to translate everything
@@ -31,17 +30,6 @@ This is roughly ordered by priority.
   German translator; I want to be able to use my original English texts --
   without switching my entire desktop and shell environment to English or the
   POSIX locale.
-
-
-
-### Online Help
-
-Dropped. Nobody reads that anyway, and the few people who do just have to make
-do with the available online documentation (which is extensive enough IMHO).
-
-Maybe open a browser (`xdg-open`) with the QDirStat main page from the _Help_
-menu?
-
 
 
 ## Some Time in the Future
