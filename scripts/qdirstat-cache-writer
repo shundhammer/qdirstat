@@ -437,7 +437,7 @@ sub write_file_entry()
         my $full_path = $dir . "/" . $name;
         $full_path =~ s://+:/:g; # Replace multiple // with one
 
-	print CACHE " full_path";
+	print CACHE " $full_path";
     }
     else
     {
