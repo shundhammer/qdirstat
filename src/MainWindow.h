@@ -194,6 +194,12 @@ protected slots:
     void showTreemapView();
 
     /**
+     * Switch between showing the treemap view beside the file directory
+     * or below it, depending on the corresponding action.
+     **/
+    void treemapAsSidePanel();
+
+    /**
      * Notification that a cleanup action was started.
      **/
     void startingCleanup( const QString & cleanupName );
