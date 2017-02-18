@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-02-17
+Updated: 2017-02-18
 
 
 ## Overview
@@ -69,6 +69,11 @@ _Full-size images and descriptions on the [Screenshots Page]
 ## Current Development Status
 
 **Latest stable release: V1.2**
+
+- 2017-02-18 New document: [QDirStat for Servers]
+(https://github.com/shundhammer/qdirstat/blob/master/doc/QDirStat-for-Servers.md)
+  describing how to use QDirStat and the `qdirstat-cache-writer` script on
+  headless (no X server, no X libs) servers.
 
 - 2017-02-17 _File Type Statistics_ window merged to Git master
 

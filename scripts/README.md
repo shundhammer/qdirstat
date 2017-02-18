@@ -50,3 +50,6 @@ become somewhat (~20%) larger, but you can also use them as a replacement for
 "locate". Simply use "zgrep" in such a file and ignore the size, mtime
 etc. fields.
 
+
+See also [QDirStat-for-Servers.md]
+(https://github.com/shundhammer/qdirstat/blob/master/doc/QDirStat-for-Servers.md)
