@@ -25,6 +25,7 @@ using namespace QDirStat;
 #endif
 
 
+
 LocateFilesWindow::LocateFilesWindow( DirTree *        tree,
                                       SelectionModel * selectionModel,
                                       QWidget *        parent ):
@@ -99,10 +100,38 @@ void LocateFilesWindow::locate( const QString & suffix )
     if ( ! _searchSuffix.startsWith( '.' ) )
         _searchSuffix.prepend( '.' );
 
+    setWindowTitle( tr( "Directories With %1 Files" ).arg( searchSuffix() ) );
     logDebug() << "Locating all files ending with \""
                << _searchSuffix << "\"" << endl;
 
+    // For better Performance: Disable sorting while inserting many items
+    _ui->treeWidget->setSortingEnabled( false );
+
     locate( _tree->root() );
+
+    _ui->treeWidget->setSortingEnabled( true );
+    _ui->treeWidget->sortByColumn( SSR_PathCol, Qt::AscendingOrder );
+    logDebug() << _ui->treeWidget->topLevelItemCount() << " directories" << endl;
+
+    // Make sure something is selected, even if this window is not the active
+    // one (for example because the user just clicked on another suffix in the
+    // file type stats window). When the window is activated, the tree widget
+    // automatically uses the topmost item as the current item, and in the
+    // default selection mode, this item is also selected. When the window is
+    // not active, this does not happen yet - until the window is activated.
+    //
+    // In the context of QDirStat, this means that this is also signaled to the
+    // SelectionModel, the corresponding branch in the main window's dir tree
+    // is opened, and the matching files are selected in the dir tree and in
+    // the treemap.
+    //
+    // It is very irritating if this only happens sometimes - when the "locate
+    // files" window is created, but not when it is just populated with new
+    // content from the outside (from the file type stats window).
+    //
+    // So let's make sure the topmost item is always selected.
+
+    _ui->treeWidget->setCurrentItem( _ui->treeWidget->topLevelItem( 0 ) );
 }
 
 
@@ -129,16 +158,16 @@ void LocateFilesWindow::locate( FileInfo * dir )
         _ui->treeWidget->addTopLevelItem( searchResultItem );
     }
 
-    
+
     // Recurse through any subdirectories
-    
+
     FileInfo* child = dir->firstChild();
 
     while ( child )
     {
         if ( child->isDir() )
             locate( child );
-        
+
         child = child->next();
     }
 
@@ -150,7 +179,7 @@ void LocateFilesWindow::locate( FileInfo * dir )
 FileInfoSet LocateFilesWindow::matchingFiles( FileInfo * item )
 {
     FileInfoSet result;
-    
+
     if ( ! item || ! item->isDirInfo() )
         return result;
 
@@ -163,9 +192,12 @@ FileInfoSet LocateFilesWindow::matchingFiles( FileInfo * item )
 
     while ( child )
     {
-        if ( child->isFile() && child->name().endsWith( _searchSuffix ) )
+        if ( child->isFile() &&
+             child->name().endsWith( _searchSuffix, Qt::CaseInsensitive ) )
+        {
             result << child;
-        
+        }
+
         child = child->next();
     }
 
@@ -175,17 +207,22 @@ FileInfoSet LocateFilesWindow::matchingFiles( FileInfo * item )
 
 void LocateFilesWindow::selectResult( QTreeWidgetItem * item )
 {
+    if ( ! item )
+        return;
+
     SuffixSearchResultItem * searchResult =
         dynamic_cast<SuffixSearchResultItem *>( item );
-
     CHECK_DYNAMIC_CAST( searchResult, "SuffixSearchResultItem" );
-    
+
     FileInfo * dir = _tree->locate( searchResult->path() );
     FileInfoSet matches = matchingFiles( dir );
-    _selectionModel->setSelectedItems( matchingFiles( dir ) );
+
+    // logDebug() << "Selecting " << searchResult->path() << " with " << matches.size() << " matches" << endl;
 
     if ( ! matches.isEmpty() )
-        _selectionModel->setCurrentBranch( matches.first() );
+        _selectionModel->setCurrentItem( matches.first(), true );
+
+    _selectionModel->setSelectedItems( matches );
 }
 
 

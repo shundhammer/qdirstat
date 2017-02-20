@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>751</width>
-    <height>231</height>
+    <width>800</width>
+    <height>220</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>File Type Statistics</string>
+   <string>Directories With Selected File Type</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>

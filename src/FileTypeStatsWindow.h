@@ -117,7 +117,7 @@ namespace QDirStat
 	DirTree *		    _tree;
         SelectionModel *            _selectionModel;
 	FileTypeStats *		    _stats;
-        QPointer<LocateFilesWindow> _locateFilesWindow;
+        static QPointer<LocateFilesWindow> _locateFilesWindow;
     };
 
 

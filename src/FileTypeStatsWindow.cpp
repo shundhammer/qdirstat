@@ -28,6 +28,9 @@ using namespace QDirStat;
 #endif
 
 
+QPointer<LocateFilesWindow> FileTypeStatsWindow::_locateFilesWindow = 0;
+
+
 FileTypeStatsWindow::FileTypeStatsWindow( DirTree *        tree,
                                           SelectionModel * selectionModel,
                                           QWidget *        parent ):
@@ -165,11 +168,6 @@ void FileTypeStatsWindow::populate()
 
         MimeCategory * parentCategory = _stats->category( suffix );
 
-        if ( suffix == NO_SUFFIX )
-            suffix = tr( "<No extension>" );
-        else
-            suffix = "*." + suffix;
-
         SuffixFileTypeItem * item = new SuffixFileTypeItem( suffix, count, sum, percentage );
         CHECK_NEW( item );
 
@@ -257,7 +255,17 @@ void FileTypeStatsWindow::locateCurrentFileType()
     if ( ! current )
         return;
 
-    logDebug() << "Locating " << current->suffix() << endl;
+    if ( current->suffix() == NO_SUFFIX )
+    {
+        logWarning() << "Can't locate NO_SUFFIX" << endl;
+
+        if ( _locateFilesWindow )
+            _locateFilesWindow->deleteLater();
+
+        return;
+    }
+
+    // logDebug() << "Locating " << current->suffix() << endl;
 
     if ( ! _locateFilesWindow )
     {
@@ -290,7 +298,12 @@ void FileTypeStatsWindow::enableLocateButton( QTreeWidgetItem * currentItem )
     bool enabled = false;
 
     if ( currentItem )
-        enabled = dynamic_cast<SuffixFileTypeItem *>( currentItem ) != 0;
+    {
+        SuffixFileTypeItem * suffixItem =
+            dynamic_cast<SuffixFileTypeItem *>( currentItem );
+
+        enabled = suffixItem && suffixItem->suffix() != NO_SUFFIX;
+    }
 
     _ui->locateButton->setEnabled( enabled );
 }
@@ -322,13 +335,16 @@ SuffixFileTypeItem::SuffixFileTypeItem( const QString & suffix,
                                         int             count,
                                         FileSize        totalSize,
                                         float           percentage ):
-    FileTypeItem( suffix,
+    FileTypeItem( "*." + suffix,
                   count,
                   totalSize,
                   percentage ),
     _suffix( suffix )
 {
-
+        if ( suffix == NO_SUFFIX )
+            setText( FT_NameCol,  QObject::tr( "<No Extension>" ) );
+        else
+            _suffix = "*." + suffix;
 }
 
 
