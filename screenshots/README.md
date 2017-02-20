@@ -1,4 +1,4 @@
-# QDirStat Screenshots 
+# QDirStat Screenshots
 
 Qt-based directory statistics: KDirStat without any KDE -- from the original KDirStat author.
 
@@ -28,6 +28,20 @@ _Screenshot of output during cleanup actions. Of course this window is purely op
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png)
 
 _Menu View -> File Type Statistics..._
+
+
+## Locating Files by Type
+
+![Locate Files Window]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locate-file-types-window.png)
+
+_Results after clicking on the "Locate" button in the "File Type Statistics" window._
+
+![Locating FilesWindow]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locating-file-types.png)
+
+_Locating files with a specific extension. That branch is automatically opened
+in the tree view in the main window, and all matching files in that directory are selected._
 
 
 ## Configuration

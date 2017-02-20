@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-02-18
+Updated: 2017-02-20
 
 
 ## Overview
@@ -49,6 +49,9 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
 [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-column-config.png" height="170">]
 (https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-column-config.png)
 
+[<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locating-file-types.png" height="337">]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locating-file-types.png)
+
 
 [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-config.png" height="245">]
 (https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-cleanup-config.png)
@@ -69,6 +72,29 @@ _Full-size images and descriptions on the [Screenshots Page]
 ## Current Development Status
 
 **Latest stable release: V1.2**
+
+- 2017-02-20 Locating files by type from the _File Type Statistics_ window
+
+![Locating FilesWindow]
+(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locating-file-types.png)
+
+  You can now locate files with a specific filename extension directly:
+
+  - You select a file type (a filename extension) in the "File Type Statistics" window.
+
+  - You click "Locate" or you double-click the item.
+
+  - The "Locate Files" window opens.
+
+  - You click a directory there.
+
+  - In the main window, the branch for that directory opens, and all matching
+    files are selected in the tree view and in the treemap.
+
+  - You can now directly start cleanup actions for those files.
+
+  See also [GitHub issue #48](https://github.com/shundhammer/qdirstat/issues/48).
+
 
 - 2017-02-18 New document: [QDirStat for Servers]
 (https://github.com/shundhammer/qdirstat/blob/master/doc/QDirStat-for-Servers.md)
@@ -94,7 +120,7 @@ _Full-size images and descriptions on the [Screenshots Page]
   that limitation.
 
   Next thing to come: Locating files with a specific suffix from there.
-  See [GitHub issue #48](https://github.com/shundhammer/qdirstat/issues/48)
+  See [GitHub issue #48](https://github.com/shundhammer/qdirstat/issues/48).
 
 
 - 2017-02-12 Working on a _File Type Statistics_ window
