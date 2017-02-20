@@ -52,6 +52,7 @@ SOURCES	  = main.cpp			\
 	    FileTypeStatsWindow.cpp	\
 	    HeaderTweaker.cpp		\
 	    ListEditor.cpp		\
+            LocateFilesWindow.cpp       \
 	    Logger.cpp			\
 	    MainWindow.cpp		\
 	    MimeCategorizer.cpp		\
@@ -98,6 +99,7 @@ HEADERS	  =				\
 	    HeaderTweaker.h		\
 	    ListEditor.h		\
 	    ListMover.h			\
+            LocateFilesWindow.h         \
 	    Logger.h			\
 	    MainWindow.h		\
 	    MimeCategorizer.h		\

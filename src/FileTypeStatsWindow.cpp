@@ -9,6 +9,7 @@
 
 #include "FileTypeStatsWindow.h"
 #include "FileTypeStats.h"
+#include "LocateFilesWindow.h"
 #include "DirTree.h"
 #include "MimeCategory.h"
 #include "Logger.h"
@@ -27,11 +28,13 @@ using namespace QDirStat;
 #endif
 
 
-FileTypeStatsWindow::FileTypeStatsWindow( DirTree * tree,
-                                          QWidget * parent ):
+FileTypeStatsWindow::FileTypeStatsWindow( DirTree *        tree,
+                                          SelectionModel * selectionModel,
+                                          QWidget *        parent ):
     QDialog( parent ),
     _ui( new Ui::FileTypeStatsWindow ),
-    _tree( tree )
+    _tree( tree ),
+    _selectionModel( selectionModel )
 {
     logDebug() << "init" << endl;
 
@@ -255,6 +258,30 @@ void FileTypeStatsWindow::locateCurrentFileType()
         return;
 
     logDebug() << "Locating " << current->suffix() << endl;
+
+    if ( ! _locateFilesWindow )
+    {
+        _locateFilesWindow = new LocateFilesWindow( _tree,
+                                                    _selectionModel,
+                                                    qobject_cast<QWidget *>( parent() ) );
+        CHECK_NEW( _locateFilesWindow );
+        _locateFilesWindow->show();
+
+        // Not using 'this' as parent so the user can close the file types
+        // stats window, but keep the locate files window open; if 'this' were
+        // used, the destructor of the file type stats window would
+        // automatically delete the locate files window, too since it would be
+        // part of its children hierarchy.
+        //
+        // On the downside, that means we have to actively raise() it because
+        // it might get hidden behind the stats window.
+    }
+    else // Reusing existing window
+    {
+        _locateFilesWindow->raise();
+    }
+
+    _locateFilesWindow->locate( current->suffix() );
 }
 
 

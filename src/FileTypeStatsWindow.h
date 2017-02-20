@@ -13,6 +13,7 @@
 #include <QDialog>
 #include <QMap>
 #include <QTreeWidgetItem>
+#include <QPointer>
 
 #include "ui_file-type-stats-window.h"
 #include "FileInfo.h"
@@ -23,6 +24,8 @@ namespace QDirStat
     class DirTree;
     class FileTypeStats;
     class MimeCategory;
+    class SelectionModel;
+    class LocateFilesWindow;
 
 
     /**
@@ -44,7 +47,9 @@ namespace QDirStat
 	 * of this class. The QPointer will keep track of this window
 	 * auto-deleting itself when closed.
 	 **/
-	FileTypeStatsWindow( DirTree * tree, QWidget * parent );
+	FileTypeStatsWindow( DirTree *        tree,
+                             SelectionModel * selectionModel,
+                             QWidget *        parent );
 
 	/**
 	 * Destructor.
@@ -108,9 +113,11 @@ namespace QDirStat
 	// Data members
 	//
 
-	Ui::FileTypeStatsWindow * _ui;
-	DirTree *		  _tree;
-	FileTypeStats *		  _stats;
+	Ui::FileTypeStatsWindow *   _ui;
+	DirTree *		    _tree;
+        SelectionModel *            _selectionModel;
+	FileTypeStats *		    _stats;
+        QPointer<LocateFilesWindow> _locateFilesWindow;
     };
 
 
