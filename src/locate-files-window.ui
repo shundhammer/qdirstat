@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FileTypeStatsWindow</class>
- <widget class="QDialog" name="FileTypeStatsWindow">
+ <class>LocateFilesWindow</class>
+ <widget class="QDialog" name="LocateFilesWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>535</width>
-    <height>605</height>
+    <width>751</width>
+    <height>231</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,16 +37,6 @@
      <property name="topMargin">
       <number>5</number>
      </property>
-     <item>
-      <widget class="QPushButton" name="locateButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>&amp;Locate...</string>
-       </property>
-      </widget>
-     </item>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -82,7 +72,7 @@
   <connection>
    <sender>closeButton</sender>
    <signal>clicked()</signal>
-   <receiver>FileTypeStatsWindow</receiver>
+   <receiver>LocateFilesWindow</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

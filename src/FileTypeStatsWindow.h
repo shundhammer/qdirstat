@@ -22,6 +22,7 @@ namespace QDirStat
 {
     class DirTree;
     class FileTypeStats;
+    class MimeCategory;
 
 
     /**
@@ -64,6 +65,12 @@ namespace QDirStat
 	 **/
 	void calc();
 
+        /**
+         * Open a "Locate File Type" window for the currently selected file
+         * type or re-populate it if it is still open.
+         **/
+        void locateCurrentFileType();
+
 	/**
 	 * Reject the dialog contents, i.e. the user clicked the "Cancel"
 	 * or WM_CLOSE button.
@@ -71,6 +78,13 @@ namespace QDirStat
 	 * Reimplemented from QDialog.
 	 **/
 	virtual void reject() Q_DECL_OVERRIDE;
+
+    protected slots:
+
+        /**
+         * Enable or disable the "Locate" button depending on the current item.
+         **/
+        void enableLocateButton( QTreeWidgetItem * currentItem );
 
     protected:
 
@@ -155,6 +169,58 @@ namespace QDirStat
         int             _count;
         FileSize        _totalSize;
         float           _percentage;
+    };
+
+
+    /**
+     * Specialized item class for MIME categories.
+     **/
+    class CategoryFileTypeItem: public FileTypeItem
+    {
+    public:
+
+        /**
+         * Constructor.
+         **/
+        CategoryFileTypeItem( MimeCategory * category,
+                              int            count,
+                              FileSize       totalSize,
+                              float          percentage );
+
+        /**
+         * Return the MIME category of this item.
+         **/
+        MimeCategory * category() const { return _category; }
+
+    protected:
+
+        MimeCategory * _category;
+    };
+
+
+    /**
+     * Specialized item class for suffix file types.
+     **/
+    class SuffixFileTypeItem: public FileTypeItem
+    {
+    public:
+
+        /**
+         * Constructor.
+         **/
+        SuffixFileTypeItem( const QString & suffix,
+                            int             count,
+                            FileSize        totalSize,
+                            float           percentage );
+
+        /**
+         * Return this file type's suffix.
+         **/
+        QString suffix() const { return _suffix; }
+
+    protected:
+
+        QString _suffix;
     };
 
 

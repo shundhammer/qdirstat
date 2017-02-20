@@ -126,7 +126,8 @@ FORMS	  = main-window.ui		   \
 	    cleanup-config-page.ui	   \
 	    mime-category-config-page.ui   \
 	    exclude-rules-config-page.ui   \
-	    file-type-stats-window.ui
+            file-type-stats-window.ui      \
+            locate-files-window.ui
 
 #	    general-config-page.ui
 

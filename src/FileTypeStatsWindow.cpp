@@ -39,6 +39,16 @@ FileTypeStatsWindow::FileTypeStatsWindow( DirTree * tree,
     _ui->setupUi( this );
     initWidgets();
 
+    connect( _ui->treeWidget,   SIGNAL( currentItemChanged( QTreeWidgetItem *,
+                                                            QTreeWidgetItem * ) ),
+             this,              SLOT  ( enableLocateButton( QTreeWidgetItem * ) ) );
+
+    connect( _ui->treeWidget,   SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),
+             this,              SLOT  ( locateCurrentFileType()                      ) );
+
+    connect( _ui->locateButton, SIGNAL( clicked() ),
+             this,              SLOT  ( locateCurrentFileType() ) );
+
     _stats = new FileTypeStats( tree, this );
     CHECK_NEW( _stats );
 
@@ -102,8 +112,8 @@ void FileTypeStatsWindow::populate()
     // Create toplevel items for the categories
     //
 
-    QMap<MimeCategory *, FileTypeItem *> categoryItem;
-    FileTypeItem * otherCategoryItem = 0;
+    QMap<MimeCategory *, CategoryFileTypeItem *> categoryItem;
+    CategoryFileTypeItem * otherCategoryItem = 0;
 
     for ( CategoryFileSizeMapIterator it = _stats->categorySumBegin();
           it != _stats->categorySumEnd();
@@ -113,12 +123,12 @@ void FileTypeStatsWindow::populate()
 
         if ( category )
         {
-            QString  name       = category->name();
             FileSize sum        = it.value();
             int      count      = _stats->categoryCount( category );
             double   percentage = _stats->percentage( sum );
 
-            FileTypeItem * item = new FileTypeItem( name, count, sum, percentage );
+            CategoryFileTypeItem * item =
+                new CategoryFileTypeItem( category, count, sum, percentage );
             CHECK_NEW( item );
 
             _ui->treeWidget->addTopLevelItem( item );
@@ -157,7 +167,7 @@ void FileTypeStatsWindow::populate()
         else
             suffix = "*." + suffix;
 
-        FileTypeItem * item = new FileTypeItem( suffix, count, sum, percentage );
+        SuffixFileTypeItem * item = new SuffixFileTypeItem( suffix, count, sum, percentage );
         CHECK_NEW( item );
 
 
@@ -193,18 +203,18 @@ void FileTypeStatsWindow::populate()
         QString name = otherItems.size() > TOP_X ?
             tr( "Other (Top %1)" ).arg( TOP_X ) : tr( "Other" );
 
-        if ( otherCategoryItem )
+        if ( ! otherCategoryItem )
         {
-            otherCategoryItem->setText( 0, name );
-        }
-        else
-        {
-            otherCategoryItem = new FileTypeItem( name, otherCount, otherSum, percentage );
+            otherCategoryItem = new CategoryFileTypeItem( _stats->otherCategory(),
+                                                          otherCount,
+                                                          otherSum,
+                                                          percentage );
             CHECK_NEW( otherCategoryItem );
         }
 
-        _ui->treeWidget->addTopLevelItem( otherCategoryItem );
+        otherCategoryItem->setText( 0, name );
         otherCategoryItem->setBold();
+        _ui->treeWidget->addTopLevelItem( otherCategoryItem );
 
         int top_x = qMin( TOP_X, otherItems.size() );
 
@@ -236,12 +246,63 @@ void FileTypeStatsWindow::populate()
 }
 
 
+void FileTypeStatsWindow::locateCurrentFileType()
+{
+    SuffixFileTypeItem * current =
+        dynamic_cast<SuffixFileTypeItem *>( _ui->treeWidget->currentItem() );
+
+    if ( ! current )
+        return;
+
+    logDebug() << "Locating " << current->suffix() << endl;
+}
+
+
+void FileTypeStatsWindow::enableLocateButton( QTreeWidgetItem * currentItem )
+{
+    bool enabled = false;
+
+    if ( currentItem )
+        enabled = dynamic_cast<SuffixFileTypeItem *>( currentItem ) != 0;
+
+    _ui->locateButton->setEnabled( enabled );
+}
+
+
 void FileTypeStatsWindow::reject()
 {
     deleteLater();
 }
 
 
+
+
+CategoryFileTypeItem::CategoryFileTypeItem( MimeCategory * category,
+                                            int            count,
+                                            FileSize       totalSize,
+                                            float          percentage ):
+    FileTypeItem( category->name(),
+                  count,
+                  totalSize,
+                  percentage ),
+    _category( category )
+{
+
+}
+
+
+SuffixFileTypeItem::SuffixFileTypeItem( const QString & suffix,
+                                        int             count,
+                                        FileSize        totalSize,
+                                        float           percentage ):
+    FileTypeItem( suffix,
+                  count,
+                  totalSize,
+                  percentage ),
+    _suffix( suffix )
+{
+
+}
 
 
 FileTypeItem::FileTypeItem( const QString & name,
