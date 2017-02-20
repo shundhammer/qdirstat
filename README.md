@@ -50,7 +50,7 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
 (https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-column-config.png)
 
 [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locating-file-types.png" height="337">]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locating-file-types.png)
+(https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-locating-file-types.png)
 
 
 [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-config.png" height="245">]
