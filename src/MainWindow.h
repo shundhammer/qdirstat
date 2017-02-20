@@ -220,9 +220,9 @@ protected slots:
     void openConfigDialog();
 
     /**
-     * Open the file type statistics window.
+     * Open or close the file type statistics window.
      **/
-    void openFileTypeStats();
+    void toggleFileTypeStats();
 
     /**
      * Switch verbose logging for selection changes on or off.

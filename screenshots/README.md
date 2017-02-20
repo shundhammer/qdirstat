@@ -37,7 +37,7 @@ _Menu View -> File Type Statistics..._
 
 _Results after clicking on the "Locate" button in the "File Type Statistics" window._
 
-![Locating FilesWindow]
+![Locating Files]
 (https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locating-file-types.png)
 
 _Locating files with a specific extension. That branch is automatically opened

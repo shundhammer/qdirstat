@@ -217,7 +217,9 @@ void MainWindow::connectActions()
 
     mapTreeExpandAction( _ui->actionCloseAllTreeLevels, 0 );
 
-    CONNECT_ACTION( _ui->actionFileTypeStats,	   this, openFileTypeStats() );
+    CONNECT_ACTION( _ui->actionFileTypeStats,	   this, toggleFileTypeStats() );
+
+    _ui->actionFileTypeStats->setShortcutContext( Qt::ApplicationShortcut );
 
 
 
@@ -738,18 +740,23 @@ void MainWindow::openConfigDialog()
 }
 
 
-void MainWindow::openFileTypeStats()
+void MainWindow::toggleFileTypeStats()
 {
     if ( _fileTypeStatsWindow )
-        return;
+    {
+        _fileTypeStatsWindow->deleteLater();
+        // No need to set the variable to 0 - it is a guarded QPointer
+    }
+    else
+    {
+        // This deletes itself when the user closes it. The associated QPointer
+        // keeps track of that and sets the pointer to 0 when it happens.
 
-    // This deletes itself when the user closes it. The associated QPointer
-    // keeps track of that and sets the pointer to 0 when it happens.
-
-    _fileTypeStatsWindow = new QDirStat::FileTypeStatsWindow( _dirTreeModel->tree(),
-                                                              _selectionModel,
-                                                              this );
-    _fileTypeStatsWindow->show();
+        _fileTypeStatsWindow = new QDirStat::FileTypeStatsWindow( _dirTreeModel->tree(),
+                                                                  _selectionModel,
+                                                                  this );
+        _fileTypeStatsWindow->show();
+    }
 }
 
 
