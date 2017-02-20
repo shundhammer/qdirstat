@@ -260,7 +260,7 @@ void FileTypeStatsWindow::locateCurrentFileType()
         logWarning() << "Can't locate NO_SUFFIX" << endl;
 
         if ( _locateFilesWindow )
-            _locateFilesWindow->deleteLater();
+            _locateFilesWindow->hide();
 
         return;
     }
@@ -286,6 +286,7 @@ void FileTypeStatsWindow::locateCurrentFileType()
     }
     else // Reusing existing window
     {
+        _locateFilesWindow->show();
         _locateFilesWindow->raise();
     }
 
