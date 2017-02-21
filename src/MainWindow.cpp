@@ -152,6 +152,7 @@ MainWindow::MainWindow():
 
     if ( ! _ui->actionShowTreemap->isChecked() )
 	_ui->treemapView->disable();
+    //actionTreemapAsSidePanel ???
 
     toggleVerboseSelection();
     updateActions();
@@ -238,7 +239,9 @@ void MainWindow::connectActions()
     // "Treemap" menu
 
     connect( _ui->actionShowTreemap, SIGNAL( toggled( bool )   ),
-	     this,		     SLOT  ( showTreemapView() ) );
+         this,		     SLOT  ( showTreemapView() ) );
+    connect( _ui->actionTreemapAsSidePanel, SIGNAL( toggled( bool )   ),
+         this,		     SLOT  ( treemapAsSidePanel() ) );
 
     CONNECT_ACTION( _ui->actionTreemapZoomIn,	 _ui->treemapView, zoomIn()	    );
     CONNECT_ACTION( _ui->actionTreemapZoomOut,	 _ui->treemapView, zoomOut()	    );
@@ -302,7 +305,7 @@ void MainWindow::updateActions()
     _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
 
     bool showingTreemap = _ui->treemapView->isVisible();
-
+    _ui->actionTreemapAsSidePanel->setEnabled( showingTreemap );
     _ui->actionTreemapZoomIn->setEnabled   ( showingTreemap && _ui->treemapView->canZoomIn() );
     _ui->actionTreemapZoomOut->setEnabled  ( showingTreemap && _ui->treemapView->canZoomOut() );
     _ui->actionResetTreemapZoom->setEnabled( showingTreemap && _ui->treemapView->canZoomOut() );
@@ -317,6 +320,7 @@ void MainWindow::readSettings()
 
     _statusBarTimeout	 = settings.value( "StatusBarTimeoutMillisec", 3000 ).toInt();
     bool   showTreemap	 = settings.value( "ShowTreemap"	     , true ).toBool();
+    bool   treemapOnSide = settings.value( "TreemapOnSide"	     , true ).toBool();
     QPoint winPos	 = settings.value( "WindowPos"		     , QPoint( -99, -99 ) ).toPoint();
     QSize  winSize	 = settings.value( "WindowSize"		     , QSize (	 0,   0 ) ).toSize();
     _verboseSelection	 = settings.value( "VerboseSelection"	     , false ).toBool();
@@ -324,6 +328,9 @@ void MainWindow::readSettings()
     settings.endGroup();
 
     _ui->actionShowTreemap->setChecked( showTreemap );
+    _ui->actionTreemapAsSidePanel->setChecked( treemapOnSide );
+    treemapAsSidePanel();
+
     _ui->actionVerboseSelection->setChecked( _verboseSelection );
 
     if ( winSize.height() > 100 && winSize.width() > 100 )
@@ -343,6 +350,8 @@ void MainWindow::writeSettings()
 
     settings.setValue( "StatusBarTimeoutMillisec", _statusBarTimeout );
     settings.setValue( "ShowTreemap"		 , _ui->actionShowTreemap->isChecked() );
+    settings.setValue( "TreemapOnSide"		 , _ui->actionTreemapAsSidePanel->isChecked() );
+
     settings.setValue( "WindowPos"		 , pos()  );
     settings.setValue( "WindowSize"		 , size() );
     settings.setValue( "VerboseSelection"	 , _verboseSelection );
@@ -359,6 +368,13 @@ void MainWindow::showTreemapView()
 	_ui->treemapView->disable();
 }
 
+void MainWindow::treemapAsSidePanel()
+{
+    if ( _ui->actionTreemapAsSidePanel->isChecked() )
+        _ui->mainWinSplitter->setOrientation(Qt::Horizontal);
+    else
+        _ui->mainWinSplitter->setOrientation(Qt::Vertical);
+}
 
 void MainWindow::closeEvent( QCloseEvent *event )
 {
