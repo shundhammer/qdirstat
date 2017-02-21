@@ -23,7 +23,7 @@
     <item>
      <widget class="QSplitter" name="mainWinSplitter">
       <property name="orientation">
-       <enum>Qt::Vertical</enum>
+       <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QDirStat::DirTreeView" name="dirTreeView"/>
       <widget class="QDirStat::TreemapView" name="treemapView"/>
@@ -93,6 +93,7 @@
      <string>Tree&amp;map</string>
     </property>
     <addaction name="actionShowTreemap"/>
+    <addaction name="actionTreemapAsSidePanel"/>
     <addaction name="separator"/>
     <addaction name="actionTreemapZoomIn"/>
     <addaction name="actionTreemapZoomOut"/>
@@ -584,6 +585,20 @@
    </property>
    <property name="shortcut">
     <string>F1</string>
+   </property>
+  </action>
+  <action name="actionTreemapAsSidePanel">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Treeemap as side panel</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the Treeemap beside the directory tree, otherwise it will be shown beneath.</string>
    </property>
   </action>
  </widget>
