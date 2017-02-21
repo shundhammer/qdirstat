@@ -149,7 +149,7 @@ void LocateFilesWindow::locate( FileInfo * dir )
     {
         // Create a search result for this path
 
-        int totalSize = 0LL;
+        FileSize totalSize = 0LL;
 
         foreach ( FileInfo * file, matches )
             totalSize += file->size();
