@@ -88,6 +88,19 @@ namespace QDirStat
      **/
     QMap<int, QString> patternSyntaxMapping();
 
+    /**
+     * Read window settings (size and position) from the settings and apply
+     * them.
+     **/
+    void readWindowSettings( QWidget *       widget,
+                             const QString & settingsGroup );
+
+    /**
+     * Write window settings (size and position) to the settings.
+     **/
+    void writeWindowSettings( QWidget *       widget,
+                              const QString & settingsGroup );
+    
 }	// namespace QDirStat
 
 #endif	// SettingsHelpers_h

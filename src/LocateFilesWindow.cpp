@@ -11,6 +11,7 @@
 #include "DirTree.h"
 #include "SelectionModel.h"
 #include "FileInfoIterator.h"
+#include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -34,11 +35,12 @@ LocateFilesWindow::LocateFilesWindow( DirTree *        tree,
     _tree( tree ),
     _selectionModel( selectionModel )
 {
-    logDebug() << "init" << endl;
+    // logDebug() << "init" << endl;
 
     CHECK_NEW( _ui );
     _ui->setupUi( this );
     initWidgets();
+    readWindowSettings( this, "LocateFilesWindow" );
 
     connect( _ui->treeWidget,   SIGNAL( currentItemChanged( QTreeWidgetItem *,
                                                             QTreeWidgetItem * ) ),
@@ -48,7 +50,8 @@ LocateFilesWindow::LocateFilesWindow( DirTree *        tree,
 
 LocateFilesWindow::~LocateFilesWindow()
 {
-    logDebug() << "destroying" << endl;
+    // logDebug() << "destroying" << endl;
+    writeWindowSettings( this, "LocateFilesWindow" );
 }
 
 

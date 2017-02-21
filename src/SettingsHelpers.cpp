@@ -10,8 +10,10 @@
 #include <QSettings>
 #include <QColor>
 #include <QRegExp>
+#include <QWidget>
 
 #include "SettingsHelpers.h"
+#include "Settings.h"
 #include "Exception.h"
 #include "Logger.h"
 
@@ -174,6 +176,33 @@ namespace QDirStat
 	return mapping;
     }
 
+
+    void readWindowSettings( QWidget * widget, const QString & settingsGroup )
+    {
+        QDirStat::Settings settings;
+        settings.beginGroup( settingsGroup );
+
+        QPoint winPos	 = settings.value( "WindowPos" , QPoint( -99, -99 ) ).toPoint();
+        QSize  winSize	 = settings.value( "WindowSize", QSize (   0,   0 ) ).toSize();
+
+        if ( winSize.height() > 100 && winSize.width() > 100 )
+            widget->resize( winSize );
+
+        if ( winPos.x() != -99 && winPos.y() != -99 )
+            widget->move( winPos );
+    }
+
+
+    void writeWindowSettings( QWidget * widget, const QString & settingsGroup )
+    {
+        QDirStat::Settings settings;
+        settings.beginGroup( settingsGroup );
+
+        settings.setValue( "WindowPos" , widget->pos()  );
+        settings.setValue( "WindowSize", widget->size() );
+
+        settings.endGroup();
+    }
 
 } // namespace QDirStat
 

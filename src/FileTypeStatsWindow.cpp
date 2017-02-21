@@ -12,6 +12,7 @@
 #include "LocateFilesWindow.h"
 #include "DirTree.h"
 #include "MimeCategory.h"
+#include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -39,11 +40,12 @@ FileTypeStatsWindow::FileTypeStatsWindow( DirTree *        tree,
     _tree( tree ),
     _selectionModel( selectionModel )
 {
-    logDebug() << "init" << endl;
+    // logDebug() << "init" << endl;
 
     CHECK_NEW( _ui );
     _ui->setupUi( this );
     initWidgets();
+    readWindowSettings( this, "FileTypeStatsWindow" );
 
     connect( _ui->treeWidget,   SIGNAL( currentItemChanged( QTreeWidgetItem *,
                                                             QTreeWidgetItem * ) ),
@@ -64,7 +66,8 @@ FileTypeStatsWindow::FileTypeStatsWindow( DirTree *        tree,
 
 FileTypeStatsWindow::~FileTypeStatsWindow()
 {
-    logDebug() << "destroying" << endl;
+    // logDebug() << "destroying" << endl;
+    writeWindowSettings( this, "FileTypeStatsWindow" );
 }
 
 

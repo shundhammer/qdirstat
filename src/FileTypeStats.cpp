@@ -23,8 +23,6 @@ FileTypeStats::FileTypeStats( DirTree * tree,
     QObject( parent ),
     _tree( tree )
 {
-    logDebug() << "init" << endl;
-
     _mimeCategorizer = new MimeCategorizer( this );
     CHECK_NEW( _mimeCategorizer );
 
@@ -37,9 +35,7 @@ FileTypeStats::FileTypeStats( DirTree * tree,
 
 FileTypeStats::~FileTypeStats()
 {
-    logDebug() << "destroying" << endl;
     clear();
-
     delete _otherCategory;
 }
 
