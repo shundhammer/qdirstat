@@ -35,6 +35,7 @@
 #include "Refresher.h"
 #include "SelectionModel.h"
 #include "Settings.h"
+#include "SettingsHelpers.h"
 #include "Trash.h"
 #include "Version.h"
 
@@ -317,8 +318,6 @@ void MainWindow::readSettings()
 
     _statusBarTimeout	 = settings.value( "StatusBarTimeoutMillisec", 3000 ).toInt();
     bool   showTreemap	 = settings.value( "ShowTreemap"	     , true ).toBool();
-    QPoint winPos	 = settings.value( "WindowPos"		     , QPoint( -99, -99 ) ).toPoint();
-    QSize  winSize	 = settings.value( "WindowSize"		     , QSize (	 0,   0 ) ).toSize();
     _verboseSelection	 = settings.value( "VerboseSelection"	     , false ).toBool();
 
     settings.endGroup();
@@ -326,12 +325,7 @@ void MainWindow::readSettings()
     _ui->actionShowTreemap->setChecked( showTreemap );
     _ui->actionVerboseSelection->setChecked( _verboseSelection );
 
-    if ( winSize.height() > 100 && winSize.width() > 100 )
-	resize( winSize );
-
-    if ( winPos.x() != -99 && winPos.y() != -99 )
-	move( winPos );
-
+    readWindowSettings( this, "MainWindow" );
     ExcludeRules::instance()->readSettings();
 }
 
@@ -343,11 +337,11 @@ void MainWindow::writeSettings()
 
     settings.setValue( "StatusBarTimeoutMillisec", _statusBarTimeout );
     settings.setValue( "ShowTreemap"		 , _ui->actionShowTreemap->isChecked() );
-    settings.setValue( "WindowPos"		 , pos()  );
-    settings.setValue( "WindowSize"		 , size() );
     settings.setValue( "VerboseSelection"	 , _verboseSelection );
 
     settings.endGroup();
+
+    writeWindowSettings( this, "MainWindow" );
 }
 
 
