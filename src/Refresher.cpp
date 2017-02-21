@@ -17,22 +17,28 @@ using namespace QDirStat;
 
 Refresher::Refresher( const FileInfoSet items, QObject * parent ):
     QObject( parent ),
-    _items( items )
+    _items( items ),
+    _tree( 0 )
 {
     // logDebug() << "Creating refresher for " <<  _items.size() << " items" << endl;
+
+    // Storing the tree right now in a separate variable because by the time we
+    // need it (in refresh()) any (or even all) of the items might have become
+    // invalid already, so any attempt to dereference them to obtain the tree
+    // from there might result in a segfault.
+
+    if ( ! _items.isEmpty() )
+	_tree = _items.first()->tree();
 }
 
 
 void Refresher::refresh()
 {
-    if ( ! _items.isEmpty() )
+    if ( ! _items.isEmpty() && _tree )
     {
-	// Don't try to log any item URL etc.: The item might have become
-	// invalid in the meantime.
 	logDebug() << "Refreshing " << _items.size() << " items" << endl;
 
-	DirTree * tree = _items.first()->tree();
-	tree->refresh( _items );
+	_tree->refresh( _items );
     }
     else
     {

@@ -82,6 +82,18 @@ namespace QDirStat
 	 **/
 	bool treeIsBusy() const;
 
+        /**
+         * Return a set with all the invalid items removed, i.e. without items
+         * where checkMagicNumber() returns 'false'.
+         *
+         * If there is reason to believe that any items of the set might have
+         * become invalid, call this first before any other operations.
+         *
+         * Notice that this does not modify the existing set, but you can
+         * of course assign the result of this to the set.
+         **/
+        FileInfoSet invalidRemoved() const;
+
 	/**
 	 * Return a 'normalized' set, i.e. with all items removed that have
 	 * ancestors in the set.

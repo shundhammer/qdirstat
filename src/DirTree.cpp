@@ -135,11 +135,14 @@ void DirTree::startReading( const QString & rawUrl )
 
 void DirTree::refresh( const FileInfoSet & refreshSet )
 {
-    FileInfoSet items = refreshSet.normalized();
+    FileInfoSet items = refreshSet.invalidRemoved().normalized();
 
     foreach ( FileInfo * item, items )
     {
-	if ( item )
+        // Need to check the magic number here again because a previous
+        // iteration step might have made the item invalid already
+
+	if ( item && item->checkMagicNumber() )
 	{
 	    if( item->isDirInfo() )
 		refresh( item->toDirInfo() );

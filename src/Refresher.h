@@ -68,6 +68,7 @@ namespace QDirStat
 	QString itemsToString() const;
 
 	FileInfoSet _items;
+        DirTree *   _tree;
     };
 }	// namespace QDirStat
 

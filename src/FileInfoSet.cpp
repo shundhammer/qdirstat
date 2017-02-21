@@ -50,6 +50,27 @@ FileInfoSet FileInfoSet::normalized() const
 }
 
 
+FileInfoSet FileInfoSet::invalidRemoved() const
+{
+    FileInfoSet result;
+
+    foreach ( FileInfo * item, *this )
+    {
+        if ( item->checkMagicNumber() )
+        {
+            logDebug() << "Keeping " << item << endl;
+            result << item;
+        }
+        else
+        {
+            logDebug() << "Removing invalid item" << endl;
+        }
+    }
+
+    return result;
+}
+
+
 FileInfo * FileInfoSet::first() const
 {
     if ( isEmpty() )
