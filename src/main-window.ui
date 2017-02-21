@@ -568,7 +568,6 @@
     <string>F7</string>
    </property>
   </action>
-<<<<<<< HEAD
   <action name="actionFileTypeStats">
    <property name="text">
     <string>File &amp;Type Statistics</string>
