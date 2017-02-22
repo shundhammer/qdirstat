@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-02-20
+Updated: 2017-02-22
 
 
 ## Overview
@@ -72,6 +72,10 @@ _Full-size images and descriptions on the [Screenshots Page]
 ## Current Development Status
 
 **Latest stable release: V1.2**
+
+- 2017-02-22 @flurbius contributed a patch to switch the main window layout
+  from tree view above and treemap below to side-by-side (Menu _Treemap_ ->
+  _Treemap as Side Panel_).
 
 - 2017-02-20 Locating files by type from the _File Type Statistics_ window
 
