@@ -320,10 +320,10 @@ void MainWindow::readSettings()
     QDirStat::Settings settings;
     settings.beginGroup( "MainWindow" );
 
-    _statusBarTimeout	 = settings.value( "StatusBarTimeoutMillisec", 3000 ).toInt();
-    bool showTreemap	 = settings.value( "ShowTreemap"	     , true ).toBool();
-    bool treemapOnSide   = settings.value( "TreemapOnSide"	     , false ).toBool();
-    _verboseSelection	 = settings.value( "VerboseSelection"	     , false ).toBool();
+    _statusBarTimeout  = settings.value( "StatusBarTimeoutMillisec", 3000  ).toInt();
+    bool showTreemap   = settings.value( "ShowTreemap"	           , true  ).toBool();
+    bool treemapOnSide = settings.value( "TreemapOnSide"	   , false ).toBool();
+    _verboseSelection  = settings.value( "VerboseSelection"	   , false ).toBool();
 
     settings.endGroup();
 
