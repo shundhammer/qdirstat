@@ -171,7 +171,8 @@ regular basis.
 There are two methods: `pull` and `fetch` / `rebase`. As long as you don't do
 any changes in your fork, there is no noticable difference; but when you work
 in your fork, i.e. when you commit changes there, `fetch` / `rebase` is highly
-recommended to keep the "railway yard" to a minimum.
+recommended to keep the "railway yard" of parallel branches with merge and fork
+points in the `gitk` display to a minimum.
 
 First, get the data from the remote server (GitHub):
 
@@ -309,3 +310,15 @@ Don't forget to push the new master to your fork, too:
     git push mine master
 
 No `-f` or `--force` needed here either if you only work in branches.
+
+
+## Further Reading
+
+https://guides.github.com/activities/contributing-to-open-source/
+
+https://guides.github.com/
+
+https://www.atlassian.com/git/tutorials/merging-vs-rebasing
+
+https://www.udacity.com/course/how-to-use-git-and-github--ud775
+
