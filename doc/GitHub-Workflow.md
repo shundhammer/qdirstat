@@ -209,9 +209,9 @@ _upstream_:
     git rebase upstream/master
 
 This basically checks where you branched off your working copy, then
-temporarily takes away your commits from that point on, then finally applies
-the commits from upstream that have accumulated in the meantime. As a last
-step, it tries to apply your commits on top of all that.
+temporarily takes away your commits from that point on, then applies the
+commits from upstream that have accumulated in the meantime. As a last step, it
+tries to apply your commits on top of all that.
 
 Since git commits are basically little more than patches (diffs) on top of
 patches, this may or may not work flawlessly. If you are lucky, your commits
