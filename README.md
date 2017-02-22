@@ -73,9 +73,15 @@ _Full-size images and descriptions on the [Screenshots Page]
 
 **Latest stable release: V1.2**
 
-- 2017-02-22 @flurbius contributed a patch to switch the main window layout
-  from tree view above and treemap below to side-by-side (Menu _Treemap_ ->
-  _Treemap as Side Panel_).
+- 2017-02-22
+
+  - @flurbius contributed a patch to switch the main window layout from tree
+    view above and treemap below to side-by-side (Menu _Treemap_ -> _Treemap as
+    Side Panel_).
+
+  - Added new document [GitHub-Workflow.md]
+(https://github.com/shundhammer/qdirstat/blob/master/doc/GitHub-Workflow.md)
+    explaining how to work with GitHub and Git to contribute to QDirStat.
 
 - 2017-02-20 Locating files by type from the _File Type Statistics_ window
 
