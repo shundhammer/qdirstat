@@ -108,6 +108,11 @@ to read that!** It's in the way of people trying to do their jobs! We could
 construct a harassment case from this!
 
 
+### The GitHub Workflow
+
+See separate document [GitHub-Workflow.md]
+(https://github.com/shundhammer/qdirstat/blob/master/doc/GitHub-Workflow.md)
+
 
 ### Getting Help for Contributors
 

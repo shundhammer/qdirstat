@@ -24,11 +24,11 @@ style. In that case, you add more commits to the pull request, and it is
 reviewed again etc. until everybody is satisfied and it is either merged (which
 is the normal case) or it is finally rejected (which is a very rare thing).
 
-When your changes are merged, you pull or rebase your fork against upstream
+When your changes are merged, you pull or rebase your fork against _upstream_
 again so it is up to date, and then you can freely work on new things.
 
 One holy rule is that **upstream master always has to work**, even between
-official releases. This is much easier achieve when everybody works in their
+official releases. This is much easier to achieve when everybody works in their
 own fork, preferably in their own branch of their own fork.
 
 
@@ -38,14 +38,16 @@ own fork, preferably in their own branch of their own fork.
   [GitHub](https://www.github.com).
 
 - Make sure to upload your ssh key to your GitHub account.
-  [More info](https://help.github.com/articles/connecting-to-github-with-ssh/)
+  [More info...](https://help.github.com/articles/connecting-to-github-with-ssh/)
 
 - Log in at GitHub.
 
 - Fork the original (upstream) repository to your GitHub account.
   You now have your own repo with that name.
-  **But it does not automatically sync itself with the upstream repo.**
-  You have to do that manually (see below).
+
+  **But it does not automatically sync itself with the upstream repo** as
+  others commit changes there after you forked; you have to do that manually
+  (see below).
 
 - In a shell on your working machine (preferably Linux), clone your forked repo
   to that machine:
@@ -54,10 +56,10 @@ own fork, preferably in their own branch of their own fork.
       git clone -o mine git@github.com:kilroy/qdirstat.git
 
   Where _kilroy_ is your GitHub user name which is part of the URL of that
-  fork. **Make sure to use the `git@github` URL**, not the `https://` URL: The
+  fork. **Make sure to use the "git@github" URL**, not the "https://" URL: The
   https URL is only useful for pulling (i.e. for read-only access), not for
-  pushing (i.e. for read-write access). Since you also want to check in changes
-  into that repo, you need read-write access.
+  pushing (i.e. for read-write access). Since you also want to commit changes
+  to that repo, you need read-write access.
 
   _mine_ is the name of that _remote_. The default would be _origin_, but that
   might lead to confusion because we'll add _upstream_ in a moment, so there
@@ -86,7 +88,7 @@ own fork, preferably in their own branch of their own fork.
 
       [remote "upstream"]
               url = git@github.com:shundhammer/qdirstat.git
-	      fetch = +refs/heads/*:refs/remotes/huha/*
+              fetch = +refs/heads/*:refs/remotes/huha/*
 
   You can also check this with this command:
 
@@ -109,7 +111,7 @@ own fork, preferably in their own branch of their own fork.
 
       [user]
           name = Kilroy Taylor
-	  email = kilroy@mydomain.com
+          email = kilroy@mydomain.com
 
   You can also use separate user names and e-mail addresses for different
   projects; simply edit .git/config in that project and add a `[user]` section
@@ -306,5 +308,4 @@ Don't forget to push the new master to your fork, too:
 
     git push mine master
 
-No '-f' or '--force' needed here either if you only work in branches.
-
+No `-f` or `--force` needed here either if you only work in branches.

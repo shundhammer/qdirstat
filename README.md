@@ -800,6 +800,8 @@ or
 
 See file [Contributing.md]
 (https://github.com/shundhammer/qdirstat/blob/master/doc/Contributing.md)
+and [GitHub-Workflow.md]
+(https://github.com/shundhammer/qdirstat/blob/master/doc/GitHub-Workflow.md)
 
 
 ## To Do
