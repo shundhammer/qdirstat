@@ -390,11 +390,9 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 
 	case RawDataRole: // Send raw data to our item delegate (the PercentBarDelegate)
 	    {
-
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
 		CHECK_PTR( item );
 		CHECK_MAGIC( item );
-
 
 		switch ( col )
 		{

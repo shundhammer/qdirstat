@@ -97,11 +97,10 @@ void DirTree::startReading( const QString & rawUrl )
     _device = mountPoint ? mountPoint->device() : "";
     logInfo() << "device: " << _device << endl;
 
-    _isBusy = true;
-
     if ( _root->hasChildren() )
 	clear();
 
+    _isBusy = true;
     emit startingReading();
 
     FileInfo * item = LocalDirReadJob::stat( url, this, _root );
