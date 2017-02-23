@@ -407,10 +407,12 @@ void MainWindow::busyDisplay()
     _ui->treemapView->disable();
     updateActions();
 
-    // During reading, PercentBarCol contains the number of read jobs.
+    // It would be nice to sort by read jobs during reading, but this confuses
+    // the hell out of the Qt side of the data model; so let's sort by name
+    // instead.
 
-    int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::PercentBarCol );
-    _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
+    int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::NameCol );
+    _ui->dirTreeView->sortByColumn( sortCol, Qt::AscendingOrder );
 
     if ( ! _selectionModel->currentBranch() )
     {

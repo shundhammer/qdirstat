@@ -553,12 +553,6 @@ void DirTreeModel::sort( int column, Qt::SortOrder order )
     _sortCol = DataColumns::fromViewCol( column );
     _sortOrder = order;
 
-    if ( _sortCol == _readJobsCol && _tree->isBusy() )
-    {
-	_sortCol = ReadJobsCol;
-	logDebug() << "Sorting by " << _sortCol << " during reading" << endl;
-    }
-
     updatePersistentIndexes();
     emit layoutChanged();
 
@@ -574,7 +568,7 @@ void DirTreeModel::busyDisplay()
 {
     emit layoutAboutToBeChanged();
 
-    _sortCol = ReadJobsCol;
+    _sortCol = NameCol;
     // logDebug() << "Sorting by " << _sortCol << " during reading" << endl;
 
     updatePersistentIndexes();
@@ -586,11 +580,8 @@ void DirTreeModel::idleDisplay()
 {
     emit layoutAboutToBeChanged();
 
-    if ( _sortCol == _readJobsCol )
-    {
-	_sortCol = PercentNumCol;
-	// logDebug() << "Sorting by " << _sortCol << " after reading is finished" << endl;
-    }
+    _sortCol = PercentNumCol;
+    // logDebug() << "Sorting by " << _sortCol << " after reading is finished" << endl;
 
     updatePersistentIndexes();
     emit layoutChanged();
