@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-02-22
+Updated: 2017-02-23
 
 
 ## Overview
@@ -72,6 +72,32 @@ _Full-size images and descriptions on the [Screenshots Page]
 ## Current Development Status
 
 **Latest stable release: V1.2**
+
+
+- 2017-02-23 Fixed [GitHub issue #24](https://github.com/shundhammer/qdirstat/issues/24):
+
+   During directory reading, subdirectories would get out of sync when opening
+   a tree branch.
+
+   It looks like QDirStat's tree display was a bit too dynamic for the concepts
+   of the underlying Qt classes (QTreeView / QAbstractItemModel): During
+   reading, QDirStat would sort the tree by the number of pending read
+   jobs. That number is constantly changing, so the sort order would also
+   constantly need to change. This is very hard to do properly with the
+   limitations those underlying classes impose; basically it would require a
+   reset of all the data the QTreeView keeps, thus making it forget things like
+   its current scrollbar position or which tree branches were expanded or
+   collapsed. That would make the user interface pretty much unusable.
+
+   So the fix for this is to not sort by read jobs, but by directory names
+   instead since they don't change all the time. The user can still sort by any
+   other column, but that sort is a momentary thing that might become invalid
+   moments later as data (accumulated sizes, number of child items) are
+   updated. Everybody please notice that **this is a known limitation** and any
+   complaints about that will flatly be rejected. The alternative would be to
+   not allow the user to sort at all during directory reading, and that is
+   certainly a lot less desirable.
+
 
 - 2017-02-22
 
