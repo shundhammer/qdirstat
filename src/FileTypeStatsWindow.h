@@ -47,9 +47,9 @@ namespace QDirStat
 	 * of this class. The QPointer will keep track of this window
 	 * auto-deleting itself when closed.
 	 **/
-	FileTypeStatsWindow( DirTree *        tree,
-                             SelectionModel * selectionModel,
-                             QWidget *        parent );
+	FileTypeStatsWindow( DirTree *	      tree,
+			     SelectionModel * selectionModel,
+			     QWidget *	      parent );
 
 	/**
 	 * Destructor.
@@ -70,16 +70,16 @@ namespace QDirStat
 	 **/
 	void calc();
 
-        /**
+	/**
 	 * Refresh (reload) all data.
 	 **/
 	void refresh();
 
 	/**
-         * Open a "Locate File Type" window for the currently selected file
-         * type or re-populate it if it is still open.
-         **/
-        void locateCurrentFileType();
+	 * Open a "Locate File Type" window for the currently selected file
+	 * type or re-populate it if it is still open.
+	 **/
+	void locateCurrentFileType();
 
 	/**
 	 * Reject the dialog contents, i.e. the user clicked the "Cancel"
@@ -91,10 +91,10 @@ namespace QDirStat
 
     protected slots:
 
-        /**
-         * Enable or disable the "Locate" button depending on the current item.
-         **/
-        void enableLocateButton( QTreeWidgetItem * currentItem );
+	/**
+	 * Enable or disable the "Locate" button depending on the current item.
+	 **/
+	void enableLocateButton( QTreeWidgetItem * currentItem );
 
     protected:
 
@@ -103,10 +103,10 @@ namespace QDirStat
 	 **/
 	void clear();
 
-        /**
-         * One-time initialization of the widgets in this window.
-         **/
-        void initWidgets();
+	/**
+	 * One-time initialization of the widgets in this window.
+	 **/
+	void initWidgets();
 
 	/**
 	 * Populate the widgets from the collected information.
@@ -120,9 +120,9 @@ namespace QDirStat
 
 	Ui::FileTypeStatsWindow *   _ui;
 	DirTree *		    _tree;
-        SelectionModel *            _selectionModel;
+	SelectionModel *	    _selectionModel;
 	FileTypeStats *		    _stats;
-        static QPointer<LocateFilesWindow> _locateFilesWindow;
+	static QPointer<LocateFilesWindow> _locateFilesWindow;
     };
 
 
@@ -131,11 +131,11 @@ namespace QDirStat
      **/
     enum FileTypeColumns
     {
-        FT_NameCol = 0,
-        FT_CountCol,
-        FT_TotalSizeCol,
-        FT_PercentageCol,
-        FT_ColumnCount
+	FT_NameCol = 0,
+	FT_CountCol,
+	FT_TotalSizeCol,
+	FT_PercentageCol,
+	FT_ColumnCount
     };
 
 
@@ -147,40 +147,40 @@ namespace QDirStat
     {
     public:
 
-        /**
-         * Constructor. After creating, this item has to be inserted into the
-         * tree at the appropriate place: Toplevel for categories, below a
-         * category for suffixes.
-         **/
-        FileTypeItem( const QString & name,
-                      int             count,
-                      FileSize        totalSize,
-                      float           percentage );
-        //
-        // Getters
-        //
+	/**
+	 * Constructor. After creating, this item has to be inserted into the
+	 * tree at the appropriate place: Toplevel for categories, below a
+	 * category for suffixes.
+	 **/
+	FileTypeItem( const QString & name,
+		      int	      count,
+		      FileSize	      totalSize,
+		      float	      percentage );
+	//
+	// Getters
+	//
 
-        QString  name()       const { return _name; }
-        int      count()      const { return _count; }
-        FileSize totalSize()  const { return _totalSize; }
-        float    percentage() const { return _percentage; }
+	QString	 name()	      const { return _name; }
+	int	 count()      const { return _count; }
+	FileSize totalSize()  const { return _totalSize; }
+	float	 percentage() const { return _percentage; }
 
-        /**
-         * Set the font to bold face for all columns.
-         **/
-        void setBold();
+	/**
+	 * Set the font to bold face for all columns.
+	 **/
+	void setBold();
 
-        /**
-         * Less-than operator for sorting.
-         **/
-        virtual bool operator<(const QTreeWidgetItem & other) const Q_DECL_OVERRIDE;
+	/**
+	 * Less-than operator for sorting.
+	 **/
+	virtual bool operator<(const QTreeWidgetItem & other) const Q_DECL_OVERRIDE;
 
     protected:
 
-        QString         _name;
-        int             _count;
-        FileSize        _totalSize;
-        float           _percentage;
+	QString		_name;
+	int		_count;
+	FileSize	_totalSize;
+	float		_percentage;
     };
 
 
@@ -191,22 +191,22 @@ namespace QDirStat
     {
     public:
 
-        /**
-         * Constructor.
-         **/
-        CategoryFileTypeItem( MimeCategory * category,
-                              int            count,
-                              FileSize       totalSize,
-                              float          percentage );
+	/**
+	 * Constructor.
+	 **/
+	CategoryFileTypeItem( MimeCategory * category,
+			      int	     count,
+			      FileSize	     totalSize,
+			      float	     percentage );
 
-        /**
-         * Return the MIME category of this item.
-         **/
-        MimeCategory * category() const { return _category; }
+	/**
+	 * Return the MIME category of this item.
+	 **/
+	MimeCategory * category() const { return _category; }
 
     protected:
 
-        MimeCategory * _category;
+	MimeCategory * _category;
     };
 
 
@@ -217,22 +217,22 @@ namespace QDirStat
     {
     public:
 
-        /**
-         * Constructor.
-         **/
-        SuffixFileTypeItem( const QString & suffix,
-                            int             count,
-                            FileSize        totalSize,
-                            float           percentage );
+	/**
+	 * Constructor.
+	 **/
+	SuffixFileTypeItem( const QString & suffix,
+			    int		    count,
+			    FileSize	    totalSize,
+			    float	    percentage );
 
-        /**
-         * Return this file type's suffix.
-         **/
-        QString suffix() const { return _suffix; }
+	/**
+	 * Return this file type's suffix.
+	 **/
+	QString suffix() const { return _suffix; }
 
     protected:
 
-        QString _suffix;
+	QString _suffix;
     };
 
 
@@ -241,8 +241,8 @@ namespace QDirStat
      **/
     struct FileTypeItemCompare
     {
-        bool operator() ( FileTypeItem * a, FileTypeItem * b )
-            { return a->totalSize() > b->totalSize(); }
+	bool operator() ( FileTypeItem * a, FileTypeItem * b )
+	    { return a->totalSize() > b->totalSize(); }
     };
 
 } // namespace QDirStat

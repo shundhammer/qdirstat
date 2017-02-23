@@ -212,7 +212,7 @@ void FileTypeStats::removeCruft()
 
 	if ( isCruft( suffix ) )
 	{
-            cruft << "*." + suffix;
+	    cruft << "*." + suffix;
 	    merge = true;
 	}
 
@@ -235,7 +235,7 @@ void FileTypeStats::removeCruft()
 
 #if 1
     logDebug() << "Merged " << cruft.size() << " suffixes to <NO SUFFIX>: "
-               << cruft.join( ", " ) << endl;
+	       << cruft.join( ", " ) << endl;
 #endif
     logDebug() << "Merged: " << totalMergedCount << " files "
 	       << "(" << formatSize( totalMergedSum ) << ")"
@@ -249,20 +249,20 @@ void FileTypeStats::removeEmpty()
 
     while ( it != _suffixCount.end() )
     {
-        QString suffix = it.key();
-        int     count  = it.value();
-        bool    remove = count == 0;
+	QString suffix = it.key();
+	int	count  = it.value();
+	bool	remove = count == 0;
 
-        if ( remove )
-        {
-            logDebug() << "Removing empty suffix *." << suffix << endl;
-            it = _suffixCount.erase( it );
-            _suffixSum.remove( suffix );
-        }
-        else
-        {
-            ++it;
-        }
+	if ( remove )
+	{
+	    logDebug() << "Removing empty suffix *." << suffix << endl;
+	    it = _suffixCount.erase( it );
+	    _suffixSum.remove( suffix );
+	}
+	else
+	{
+	    ++it;
+	}
     }
 }
 

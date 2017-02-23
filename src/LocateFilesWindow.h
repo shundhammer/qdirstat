@@ -70,10 +70,10 @@ namespace QDirStat
 	 **/
 	DirTree * tree() const { return _tree; }
 
-        /**
-         * Return the current search suffix (with leading '*.')
-         **/
-        QString searchSuffix() const;
+	/**
+	 * Return the current search suffix (with leading '*.')
+	 **/
+	QString searchSuffix() const;
 
 
     public slots:
@@ -103,11 +103,11 @@ namespace QDirStat
 
     protected slots:
 
-        /**
-         * Select one of the search results in the main window's tree and
-         * treemap widgets via their SelectionModel.
-         **/
-        void selectResult( QTreeWidgetItem * item );
+	/**
+	 * Select one of the search results in the main window's tree and
+	 * treemap widgets via their SelectionModel.
+	 **/
+	void selectResult( QTreeWidgetItem * item );
 
     protected:
 
@@ -127,10 +127,10 @@ namespace QDirStat
 	 **/
 	void locate( FileInfo * dir );
 
-        /**
-         * Return all direct file children matching the current search suffix.
-         **/
-        FileInfoSet matchingFiles( FileInfo * dir );
+	/**
+	 * Return all direct file children matching the current search suffix.
+	 **/
+	FileInfoSet matchingFiles( FileInfo * dir );
 
 
 	//
@@ -139,7 +139,7 @@ namespace QDirStat
 
 	Ui::LocateFilesWindow * _ui;
 	DirTree *		_tree;
-        QString                 _searchSuffix;
+	QString			_searchSuffix;
 	SelectionModel *	_selectionModel;
     };
 
@@ -182,8 +182,8 @@ namespace QDirStat
 	 * Constructor.
 	 **/
 	SuffixSearchResultItem( const QString & path,
-                                int		count,
-                                FileSize	totalSize );
+				int		count,
+				FileSize	totalSize );
 	//
 	// Getters
 	//

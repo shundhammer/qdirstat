@@ -161,10 +161,10 @@ namespace QDirStat
 	 **/
 	void removeCruft();
 
-        /**
-         * Remove empty suffix entries from the internal maps.
-         **/
-        void removeEmpty();
+	/**
+	 * Remove empty suffix entries from the internal maps.
+	 **/
+	void removeEmpty();
 
 	/**
 	 * Check if a suffix is cruft, i.e. a nonstandard suffix that is not
