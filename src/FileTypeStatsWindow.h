@@ -71,6 +71,11 @@ namespace QDirStat
 	void calc();
 
         /**
+	 * Refresh (reload) all data.
+	 **/
+	void refresh();
+
+	/**
          * Open a "Locate File Type" window for the currently selected file
          * type or re-populate it if it is still open.
          **/

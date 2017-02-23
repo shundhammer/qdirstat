@@ -47,15 +47,18 @@ FileTypeStatsWindow::FileTypeStatsWindow( DirTree *        tree,
     initWidgets();
     readWindowSettings( this, "FileTypeStatsWindow" );
 
-    connect( _ui->treeWidget,   SIGNAL( currentItemChanged( QTreeWidgetItem *,
-                                                            QTreeWidgetItem * ) ),
-             this,              SLOT  ( enableLocateButton( QTreeWidgetItem * ) ) );
+    connect( _ui->treeWidget,    SIGNAL( currentItemChanged( QTreeWidgetItem *,
+                                                             QTreeWidgetItem * ) ),
+             this,               SLOT  ( enableLocateButton( QTreeWidgetItem * ) ) );
 
-    connect( _ui->treeWidget,   SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),
-             this,              SLOT  ( locateCurrentFileType()                      ) );
+    connect( _ui->treeWidget,    SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),
+             this,               SLOT  ( locateCurrentFileType()                      ) );
 
-    connect( _ui->locateButton, SIGNAL( clicked() ),
-             this,              SLOT  ( locateCurrentFileType() ) );
+    connect( _ui->refreshButton, SIGNAL( clicked() ),
+	     this,		 SLOT  ( refresh() ) );
+
+    connect( _ui->locateButton,  SIGNAL( clicked() ),
+             this,               SLOT  ( locateCurrentFileType() ) );
 
     _stats = new FileTypeStats( tree, this );
     CHECK_NEW( _stats );
@@ -75,6 +78,7 @@ void FileTypeStatsWindow::clear()
 {
     _stats->clear();
     _ui->treeWidget->clear();
+    _ui->locateButton->setEnabled( false );
 }
 
 
@@ -94,6 +98,12 @@ void FileTypeStatsWindow::initWidgets()
     {
         _ui->treeWidget->header()->setSectionResizeMode( col, QHeaderView::ResizeToContents );
     }
+}
+
+
+void FileTypeStatsWindow::refresh()
+{
+    calc();
 }
 
 

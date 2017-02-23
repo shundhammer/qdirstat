@@ -38,6 +38,13 @@
       <number>5</number>
      </property>
      <item>
+      <widget class="QPushButton" name="refreshButton">
+       <property name="text">
+        <string>&amp;Refresh</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="locateButton">
        <property name="enabled">
         <bool>false</bool>

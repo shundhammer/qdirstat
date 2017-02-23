@@ -88,6 +88,11 @@ namespace QDirStat
 	void locate( const QString & suffix );
 
 	/**
+	 * Refresh (reload) all data.
+	 **/
+	void refresh();
+
+	/**
 	 * Reject the dialog contents, i.e. the user clicked the "Cancel" or
 	 * WM_CLOSE button. This not only closes the dialog, it also deletes
 	 * it.

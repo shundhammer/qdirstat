@@ -42,9 +42,12 @@ LocateFilesWindow::LocateFilesWindow( DirTree *        tree,
     initWidgets();
     readWindowSettings( this, "LocateFilesWindow" );
 
-    connect( _ui->treeWidget,   SIGNAL( currentItemChanged( QTreeWidgetItem *,
-                                                            QTreeWidgetItem * ) ),
-             this,              SLOT  ( selectResult      ( QTreeWidgetItem * ) ) );
+    connect( _ui->refreshButton, SIGNAL( clicked() ),
+	     this,		 SLOT  ( refresh() ) );
+
+    connect( _ui->treeWidget,    SIGNAL( currentItemChanged( QTreeWidgetItem *,
+                                                             QTreeWidgetItem * ) ),
+             this,               SLOT  ( selectResult      ( QTreeWidgetItem * ) ) );
 }
 
 
@@ -59,6 +62,12 @@ void LocateFilesWindow::clear()
 {
     _searchSuffix.clear();
     _ui->treeWidget->clear();
+}
+
+
+void LocateFilesWindow::refresh()
+{
+    locate( searchSuffix() );
 }
 
 
