@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-02-23
+Updated: 2017-02-24
 
 
 ## Overview
@@ -73,6 +73,22 @@ _Full-size images and descriptions on the [Screenshots Page]
 
 **Latest stable release: V1.2**
 
+- 2017-02-24 Improved logging: More secure and automatically log-rotating.
+
+  QDirStat now uses its own log directory `/tmp/qdirstat-$USER` (where `$USER`
+  is your user name; the numeric user ID is now only used if the user name
+  cannot be obtained). It no longer keeps one single log file growing, but
+  starts a new one each time it is started. 3 old logs are kept; any older ones
+  are deleted.
+
+  The permissions for that directory are set up in a pretty restrictive way
+  (0700, i.e. `rwx------`) when it is created. If it already exists, QDirStat
+  checks the owner and creates a new one with a random name it is owned by
+  anyone else than the user who started QDirStat.
+
+  For anybody regularly watching the log file this means you will now have to
+  use `tail -F qdirstat.log` rather than `tail -f` since the latter does not
+  realize when the file it watches is renamed and a new one is created instead.
 
 - 2017-02-23 Fixed [GitHub issue #24](https://github.com/shundhammer/qdirstat/issues/24):
 
@@ -484,10 +500,10 @@ old code base that had been long overdue.
   own with constantly having to change back and forth between source and build
   directories.
 
-- QDirStat now has its own log file. It now logs to /tmp/qdirstat-$UID.log,
-  which for most Linux home users (with only one user account on the machine)
-  is typically /tmp/qdirstat-1000.log . No more messages on stdout that either
-  clobber the shell you started the program from or that simply go missing.
+- QDirStat now has its own log file. It now logs to
+  `/tmp/qdirstat-$USER/qdirstat.log` where $USER is your Linux user name. No
+  more messages on stdout that either clobber the shell you started the program
+  from or that simply go missing.
 
 - No longer depending on dozens of KDE libs and a lot of KDE infrastructure; it
   now only requires Qt which is typically installed anyway on a Linux / BSD /

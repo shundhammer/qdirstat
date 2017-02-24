@@ -23,7 +23,7 @@
 #include <sys/types.h>	// pid_t, getpwuid()
 
 
-#define VERBOSE_ROTATE 1
+#define VERBOSE_ROTATE 0
 
 
 static LogSeverity toLogSeverity( QtMsgType msgType );
