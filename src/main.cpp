@@ -63,7 +63,7 @@ bool commandLineSwitch( const QString & longName,
 
 int main( int argc, char *argv[] )
 {
-    Logger logger( QString( "/tmp/qdirstat-%1.log" ).arg( getuid() ) );
+    Logger logger( "/tmp/qdirstat-$USER", "qdirstat.log" );
 
     // Set org/app name for QSettings
     QCoreApplication::setOrganizationName( "QDirStat" );

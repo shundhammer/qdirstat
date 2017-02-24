@@ -66,11 +66,28 @@ class Logger
 {
 public:
     /**
-     * Constructor. Create a logger that logs to the specified file.
+     * Constructor: Create a logger that logs to the specified file.
      * The first logger created is also implicitly used as the default
      * logger. This can be changed later with setDefaultLogger().
      */
-    Logger( const QString &filename );
+    Logger( const QString & filename );
+
+    /**
+     * Constructor: Create a logger that logs to 'filename' in directory
+     * 'logDir'. $USER and $UID are expanded in both to the login user name or
+     * the numeric user ID, respectively.
+     *
+     * If 'doRotate' is 'true, rotate any old logs in that directory
+     * before opening the log and keep a maximum of 'logRotateCount' old logs
+     * in that directory.
+     *
+     * The first logger created is also implicitly used as the default
+     * logger. This can be changed later with setDefaultLogger().
+     **/
+    Logger( const QString & logDir,
+            const QString & filename,
+            bool            doRotate = true,
+            int             logRotateCount = 3 );
 
     /**
      * Destructor.
@@ -82,10 +99,10 @@ public:
      * Internal logging function. In most cases, better use the logDebug(),
      * logWarning() etc. macros instead.
      */
-    QTextStream & log( const QString &srcFile,
-		       int	      srcLine,
-		       const QString &srcFunction,
-		       LogSeverity    severity );
+    QTextStream & log( const QString & srcFile,
+		       int	       srcLine,
+		       const QString & srcFunction,
+		       LogSeverity     severity );
 
     /**
      * Static version of the internal logging function.
@@ -93,17 +110,18 @@ public:
      *
      * If 'logger' is 0, the default logger is used.
      */
-    static QTextStream & log( Logger	    *logger,
-			      const QString &srcFile,
-			      int	     srcLine,
-			      const QString &srcFunction,
-			      LogSeverity    severity );
+    static QTextStream & log( Logger	    * logger,
+			      const QString & srcFile,
+			      int	      srcLine,
+			      const QString & srcFunction,
+			      LogSeverity     severity );
 
     /**
-     * Log a plain newline without any prefix (timestamp, source file name, line number).
+     * Log a plain newline without any prefix (timestamp, source file name,
+     * line number).
      */
     void newline();
-    static void newline( Logger *logger );
+    static void newline( Logger * logger );
 
     /**
      * Return a timestamp string in the format used in the log file:
@@ -114,12 +132,14 @@ public:
     /**
      * Prefix each line of a multi-line text with 'prefix'.
      */
-    static QString prefixLines( const QString &prefix, const QString &multiLineText );
+    static QString prefixLines( const QString & prefix,
+                                const QString & multiLineText );
 
     /**
      * Indent each line of a multi-line text with 'indentWith' blanks.
      */
-    static QString indentLines( int indentWidth, const QString &multiLineText );
+    static QString indentLines( int indentWidth,
+                                const QString & multiLineText );
 
     /**
      * Set this as the default logger. That one will be used whenever log() is
@@ -179,6 +199,66 @@ public:
      * If 'logger' is 0, the default logger is used.
      */
     static void setLogLevel( Logger *logger, LogSeverity newLevel );
+
+    /**
+     * Return the user name (the login name) of the user owning this process.
+     * If that information cannot be obtained, this returns the UID as string.
+     **/
+    static QString userName();
+
+    /**
+     * Rotate the logs in directory 'logDir' based on future log file
+     * 'filename' (without path). Keep at most 'logRotateCount' old logs and
+     * delete all other old logs.
+     **/
+    static void logRotate( const QString & logDir,
+                           const QString & filename,
+                           int             logRotateCount );
+
+protected:
+
+    /**
+     * Common initialization for all constructors.
+     **/
+    void init();
+
+    /**
+     * Create the null log stream to suppress messages below the current log
+     * level.
+     **/
+    void createNullStream();
+
+    /**
+     * Actually open the log file.
+     **/
+    void openLogFile( const QString & filename );
+
+    /**
+     * Create log directory 'logDir' and return the name of the directory
+     * actually used. That might be different from the requested name if the
+     * directory already exists and is not owned by the current user.
+     **/
+    QString createLogDir( const QString & logDir );
+
+    /**
+     * Expand variables in 'unexpanded' and return the expanded string:
+     *
+     *   $USER  the login user name of the current user
+     *   $UID   the numeric user ID of the current user
+     **/
+    static QString expandVariables( const QString & unexpanded );
+
+    /**
+     * Return the name for an old log file based on 'filename' for old log
+     * no. 'no'.
+     **/
+    static QString oldName( const QString & filename, int no );
+
+    /**
+     * Return the glob pattern for old log files based on 'filename'.
+     * This pattern can be used for QDir matches.
+     **/
+    static QString oldNamePattern( const QString & filename );
 
 
 private:
