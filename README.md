@@ -83,12 +83,23 @@ _Full-size images and descriptions on the [Screenshots Page]
 
   The permissions for that directory are set up in a pretty restrictive way
   (0700, i.e. `rwx------`) when it is created. If it already exists, QDirStat
-  checks the owner and creates a new one with a random name it is owned by
+  checks the owner and creates a new one with a random name if it is owned by
   anyone else than the user who started QDirStat.
 
-  For anybody regularly watching the log file this means you will now have to
+      [sh @ balrog] ~ 68 % ls -ld /tmp/qdirstat-sh
+      drwx------ 2 sh sh 4096 Feb 24 18:29 /tmp/qdirstat-sh
+      [sh @ balrog] ~ 69 % ls -l /tmp/qdirstat-sh
+      total 16
+      -rw-rw-r-- 1 sh sh 2067 Feb 24 18:29 qdirstat-00.old
+      -rw-rw-r-- 1 sh sh 2067 Feb 24 18:07 qdirstat-01.old
+      -rw-rw-r-- 1 sh sh 2067 Feb 24 18:07 qdirstat-02.old
+      -rw-rw-r-- 1 sh sh 2067 Feb 24 18:29 qdirstat.log
+
+
+  For anybody regularly watching the log file this means they will now have to
   use `tail -F qdirstat.log` rather than `tail -f` since the latter does not
-  realize when the file it watches is renamed and a new one is created instead.
+  realize when the file it watches is renamed and a new one is created under
+  the same name.
 
 - 2017-02-23 Fixed [GitHub issue #24](https://github.com/shundhammer/qdirstat/issues/24):
 
