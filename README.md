@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-02-24
+Updated: 2017-02-27
 
 
 ## Overview
@@ -72,6 +72,13 @@ _Full-size images and descriptions on the [Screenshots Page]
 ## Current Development Status
 
 **Latest stable release: V1.2**
+
+- 2017-02-27 Implemented [GitHub issue #30](https://github.com/shundhammer/qdirstat/issues/30):
+
+  When hovering over a treemap tile, display the full path and the total size
+  of that element in the status bar. When the hover ends (when the mouse cursor
+  leaves the treemap tile), display the current selection again in the status
+  bar.
 
 - 2017-02-24 Improved logging: More secure and automatically log-rotating.
 
