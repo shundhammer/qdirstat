@@ -37,14 +37,14 @@ QString SysCallFailedException::errMsg( const QString & sysCall,
 
     if ( errno != 0 )
     {
-	msg = QObject::tr( "%1( %2 ) failed: %3" )
+	msg = QObject::tr( "%1( \"%2\" ) failed: %3" )
 	    .arg( sysCall )
 	    .arg( resourceName )
 	    .arg( strerror( errno ) );
     }
     else
     {
-	msg = QObject::tr( "%1( %2 ) failed" )
+	msg = QObject::tr( "%1( \"%2\" ) failed" )
 	    .arg( sysCall )
 	    .arg( resourceName );
     }
