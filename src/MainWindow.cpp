@@ -127,6 +127,12 @@ MainWindow::MainWindow():
     connect( _cleanupCollection, SIGNAL( cleanupFinished( int ) ),
 	     this,		 SLOT  ( cleanupFinished( int ) ) );
 
+    connect( _ui->treemapView,   SIGNAL( hoverEnter ( FileInfo * ) ),
+             this,               SLOT  ( showCurrent( FileInfo * ) ) );
+
+    connect( _ui->treemapView,   SIGNAL( hoverLeave ( FileInfo * ) ),
+             this,               SLOT  ( showSummary()             ) );
+
 
     // Debug connections
 

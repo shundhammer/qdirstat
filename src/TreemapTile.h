@@ -18,6 +18,7 @@
 
 
 class QGraphicsSceneMouseEvent;
+class QGraphicsSceneHoverEvent;
 
 
 namespace QDirStat
@@ -312,6 +313,20 @@ namespace QDirStat
 	 * Reimplemented from QGraphicsItem.
 	 **/
 	virtual void contextMenuEvent( QGraphicsSceneContextMenuEvent * event ) Q_DECL_OVERRIDE;
+
+        /**
+         * Hover enter event.
+	 *
+	 * Reimplemented from QGraphicsItem.
+         **/
+        virtual void hoverEnterEvent( QGraphicsSceneHoverEvent * event ) Q_DECL_OVERRIDE;
+
+        /**
+         * Hover enter event.
+	 *
+	 * Reimplemented from QGraphicsItem.
+         **/
+        virtual void hoverLeaveEvent( QGraphicsSceneHoverEvent * event ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Render a cushion as described in "cushioned treemaps" by Jarke

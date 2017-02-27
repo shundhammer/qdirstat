@@ -676,6 +676,18 @@ QColor TreemapView::tileColor( FileInfo * file )
 }
 
 
+void TreemapView::sendHoverEnter( FileInfo * node )
+{
+    emit hoverEnter( node );
+}
+
+
+void TreemapView::sendHoverLeave( FileInfo * node )
+{
+    emit hoverLeave( node );
+}
+
+
 
 
 

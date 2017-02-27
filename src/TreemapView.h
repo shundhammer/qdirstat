@@ -230,6 +230,16 @@ namespace QDirStat
 	 **/
 	void sendSelection();
 
+        /**
+         * Send a hoverEnter() signal for 'node'.
+         **/
+        void sendHoverEnter( FileInfo * node );
+
+        /**
+         * Send a hoverLeave() signal for 'node'.
+         **/
+        void sendHoverLeave( FileInfo * node );
+
 	/**
 	 * Read parameters from the settings file.
 	 **/
@@ -426,6 +436,16 @@ namespace QDirStat
 	 * coordinates.
 	 **/
 	void contextMenu( TreemapTile * tile, const QPoint & pos );
+
+        /**
+         * Emitted when the mouse cursor enters a hover over 'item'.
+         **/
+        void hoverEnter( FileInfo * item );
+
+        /**
+         * Emitted when the mouse cursor leaves the hover over 'item'.
+         **/
+        void hoverLeave( FileInfo * item );
 
 
     protected slots:
