@@ -173,7 +173,14 @@ void DirTree::refresh( DirInfo * subtree )
 
     if ( ! subtree || ! subtree->parent() )	// Refresh all (from first toplevel)
     {
-	startReading( QDir::cleanPath( firstToplevel()->url() ) );
+        try
+        {
+            startReading( QDir::cleanPath( firstToplevel()->url() ) );
+        }
+        catch ( const SysCallFailedException & ex )
+        {
+            CAUGHT( ex );
+        }
     }
     else	// Refresh subtree
     {
