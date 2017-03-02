@@ -94,8 +94,8 @@ own fork, preferably in their own branch of their own fork.
 
       git remote -v
 
-      mine      git@github.com:shundhammer/qdirstat.git (fetch)
-      mine      git@github.com:shundhammer/qdirstat.git (push)
+      mine      git@github.com:kilroy/qdirstat.git (fetch)
+      mine      git@github.com:kilroy/qdirstat.git (push)
       upstream  git@github.com:shundhammer/qdirstat.git (fetch)
       upstream  git@github.com:shundhammer/qdirstat.git (push)
 
