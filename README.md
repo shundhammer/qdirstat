@@ -777,6 +777,7 @@ QDirStat packages for:
 - openSUSE Leap 42.2
 - openSUSE Leap 42.1
 - openSUSE 13.2
+- SUSE Linux Enterprise (SLE) 12 SP2
 - SUSE Linux Enterprise (SLE) 12 SP1
 - SUSE Linux Enterprise (SLE) 12
 
