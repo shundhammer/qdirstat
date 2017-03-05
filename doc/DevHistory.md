@@ -11,6 +11,90 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 ## QDirStat History
 
 
+- 2017-01-03 **New stable release: V1.2**
+
+  _Upgrading to this release is highly recommended for Btrfs users:_
+
+  If you used QDirStat to scan a Btrfs partition, any subvolumes of that
+  partition were not scanned (see
+  [GitHub issue #39](https://github.com/shundhammer/qdirstat/issues/39)).
+
+  Btrfs subvolumes were treated just like ordinary mount points (which, to all
+  intents and purposes, they are). So you might have wondered why the _df_
+  command shows your 40 GB root filesystem as 97% full, yet QDirStat shows only
+  about 7 GB. The rest might be hidden in subvolumes.
+
+  QDirStat stops reading at mount points - which only makes sense because
+  normally you want to know what eats up the disk space on that one partition
+  that is filling up, not on any others like /home that are mounted
+  there. Unfortunately, a Btrfs subvolume is also just another mount point, and
+  QDirStat would stop reading there, too - at /var/log, at /var/spool, at
+  /var/lib/libvirt etc.; a typical Btrfs root filesystem has about a dozen
+  subvolumes, and all files in them were disregarded by QDirStat.
+
+  This is now fixed: Despite Btrfs doing its best to make this difficult (using
+  one single privileged system call for all its functionality, including simple
+  info calls), QDirStat now detects if a mount point is a Btrfs subvolume and
+  continues reading if it is. QDirStat uses /proc/mounts (or, if this is not
+  available, /etc/mtab) to find this out.
+
+  This is fixed in the _qdirstat-cache-writer_ script, too.
+
+
+- 2016-12-11 Bernhard Walle contributed some patches for MacOS X support.
+  Thanks, Bernhard!
+
+- 2016-12-09 Fixed Perl (_qdirstat-cache-writer_) part of
+  [GitHub issue #39](https://github.com/shundhammer/qdirstat/issues/39):
+  QDirStat doesn't scan Btrfs subvolumes
+
+  The _qdirstat-cache-writer_ script now also checks the device names of a
+  mount point and its parent directory, not only their major/minor device
+  numbers; so now it will not stop at Btrfs subvolumes while scanning.
+
+  That script uses a more simplistic approach than QDirStat itself: It invokes
+  the _df_ command with that path and parses its output. If the path contains
+  very weird special characters, this may fail, in which case that directory
+  (which at that point is already known to have a different device major/minor
+  number than its parent) is considered a filesystem boundary, and that branch
+  is not scanned.
+
+
+- 2016-12-08 Fixed C++ (QDirStat binary) part of
+  [GitHub issue #39](https://github.com/shundhammer/qdirstat/issues/39):
+  QDirStat doesn't scan Btrfs subvolumes
+
+  This was a bit of a challenge since the relevant Btrfs commands to obtain any
+  useful information about subvolumes all require root privileges, and I really
+  wouldn't want to scare users off by prompting for a _sudo_ password. QDirStat
+  now fetches the information from /proc/mounts (or /etc/mtab if /proc/mounts
+  is unavailable) and does some heuristics (which are not completely fool
+  proof) to check if a potential mount point is still on the same device. That
+  means that it will no longer treat a Btrfs subvolume as an ordinary mount
+  point where it stops reading by default, but it just continues. On the other
+  hand, another Btrfs mounted into the current file system is of course treated
+  as a normal mount point. See also the corresponding
+  [GitHub issue](https://github.com/shundhammer/qdirstat/issues/39)
+  for details.
+
+  The Perl _qdirstat-cache-writer_ still has the old behaviour, i.e. it still
+  stops at a subvolume mount point. This will be addressed next.
+
+
+- 2016-12-07 Fixed [GitHub issue #40](https://github.com/shundhammer/qdirstat/issues/40):
+  Crash without useful error message when no display available
+
+  When ssh'ing without -X to a remote machine and starting QDirStat there, it
+  would just dump core and not issue any meaningful message. The fatal error
+  message was only in the log file:
+
+  `<ERROR>   :0 ():  QXcbConnection: Could not connect to display`
+
+  Now this message is also repeated on stderr, and in this particular case
+  ("Could not connect to display"), it does not dump core any more, but just
+  exits with error code 1.
+
+
 - 2016-12-06 **Warning to Btrfs users** (Fixed as of 2012-12-09)
 
   If you use QDirStat to scan a Btrfs partition,
