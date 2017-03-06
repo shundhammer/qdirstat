@@ -408,9 +408,9 @@ QString Logger::createLogDir( const QString & rawLogDir )
     if ( created )
     {
 	QFile dir( logDir );
-	dir.setPermissions( QFileDevice::ReadOwner  |
-			    QFileDevice::WriteOwner |
-			    QFileDevice::ExeOwner    );
+	dir.setPermissions( QFile::ReadOwner  |
+			    QFile::WriteOwner |
+			    QFile::ExeOwner    );
     }
 
     return logDir;
