@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-03-05
+Updated: 2017-03-06
 
 
 ## Overview
@@ -272,7 +272,7 @@ This is just a rough summary. For more details, see [DevHistory.md]
 ## WinDirStat and QDirStat
 
 I keep reading articles and user forum comments about QDirStat being a "nice
-Linux port of WinDirStat". Well, nothing could be farther from the truth:
+Linux port of WinDirStat". Well, nothing could be further from the truth:
 **WinDirStat is a Windows port of KDirStat**, the predecessor of QDirStat.
 
 So it's the other way round: **The Linux version was there first**, and
