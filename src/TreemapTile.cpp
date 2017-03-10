@@ -93,10 +93,17 @@ void TreemapTile::init()
     {
         if ( _parentView->useDirGradient() )
         {
-            QLinearGradient gradient( rect().topLeft(), rect().bottomRight() );
-            gradient.setColorAt( 0.0, _parentView->dirGradientStart() );
-            gradient.setColorAt( 1.0, _parentView->dirGradientEnd()   );
-            setBrush( gradient );
+            if ( qMax( rect().width(), rect().height() ) < _parentView->minTileSize() )
+            {
+                setBrush( Qt::NoBrush );
+            }
+            else
+            {
+                QLinearGradient gradient( rect().topLeft(), rect().bottomRight() );
+                gradient.setColorAt( 0.0, _parentView->dirGradientStart() );
+                gradient.setColorAt( 1.0, _parentView->dirGradientEnd()   );
+                setBrush( gradient );
+            }
         }
     }
 
