@@ -334,6 +334,12 @@ namespace QDirStat
 	 **/
 	bool doCushionShading() const { return _doCushionShading; }
 
+        /**
+         * Returns 'true' if directories should be rendered with a gradient,
+         * 'false' if not.
+         **/
+        bool useDirGradient() const { return _useDirGradient; }
+
 	/**
 	 * Returns 'true' if cushion shaded treemap tiles are to be separated
 	 * by a grid, 'false' if not.
@@ -378,6 +384,19 @@ namespace QDirStat
 	 * when cushion shading is not used.
 	 **/
 	const QColor & dirFillColor() const { return _dirFillColor; }
+
+        /**
+         * Returns the start color for directory (or "dotentry") treemap tiles
+         * if a directory gradient should be used.
+         **/
+        const QColor & dirGradientStart() const { return _dirGradientStart; }
+
+        /**
+         * Returns the end color for directory (or "dotentry") treemap tiles
+         * if a directory gradient should be used.
+         **/
+        const QColor & dirGradientEnd() const { return _dirGradientEnd; }
+
 
 	/**
 	 * Returns the intensity of ambient light for cushion shading
@@ -486,6 +505,7 @@ namespace QDirStat
 	bool   _ensureContrast;
 	bool   _useFixedColor;
 	int    _minTileSize;
+        bool   _useDirGradient;
 	int    _pendingRebuildCount;
 
 	QColor _currentItemColor;
@@ -494,6 +514,8 @@ namespace QDirStat
 	QColor _outlineColor;
 	QColor _fileFillColor;
 	QColor _dirFillColor;
+        QColor _dirGradientStart;
+        QColor _dirGradientEnd;
 	QColor _fixedColor;
 
 	int    _ambientLight;

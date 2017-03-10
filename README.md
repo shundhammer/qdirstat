@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-03-06
+Updated: 2017-03-10
 
 
 ## Overview
@@ -68,10 +68,59 @@ _Full-size images and descriptions on the [Screenshots Page]
 -----------------------
 
 
-
 ## Latest News
 
 **Latest stable release: V1.3**
+
+- 2017-03-10 Filling the gaps in the treemap
+
+  (GitHub issue #58)[https://github.com/shundhammer/qdirstat/issues/58] shows
+  that users feel under-informed when there are grey areas in the treemap. The
+  explanation is simple: Treemap tiles are only displayed when they have at
+  least a certain minimum size (by default 3 pixels). Otherwise the treemap
+  just gets cluttered with tiny things that don't show any information
+  whatsoever.
+
+  The remaining space is taken by its parent directory's tile. They were
+  rendered just flat grey which makes their boundaries against each other
+  invisible, thus giving the impression that there is nothing.
+
+  So I experimented with visible borders, but that completely destroyed the
+  visual impression of the treemap because those borders were everywhere. Fill
+  patterns also didn't help: They were just ugly, and there was no way to tell
+  where one directory tile ends and where the next one starts.
+
+  Then I tried gradients. The first impression was good, but then I found that
+  it was hard to tell which item was a (now over-emphasized) directory and
+  which one a large file. Locating large files deep inside the directory
+  hierarchy is the major strong point of the treemap visualization, so I
+  wouldn't want to give that up. After playing a bit with the gradient
+  parameters (toning it down and giving it just a little blueish tint) I ended
+  up with this:
+
+  [!Using Gradients](https://cloud.githubusercontent.com/assets/11538225/23812600/7e769e48-05db-11e7-820c-2a6f70916403.png)
+
+  I think this is a good compromise.
+
+  Of course this is configurable: Edit `~/config/QDirStat/QDirStat.conf`:
+
+      [Treemaps]
+      ...
+      DirGradientEnd=#707080
+      DirGradientStart=#606070
+      ...
+      UseDirGradient=true
+
+  Beware that QSettings sorts the entries alphabetically, so the start is after
+  the end (how philosophical...).
+
+  If there are graphics designers out there who want to tune this even more,
+  please send me the results (preferably with a screenshot). But please
+  remember that this effect should be kind of subtle, and the user should
+  clearly see the difference between a large file and a directory full of tiny
+  things that just don't get rendered because of the minimum tile size.
+
+------------------------
 
 - 2017-03-05 **New stable release: V1.3**
 

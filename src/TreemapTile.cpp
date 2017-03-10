@@ -88,6 +88,18 @@ void TreemapTile::init()
 
     setBrush( QColor( 0x60, 0x60, 0x60 ) );
     setPen( Qt::NoPen );
+
+    if ( _orig->isDir() || _orig->isDotEntry() )
+    {
+        if ( _parentView->useDirGradient() )
+        {
+            QLinearGradient gradient( rect().topLeft(), rect().bottomRight() );
+            gradient.setColorAt( 0.0, _parentView->dirGradientStart() );
+            gradient.setColorAt( 1.0, _parentView->dirGradientEnd()   );
+            setBrush( gradient );
+        }
+    }
+
     setFlags( ItemIsSelectable );
     _highlighter = 0;
     setAcceptHoverEvents(true);
@@ -409,7 +421,8 @@ void TreemapTile::paint( QPainter			* painter,
 
 	if ( _orig->isDir() || _orig->isDotEntry() )
 	{
-	    setBrush( _parentView->dirFillColor() );
+            if ( ! _parentView->useDirGradient() )
+                setBrush( _parentView->dirFillColor() );
 	}
 	else
 	{
