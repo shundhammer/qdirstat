@@ -74,7 +74,7 @@ _Full-size images and descriptions on the [Screenshots Page]
 
 - 2017-03-10 Filling the gaps in the treemap
 
-  (GitHub issue #58)[https://github.com/shundhammer/qdirstat/issues/58] shows
+  [GitHub issue #58](https://github.com/shundhammer/qdirstat/issues/58) shows
   that users feel under-informed when there are grey areas in the treemap. The
   explanation is simple: Treemap tiles are only displayed when they have at
   least a certain minimum size (by default 3 pixels). Otherwise the treemap
