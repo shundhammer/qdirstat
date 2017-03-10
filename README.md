@@ -98,11 +98,11 @@ _Full-size images and descriptions on the [Screenshots Page]
   parameters (toning it down and giving it just a little blueish tint) I ended
   up with this:
 
-  [!Using Gradients](https://cloud.githubusercontent.com/assets/11538225/23812600/7e769e48-05db-11e7-820c-2a6f70916403.png)
+  ![Using Gradients](https://cloud.githubusercontent.com/assets/11538225/23812600/7e769e48-05db-11e7-820c-2a6f70916403.png)
 
   I think this is a good compromise.
 
-  Of course this is configurable: Edit `~/config/QDirStat/QDirStat.conf`:
+  Of course this is configurable: Edit `~/.config/QDirStat/QDirStat.conf`:
 
       [Treemaps]
       ...
