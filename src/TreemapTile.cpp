@@ -409,11 +409,11 @@ void TreemapTile::paint( QPainter			* painter,
 
 	if ( _orig->isDir() || _orig->isDotEntry() )
 	{
-	    painter->setBrush( _parentView->dirFillColor() );
+	    setBrush( _parentView->dirFillColor() );
 	}
 	else
 	{
-	    painter->setBrush( _parentView->tileColor( _orig ) );
+	    setBrush( _parentView->tileColor( _orig ) );
 	}
 
 	QGraphicsRectItem::paint( painter, option, widget );
