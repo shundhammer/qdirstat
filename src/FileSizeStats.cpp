@@ -1,5 +1,5 @@
 /*
- *   File name: StatsCollector.cpp
+ *   File name: FileSizeStats.cpp
  *   Summary:	Statistics classes for QDirStat
  *   License:	GPL V2 - See file LICENSE for details.
  *
@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-#include "StatsCollector.h"
+#include "FileSizeStats.h"
 #include "FileInfoIterator.h"
 #include "DirTree.h"
 
@@ -18,13 +18,13 @@
 using namespace QDirStat;
 
 
-StatsCollector::StatsCollector():
+FileSizeStats::FileSizeStats():
     _sorted( false )
 {
 
 }
 
-void StatsCollector::clear()
+void FileSizeStats::clear()
 {
     // Just _data.clear() does not free any memory; we need to assign an empty
     // list to _data.
@@ -33,7 +33,7 @@ void StatsCollector::clear()
 }
 
 
-void StatsCollector::collect( DirTree * tree )
+void FileSizeStats::collect( DirTree * tree )
 {
     Q_CHECK_PTR( tree );
 
@@ -41,7 +41,7 @@ void StatsCollector::collect( DirTree * tree )
 }
 
 
-void StatsCollector::collect( FileInfo * subtree )
+void FileSizeStats::collect( FileInfo * subtree )
 {
     Q_CHECK_PTR( subtree );
 
@@ -72,7 +72,7 @@ void StatsCollector::collect( FileInfo * subtree )
 }
 
 
-void StatsCollector::collect( DirTree * tree, const QString & suffix )
+void FileSizeStats::collect( DirTree * tree, const QString & suffix )
 {
     Q_CHECK_PTR( tree );
 
@@ -86,7 +86,7 @@ void StatsCollector::collect( DirTree * tree, const QString & suffix )
 }
 
 
-void StatsCollector::collect( FileInfo * subtree, const QString & suffix )
+void FileSizeStats::collect( FileInfo * subtree, const QString & suffix )
 {
     Q_CHECK_PTR( subtree );
 
@@ -118,7 +118,7 @@ void StatsCollector::collect( FileInfo * subtree, const QString & suffix )
 }
 
 
-void StatsCollector::sort()
+void FileSizeStats::sort()
 {
     if ( _data.size() > VERBOSE_SORT_THRESHOLD )
         logDebug() << "Sorting " << _data.size() << " elements" << endl;
@@ -131,7 +131,7 @@ void StatsCollector::sort()
 }
 
 
-FileSize StatsCollector::median()
+FileSize FileSizeStats::median()
 {
     if ( _data.isEmpty() )
         return 0;
@@ -168,7 +168,7 @@ FileSize StatsCollector::median()
 }
 
 
-FileSize StatsCollector::min()
+FileSize FileSizeStats::min()
 {
     if ( _data.isEmpty() )
         return 0;
@@ -181,7 +181,7 @@ FileSize StatsCollector::min()
 
 
 
-FileSize StatsCollector::max()
+FileSize FileSizeStats::max()
 {
     if ( _data.isEmpty() )
         return 0;
@@ -193,7 +193,7 @@ FileSize StatsCollector::max()
 }
 
 
-FileSize StatsCollector::quantile( int quantileOrder, int quantileNumber )
+FileSize FileSizeStats::quantile( int quantileOrder, int quantileNumber )
 {
     if ( ! _sorted )
         sort();

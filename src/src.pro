@@ -48,11 +48,12 @@ SOURCES	  = main.cpp			\
 	    FileInfoIterator.cpp	\
 	    FileInfoSet.cpp		\
 	    FileInfoSorter.cpp		\
+	    FileSizeStats.cpp		\
 	    FileTypeStats.cpp		\
 	    FileTypeStatsWindow.cpp	\
 	    HeaderTweaker.cpp		\
 	    ListEditor.cpp		\
-            LocateFilesWindow.cpp       \
+	    LocateFilesWindow.cpp	\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
 	    MimeCategorizer.cpp		\
@@ -66,7 +67,6 @@ SOURCES	  = main.cpp			\
 	    SelectionModel.cpp		\
 	    Settings.cpp		\
 	    SettingsHelpers.cpp		\
-            StatsCollector.cpp          \
 	    StdCleanup.cpp		\
 	    Trash.cpp			\
 	    TreemapTile.cpp		\
@@ -95,12 +95,13 @@ HEADERS	  =				\
 	    FileInfoIterator.h		\
 	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
+	    FileSizeStats.h		\
 	    FileTypeStats.h		\
 	    FileTypeStatsWindow.h	\
 	    HeaderTweaker.h		\
 	    ListEditor.h		\
 	    ListMover.h			\
-            LocateFilesWindow.h         \
+	    LocateFilesWindow.h		\
 	    Logger.h			\
 	    MainWindow.h		\
 	    MimeCategorizer.h		\
@@ -115,7 +116,6 @@ HEADERS	  =				\
 	    Settings.h			\
 	    SettingsHelpers.h		\
 	    SignalBlocker.h		\
-            StatsCollector.h            \
 	    StdCleanup.h		\
 	    Trash.h			\
 	    TreemapTile.h		\
@@ -130,8 +130,8 @@ FORMS	  = main-window.ui		   \
 	    cleanup-config-page.ui	   \
 	    mime-category-config-page.ui   \
 	    exclude-rules-config-page.ui   \
-            file-type-stats-window.ui      \
-            locate-files-window.ui
+	    file-type-stats-window.ui	   \
+	    locate-files-window.ui
 
 #	    general-config-page.ui
 
