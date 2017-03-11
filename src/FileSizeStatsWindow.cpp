@@ -88,7 +88,6 @@ void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
 
     calc();
 
-    FileSize average = _subtree->totalSize() / _subtree->totalItems();
 
     QString text;
     text = tr( "File size statistics for\n%1\n\n" ).arg( subtree->debugUrl() );
@@ -96,7 +95,12 @@ void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
     text += tr( "Min:     %1\n" ).arg( formatSize( _stats->min() ) );
     text += tr( "Max:     %1\n" ).arg( formatSize( _stats->max() ) );
     text += tr( "Files:   %1\n" ).arg( _stats->data().size() );
-    text += tr( "Average: %1\n" ).arg( formatSize( average ) );
+
+    if ( _subtree->totalItems() > 0 )
+    {
+        FileSize average = _subtree->totalSize() / _subtree->totalItems();
+        text += tr( "Average: %1\n" ).arg( formatSize( average ) );
+    }
 
     _ui->content->setText( text );
 }
