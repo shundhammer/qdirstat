@@ -88,21 +88,43 @@ void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
 
     calc();
 
+    QStringList text;
 
-    QString text;
-    text = tr( "File size statistics for\n%1\n\n" ).arg( subtree->debugUrl() );
-    text += tr( "Median:  %1\n" ).arg( formatSize( _stats->median() ) );
-    text += tr( "Min:     %1\n" ).arg( formatSize( _stats->min() ) );
-    text += tr( "Max:     %1\n" ).arg( formatSize( _stats->max() ) );
-    text += tr( "Files:   %1\n" ).arg( _stats->data().size() );
+    text << tr( "File size statistics for %1" ).arg( subtree->debugUrl() );
+    text << "";
+    text << tr( "Median:  %1" ).arg( formatSize( _stats->median() ) );
+    text << tr( "Average: %1\n" ).arg( formatSize( _stats->average() ) );
+    text << tr( "Min:     %1" ).arg( formatSize( _stats->min() ) );
+    text << tr( "Max:     %1" ).arg( formatSize( _stats->max() ) );
+    text << "";
+    text << tr( "Files:   %1" ).arg( _stats->data().size() );
+    text << "";
 
-    if ( _subtree->totalItems() > 0 )
+    text << quantile( 4,   "quartile"   );
+    text << quantile( 10,  "centile"    );
+    text << quantile( 100, "percentile" );
+
+    _ui->content->setText( text.join( "\n" ) );
+}
+
+
+QStringList FileSizeStatsWindow::quantile( int order, const QString & name )
+{
+    QStringList text;
+
+    if ( _stats->data().size() < order )
+        return text;
+
+    for ( int i=1; i < order; ++i )
     {
-        FileSize average = _subtree->totalSize() / _subtree->totalItems();
-        text += tr( "Average: %1\n" ).arg( formatSize( average ) );
+        text << QString( "%1. %2: %3" ).arg( i )
+            .arg( name )
+            .arg( formatSize( _stats->quantile( order, i ) ) );
     }
 
-    _ui->content->setText( text );
+    text << "";
+
+    return text;
 }
 
 

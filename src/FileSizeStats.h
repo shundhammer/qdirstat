@@ -97,6 +97,15 @@ namespace QDirStat
 	 **/
 	FileSize median();
 
+        /**
+         * Calculate the arithmetic average based on the collected data.
+         *
+         * Notice that this is probably the most expensive way of doing this:
+         * The FileInfo class already collected sums and counts during
+         * directory reading that might also be used.
+         **/
+        FileSize average();
+
 	/**
 	 * Find the minimum value.
 	 **/
@@ -108,14 +117,14 @@ namespace QDirStat
 	FileSize max();
 
 	/**
-	 * Calculate a quantile: Find the quantile no. 'quantileNumber' of
-	 * order 'quantileOrder'.
+	 * Calculate a quantile: Find the quantile no. 'number' of order
+	 * 'order'.
 	 *
 	 * The median is quantile( 2, 1 ), the minimum is quantile( 2, 0 ), the
 	 * maximum is quantile( 2, 2 ). The first quartile is quantile( 4, 1 ),
 	 * the first percentile is quantile( 100, 1 ).
 	 **/
-	FileSize quantile( int quantileOrder, int quantileNumber );
+	FileSize quantile( int order, int number );
 
     protected:
 

@@ -90,6 +90,11 @@ namespace QDirStat
 	 **/
 	void initWidgets();
 
+        /**
+         * Return text for a quantile of 'order' named 'name'.
+         **/
+        QStringList quantile( int order, const QString & name );
+
 
 	//
 	// Data members

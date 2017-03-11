@@ -12,8 +12,9 @@
 #include "FileSizeStats.h"
 #include "FileInfoIterator.h"
 #include "DirTree.h"
+#include "Exception.h"
 
-#define VERBOSE_SORT_THRESHOLD  10000
+#define VERBOSE_SORT_THRESHOLD  50000
 
 using namespace QDirStat;
 
@@ -168,6 +169,21 @@ FileSize FileSizeStats::median()
 }
 
 
+FileSize FileSizeStats::average()
+{
+    if ( _data.isEmpty() )
+        return 0;
+
+    int count    = _data.size();
+    FileSize sum = 0;
+
+    for ( int i=0; i < count; ++i )
+        sum += _data.at(i);
+
+    return sum / count;
+}
+
+
 FileSize FileSizeStats::min()
 {
     if ( _data.isEmpty() )
@@ -193,18 +209,54 @@ FileSize FileSizeStats::max()
 }
 
 
-FileSize FileSizeStats::quantile( int quantileOrder, int quantileNumber )
+FileSize FileSizeStats::quantile( int order, int number )
 {
+    if ( _data.isEmpty() )
+        return 0;
+
+    if ( _data.size() < order )
+    {
+        logError() << "Not enough data for " << order << "-quantile" << endl;
+        return 0;
+    }
+
+    if ( number > order )
+    {
+        QString msg = QString( "Cannot determine quantile #%1" ).arg( number );
+        msg += QString( " for %1-quantile" ).arg( order );
+        THROW( Exception( msg ) );
+    }
+
+    if ( order < 2 )
+    {
+        QString msg = QString( "Invalid quantile order %1" ).arg( order );
+        THROW( Exception( msg ) );
+    }
+
     if ( ! _sorted )
         sort();
 
-    FileSize result = 0;
+    if ( number == 0 )
+        return _data.first();
 
-    // TO DO
-    // TO DO
-    // TO DO
-    Q_UNUSED( quantileOrder  );
-    Q_UNUSED( quantileNumber );
+    if ( number == order )
+        return _data.last();
+
+    int pos = ( _data.size() * number ) / order;
+
+    // Same as in median(): The integer division already cut off any non-zero
+    // decimal place, so don't subtract 1 to compensate for starting _data with
+    // index 0.
+
+    FileSize result = _data.at( pos );
+
+    if ( ( _data.size() * number ) % order == 0 )
+    {
+        // Same as in median: We hit between two elements, so use the average
+        // between them.
+
+        result = ( result + _data.at( pos - 1 ) ) / 2;
+    }
 
     return result;
 }
