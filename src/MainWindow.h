@@ -16,6 +16,7 @@
 #include <QPointer>
 
 #include "ui_main-window.h"
+#include "FileSizeStatsWindow.h"
 #include "FileTypeStatsWindow.h"
 
 class QCloseEvent;
@@ -34,6 +35,7 @@ namespace QDirStat
 }
 
 using QDirStat::FileInfo;
+using QDirStat::FileSizeStatsWindow;
 using QDirStat::FileTypeStatsWindow;
 
 
@@ -231,6 +233,11 @@ protected slots:
     void toggleFileTypeStats();
 
     /**
+     * Show file type statistics for the currently selected directory.
+     **/
+    void showFileSizeStats();
+
+    /**
      * Switch verbose logging for selection changes on or off.
      *
      * This is normally done by the invisible checkable action
@@ -293,6 +300,7 @@ private:
     QDirStat::MimeCategorizer	* _mimeCategorizer;
     QDirStat::ConfigDialog	* _configDialog;
     QPointer<FileTypeStatsWindow> _fileTypeStatsWindow;
+    QPointer<FileSizeStatsWindow> _fileSizeStatsWindow;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
     bool			  _verboseSelection;

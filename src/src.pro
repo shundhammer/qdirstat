@@ -49,6 +49,7 @@ SOURCES	  = main.cpp			\
 	    FileInfoSet.cpp		\
 	    FileInfoSorter.cpp		\
 	    FileSizeStats.cpp		\
+	    FileSizeStatsWindow.cpp	\
 	    FileTypeStats.cpp		\
 	    FileTypeStatsWindow.cpp	\
 	    HeaderTweaker.cpp		\
@@ -96,6 +97,7 @@ HEADERS	  =				\
 	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
 	    FileSizeStats.h		\
+	    FileSizeStatsWindow.h	\
 	    FileTypeStats.h		\
 	    FileTypeStatsWindow.h	\
 	    HeaderTweaker.h		\
@@ -130,6 +132,7 @@ FORMS	  = main-window.ui		   \
 	    cleanup-config-page.ui	   \
 	    mime-category-config-page.ui   \
 	    exclude-rules-config-page.ui   \
+	    file-size-stats-window.ui	   \
 	    file-type-stats-window.ui	   \
 	    locate-files-window.ui
 

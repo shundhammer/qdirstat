@@ -80,6 +80,7 @@
     <addaction name="menuExpandTreeToLevel"/>
     <addaction name="separator"/>
     <addaction name="actionFileTypeStats"/>
+    <addaction name="actionFileSizeStats"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -595,10 +596,18 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Treeemap as side panel</string>
+    <string>Treemap as side panel</string>
    </property>
    <property name="toolTip">
     <string>Show the Treeemap beside the directory tree, otherwise it will be shown beneath.</string>
+   </property>
+  </action>
+  <action name="actionFileSizeStats">
+   <property name="text">
+    <string>File &amp;Size Statistics</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
    </property>
   </action>
  </widget>

@@ -225,6 +225,7 @@ void MainWindow::connectActions()
     mapTreeExpandAction( _ui->actionCloseAllTreeLevels, 0 );
 
     CONNECT_ACTION( _ui->actionFileTypeStats,	   this, toggleFileTypeStats() );
+    CONNECT_ACTION( _ui->actionFileSizeStats,	   this, showFileSizeStats() );
 
     _ui->actionFileTypeStats->setShortcutContext( Qt::ApplicationShortcut );
 
@@ -310,6 +311,9 @@ void MainWindow::updateActions()
     _ui->actionRefreshSelected->setEnabled( oneDirSelected && ! sel->isExcluded() && ! sel->isMountPoint() );
     _ui->actionContinueReadingAtMountPoint->setEnabled( oneDirSelected && sel->isMountPoint() );
     _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
+
+    _ui->actionFileSizeStats->setEnabled( ! reading && selectedItems.size() == 1 &&
+                                          ( sel->isDir() || sel->isDotEntry() ) );
 
     bool showingTreemap = _ui->treemapView->isVisible();
 
@@ -777,6 +781,27 @@ void MainWindow::toggleFileTypeStats()
                                                                   this );
         _fileTypeStatsWindow->show();
     }
+}
+
+
+void MainWindow::showFileSizeStats()
+{
+    FileInfoSet selectedItems = _selectionModel->selectedItems();
+    FileInfo * sel = selectedItems.first();
+
+    if ( ! sel )
+        return;
+
+    if ( ! _fileSizeStatsWindow )
+    {
+        // This deletes itself when the user closes it. The associated QPointer
+        // keeps track of that and sets the pointer to 0 when it happens.
+
+        _fileSizeStatsWindow = new QDirStat::FileSizeStatsWindow( this );
+    }
+
+    _fileSizeStatsWindow->populate( sel, "" );
+    _fileSizeStatsWindow->show();
 }
 
 
