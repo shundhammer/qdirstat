@@ -66,6 +66,7 @@ SOURCES	  = main.cpp			\
 	    SelectionModel.cpp		\
 	    Settings.cpp		\
 	    SettingsHelpers.cpp		\
+            StatsCollector.cpp          \
 	    StdCleanup.cpp		\
 	    Trash.cpp			\
 	    TreemapTile.cpp		\
@@ -114,6 +115,7 @@ HEADERS	  =				\
 	    Settings.h			\
 	    SettingsHelpers.h		\
 	    SignalBlocker.h		\
+            StatsCollector.h            \
 	    StdCleanup.h		\
 	    Trash.h			\
 	    TreemapTile.h		\
