@@ -312,8 +312,10 @@ void MainWindow::updateActions()
     _ui->actionContinueReadingAtMountPoint->setEnabled( oneDirSelected && sel->isMountPoint() );
     _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
 
-    _ui->actionFileSizeStats->setEnabled( ! reading && selectedItems.size() == 1 &&
-                                          ( sel->isDir() || sel->isDotEntry() ) );
+    _ui->actionFileSizeStats->setEnabled( ! reading &&
+                                          ( selectedItems.isEmpty() ||
+                                            ( selectedItems.size() == 1 &&
+                                              ( sel->isDir() || sel->isDotEntry() ) ) ) );
 
     bool showingTreemap = _ui->treemapView->isVisible();
 
@@ -790,6 +792,9 @@ void MainWindow::showFileSizeStats()
     FileInfo * sel = selectedItems.first();
 
     if ( ! sel )
+        sel = _dirTreeModel->tree()->root();
+
+    if ( ! sel || ! sel->hasChildren() )
         return;
 
     if ( ! _fileSizeStatsWindow )
