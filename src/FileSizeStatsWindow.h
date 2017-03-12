@@ -15,6 +15,8 @@
 #include "ui_file-size-stats-window.h"
 #include "FileInfo.h"
 
+class QTableWidget;
+
 
 namespace QDirStat
 {
@@ -94,6 +96,11 @@ namespace QDirStat
          * Return text for a quantile of 'order' named 'name'.
          **/
         QStringList quantile( int order, const QString & name );
+
+        /**
+         * Fill a quantile table for 'order' quantiles with content.
+         **/
+        void fillQuantileTable( QTableWidget * table, int order );
 
 
 	//

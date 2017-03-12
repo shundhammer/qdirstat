@@ -7,14 +7,16 @@
  */
 
 
+#include <algorithm>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+
 #include "FileSizeStatsWindow.h"
 #include "FileSizeStats.h"
 #include "DirTree.h"
 #include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
-
-#include <algorithm>
 
 
 using namespace QDirStat;
@@ -55,7 +57,9 @@ void FileSizeStatsWindow::clear()
 
 void FileSizeStatsWindow::initWidgets()
 {
-    _ui->content->clear();
+    QFont font = _ui->heading->font();
+    font.setBold( true );
+    _ui->heading->setFont( font );
 }
 
 
@@ -75,7 +79,6 @@ void FileSizeStatsWindow::calc()
 void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
 {
     _ui->content->clear();
-    _ui->content->setText( tr( "Calculating statistics for %1" ).arg( subtree->debugUrl() ) );
 
     _subtree = subtree;
     _suffix  = suffix;
@@ -86,14 +89,14 @@ void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
 	return;
     }
 
+    _ui->heading->setText( tr( "File size statistics for %1" ).arg( subtree->debugUrl() ) );
     calc();
 
     QStringList text;
 
-    text << tr( "File size statistics for %1" ).arg( subtree->debugUrl() );
-    text << "";
     text << tr( "Median:  %1" ).arg( formatSize( _stats->median() ) );
-    text << tr( "Average: %1\n" ).arg( formatSize( _stats->average() ) );
+    text << tr( "Average: %1" ).arg( formatSize( _stats->average() ) );
+    text << "";
     text << tr( "Min:     %1" ).arg( formatSize( _stats->min() ) );
     text << tr( "Max:     %1" ).arg( formatSize( _stats->max() ) );
     text << "";
@@ -101,8 +104,13 @@ void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
     text << "";
 
     text << quantile( 4,   "quartile"   );
-    text << quantile( 10,  "centile"    );
+
+    fillQuantileTable( _ui->decileTable,     10 );
+    fillQuantileTable( _ui->percentileTable, 100 );
+#if 0
+    text << quantile( 10,  "decile"    );
     text << quantile( 100, "percentile" );
+#endif
 
     _ui->content->setText( text.join( "\n" ) );
 }
@@ -112,7 +120,7 @@ QStringList FileSizeStatsWindow::quantile( int order, const QString & name )
 {
     QStringList text;
 
-    if ( _stats->data().size() < order )
+    if ( _stats->data().size() < 2 * order )
         return text;
 
     for ( int i=1; i < order; ++i )
@@ -125,6 +133,90 @@ QStringList FileSizeStatsWindow::quantile( int order, const QString & name )
     text << "";
 
     return text;
+}
+
+
+void FileSizeStatsWindow::fillQuantileTable( QTableWidget * table, int order )
+{
+    table->clear();
+
+    if ( _stats->data().size() < 2 * order )
+    {
+        logWarning() << "Not enough data for " << order << "-quantiles" << endl;
+        return;
+    }
+
+    table->setColumnCount( 3 );
+    table->setRowCount( order + 1 );
+
+    int median     = order / 2;
+    int quartile_1 = -1;
+    int quartile_3 = -1;
+
+    if ( order % 4 == 0 )
+    {
+        quartile_1 = order / 4;
+        quartile_3 = quartile_1 * 3;
+    }
+
+
+    for ( int i=0; i <= order; ++i )
+    {
+        QTableWidgetItem * numberItem = new QTableWidgetItem( QString::number( i ) );
+        QTableWidgetItem * valueItem  = new QTableWidgetItem( formatSize( _stats->quantile( order, i ) ) );
+
+        CHECK_NEW( numberItem );
+        CHECK_NEW( valueItem );
+
+        numberItem->setTextAlignment( Qt::AlignRight | Qt::AlignVCenter );
+        valueItem->setTextAlignment ( Qt::AlignRight | Qt::AlignVCenter );
+
+        table->setItem( i, 0, numberItem );
+        table->setItem( i, 1, valueItem  );
+
+        if ( i == 0 || i == median || i == order || i == quartile_1 || i == quartile_3 )
+        {
+            QString text;
+
+            if      ( i == 0 )          text = "Min";
+            else if ( i == order  )     text = "Max";
+            else if ( i == median )     text = "Median";
+            else if ( i == quartile_1 ) text = "1. Quartile";
+            else if ( i == quartile_3 ) text = "3. Quartile";
+
+            QTableWidgetItem * nameItem = new QTableWidgetItem( text );
+            CHECK_NEW( nameItem );
+
+            nameItem->setTextAlignment( Qt::AlignCenter | Qt::AlignVCenter );
+            table->setItem( i, 2, nameItem );
+
+            QFont font = nameItem->font();
+            font.setBold( true );
+
+            numberItem->setFont( font );
+            valueItem->setFont( font );
+            nameItem->setFont( font );
+
+            QBrush brush = nameItem->foreground();
+            brush.setColor( Qt::blue );
+
+            numberItem->setForeground( brush );
+            valueItem->setForeground( brush );
+            nameItem->setForeground( brush );
+        }
+        else if ( order > 20 && i % 10 == 0 )
+        {
+            QTableWidgetItem * emptyItem = new QTableWidgetItem( "" );
+            CHECK_NEW( emptyItem );
+
+            table->setItem( i, 2, emptyItem );
+
+            QBrush brush( QColor( 0xE0, 0xE0, 0xF0 ), Qt::SolidPattern );
+            numberItem->setBackground( brush );
+            valueItem->setBackground( brush );
+            emptyItem->setBackground( brush );
+        }
+    }
 }
 
 

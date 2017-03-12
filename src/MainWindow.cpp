@@ -792,7 +792,7 @@ void MainWindow::showFileSizeStats()
     FileInfo * sel = selectedItems.first();
 
     if ( ! sel )
-        sel = _dirTreeModel->tree()->root();
+        sel = _dirTreeModel->tree()->root()->firstChild();
 
     if ( ! sel || ! sel->hasChildren() )
         return;
