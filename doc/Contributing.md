@@ -110,8 +110,7 @@ construct a harassment case from this!
 
 ### The GitHub Workflow
 
-See separate document [GitHub-Workflow.md]
-(https://github.com/shundhammer/qdirstat/blob/master/doc/GitHub-Workflow.md)
+See separate document [GitHub-Workflow.md](https://github.com/shundhammer/qdirstat/blob/master/doc/GitHub-Workflow.md)
 
 
 ### Getting Help for Contributors
