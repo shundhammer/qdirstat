@@ -277,7 +277,6 @@ HistogramBar::HistogramBar( HistogramView * parent,
 
     filledRect->setPen( _parentView->barPen() );
     filledRect->setBrush( _parentView->barBrush() );
-    filledRect->setFlags( ItemIsSelectable );
 
     setFlags( ItemIsSelectable );
     _parentView->scene()->addItem( this );
@@ -290,7 +289,9 @@ void HistogramBar::mousePressEvent( QGraphicsSceneMouseEvent * event )
     {
 	case Qt::LeftButton:
 	    QGraphicsRectItem::mousePressEvent( event );
-	    logDebug() << "Mouse pressed for histogram bar #" << _number << endl;
+	    logDebug() << "Histogram bar #" << _number
+                       << ": " << _parentView->bucket( _number )
+                       << endl;
 	    break;
 
 	default:
