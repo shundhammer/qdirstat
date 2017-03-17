@@ -170,26 +170,29 @@ namespace QDirStat
          **/
         qreal bucketWidth() const;
 
-
-    public slots:
-
-        /**
-         * Display or redisplay the histogram based on the current data.
-         **/
-        void redisplay();
-
         /**
          * Enable or disable showing the median (percentile 50) as an overlay
          * over the histogram.
          **/
-        void showMedian( bool show = true ) { _showMedian = show; }
+        void setShowMedian( bool show = true ) { _showMedian = show; }
+
+        /**
+         * Return 'true' if the median is shown as an overlay, 'false' if not.
+         **/
+        bool showMedian() const { return _showMedian; }
 
         /**
          * Enable or disable showing the 1st and 3rd quartiles (Q1 and Q3,
          * percentile 25 and 75, respectively) as an overlay over the
          * histogram.
          **/
-        void showQuartiles( bool show = true ) { _showQuartiles = show; }
+        void setShowQuartiles( bool show = true ) { _showQuartiles = show; }
+
+        /**
+         * Return 'true' if the 1st and 3rd quartiles are shown as an overlay,
+         * 'false' if not.
+         **/
+        bool showQuartiles() const { return _showQuartiles; }
 
         /**
          * Enable or disable showing percentiles as an overlay over the
@@ -197,7 +200,12 @@ namespace QDirStat
          * default '5' it will display P5, P10, P15 etc.; step = 0 disables
          * them completely.
          **/
-        void showPercentiles( int step = 5 ) { _percentileStep = step; }
+        void setPercentileStep( int step = 5 ) { _percentileStep = step; }
+
+        /**
+         * Return the percentile step or 0 if no percentiles are shown.
+         **/
+        int percentileStep() const { return _percentileStep; }
 
         /**
          * Set how many percentiles to display as an overlay at the margins (at
@@ -212,7 +220,31 @@ namespace QDirStat
          *
          * A value of 0 means show no additional percentiles.
          **/
-        void showMarginPercentiles( int margin = 2 ) { _marginPercentiles = margin; }
+        void setMarginPercentiles( int margin = 2 ) { _marginPercentiles = margin; }
+
+        /**
+         * Return the margin percentiles or 0 if none are shown.
+         **/
+        int marginPercentiles() { return _marginPercentiles; }
+
+        /**
+         * Enable or disable a logarithmic (log2) height scale.
+         **/
+        void setUseLogHeightScale( bool enable ) { _useLogHeightScale = enable; }
+
+        /**
+         * Return 'true' if a logarithmic height scale is used or 'false' if
+         * not.
+         **/
+        bool useLogHeightScale() const { return _useLogHeightScale; }
+
+
+    public slots:
+
+        /**
+         * Display or redisplay the histogram based on the current data.
+         **/
+        void redisplay();
 
 
     protected:
@@ -230,6 +262,8 @@ namespace QDirStat
 
         int       _startPercentile;
         int       _endPercentile;
+
+        bool      _useLogHeightScale;
 
         bool      _showMedian;
         bool      _showQuartiles;

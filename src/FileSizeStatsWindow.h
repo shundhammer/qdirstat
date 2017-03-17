@@ -118,6 +118,11 @@ namespace QDirStat
                                 int             step = 1,
                                 int             extremesMargin = 1 );
 
+        /**
+         * Fill the histogram with content.
+         **/
+        void fillHistogram();
+
 
 	//
 	// Data members

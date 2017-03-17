@@ -355,7 +355,7 @@ private:
 	}							\
     } while( 0 )
 
-    
+
 /**
  * Check if an index is in range:
  * VALID_MIN <= INDEX <= VALID_MAX

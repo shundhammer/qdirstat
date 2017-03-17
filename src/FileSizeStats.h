@@ -84,6 +84,12 @@ namespace QDirStat
 	 **/
 	void sort();
 
+        /**
+         * Return the size of the collected data, i.e. the number of data
+         * points.
+         **/
+        int dataSize() const { return _data.size(); }
+
 	/**
 	 * Return a reference to the collected data.
 	 **/

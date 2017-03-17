@@ -26,7 +26,7 @@ HistogramView::HistogramView( QWidget * parent ):
     QGraphicsView( parent )
 {
     logInfo() << "HistogramView ctor" << endl;
-    redisplay();
+    init();
 }
 
 
@@ -39,8 +39,9 @@ HistogramView::~HistogramView()
 void HistogramView::init()
 {
     _bucketMaxValue    = 0;
-    _startPercentile   = 0;   // data min
-    _endPercentile     = 100; // data max
+    _startPercentile   = 0;    // data min
+    _endPercentile     = 100;  // data max
+    _useLogHeightScale = false;
     _showMedian        = true;
     _showQuartiles     = true;
     _percentileStep    = 5;
@@ -49,7 +50,7 @@ void HistogramView::init()
 
     // TO DO: read from and write to QSettings
 
-    _barBrush      = QBrush( QColor( 0x70, 0x70, 0x80 ) );
+    _barBrush      = QBrush( QColor( 0xB0, 0xB0, 0xD0 ) );
     _barPen        = QPen  ( QColor( 0x40, 0x40, 0x50 ), 1 );
 
     _medianPen     = QPen( Qt::magenta, 2 );
@@ -118,7 +119,7 @@ void HistogramView::setBuckets( const QRealList & newBuckets )
 
 void HistogramView::setPercentiles( const QRealList & newPercentiles )
 {
-    CHECK_INDEX_MSG( newPercentiles.size(), 100, 100,
+    CHECK_INDEX_MSG( newPercentiles.size(), 101, 101,
                      "Percentiles size out of range" );
 
     _percentiles = newPercentiles;
@@ -198,18 +199,50 @@ void HistogramView::redisplay()
 	CHECK_NEW( scene);
 	setScene( scene );
     }
+    else
+    {
+        qDeleteAll( scene()->items() );
+    }
 
-    if ( _buckets.size() < 1 || _percentiles.size() != 100 )
+    if ( _buckets.size() < 1 || _percentiles.size() != 101 )
     {
         scene()->addText( "No data yet" );
         logInfo() << "No data yet" << endl;
         return;
     }
 
-    QPen pen( Qt::black );
-    pen.setWidth( 2 );
+    qreal histogramHeight = 400.0;
+    qreal histogramWidth  = 400.0;
+    qreal barWidth = histogramWidth / bucketCount(); // FIXME
+    qreal maxVal = _bucketMaxValue;
 
-    QBrush brush( Qt::blue );
+    if ( _useLogHeightScale )
+        maxVal = log2( maxVal );
 
-    scene()->addRect( 0, 0, 100, 100, pen, brush );
+    for ( int i=0; i < _buckets.size(); ++i )
+    {
+        logDebug() << "Adding bar #" << i << " with value " << _buckets[ i ] << endl;
+        qreal x   = i * barWidth;
+        qreal y   = -histogramHeight;
+        qreal val = _buckets[ i ];
+
+        if ( _useLogHeightScale && val > 1.0 )
+            val = log2( val );
+
+        qreal height = val / maxVal * histogramHeight;
+        QGraphicsRectItem * rect =
+            scene()->addRect( x, y, barWidth, -height, _barPen, _barBrush );
+
+        CHECK_NEW( rect );
+        rect->setFlags( QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable );
+    }
+
+    qreal margin = 10;
+    QRectF rect = scene()->sceneRect();
+    setSceneRect( rect.x() - margin,
+                  rect.y() - margin,
+                  rect.width() + margin,
+                  rect.height() + margin );
+
+    // setSceneRect( -margin, -margin, histogramWidth + margin , -histogramHeight - margin );
 }

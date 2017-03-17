@@ -281,11 +281,8 @@ QRealList FileSizeStats::fillBuckets( int bucketCount,
     QRealList buckets;
     buckets.reserve( bucketCount );
 
-    // Initialize the buckets. This is probably strictly not necessary, but
-    // better be safe than sorry.
-
     for ( int i=0; i < bucketCount; ++i )
-        buckets[i] = 0;
+        buckets << 0;
 
 
     // The first call to percentile() or quantile() will cause the data to be
@@ -295,10 +292,19 @@ QRealList FileSizeStats::fillBuckets( int bucketCount,
     qreal endVal   = percentile( endPercentile );
     qreal bucketWidth = ( endVal - startVal ) / bucketCount;
 
+#if 1
+    logDebug() << "startPercentile: " << startPercentile
+               << " endPercentile: " << endPercentile
+               << " startVal: " << formatSize( startVal )
+               << " endVal: " << formatSize( endVal )
+               << " bucketWidth: " << formatSize( bucketWidth )
+               << endl;
+#endif
+
     for ( int i=0; i < _data.size(); ++i )
     {
         qreal val = _data.at( i );
-        
+
         if ( val < startVal )
             continue;
 
@@ -309,7 +315,7 @@ QRealList FileSizeStats::fillBuckets( int bucketCount,
         // already. We don't really need that many divisions; just when leaving
         // the current bucket would be sufficient.
 
-        int index = ( val - startVal ) / bucketWidth;
+        int index = qMin( ( val - startVal ) / bucketWidth, bucketCount - 1.0 );
         ++buckets[ index ];
     }
 
@@ -326,7 +332,7 @@ QRealList FileSizeStats::percentileList()
     percentiles.reserve( 100 );
 
     for ( int i=0; i <= 100; ++i )
-        percentiles[ i ] = percentile( i );
+        percentiles << percentile( i );
 
     return percentiles;
 }

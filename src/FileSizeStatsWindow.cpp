@@ -13,6 +13,7 @@
 
 #include "FileSizeStatsWindow.h"
 #include "FileSizeStats.h"
+#include "HistogramView.h"
 #include "DirTree.h"
 #include "SettingsHelpers.h"
 #include "Logger.h"
@@ -63,6 +64,20 @@ void FileSizeStatsWindow::initWidgets()
 
     connect( _ui->percentileFilterComboBox, SIGNAL( currentIndexChanged( int ) ),
              this,                          SLOT  ( fillPercentileTable()      ) );
+
+#if 1
+    // DEBUG
+    // DEBUG
+    // DEBUG
+
+    _ui->histogramView->setStartPercentile(  2 );
+    _ui->histogramView->setEndPercentile  ( 98 );
+    _ui->histogramView->setUseLogHeightScale( false );
+
+    // DEBUG
+    // DEBUG
+    // DEBUG
+#endif
 }
 
 
@@ -110,9 +125,10 @@ void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
     text << tr( "Min:      %1" ).arg( formatSize( _stats->min() ) );
     text << tr( "Max:      %1" ).arg( formatSize( _stats->max() ) );
     text << "";
-    text << tr( "Files:    %1" ).arg( _stats->data().size() );
+    text << tr( "Files:    %1" ).arg( _stats->dataSize() );
 
     fillPercentileTable();
+    fillHistogram();
 
     _ui->content->setText( text.join( "\n" ) );
 }
@@ -129,7 +145,7 @@ QStringList FileSizeStatsWindow::quantile( int order, const QString & name )
 {
     QStringList text;
 
-    if ( _stats->data().size() < 2 * order )
+    if ( _stats->dataSize() < 2 * order )
         return text;
 
     for ( int i=1; i < order; ++i )
@@ -153,7 +169,7 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *  table,
 {
     table->clear();
 
-    if ( _stats->data().size() < 2 * order )
+    if ( _stats->dataSize() < 2 * order )
     {
         logWarning() << "Not enough data for " << order << "-quantiles" << endl;
         return;
@@ -243,6 +259,24 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *  table,
     }
 
     table->setRowCount( row );
+}
+
+
+void FileSizeStatsWindow::fillHistogram()
+{
+    HistogramView * histogram = _ui->histogramView;
+    CHECK_PTR( histogram );
+
+    int startPercentile = histogram->startPercentile();
+    int endPercentile   = histogram->endPercentile();
+    int percentileCount = endPercentile - startPercentile;
+    int dataCount       = _stats->dataSize() * ( percentileCount / 100.0 );
+    int bucketCount     = histogram->bestBucketCount( dataCount );
+    QRealList buckets   = _stats->fillBuckets( bucketCount, startPercentile, endPercentile );
+
+    histogram->setBuckets( buckets );
+    histogram->setPercentiles( _stats->percentileList() );
+    histogram->redisplay();
 }
 
 
