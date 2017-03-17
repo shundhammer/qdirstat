@@ -51,3 +51,20 @@ QString SysCallFailedException::errMsg( const QString & sysCall,
 
     return msg;
 }
+
+
+QString IndexOutOfRangeException::errMsg( int	invalidIndex,
+                                          int	validMin,
+                                          int	validMax,
+                                          const QString & prefix ) const
+{
+    QString msg = prefix;
+
+    if ( msg.isEmpty() )
+        msg = "Index out of range";
+
+    msg += QString( ": %1 valid: %2..%3" ).arg( invalidIndex )
+        .arg( validMin ).arg( validMax );
+
+    return msg;
+}

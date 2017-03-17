@@ -260,3 +260,73 @@ FileSize FileSizeStats::quantile( int order, int number )
 
     return result;
 }
+
+
+QRealList FileSizeStats::fillBuckets( int bucketCount,
+                                      int startPercentile,
+                                      int endPercentile )
+{
+    CHECK_INDEX( startPercentile, 0, 100 );
+    CHECK_INDEX( endPercentile,   0, 100 );
+
+    if ( startPercentile >= endPercentile )
+        THROW( Exception( "startPercentile must be less than endPercentile" ) );
+
+    if ( bucketCount < 1 )
+        THROW( Exception( QString( "Invalid bucket count %1" ).arg( bucketCount ) ) );
+
+    if ( _data.isEmpty() )
+        return QRealList();
+
+    QRealList buckets;
+    buckets.reserve( bucketCount );
+
+    // Initialize the buckets. This is probably strictly not necessary, but
+    // better be safe than sorry.
+
+    for ( int i=0; i < bucketCount; ++i )
+        buckets[i] = 0;
+
+
+    // The first call to percentile() or quantile() will cause the data to be
+    // sorted, so there is no need to sort them again here.
+
+    qreal startVal = percentile( startPercentile );
+    qreal endVal   = percentile( endPercentile );
+    qreal bucketWidth = ( endVal - startVal ) / bucketCount;
+
+    for ( int i=0; i < _data.size(); ++i )
+    {
+        qreal val = _data.at( i );
+        
+        if ( val < startVal )
+            continue;
+
+        if ( val > endVal )
+            break;
+
+        // TO DO: Optimize this by taking into account that the data are sorted
+        // already. We don't really need that many divisions; just when leaving
+        // the current bucket would be sufficient.
+
+        int index = ( val - startVal ) / bucketWidth;
+        ++buckets[ index ];
+    }
+
+    return buckets;
+}
+
+
+QRealList FileSizeStats::percentileList()
+{
+    if ( _data.isEmpty() )
+        return QRealList();
+
+    QRealList percentiles;
+    percentiles.reserve( 100 );
+
+    for ( int i=0; i <= 100; ++i )
+        percentiles[ i ] = percentile( i );
+
+    return percentiles;
+}

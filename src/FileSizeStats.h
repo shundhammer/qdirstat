@@ -11,6 +11,7 @@
 #define FileSizeStats_h
 
 #include "FileInfo.h"
+#include "HistogramView.h"
 
 
 namespace QDirStat
@@ -135,6 +136,16 @@ namespace QDirStat
          * Calculate a quartile.
          **/
         FileSize quartile( int number ) { return quantile( 4, number ); }
+
+        /**
+         * Fill buckets for a histogram from 'startPercentile' to 'endPercentile'.
+         **/
+        QRealList fillBuckets( int bucketCount, int startPercentile, int endPercentile );
+
+        /**
+         * Return a list of all percentiles from 0 to 100.
+         **/
+        QRealList percentileList();
 
 
     protected:

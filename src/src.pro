@@ -53,6 +53,7 @@ SOURCES	  = main.cpp			\
 	    FileTypeStats.cpp		\
 	    FileTypeStatsWindow.cpp	\
 	    HeaderTweaker.cpp		\
+	    HistogramView.cpp		\
 	    ListEditor.cpp		\
 	    LocateFilesWindow.cpp	\
 	    Logger.cpp			\
@@ -101,6 +102,7 @@ HEADERS	  =				\
 	    FileTypeStats.h		\
 	    FileTypeStatsWindow.h	\
 	    HeaderTweaker.h		\
+	    HistogramView.h		\
 	    ListEditor.h		\
 	    ListMover.h			\
 	    LocateFilesWindow.h		\

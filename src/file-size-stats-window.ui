@@ -30,11 +30,11 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
-     <widget class="QWidget" name="overviewTab">
+     <widget class="QWidget" name="overviewPage">
       <attribute name="title">
-       <string>Overview</string>
+       <string>&amp;Overview</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
@@ -61,9 +61,19 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="percentileTab">
+     <widget class="QWidget" name="histogramPage">
       <attribute name="title">
-       <string>Percentiles</string>
+       <string>&amp;Histogram</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QDirStat::HistogramView" name="histogramView"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="percentilePage">
+      <attribute name="title">
+       <string>&amp;Percentiles</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
@@ -255,6 +265,13 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QDirStat::HistogramView</class>
+   <extends>QGraphicsView</extends>
+   <header>HistogramView.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

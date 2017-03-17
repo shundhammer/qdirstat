@@ -191,6 +191,63 @@ public:
 };
 
 
+/**
+ * Exception class for "index out of range"
+ **/
+class IndexOutOfRangeException : public Exception
+{
+public:
+    /**
+     * Constructor.
+     *
+     * 'invalidIndex' is the offending index value. It should be between
+     *'validMin' and 'validMax':
+     *
+     *     validMin <= index <= validMax
+     **/
+    IndexOutOfRangeException( int invalidIndex,
+                              int validMin,
+                              int validMax,
+                              const QString & msg = "" )
+        : Exception( errMsg( invalidIndex, validMin, validMax, msg ) )
+        , _invalidIndex( invalidIndex )
+        , _validMin( validMin )
+        , _validMax( validMax )
+        {}
+
+    virtual ~IndexOutOfRangeException() throw()
+        {}
+
+    /**
+     * Return the offending index value.
+     **/
+    int invalidIndex() const	{ return _invalidIndex; }
+
+    /**
+     * Return the valid minimum index.
+     **/
+    int validMin() const	{ return _validMin; }
+
+    /**
+     * Return the valid maximum index.
+     **/
+    int validMax() const	{ return _validMax; }
+
+protected:
+    QString errMsg( int	invalidIndex,
+                    int	validMin,
+                    int	validMax,
+                    const QString & msg = "" ) const;
+
+private:
+
+    int _invalidIndex;
+    int _validMin;
+    int _validMax;
+};
+
+
+
 
 //
 // Helper macros
@@ -297,6 +354,27 @@ public:
 	    THROW( BadMagicNumberException( PTR ) );		\
 	}							\
     } while( 0 )
+
+    
+/**
+ * Check if an index is in range:
+ * VALID_MIN <= INDEX <= VALID_MAX
+ *
+ * Throws InvalidWidgetException if out of range.
+ **/
+#define CHECK_INDEX_MSG( INDEX, VALID_MIN, VALID_MAX, MSG )	\
+    do								\
+    {								\
+	if ( (INDEX) < (VALID_MIN) ||				\
+	     (INDEX) > (VALID_MAX) )				\
+	{							\
+	    THROW( IndexOutOfRangeException( (INDEX), (VALID_MIN), (VALID_MAX), (MSG) ) ); \
+	}							\
+    } while( 0 )
+
+
+#define CHECK_INDEX( INDEX, VALID_MIN, VALID_MAX )		\
+    CHECK_INDEX_MSG( (INDEX), (VALID_MIN), (VALID_MAX), "")
 
 
 //
