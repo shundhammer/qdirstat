@@ -214,12 +214,6 @@ FileSize FileSizeStats::quantile( int order, int number )
     if ( _data.isEmpty() )
         return 0;
 
-    if ( _data.size() < order )
-    {
-        logError() << "Not enough data for " << order << "-quantile" << endl;
-        return 0;
-    }
-
     if ( number > order )
     {
         QString msg = QString( "Cannot determine quantile #%1" ).arg( number );

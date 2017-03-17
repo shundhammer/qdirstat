@@ -168,13 +168,6 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *  table,
                                              int             extremesMargin )
 {
     table->clear();
-
-    if ( _stats->dataSize() < 2 * order )
-    {
-        logWarning() << "Not enough data for " << order << "-quantiles" << endl;
-        return;
-    }
-
     table->setColumnCount( 3 );
     table->setRowCount( order + 1 );
     int row = 0;
