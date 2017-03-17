@@ -126,6 +126,17 @@ namespace QDirStat
 	 **/
 	FileSize quantile( int order, int number );
 
+        /**
+         * Calculate a percentile.
+         **/
+        FileSize percentile( int number ) { return quantile( 100, number ); }
+
+        /**
+         * Calculate a quartile.
+         **/
+        FileSize quartile( int number ) { return quantile( 4, number ); }
+
+
     protected:
 
 	FileSizeList _data;

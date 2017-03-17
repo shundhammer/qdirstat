@@ -65,6 +65,7 @@ namespace QDirStat
          **/
         QString suffix() const { return _suffix; }
 
+
     public slots:
 
 	/**
@@ -74,6 +75,14 @@ namespace QDirStat
 	 * Reimplemented from QDialog.
 	 **/
 	virtual void reject() Q_DECL_OVERRIDE;
+
+    protected slots:
+
+        /**
+         * Fill the percentiles table depending on the content of the filter
+         * combo box in the same tab.
+         **/
+        void fillPercentileTable();
 
     protected:
 
@@ -93,14 +102,21 @@ namespace QDirStat
 	void initWidgets();
 
         /**
-         * Return text for a quantile of 'order' named 'name'.
+         * Return text for all quantiles of 'order' named 'name'.
          **/
         QStringList quantile( int order, const QString & name );
 
         /**
          * Fill a quantile table for 'order' quantiles with content.
+         *
+         * 'step' is the step width; 'extremesMargin' specifies how far from
+         * the extremes (min, max) the step width should be 1 instead.
          **/
-        void fillQuantileTable( QTableWidget * table, int order );
+        void fillQuantileTable( QTableWidget *  table,
+                                int             order,
+                                const QString & namePrefix = "",
+                                int             step = 1,
+                                int             extremesMargin = 1 );
 
 
 	//

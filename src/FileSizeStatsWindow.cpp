@@ -60,6 +60,9 @@ void FileSizeStatsWindow::initWidgets()
     QFont font = _ui->heading->font();
     font.setBold( true );
     _ui->heading->setFont( font );
+
+    connect( _ui->percentileFilterComboBox, SIGNAL( currentIndexChanged( int ) ),
+             this,                          SLOT  ( fillPercentileTable()      ) );
 }
 
 
@@ -94,25 +97,31 @@ void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
 
     QStringList text;
 
-    text << tr( "Median:  %1" ).arg( formatSize( _stats->median() ) );
-    text << tr( "Average: %1" ).arg( formatSize( _stats->average() ) );
-    text << "";
-    text << tr( "Min:     %1" ).arg( formatSize( _stats->min() ) );
-    text << tr( "Max:     %1" ).arg( formatSize( _stats->max() ) );
-    text << "";
-    text << tr( "Files:   %1" ).arg( _stats->data().size() );
-    text << "";
+    FileSize q1 = _stats->quartile( 1 );
+    FileSize q3 = _stats->quartile( 3 );
 
-    text << quantile( 4,   "quartile"   );
+    text << tr( "Median:   %1" ).arg( formatSize( _stats->median() ) );
+    text << tr( "Average:  %1" ).arg( formatSize( _stats->average() ) );
+    text << "";
+    text << tr( "Q1:       %1" ).arg( formatSize( q1 ) );
+    text << tr( "Q3:       %1" ).arg( formatSize( q3 ) );
+    text << tr( "Q3 - Q1:  %1" ).arg( formatSize( q3 - q1 ) );
+    text << "";
+    text << tr( "Min:      %1" ).arg( formatSize( _stats->min() ) );
+    text << tr( "Max:      %1" ).arg( formatSize( _stats->max() ) );
+    text << "";
+    text << tr( "Files:    %1" ).arg( _stats->data().size() );
 
-    fillQuantileTable( _ui->decileTable,     10 );
-    fillQuantileTable( _ui->percentileTable, 100 );
-#if 0
-    text << quantile( 10,  "decile"    );
-    text << quantile( 100, "percentile" );
-#endif
+    fillPercentileTable();
 
     _ui->content->setText( text.join( "\n" ) );
+}
+
+
+void FileSizeStatsWindow::fillPercentileTable()
+{
+    int step = _ui->percentileFilterComboBox->currentIndex() == 0 ? 5 : 1;
+    fillQuantileTable( _ui->percentileTable, 100, "P", step, 2 );
 }
 
 
@@ -136,7 +145,11 @@ QStringList FileSizeStatsWindow::quantile( int order, const QString & name )
 }
 
 
-void FileSizeStatsWindow::fillQuantileTable( QTableWidget * table, int order )
+void FileSizeStatsWindow::fillQuantileTable( QTableWidget *  table,
+                                             int             order,
+                                             const QString & namePrefix,
+                                             int             step,
+                                             int             extremesMargin )
 {
     table->clear();
 
@@ -148,6 +161,7 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget * table, int order )
 
     table->setColumnCount( 3 );
     table->setRowCount( order + 1 );
+    int row = 0;
 
     int median     = order / 2;
     int quartile_1 = -1;
@@ -162,7 +176,15 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget * table, int order )
 
     for ( int i=0; i <= order; ++i )
     {
-        QTableWidgetItem * numberItem = new QTableWidgetItem( QString::number( i ) );
+        if ( step > 1 &&
+             i > extremesMargin && i < order - extremesMargin &&
+             i % step != 0 )
+        {
+            continue;
+        }
+
+
+        QTableWidgetItem * numberItem = new QTableWidgetItem( namePrefix + QString::number( i ) );
         QTableWidgetItem * valueItem  = new QTableWidgetItem( formatSize( _stats->quantile( order, i ) ) );
 
         CHECK_NEW( numberItem );
@@ -171,8 +193,8 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget * table, int order )
         numberItem->setTextAlignment( Qt::AlignRight | Qt::AlignVCenter );
         valueItem->setTextAlignment ( Qt::AlignRight | Qt::AlignVCenter );
 
-        table->setItem( i, 0, numberItem );
-        table->setItem( i, 1, valueItem  );
+        table->setItem( row, 0, numberItem );
+        table->setItem( row, 1, valueItem  );
 
         if ( i == 0 || i == median || i == order || i == quartile_1 || i == quartile_3 )
         {
@@ -188,7 +210,7 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget * table, int order )
             CHECK_NEW( nameItem );
 
             nameItem->setTextAlignment( Qt::AlignCenter | Qt::AlignVCenter );
-            table->setItem( i, 2, nameItem );
+            table->setItem( row, 2, nameItem );
 
             QFont font = nameItem->font();
             font.setBold( true );
@@ -204,7 +226,7 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget * table, int order )
             valueItem->setForeground( brush );
             nameItem->setForeground( brush );
         }
-        else if ( order > 20 && i % 10 == 0 )
+        else if ( order > 20 && i % 10 == 0 && step <= 1 )
         {
             QTableWidgetItem * emptyItem = new QTableWidgetItem( "" );
             CHECK_NEW( emptyItem );
@@ -216,7 +238,11 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget * table, int order )
             valueItem->setBackground( brush );
             emptyItem->setBackground( brush );
         }
+
+        ++row;
     }
+
+    table->setRowCount( row );
 }
 
 

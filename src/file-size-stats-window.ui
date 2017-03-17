@@ -61,44 +61,45 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="decileTab">
-      <attribute name="title">
-       <string>Deciles</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QTableWidget" name="decileTable">
-         <property name="rowCount">
-          <number>10</number>
-         </property>
-         <property name="columnCount">
-          <number>3</number>
-         </property>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <column/>
-         <column/>
-         <column/>
-        </widget>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="percentileTab">
       <attribute name="title">
        <string>Percentiles</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <layout class="QHBoxLayout" name="topComboBoxLayout">
+         <item>
+          <spacer name="comboBoxSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QComboBox" name="percentileFilterComboBox">
+           <property name="editable">
+            <bool>false</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>Interesting only</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Show all</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item>
         <widget class="QTableWidget" name="percentileTable">
          <property name="rowCount">
