@@ -13,6 +13,7 @@
 
 #include <QGraphicsView>
 #include <QGraphicsRectItem>
+#include <QGraphicsLineItem>
 #include <QList>
 
 #define MAX_BUCKET_COUNT 100
@@ -264,6 +265,15 @@ namespace QDirStat
 
         void init();
 
+        void addHistogramBars();
+        void addMarkers();
+
+        /**
+         * Convert a data value to the corresponding X axis point in the
+         * histogram.
+         **/
+        qreal scaleValue( qreal value );
+
 
         //
         // Data members
@@ -290,6 +300,9 @@ namespace QDirStat
         QPen      _quartilePen;
         QPen      _percentilePen;
         QPen      _decilePen;
+
+        qreal     _histogramWidth;
+        qreal     _histogramHeight;
     };
 
 
@@ -309,7 +322,7 @@ namespace QDirStat
          **/
         HistogramBar( HistogramView * parent,
                       int             number,
-                      QRectF          rect,
+                      const QRectF &  rect,
                       qreal           fillHeight );
 
         /**
@@ -327,6 +340,47 @@ namespace QDirStat
 
         HistogramView * _parentView;
         int             _number;
+    };
+
+
+    /**
+     * GraphicsItem for a percentile marker (including median or quartiles).
+     **/
+    class PercentileMarker: public QGraphicsLineItem
+    {
+    public:
+        PercentileMarker( HistogramView * parent,
+                          const QLineF &  line,
+                          const QString & name,
+                          int             percentileIndex );
+
+        /**
+         * Return the name of this marker; something like "P1", "Min", "Max",
+         * "Median", "Q1", "Q3".
+         **/
+        QString name() const { return _name; }
+
+        /**
+         * Return the percentile index (0..100) for this marker.
+         **/
+        int percentileIndex() const { return _percentileIndex; }
+
+        /**
+         * Return the percentile value for this marker.
+         **/
+        qreal value() const;
+
+    protected:
+	/**
+	 * Mouse press event
+	 *
+	 * Reimplemented from QGraphicsItem.
+	 **/
+	virtual void mousePressEvent( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
+
+        HistogramView * _parentView;
+        QString         _name;
+        int             _percentileIndex;
     };
 
 }	// namespace QDirStat

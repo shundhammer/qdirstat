@@ -12,6 +12,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 #include "HistogramView.h"
+#include "FileInfo.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -212,9 +213,32 @@ void HistogramView::redisplay()
         return;
     }
 
-    qreal histogramHeight = 400.0;
-    qreal histogramWidth  = 400.0;
-    qreal barWidth = histogramWidth / bucketCount(); // FIXME
+    _histogramHeight = 400.0; // FIXME
+    _histogramWidth  = 400.0; // FIXME
+
+    addHistogramBars();
+    addMarkers();
+
+
+
+    //
+    // Scale viewport
+    //
+
+#if 0
+    qreal margin = 10;
+    QRectF rect = scene()->sceneRect();
+    setSceneRect( rect.x() - margin,
+                  rect.y() - margin,
+                  rect.width() + margin,
+                  rect.height() + margin );
+#endif
+}
+
+
+void HistogramView::addHistogramBars()
+{
+    qreal barWidth = _histogramWidth / bucketCount();
     qreal maxVal   = _bucketMaxValue;
 
     if ( _useLogHeightScale )
@@ -225,8 +249,8 @@ void HistogramView::redisplay()
         logDebug() << "Adding bar #" << i << " with value " << _buckets[ i ] << endl;
         QRectF rect;
         rect.setX( i * barWidth );
-        rect.setY( -histogramHeight );
-        rect.setHeight( -histogramHeight );
+        rect.setY( 0 );
+        rect.setHeight( -_histogramHeight );
         rect.setWidth( barWidth );
 
         qreal val = _buckets[ i ];
@@ -234,22 +258,45 @@ void HistogramView::redisplay()
         if ( _useLogHeightScale && val > 1.0 )
             val = log2( val );
 
-        qreal fillHeight = val / maxVal * histogramHeight;
+        qreal fillHeight = val / maxVal * _histogramHeight;
 
         HistogramBar * bar = new HistogramBar( this, i, rect, fillHeight );
         CHECK_NEW( bar );
     }
+}
 
+
+void HistogramView::addMarkers()
+{
+    qreal markerExtraHeight = 15; // FIXME
+
+    QLineF line( 0, markerExtraHeight,
+                 0, -( _histogramHeight + markerExtraHeight ) );
+
+    if ( _showMedian )
     {
-        qreal margin = 10;
-        QRectF rect = scene()->sceneRect();
-        setSceneRect( rect.x() - margin,
-                      rect.y() - margin,
-                      rect.width() + margin,
-                      rect.height() + margin );
-    }
+        qreal val = scaleValue( percentile( 50 ) );
 
-    // setSceneRect( -margin, -margin, histogramWidth + margin , -histogramHeight - margin );
+        PercentileMarker * marker =
+            new PercentileMarker( this,
+                                  line.translated( val, 0 ),
+                                  tr( "Median" ),
+                                  50 );
+        marker->setPen( _medianPen );
+    }
+}
+
+
+qreal HistogramView::scaleValue( qreal value )
+{
+    qreal startVal   = _percentiles[ _startPercentile ];
+    qreal endVal     = _percentiles[ _endPercentile   ];
+    qreal totalWidth = endVal - startVal;
+    qreal result     = ( value - startVal ) / totalWidth * _histogramWidth;
+
+    logDebug() << "Scaling " << formatSize( value ) << " to " << result << endl;
+
+    return result;
 }
 
 
@@ -257,7 +304,7 @@ void HistogramView::redisplay()
 
 HistogramBar::HistogramBar( HistogramView * parent,
                             int             number,
-                            QRectF          rect,
+                            const QRectF &  rect,
                             qreal           fillHeight ):
     QGraphicsRectItem( rect ),
     _parentView( parent ),
@@ -299,3 +346,54 @@ void HistogramBar::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	    break;
     }
 }
+
+
+
+
+PercentileMarker::PercentileMarker( HistogramView * parent,
+                                    const QLineF &  line,
+                                    const QString & name,
+                                    int             percentileIndex ):
+    QGraphicsLineItem( line ),
+    _parentView( parent ),
+    _name( name ),
+    _percentileIndex( percentileIndex )
+{
+    logDebug() << "Line: x1: " << line.x1() << " y1: " << line.y1()
+               << " x2: "      << line.x2() << " y2: " << line.y2()
+               << endl;
+
+    if ( _name.isEmpty() )
+        _name = QString( "P%1" ).arg( percentileIndex );
+
+    setPen( _parentView->percentilePen() );
+
+    setFlags( ItemIsSelectable );
+    _parentView->scene()->addItem( this );
+}
+
+
+qreal PercentileMarker::value() const
+{
+    return _parentView->percentile( _percentileIndex );
+}
+
+
+void PercentileMarker::mousePressEvent( QGraphicsSceneMouseEvent * event )
+{
+    switch ( event->button() )
+    {
+	case Qt::LeftButton:
+	    QGraphicsLineItem::mousePressEvent( event );
+	    logDebug() << "Percentile marker #" << _percentileIndex
+                       << ": " << _name
+                       << ": " << formatSize( _parentView->percentile( _percentileIndex ) )
+                       << endl;
+	    break;
+
+	default:
+	    QGraphicsLineItem::mousePressEvent( event );
+	    break;
+    }
+}
+
