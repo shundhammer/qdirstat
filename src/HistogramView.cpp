@@ -9,6 +9,7 @@
 
 #include <math.h>
 #include <QGraphicsRectItem>
+#include <QGraphicsSceneMouseEvent>
 
 #include "HistogramView.h"
 #include "Logger.h"
@@ -214,7 +215,7 @@ void HistogramView::redisplay()
     qreal histogramHeight = 400.0;
     qreal histogramWidth  = 400.0;
     qreal barWidth = histogramWidth / bucketCount(); // FIXME
-    qreal maxVal = _bucketMaxValue;
+    qreal maxVal   = _bucketMaxValue;
 
     if ( _useLogHeightScale )
         maxVal = log2( maxVal );
@@ -222,27 +223,78 @@ void HistogramView::redisplay()
     for ( int i=0; i < _buckets.size(); ++i )
     {
         logDebug() << "Adding bar #" << i << " with value " << _buckets[ i ] << endl;
-        qreal x   = i * barWidth;
-        qreal y   = -histogramHeight;
+        QRectF rect;
+        rect.setX( i * barWidth );
+        rect.setY( -histogramHeight );
+        rect.setHeight( -histogramHeight );
+        rect.setWidth( barWidth );
+
         qreal val = _buckets[ i ];
 
         if ( _useLogHeightScale && val > 1.0 )
             val = log2( val );
 
-        qreal height = val / maxVal * histogramHeight;
-        QGraphicsRectItem * rect =
-            scene()->addRect( x, y, barWidth, -height, _barPen, _barBrush );
+        qreal fillHeight = val / maxVal * histogramHeight;
 
-        CHECK_NEW( rect );
-        rect->setFlags( QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable );
+        HistogramBar * bar = new HistogramBar( this, i, rect, fillHeight );
+        CHECK_NEW( bar );
     }
 
-    qreal margin = 10;
-    QRectF rect = scene()->sceneRect();
-    setSceneRect( rect.x() - margin,
-                  rect.y() - margin,
-                  rect.width() + margin,
-                  rect.height() + margin );
+    {
+        qreal margin = 10;
+        QRectF rect = scene()->sceneRect();
+        setSceneRect( rect.x() - margin,
+                      rect.y() - margin,
+                      rect.width() + margin,
+                      rect.height() + margin );
+    }
 
     // setSceneRect( -margin, -margin, histogramWidth + margin , -histogramHeight - margin );
+}
+
+
+
+
+HistogramBar::HistogramBar( HistogramView * parent,
+                            int             number,
+                            QRectF          rect,
+                            qreal           fillHeight ):
+    QGraphicsRectItem( rect ),
+    _parentView( parent ),
+    _number( number )
+{
+    setPen( Qt::NoPen );
+
+    // Setting NoPen so this rectangle remains invisible: This full-height
+    // rectangle is just for clicking. For the bar content, we create a visible
+    // separate child item with the correct height.
+
+    QRectF childRect = rect;
+    childRect.setHeight( -fillHeight );
+
+    QGraphicsRectItem * filledRect = new QGraphicsRectItem( childRect, this );
+    CHECK_NEW( filledRect );
+
+    filledRect->setPen( _parentView->barPen() );
+    filledRect->setBrush( _parentView->barBrush() );
+    filledRect->setFlags( ItemIsSelectable );
+
+    setFlags( ItemIsSelectable );
+    _parentView->scene()->addItem( this );
+}
+
+
+void HistogramBar::mousePressEvent( QGraphicsSceneMouseEvent * event )
+{
+    switch ( event->button() )
+    {
+	case Qt::LeftButton:
+	    QGraphicsRectItem::mousePressEvent( event );
+	    logDebug() << "Mouse pressed for histogram bar #" << _number << endl;
+	    break;
+
+	default:
+	    QGraphicsRectItem::mousePressEvent( event );
+	    break;
+    }
 }

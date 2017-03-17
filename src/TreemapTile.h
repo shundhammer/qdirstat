@@ -281,7 +281,7 @@ namespace QDirStat
 	 *
 	 * Reimplemented from QGraphicsItem.
 	 **/
-	virtual void mousePressEvent  ( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
+	virtual void mousePressEvent( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Mouse release event: Handle marking item selection.

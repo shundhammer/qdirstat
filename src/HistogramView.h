@@ -12,10 +12,13 @@
 
 
 #include <QGraphicsView>
+#include <QGraphicsRectItem>
 #include <QList>
 
 #define MAX_BUCKET_COUNT 100
 
+
+class QGraphicsSceneMouseEvent;
 
 typedef QList<qreal> QRealList;
 
@@ -239,6 +242,16 @@ namespace QDirStat
         bool useLogHeightScale() const { return _useLogHeightScale; }
 
 
+        // Pens and brushes for the various elements of the histograms
+
+        QBrush barBrush()      const { return _barBrush;      }
+        QPen   barPen()        const { return _barPen;        }
+        QPen   medianPen()     const { return _medianPen;     }
+        QPen   quartilePen()   const { return _quartilePen;   }
+        QPen   percentilePen() const { return _percentilePen; }
+        QPen   decilePen()     const { return _decilePen;     }
+
+
     public slots:
 
         /**
@@ -277,6 +290,43 @@ namespace QDirStat
         QPen      _quartilePen;
         QPen      _percentilePen;
         QPen      _decilePen;
+    };
+
+
+    /**
+     * GraphicsItem class for a histogram bar.
+     *
+     * This creates an invisible full-height item so it is clickable, even for
+     * very small values, and a visible child rectangle to display the correct
+     * height.
+     **/
+    class HistogramBar: public QGraphicsRectItem
+    {
+    public:
+        /**
+         * Constructor. 'number' is the number of the bar (0 being the
+         * leftmost) in the histogram.
+         **/
+        HistogramBar( HistogramView * parent,
+                      int             number,
+                      QRectF          rect,
+                      qreal           fillHeight );
+
+        /**
+         * Return the number of this bar.
+         **/
+        int number() const { return _number; }
+
+    protected:
+	/**
+	 * Mouse press event
+	 *
+	 * Reimplemented from QGraphicsItem.
+	 **/
+	virtual void mousePressEvent( QGraphicsSceneMouseEvent * event ) Q_DECL_OVERRIDE;
+
+        HistogramView * _parentView;
+        int             _number;
     };
 
 }	// namespace QDirStat
