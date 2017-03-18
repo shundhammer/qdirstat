@@ -217,24 +217,44 @@ namespace QDirStat
         int percentileStep() const { return _percentileStep; }
 
         /**
-         * Set how many percentiles to display as an overlay at the margins (at
-         * the left and at the right border) in addition to those shown with
-         * showPercentiles().
+         * Set how many percentiles to display as an overlay at the left margin
+         * in addition to those shown with showPercentiles().
          *
          * A value of 2 with a histogram showing data from min to max means
-         * show also P1, P2, P98 and P99.
+         * show also P1 and P2.
          *
          * A value of 2 with a histogram showing data from P3 to P97 means show
-         * also P4, P5, P95 and P96.
+         * also P4 and P5.
          *
          * A value of 0 means show no additional percentiles.
          **/
-        void setMarginPercentiles( int margin = 2 ) { _marginPercentiles = margin; }
+        void setLeftMarginPercentiles( int number = 0 )
+            { _leftMarginPercentiles = number; }
 
         /**
-         * Return the margin percentiles or 0 if none are shown.
+         * Return the left margin percentiles or 0 if none are shown.
          **/
-        int marginPercentiles() { return _marginPercentiles; }
+        int leftMarginPercentiles() { return _leftMarginPercentiles; }
+
+        /**
+         * Set how many percentiles to display as an overlay at the right
+         * margin in addition to those shown with showPercentiles().
+         *
+         * A value of 2 with a histogram showing data from min to max means
+         * show also P98 and P99.
+         *
+         * A value of 2 with a histogram showing data from P3 to P97 means show
+         * also P95 and P96.
+         *
+         * A value of 0 means show no additional percentiles.
+         **/
+        void setRightMarginPercentiles( int number= 2 )
+            { _leftMarginPercentiles = number; }
+
+        /**
+         * Return the right margin percentiles or 0 if none are shown.
+         **/
+        int rightMarginPercentiles() { return _rightMarginPercentiles; }
 
         /**
          * Enable or disable a logarithmic (log2) height scale.
@@ -320,7 +340,8 @@ namespace QDirStat
         bool      _showMedian;
         bool      _showQuartiles;
         int       _percentileStep;
-        int       _marginPercentiles;
+        int       _leftMarginPercentiles;
+        int       _rightMarginPercentiles;
 
         QBrush    _barBrush;
         QPen      _barPen;

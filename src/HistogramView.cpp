@@ -40,14 +40,15 @@ HistogramView::~HistogramView()
 
 void HistogramView::init()
 {
-    _bucketMaxValue    = 0;
-    _startPercentile   = 0;    // data min
-    _endPercentile     = 100;  // data max
-    _useLogHeightScale = false;
-    _showMedian        = true;
-    _showQuartiles     = true;
-    _percentileStep    = 5;
-    _marginPercentiles = 2;
+    _bucketMaxValue         = 0;
+    _startPercentile        = 0;    // data min
+    _endPercentile          = 100;  // data max
+    _useLogHeightScale      = false;
+    _showMedian             = true;
+    _showQuartiles          = true;
+    _percentileStep         = 0;
+    _leftMarginPercentiles  = 0;
+    _rightMarginPercentiles = 5;
 
 
     // TO DO: read from and write to QSettings
@@ -57,8 +58,8 @@ void HistogramView::init()
 
     _medianPen     = QPen( Qt::magenta, 2 );
     _quartilePen   = QPen( Qt::blue, 2 );
-    _percentilePen = QPen( QColor( 0x30, 0x30, 0x30 ), 1 );
-    _decilePen     = QPen( QColor( 0x30, 0x50, 0x30 ), 2 );
+    _percentilePen = QPen( QColor( 0xA0, 0xA0, 0xA0 ), 1 );
+    _decilePen     = QPen( QColor( 0x30, 0x80, 0x30 ), 1 );
 }
 
 
@@ -394,13 +395,12 @@ void HistogramView::addXAxisLabel()
 
 void HistogramView::addXStartEndLabels()
 {
-    QString startLabel = tr( "Min" ) + "\n0";
+    QString startLabel = tr( "Min" );
 
     if ( _startPercentile > 0 )
-    {
         startLabel = QString( "P%1" ).arg( _startPercentile );
-        startLabel += "\n" + formatSize( percentile( _startPercentile ) );
-    }
+
+    startLabel += "\n" + formatSize( percentile( _startPercentile ) );
 
     QString endLabel = _endPercentile == 100 ?
         tr( "Max" ) :
@@ -458,6 +458,36 @@ void HistogramView::addMarkers()
     QLineF zeroLine( 0, _markerExtraHeight,
                      0, -( _histogramHeight + _markerExtraHeight ) );
 
+    // Show ordinary percentiles (all except Q1, Median, Q3)
+
+    for ( int i = _startPercentile + 1; i < _endPercentile; ++i )
+    {
+        if ( i == 0 || i == 100 )
+            continue;
+
+        if ( i == 50 && _showMedian )
+            continue;
+
+        if ( ( i == 25 || i == 75 ) && _showQuartiles )
+            continue;
+
+        if ( _percentileStep != 1 &&
+             i > _startPercentile + _leftMarginPercentiles  &&
+             i < _endPercentile   - _rightMarginPercentiles &&
+             ( _percentileStep == 0 || i % _percentileStep != 0 ) )
+        {
+            continue;
+        }
+
+        QPen pen = _percentilePen;
+
+        if ( _percentileStep != 0 && _percentileStep != 5 && i % 10 == 0 )
+            pen = _decilePen;
+
+        logDebug() << "Adding marker for P" << i << endl;
+        new PercentileMarker( this, i, "", zeroLine, pen );
+    }
+
     if ( _showQuartiles )
     {
         if ( percentileDisplayed( 25 ) )
@@ -470,9 +500,10 @@ void HistogramView::addMarkers()
     }
 
     if ( _showMedian && percentileDisplayed( 50 ) )
+    {
         new PercentileMarker( this, 50, tr( "Median" ),
                               zeroLine, _medianPen );
-
+    }
 }
 
 
@@ -570,9 +601,9 @@ PercentileMarker::PercentileMarker( HistogramView * parent,
     _percentileIndex( percentileIndex )
 {
     if ( _name.isEmpty() )
-        _name = QString( "P%1" ).arg( _percentileIndex );
+        _name = QObject::tr( "Percentile P%1" ).arg( _percentileIndex );
 
-    setToolTip( name + "\n" +
+    setToolTip( _name + "\n" +
                 formatSize( _parentView->percentile( percentileIndex ) ) );
 
     setPen( pen );
