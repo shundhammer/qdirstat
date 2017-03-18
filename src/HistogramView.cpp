@@ -307,26 +307,28 @@ void HistogramView::addXStartEndLabels()
 
     if ( _startPercentile > 0 )
     {
-        QString( "P%1" ).arg( _startPercentile );
+        startLabel = QString( "P%1" ).arg( _startPercentile );
         startLabel += "\n" + formatSize( percentile( _startPercentile ) );
     }
-
 
     QString endLabel = _endPercentile == 100 ?
         tr( "Max" ) :
         QString( "P%1" ).arg( _endPercentile );
 
-    endLabel = "     " + endLabel + "\n" + formatSize( percentile( _endPercentile ) );
+    QString endSizeLabel = formatSize( percentile( _endPercentile ) );
 
-    QGraphicsSimpleTextItem * startItem = scene()->addSimpleText( startLabel );
-    QGraphicsSimpleTextItem * endItem   = scene()->addSimpleText( endLabel );
+    QGraphicsSimpleTextItem * startItem   = scene()->addSimpleText( startLabel );
+    QGraphicsSimpleTextItem * endItem     = scene()->addSimpleText( endLabel );
+    QGraphicsSimpleTextItem * endSizeItem = scene()->addSimpleText( endSizeLabel );
 
-    qreal textHeight   = endItem->boundingRect().height(); // same for both
-    qreal endTextWidth = endItem->boundingRect().width();
-    qreal y            = _bottomBorder - textHeight;
+    qreal endTextHeight = endItem->boundingRect().height();
+    qreal endTextWidth  = endItem->boundingRect().width();
+    qreal endSizeWidth  = endSizeItem->boundingRect().width();
+    qreal y             = _bottomBorder - 2 * endTextHeight;
 
-    startItem->setPos( 0, y );
+    startItem->setPos( 0, _bottomBorder - startItem->boundingRect().height() );
     endItem->setPos( _histogramWidth - endTextWidth, y );
+    endSizeItem->setPos( _histogramWidth - endSizeWidth, y + endTextHeight );
 }
 
 
