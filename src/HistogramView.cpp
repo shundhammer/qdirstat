@@ -310,6 +310,7 @@ void HistogramView::redisplay()
 
 
     addHistogramBackground();
+    addAxes();
     addYAxisLabel();
     addXAxisLabel();
     addXStartEndLabels();
@@ -329,6 +330,14 @@ void HistogramView::addHistogramBackground()
                  -( _histogramHeight + _topBorder  + _bottomBorder ) );
 
     scene()->addRect( rect, pen, brush );
+}
+
+
+void HistogramView::addAxes()
+{
+    QPen pen( QColor( Qt::black ), 1 );
+    scene()->addLine( 0, 0, 0, -_histogramHeight, pen );
+    scene()->addLine( 0, 0, _histogramWidth, 0, pen );
 }
 
 

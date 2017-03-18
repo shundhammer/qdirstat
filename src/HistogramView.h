@@ -296,6 +296,7 @@ namespace QDirStat
         // Histogram elements
 
         void addHistogramBackground();
+        void addAxes();
         void addYAxisLabel();
         void addXAxisLabel();
         void addXStartEndLabels();
