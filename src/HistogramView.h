@@ -284,6 +284,8 @@ namespace QDirStat
         // Histogram elements
 
         void addHistogramBackground();
+        void addYAxisLabel();
+        void addXAxisLabel();
         void addHistogramBars();
         void addMarkers();
 
@@ -316,6 +318,12 @@ namespace QDirStat
 
         qreal     _histogramWidth;
         qreal     _histogramHeight;
+
+        qreal     _leftBorder;
+        qreal     _rightBorder;
+        qreal     _topBorder;
+        qreal     _bottomBorder;
+
     };
 
 

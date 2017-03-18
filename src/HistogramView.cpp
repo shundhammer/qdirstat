@@ -222,24 +222,16 @@ void HistogramView::redisplay()
     _histogramHeight = 250.0; // FIXME
     _histogramWidth  = 600.0; // FIXME
 
+    _leftBorder      = 40.0;
+    _rightBorder     = 10.0;
+    _topBorder       = 30.0;
+    _bottomBorder    = 40.0;
+
     addHistogramBackground();
+    addYAxisLabel();
+    addXAxisLabel();
     addHistogramBars();
     addMarkers();
-
-
-
-    //
-    // Scale viewport
-    //
-
-#if 0
-    qreal margin = 10;
-    QRectF rect = scene()->sceneRect();
-    setSceneRect( rect.x() - margin,
-                  rect.y() - margin,
-                  rect.width() + margin,
-                  rect.height() + margin );
-#endif
 }
 
 
@@ -248,30 +240,29 @@ void HistogramView::addHistogramBackground()
     QBrush brush( QColor( 0xE0, 0xE0, 0xE0, 0x80 ) );
     QPen   pen( Qt::NoPen );
 
-    qreal  leftBorder   = 50.0;
-    qreal  rightBorder  = 10.0;
-    qreal  topBorder    = 30.0;
-    qreal  bottomBorder = 30.0;
-
-    QRectF rect( -leftBorder,
-                 topBorder,
-                 _histogramWidth   + leftBorder + rightBorder,
-                 -_histogramHeight - topBorder  - bottomBorder );
+    QRectF rect( -_leftBorder,
+                 _bottomBorder,
+                 _histogramWidth   + _leftBorder + _rightBorder,
+                 -( _histogramHeight + _topBorder  + _bottomBorder ) );
 
     scene()->addRect( rect, pen, brush );
+}
 
-    QString yAxisLabel = _useLogHeightScale ? "log<sub>2</sub>(n)" : "n";
 
+void HistogramView::addYAxisLabel()
+{
+    QString labelText = _useLogHeightScale ? "log<sub>2</sub>(n)   -->" : "n";
 
     QGraphicsTextItem * item = scene()->addText( "" );
-    item->setHtml( yAxisLabel );
+    item->setHtml( labelText );
+
     QFont font( item->font() );
     font.setBold( true );
     item->setFont( font );
 
     qreal   textWidth   = item->boundingRect().width();
     qreal   textHeight  = item->boundingRect().height();
-    QPointF labelCenter = QPoint( -leftBorder / 2, -_histogramHeight / 2 );
+    QPointF labelCenter = QPoint( -_leftBorder / 2, -_histogramHeight / 2 );
 
     if ( _useLogHeightScale )
     {
@@ -284,6 +275,25 @@ void HistogramView::addHistogramBackground()
         item->setPos( labelCenter.x() - textWidth  / 2,
                       labelCenter.y() - textHeight / 2 );
     }
+}
+
+
+void HistogramView::addXAxisLabel()
+{
+    QString labelText = tr( "File Size" ) + "  -->";
+
+    QGraphicsTextItem * item = scene()->addText( labelText );
+
+    QFont font( item->font() );
+    font.setBold( true );
+    item->setFont( font );
+
+    qreal   textWidth   = item->boundingRect().width();
+    qreal   textHeight  = item->boundingRect().height();
+    QPointF labelCenter = QPoint( _histogramWidth / 2, _bottomBorder / 2 );
+
+    item->setPos( labelCenter.x() - textWidth  / 2,
+                  labelCenter.y() - textHeight / 2 );
 }
 
 
