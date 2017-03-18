@@ -167,6 +167,12 @@ void HistogramView::setEndPercentile( int index )
 }
 
 
+bool HistogramView::percentileDisplayed( int index ) const
+{
+    return index >= _startPercentile && index <= _endPercentile;
+}
+
+
 qreal HistogramView::bucket( int index ) const
 {
     CHECK_INDEX( index, 0, _buckets.size() - 1 );
@@ -213,8 +219,8 @@ void HistogramView::redisplay()
         return;
     }
 
-    _histogramHeight = 400.0; // FIXME
-    _histogramWidth  = 400.0; // FIXME
+    _histogramHeight = 250.0; // FIXME
+    _histogramWidth  = 600.0; // FIXME
 
     addHistogramBars();
     addMarkers();
@@ -270,19 +276,19 @@ void HistogramView::addMarkers()
 {
     qreal markerExtraHeight = 15; // FIXME
 
-    QLineF line( 0, markerExtraHeight,
-                 0, -( _histogramHeight + markerExtraHeight ) );
+    QLineF zeroLine( 0, markerExtraHeight,
+                     0, -( _histogramHeight + markerExtraHeight ) );
 
-    if ( _showMedian )
+    if ( _showMedian && percentileDisplayed( 50 ) )
+        new PercentileMarker( this, 50, tr( "Median" ), zeroLine, _medianPen );
+
+    if ( _showQuartiles )
     {
-        qreal val = scaleValue( percentile( 50 ) );
+        if ( percentileDisplayed( 25 ) )
+            new PercentileMarker( this, 25, tr( "Q1" ), zeroLine, _quartilePen );
 
-        PercentileMarker * marker =
-            new PercentileMarker( this,
-                                  line.translated( val, 0 ),
-                                  tr( "Median" ),
-                                  50 );
-        marker->setPen( _medianPen );
+        if ( percentileDisplayed( 75 ) )
+            new PercentileMarker( this, 75, tr( "Q3" ), zeroLine, _quartilePen );
     }
 }
 
@@ -335,10 +341,19 @@ void HistogramBar::mousePressEvent( QGraphicsSceneMouseEvent * event )
     switch ( event->button() )
     {
 	case Qt::LeftButton:
-	    QGraphicsRectItem::mousePressEvent( event );
-	    logDebug() << "Histogram bar #" << _number
-                       << ": " << _parentView->bucket( _number )
-                       << endl;
+            {
+                QGraphicsRectItem::mousePressEvent( event );
+
+                qreal bwidth = _parentView->bucketWidth();
+                qreal from   = bwidth * _number;
+                qreal to     = from + bwidth;
+
+                logDebug() << "Histogram bar #" << _number
+                           << ": " << _parentView->bucket( _number ) << " items;"
+                           << " range: " << formatSize( from )
+                           << " .. " << formatSize( to )
+                           << endl;
+            }
 	    break;
 
 	default:
@@ -351,25 +366,32 @@ void HistogramBar::mousePressEvent( QGraphicsSceneMouseEvent * event )
 
 
 PercentileMarker::PercentileMarker( HistogramView * parent,
-                                    const QLineF &  line,
+                                    int             percentileIndex,
                                     const QString & name,
-                                    int             percentileIndex ):
-    QGraphicsLineItem( line ),
+                                    const QLineF &  zeroLine,
+                                    const QPen &    pen ):
+    QGraphicsLineItem( translatedLine( zeroLine, percentileIndex, parent ) ),
     _parentView( parent ),
     _name( name ),
     _percentileIndex( percentileIndex )
 {
-    logDebug() << "Line: x1: " << line.x1() << " y1: " << line.y1()
-               << " x2: "      << line.x2() << " y2: " << line.y2()
-               << endl;
-
     if ( _name.isEmpty() )
-        _name = QString( "P%1" ).arg( percentileIndex );
+        _name = QString( "P%1" ).arg( _percentileIndex );
 
-    setPen( _parentView->percentilePen() );
-
+    setPen( pen );
     setFlags( ItemIsSelectable );
     _parentView->scene()->addItem( this );
+}
+
+
+QLineF PercentileMarker::translatedLine( const QLineF &  zeroLine,
+                                         int             percentileIndex,
+                                         HistogramView * parent ) const
+{
+    qreal value = parent->percentile( percentileIndex );
+    qreal x     = parent->scaleValue( value );
+
+    return zeroLine.translated( x, 0 );
 }
 
 

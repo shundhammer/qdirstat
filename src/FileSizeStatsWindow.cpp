@@ -70,8 +70,8 @@ void FileSizeStatsWindow::initWidgets()
     // DEBUG
     // DEBUG
 
-    _ui->histogramView->setStartPercentile(  2 );
-    _ui->histogramView->setEndPercentile  ( 80 );
+    _ui->histogramView->setStartPercentile(  0 );
+    _ui->histogramView->setEndPercentile  ( 95 );
     _ui->histogramView->setUseLogHeightScale( false );
 
     // DEBUG

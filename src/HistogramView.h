@@ -242,6 +242,11 @@ namespace QDirStat
          **/
         bool useLogHeightScale() const { return _useLogHeightScale; }
 
+        /**
+         * Convert a data value to the corresponding X axis point in the
+         * histogram.
+         **/
+        qreal scaleValue( qreal value );
 
         // Pens and brushes for the various elements of the histograms
 
@@ -269,10 +274,11 @@ namespace QDirStat
         void addMarkers();
 
         /**
-         * Convert a data value to the corresponding X axis point in the
-         * histogram.
+         * Return 'true' if percentile no. 'index' is in range for being
+         * displayed, i.e. if it is between _startPercentile and
+         * _endPercentile.
          **/
-        qreal scaleValue( qreal value );
+        bool percentileDisplayed( int index ) const;
 
 
         //
@@ -350,9 +356,10 @@ namespace QDirStat
     {
     public:
         PercentileMarker( HistogramView * parent,
-                          const QLineF &  line,
+                          int             percentileIndex,
                           const QString & name,
-                          int             percentileIndex );
+                          const QLineF &  zeroLine,
+                          const QPen &    pen );
 
         /**
          * Return the name of this marker; something like "P1", "Min", "Max",
@@ -371,6 +378,11 @@ namespace QDirStat
         qreal value() const;
 
     protected:
+
+        QLineF translatedLine( const QLineF &  zeroLine,
+                               int             percentileIndex,
+                               HistogramView * parent ) const;
+
 	/**
 	 * Mouse press event
 	 *
