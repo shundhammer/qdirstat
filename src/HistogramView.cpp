@@ -225,11 +225,15 @@ void HistogramView::redisplay()
     _leftBorder      = 40.0;
     _rightBorder     = 10.0;
     _topBorder       = 30.0;
-    _bottomBorder    = 40.0;
+    _bottomBorder    = 50.0;
+
+    _markerExtraHeight = 15.0;
+
 
     addHistogramBackground();
     addYAxisLabel();
     addXAxisLabel();
+    addXStartEndLabels();
     addHistogramBars();
     addMarkers();
 }
@@ -282,7 +286,7 @@ void HistogramView::addXAxisLabel()
 {
     QString labelText = tr( "File Size" ) + "  -->";
 
-    QGraphicsTextItem * item = scene()->addText( labelText );
+    QGraphicsSimpleTextItem * item = scene()->addSimpleText( labelText );
 
     QFont font( item->font() );
     font.setBold( true );
@@ -290,10 +294,39 @@ void HistogramView::addXAxisLabel()
 
     qreal   textWidth   = item->boundingRect().width();
     qreal   textHeight  = item->boundingRect().height();
-    QPointF labelCenter = QPoint( _histogramWidth / 2, _bottomBorder / 2 );
+    QPointF labelCenter = QPoint( _histogramWidth / 2, _bottomBorder );
 
-    item->setPos( labelCenter.x() - textWidth  / 2,
-                  labelCenter.y() - textHeight / 2 );
+    item->setPos( labelCenter.x() - textWidth / 2,
+                  labelCenter.y() - textHeight ); // Align bottom
+}
+
+
+void HistogramView::addXStartEndLabels()
+{
+    QString startLabel = tr( "Min" ) + "\n0";
+
+    if ( _startPercentile > 0 )
+    {
+        QString( "P%1" ).arg( _startPercentile );
+        startLabel += "\n" + formatSize( percentile( _startPercentile ) );
+    }
+
+
+    QString endLabel = _endPercentile == 100 ?
+        tr( "Max" ) :
+        QString( "P%1" ).arg( _endPercentile );
+
+    endLabel = "     " + endLabel + "\n" + formatSize( percentile( _endPercentile ) );
+
+    QGraphicsSimpleTextItem * startItem = scene()->addSimpleText( startLabel );
+    QGraphicsSimpleTextItem * endItem   = scene()->addSimpleText( endLabel );
+
+    qreal textHeight   = endItem->boundingRect().height(); // same for both
+    qreal endTextWidth = endItem->boundingRect().width();
+    qreal y            = _bottomBorder - textHeight;
+
+    startItem->setPos( 0, y );
+    endItem->setPos( _histogramWidth - endTextWidth, y );
 }
 
 
@@ -329,10 +362,8 @@ void HistogramView::addHistogramBars()
 
 void HistogramView::addMarkers()
 {
-    qreal markerExtraHeight = 15; // FIXME
-
-    QLineF zeroLine( 0, markerExtraHeight,
-                     0, -( _histogramHeight + markerExtraHeight ) );
+    QLineF zeroLine( 0, _markerExtraHeight,
+                     0, -( _histogramHeight + _markerExtraHeight ) );
 
     if ( _showMedian && percentileDisplayed( 50 ) )
         new PercentileMarker( this, 50, tr( "Median" ), zeroLine, _medianPen );

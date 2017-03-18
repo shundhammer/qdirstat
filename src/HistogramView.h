@@ -286,6 +286,7 @@ namespace QDirStat
         void addHistogramBackground();
         void addYAxisLabel();
         void addXAxisLabel();
+        void addXStartEndLabels();
         void addHistogramBars();
         void addMarkers();
 
@@ -323,6 +324,8 @@ namespace QDirStat
         qreal     _rightBorder;
         qreal     _topBorder;
         qreal     _bottomBorder;
+
+        qreal     _markerExtraHeight;
 
     };
 
