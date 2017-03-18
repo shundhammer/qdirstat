@@ -69,7 +69,10 @@ void HistogramView::clear()
     init();
 
     if ( scene() )
-	qDeleteAll( scene()->items() );
+    {
+        scene()->clear();
+        scene()->invalidate( scene()->sceneRect() );
+    }
 }
 
 
@@ -430,7 +433,7 @@ void HistogramView::addHistogramBars()
 
     for ( int i=0; i < _buckets.size(); ++i )
     {
-        logDebug() << "Adding bar #" << i << " with value " << _buckets[ i ] << endl;
+        // logDebug() << "Adding bar #" << i << " with value " << _buckets[ i ] << endl;
         QRectF rect;
         rect.setX( i * barWidth );
         rect.setY( 0 );
@@ -458,14 +461,17 @@ void HistogramView::addMarkers()
     if ( _showQuartiles )
     {
         if ( percentileDisplayed( 25 ) )
-            new PercentileMarker( this, 25, tr( "Q1" ), zeroLine, _quartilePen );
+            new PercentileMarker( this, 25, tr( "Q1 (1st Quartile)" ),
+                                  zeroLine, _quartilePen );
 
         if ( percentileDisplayed( 75 ) )
-            new PercentileMarker( this, 75, tr( "Q3" ), zeroLine, _quartilePen );
+            new PercentileMarker( this, 75, tr( "Q3 (3rd Quartile)" ),
+                                  zeroLine, _quartilePen );
     }
 
     if ( _showMedian && percentileDisplayed( 50 ) )
-        new PercentileMarker( this, 50, tr( "Median" ), zeroLine, _medianPen );
+        new PercentileMarker( this, 50, tr( "Median" ),
+                              zeroLine, _medianPen );
 
 }
 
@@ -510,6 +516,17 @@ HistogramBar::HistogramBar( HistogramView * parent,
 
     setFlags( ItemIsSelectable );
     _parentView->scene()->addItem( this );
+
+    qreal bucketWidth = _parentView->bucketWidth();
+
+    QString tooltip = QObject::tr( "Bucket #%1:\n%2 Files\n%3 .. %4" )
+        .arg( _number + 1 )
+        .arg( _parentView->bucket( _number ) )
+        .arg( formatSize( _number * bucketWidth ) )
+        .arg( formatSize( ( _number + 1 ) * bucketWidth ) );
+
+    setToolTip( tooltip );
+    filledRect->setToolTip( tooltip );
 }
 
 
@@ -554,6 +571,9 @@ PercentileMarker::PercentileMarker( HistogramView * parent,
 {
     if ( _name.isEmpty() )
         _name = QString( "P%1" ).arg( _percentileIndex );
+
+    setToolTip( name + "\n" +
+                formatSize( _parentView->percentile( percentileIndex ) ) );
 
     setPen( pen );
     setFlags( ItemIsSelectable );
