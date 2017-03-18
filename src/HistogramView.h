@@ -320,6 +320,7 @@ namespace QDirStat
         void addYAxisLabel();
         void addXAxisLabel();
         void addXStartEndLabels();
+        void addQuartileText();
         void addHistogramBars();
         void addMarkers();
 

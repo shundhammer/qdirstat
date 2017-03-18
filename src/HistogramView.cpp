@@ -318,6 +318,7 @@ void HistogramView::redisplay()
     addYAxisLabel();
     addXAxisLabel();
     addXStartEndLabels();
+    addQuartileText();
     addHistogramBars();
     addMarkers();
 }
@@ -420,6 +421,44 @@ void HistogramView::addXStartEndLabels()
     startItem->setPos( 0, _bottomBorder - startItem->boundingRect().height() );
     endItem->setPos( _histogramWidth - endTextWidth, y );
     endSizeItem->setPos( _histogramWidth - endSizeWidth, y + endTextHeight );
+}
+
+
+void HistogramView::addQuartileText()
+{
+    QString q1Text = tr( "Q1: %1" ).arg( formatSize( percentile( 25 ) ) );
+    QString q3Text = tr( "Q3: %1" ).arg( formatSize( percentile( 75 ) ) );
+    QString medianText = tr( "Median: %1" ).arg( formatSize( percentile( 50 ) ) );
+
+    QGraphicsSimpleTextItem * q1Item     = scene()->addSimpleText( q1Text );
+    QGraphicsSimpleTextItem * q3Item     = scene()->addSimpleText( q3Text );
+    QGraphicsSimpleTextItem * medianItem = scene()->addSimpleText( medianText );
+
+    q1Item->setBrush( _quartilePen.color() );
+    q3Item->setBrush( _quartilePen.color() );
+    medianItem->setBrush( _medianPen.color() );
+
+    QFont font( medianItem->font() );
+    font.setBold( true );
+
+    medianItem->setFont( font );
+    q1Item->setFont( font );
+    q3Item->setFont( font );
+
+    qreal textBorder  = 10.0;
+    qreal textSpacing = 30.0;
+
+    qreal y = -_histogramHeight - _topBorder - textBorder;
+    y -= medianItem->boundingRect().height();
+
+    qreal q1Width     = q1Item->boundingRect().width();
+    qreal q3Width     = q3Item->boundingRect().width();
+    qreal medianWidth = medianItem->boundingRect().width();
+
+    qreal x = 0;
+    q1Item->setPos( x, y );      x += q1Width     + textSpacing;
+    medianItem->setPos( x, y );  x += medianWidth + textSpacing;
+    q3Item->setPos( x, y );      x += q3Width     + textSpacing;
 }
 
 
