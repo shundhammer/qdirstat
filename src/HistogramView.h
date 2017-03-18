@@ -268,10 +268,10 @@ namespace QDirStat
 
     protected:
 
+        /**
+         * Common one-time initializations
+         **/
         void init();
-
-        void addHistogramBars();
-        void addMarkers();
 
         /**
          * Return 'true' if percentile no. 'index' is in range for being
@@ -279,6 +279,13 @@ namespace QDirStat
          * _endPercentile.
          **/
         bool percentileDisplayed( int index ) const;
+
+
+        // Histogram elements
+
+        void addHistogramBackground();
+        void addHistogramBars();
+        void addMarkers();
 
 
         //

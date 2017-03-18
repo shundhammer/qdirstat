@@ -8,6 +8,8 @@
 
 
 #include <math.h>
+#include <algorithm>
+
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
 
@@ -27,14 +29,12 @@ using namespace QDirStat;
 HistogramView::HistogramView( QWidget * parent ):
     QGraphicsView( parent )
 {
-    logInfo() << "HistogramView ctor" << endl;
     init();
 }
 
 
 HistogramView::~HistogramView()
 {
-    logInfo() << "HistogramView dtor" << endl;
 }
 
 
@@ -222,6 +222,7 @@ void HistogramView::redisplay()
     _histogramHeight = 250.0; // FIXME
     _histogramWidth  = 600.0; // FIXME
 
+    addHistogramBackground();
     addHistogramBars();
     addMarkers();
 
@@ -239,6 +240,50 @@ void HistogramView::redisplay()
                   rect.width() + margin,
                   rect.height() + margin );
 #endif
+}
+
+
+void HistogramView::addHistogramBackground()
+{
+    QBrush brush( QColor( 0xE0, 0xE0, 0xE0, 0x80 ) );
+    QPen   pen( Qt::NoPen );
+
+    qreal  leftBorder   = 50.0;
+    qreal  rightBorder  = 10.0;
+    qreal  topBorder    = 30.0;
+    qreal  bottomBorder = 30.0;
+
+    QRectF rect( -leftBorder,
+                 topBorder,
+                 _histogramWidth   + leftBorder + rightBorder,
+                 -_histogramHeight - topBorder  - bottomBorder );
+
+    scene()->addRect( rect, pen, brush );
+
+    QString yAxisLabel = _useLogHeightScale ? "log<sub>2</sub>(n)" : "n";
+
+
+    QGraphicsTextItem * item = scene()->addText( "" );
+    item->setHtml( yAxisLabel );
+    QFont font( item->font() );
+    font.setBold( true );
+    item->setFont( font );
+
+    qreal   textWidth   = item->boundingRect().width();
+    qreal   textHeight  = item->boundingRect().height();
+    QPointF labelCenter = QPoint( -leftBorder / 2, -_histogramHeight / 2 );
+
+    if ( _useLogHeightScale )
+    {
+        item->setRotation( 270 );
+        item->setPos( labelCenter.x() - textHeight / 2,
+                      labelCenter.y() + textWidth  / 2 );
+    }
+    else
+    {
+        item->setPos( labelCenter.x() - textWidth  / 2,
+                      labelCenter.y() - textHeight / 2 );
+    }
 }
 
 
@@ -300,7 +345,7 @@ qreal HistogramView::scaleValue( qreal value )
     qreal totalWidth = endVal - startVal;
     qreal result     = ( value - startVal ) / totalWidth * _histogramWidth;
 
-    logDebug() << "Scaling " << formatSize( value ) << " to " << result << endl;
+    // logDebug() << "Scaling " << formatSize( value ) << " to " << result << endl;
 
     return result;
 }
