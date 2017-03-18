@@ -64,20 +64,6 @@ void FileSizeStatsWindow::initWidgets()
 
     connect( _ui->percentileFilterComboBox, SIGNAL( currentIndexChanged( int ) ),
              this,                          SLOT  ( fillPercentileTable()      ) );
-
-#if 1
-    // DEBUG
-    // DEBUG
-    // DEBUG
-
-    _ui->histogramView->setStartPercentile(  0 );
-    _ui->histogramView->setEndPercentile  ( 95 );
-    _ui->histogramView->setUseLogHeightScale( true );
-
-    // DEBUG
-    // DEBUG
-    // DEBUG
-#endif
 }
 
 
@@ -260,15 +246,19 @@ void FileSizeStatsWindow::fillHistogram()
     HistogramView * histogram = _ui->histogramView;
     CHECK_PTR( histogram );
 
+    histogram->setPercentiles( _stats->percentileList() );
+    histogram->autoStartEndPercentiles();
+
     int startPercentile = histogram->startPercentile();
     int endPercentile   = histogram->endPercentile();
+
     int percentileCount = endPercentile - startPercentile;
     int dataCount       = _stats->dataSize() * ( percentileCount / 100.0 );
     int bucketCount     = histogram->bestBucketCount( dataCount );
     QRealList buckets   = _stats->fillBuckets( bucketCount, startPercentile, endPercentile );
 
     histogram->setBuckets( buckets );
-    histogram->setPercentiles( _stats->percentileList() );
+    histogram->autoLogHeightScale();
     histogram->redisplay();
 }
 

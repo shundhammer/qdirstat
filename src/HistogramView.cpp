@@ -196,6 +196,85 @@ qreal HistogramView::bucketWidth() const
 }
 
 
+void HistogramView::autoStartEndPercentiles()
+{
+    if ( _percentiles.isEmpty() )
+    {
+        logError() << "No percentiles set" << endl;
+        return;
+    }
+
+    qreal q1    = percentile( 25 );
+    qreal q3    = percentile( 75 );
+    qreal qDist = q3 - q1;
+
+    qreal minVal = qMax( q1 - 3 * qDist, 0.0 );
+    qreal maxVal = qMin( q3 + 3 * qDist, percentile( 100 ) );
+
+    for ( _startPercentile = 0; _startPercentile <= 25; ++_startPercentile )
+    {
+        if ( percentile( _startPercentile ) >= minVal )
+            break;
+    }
+
+    for ( _endPercentile = 100; _endPercentile >= 75; --_endPercentile )
+    {
+        if ( percentile( _endPercentile ) <= maxVal )
+            break;
+    }
+
+    logInfo() << "Q1: " << formatSize( q1 )
+              << "  Q3: " << formatSize( q3 )
+              << "  minVal: " << formatSize( minVal )
+              << "  maxVal: " << formatSize( maxVal )
+              << endl;
+    logInfo() << "startPercentile: " << _startPercentile
+              << "  " << formatSize( percentile( _startPercentile ) )
+              << "  endPercentile: " << _endPercentile
+              << "  " << formatSize( percentile( _endPercentile  ) )
+              << endl;
+}
+
+
+bool HistogramView::autoLogHeightScale()
+{
+    if ( _buckets.isEmpty() )
+    {
+        logError() << "No buckets set" << endl;
+        return false;
+    }
+
+    _useLogHeightScale = false;
+
+
+    if ( _buckets.size() > 3 )
+    {
+        QRealList data = _buckets;
+
+        std::sort( data.begin(), data.end() );
+        qreal largest = data.last();
+
+        // We compare the largest bucket with the P90 percentile of the buckets
+        // (not to confuse with the P90 percentile with the data the buckets
+        // were collected from!)
+
+        int referencePercentile = 85;
+        int pos = data.size() / 100.0 * referencePercentile;
+        qreal referencePercentileValue = data.at( pos );
+
+        _useLogHeightScale = largest > referencePercentileValue * 10;
+
+        logInfo() << "Largest bucket: " << largest
+                  << " bucket P" << referencePercentile
+                  << ": " << referencePercentileValue
+                  << "   -> use log height scale: " << _useLogHeightScale
+                  << endl;
+    }
+
+    return _useLogHeightScale;
+}
+
+
 void HistogramView::redisplay()
 {
 
@@ -367,9 +446,6 @@ void HistogramView::addMarkers()
     QLineF zeroLine( 0, _markerExtraHeight,
                      0, -( _histogramHeight + _markerExtraHeight ) );
 
-    if ( _showMedian && percentileDisplayed( 50 ) )
-        new PercentileMarker( this, 50, tr( "Median" ), zeroLine, _medianPen );
-
     if ( _showQuartiles )
     {
         if ( percentileDisplayed( 25 ) )
@@ -378,6 +454,10 @@ void HistogramView::addMarkers()
         if ( percentileDisplayed( 75 ) )
             new PercentileMarker( this, 75, tr( "Q3" ), zeroLine, _quartilePen );
     }
+
+    if ( _showMedian && percentileDisplayed( 50 ) )
+        new PercentileMarker( this, 50, tr( "Median" ), zeroLine, _medianPen );
+
 }
 
 

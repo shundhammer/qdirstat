@@ -76,32 +76,6 @@ namespace QDirStat
         void clear();
 
         /**
-         * Calculate the best bucket count according to the "Rice Rule" for n
-         * data points, but limited to MAX_BUCKET_COUNT.
-         *
-         * See also https://en.wikipedia.org/wiki/Histogram
-         **/
-        static qreal bestBucketCount( int n );
-
-        /**
-         * Calculate the bucket width from min to max for 'bucketCount'
-         * buckets.
-         **/
-        static qreal bucketWidth( qreal min, qreal max, int bucketCount );
-
-        /**
-         * Set the data as "buckets". Each bucket contains the number of data
-         * points (not their value!) from one interval of bucketWidth width.
-         *
-         * The type of the buckets is qreal even though by mathematical
-         * definition it should be int, but QGraphicsView uses qreal
-         * everywhere, so this is intended to minimize the hassle converting
-         * back and forth. The bucket values can safely be converted to int
-         * with no loss of precision.
-         **/
-        void setBuckets( const QRealList & newBuckets );
-
-        /**
          * Set the percentiles for the data points all at once. Unlike the
          * buckets, these have a value; in the context of QDirStat, this is the
          * FileSize.
@@ -135,13 +109,6 @@ namespace QDirStat
         void setStartPercentile( int index );
 
         /**
-         * Set the percentile (0..100) until which on to display data, i.e. set
-         * the right border of the histogram. The real value to use is taken
-         * from the stored percentiles.
-         **/
-        void setEndPercentile( int index );
-
-        /**
          * Return the percentile from which on to display data, i.e. the left
          * border of the histogram. Use percentile() with the result of this to
          * get the numeric value.
@@ -149,11 +116,49 @@ namespace QDirStat
         int startPercentile() const { return _startPercentile; }
 
         /**
+         * Set the percentile (0..100) until which on to display data, i.e. set
+         * the right border of the histogram. The real value to use is taken
+         * from the stored percentiles.
+         **/
+        void setEndPercentile( int index );
+
+        /**
          * Return the percentile until which on to display data, i.e. the right
          * border of the histogram. Use percentile() with the result of this to
          * get the numeric value.
          **/
         int endPercentile() const { return _endPercentile; }
+
+        /**
+         * Automatically determine the best start and end percentile.
+         **/
+        void autoStartEndPercentiles();
+
+        /**
+         * Calculate the best bucket count according to the "Rice Rule" for n
+         * data points, but limited to MAX_BUCKET_COUNT.
+         *
+         * See also https://en.wikipedia.org/wiki/Histogram
+         **/
+        static qreal bestBucketCount( int n );
+
+        /**
+         * Calculate the bucket width from min to max for 'bucketCount'
+         * buckets.
+         **/
+        static qreal bucketWidth( qreal min, qreal max, int bucketCount );
+
+        /**
+         * Set the data as "buckets". Each bucket contains the number of data
+         * points (not their value!) from one interval of bucketWidth width.
+         *
+         * The type of the buckets is qreal even though by mathematical
+         * definition it should be int, but QGraphicsView uses qreal
+         * everywhere, so this is intended to minimize the hassle converting
+         * back and forth. The bucket values can safely be converted to int
+         * with no loss of precision.
+         **/
+        void setBuckets( const QRealList & newBuckets );
 
         /**
          * Return the current number of data buckets, i.e. the number of
@@ -241,6 +246,13 @@ namespace QDirStat
          * not.
          **/
         bool useLogHeightScale() const { return _useLogHeightScale; }
+
+        /**
+         * Automatically determine if a logarithmic height scale should be
+         * used. Set the internal _useLogHeightScale variable accordingly and
+         * return it.
+         **/
+        bool autoLogHeightScale();
 
         /**
          * Convert a data value to the corresponding X axis point in the
