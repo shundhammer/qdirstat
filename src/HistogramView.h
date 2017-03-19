@@ -180,6 +180,11 @@ namespace QDirStat
         qreal bucketWidth() const;
 
         /**
+         * Return the total sum of all buckets.
+         **/
+        qreal bucketsTotalSum() const;
+
+        /**
          * Enable or disable showing the median (percentile 50) as an overlay
          * over the histogram.
          **/

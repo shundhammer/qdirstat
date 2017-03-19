@@ -22,6 +22,8 @@
 #define CHECK_PERCENTILE_INDEX( INDEX ) \
     CHECK_INDEX_MSG( (INDEX), 0, 100, "Percentile index out of range" );
 
+#define UNICODE_MATH_SIGMA  0x2211  // 'n-ary summation'
+
 
 using namespace QDirStat;
 
@@ -197,6 +199,17 @@ qreal HistogramView::bucketWidth() const
         THROW( Exception( "Invalid percentile data" ) );
 
     return ( endVal - startVal ) / (qreal) _buckets.size();
+}
+
+
+qreal HistogramView::bucketsTotalSum() const
+{
+    qreal sum = 0;
+
+    for ( int i=0; i < _buckets.size(); ++i )
+        sum += _buckets[i];
+
+    return sum;
 }
 
 
@@ -459,6 +472,20 @@ void HistogramView::addQuartileText()
     q1Item->setPos( x, y );      x += q1Width     + textSpacing;
     medianItem->setPos( x, y );  x += medianWidth + textSpacing;
     q3Item->setPos( x, y );      x += q3Width     + textSpacing;
+
+
+    QString nText;
+    QFontMetrics metrics( font );
+    QChar sigma( UNICODE_MATH_SIGMA );
+
+    if ( metrics.inFont( sigma ) )
+        nText = QString( "%1n: %2" ).arg( sigma ).arg( bucketsTotalSum() );
+    else
+        nText = tr( "Files (n): %1" ).arg( bucketsTotalSum() );
+
+    QGraphicsSimpleTextItem * nTextItem = scene()->addSimpleText( nText );
+    nTextItem->setFont( font );
+    nTextItem->setPos( x, y );
 }
 
 
