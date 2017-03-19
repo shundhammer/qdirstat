@@ -269,14 +269,14 @@ QRealList FileSizeStats::fillBuckets( int bucketCount,
     if ( bucketCount < 1 )
         THROW( Exception( QString( "Invalid bucket count %1" ).arg( bucketCount ) ) );
 
-    if ( _data.isEmpty() )
-        return QRealList();
-
     QRealList buckets;
     buckets.reserve( bucketCount );
 
     for ( int i=0; i < bucketCount; ++i )
         buckets << 0;
+
+    if ( _data.isEmpty() )
+        return buckets;
 
 
     // The first call to percentile() or quantile() will cause the data to be
@@ -319,9 +319,6 @@ QRealList FileSizeStats::fillBuckets( int bucketCount,
 
 QRealList FileSizeStats::percentileList()
 {
-    if ( _data.isEmpty() )
-        return QRealList();
-
     QRealList percentiles;
     percentiles.reserve( 100 );
 

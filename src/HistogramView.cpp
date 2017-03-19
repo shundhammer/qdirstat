@@ -81,6 +81,9 @@ void HistogramView::clear()
 
 qreal HistogramView::bestBucketCount( int n )
 {
+    if ( n < 2 )
+        return 1;
+
     // Using the "Rice Rule" which gives more reasonable values for the numbers
     // we are likely to encounter in the context of QDirStat.
 
@@ -195,7 +198,7 @@ qreal HistogramView::bucketWidth() const
     qreal startVal = percentile( _startPercentile );
     qreal endVal   = percentile( _endPercentile   );
 
-    if ( startVal >= endVal )
+    if ( startVal > endVal )
         THROW( Exception( "Invalid percentile data" ) );
 
     return ( endVal - startVal ) / (qreal) _buckets.size();
@@ -491,7 +494,7 @@ void HistogramView::addQuartileText()
 
 void HistogramView::addHistogramBars()
 {
-    qreal barWidth = _histogramWidth / bucketCount();
+    qreal barWidth = _histogramWidth / _buckets.size();
     qreal maxVal   = _bucketMaxValue;
 
     if ( _useLogHeightScale )
@@ -511,7 +514,9 @@ void HistogramView::addHistogramBars()
         if ( _useLogHeightScale && val > 1.0 )
             val = log2( val );
 
-        qreal fillHeight = val / maxVal * _histogramHeight;
+        qreal fillHeight = maxVal == 0 ?
+            0.0 :
+            val / maxVal * _histogramHeight;
 
         HistogramBar * bar = new HistogramBar( this, i, rect, fillHeight );
         CHECK_NEW( bar );
@@ -521,6 +526,13 @@ void HistogramView::addHistogramBars()
 
 void HistogramView::addMarkers()
 {
+    qreal totalWidth =
+        _percentiles[ _endPercentile   ] -
+        _percentiles[ _startPercentile ];
+
+    if ( totalWidth < 1 )
+        return;
+
     QLineF zeroLine( 0, _markerExtraHeight,
                      0, -( _histogramHeight + _markerExtraHeight ) );
 
@@ -611,16 +623,19 @@ HistogramBar::HistogramBar( HistogramView * parent,
     filledRect->setPen( _parentView->barPen() );
     filledRect->setBrush( _parentView->barBrush() );
 
-    setFlags( ItemIsSelectable );
+    // setFlags( ItemIsSelectable );
     _parentView->scene()->addItem( this );
 
     qreal bucketWidth = _parentView->bucketWidth();
+    qreal offset      = _parentView->percentile( _parentView->startPercentile() );
+    _startVal = offset + _number * bucketWidth;
+    _endVal   = _startVal + bucketWidth;
 
     QString tooltip = QObject::tr( "Bucket #%1:\n%2 Files\n%3 .. %4" )
         .arg( _number + 1 )
         .arg( _parentView->bucket( _number ) )
-        .arg( formatSize( _number * bucketWidth ) )
-        .arg( formatSize( ( _number + 1 ) * bucketWidth ) );
+        .arg( formatSize( _startVal ) )
+        .arg( formatSize( _endVal ) );
 
     setToolTip( tooltip );
     filledRect->setToolTip( tooltip );
@@ -635,14 +650,10 @@ void HistogramBar::mousePressEvent( QGraphicsSceneMouseEvent * event )
             {
                 QGraphicsRectItem::mousePressEvent( event );
 
-                qreal bwidth = _parentView->bucketWidth();
-                qreal from   = bwidth * _number;
-                qreal to     = from + bwidth;
-
                 logDebug() << "Histogram bar #" << _number
                            << ": " << _parentView->bucket( _number ) << " items;"
-                           << " range: " << formatSize( from )
-                           << " .. " << formatSize( to )
+                           << " range: " << formatSize( _startVal )
+                           << " .. " << formatSize( _endVal )
                            << endl;
             }
 	    break;
@@ -673,7 +684,7 @@ PercentileMarker::PercentileMarker( HistogramView * parent,
                 formatSize( _parentView->percentile( percentileIndex ) ) );
 
     setPen( pen );
-    setFlags( ItemIsSelectable );
+    // setFlags( ItemIsSelectable );
     _parentView->scene()->addItem( this );
 }
 

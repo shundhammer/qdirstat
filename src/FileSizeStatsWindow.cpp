@@ -247,13 +247,6 @@ void FileSizeStatsWindow::fillHistogram()
     CHECK_PTR( histogram );
 
     histogram->clear();
-
-    if ( _stats->dataSize() < 1 )
-    {
-        logWarning() << "No data" << endl;
-        return;
-    }
-
     histogram->setPercentiles( _stats->percentileList() );
     histogram->autoStartEndPercentiles();
 

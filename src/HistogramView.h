@@ -404,6 +404,8 @@ namespace QDirStat
 
         HistogramView * _parentView;
         int             _number;
+        qreal           _startVal;
+        qreal           _endVal;
     };
 
 
