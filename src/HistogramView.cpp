@@ -366,16 +366,24 @@ void HistogramView::fitToViewport()
     // logDebug() << "New scene rect: " << rect << endl;
     // logDebug() << "Viewport size:  " << viewport()->size() << endl;
 
-    if ( rect.width()  <= viewport()->size().width() &&
-         rect.height() <= viewport()->size().height()   )
+    QSize visibleSize = viewport()->size();
+
+    if ( rect.width()  <= visibleSize.width() &&
+         rect.height() <= visibleSize.height()   )
     {
-        // logDebug() << "Histogram fits into viewport" << endl;
+        logDebug() << "Histogram in " << rect.size()
+                   << " fits into visible size " << visibleSize
+                   << endl;
+
         setTransform( QTransform() ); // Reset scaling etc.
         ensureVisible( rect, 0, 0 );
     }
     else
     {
-        // logDebug() << "Scaling down histogram" << endl;
+        logDebug() << "Scaling down histogram in " << rect.size()
+                   << " to fit into visible size " << visibleSize
+                   << endl;
+
         fitInView( rect, Qt::KeepAspectRatio );
     }
 }
@@ -390,6 +398,10 @@ void HistogramView::rebuild()
     }
 
     logInfo() << "Rebuilding histogram" << endl;
+
+    // QGraphicsScene never resets the min and max in both dimensions where it
+    // ever created QGraphicsItems, which makes its sceneRect() call pretty
+    // useless. Let's create a new one without those bad old memories.
 
     if ( scene() )
         delete scene();
