@@ -25,7 +25,8 @@
     CHECK_INDEX_MSG( (INDEX), 0, 100, "Percentile index out of range" );
 
 #define UnicodeMathSigma        0x2211  // 'n-ary summation'
-#define MinHistogramWidth       150
+#define MinHistogramWidth        150.0
+#define MinHistogramHeight        80.0
 
 
 using namespace QDirStat;
@@ -71,7 +72,6 @@ void HistogramView::init()
 
     _histogramHeight      = 250.0;
     _histogramWidth       = 600.0;
-    _histogramAspectRatio = _histogramHeight / _histogramWidth;
 
     _leftBorder           = 40.0;
     _rightBorder          = 10.0;
@@ -323,23 +323,25 @@ bool HistogramView::autoLogHeightScale()
 
 void HistogramView::resizeEvent( QResizeEvent * event )
 {
-    logDebug() << "Event size: width: "
-               << event->size().width() << " height: "
-               << event->size().height() << endl;
+    // logDebug() << "Event size: " << event->size() << endl;
 
     QGraphicsView::resizeEvent( event );
 
-    _histogramWidth = event->size().width();
+    _histogramWidth  = event->size().width();
     _histogramWidth -= _leftBorder + _rightBorder + 2 * _viewMargin;
+    _histogramWidth  = qMax( MinHistogramWidth, _histogramWidth );
 
-    if ( _histogramWidth < MinHistogramWidth )
-        _histogramWidth = MinHistogramWidth;
+    _histogramHeight  = event->size().height();
+    _histogramHeight -= _bottomBorder + _topBorder + 2 * _viewMargin;
+    _histogramHeight -= 30.0; // compensate for text above
 
-    _histogramHeight = _histogramWidth * _histogramAspectRatio;
+    _histogramHeight  = qBound( MinHistogramHeight, _histogramHeight, 1.5 * _histogramWidth );
 
+#if 0
     logDebug() << "Histogram width: " << _histogramWidth
                << " height: " << _histogramHeight
                << endl;
+#endif
 
     _rebuilder->scheduleRebuild();
 }
@@ -356,23 +358,24 @@ void HistogramView::fitToViewport()
     // life time with this crap.
 
     QRectF rect = scene()->sceneRect().normalized();
-    logDebug() << "Old scene rect: " << rect << endl;
+    // logDebug() << "Old scene rect: " << rect << endl;
 
     scene()->setSceneRect( rect );
 
     rect.adjust( -_viewMargin, -_viewMargin, _viewMargin, _viewMargin );
-    logDebug() << "New scene rect: " << rect << endl;
-    logDebug() << "Viewport size:  " << viewport()->size() << endl;
+    // logDebug() << "New scene rect: " << rect << endl;
+    // logDebug() << "Viewport size:  " << viewport()->size() << endl;
 
     if ( rect.width()  <= viewport()->size().width() &&
          rect.height() <= viewport()->size().height()   )
     {
-        logDebug() << "Histogram fits into viewport" << endl;
+        // logDebug() << "Histogram fits into viewport" << endl;
+        setTransform( QTransform() ); // Reset scaling etc.
         ensureVisible( rect, 0, 0 );
     }
     else
     {
-        logDebug() << "Scaling down histogram" << endl;
+        // logDebug() << "Scaling down histogram" << endl;
         fitInView( rect, Qt::KeepAspectRatio );
     }
 }
@@ -650,7 +653,7 @@ void HistogramView::addMarkers()
         if ( _percentileStep != 0 && _percentileStep != 5 && i % 10 == 0 )
             pen = _decilePen;
 
-        logDebug() << "Adding marker for P" << i << endl;
+        // logDebug() << "Adding marker for P" << i << endl;
         new PercentileMarker( this, i, "", zeroLine, pen );
     }
 

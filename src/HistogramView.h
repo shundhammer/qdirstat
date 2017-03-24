@@ -377,7 +377,6 @@ namespace QDirStat
 
         qreal     _histogramWidth;
         qreal     _histogramHeight;
-        qreal     _histogramAspectRatio;
 
         qreal     _leftBorder;
         qreal     _rightBorder;
