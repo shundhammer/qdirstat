@@ -21,12 +21,12 @@
 #include "SignalBlocker.h"
 #include "TreemapTile.h"
 #include "MimeCategorizer.h"
+#include "DelayedRebuilder.h"
 
 
 using namespace QDirStat;
 
 #define UpdateMinSize	      20
-#define RebuildDelayMillisec 200
 
 
 TreemapView::TreemapView( QWidget * parent ):
@@ -36,15 +36,16 @@ TreemapView::TreemapView( QWidget * parent ):
     _selectionModelProxy(0),
     _cleanupCollection(0),
     _mimeCategorizer(0),
+    _rebuilder(0),
     _rootTile(0),
     _currentItem(0),
     _currentItemRect(0),
     _newRoot(0),
     _useFixedColor(false),
-    _useDirGradient(true),
-    _pendingRebuildCount(0)
+    _useDirGradient(true)
 {
     logDebug() << endl;
+
     readSettings();
 
     // Default values for light sources taken from Wiik / Wetering's paper
@@ -56,6 +57,12 @@ TreemapView::TreemapView( QWidget * parent ):
 
     setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     setVerticalScrollBarPolicy	( Qt::ScrollBarAlwaysOff );
+
+    _rebuilder = new DelayedRebuilder( this );
+    CHECK_NEW( _rebuilder );
+
+    connect( _rebuilder, SIGNAL( rebuild() ),
+             this,       SLOT  ( rebuildTreemapDelayed() ) );
 }
 
 
@@ -364,18 +371,13 @@ void TreemapView::rebuildTreemap( FileInfo *	 newRoot,
 
 void TreemapView::scheduleRebuildTreemap( FileInfo * newRoot )
 {
-    ++_pendingRebuildCount;
     _newRoot = newRoot;
-    QTimer::singleShot( RebuildDelayMillisec, this, SLOT( rebuildTreemapDelayed() ) );
+    _rebuilder->scheduleRebuild();
 }
 
 
 void TreemapView::rebuildTreemapDelayed()
 {
-    if ( --_pendingRebuildCount > 0 ) // Yet another rebuild scheduled (by timer)?
-        return;                       // -> do nothing, it will be in vain anyway
-
-    _pendingRebuildCount = 0;
     rebuildTreemap( _newRoot );
 }
 

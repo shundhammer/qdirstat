@@ -34,6 +34,7 @@ SOURCES	  = main.cpp			\
 	    ConfigDialog.cpp		\
 	    DataColumns.cpp		\
 	    DebugHelpers.cpp		\
+            DelayedRebuilder.cpp        \
 	    DirInfo.cpp			\
 	    DirReadJob.cpp		\
 	    DirSaver.cpp		\
@@ -83,6 +84,7 @@ HEADERS	  =				\
 	    ConfigDialog.h		\
 	    DataColumns.h		\
 	    DebugHelpers.h		\
+            DelayedRebuilder.h          \
 	    DirInfo.h			\
 	    DirReadJob.h		\
 	    DirSaver.h			\

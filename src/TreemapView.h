@@ -44,6 +44,7 @@ namespace QDirStat
     class CleanupCollection;
     class FileInfoSet;
     class MimeCategorizer;
+    class DelayedRebuilder;
 
 
     /**
@@ -493,6 +494,7 @@ namespace QDirStat
 	SelectionModelProxy * _selectionModelProxy;
 	CleanupCollection   * _cleanupCollection;
 	MimeCategorizer	    * _mimeCategorizer;
+        DelayedRebuilder    * _rebuilder;
 	TreemapTile	    * _rootTile;
 	TreemapTile	    * _currentItem;
 	HighlightRect	    * _currentItemRect;
@@ -506,7 +508,6 @@ namespace QDirStat
 	bool   _useFixedColor;
 	int    _minTileSize;
         bool   _useDirGradient;
-	int    _pendingRebuildCount;
 
 	QColor _currentItemColor;
 	QColor _selectedItemsColor;
