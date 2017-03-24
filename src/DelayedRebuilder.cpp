@@ -10,6 +10,7 @@
 #include <QTimer>
 
 #include "DelayedRebuilder.h"
+#include "Logger.h"
 
 #define DefaultRebuildDelayMillisec 200
 
@@ -20,8 +21,15 @@ using namespace QDirStat;
 
 DelayedRebuilder::DelayedRebuilder( QObject * parent ):
     QObject( parent ),
+    _firstRebuild( true ),
     _pendingRebuildCount(0),
     _delayMillisec( DefaultRebuildDelayMillisec )
+{
+
+}
+
+
+DelayedRebuilder::~DelayedRebuilder()
 {
 
 }
@@ -40,5 +48,6 @@ void DelayedRebuilder::rebuildDelayed()
         return;                       // -> do nothing, it will be in vain anyway
 
     _pendingRebuildCount = 0;
+    _firstRebuild       = false;
     emit rebuild();
 }

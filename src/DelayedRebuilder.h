@@ -32,7 +32,17 @@ namespace QDirStat
         /**
          * Constructor.
          **/
-        DelayedRebuilder( QObject * parent );
+        DelayedRebuilder( QObject * parent = 0 );
+
+        /**
+         * Destructor.
+         **/
+        virtual ~DelayedRebuilder();
+
+        /**
+         * Return 'true' if this is the first rebuild ever.
+         **/
+        bool firstRebuild() const { return _firstRebuild; }
 
         /**
          * Return the number of pending rebuilds.
@@ -70,8 +80,9 @@ namespace QDirStat
 
     protected:
 
-        int _pendingRebuildCount;
-        int _delayMillisec;
+        bool _firstRebuild;
+        int  _pendingRebuildCount;
+        int  _delayMillisec;
     };
 
 }	// namespace QDirStat

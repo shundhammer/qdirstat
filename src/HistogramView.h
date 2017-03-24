@@ -15,6 +15,7 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsLineItem>
 #include <QList>
+#include <QTextStream>
 
 #define MAX_BUCKET_COUNT 100
 
@@ -26,6 +27,9 @@ typedef QList<qreal> QRealList;
 
 namespace QDirStat
 {
+    class DelayedRebuilder;
+
+
     /**
      * Histogram widget.
      *
@@ -298,9 +302,9 @@ namespace QDirStat
     public slots:
 
         /**
-         * Display or redisplay the histogram based on the current data.
+         * Rebuild the histogram based on the current data.
          **/
-        void redisplay();
+        void rebuild();
 
 
     protected:
@@ -329,10 +333,24 @@ namespace QDirStat
         void addHistogramBars();
         void addMarkers();
 
+        /**
+         * Fit the graphics into the viewport.
+         **/
+        void fitToViewport();
+
+	/**
+	 * Resize the view.
+	 *
+	 * Reimplemented from QFrame.
+	 **/
+	virtual void resizeEvent( QResizeEvent * event ) Q_DECL_OVERRIDE;
+
 
         //
         // Data members
         //
+
+        DelayedRebuilder * _rebuilder;
 
         QRealList _buckets;
         QRealList _percentiles;
@@ -359,11 +377,14 @@ namespace QDirStat
 
         qreal     _histogramWidth;
         qreal     _histogramHeight;
+        qreal     _histogramAspectRatio;
 
         qreal     _leftBorder;
         qreal     _rightBorder;
         qreal     _topBorder;
         qreal     _bottomBorder;
+
+        qreal     _viewMargin;
 
         qreal     _markerExtraHeight;
 
@@ -454,6 +475,52 @@ namespace QDirStat
         QString         _name;
         int             _percentileIndex;
     };
+
+
+    inline QTextStream & operator<< ( QTextStream & stream, const QRectF & rect )
+    {
+	stream << "QRectF("
+               << " x: " << rect.x()
+               << " y: " << rect.y()
+               << " width: " << rect.width()
+               << " height: " << rect.height()
+               << " )";
+
+	return stream;
+    }
+
+
+    inline QTextStream & operator<< ( QTextStream & stream, const QPointF & point )
+    {
+	stream << "QPointF("
+               << " x: " << point.x()
+               << " y: " << point.y()
+               << " )";
+
+	return stream;
+    }
+
+
+    inline QTextStream & operator<< ( QTextStream & stream, const QSizeF & size )
+    {
+	stream << "QSizeF("
+               << " width: " << size.width()
+               << " height: " << size.height()
+               << " )";
+
+	return stream;
+    }
+
+
+    inline QTextStream & operator<< ( QTextStream & stream, const QSize & size )
+    {
+	stream << "QSize("
+               << " width: " << size.width()
+               << " height: " << size.height()
+               << " )";
+
+	return stream;
+    }
 
 }	// namespace QDirStat
 

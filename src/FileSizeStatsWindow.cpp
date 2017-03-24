@@ -260,7 +260,7 @@ void FileSizeStatsWindow::fillHistogram()
 
     histogram->setBuckets( buckets );
     histogram->autoLogHeightScale();
-    histogram->redisplay();
+    histogram->rebuild();
 }
 
 

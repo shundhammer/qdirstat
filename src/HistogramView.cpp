@@ -10,10 +10,12 @@
 #include <math.h>
 #include <algorithm>
 
+#include <QResizeEvent>
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
 
 #include "HistogramView.h"
+#include "DelayedRebuilder.h"
 #include "FileInfo.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -22,21 +24,34 @@
 #define CHECK_PERCENTILE_INDEX( INDEX ) \
     CHECK_INDEX_MSG( (INDEX), 0, 100, "Percentile index out of range" );
 
-#define UNICODE_MATH_SIGMA  0x2211  // 'n-ary summation'
+#define UnicodeMathSigma        0x2211  // 'n-ary summation'
+#define MinHistogramWidth       150
 
 
 using namespace QDirStat;
+
+
 
 
 HistogramView::HistogramView( QWidget * parent ):
     QGraphicsView( parent )
 {
     init();
+
+    _rebuilder = new DelayedRebuilder();
+    CHECK_NEW( _rebuilder );
+
+    connect( _rebuilder, SIGNAL( rebuild() ),
+             this,       SLOT  ( rebuild() ) );
+
+    setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    setVerticalScrollBarPolicy  ( Qt::ScrollBarAlwaysOff );
 }
 
 
 HistogramView::~HistogramView()
 {
+    delete _rebuilder;
 }
 
 
@@ -52,8 +67,19 @@ void HistogramView::init()
     _leftMarginPercentiles  = 0;
     _rightMarginPercentiles = 5;
 
-
     // TO DO: read from and write to QSettings
+
+    _histogramHeight      = 250.0;
+    _histogramWidth       = 600.0;
+    _histogramAspectRatio = _histogramHeight / _histogramWidth;
+
+    _leftBorder           = 40.0;
+    _rightBorder          = 10.0;
+    _topBorder            = 30.0;
+    _bottomBorder         = 50.0;
+    _viewMargin           = 10.0;
+
+    _markerExtraHeight    = 15.0;
 
     _barBrush      = QBrush( QColor( 0xB0, 0xB0, 0xD0 ) );
     _barPen        = QPen  ( QColor( 0x40, 0x40, 0x50 ), 1 );
@@ -295,39 +321,86 @@ bool HistogramView::autoLogHeightScale()
 }
 
 
-void HistogramView::redisplay()
+void HistogramView::resizeEvent( QResizeEvent * event )
 {
+    logDebug() << "Event size: width: "
+               << event->size().width() << " height: "
+               << event->size().height() << endl;
 
-    logInfo() << "Displaying histogram" << endl;
+    QGraphicsView::resizeEvent( event );
 
-    if ( ! scene() )
+    _histogramWidth = event->size().width();
+    _histogramWidth -= _leftBorder + _rightBorder + 2 * _viewMargin;
+
+    if ( _histogramWidth < MinHistogramWidth )
+        _histogramWidth = MinHistogramWidth;
+
+    _histogramHeight = _histogramWidth * _histogramAspectRatio;
+
+    logDebug() << "Histogram width: " << _histogramWidth
+               << " height: " << _histogramHeight
+               << endl;
+
+    _rebuilder->scheduleRebuild();
+}
+
+
+void HistogramView::fitToViewport()
+{
+    // This is the black magic that everybody hates from the bottom of his
+    // heart about that drawing stuff: Making sure the graphics actually is
+    // visible on the screen without unnecessary scrolling.
+    //
+    // You would think that a widget as sophisticated as QGraphicsView does
+    // this all by itself, but no: Everybody has to waste hours upon hours of
+    // life time with this crap.
+
+    QRectF rect = scene()->sceneRect().normalized();
+    logDebug() << "Old scene rect: " << rect << endl;
+
+    scene()->setSceneRect( rect );
+
+    rect.adjust( -_viewMargin, -_viewMargin, _viewMargin, _viewMargin );
+    logDebug() << "New scene rect: " << rect << endl;
+    logDebug() << "Viewport size:  " << viewport()->size() << endl;
+
+    if ( rect.width()  <= viewport()->size().width() &&
+         rect.height() <= viewport()->size().height()   )
     {
-	QGraphicsScene * scene = new QGraphicsScene( this );
-	CHECK_NEW( scene);
-	setScene( scene );
+        logDebug() << "Histogram fits into viewport" << endl;
+        ensureVisible( rect, 0, 0 );
     }
     else
     {
-        qDeleteAll( scene()->items() );
+        logDebug() << "Scaling down histogram" << endl;
+        fitInView( rect, Qt::KeepAspectRatio );
     }
+}
 
-    if ( _buckets.size() < 1 || _percentiles.size() != 101 )
+
+void HistogramView::rebuild()
+{
+    if ( _rebuilder->firstRebuild() )
     {
-        scene()->addText( "No data yet" );
-        logInfo() << "No data yet" << endl;
+        _rebuilder->scheduleRebuild();
         return;
     }
 
-    _histogramHeight = 250.0; // FIXME
-    _histogramWidth  = 600.0; // FIXME
+    logInfo() << "Rebuilding histogram" << endl;
 
-    _leftBorder      = 40.0;
-    _rightBorder     = 10.0;
-    _topBorder       = 30.0;
-    _bottomBorder    = 50.0;
+    if ( scene() )
+        delete scene();
 
-    _markerExtraHeight = 15.0;
+    QGraphicsScene * scene = new QGraphicsScene( this );
+    CHECK_NEW( scene);
+    setScene( scene );
 
+    if ( _buckets.size() < 1 || _percentiles.size() != 101 )
+    {
+        scene->addText( "No data yet" );
+        logInfo() << "No data yet" << endl;
+        return;
+    }
 
     addHistogramBackground();
     addAxes();
@@ -337,8 +410,9 @@ void HistogramView::redisplay()
     addQuartileText();
     addHistogramBars();
     addMarkers();
-}
 
+    fitToViewport();
+}
 
 void HistogramView::addHistogramBackground()
 {
@@ -494,7 +568,7 @@ void HistogramView::addQuartileText()
     nTextItem->setFont( font );
 
     QFontMetrics metrics( font );
-    QChar sigma( UNICODE_MATH_SIGMA );
+    QChar sigma( UnicodeMathSigma );
 
     if ( metrics.inFont( sigma ) )
         nTextItem->setText( QString( "%1n: %2" ).arg( sigma ).arg( n ) );
