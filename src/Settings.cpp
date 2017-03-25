@@ -6,14 +6,13 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
-#include "Settings.h"
-#include "SettingsHelpers.h"
 
 #include <QCoreApplication>
 
+#include "Settings.h"
+#include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
-
 
 using namespace QDirStat;
 

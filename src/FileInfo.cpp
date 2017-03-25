@@ -26,7 +26,6 @@
 
 #define FRAGMENT_SIZE	2048
 
-
 using namespace QDirStat;
 
 

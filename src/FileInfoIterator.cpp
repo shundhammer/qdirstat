@@ -11,7 +11,6 @@
 #include "FileInfoSorter.h"
 #include "Exception.h"
 
-
 using namespace QDirStat;
 
 

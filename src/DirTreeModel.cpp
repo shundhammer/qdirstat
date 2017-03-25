@@ -7,7 +7,6 @@
  */
 
 
-
 #include "DirTreeModel.h"
 #include "DirTree.h"
 #include "FileInfoIterator.h"
@@ -17,7 +16,6 @@
 #include "Logger.h"
 #include "Exception.h"
 #include "DebugHelpers.h"
-
 
 using namespace QDirStat;
 

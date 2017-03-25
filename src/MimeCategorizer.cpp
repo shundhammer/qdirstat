@@ -14,8 +14,8 @@
 #include "Logger.h"
 #include "Exception.h"
 
-
 using namespace QDirStat;
+
 
 MimeCategorizer::MimeCategorizer( QObject * parent ):
     QObject( parent ),

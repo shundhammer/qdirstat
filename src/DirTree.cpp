@@ -19,7 +19,6 @@
 using namespace QDirStat;
 
 
-
 DirTree::DirTree()
     : QObject()
 {

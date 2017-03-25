@@ -7,7 +7,6 @@
  */
 
 
-
 #include "ExcludeRules.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"

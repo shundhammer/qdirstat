@@ -28,10 +28,7 @@
 #define MinHistogramWidth        150.0
 #define MinHistogramHeight        80.0
 
-
 using namespace QDirStat;
-
-
 
 
 HistogramView::HistogramView( QWidget * parent ):

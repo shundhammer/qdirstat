@@ -23,10 +23,9 @@
 #include "MimeCategorizer.h"
 #include "DelayedRebuilder.h"
 
+#define UpdateMinSize	      20
 
 using namespace QDirStat;
-
-#define UpdateMinSize	      20
 
 
 TreemapView::TreemapView( QWidget * parent ):

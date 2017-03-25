@@ -18,7 +18,6 @@
 #include "FileInfo.h"
 #include "Logger.h"
 
-
 using namespace QDirStat;
 
 

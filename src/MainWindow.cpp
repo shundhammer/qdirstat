@@ -39,7 +39,6 @@
 #include "Trash.h"
 #include "Version.h"
 
-
 using namespace QDirStat;
 
 using QDirStat::DataColumns;

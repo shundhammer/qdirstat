@@ -22,7 +22,6 @@
 #include "MountPoints.h"
 #include "Exception.h"
 
-
 using namespace QDirStat;
 
 

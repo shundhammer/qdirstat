@@ -15,14 +15,13 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
-
 #define DEFAULT_OUTPUT_WINDOW_SHOW_TIMEOUT	500
 
 // This is a mess that became necessary because Qt's moc cannot handle template
 // classes. Yes, this is ugly.
 #define CLEANUP_CAST(VOID_PTR) (static_cast<Cleanup *>(VOID_PTR))
 
+using namespace QDirStat;
 
 
 CleanupConfigPage::CleanupConfigPage( QWidget * parent ):

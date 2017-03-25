@@ -20,7 +20,6 @@
 #include "Exception.h"
 #include "Logger.h"
 
-
 using namespace QDirStat;
 
 

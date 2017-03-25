@@ -12,12 +12,11 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
-
 // This is a mess that became necessary because Qt's moc cannot handle template
 // classes. Yes, this is ugly.
 #define EXCLUDE_RULE_CAST(VOID_PTR) (static_cast<ExcludeRule *>(VOID_PTR))
 
+using namespace QDirStat;
 
 
 ExcludeRulesConfigPage::ExcludeRulesConfigPage( QWidget * parent ):

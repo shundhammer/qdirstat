@@ -13,8 +13,8 @@
 #include "Logger.h"
 #include "Exception.h"
 
-
 using namespace QDirStat;
+
 
 DataColumns * DataColumns::_instance = 0;
 

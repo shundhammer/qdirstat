@@ -29,8 +29,6 @@
 #define VERBOSE_CACHE_FILE_INFOS	0
 #define DEBUG_LOCATE_PARENT		0
 
-
-
 using namespace QDirStat;
 
 
