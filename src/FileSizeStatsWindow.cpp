@@ -176,7 +176,7 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *    table,
         header << tr( "Sum %1(n-1)..%2(n)" ).arg( namePrefix ).arg( namePrefix );
 
     for ( int col = 0; col < header.size(); ++col )
-        table->setHorizontalHeaderItem( col, new QTableWidgetItem( header[ col ] ) );
+        table->setHorizontalHeaderItem( col, new QTableWidgetItem( " " + header[ col ] + " " ) );
 
     int median     = order / 2;
     int quartile_1 = -1;
@@ -277,6 +277,9 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *    table,
     }
 
     table->setRowCount( row );
+
+    for ( int col = 0; col < table->horizontalHeader()->count(); ++col )
+        table->horizontalHeader()->setSectionResizeMode( col, QHeaderView::ResizeToContents );
 }
 
 
