@@ -26,7 +26,7 @@ namespace QDirStat
 
     /**
      * Modeless dialog to display file size statistics:
-     * median, min, max, quartiles etc.
+     * median, min, max, quartiles; histogram; percentiles table.
      **/
     class FileSizeStatsWindow: public QDialog
     {
@@ -123,9 +123,38 @@ namespace QDirStat
                                 int               extremesMargin = 1 );
 
         /**
+         * Add an item to a table.
+         **/
+        QTableWidgetItem * addItem( QTableWidget *  table,
+                                    int             row,
+                                    int             col,
+                                    const QString & text );
+
+        /**
+         * Set the font to bold for all items in a table row.
+         **/
+        void setRowBold( QTableWidget * table, int row );
+
+        /**
+         * Set the forground (the text color) for all items in a table row.
+         **/
+        void setRowForeground( QTableWidget * table, int row, const QBrush & brush );
+
+        /**
+         * Set the background for all items in a table row.
+         **/
+        void setRowBackground( QTableWidget * table, int row, const QBrush & brush );
+
+        /**
+         * Set the text alignment for all items in a table column.
+         **/
+        void setColAlignment( QTableWidget * table, int col, int alignment );
+
+        /**
          * Fill the histogram with content.
          **/
         void fillHistogram();
+
 
 
 	//

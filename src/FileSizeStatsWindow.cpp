@@ -156,6 +156,14 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *    table,
                                              int               step,
                                              int               extremesMargin )
 {
+    enum TableColumns
+    {
+        NumberCol,
+        ValueCol,
+        NameCol,
+        SumCol
+    };
+
     table->clear();
     table->setColumnCount( sums.isEmpty() ? 3 : 4 );
     table->setRowCount( order + 1 );
@@ -176,7 +184,10 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *    table,
         header << tr( "Sum %1(n-1)..%2(n)" ).arg( namePrefix ).arg( namePrefix );
 
     for ( int col = 0; col < header.size(); ++col )
-        table->setHorizontalHeaderItem( col, new QTableWidgetItem( " " + header[ col ] + " " ) );
+    {
+        QString text = " " + header[ col ] + " ";
+        table->setHorizontalHeaderItem( col, new QTableWidgetItem( text ) );
+    }
 
     int median     = order / 2;
     int quartile_1 = -1;
@@ -199,27 +210,11 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *    table,
             continue;
         }
 
-
-        QTableWidgetItem * numberItem = new QTableWidgetItem( namePrefix + QString::number( i ) );
-        QTableWidgetItem * valueItem  = new QTableWidgetItem( formatSize( _stats->quantile( order, i ) ) );
-        QTableWidgetItem * sumItem    = 0;
-
-        CHECK_NEW( numberItem );
-        CHECK_NEW( valueItem );
-
-        numberItem->setTextAlignment( Qt::AlignRight | Qt::AlignVCenter );
-        valueItem->setTextAlignment ( Qt::AlignRight | Qt::AlignVCenter );
-
-        table->setItem( row, 0, numberItem );
-        table->setItem( row, 1, valueItem  );
+        addItem( table, row, NumberCol, namePrefix + QString::number( i ) );
+        addItem( table, row, ValueCol, formatSize( _stats->quantile( order, i ) ) );
 
         if ( i > 0 && i < sums.size() )
-        {
-            sumItem = new QTableWidgetItem( formatSize( sums.at( i ) ) );
-            CHECK_NEW( sumItem );
-            sumItem->setTextAlignment( Qt::AlignRight | Qt::AlignVCenter );
-            table->setItem( row, 3, sumItem );
-        }
+            addItem( table, row, SumCol, formatSize( sums.at( i ) ) );
 
         if ( i == 0 || i == median || i == order || i == quartile_1 || i == quartile_3 )
         {
@@ -231,46 +226,14 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *    table,
             else if ( i == quartile_1 ) text = tr( "1. Quartile" );
             else if ( i == quartile_3 ) text = tr( "3. Quartile" );
 
-            QTableWidgetItem * nameItem = new QTableWidgetItem( text );
-            CHECK_NEW( nameItem );
-
-            nameItem->setTextAlignment( Qt::AlignCenter | Qt::AlignVCenter );
-            table->setItem( row, 2, nameItem );
-
-            QFont font = nameItem->font();
-            font.setBold( true );
-
-            numberItem->setFont( font );
-            valueItem->setFont( font );
-            nameItem->setFont( font );
-
-            QBrush brush = nameItem->foreground();
-            brush.setColor( Qt::blue );
-
-            numberItem->setForeground( brush );
-            valueItem->setForeground( brush );
-            nameItem->setForeground( brush );
-
-            if ( sumItem )
-            {
-                sumItem->setFont( font );
-                sumItem->setForeground( brush );
-            }
+            addItem( table, row, NameCol, text );
+            setRowBold( table, row );
+            setRowForeground( table, row, QBrush( QColor( Qt::blue ) ) );
         }
         else if ( order > 20 && i % 10 == 0 && step <= 1 )
         {
-            QTableWidgetItem * emptyItem = new QTableWidgetItem( "" );
-            CHECK_NEW( emptyItem );
-
-            table->setItem( i, 2, emptyItem );
-
-            QBrush brush( QColor( 0xE0, 0xE0, 0xF0 ), Qt::SolidPattern );
-            numberItem->setBackground( brush );
-            valueItem->setBackground( brush );
-            emptyItem->setBackground( brush );
-
-            if ( sumItem )
-                sumItem->setBackground( brush );
+            addItem( table, row, NameCol, "" ); // Fill the empty cell
+            setRowBackground( table, row, QBrush( QColor( 0xE0, 0xE0, 0xF0 ), Qt::SolidPattern ) );
         }
 
         ++row;
@@ -278,8 +241,79 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *    table,
 
     table->setRowCount( row );
 
+    setColAlignment( table, NumberCol, Qt::AlignRight  | Qt::AlignVCenter );
+    setColAlignment( table, ValueCol,  Qt::AlignRight  | Qt::AlignVCenter );
+    setColAlignment( table, NameCol,   Qt::AlignCenter | Qt::AlignVCenter );
+    setColAlignment( table, SumCol,    Qt::AlignRight  | Qt::AlignVCenter );
+
     for ( int col = 0; col < table->horizontalHeader()->count(); ++col )
         table->horizontalHeader()->setSectionResizeMode( col, QHeaderView::ResizeToContents );
+}
+
+
+QTableWidgetItem *
+FileSizeStatsWindow::addItem( QTableWidget *  table,
+                              int             row,
+                              int             col,
+                              const QString & text )
+{
+    QTableWidgetItem * item = new QTableWidgetItem( text );
+    CHECK_NEW( item );
+    table->setItem( row, col, item );
+
+    return item;
+}
+
+
+void FileSizeStatsWindow::setRowBold( QTableWidget * table, int row )
+{
+    for ( int col=0; col < table->columnCount(); ++col )
+    {
+        QTableWidgetItem * item = table->item( row, col );
+
+        if ( item )
+        {
+            QFont font = item->font();
+            font.setBold( true );
+            item->setFont( font );
+        }
+    }
+}
+
+
+void FileSizeStatsWindow::setRowForeground( QTableWidget * table, int row, const QBrush & brush )
+{
+    for ( int col=0; col < table->columnCount(); ++col )
+    {
+        QTableWidgetItem * item = table->item( row, col );
+
+        if ( item )
+            item->setForeground( brush );
+    }
+}
+
+
+void FileSizeStatsWindow::setRowBackground( QTableWidget * table, int row, const QBrush & brush )
+{
+    for ( int col=0; col < table->columnCount(); ++col )
+    {
+        QTableWidgetItem * item = table->item( row, col );
+
+        if ( item )
+            item->setBackground( brush );
+    }
+}
+
+
+void FileSizeStatsWindow::setColAlignment( QTableWidget * table, int col, int alignment )
+{
+    for ( int row=0; row < table->rowCount(); ++row )
+    {
+        QTableWidgetItem * item = table->item( row, col );
+
+        if ( item )
+            item->setTextAlignment( alignment );
+    }
 }
 
 
