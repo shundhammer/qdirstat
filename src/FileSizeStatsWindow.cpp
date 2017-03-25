@@ -16,9 +16,9 @@
 #include "HistogramView.h"
 #include "DirTree.h"
 #include "SettingsHelpers.h"
+#include "Qt4Compat.h"
 #include "Logger.h"
 #include "Exception.h"
-
 
 using namespace QDirStat;
 
@@ -123,7 +123,9 @@ void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
 void FileSizeStatsWindow::fillPercentileTable()
 {
     int step = _ui->percentileFilterComboBox->currentIndex() == 0 ? 5 : 1;
-    fillQuantileTable( _ui->percentileTable, 100, "P", step, 2 );
+    fillQuantileTable( _ui->percentileTable, 100, "P",
+                       _stats->percentileSums(),
+                       step, 2 );
 }
 
 
@@ -147,16 +149,34 @@ QStringList FileSizeStatsWindow::quantile( int order, const QString & name )
 }
 
 
-void FileSizeStatsWindow::fillQuantileTable( QTableWidget *  table,
-                                             int             order,
-                                             const QString & namePrefix,
-                                             int             step,
-                                             int             extremesMargin )
+void FileSizeStatsWindow::fillQuantileTable( QTableWidget *    table,
+                                             int               order,
+                                             const QString &   namePrefix,
+                                             const QRealList & sums,
+                                             int               step,
+                                             int               extremesMargin )
 {
     table->clear();
-    table->setColumnCount( 3 );
+    table->setColumnCount( sums.isEmpty() ? 3 : 4 );
     table->setRowCount( order + 1 );
-    int row = 0;
+
+    QStringList header;
+
+    switch ( order )
+    {
+        case 100:       header << tr( "Percentile" ); break;
+        case  10:       header << tr( "Decile"     ); break;
+        case   4:       header << tr( "Quartile"   ); break;
+        default:        header << tr( "%1-Quantile" ).arg( order ); break;
+    }
+
+    header << tr( "Value" ) << tr( "Name" );
+
+    if ( ! sums.isEmpty() )
+        header << tr( "Sum %1(n-1)..%2(n)" ).arg( namePrefix ).arg( namePrefix );
+
+    for ( int col = 0; col < header.size(); ++col )
+        table->setHorizontalHeaderItem( col, new QTableWidgetItem( header[ col ] ) );
 
     int median     = order / 2;
     int quartile_1 = -1;
@@ -168,6 +188,7 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *  table,
         quartile_3 = quartile_1 * 3;
     }
 
+    int row = 0;
 
     for ( int i=0; i <= order; ++i )
     {
@@ -181,6 +202,7 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *  table,
 
         QTableWidgetItem * numberItem = new QTableWidgetItem( namePrefix + QString::number( i ) );
         QTableWidgetItem * valueItem  = new QTableWidgetItem( formatSize( _stats->quantile( order, i ) ) );
+        QTableWidgetItem * sumItem    = 0;
 
         CHECK_NEW( numberItem );
         CHECK_NEW( valueItem );
@@ -190,6 +212,14 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *  table,
 
         table->setItem( row, 0, numberItem );
         table->setItem( row, 1, valueItem  );
+
+        if ( i > 0 && i < sums.size() )
+        {
+            sumItem = new QTableWidgetItem( formatSize( sums.at( i ) ) );
+            CHECK_NEW( sumItem );
+            sumItem->setTextAlignment( Qt::AlignRight | Qt::AlignVCenter );
+            table->setItem( row, 3, sumItem );
+        }
 
         if ( i == 0 || i == median || i == order || i == quartile_1 || i == quartile_3 )
         {
@@ -220,6 +250,12 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *  table,
             numberItem->setForeground( brush );
             valueItem->setForeground( brush );
             nameItem->setForeground( brush );
+
+            if ( sumItem )
+            {
+                sumItem->setFont( font );
+                sumItem->setForeground( brush );
+            }
         }
         else if ( order > 20 && i % 10 == 0 && step <= 1 )
         {
@@ -232,6 +268,9 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *  table,
             numberItem->setBackground( brush );
             valueItem->setBackground( brush );
             emptyItem->setBackground( brush );
+
+            if ( sumItem )
+                sumItem->setBackground( brush );
         }
 
         ++row;
@@ -248,6 +287,7 @@ void FileSizeStatsWindow::fillHistogram()
 
     histogram->clear();
     histogram->setPercentiles( _stats->percentileList() );
+    histogram->setPercentileSums( _stats->percentileSums() );
     histogram->autoStartEndPercentiles();
 
     int startPercentile = histogram->startPercentile();

@@ -7,6 +7,7 @@
  */
 
 
+#include <math.h>       // ceil()
 #include <algorithm>
 
 #include "FileSizeStats.h"
@@ -326,4 +327,33 @@ QRealList FileSizeStats::percentileList()
         percentiles << percentile( i );
 
     return percentiles;
+}
+
+
+QRealList FileSizeStats::percentileSums()
+{
+    QRealList sums;
+    sums.reserve( 100 );
+
+    for ( int i=0; i <= 100; ++i )
+        sums << 0.0;
+
+    if ( ! _sorted )
+        sort();
+
+    qreal percentileSize = _data.size() / 100.0;
+
+    for ( int i=0; i < _data.size(); ++i )
+    {
+        int percentile = qMax( 1, (int) ceil( i / percentileSize ) );
+
+        sums[ percentile ] += _data.at(i);
+    }
+
+#if 0
+    for ( int i=0; i < sums.size(); ++i )
+        logDebug() << "sum[ " << i << " ] : " << formatSize( sums[i] ) << endl;
+#endif
+
+    return sums;
 }

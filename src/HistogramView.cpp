@@ -95,6 +95,7 @@ void HistogramView::clear()
 {
     _buckets.clear();
     _percentiles.clear();
+    _percentileSums.clear();
     init();
 
     if ( scene() )
@@ -205,6 +206,43 @@ void HistogramView::setEndPercentile( int index )
 bool HistogramView::percentileDisplayed( int index ) const
 {
     return index >= _startPercentile && index <= _endPercentile;
+}
+
+
+void HistogramView::setPercentileSums( const QRealList & newPercentileSums )
+{
+    CHECK_INDEX_MSG( newPercentileSums.size(), 101, 101,
+                     "Percentile sums size out of range" );
+
+    _percentileSums = newPercentileSums;
+}
+
+
+qreal HistogramView::percentileSum( int index ) const
+{
+    CHECK_PERCENTILE_INDEX( index );
+
+    if ( _percentileSums.isEmpty() )
+        return 0.0;
+
+    return _percentileSums[ index ];
+}
+
+
+qreal HistogramView::percentileSum( int fromIndex, int toIndex ) const
+{
+    CHECK_PERCENTILE_INDEX( fromIndex );
+    CHECK_PERCENTILE_INDEX( toIndex );
+
+    if ( _percentileSums.isEmpty() )
+        return 0.0;
+
+    qreal sum = 0.0;
+
+    for ( int i=fromIndex; i <= toIndex; ++i )
+        sum += _percentileSums[i];
+
+    return sum;
 }
 
 
@@ -612,7 +650,7 @@ void HistogramView::addHistogramBars()
         rect.setHeight( -_histogramHeight );
         rect.setWidth( barWidth );
 
-        qreal val = _buckets[ i ];
+        qreal val = _buckets[i];
 
         if ( _useLogHeightScale && val > 1.0 )
             val = log2( val );

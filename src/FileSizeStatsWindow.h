@@ -109,14 +109,18 @@ namespace QDirStat
         /**
          * Fill a quantile table for 'order' quantiles with content.
          *
+         * 'sums' (if non-empty) is a list of accumulated sums between one
+         * quantile and its previous one.
+         *
          * 'step' is the step width; 'extremesMargin' specifies how far from
          * the extremes (min, max) the step width should be 1 instead.
          **/
-        void fillQuantileTable( QTableWidget *  table,
-                                int             order,
-                                const QString & namePrefix = "",
-                                int             step = 1,
-                                int             extremesMargin = 1 );
+        void fillQuantileTable( QTableWidget *    table,
+                                int               order,
+                                const QString &   namePrefix = "",
+                                const QRealList & sums = QRealList(),
+                                int               step = 1,
+                                int               extremesMargin = 1 );
 
         /**
          * Fill the histogram with content.

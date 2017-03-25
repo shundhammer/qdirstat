@@ -189,6 +189,22 @@ namespace QDirStat
         qreal bucketsTotalSum() const;
 
         /**
+         * Set the percentile sums.
+         **/
+        void setPercentileSums( const QRealList & newPercentileSums );
+
+        /**
+         * Return the percentile sum for percentile no. 'index' (0..100),
+         * i.e. the accumulated values between percentile index-1 and index.
+         **/
+        qreal percentileSum( int index ) const;
+
+        /**
+         * Return the percentile sums from 'fromIndex' including to 'toIndex'.
+         **/
+        qreal percentileSum( int fromIndex, int toIndex ) const;
+
+        /**
          * Enable or disable showing the median (percentile 50) as an overlay
          * over the histogram.
          **/
@@ -354,6 +370,7 @@ namespace QDirStat
 
         QRealList _buckets;
         QRealList _percentiles;
+        QRealList _percentileSums;
         qreal     _bucketMaxValue;
 
         int       _startPercentile;

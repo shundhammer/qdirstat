@@ -153,6 +153,12 @@ namespace QDirStat
          **/
         QRealList percentileList();
 
+        /**
+         * Return a list (0..100) of all accumulated sizes between one
+         * percentile and the previous one.
+         **/
+        QRealList percentileSums();
+
 
     protected:
 
