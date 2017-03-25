@@ -225,11 +225,11 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *    table,
         {
             QString text;
 
-            if      ( i == 0 )          text = "Min";
-            else if ( i == order  )     text = "Max";
-            else if ( i == median )     text = "Median";
-            else if ( i == quartile_1 ) text = "1. Quartile";
-            else if ( i == quartile_3 ) text = "3. Quartile";
+            if      ( i == 0 )          text = tr( "Min" );
+            else if ( i == order  )     text = tr( "Max" );
+            else if ( i == median )     text = tr( "Median" );
+            else if ( i == quartile_1 ) text = tr( "1. Quartile" );
+            else if ( i == quartile_3 ) text = tr( "3. Quartile" );
 
             QTableWidgetItem * nameItem = new QTableWidgetItem( text );
             CHECK_NEW( nameItem );
