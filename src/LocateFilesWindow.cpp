@@ -7,6 +7,8 @@
  */
 
 
+#include <algorithm>
+
 #include "LocateFilesWindow.h"
 #include "DirTree.h"
 #include "SelectionModel.h"
@@ -14,17 +16,9 @@
 #include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
-
-#include <algorithm>
-
+#include "Qt4Compat.h"
 
 using namespace QDirStat;
-
-
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-#  define setSectionResizeMode setResizeMode
-#endif
-
 
 
 LocateFilesWindow::LocateFilesWindow( DirTree *	       tree,

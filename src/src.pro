@@ -117,6 +117,7 @@ HEADERS	  =				\
 	    OutputWindow.h		\
 	    PercentBar.h		\
 	    Process.h			\
+            Qt4Compat.h                 \
 	    Refresher.h			\
 	    SelectionModel.h		\
 	    Settings.h			\

@@ -7,26 +7,23 @@
  */
 
 
+#include <algorithm>
+
 #include "FileTypeStatsWindow.h"
 #include "FileTypeStats.h"
 #include "LocateFilesWindow.h"
 #include "DirTree.h"
 #include "MimeCategory.h"
 #include "SettingsHelpers.h"
+#include "Qt4Compat.h"
 #include "Logger.h"
 #include "Exception.h"
 
-#include <algorithm>
-
-
-using namespace QDirStat;
 
 // Number of suffixes in the "other" category
 #define TOP_X	20
 
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-#  define setSectionResizeMode setResizeMode
-#endif
+using namespace QDirStat;
 
 
 QPointer<LocateFilesWindow> FileTypeStatsWindow::_locateFilesWindow = 0;
