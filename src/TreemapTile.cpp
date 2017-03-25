@@ -8,7 +8,6 @@
 
 
 #include <math.h>
-#include <algorithm>
 
 #include <QImage>
 #include <QPainter>
@@ -24,10 +23,7 @@
 #include "Exception.h"
 #include "Logger.h"
 
-
 using namespace QDirStat;
-using std::max;
-using std::min;
 
 
 TreemapTile::TreemapTile( TreemapView *	 parentView,
@@ -135,7 +131,6 @@ void TreemapTile::createChildren( const QRectF & rect,
 void TreemapTile::createChildrenSimple( const QRectF & rect,
 					Orientation    orientation )
 {
-
     Orientation dir	 = orientation;
     Orientation childDir = orientation;
 
@@ -214,7 +209,7 @@ FileInfoList TreemapTile::squarify( const QRectF & rect,
     // logDebug() << "squarify() " << this << " " << rect << endl;
 
     FileInfoList row;
-    int length = max( rect.width(), rect.height() );
+    int length = qMax( rect.width(), rect.height() );
 
     if ( length == 0 )	// Sanity check
     {
@@ -243,8 +238,8 @@ FileInfoList TreemapTile::squarify( const QRectF & rect,
 	if ( ! row.isEmpty() && sum != 0 && (*it)->totalSize() != 0 )
 	{
 	    double sumSquare	    = sum * sum;
-	    double worstAspectRatio = max( scaledLengthSquare * row.first()->totalSize() / sumSquare,
-					   sumSquare / ( scaledLengthSquare * (*it)->totalSize() ) );
+	    double worstAspectRatio = qMax( scaledLengthSquare * row.first()->totalSize() / sumSquare,
+                                            sumSquare / ( scaledLengthSquare * (*it)->totalSize() ) );
 
 	    if ( lastWorstAspectRatio >= 0.0 &&
 		 worstAspectRatio > lastWorstAspectRatio )
@@ -271,7 +266,6 @@ FileInfoList TreemapTile::squarify( const QRectF & rect,
 }
 
 
-
 QRectF TreemapTile::layoutRow( const QRectF & rect,
 			       double	      scale,
 			       FileInfoList & row )
@@ -284,7 +278,7 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
     Orientation dir = rect.width() > rect.height() ? TreemapHorizontal : TreemapVertical;
 
     // This row's primary length is the longer one.
-    int primary = max( rect.width(), rect.height() );
+    int primary = qMax( rect.width(), rect.height() );
 
     // This row's secondary length is determined by the area (the number of
     // pixels) to be allocated for all of the row's items.
@@ -474,9 +468,9 @@ QPixmap TreemapTile::renderCushion()
     int		y0	     = rect.y();
 
     QColor	color	     = parentView()->tileColor( _orig );
-    int		maxRed	     = max( 0, color.red()   - ambientLight );
-    int		maxGreen     = max( 0, color.green() - ambientLight );
-    int		maxBlue	     = max( 0, color.blue()  - ambientLight );
+    int		maxRed	     = qMax( 0, color.red()   - ambientLight );
+    int		maxGreen     = qMax( 0, color.green() - ambientLight );
+    int		maxBlue	     = qMax( 0, color.blue()  - ambientLight );
 
     QImage image( qRound( rect.width() ), qRound( rect.height() ), QImage::Format_RGB32 );
 
@@ -523,7 +517,7 @@ void TreemapTile::ensureContrast( QImage & image )
 
 	int x1 = image.width() - 6;
 	int x2 = image.width() - 1;
-	int interval = max( image.height() / 10, 5 );
+	int interval = qMax( image.height() / 10, 5 );
 	int sameColorCount = 0;
 
 
@@ -553,7 +547,7 @@ void TreemapTile::ensureContrast( QImage & image )
 
 	int y1 = image.height() - 6;
 	int y2 = image.height() - 1;
-	int interval = max( image.width() / 10, 5 );
+	int interval = qMax( image.width() / 10, 5 );
 	int sameColorCount = 0;
 
 	for ( int x = interval; x < image.width(); x += interval )
