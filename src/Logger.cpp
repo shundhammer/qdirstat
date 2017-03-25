@@ -13,6 +13,10 @@
 #include <QDir>
 #include <QDateTime>
 #include <QString>
+#include <QRectF>
+#include <QPointF>
+#include <QSizeF>
+#include <QSize>
 #include <QStringList>
 
 #include <stdio.h>	// stderr, fprintf()
@@ -509,15 +513,64 @@ QString Logger::expandVariables( const QString & unexpanded )
 }
 
 
-QTextStream & operator<<( QTextStream &str, const QStringList &stringList )
+
+
+QTextStream & operator<<( QTextStream & str, bool val )
+{
+    str << ( val ? "true" : "false" );
+    return str;
+}
+
+
+QTextStream & operator<<( QTextStream & str, const QStringList &stringList )
 {
     str << stringList.join( ", " );
     return str;
 }
 
 
-QTextStream & operator<<( QTextStream &str, bool val )
+QTextStream & operator<<( QTextStream & str, const QRectF & rect )
 {
-    str << ( val ? "true" : "false" );
+    str << "QRectF("
+           << " x: " << rect.x()
+           << " y: " << rect.y()
+           << " width: " << rect.width()
+           << " height: " << rect.height()
+           << " )";
+
     return str;
 }
+
+
+QTextStream & operator<<( QTextStream & str, const QPointF & point )
+{
+    str << "QPointF("
+           << " x: " << point.x()
+           << " y: " << point.y()
+           << " )";
+
+    return str;
+}
+
+
+QTextStream & operator<<( QTextStream & str, const QSizeF & size )
+{
+    str << "QSizeF("
+           << " width: " << size.width()
+           << " height: " << size.height()
+           << " )";
+
+    return str;
+}
+
+
+QTextStream & operator<<( QTextStream & str, const QSize & size )
+{
+    str << "QSize("
+           << " width: " << size.width()
+           << " height: " << size.height()
+           << " )";
+
+    return str;
+}
+

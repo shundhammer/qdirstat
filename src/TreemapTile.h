@@ -380,17 +380,6 @@ namespace QDirStat
 	return stream;
     }
 
-
-    inline QTextStream & operator<< ( QTextStream & stream, const QRectF & rect )
-    {
-	stream << "QRectF("
-	       << rect.width() << "x" << rect.height()
-	       << "+" << rect.x() << "+" << rect.y()
-	       << ")";
-
-	return stream;
-    }
-
 }	// namespace QDirStat
 
 

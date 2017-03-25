@@ -475,52 +475,6 @@ namespace QDirStat
         int             _percentileIndex;
     };
 
-
-    inline QTextStream & operator<< ( QTextStream & stream, const QRectF & rect )
-    {
-	stream << "QRectF("
-               << " x: " << rect.x()
-               << " y: " << rect.y()
-               << " width: " << rect.width()
-               << " height: " << rect.height()
-               << " )";
-
-	return stream;
-    }
-
-
-    inline QTextStream & operator<< ( QTextStream & stream, const QPointF & point )
-    {
-	stream << "QPointF("
-               << " x: " << point.x()
-               << " y: " << point.y()
-               << " )";
-
-	return stream;
-    }
-
-
-    inline QTextStream & operator<< ( QTextStream & stream, const QSizeF & size )
-    {
-	stream << "QSizeF("
-               << " width: " << size.width()
-               << " height: " << size.height()
-               << " )";
-
-	return stream;
-    }
-
-
-    inline QTextStream & operator<< ( QTextStream & stream, const QSize & size )
-    {
-	stream << "QSize("
-               << " width: " << size.width()
-               << " height: " << size.height()
-               << " )";
-
-	return stream;
-    }
-
 }	// namespace QDirStat
 
 
