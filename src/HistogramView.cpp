@@ -798,6 +798,8 @@ void HistogramView::addOverflowRight()
     if ( _endPercentile == 100 )
 	return;
 
+    // Panel for the overflow area
+
     QRectF histPanelRect = _histogramPanel->boundingRect().normalized();
 
     QRectF rect( histPanelRect.topRight().x() + _overflowSpacing,
@@ -806,18 +808,17 @@ void HistogramView::addOverflowRight()
 		 histPanelRect.height() );
 
     QGraphicsRectItem * cutoffPanel =
-        scene()->addRect( rect, QPen( Qt::NoPen ), _panelBackground );
+	scene()->addRect( rect, QPen( Qt::NoPen ), _panelBackground );
 
-    QPointF next( rect.x() + _overflowSpacing, rect.y() );
 
-    QGraphicsTextItem * textItem = scene()->addText( tr( "Cut off" ) );
-    textItem->setPos( next );
+    // Headline
 
-    QFont boldFont( textItem->font() );
-    boldFont.setBold( true );
-    textItem->setFont( boldFont );
+    QPointF nextPos( rect.x() + _overflowLeftBorder, rect.y() );
 
-    next.setY( next.y() + textItem->boundingRect().height() );
+    nextPos = addBoldText( nextPos, tr( "Cut off" ) );
+
+
+    // Text about cut-off percentiles and size
 
     qreal filesInHistogram = bucketsTotalSum();
     qreal totalFiles = bucketsTotalSum() / ( _endPercentile - _startPercentile ) * 100.0;
@@ -827,83 +828,105 @@ void HistogramView::addOverflowRight()
     lines << "";
     lines << tr( "P%1 .. Max (P100)" ).arg( _endPercentile );
     lines << tr( "%1 .. %2" ).arg( formatSize( percentile( _endPercentile ) ) )
-        .arg( formatSize( percentile( 100 ) ) );
+	.arg( formatSize( percentile( 100 ) ) );
 
-    textItem = scene()->addText( lines.join( "\n" ) );
-    textItem->setPos( next );
+    nextPos = addText( nextPos, lines );
 
-    next.setY( next.y() + textItem->boundingRect().height() );
-    next.setY( next.y() + _pieSliceOffset );
 
-    QRectF pieRect( QRectF( next, QSizeF( _pieDiameter, _pieDiameter ) ) );
+    // Upper pie chart: Number of files cut off
+
+    nextPos.setY( nextPos.y() + _pieSliceOffset );
+    QRectF pieRect( QRectF( nextPos, QSizeF( _pieDiameter, _pieDiameter ) ) );
 
     int cutoff = 100 - _endPercentile;
-    QGraphicsItem * item = addPie( pieRect,
-                                   _endPercentile, cutoff,
-                                   _barBrush, _overflowSliceBrush );
+    nextPos = addPie( pieRect,
+		      _endPercentile, cutoff,
+		      _barBrush, _overflowSliceBrush );
 
-    next.setY( next.y() + item->boundingRect().height() );
+    // Caption for the upper pie chart
 
     lines.clear();
     lines << tr( "%1% of all files" ).arg( cutoff );
     lines << ( missingFiles == 1 ?
-               tr( "1 file total" ) :
-               tr( "%1 files total" ).arg( missingFiles ) );
+	       tr( "1 file total" ) :
+	       tr( "%1 files total" ).arg( missingFiles ) );
     lines << "";
+    nextPos = addText( nextPos, lines );
 
-    textItem = scene()->addText( lines.join( "\n" ) );
-    textItem->setPos( next );
-    next.setY( next.y() + textItem->boundingRect().height() );
+
+    // Lower pie chart: Disk space disregarded
 
     qreal histogramDiskSpace = percentileSum( _startPercentile, _endPercentile );
     qreal cutoffDiskSpace    = percentileSum( _endPercentile, 100 );
     qreal cutoffSpacePercent = 100.0 * cutoffDiskSpace / ( histogramDiskSpace + cutoffDiskSpace );
 
-    next.setY( next.y() + _pieSliceOffset );
-    pieRect = QRectF( next, QSizeF( _pieDiameter, _pieDiameter ) );
+    nextPos.setY( nextPos.y() + _pieSliceOffset );
+    pieRect = QRectF( nextPos, QSizeF( _pieDiameter, _pieDiameter ) );
 
     if ( cutoffDiskSpace > histogramDiskSpace )
     {
-        item = addPie( pieRect,
-                       cutoffDiskSpace, histogramDiskSpace,
-                       _overflowSliceBrush, _barBrush );
+	nextPos = addPie( pieRect,
+			  cutoffDiskSpace, histogramDiskSpace,
+			  _overflowSliceBrush, _barBrush );
     }
     else
     {
-        item = addPie( pieRect,
-                       histogramDiskSpace, cutoffDiskSpace,
-                       _barBrush, _overflowSliceBrush );
+	nextPos = addPie( pieRect,
+			  histogramDiskSpace, cutoffDiskSpace,
+			  _barBrush, _overflowSliceBrush );
     }
 
-    next.setY( next.y() + item->boundingRect().height() );
+
+    // Caption for the lower pie chart
 
     lines.clear();
     lines << tr( "%1% of disk space" ).arg( cutoffSpacePercent, 0, 'f', 1 );
     lines << tr( "%1 total" ).arg( formatSize( cutoffDiskSpace ) );
     lines << "";
+    nextPos = addText( nextPos, lines );
 
-    textItem = scene()->addText( lines.join( "\n" ) );
-    textItem->setPos( next );
-    next.setY( next.y() + textItem->boundingRect().height() );
 
-    if ( next.y() > cutoffPanel->rect().bottom() ) // Panel no longer high enough?
+    // Make sure the panel is tall enough to fit everyting in
+
+    if ( nextPos.y() > cutoffPanel->rect().bottom() )
     {
-        QRectF rect( cutoffPanel->rect() );
-        rect.setBottomLeft( QPointF( rect.x(), next.y()  ) );
-        cutoffPanel->setRect( rect );  // Adapt it to the used height
+	QRectF rect( cutoffPanel->rect() );
+	rect.setBottomLeft( QPointF( rect.x(), nextPos.y()  ) );
+	cutoffPanel->setRect( rect );
     }
 }
 
 
+QPointF HistogramView::addText( const QPointF & pos, const QStringList & lines )
+{
+    QGraphicsTextItem * textItem = scene()->addText( lines.join( "\n" ) );
+    textItem->setPos( pos );
 
-QGraphicsItem * HistogramView::addPie( const QRectF & rect,
-                                       qreal	      val1,
-                                       qreal	      val2,
-                                       const QBrush & brush1,
-                                       const QBrush & brush2 )
+    return QPoint( pos.x(), pos.y() + textItem->boundingRect().height() );
+}
+
+
+QPointF HistogramView::addBoldText( const QPointF & pos, const QString & text )
+{
+    QGraphicsTextItem * textItem = scene()->addText( text );
+    textItem->setPos( pos );
+
+    QFont boldFont( textItem->font() );
+    boldFont.setBold( true );
+    textItem->setFont( boldFont );
+
+    return QPoint( pos.x(), pos.y() + textItem->boundingRect().height() );
+}
+
+
+QPointF HistogramView::addPie( const QRectF & rect,
+			       qreal	      val1,
+			       qreal	      val2,
+			       const QBrush & brush1,
+			       const QBrush & brush2 )
 {
     if ( val1 + val2 == 0.0 )
-	return 0;
+	return rect.topLeft();
 
     const qreal FullCircle = 360.0 * 16.0; // Qt uses 1/16 degrees
     qreal angle1 = val1 / ( val1 + val2 ) * FullCircle;
@@ -936,8 +959,7 @@ QGraphicsItem * HistogramView::addPie( const QRectF & rect,
     // Seriously, trolls, WTF?! One of the most common things to do is to
     // rotate a QGraphicsItem around its center. But this is the most difficult
     // thing to do, and, adding insult to injury, IT IS NOT EXPLAINED IN THE
-    // FUCKING DOCUMENTATION! Thanks a lot for wasting another two hours of my
-    // lifetime!
+    // DOCUMENTATION!
 
     QTransform transform;
     transform.translate( pieCenter.x(), pieCenter.y() );
@@ -945,7 +967,7 @@ QGraphicsItem * HistogramView::addPie( const QRectF & rect,
     transform.translate( -pieCenter.x(), -pieCenter.y() );
     pie->setTransform( transform );
 
-    return pie;
+    return QPoint( rect.x(), rect.y() + pie->boundingRect().height() );
 }
 
 

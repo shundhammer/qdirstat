@@ -352,14 +352,27 @@ namespace QDirStat
 
 	void addOverflowRight();
 
+        /**
+         * Add a text item at 'pos' and return the bottom left of its bounding
+         * rect.
+         **/
+	QPointF addText( const QPointF & pos, const QStringList & lines );
+
+        /**
+         * Add a bold font text item at 'pos' and return the bottom left of its
+         * bounding rect.
+         **/
+	QPointF addBoldText( const QPointF & pos, const QString & text );
+
 	/**
 	 * Add a pie diagram with two values val1 and val2.
+         * Return the bottom left of the bounding rect.
 	 **/
-	QGraphicsItem * addPie( const QRectF & rect,
-                                qreal	    val1,
-                                qreal	    val2,
-                                const QBrush & brush1,
-                                const QBrush & brush2 );
+	QPointF addPie( const QRectF & rect,
+			qreal	       val1,
+			qreal	       val2,
+			const QBrush & brush1,
+			const QBrush & brush2 );
 
 	/**
 	 * Fit the graphics into the viewport.
