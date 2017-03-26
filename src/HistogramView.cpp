@@ -13,6 +13,7 @@
 #include <QResizeEvent>
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QToolTip>
 
 #include "HistogramView.h"
 #include "DelayedRebuilder.h"
@@ -1038,6 +1039,13 @@ void HistogramBar::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	case Qt::LeftButton:
 	    {
 		QGraphicsRectItem::mousePressEvent( event );
+
+#if 0
+                // FIXME: This does not work. Why?
+
+                QPointF pos( event->scenePos() );
+                QToolTip::showText( QPoint( pos.x(), pos.y() ), toolTip(), _parentView );
+#endif
 
 		logDebug() << "Histogram bar #" << _number
 			   << ": " << _parentView->bucket( _number ) << " items;"
