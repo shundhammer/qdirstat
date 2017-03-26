@@ -355,11 +355,11 @@ namespace QDirStat
 	/**
 	 * Add a pie diagram with two values val1 and val2.
 	 **/
-	void addPie( const QRectF & rect,
-		     qreal	    val1,
-		     qreal	    val2,
-		     const QBrush & brush1,
-		     const QBrush & brush2 );
+	QGraphicsItem * addPie( const QRectF & rect,
+                                qreal	    val1,
+                                qreal	    val2,
+                                const QBrush & brush1,
+                                const QBrush & brush2 );
 
 	/**
 	 * Fit the graphics into the viewport.
@@ -378,9 +378,8 @@ namespace QDirStat
 	// Data Members
 	//
 
-	DelayedRebuilder   * _rebuilder;
-	QGraphicsItemGroup * _histogram;
-	QGraphicsItem	   * _histogramPanel;
+	DelayedRebuilder * _rebuilder;
+	QGraphicsItem	 * _histogramPanel;
 
 
 	// Statistics Data

@@ -75,7 +75,6 @@ HistogramView::~HistogramView()
 
 void HistogramView::init()
 {
-    _histogram	    = 0;
     _histogramPanel = 0;
 
     _bucketMaxValue	    = 0;
@@ -106,7 +105,7 @@ void HistogramView::init()
     _overflowRightBorder  = 10.0;
     _overflowSpacing	  = 15.0;
     _pieDiameter	  = 60.0;
-    _pieSliceOffset	  =  4.0;
+    _pieSliceOffset	  = 10.0;
 
 
     _panelBackground	  = QBrush( QColor( 0xF0, 0xF0, 0xF0 ) );
@@ -527,9 +526,7 @@ void HistogramView::addHistogramBackground()
 		 _histogramWidth   + _leftBorder + _rightBorder,
 		 -( _histogramHeight + _topBorder  + _bottomBorder ) );
 
-    _histogramPanel =
-	scene()->addRect( rect, QPen( Qt::NoPen ), _panelBackground );
-
+    _histogramPanel = scene()->addRect( rect, QPen( Qt::NoPen ), _panelBackground );
     _histogramPanel->setZValue( PanelBackgroundLayer );
 }
 
@@ -821,32 +818,57 @@ void HistogramView::addOverflowRight()
 }
 
 
-void HistogramView::addPie( const QRectF & rect,
-			    qreal	   val1,
-			    qreal	   val2,
-			    const QBrush & brush1,
-			    const QBrush & brush2 )
+
+QGraphicsItem * HistogramView::addPie( const QRectF & rect,
+                                       qreal	      val1,
+                                       qreal	      val2,
+                                       const QBrush & brush1,
+                                       const QBrush & brush2 )
 {
     if ( val1 + val2 == 0.0 )
-	return;
+	return 0;
 
     const qreal FullCircle = 360.0 * 16.0; // Qt uses 1/16 degrees
     qreal angle1 = val1 / ( val1 + val2 ) * FullCircle;
     qreal angle2 = FullCircle - angle1;
 
     QGraphicsEllipseItem * slice1 = scene()->addEllipse( rect );
-    slice1->setStartAngle( angle2 );
+
+    slice1->setStartAngle( angle2 / 2.0 );
     slice1->setSpanAngle( angle1 );
     slice1->setBrush( brush1 );
     slice1->setPen( _piePen );
 
-    QRectF rect2 = rect;
-    rect2.moveTopLeft( rect.topLeft() + QPoint( _pieSliceOffset, -_pieSliceOffset ) );
+    QRectF rect2( rect );
+    rect2.moveTopLeft( rect.topLeft() + QPoint( _pieSliceOffset, 0.0 ) );
     QGraphicsEllipseItem * slice2 = scene()->addEllipse( rect2 );
-    slice2->setStartAngle( 0.0 );
+
+    slice2->setStartAngle( -angle2 / 2.0 );
     slice2->setSpanAngle( angle2 );
     slice2->setBrush( brush2 );
     slice2->setPen( _piePen );
+
+    QList<QGraphicsItem *> slices;
+    slices << slice1 << slice2;
+
+    QGraphicsItemGroup * pie = scene()->createItemGroup( slices );
+    QPointF pieCenter = rect.center();
+
+    // Figuring out the following arcane sequence took me well over 2 hours.
+    //
+    // Seriously, trolls, WTF?! One of the most common things to do is to
+    // rotate a QGraphicsItem around its center. But this is the most difficult
+    // thing to do, and, adding insult to injury, IT IS NOT EXPLAINED IN THE
+    // FUCKING DOCUMENTATION! Thanks a lot for wasting another two hours of my
+    // lifetime!
+
+    QTransform transform;
+    transform.translate( pieCenter.x(), pieCenter.y() );
+    transform.rotate( -45.0 );
+    transform.translate( -pieCenter.x(), -pieCenter.y() );
+    pie->setTransform( transform );
+
+    return pie;
 }
 
 
