@@ -100,7 +100,7 @@ void HistogramView::init()
 
     _markerExtraHeight	  = 15.0;
 
-    _overflowWidth	  = 80.0;
+    _overflowWidth	  = 150.0;
     _overflowLeftBorder	  = 10.0;
     _overflowRightBorder  = 10.0;
     _overflowSpacing	  = 15.0;
@@ -805,16 +805,93 @@ void HistogramView::addOverflowRight()
 		 _overflowWidth + _overflowLeftBorder + _overflowRightBorder,
 		 histPanelRect.height() );
 
-    scene()->addRect( rect, QPen( Qt::NoPen ), _panelBackground );
+    QGraphicsRectItem * cutoffPanel =
+        scene()->addRect( rect, QPen( Qt::NoPen ), _panelBackground );
 
-    QRect pie1Rect( rect.x() + _overflowLeftBorder,
-		    rect.y() + _topBorder,
-		    _pieDiameter,
-		    _pieDiameter );
+    QPointF next( rect.x() + _overflowSpacing, rect.y() );
 
-    addPie( pie1Rect,
-	    _endPercentile, 100 - _endPercentile,
-	    _barBrush, _overflowSliceBrush );
+    QGraphicsTextItem * textItem = scene()->addText( tr( "Cut off" ) );
+    textItem->setPos( next );
+
+    QFont boldFont( textItem->font() );
+    boldFont.setBold( true );
+    textItem->setFont( boldFont );
+
+    next.setY( next.y() + textItem->boundingRect().height() );
+
+    qreal filesInHistogram = bucketsTotalSum();
+    qreal totalFiles = bucketsTotalSum() / ( _endPercentile - _startPercentile ) * 100.0;
+    int missingFiles = totalFiles - filesInHistogram;
+
+    QStringList lines;
+    lines << "";
+    lines << tr( "P%1 .. Max (P100)" ).arg( _endPercentile );
+    lines << tr( "%1 .. %2" ).arg( formatSize( percentile( _endPercentile ) ) )
+        .arg( formatSize( percentile( 100 ) ) );
+
+    textItem = scene()->addText( lines.join( "\n" ) );
+    textItem->setPos( next );
+
+    next.setY( next.y() + textItem->boundingRect().height() );
+    next.setY( next.y() + _pieSliceOffset );
+
+    QRectF pieRect( QRectF( next, QSizeF( _pieDiameter, _pieDiameter ) ) );
+
+    int cutoff = 100 - _endPercentile;
+    QGraphicsItem * item = addPie( pieRect,
+                                   _endPercentile, cutoff,
+                                   _barBrush, _overflowSliceBrush );
+
+    next.setY( next.y() + item->boundingRect().height() );
+
+    lines.clear();
+    lines << tr( "%1% of all files" ).arg( cutoff );
+    lines << ( missingFiles == 1 ?
+               tr( "1 file total" ) :
+               tr( "%1 files total" ).arg( missingFiles ) );
+    lines << "";
+
+    textItem = scene()->addText( lines.join( "\n" ) );
+    textItem->setPos( next );
+    next.setY( next.y() + textItem->boundingRect().height() );
+
+    qreal histogramDiskSpace = percentileSum( _startPercentile, _endPercentile );
+    qreal cutoffDiskSpace    = percentileSum( _endPercentile, 100 );
+    qreal cutoffSpacePercent = 100.0 * cutoffDiskSpace / ( histogramDiskSpace + cutoffDiskSpace );
+
+    next.setY( next.y() + _pieSliceOffset );
+    pieRect = QRectF( next, QSizeF( _pieDiameter, _pieDiameter ) );
+
+    if ( cutoffDiskSpace > histogramDiskSpace )
+    {
+        item = addPie( pieRect,
+                       cutoffDiskSpace, histogramDiskSpace,
+                       _overflowSliceBrush, _barBrush );
+    }
+    else
+    {
+        item = addPie( pieRect,
+                       histogramDiskSpace, cutoffDiskSpace,
+                       _barBrush, _overflowSliceBrush );
+    }
+
+    next.setY( next.y() + item->boundingRect().height() );
+
+    lines.clear();
+    lines << tr( "%1% of disk space" ).arg( cutoffSpacePercent, 0, 'f', 1 );
+    lines << tr( "%1 total" ).arg( formatSize( cutoffDiskSpace ) );
+    lines << "";
+
+    textItem = scene()->addText( lines.join( "\n" ) );
+    textItem->setPos( next );
+    next.setY( next.y() + textItem->boundingRect().height() );
+
+    if ( next.y() > cutoffPanel->rect().bottom() ) // Panel no longer high enough?
+    {
+        QRectF rect( cutoffPanel->rect() );
+        rect.setBottomLeft( QPointF( rect.x(), next.y()  ) );
+        cutoffPanel->setRect( rect );  // Adapt it to the used height
+    }
 }
 
 
