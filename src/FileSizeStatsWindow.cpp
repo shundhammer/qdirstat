@@ -61,9 +61,28 @@ void FileSizeStatsWindow::initWidgets()
     QFont font = _ui->heading->font();
     font.setBold( true );
     _ui->heading->setFont( font );
+    _ui->optionsPanel->hide();
 
     connect( _ui->percentileFilterComboBox, SIGNAL( currentIndexChanged( int ) ),
              this,                          SLOT  ( fillPercentileTable()      ) );
+
+    connect( _ui->optionsButton, SIGNAL( clicked()       ),
+             this,               SLOT  ( toggleOptions() ) );
+
+    connect( _ui->autoButton,    SIGNAL( clicked()  ),
+             this,               SLOT  ( autoPercentiles() ) );
+
+    connect( _ui->startPercentileSlider,  SIGNAL( valueChanged( int ) ),
+             this,                        SLOT  ( applyOptions()      ) );
+
+    connect( _ui->startPercentileSpinBox, SIGNAL( valueChanged( int ) ),
+             this,                        SLOT  ( applyOptions()      ) );
+
+    connect( _ui->endPercentileSlider,    SIGNAL( valueChanged( int ) ),
+             this,                        SLOT  ( applyOptions()      ) );
+
+    connect( _ui->endPercentileSpinBox,   SIGNAL( valueChanged( int ) ),
+             this,                        SLOT  ( applyOptions()      ) );
 }
 
 
@@ -326,6 +345,7 @@ void FileSizeStatsWindow::fillHistogram()
     histogram->setPercentiles( _stats->percentileList() );
     histogram->setPercentileSums( _stats->percentileSums() );
     histogram->autoStartEndPercentiles();
+    updateOptions();
 
     int startPercentile = histogram->startPercentile();
     int endPercentile   = histogram->endPercentile();
@@ -346,3 +366,58 @@ void FileSizeStatsWindow::reject()
     deleteLater();
 }
 
+
+void FileSizeStatsWindow::toggleOptions()
+{
+    if ( _ui->optionsPanel->isVisible() )
+    {
+        _ui->optionsPanel->hide();
+        _ui->optionsButton->setText( tr( "&Options >>" ) );
+    }
+    else
+    {
+        _ui->optionsPanel->show();
+        _ui->optionsButton->setText( tr( "<< &Options" ) );
+        updateOptions();
+    }
+}
+
+
+void FileSizeStatsWindow::applyOptions()
+{
+    HistogramView * histogram = _ui->histogramView;
+
+    int newStart = _ui->startPercentileSlider->value();
+    int newEnd   = _ui->endPercentileSlider->value();
+
+    if ( newStart != histogram->startPercentile() ||
+         newEnd   != histogram->endPercentile()     )
+    {
+        logDebug() << "New start: " << newStart << " new end: " << newEnd << endl;
+
+        histogram->setStartPercentile( newStart );
+        histogram->setEndPercentile  ( newEnd   );
+        histogram->rebuild();
+    }
+}
+
+
+void FileSizeStatsWindow::autoPercentiles()
+{
+    _ui->histogramView->autoStartEndPercentiles();
+
+    updateOptions();
+    _ui->histogramView->rebuild();
+}
+
+
+void FileSizeStatsWindow::updateOptions()
+{
+    HistogramView * histogram = _ui->histogramView;
+
+    _ui->startPercentileSlider->setValue ( histogram->startPercentile() );
+    _ui->startPercentileSpinBox->setValue( histogram->startPercentile() );
+
+    _ui->endPercentileSlider->setValue ( histogram->endPercentile() );
+    _ui->endPercentileSpinBox->setValue( histogram->endPercentile() );
+}

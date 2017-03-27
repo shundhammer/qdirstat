@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>442</width>
-    <height>541</height>
+    <width>811</width>
+    <height>723</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -65,9 +65,164 @@ p, li { white-space: pre-wrap; }
       <attribute name="title">
        <string>&amp;Histogram</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
         <widget class="QDirStat::HistogramView" name="histogramView"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="optionsButtonLayout">
+         <item>
+          <widget class="QPushButton" name="optionsButton">
+           <property name="text">
+            <string>&amp;Options &gt;&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>248</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QWidget" name="optionsPanel" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>7</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QGridLayout" name="percentilesGridLayout">
+            <property name="horizontalSpacing">
+             <number>12</number>
+            </property>
+            <property name="verticalSpacing">
+             <number>9</number>
+            </property>
+            <item row="0" column="0" colspan="2">
+             <widget class="QSlider" name="startPercentileSlider">
+              <property name="maximum">
+               <number>24</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QPushButton" name="autoButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>A&amp;uto</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3" colspan="2">
+             <widget class="QSlider" name="endPercentileSlider">
+              <property name="minimum">
+               <number>76</number>
+              </property>
+              <property name="maximum">
+               <number>100</number>
+              </property>
+              <property name="value">
+               <number>90</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QSpinBox" name="startPercentileSpinBox">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="prefix">
+               <string>P</string>
+              </property>
+              <property name="maximum">
+               <number>24</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="startPercentileLabel">
+              <property name="text">
+               <string>&amp;Start Percentile</string>
+              </property>
+              <property name="buddy">
+               <cstring>startPercentileSpinBox</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QLabel" name="endPercentileLabel">
+              <property name="text">
+               <string>&amp;End Percentile</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="buddy">
+               <cstring>endPercentileSpinBox</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="4">
+             <widget class="QSpinBox" name="endPercentileSpinBox">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="prefix">
+               <string>P</string>
+              </property>
+              <property name="minimum">
+               <number>76</number>
+              </property>
+              <property name="maximum">
+               <number>100</number>
+              </property>
+              <property name="value">
+               <number>90</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -272,6 +427,20 @@ p, li { white-space: pre-wrap; }
    <header>HistogramView.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>histogramView</tabstop>
+  <tabstop>optionsButton</tabstop>
+  <tabstop>startPercentileSlider</tabstop>
+  <tabstop>autoButton</tabstop>
+  <tabstop>endPercentileSlider</tabstop>
+  <tabstop>startPercentileSpinBox</tabstop>
+  <tabstop>endPercentileSpinBox</tabstop>
+  <tabstop>content</tabstop>
+  <tabstop>percentileFilterComboBox</tabstop>
+  <tabstop>percentileTable</tabstop>
+  <tabstop>closeButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -281,12 +450,76 @@ p, li { white-space: pre-wrap; }
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>349</x>
-     <y>277</y>
+     <x>627</x>
+     <y>621</y>
     </hint>
     <hint type="destinationlabel">
      <x>199</x>
      <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>endPercentileSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>endPercentileSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>457</x>
+     <y>520</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>647</x>
+     <y>553</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>startPercentileSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>startPercentileSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>72</x>
+     <y>520</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>48</x>
+     <y>549</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>endPercentileSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>endPercentileSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>631</x>
+     <y>563</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>412</x>
+     <y>517</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>startPercentileSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>startPercentileSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>27</x>
+     <y>554</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>67</x>
+     <y>527</y>
     </hint>
    </hints>
   </connection>

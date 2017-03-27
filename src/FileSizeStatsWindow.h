@@ -84,6 +84,23 @@ namespace QDirStat
          **/
         void fillPercentileTable();
 
+        /**
+         * Make the histogram options visible or invisible.
+         **/
+        void toggleOptions();
+
+        /**
+         * Check the options widgets for any new values, apply them and rebuild
+         * the histogram.
+         **/
+        void applyOptions();
+
+        /**
+         * Calculate automatic values for the start and end percentiles, apply
+         * them and rebuild the histogram.
+         **/
+        void autoPercentiles();
+
     protected:
 
 	/**
@@ -100,6 +117,12 @@ namespace QDirStat
 	 * One-time initialization of the widgets in this window.
 	 **/
 	void initWidgets();
+
+        /**
+         * Update the values for the option widgets from the current ones from
+         * the histogram.
+         **/
+        void updateOptions();
 
         /**
          * Return text for all quantiles of 'order' named 'name'.
