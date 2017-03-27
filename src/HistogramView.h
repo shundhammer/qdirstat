@@ -386,6 +386,16 @@ namespace QDirStat
 	 **/
 	virtual void resizeEvent( QResizeEvent * event ) Q_DECL_OVERRIDE;
 
+        /**
+         * Resize the widget content to 'newSize'.
+         **/
+        void resizeContent( const QSize & newSize );
+
+        /**
+         * Resize the widget content to the current window size.
+         **/
+        void autoResize();
+
 
 	//
 	// Data Members
@@ -393,6 +403,7 @@ namespace QDirStat
 
 	DelayedRebuilder * _rebuilder;
 	QGraphicsItem	 * _histogramPanel;
+        bool               _haveGeometry;
 
 
 	// Statistics Data

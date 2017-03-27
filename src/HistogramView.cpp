@@ -77,6 +77,7 @@ HistogramView::~HistogramView()
 void HistogramView::init()
 {
     _histogramPanel = 0;
+    _haveGeometry   = false;
 
     _bucketMaxValue	    = 0;
     _startPercentile	    = 0;    // data min
@@ -391,14 +392,10 @@ bool HistogramView::autoLogHeightScale()
 }
 
 
-void HistogramView::resizeEvent( QResizeEvent * event )
+void HistogramView::resizeContent( const QSize & newSize )
 {
-    // logDebug() << "Event size: " << event->size() << endl;
-
-    QGraphicsView::resizeEvent( event );
-
     qreal overflowW  = _overflowSpacing + _overflowWidth + _overflowLeftBorder + _overflowRightBorder;
-    _histogramWidth  = event->size().width();
+    _histogramWidth  = newSize.width();
     _histogramWidth -= _leftBorder + _rightBorder + 2 * _viewMargin;
 
     if ( _endPercentile != 100 )
@@ -414,17 +411,33 @@ void HistogramView::resizeEvent( QResizeEvent * event )
     if ( _histogramWidth < MinHistogramWidth )
 	_histogramWidth = MinHistogramWidth;
 
-    _histogramHeight  = event->size().height();
+    _histogramHeight  = newSize.height();
     _histogramHeight -= _bottomBorder + _topBorder + 2 * _viewMargin;
     _histogramHeight -= 30.0; // compensate for text above
 
     _histogramHeight  = qBound( MinHistogramHeight, _histogramHeight, 1.5 * _histogramWidth );
+    _haveGeometry     = true;
 
 #if 0
     logDebug() << "Histogram width: " << _histogramWidth
 	       << " height: " << _histogramHeight
 	       << endl;
 #endif
+}
+
+
+void HistogramView::autoResize()
+{
+    resizeContent( viewport()->size() );
+}
+
+
+void HistogramView::resizeEvent( QResizeEvent * event )
+{
+    // logDebug() << "Event size: " << event->size() << endl;
+
+    QGraphicsView::resizeEvent( event );
+    resizeContent( event->size() );
 
     _rebuilder->scheduleRebuild();
 }
@@ -481,6 +494,9 @@ void HistogramView::rebuild()
     }
 
     logInfo() << "Rebuilding histogram" << endl;
+
+    if ( ! _haveGeometry )
+        autoResize();
 
     // QGraphicsScene never resets the min and max in both dimensions where it
     // ever created QGraphicsItems, which makes its sceneRect() call pretty
