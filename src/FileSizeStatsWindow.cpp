@@ -346,6 +346,15 @@ void FileSizeStatsWindow::fillHistogram()
     histogram->setPercentileSums( _stats->percentileSums() );
     histogram->autoStartEndPercentiles();
     updateOptions();
+    histogram->autoLogHeightScale();
+    fillBuckets();
+    histogram->rebuild();
+}
+
+
+void FileSizeStatsWindow::fillBuckets()
+{
+    HistogramView * histogram = _ui->histogramView;
 
     int startPercentile = histogram->startPercentile();
     int endPercentile   = histogram->endPercentile();
@@ -356,8 +365,6 @@ void FileSizeStatsWindow::fillHistogram()
     QRealList buckets   = _stats->fillBuckets( bucketCount, startPercentile, endPercentile );
 
     histogram->setBuckets( buckets );
-    histogram->autoLogHeightScale();
-    histogram->rebuild();
 }
 
 
@@ -397,6 +404,8 @@ void FileSizeStatsWindow::applyOptions()
 
         histogram->setStartPercentile( newStart );
         histogram->setEndPercentile  ( newEnd   );
+        fillBuckets();
+        histogram->autoLogHeightScale(); // FIXME
         histogram->rebuild();
     }
 }
@@ -407,6 +416,8 @@ void FileSizeStatsWindow::autoPercentiles()
     _ui->histogramView->autoStartEndPercentiles();
 
     updateOptions();
+    fillBuckets();
+    _ui->histogramView->autoLogHeightScale(); // FIXME
     _ui->histogramView->rebuild();
 }
 

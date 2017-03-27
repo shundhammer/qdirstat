@@ -178,6 +178,10 @@ namespace QDirStat
          **/
         void fillHistogram();
 
+        /**
+         * Provide data for the histogram.
+         **/
+        void fillBuckets();
 
 
 	//
