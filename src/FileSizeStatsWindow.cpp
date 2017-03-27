@@ -346,8 +346,8 @@ void FileSizeStatsWindow::fillHistogram()
     histogram->setPercentileSums( _stats->percentileSums() );
     histogram->autoStartEndPercentiles();
     updateOptions();
-    histogram->autoLogHeightScale();
     fillBuckets();
+    histogram->autoLogHeightScale();
     histogram->rebuild();
 }
 
