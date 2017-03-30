@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-03-10
+Updated: 2017-03-31
 
 
 ## Overview
@@ -61,8 +61,7 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
 (https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-exclude-rules-config.png)
 
 
-_Full-size images and descriptions on the [Screenshots Page]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/README.md)_
+_Full-size images and descriptions on the [Screenshots Page](https://github.com/shundhammer/qdirstat/blob/master/screenshots/README.md)_
 
 
 -----------------------
@@ -193,14 +192,12 @@ _Full-size images and descriptions on the [Screenshots Page]
     view above and treemap below to side-by-side (Menu _Treemap_ -> _Treemap as
     Side Panel_).
 
-  - Added new document [GitHub-Workflow.md]
-(https://github.com/shundhammer/qdirstat/blob/master/doc/GitHub-Workflow.md)
+  - Added new document [GitHub-Workflow.md](https://github.com/shundhammer/qdirstat/blob/master/doc/GitHub-Workflow.md)
     explaining how to work with GitHub and Git to contribute to QDirStat.
 
 - 2017-02-20 Locating files by type from the _File Type Statistics_ window
 
-![Locating FilesWindow]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locating-file-types.png)
+![Locating FilesWindow](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locating-file-types.png)
 
   You can now locate files with a specific filename extension directly:
 
@@ -220,8 +217,7 @@ _Full-size images and descriptions on the [Screenshots Page]
   See also [GitHub issue #48](https://github.com/shundhammer/qdirstat/issues/48).
 
 
-- 2017-02-18 New document: [QDirStat for Servers]
-(https://github.com/shundhammer/qdirstat/blob/master/doc/QDirStat-for-Servers.md)
+- 2017-02-18 New document: [QDirStat for Servers](https://github.com/shundhammer/qdirstat/blob/master/doc/QDirStat-for-Servers.md)
   describing how to use QDirStat and the `qdirstat-cache-writer` script on
   headless (no X server, no X libs) servers.
 
@@ -229,8 +225,7 @@ _Full-size images and descriptions on the [Screenshots Page]
 
   Latest screenshot:
 
-  ![File Type Statistics Window Screenshot]
-(https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png)
+  ![File Type Statistics Window Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png)
 
   **Limitations:**
 
@@ -277,16 +272,14 @@ _Full-size images and descriptions on the [Screenshots Page]
 
 - 2017-01-03 **New stable release: V1.2**
 
-_See [DevHistory.md]
-(https://github.com/shundhammer/qdirstat/blob/master/doc/DevHistory.md)
+_See [DevHistory.md](https://github.com/shundhammer/qdirstat/blob/master/doc/DevHistory.md)
 for older entries._
 
 
 ## History
 
 
-This is just a rough summary. For more details, see [DevHistory.md]
-(https://github.com/shundhammer/qdirstat/blob/master/doc/DevHistory.md)
+This is just a rough summary. For more details, see [DevHistory.md](https://github.com/shundhammer/qdirstat/blob/master/doc/DevHistory.md)
 
 - 2017-03-05 New stable release: V1.3
 
@@ -830,11 +823,9 @@ QDirStat packages for:
 - SUSE Linux Enterprise (SLE) 12 SP1
 - SUSE Linux Enterprise (SLE) 12
 
-Download page for the [**latest stable release**]
-(https://software.opensuse.org/download/package?project=home:shundhammer:qdirstat-stable&package=qdirstat)
+Download page for the [**latest stable release**](https://software.opensuse.org/download/package?project=home:shundhammer:qdirstat-stable&package=qdirstat)
 
-Download page for the [**current development version** (git master)]
-(https://software.opensuse.org/download/package?project=home:shundhammer:qdirstat-git&package=qdirstat)
+Download page for the [**current development version** (git master)](https://software.opensuse.org/download/package?project=home:shundhammer:qdirstat-git&package=qdirstat)
 
 Since this version is in development, it may be not quite as stable and
 reliable as the latest official stable release, although the QDirStat
@@ -844,8 +835,7 @@ developers try their best to keep it as stable as possible.
 ### Ubuntu
 
 See Nathan Rennie-Waldock's
-[**QDirStat PPA**]
-(https://launchpad.net/~nathan-renniewaldock/+archive/ubuntu/qdirstat)
+[**QDirStat PPA**](https://launchpad.net/~nathan-renniewaldock/+archive/ubuntu/qdirstat)
 
 
 ## Building
@@ -861,8 +851,7 @@ Make sure you have a working Qt 5 build environment installed. This includes:
 
 If anything doesn't work, first of all **make sure you can build any of the
 simple examples supplied with Qt**, e.g. the
-[calculator example]
-(http://doc.qt.io/qt-5/qtwidgets-widgets-calculator-example.html).
+[calculator example](http://doc.qt.io/qt-5/qtwidgets-widgets-calculator-example.html).
 
 
 #### Ubuntu
@@ -921,24 +910,20 @@ or
 
 ## Contributing
 
-See file [Contributing.md]
-(https://github.com/shundhammer/qdirstat/blob/master/doc/Contributing.md)
-and [GitHub-Workflow.md]
-(https://github.com/shundhammer/qdirstat/blob/master/doc/GitHub-Workflow.md)
+See file [Contributing.md](https://github.com/shundhammer/qdirstat/blob/master/doc/Contributing.md)
+and [GitHub-Workflow.md](https://github.com/shundhammer/qdirstat/blob/master/doc/GitHub-Workflow.md)
 
 
 ## To Do
 
-See file [TODO.md]
-(https://github.com/shundhammer/qdirstat/blob/master/doc/TODO.md)
+See file [TODO.md](https://github.com/shundhammer/qdirstat/blob/master/doc/TODO.md)
 
 
 ## Troubleshooting
 
 ### Can't Move a Directory to Trash
 
-See file [Troubleshooting.md]
-(https://github.com/shundhammer/qdirstat/blob/master/doc/Troubleshooting.md)
+See file [Troubleshooting.md](https://github.com/shundhammer/qdirstat/blob/master/doc/Troubleshooting.md)
 
 
 ## Reference
@@ -971,8 +956,7 @@ http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
 
 ### YouTube
 
-[Spatry: _Quick Look: QDirStat_]
-(https://www.youtube.com/watch?v=ysm4-x_5ftI)
+[Spatry: _Quick Look: QDirStat_](https://www.youtube.com/watch?v=ysm4-x_5ftI)
 
 
 ## Misc
