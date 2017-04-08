@@ -788,13 +788,22 @@ void HistogramView::addMarkers()
 	if ( ( i == 25 || i == 75 ) && _showQuartiles )
 	    continue;
 
-	if ( _percentileStep != 1 &&
-	     i > _startPercentile + _leftMarginPercentiles  &&
-	     i < _endPercentile	  - _rightMarginPercentiles &&
-	     ( _percentileStep == 0 || i % _percentileStep != 0 ) )
-	{
-	    continue;
-	}
+	if ( _percentileStep != 1 )
+        {
+            bool skip = true;
+
+            if ( i <= _startPercentile + _leftMarginPercentiles && i < 25 )
+                skip = false;
+
+            if ( i >= _endPercentile - _rightMarginPercentiles && i > 75 )
+                skip = false;
+
+            if  ( skip && _percentileStep != 0 && i % _percentileStep == 0 )
+                skip = false;
+
+            if ( skip )
+                continue;
+        }
 
 	QPen pen = _percentilePen;
 
