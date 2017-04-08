@@ -20,13 +20,13 @@ BucketsTableModel::BucketsTableModel( QWidget * parent, HistogramView * histogra
     QAbstractTableModel( parent ),
     _histogram( histogram )
 {
-    logDebug() << "Creating model" << endl;
+    // logDebug() << "init" << endl;
 }
 
 
 BucketsTableModel::~BucketsTableModel()
 {
-    logDebug() << "Destroying model" << endl;
+    // logDebug() << "destroying" << endl;
 }
 
 
@@ -115,7 +115,7 @@ QVariant BucketsTableModel::headerData( int	        section,
             else
             {
                 if ( section < _histogram->bucketCount() )
-                    return QString::number( section + 1 );
+                    return " " + QString::number( section + 1 ) + " ";
                 else
                     return QVariant();
             }

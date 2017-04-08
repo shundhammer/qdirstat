@@ -34,7 +34,7 @@ FileSizeStatsWindow::FileSizeStatsWindow( QWidget * parent ):
     _suffix( "" ),
     _stats( 0 )
 {
-    logDebug() << "init" << endl;
+    // logDebug() << "init" << endl;
 
     CHECK_NEW( _ui );
     _ui->setupUi( this );
@@ -53,7 +53,7 @@ FileSizeStatsWindow::FileSizeStatsWindow( QWidget * parent ):
 
 FileSizeStatsWindow::~FileSizeStatsWindow()
 {
-    logDebug() << "destroying" << endl;
+    // logDebug() << "destroying" << endl;
     writeWindowSettings( this, "FileSizeStatsWindow" );
 }
 
