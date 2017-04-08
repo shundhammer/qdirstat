@@ -77,7 +77,7 @@ HistogramView::~HistogramView()
 void HistogramView::init()
 {
     _histogramPanel = 0;
-    _haveGeometry   = false;
+    _geometryDirty  = true;
 
     _bucketMaxValue	    = 0;
     _startPercentile	    = 0;    // data min
@@ -217,7 +217,11 @@ void HistogramView::setStartPercentile( int index )
 {
     CHECK_PERCENTILE_INDEX( index );
 
+    bool oldNeedOverflowPanel = needOverflowPanel();
     _startPercentile = index;
+
+    if ( oldNeedOverflowPanel != needOverflowPanel() )
+        _geometryDirty = true;
 }
 
 
@@ -225,7 +229,11 @@ void HistogramView::setEndPercentile( int index )
 {
     CHECK_PERCENTILE_INDEX( index );
 
+    bool oldNeedOverflowPanel = needOverflowPanel();
     _endPercentile = index;
+
+    if ( oldNeedOverflowPanel != needOverflowPanel() )
+        _geometryDirty = true;
 
     if ( _startPercentile >= _endPercentile )
     {
@@ -328,6 +336,8 @@ void HistogramView::autoStartEndPercentiles()
     qreal minVal = qMax( q1 - 3 * qDist, 0.0 );
     qreal maxVal = qMin( q3 + 3 * qDist, percentile( 100 ) );
 
+    bool oldNeedOverflowPanel = needOverflowPanel();
+
     for ( _startPercentile = 0; _startPercentile <= 25; ++_startPercentile )
     {
 	if ( percentile( _startPercentile ) >= minVal )
@@ -339,6 +349,9 @@ void HistogramView::autoStartEndPercentiles()
 	if ( percentile( _endPercentile ) <= maxVal )
 	    break;
     }
+
+    if ( oldNeedOverflowPanel != needOverflowPanel() )
+        _geometryDirty = true;
 
     logInfo() << "Q1: " << formatSize( q1 )
 	      << "  Q3: " << formatSize( q3 )
@@ -392,21 +405,16 @@ bool HistogramView::autoLogHeightScale()
 }
 
 
-void HistogramView::resizeContent( const QSize & newSize )
+void HistogramView::calcGeometry( const QSize & newSize )
 {
-    qreal overflowW  = _overflowSpacing + _overflowWidth + _overflowLeftBorder + _overflowRightBorder;
     _histogramWidth  = newSize.width();
     _histogramWidth -= _leftBorder + _rightBorder + 2 * _viewMargin;
 
-    if ( _endPercentile != 100 )
-	_histogramWidth -= overflowW;
-
-#if 0
-    // No left overflow panel so far
-
-    if ( _startPercentile != 0 )
-	_histogramWidth -= _overflowW;
-#endif
+    if ( needOverflowPanel() )
+    {
+	_histogramWidth -= _overflowSpacing + _overflowWidth;
+        _histogramWidth -= _overflowLeftBorder + _overflowRightBorder;
+    }
 
     if ( _histogramWidth < MinHistogramWidth )
 	_histogramWidth = MinHistogramWidth;
@@ -416,7 +424,7 @@ void HistogramView::resizeContent( const QSize & newSize )
     _histogramHeight -= 30.0; // compensate for text above
 
     _histogramHeight  = qBound( MinHistogramHeight, _histogramHeight, 1.5 * _histogramWidth );
-    _haveGeometry     = true;
+    _geometryDirty    = false;
 
 #if 0
     logDebug() << "Histogram width: " << _histogramWidth
@@ -426,9 +434,15 @@ void HistogramView::resizeContent( const QSize & newSize )
 }
 
 
+bool HistogramView::needOverflowPanel() const
+{
+    return _startPercentile > 0 || _endPercentile < 100;
+}
+
+
 void HistogramView::autoResize()
 {
-    resizeContent( viewport()->size() );
+    calcGeometry( viewport()->size() );
 }
 
 
@@ -437,7 +451,7 @@ void HistogramView::resizeEvent( QResizeEvent * event )
     // logDebug() << "Event size: " << event->size() << endl;
 
     QGraphicsView::resizeEvent( event );
-    resizeContent( event->size() );
+    calcGeometry( event->size() );
 
     _rebuilder->scheduleRebuild();
 }
@@ -495,7 +509,7 @@ void HistogramView::rebuild()
 
     logInfo() << "Rebuilding histogram" << endl;
 
-    if ( ! _haveGeometry )
+    if ( _geometryDirty )
         autoResize();
 
     // QGraphicsScene never resets the min and max in both dimensions where it
@@ -517,7 +531,7 @@ void HistogramView::rebuild()
     }
 
     addHistogram();
-    addOverflowRight();
+    addOverflowPanel();
 
     fitToViewport();
 }
@@ -810,9 +824,9 @@ void HistogramView::addMarkers()
 }
 
 
-void HistogramView::addOverflowRight()
+void HistogramView::addOverflowPanel()
 {
-    if ( _endPercentile == 100 )
+    if ( ! needOverflowPanel() )
 	return;
 
     // Panel for the overflow area
@@ -842,10 +856,24 @@ void HistogramView::addOverflowRight()
     int missingFiles = totalFiles - filesInHistogram;
 
     QStringList lines;
-    lines << "";
-    lines << tr( "P%1 .. Max (P100)" ).arg( _endPercentile );
-    lines << tr( "%1 .. %2" ).arg( formatSize( percentile( _endPercentile ) ) )
-	.arg( formatSize( percentile( 100 ) ) );
+
+    if ( _startPercentile > 0 )
+    {
+        lines << "";
+        lines << tr( "Min (P0) .. P%1" ).arg( _startPercentile );
+        lines << tr( "%1 .. %2" )
+            .arg( formatSize( percentile( 0 ) ) )
+            .arg( formatSize( percentile( _startPercentile ) ) );
+    }
+
+    if ( _endPercentile < 100 )
+    {
+        lines << "";
+        lines << tr( "P%1 .. Max (P100)" ).arg( _endPercentile );
+        lines << tr( "%1 .. %2" )
+            .arg( formatSize( percentile( _endPercentile ) ) )
+            .arg( formatSize( percentile( 100 ) ) );
+    }
 
     nextPos = addText( nextPos, lines );
 
@@ -855,9 +883,9 @@ void HistogramView::addOverflowRight()
     nextPos.setY( nextPos.y() + _pieSliceOffset );
     QRectF pieRect( QRectF( nextPos, QSizeF( _pieDiameter, _pieDiameter ) ) );
 
-    int cutoff = 100 - _endPercentile;
+    int cutoff = _startPercentile + 100 - _endPercentile;
     nextPos = addPie( pieRect,
-		      _endPercentile, cutoff,
+		      100 - cutoff, cutoff,
 		      _barBrush, _overflowSliceBrush );
 
     // Caption for the upper pie chart
@@ -874,7 +902,11 @@ void HistogramView::addOverflowRight()
     // Lower pie chart: Disk space disregarded
 
     qreal histogramDiskSpace = percentileSum( _startPercentile, _endPercentile );
-    qreal cutoffDiskSpace    = percentileSum( _endPercentile, 100 );
+    qreal cutoffDiskSpace    = percentileSum( 0, _startPercentile );
+
+    if ( _endPercentile < 100 )
+        cutoffDiskSpace += percentileSum( _endPercentile, 100 );
+
     qreal cutoffSpacePercent = 100.0 * cutoffDiskSpace / ( histogramDiskSpace + cutoffDiskSpace );
 
     nextPos.setY( nextPos.y() + _pieSliceOffset );

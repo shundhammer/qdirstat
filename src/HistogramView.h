@@ -350,7 +350,7 @@ namespace QDirStat
 	void addHistogramBars();
 	void addMarkers();
 
-	void addOverflowRight();
+	void addOverflowPanel();
 
         /**
          * Add a text item at 'pos' and return the bottom left of its bounding
@@ -387,14 +387,19 @@ namespace QDirStat
 	virtual void resizeEvent( QResizeEvent * event ) Q_DECL_OVERRIDE;
 
         /**
-         * Resize the widget content to 'newSize'.
+         * Calculate the content geometry to fit into 'newSize'.
          **/
-        void resizeContent( const QSize & newSize );
+        void calcGeometry( const QSize & newSize );
 
         /**
          * Resize the widget content to the current window size.
          **/
         void autoResize();
+
+        /**
+         * Return 'true' if an overflow ("cutoff") panel is needed.
+         **/
+        bool needOverflowPanel() const;
 
 
 	//
@@ -403,7 +408,7 @@ namespace QDirStat
 
 	DelayedRebuilder * _rebuilder;
 	QGraphicsItem	 * _histogramPanel;
-        bool               _haveGeometry;
+        bool               _geometryDirty;
 
 
 	// Statistics Data
