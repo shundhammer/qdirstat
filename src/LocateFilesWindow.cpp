@@ -14,9 +14,9 @@
 #include "SelectionModel.h"
 #include "FileInfoIterator.h"
 #include "SettingsHelpers.h"
+#include "HeaderTweaker.h"
 #include "Logger.h"
 #include "Exception.h"
-#include "Qt4Compat.h"
 
 using namespace QDirStat;
 
@@ -73,13 +73,7 @@ void LocateFilesWindow::initWidgets()
 				      << tr( "Total Size" )
 				      << tr( "Directory" ) );
     _ui->treeWidget->header()->setStretchLastSection( false );
-
-    // Set auto-resize for all columns
-
-    for ( int col = 0; col < SSR_ColumnCount; ++col )
-    {
-	_ui->treeWidget->header()->setSectionResizeMode( col, QHeaderView::ResizeToContents );
-    }
+    HeaderTweaker::resizeToContents( _ui->treeWidget->header() );
 }
 
 

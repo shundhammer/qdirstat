@@ -28,7 +28,6 @@ namespace QDirStat
     public:
         enum Column
         {
-            NumberCol,
             StartCol,
             EndCol,
             ValueCol,

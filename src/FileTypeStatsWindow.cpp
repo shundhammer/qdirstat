@@ -18,7 +18,7 @@
 #include "DirTree.h"
 #include "MimeCategory.h"
 #include "SettingsHelpers.h"
-#include "Qt4Compat.h"
+#include "HeaderTweaker.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -94,13 +94,8 @@ void FileTypeStatsWindow::initWidgets()
 				      << tr( "Total Size" )
 				      << tr( "Percentage" ) );
     _ui->treeWidget->header()->setStretchLastSection( false );
+    HeaderTweaker::resizeToContents( _ui->treeWidget->header() );
 
-    // Set auto-resize for all columns
-
-    for ( int col = 0; col < FT_ColumnCount; ++col )
-    {
-	_ui->treeWidget->header()->setSectionResizeMode( col, QHeaderView::ResizeToContents );
-    }
 
     // Create the menu for the menu button
 

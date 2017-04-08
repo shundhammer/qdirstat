@@ -65,15 +65,18 @@ QVariant BucketsTableModel::data( const QModelIndex & index, int role ) const
                 if ( row < 0 || row >= _histogram->bucketCount() )
                     return QVariant();
 
+                QString result;
+
                 switch ( index.column() )
                 {
-                    case NumberCol: return QString::number( row + 1 );
-                    case StartCol:  return formatSize( _histogram->bucketStart( row ) );
-                    case EndCol:    return formatSize( _histogram->bucketEnd( row ) );
-                    case ValueCol:  return QString::number( _histogram->bucket( row ) );
+                    case StartCol:  result = formatSize( _histogram->bucketStart( row ) ); break;
+                    case EndCol:    result = formatSize( _histogram->bucketEnd  ( row ) ); break;
+                    case ValueCol:  result = QString::number( _histogram->bucket( row ) ); break;
 
                     default:        return QVariant();
                 }
+
+                return " " + result + " "; // Maintain some margin
 	    }
 
 	case Qt::TextAlignmentRole:
@@ -91,25 +94,39 @@ QVariant BucketsTableModel::headerData( int	        section,
                                         Qt::Orientation orientation,
                                         int	        role ) const
 {
-    if ( orientation != Qt::Horizontal )
-	return QVariant();
-
     switch ( role )
     {
 	case Qt::DisplayRole:
+            if ( orientation == Qt::Horizontal )
+            {
+                QString result;
 
-	    switch ( section )
-	    {
-		case NumberCol:		return tr( "Bucket Number" );
-		case StartCol:		return tr( "Start"         );
-		case EndCol:		return tr( "End"           );
-		case ValueCol:		return tr( "Files"         );
+                switch ( section )
+                {
+                    case StartCol:	result = tr( "Start"         ); break;
+                    case EndCol:	result = tr( "End"           ); break;
+                    case ValueCol:	result = tr( "Files"         ); break;
 
-		default:		return QVariant();
-	    }
+                    default: return QVariant();
+                }
+
+                return " " + result + " "; // Maintain some margin
+            }
+            else
+            {
+                if ( section < _histogram->bucketCount() )
+                    return QString::number( section + 1 );
+                else
+                    return QVariant();
+            }
 
 	case Qt::TextAlignmentRole:
-	    return Qt::AlignRight;
+            {
+                if ( orientation == Qt::Horizontal )
+                    return (int) Qt::AlignVCenter | Qt::AlignHCenter;
+                else
+                    return (int) Qt::AlignVCenter | Qt::AlignRight;
+            }
 
 	default:
 	    return QVariant();
@@ -119,8 +136,9 @@ QVariant BucketsTableModel::headerData( int	        section,
 
 Qt::ItemFlags BucketsTableModel::flags( const QModelIndex &index ) const
 {
-    Q_UNUSED( index );
+    Qt::ItemFlags flags = QAbstractTableModel::flags( index );
+    flags |= Qt::ItemIsSelectable;
 
-    return Qt::ItemIsSelectable;
+    return flags;
 }
 

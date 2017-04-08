@@ -18,7 +18,7 @@
 #include "DirTree.h"
 #include "MainWindow.h"
 #include "SettingsHelpers.h"
-#include "Qt4Compat.h"
+#include "HeaderTweaker.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -298,8 +298,7 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *    table,
     setColAlignment( table, NameCol,   Qt::AlignCenter | Qt::AlignVCenter );
     setColAlignment( table, SumCol,    Qt::AlignRight  | Qt::AlignVCenter );
 
-    for ( int col = 0; col < table->horizontalHeader()->count(); ++col )
-        table->horizontalHeader()->setSectionResizeMode( col, QHeaderView::ResizeToContents );
+    HeaderTweaker::resizeToContents( table->horizontalHeader() );
 }
 
 
@@ -405,6 +404,7 @@ void FileSizeStatsWindow::fillBuckets()
 void FileSizeStatsWindow::fillBucketsTable()
 {
     _bucketsTableModel->reset();
+    HeaderTweaker::resizeToContents( _ui->bucketsTable->horizontalHeader() );
 }
 
 

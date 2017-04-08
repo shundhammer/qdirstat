@@ -48,6 +48,10 @@ namespace QDirStat
 	 **/
 	void setColumnOrder( const DataColumnList & colOrderList);
 
+        /**
+         * Resize a header view to contents.
+         **/
+        static void resizeToContents( QHeaderView * header );
 
     public slots:
 
