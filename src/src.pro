@@ -28,6 +28,7 @@ INSTALLS	+= TARGET desktop icons
 
 SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
+            BucketsTableModel.cpp       \
 	    Cleanup.cpp			\
 	    CleanupCollection.cpp	\
 	    CleanupConfigPage.cpp	\
@@ -78,6 +79,7 @@ SOURCES	  = main.cpp			\
 
 HEADERS	  =				\
 	    ActionManager.h		\
+            BucketsTableModel.h         \
 	    Cleanup.h			\
 	    CleanupCollection.h		\
 	    CleanupConfigPage.h		\

@@ -183,6 +183,16 @@ namespace QDirStat
 	 **/
 	qreal bucketWidth() const;
 
+        /**
+         * Return the start value of bucket no. 'index'.
+         **/
+        qreal bucketStart( int index ) const;
+
+        /**
+         * Return the end value of bucket no. 'index'.
+         **/
+        qreal bucketEnd( int index ) const;
+
 	/**
 	 * Return the total sum of all buckets.
 	 **/

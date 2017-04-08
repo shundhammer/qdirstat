@@ -144,9 +144,12 @@ namespace QDirStat
         FileSize quartile( int number ) { return quantile( 4, number ); }
 
         /**
-         * Fill buckets for a histogram from 'startPercentile' to 'endPercentile'.
+         * Fill buckets for a histogram from 'startPercentile' to
+         * 'endPercentile'.
          **/
-        QRealList fillBuckets( int bucketCount, int startPercentile, int endPercentile );
+        QRealList fillBuckets( int bucketCount,
+                               int startPercentile,
+                               int endPercentile );
 
         /**
          * Return a list of all percentiles from 0 to 100.

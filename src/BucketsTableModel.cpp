@@ -1,0 +1,126 @@
+/*
+ *   File name: BucketsTableModel.h
+ *   Summary:	Data model for buckets table
+ *   License:	GPL V2 - See file LICENSE for details.
+ *
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ */
+
+
+#include "BucketsTableModel.h"
+#include "HistogramView.h"
+#include "FileInfo.h"
+#include "Logger.h"
+#include "Exception.h"
+
+using namespace QDirStat;
+
+
+BucketsTableModel::BucketsTableModel( QWidget * parent, HistogramView * histogram ):
+    QAbstractTableModel( parent ),
+    _histogram( histogram )
+{
+    logDebug() << "Creating model" << endl;
+}
+
+
+BucketsTableModel::~BucketsTableModel()
+{
+    logDebug() << "Destroying model" << endl;
+}
+
+
+void BucketsTableModel::reset()
+{
+    beginResetModel();
+    endResetModel();
+}
+
+
+int BucketsTableModel::rowCount( const QModelIndex & parent ) const
+{
+    return parent.isValid() ? 0 : _histogram->bucketCount();
+}
+
+
+int BucketsTableModel::columnCount( const QModelIndex & parent ) const
+{
+    Q_UNUSED( parent );
+
+    return ColCount;
+}
+
+
+QVariant BucketsTableModel::data( const QModelIndex & index, int role ) const
+{
+    if ( ! index.isValid() )
+	return QVariant();
+
+    switch ( role )
+    {
+	case Qt::DisplayRole:
+	    {
+                int row = index.row();
+
+                if ( row < 0 || row >= _histogram->bucketCount() )
+                    return QVariant();
+
+                switch ( index.column() )
+                {
+                    case NumberCol: return QString::number( row + 1 );
+                    case StartCol:  return formatSize( _histogram->bucketStart( row ) );
+                    case EndCol:    return formatSize( _histogram->bucketEnd( row ) );
+                    case ValueCol:  return QString::number( _histogram->bucket( row ) );
+
+                    default:        return QVariant();
+                }
+	    }
+
+	case Qt::TextAlignmentRole:
+            return (int) Qt::AlignVCenter | Qt::AlignRight;
+
+	default:
+	    return QVariant();
+    }
+
+    return QVariant();
+}
+
+
+QVariant BucketsTableModel::headerData( int	        section,
+                                        Qt::Orientation orientation,
+                                        int	        role ) const
+{
+    if ( orientation != Qt::Horizontal )
+	return QVariant();
+
+    switch ( role )
+    {
+	case Qt::DisplayRole:
+
+	    switch ( section )
+	    {
+		case NumberCol:		return tr( "Bucket Number" );
+		case StartCol:		return tr( "Start"         );
+		case EndCol:		return tr( "End"           );
+		case ValueCol:		return tr( "Files"         );
+
+		default:		return QVariant();
+	    }
+
+	case Qt::TextAlignmentRole:
+	    return Qt::AlignRight;
+
+	default:
+	    return QVariant();
+    }
+}
+
+
+Qt::ItemFlags BucketsTableModel::flags( const QModelIndex &index ) const
+{
+    Q_UNUSED( index );
+
+    return Qt::ItemIsSelectable;
+}
+

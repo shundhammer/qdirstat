@@ -178,6 +178,20 @@ qreal HistogramView::bucketWidth( qreal min, qreal max, int bucketCount )
 }
 
 
+qreal HistogramView::bucketStart( int index ) const
+{
+    qreal offset = percentile( _startPercentile );
+    return offset + index * bucketWidth();
+}
+
+
+qreal HistogramView::bucketEnd( int index ) const
+{
+    qreal offset = percentile( _startPercentile );
+    return offset + ( index + 1 ) * bucketWidth();
+}
+
+
 void HistogramView::setBuckets( const QRealList & newBuckets )
 {
     _buckets	    = newBuckets;
@@ -1070,10 +1084,8 @@ HistogramBar::HistogramBar( HistogramView * parent,
     // setFlags( ItemIsSelectable );
     _parentView->scene()->addItem( this );
 
-    qreal bucketWidth = _parentView->bucketWidth();
-    qreal offset      = _parentView->percentile( _parentView->startPercentile() );
-    _startVal = offset + _number * bucketWidth;
-    _endVal   = _startVal + bucketWidth;
+    _startVal = _parentView->bucketStart( _number );
+    _endVal   = _parentView->bucketEnd  ( _number );
 
     QString tooltip = QObject::tr( "Bucket #%1:\n%2 Files\n%3 .. %4" )
 	.arg( _number + 1 )

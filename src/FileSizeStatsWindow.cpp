@@ -1,6 +1,6 @@
 /*
  *   File name: FileSizeStatsWindow.cpp
- *   Summary:	QDirStat file type statistics window
+ *   Summary:	QDirStat size type statistics window
  *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
@@ -14,6 +14,7 @@
 #include "FileSizeStatsWindow.h"
 #include "FileSizeStats.h"
 #include "HistogramView.h"
+#include "BucketsTableModel.h"
 #include "DirTree.h"
 #include "MainWindow.h"
 #include "SettingsHelpers.h"
@@ -42,6 +43,11 @@ FileSizeStatsWindow::FileSizeStatsWindow( QWidget * parent ):
 
     _stats = new FileSizeStats();
     CHECK_NEW( _stats );
+
+    _bucketsTableModel = new BucketsTableModel( this, _ui->histogramView );
+    CHECK_NEW( _bucketsTableModel );
+
+    _ui->bucketsTable->setModel( _bucketsTableModel );
 }
 
 
@@ -81,7 +87,6 @@ FileSizeStatsWindow * FileSizeStatsWindow::sharedInstance()
 void FileSizeStatsWindow::clear()
 {
     _stats->clear();
-    _ui->content->clear();
 }
 
 
@@ -138,8 +143,6 @@ void FileSizeStatsWindow::populateSharedInstance( FileInfo *      subtree,
 
 void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
 {
-    _ui->content->clear();
-
     _subtree = subtree;
     _suffix  = suffix;
 
@@ -164,27 +167,8 @@ void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
                                .arg( suffix ).arg( url ) );
     calc();
 
-    QStringList text;
-
-    FileSize q1 = _stats->quartile( 1 );
-    FileSize q3 = _stats->quartile( 3 );
-
-    text << tr( "Median:   %1" ).arg( formatSize( _stats->median() ) );
-    text << tr( "Average:  %1" ).arg( formatSize( _stats->average() ) );
-    text << "";
-    text << tr( "Q1:       %1" ).arg( formatSize( q1 ) );
-    text << tr( "Q3:       %1" ).arg( formatSize( q3 ) );
-    text << tr( "Q3 - Q1:  %1" ).arg( formatSize( q3 - q1 ) );
-    text << "";
-    text << tr( "Min:      %1" ).arg( formatSize( _stats->min() ) );
-    text << tr( "Max:      %1" ).arg( formatSize( _stats->max() ) );
-    text << "";
-    text << tr( "Files:    %1" ).arg( _stats->dataSize() );
-
-    fillPercentileTable();
     fillHistogram();
-
-    _ui->content->setText( text.join( "\n" ) );
+    fillPercentileTable();
 }
 
 
@@ -414,6 +398,13 @@ void FileSizeStatsWindow::fillBuckets()
     QRealList buckets   = _stats->fillBuckets( bucketCount, startPercentile, endPercentile );
 
     histogram->setBuckets( buckets );
+    fillBucketsTable();
+}
+
+
+void FileSizeStatsWindow::fillBucketsTable()
+{
+    _bucketsTableModel->reset();
 }
 
 

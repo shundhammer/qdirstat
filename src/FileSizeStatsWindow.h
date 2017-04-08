@@ -1,6 +1,6 @@
 /*
  *   File name: FileSizeStatsWindow.h
- *   Summary:	QDirStat file type statistics window
+ *   Summary:	QDirStat file size statistics window
  *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
@@ -23,6 +23,7 @@ namespace QDirStat
 {
     class DirTree;
     class FileSizeStats;
+    class BucketsTableModel;
 
 
     /**
@@ -199,6 +200,11 @@ namespace QDirStat
         void fillHistogram();
 
         /**
+         * Fill the buckets table with content.
+         **/
+        void fillBucketsTable();
+
+        /**
          * Provide data for the histogram.
          **/
         void fillBuckets();
@@ -212,6 +218,7 @@ namespace QDirStat
         FileInfo *                  _subtree;
         QString                     _suffix;
 	FileSizeStats *		    _stats;
+        BucketsTableModel *         _bucketsTableModel;
 
         static QPointer<FileSizeStatsWindow> _sharedInstance;
     };
