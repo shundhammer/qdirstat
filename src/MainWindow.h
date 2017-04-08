@@ -16,7 +16,6 @@
 #include <QPointer>
 
 #include "ui_main-window.h"
-#include "FileSizeStatsWindow.h"
 #include "FileTypeStatsWindow.h"
 
 class QCloseEvent;
@@ -35,9 +34,7 @@ namespace QDirStat
 }
 
 using QDirStat::FileInfo;
-using QDirStat::FileSizeStatsWindow;
 using QDirStat::FileTypeStatsWindow;
-
 
 
 class MainWindow: public QMainWindow
@@ -300,7 +297,6 @@ private:
     QDirStat::MimeCategorizer	* _mimeCategorizer;
     QDirStat::ConfigDialog	* _configDialog;
     QPointer<FileTypeStatsWindow> _fileTypeStatsWindow;
-    QPointer<FileSizeStatsWindow> _fileSizeStatsWindow;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
     bool			  _verboseSelection;

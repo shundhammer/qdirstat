@@ -15,12 +15,15 @@
 #include "FileSizeStats.h"
 #include "HistogramView.h"
 #include "DirTree.h"
+#include "MainWindow.h"
 #include "SettingsHelpers.h"
 #include "Qt4Compat.h"
 #include "Logger.h"
 #include "Exception.h"
 
 using namespace QDirStat;
+
+QPointer<FileSizeStatsWindow> FileSizeStatsWindow::_sharedInstance = 0;
 
 
 FileSizeStatsWindow::FileSizeStatsWindow( QWidget * parent ):
@@ -46,6 +49,32 @@ FileSizeStatsWindow::~FileSizeStatsWindow()
 {
     logDebug() << "destroying" << endl;
     writeWindowSettings( this, "FileSizeStatsWindow" );
+}
+
+
+FileSizeStatsWindow * FileSizeStatsWindow::sharedInstance()
+{
+    if ( ! _sharedInstance )
+    {
+        QWidget * parent = 0;
+
+        QWidgetList toplevel = QApplication::topLevelWidgets();
+
+        for ( QWidgetList::const_iterator it = toplevel.constBegin();
+              it != toplevel.constEnd() && ! parent;
+              ++it )
+        {
+            parent = qobject_cast<MainWindow *>( *it );
+        }
+
+        if ( ! parent )
+            logWarning() << "NULL parent for shared instance" << endl;
+
+        _sharedInstance = new FileSizeStatsWindow( parent );
+        CHECK_NEW( _sharedInstance );
+    }
+
+    return _sharedInstance;
 }
 
 
@@ -99,6 +128,14 @@ void FileSizeStatsWindow::calc()
 }
 
 
+void FileSizeStatsWindow::populateSharedInstance( FileInfo *      subtree,
+                                                  const QString & suffix  )
+{
+    sharedInstance()->populate( subtree, suffix );
+    sharedInstance()->show();
+}
+
+
 void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
 {
     _ui->content->clear();
@@ -106,13 +143,25 @@ void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
     _subtree = subtree;
     _suffix  = suffix;
 
+    if ( _suffix.startsWith( "*." ) )
+        _suffix.remove( 0, 1 );
+
     if ( ! _subtree )
     {
 	logWarning() << "No tree" << endl;
 	return;
     }
 
-    _ui->heading->setText( tr( "File size statistics for %1" ).arg( subtree->debugUrl() ) );
+    QString url = subtree->debugUrl();
+
+    if ( url == "<root>" )
+        url = subtree->tree()->url();
+
+    if ( _suffix.isEmpty() )
+        _ui->heading->setText( tr( "File size statistics for %1" ).arg( url ) );
+    else
+        _ui->heading->setText( tr( "File size statistics for %1 in %2" )
+                               .arg( suffix ).arg( url ) );
     calc();
 
     QStringList text;

@@ -9,8 +9,11 @@
 
 #include <algorithm>
 
+#include <QMenu>
+
 #include "FileTypeStatsWindow.h"
 #include "FileTypeStats.h"
+#include "FileSizeStatsWindow.h"
 #include "LocateFilesWindow.h"
 #include "DirTree.h"
 #include "MimeCategory.h"
@@ -44,18 +47,21 @@ FileTypeStatsWindow::FileTypeStatsWindow( DirTree *	   tree,
     initWidgets();
     readWindowSettings( this, "FileTypeStatsWindow" );
 
-    connect( _ui->treeWidget,	 SIGNAL( currentItemChanged( QTreeWidgetItem *,
-							     QTreeWidgetItem * ) ),
-	     this,		 SLOT  ( enableLocateButton( QTreeWidgetItem * ) ) );
+    connect( _ui->treeWidget,	   SIGNAL( currentItemChanged( QTreeWidgetItem *,
+							       QTreeWidgetItem * ) ),
+	     this,		   SLOT	 ( enableActions     ( QTreeWidgetItem * ) ) );
 
-    connect( _ui->treeWidget,	 SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),
-	     this,		 SLOT  ( locateCurrentFileType()		      ) );
+    connect( _ui->treeWidget,	   SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),
+	     this,		   SLOT	 ( locateCurrentFileType()			) );
 
-    connect( _ui->refreshButton, SIGNAL( clicked() ),
-	     this,		 SLOT  ( refresh() ) );
+    connect( _ui->refreshButton,   SIGNAL( clicked() ),
+	     this,		   SLOT	 ( refresh() ) );
 
-    connect( _ui->locateButton,	 SIGNAL( clicked() ),
-	     this,		 SLOT  ( locateCurrentFileType() ) );
+    connect( _ui->actionLocate,	   SIGNAL( triggered()		   ),
+	     this,		   SLOT	 ( locateCurrentFileType() ) );
+
+    connect( _ui->actionSizeStats, SIGNAL( triggered()	                 ),
+	     this,		   SLOT	 ( sizeStatsForCurrentFileType() ) );
 
     _stats = new FileTypeStats( tree, this );
     CHECK_NEW( _stats );
@@ -75,7 +81,7 @@ void FileTypeStatsWindow::clear()
 {
     _stats->clear();
     _ui->treeWidget->clear();
-    _ui->locateButton->setEnabled( false );
+    enableActions(0);
 }
 
 
@@ -95,6 +101,14 @@ void FileTypeStatsWindow::initWidgets()
     {
 	_ui->treeWidget->header()->setSectionResizeMode( col, QHeaderView::ResizeToContents );
     }
+
+    // Create the menu for the menu button
+
+    QMenu * menu = new QMenu( this );
+    CHECK_NEW( menu );
+    menu->addAction( _ui->actionLocate    );
+    menu->addAction( _ui->actionSizeStats );
+    _ui->menuButton->setMenu( menu );
 }
 
 
@@ -259,16 +273,10 @@ void FileTypeStatsWindow::populate()
 
 void FileTypeStatsWindow::locateCurrentFileType()
 {
-    SuffixFileTypeItem * current =
-	dynamic_cast<SuffixFileTypeItem *>( _ui->treeWidget->currentItem() );
+    QString suffix = currentSuffix();
 
-    if ( ! current )
-	return;
-
-    if ( current->suffix() == NO_SUFFIX )
+    if ( suffix.isEmpty() )
     {
-	logWarning() << "Can't locate NO_SUFFIX" << endl;
-
 	if ( _locateFilesWindow )
 	    _locateFilesWindow->hide();
 
@@ -300,11 +308,43 @@ void FileTypeStatsWindow::locateCurrentFileType()
 	_locateFilesWindow->raise();
     }
 
-    _locateFilesWindow->locate( current->suffix() );
+    _locateFilesWindow->locate( suffix );
 }
 
 
-void FileTypeStatsWindow::enableLocateButton( QTreeWidgetItem * currentItem )
+void FileTypeStatsWindow::sizeStatsForCurrentFileType()
+{
+    QString suffix = currentSuffix();
+
+    if ( suffix.isEmpty() || ! _tree || ! _tree->root() )
+        return;
+
+    logDebug() << "Size stats for " << suffix << endl;
+
+    FileSizeStatsWindow::populateSharedInstance( _tree->root(), suffix );
+}
+
+
+QString FileTypeStatsWindow::currentSuffix() const
+{
+    SuffixFileTypeItem * current =
+	dynamic_cast<SuffixFileTypeItem *>( _ui->treeWidget->currentItem() );
+
+    if ( ! current )
+	return QString();
+
+    if ( current->suffix() == NO_SUFFIX )
+    {
+	logWarning() << "NO_SUFFIX selected" << endl;
+
+	return QString();
+    }
+
+    return current->suffix();
+}
+
+
+void FileTypeStatsWindow::enableActions( QTreeWidgetItem * currentItem )
 {
     bool enabled = false;
 
@@ -316,7 +356,9 @@ void FileTypeStatsWindow::enableLocateButton( QTreeWidgetItem * currentItem )
 	enabled = suffixItem && suffixItem->suffix() != NO_SUFFIX;
     }
 
-    _ui->locateButton->setEnabled( enabled );
+    _ui->actionLocate->setEnabled( enabled );
+    _ui->actionSizeStats->setEnabled( enabled );
+    _ui->menuButton->setEnabled( enabled );
 }
 
 

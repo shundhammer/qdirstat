@@ -28,6 +28,7 @@
 #include "Exception.h"
 #include "ExcludeRules.h"
 #include "FileInfo.h"
+#include "FileSizeStatsWindow.h"
 #include "Logger.h"
 #include "MimeCategorizer.h"
 #include "MimeCategoryConfigPage.h"
@@ -796,16 +797,7 @@ void MainWindow::showFileSizeStats()
     if ( ! sel || ! sel->hasChildren() )
         return;
 
-    if ( ! _fileSizeStatsWindow )
-    {
-        // This deletes itself when the user closes it. The associated QPointer
-        // keeps track of that and sets the pointer to 0 when it happens.
-
-        _fileSizeStatsWindow = new QDirStat::FileSizeStatsWindow( this );
-    }
-
-    _fileSizeStatsWindow->populate( sel, "" );
-    _fileSizeStatsWindow->show();
+    FileSizeStatsWindow::populateSharedInstance( sel );
 }
 
 

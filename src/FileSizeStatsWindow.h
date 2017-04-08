@@ -11,6 +11,7 @@
 #define FileSizeStatsWindow_h
 
 #include <QDialog>
+#include <QPointer>
 
 #include "ui_file-size-stats-window.h"
 #include "FileInfo.h"
@@ -64,6 +65,25 @@ namespace QDirStat
          * Return the filename suffix to filter the collected information.
          **/
         QString suffix() const { return _suffix; }
+
+        /**
+         * Static method for using one shared instance of this class between
+         * multiple parts of the application. This will create a new instance
+         * if there is none yet (or anymore).
+         *
+         * Do not hold on to this pointer; the instance destroys itself when
+         * the user closes the window, and then the pointer becomes invalid.
+         *
+         * After getting this shared instance, call populate() and show().
+         **/
+        static FileSizeStatsWindow * sharedInstance();
+
+        /**
+         * Convenience function for creating, populating and showing the shared
+         * instance.
+         **/
+        static void populateSharedInstance( FileInfo *      subtree,
+                                            const QString & suffix = "" );
 
 
     public slots:
@@ -192,6 +212,8 @@ namespace QDirStat
         FileInfo *                  _subtree;
         QString                     _suffix;
 	FileSizeStats *		    _stats;
+
+        static QPointer<FileSizeStatsWindow> _sharedInstance;
     };
 
 } // namespace QDirStat

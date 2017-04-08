@@ -106,7 +106,7 @@ void FileSizeStats::collect( FileInfo * subtree, const QString & suffix )
 
 	if ( item->hasChildren() )
 	{
-	    collect( item );
+	    collect( item, suffix );
 	}
 	else if ( item->isFile() )
 	{

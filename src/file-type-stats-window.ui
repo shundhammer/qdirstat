@@ -45,12 +45,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="locateButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
+      <widget class="QPushButton" name="menuButton">
        <property name="text">
-        <string>&amp;Locate...</string>
+        <string>File &amp;Type</string>
        </property>
       </widget>
      </item>
@@ -83,6 +80,19 @@
     </layout>
    </item>
   </layout>
+  <action name="actionLocate">
+   <property name="text">
+    <string>&amp;Locate</string>
+   </property>
+  </action>
+  <action name="actionSizeStats">
+   <property name="text">
+    <string>Si&amp;ze Statistics</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>

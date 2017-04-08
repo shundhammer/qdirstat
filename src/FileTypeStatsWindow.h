@@ -81,6 +81,12 @@ namespace QDirStat
 	 **/
 	void locateCurrentFileType();
 
+        /**
+         * Open a "File Size Statistics" window for the currently selected file
+         * type or re-popuolate it if it is still open.
+         **/
+	void sizeStatsForCurrentFileType();
+
 	/**
 	 * Reject the dialog contents, i.e. the user clicked the "Cancel"
 	 * or WM_CLOSE button.
@@ -92,9 +98,9 @@ namespace QDirStat
     protected slots:
 
 	/**
-	 * Enable or disable the "Locate" button depending on the current item.
+	 * Enable or disable the actions depending on the current item.
 	 **/
-	void enableLocateButton( QTreeWidgetItem * currentItem );
+	void enableActions( QTreeWidgetItem * currentItem );
 
     protected:
 
@@ -112,6 +118,12 @@ namespace QDirStat
 	 * Populate the widgets from the collected information.
 	 **/
 	void populate();
+
+        /**
+         * Return the suffix of the currently selected file type or an empty
+         * string if no suffix is selected.
+         **/
+        QString currentSuffix() const;
 
 
 	//
