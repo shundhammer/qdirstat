@@ -95,7 +95,7 @@ void FileSizeStats::collect( FileInfo * subtree, const QString & suffix )
     if ( _data.isEmpty() )
         _data.reserve( subtree->totalFiles() );
 
-    if ( subtree->isFile() && subtree->name().endsWith( suffix ) )
+    if ( subtree->isFile() && subtree->name().toLower().endsWith( suffix ) )
         _data << subtree->size();
 
     FileInfoIterator it( subtree );
@@ -110,7 +110,7 @@ void FileSizeStats::collect( FileInfo * subtree, const QString & suffix )
 	}
 	else if ( item->isFile() )
 	{
-            if ( item->name().endsWith( suffix ) )
+            if ( item->name().toLower().endsWith( suffix ) )
                 _data << item->size();
 	}
 	// Disregard symlinks, block devices and other special files

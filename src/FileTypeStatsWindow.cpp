@@ -314,7 +314,7 @@ void FileTypeStatsWindow::locateCurrentFileType()
 
 void FileTypeStatsWindow::sizeStatsForCurrentFileType()
 {
-    QString suffix = currentSuffix();
+    QString suffix = currentSuffix().toLower();
 
     if ( suffix.isEmpty() || ! _tree || ! _tree->root() )
         return;
