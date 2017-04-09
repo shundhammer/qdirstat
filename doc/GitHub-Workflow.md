@@ -1,6 +1,8 @@
 # GitHub Workflow for Open Source Projects
 
-_Author: HuHa <Stefan.Hundhammer@gmx.de>_
+(c) 2017 Stefan Hundhammer
+
+License: GNU Free Documentation License
 
 
 This is the workflow used for Open Source projects like QDirStat and YaST.
