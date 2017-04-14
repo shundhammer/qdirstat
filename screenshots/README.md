@@ -72,50 +72,50 @@ _Context menu of the tree header where you can configure the columns._
 
 _File size histogram for a directory_
 
-![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-jpg-work.png)
+![Histogram with only JPGs](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-jpg-work.png)
 
 _File size histogram for all files of type .jpg (start from the File Type Statistics window)_
 
-![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-options.png)
+![Histogram Options](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-options.png)
 
 _Histogram settings can be tweaked_
 
-![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-log-scale.png)
+![Logarithmic Scale](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-log-scale.png)
 
 _Logarithmic scale for the vertical axis if needed_
 
 
-![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-P100.png)
+![Histogram with P100](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-P100.png)
 
 _Degenerated histogram if the last percentiles are too far spread out_
 
-![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-P99.png)
+![Histogram with P99](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-P99.png)
 
 _Just one percentile less makes all the difference: Scaled down from P100 to P99_
 
 
 
-![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-percentiles-table.png)
+![Percentiles Table](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-percentiles-table.png)
 
 _Numeric percentiles table_
 
 
-![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-percentiles-table-full.png)
+![Full Percentiles Table](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-percentiles-table-full.png)
 
 _Full percentiles table_
 
-![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-percentiles-extreme.png)
+![Extreme Percentiles](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-percentiles-extreme.png)
 
 _Notice the leap from P99 to P100_
 
 
 
-![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-buckets-table.png)
+![Buckets Table](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-buckets-table.png)
 
 _Buckets table (information also available by tooltips in the histogram)_
 
 
-![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-stats-help.png)
+![File Size Help](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-stats-help.png)
 
 _Dedicated help start page for file size statistics_
 
