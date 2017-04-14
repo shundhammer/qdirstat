@@ -122,6 +122,11 @@ namespace QDirStat
          **/
         void autoPercentiles();
 
+        /**
+         * Show help for a topic determinded by the sender of this signal.
+         **/
+        void showHelp();
+
     protected:
 
 	/**
