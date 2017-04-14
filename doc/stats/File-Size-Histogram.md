@@ -3,7 +3,7 @@
 _This explains the histogram itself. The overflow ("cut off") area is described in a
 [separate document](https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Overflow-Area.md),
 and the histogram options in
-[yet another separate document]((https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Histogram-Options.md)._
+[yet another separate document](https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Histogram-Options.md)._
 
 ![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram.png)
 
@@ -25,7 +25,7 @@ _Histogram showing only .jpg files in that directory_
 
 This histogram displays the distribution of file sizes in the selected
 directory (see window heading). If a filename suffix ("*.jpg" or similar) is
-displayed, it is restricted to the files of that type.
+displayed, it is restricted to files of that type.
 
 
 ### The Colored Heading Values
@@ -52,7 +52,7 @@ The horizontal (x) axis are the file sizes, the vertical axis the number of
 files with each files.
 
 The vertical axis might be linear (if labeled just with **n**) or logarithmic
-(if labeled with **log2(n)**) with a base 2 logarithmus.
+(if labeled with **log2(n)**) with a base 2 logarithm.
 
 ![Logarithmic scale](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-log-scale.png)
 
@@ -106,8 +106,8 @@ _Buckets_ page in that dialog.
 ### The Markers
 
 Markers for Q1, the median and Q3 are superimposed over the histogram: They are
-the colored vertical lines in the histogram. Their respective color is the same
-as in the heading above the histogram.
+the colored vertical lines. Their respective color is the same as in the
+heading above the histogram.
 
 At the right, there are some more grey markers; they show some percentiles at
 the border of the histogram. They are useful to get an idea how much the
@@ -169,7 +169,7 @@ thin bars on the right. If there are extreme differences like in this example,
 the right bars would degenerate into thin lines, and even that would be
 technically wrong because they would need to have sub-pixel widths. Remember
 that we are comparing ranges of some few bytes with gigabytes; that's a factor
-1024*1024*1024 difference. It's just not feasible to display that.
+1024\*1024\*1024 difference. It's just not feasible to display that.
 
 So the more pragmatic approach is to cut off at a sensible limit.
 
