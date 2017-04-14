@@ -1,4 +1,4 @@
-# Median, Percentiles etc. Explained
+# Median, Quartiles and Percentiles Explained
 
 (c) 2017 Stefan Hundhammer
 
@@ -58,9 +58,12 @@ also that big large corporation Agricorp, Inc. with a lot of cows:
 The average is 561 / 12 = 46.75.
 
 But that does not describe any of the farmers well; worse, that average is a
-meaningless number. Why this is so is obvious here: That big Agricorp, Inc. is
-greatly distorting the result. There must be a better way to do this; one that
-actually makes a meaningful statement about the typical farmer of Dairyville.
+meaningless number: It does not fit any of the normal farmers, much less the
+big Agricorp, Inc. corporation.
+
+Why this is so is obvious in this case: That big Agricorp, Inc. is greatly
+distorting the result. There must be a better way to do this; one that actually
+makes a meaningful statement about the typical farmer of Dairyville.
 
 Well, there is. It is called the median.
 
@@ -262,3 +265,12 @@ We'd like to thank the farmers and cows of Dairyville and the Dairyville
 chamber of commerce for their kind cooperation.
 
 ;-)
+
+
+## Navigation
+
+[Next: Histograms in General](https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Histograms-in-General.md)
+
+[Up: Statistics Top Page](https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Statistics.md)
+
+[Top: QDirStat Home Page](https://github.com/shundhammer/qdirstat/blob/master/README.md)

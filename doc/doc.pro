@@ -13,4 +13,3 @@ exists( /usr/share/doc/packages ) {
 }
 
 INSTALLS  += doc
-
