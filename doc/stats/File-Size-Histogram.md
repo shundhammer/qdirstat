@@ -32,11 +32,11 @@ displayed, it is restricted to files of that type.
 
 From left to right, you see
 
-- The first quartile (Q1) of the values (the file sizes)
+- The first quartile (Q1) of the file sizes
 
-- The median of the values (the file sizes)
+- The median of the file sizes
 
-- The third quartile (Q3) of the values (the file sizes)
+- The third quartile (Q3) of the file sizes
 
 - The total number of files in the histogram, i.e. the sum of all bucket
   values.
@@ -48,8 +48,8 @@ might want to read the
 
 ### The Histogram
 
-The horizontal (x) axis are the file sizes, the vertical axis the number of
-files with each files.
+The horizontal (x) axis shows the file sizes, the vertical axis the bucket
+values, i.e. the number of files in each bucket (in each size interval).
 
 The vertical axis might be linear (if labeled just with **n**) or logarithmic
 (if labeled with **log2(n)**) with a base 2 logarithm.
