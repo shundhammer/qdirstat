@@ -126,4 +126,4 @@ _Dedicated help start page for file size statistics_
 
 [Top: QDirStat home page](https://github.com/shundhammer/qdirstat)
 
-[Statistics help page](https://github.com/shundhammer/doc/stats/Statistics.md)
+[Statistics help page](https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Statistics.md)
