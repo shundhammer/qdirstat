@@ -62,7 +62,7 @@ you are looking for in the histogram. But this is where you might want to
 decide to show just a little more of the data range by opening the histogram
 options and moving the sliders.
 
-Moving the "end percentile" slider to P99 in this case gets you this:
+Moving the _End Percentile_ slider to P99 in this case gets you this:
 
 ![Histogram with P99](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-P99.png)
 
@@ -82,12 +82,13 @@ is not helpful, either:
 
 Duh. There is no longer an overflow panel since now nothing is cut off, but the
 histogram is pretty worthless: We can now see that there are some files in the
-2 GB range, but the core or the histogram (Q1..Q3) has now degenerated to some
-5 pixels with colored lines. All we can see in this histogram is that there is
-a lot of little stuff on the left, then it peters out for a wide stretch, and
-there is another peak on the right. Notice, though, that due to the logarithmic
-vertical scale that peak is not nearly as high: It's just 18 files (!) in
-comparison to bucket #1 (the peak at the very left) with 98206.
+2 GB range, but the core of the histogram (Q1..Q3) has now degenerated to some
+5 pixels wide with colored lines. All we can see in this histogram is that
+there is a lot of little stuff on the left, then it peters out for a wide
+stretch, and there is another peak on the right. Notice, though, that due to
+the logarithmic vertical scale that peak is not nearly as high as it appears:
+It's just 18 files (!) in comparison to bucket #1 (the peak at the very left)
+with 98206 files.
 
 
 

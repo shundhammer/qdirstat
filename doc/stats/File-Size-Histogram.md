@@ -156,8 +156,7 @@ Percentile data for reference:
 ![Extreme Percentiles](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-percentiles-extreme.png)
 
 
-
-### Why not Use a Logarithmic Scale There, Too?
+### Why Not Use a Logarithmic Scale There, Too?
 
 This is a tempting idea, but it would make the histogram display either
 incorrect or very difficult to interpret: By definition, the area of each bar

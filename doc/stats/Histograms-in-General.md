@@ -35,9 +35,9 @@ the resulting histogram very difficult.
 
 There are a number of formulas to calculate a reasonable number of
 buckets. QDirStat uses the
-[Rice Rule](https://en.wikipedia.org/wiki/Histogram#Rice_Rule)
-with an upper limit of 100 so the resulting histogram bars remain well visible
-and also clickable.
+[Rice Rule](https://en.wikipedia.org/wiki/Histogram#Rice_Rule).
+It uses a maximum of 100 buckets so the resulting histogram bars don't
+degenerate to very thin lines, but remain well visible and also clickable.
 
 
 ### Buckets vs. Percentiles
@@ -74,11 +74,11 @@ Scenario:
 We measured 1000 data points. The minimum measured value is 100, the maximum
 200.
 
-According to the Rice Rule, we need 2 * 1000^(1/3) = 20 buckets.
+According to the Rice Rule, we need `2 * 1000^(1/3) = 20` buckets.
 
-The range we need to display is max - min = 200 - 100 = 100.
+The range we need to display is `max - min = 200 - 100 = 100`.
 
-The bucket width is range / bucket_count = 100 / 20 = 5.
+The bucket width is `range / bucketCount = 100 / 20 = 5`.
 
 So we get those buckets:
 
@@ -97,7 +97,7 @@ So we get those buckets:
 How to handle the boundaries for its bucket is open to definition. A
 practicable definition would be to check for `start <= x < end`.
 
-The we go through all data and determine the bucket where each data point
+Then we go through all data and determine the bucket where each data point
 belongs. For that bucket, we increment its counter by one.
 
 

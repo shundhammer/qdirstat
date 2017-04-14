@@ -27,11 +27,13 @@ cut off.
 
 The _Auto_ button resets both to the automatically calculated values:
 
-    3 * (Q3 - Q1)
+    leftBoundary  = Q1 - 3 * (Q3 - Q1)
+    rightBoundary = Q3 + 3 * (Q3 - Q1)
 
-to the left of Q1 and to the right of Q3.
+(maxed out at minValue (P0) and maxValue (P100), of course)
 
-Hit _<< Options_ again to close the histogram controls.
+
+Hit `<< Options` again to close the histogram controls.
 
 
 
