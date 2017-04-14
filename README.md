@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-03-31
+Updated: 2017-04-14
 
 
 ## Overview
@@ -53,6 +53,10 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
 [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-exclude-rules-config.png" height="245">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-exclude-rules-config.png)
 
 
+[<img src="https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-histogram.png" height="262">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-histogram.png)
+[<img src="https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-histogram-options.png" height="262">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-histogram-options.png)
+[<img src="https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-stats-help.png" height="262">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-stats-help.png)
+
 _Full-size images and descriptions on the [Screenshots Page](https://github.com/shundhammer/qdirstat/blob/master/screenshots/README.md)_
 
 
@@ -62,6 +66,43 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.3**
+
+- 2017-04-14 _Let's do some real statistics_
+
+  It's been a while since the last official news here, but I wasn't idle during
+  that time:
+
+  ![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram.png)
+
+  This is a whole new kind of statistics in QDirStat showing how file sizes are
+  distributed. You can start that for any selected directory (menu _View_ ->
+  _File Size Statistics_ or F2) or from the _File Type Statistics" window if
+  you select any filename suffix (extension) there and then _File Type_ ->
+  _Size Statistics_ (or F2). In the latter case, you can see how large all your
+  photos (.jpg), your videos (.mp4) or whatever are.
+
+  This new statistics window deals with a lot of things you might have come to
+  hate at school or at university, and which your math teacher or your
+  statistics professor never explained in a way that mere mortals can
+  understand, so I added those explanations as a bonus. There is a landing page
+  for that in that new window:
+
+  ![File Size Help](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-stats-help.png)
+
+  Or you might use
+  [this](https://github.com/shundhammer/qdirstat/tree/master/doc/stats)
+  as a starting point.
+
+  Everybody thinking "I have no clue what this is all about", please have a
+  look at the
+  [Median, Quartiles and Percentiles Explained](https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Median-Percentiles.md)
+  document to convince yourself that really **everybody** can easily understand
+  this.
+
+  I also opened a
+  [GitHub issue to discuss this](https://github.com/shundhammer/qdirstat/issues/60);
+  comments are welcome.
+
 
 - 2017-03-10 Filling the gaps in the treemap
 
@@ -468,6 +509,11 @@ old code base that had been long overdue.
   files of that type preselected so you can start cleanup actions like moving
   them to trash or converting them to a better format (.bmp -> .png)
   immediately.
+
+- File size statistics window with histogram, percentiles, buckets and a lot of
+  documentation that everybody should be able to understand. Even if (or,
+  better yet, in particular if) your math teacher or statistics professor never
+  explained it properly, please have a lot at it.
 
 - New macros to use in cleanup actions:
 
