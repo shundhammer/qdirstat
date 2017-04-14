@@ -22,7 +22,7 @@ But P99..P100 in this case means cutting off from 5 MB to 31.1 MB, so it's a
 really wide part of the x axis that gets cut off; to show that all, it would
 need to be more than 6 times as wide. If scaled to the same window width, that
 would mean that the meaningful part of the histogram would only be 1/6 of the
-total width with vast areas of emptiness to its right. That's **why* that part
+total width with vast areas of emptiness to its right. That's _why_ that part
 was cut off.
 
 But even though it's only 1% of all files, those files together account for
@@ -43,8 +43,8 @@ _...and why art thou red?_
 Going one directory level up, we get this histogram, and this is an entirely
 different matter:
 
-The automatic for determining the histogram boundaries decided on displaying P0
-.. P87. This does make sense to have the most important part of the
+The heuristics for determining the histogram boundaries decided on displaying
+P0 to P87. This does make sense in order to have the most important part of the
 distribution between Q1 (P25) and Q3 (P75) in view.
 
 But on the other hand, it cuts off 13% of all files (13 percentiles), the range
@@ -67,15 +67,15 @@ Moving the "end percentile" slider to P99 in this case gets you this:
 ![Histogram with P99](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-P99.png)
 
 OK, that did put things a bit more into proportion - at the price that the most
-important part of the data, Q1 .. Q3, have now become a lot less visible: It
-now has 1/4 of its previous display size (since the right boundary is now at 8
-MB from the previous 2 MB).
+important part of the data, Q1 .. Q3, has now become a lot less visible: It now
+has 1/4 of its previous display size (since the right boundary is now at 8 MB
+from the previous 2 MB).
 
 Still, the remaining 1% of the files that were cut off contribute to 62% of the
 total disk space: The red slice is still the dominant one, albeit no longer
 quite as much as before. _PacMan opened its mouth for us._  ;-)
 
-But going full hog and moving the _end percentile_ slider all the way to P100
+But going full hog and moving the _End Percentile_ slider all the way to P100
 is not helpful, either:
 
 ![Histogram with P100](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-P100.png)

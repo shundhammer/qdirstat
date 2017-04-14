@@ -1,5 +1,7 @@
 # The Buckets Table
 
+![Buckets Table](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-buckets-table.png)
+
 This shows the _buckets_ of the histogram as a table. It is the same
 information you can get when hovering over the histogram bars.
 

@@ -1,10 +1,15 @@
 # The Percentiles Table
 
+
+![Percentiles Table](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-percentiles-table.png)
+
+
 This table shows the percentiles of the file size statistics.
 
 If you don't know what percentiles are, please read the
-[Percentiles](https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Median-Percentiles.md)
-documentation first.
+[percentiles documentation](https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Median-Percentiles.md)
+first.
+
 
 Columns from left to right:
 
@@ -40,6 +45,11 @@ box at the top right to switch between those two views.
 Interesting percentiles in the context of this table are those with a special
 name (see above), those with a number that can be divided (without remainder)
 by 5, and a few around the extremes (min and max).
+
+
+![Full Percentiles Table](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-percentiles-table-full.png)
+
+_Full percentiles table_
 
 
 ----------------------------
