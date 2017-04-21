@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-04-14
+Updated: 2017-04-21
 
 
 ## Overview
@@ -66,6 +66,31 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.3**
+
+- 2017-04-21 More consistency between file type and size statistics
+
+  Like the new file size statistics window, the older file type statistics
+  window now uses the currently selected directory (in the tree view), not
+  always the tree's toplevel directory. If nothing is selected, it still uses
+  the toplevel directory.
+
+  That means that F3 no longer toggles that window, but re-populates it with
+  the currently selected directory instead. This is consistent with the F2
+  view.
+
+  Of course, the "Locate Files by Type" window now is also restricted to that
+  subtree which actually gives it better functionality if you know that you
+  want to locate files only there.
+
+  This means that you can now select a subdirectory in the tree, open the file
+  type statistics for it (F3 key), then select any filename extension (suffix)
+  in that window and then open the file size statistics (F2 key) for that file
+  type in that subtree.
+
+  Previously, you would have to start QDirStat to show only that directory,
+  then open the file type statistics window (F3), then the file size statistics
+  window (F2) from there.
+
 
 - 2017-04-14 _Let's do some real statistics_
 
