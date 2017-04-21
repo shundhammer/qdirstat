@@ -27,6 +27,7 @@ LocateFilesWindow::LocateFilesWindow( DirTree *	       tree,
     QDialog( parent ),
     _ui( new Ui::LocateFilesWindow ),
     _tree( tree ),
+    _subtree( 0 ),
     _selectionModel( selectionModel )
 {
     // logDebug() << "init" << endl;
@@ -59,9 +60,29 @@ void LocateFilesWindow::clear()
 }
 
 
+FileInfo * LocateFilesWindow::subtree()
+{
+    CHECK_PTR( _tree );
+
+    if ( ! _subtree )
+        _subtree = _tree->root();
+
+    if ( _subtree && ! _subtree->checkMagicNumber() && ! _url.isEmpty() )
+    {
+        logDebug() << "Subtree has become invalid; locating URL " << _url
+                   << " in the tree" << endl;
+
+        _subtree = _tree->locate( _url,
+                                  true ); // findDotEntries
+    }
+
+    return _subtree;
+}
+
+
 void LocateFilesWindow::refresh()
 {
-    locate( searchSuffix() );
+    populate( searchSuffix(), subtree() );
 }
 
 
@@ -89,9 +110,16 @@ QString LocateFilesWindow::searchSuffix() const
 }
 
 
-void LocateFilesWindow::locate( const QString & suffix )
+void LocateFilesWindow::populate( const QString & suffix, FileInfo * subtree )
 {
     clear();
+
+    if ( ! subtree )
+        subtree = _tree->root();
+
+    _subtree = subtree;
+    _url    = _subtree->debugUrl();
+
     _searchSuffix = suffix;
 
     if ( _searchSuffix.startsWith( '*' ) )
@@ -100,14 +128,17 @@ void LocateFilesWindow::locate( const QString & suffix )
     if ( ! _searchSuffix.startsWith( '.' ) )
 	_searchSuffix.prepend( '.' );
 
-    setWindowTitle( tr( "Directories With %1 Files" ).arg( searchSuffix() ) );
+    if ( _url == "<root>" )
+	_url = _tree->url();
+
+    setWindowTitle( tr( "Directories with %1 Files below %2" ).arg( searchSuffix() ).arg( _url ) );
     logDebug() << "Locating all files ending with \""
-	       << _searchSuffix << "\"" << endl;
+	       << _searchSuffix << "\" below " << _url << endl;
 
     // For better Performance: Disable sorting while inserting many items
     _ui->treeWidget->setSortingEnabled( false );
 
-    locate( _tree->root() );
+    locate( subtree );
 
     _ui->treeWidget->setSortingEnabled( true );
     _ui->treeWidget->sortByColumn( SSR_PathCol, Qt::AscendingOrder );

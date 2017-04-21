@@ -143,10 +143,7 @@ void FileTypeStatsWindow::populate( FileInfo * subtree )
     CHECK_PTR( _tree );
 
     if ( ! subtree )
-    {
-	logWarning() << "No tree" << endl;
-	return;
-    }
+        subtree = _tree->root();
 
     _subtree = subtree;
     _url     = subtree->debugUrl();
@@ -154,7 +151,7 @@ void FileTypeStatsWindow::populate( FileInfo * subtree )
     _stats->calc( _subtree );
 
     if ( _url == "<root>" )
-	_url = subtree->tree()->url();
+	_url = _tree->url();
 
     _ui->heading->setText( tr( "File type statistics for %1" ).arg( _url ) );
     _ui->treeWidget->setSortingEnabled( false );
@@ -330,7 +327,7 @@ void FileTypeStatsWindow::locateCurrentFileType()
 	_locateFilesWindow->raise();
     }
 
-    _locateFilesWindow->locate( suffix );
+    _locateFilesWindow->populate( suffix, subtree() );
 }
 
 

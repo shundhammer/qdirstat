@@ -70,22 +70,36 @@ namespace QDirStat
 	 **/
 	DirTree * tree() const { return _tree; }
 
+        /**
+         * Return the corresponding subtree. If the old subtree has become
+         * invalid, the subtree with the same url as the last time is located
+         * in the tree. If the old subtree is null, use the tree's root.
+         **/
+        FileInfo * subtree();
+
 	/**
 	 * Return the current search suffix (with leading '*.')
 	 **/
 	QString searchSuffix() const;
 
+        /**
+         * Return the url of the subtree. This is useful if the subtree itself
+         * has become invalid in the meantime: It might have been refreshed in
+         * the main window.
+         **/
+        QString url() const { return _url; }
+
 
     public slots:
 
 	/**
-	 * Locate files with 'suffix' in the directory tree.
+	 * Populate the window: Locate files with 'suffix' in 'subtree'.
 	 *
-	 * This clears the old search results first, then searches the tree and
-	 * populates the search result list with the directories where matching
-	 * files were found.
+	 * This clears the old search results first, then searches the subtree
+	 * and populates the search result list with the directories where
+	 * matching files were found.
 	 **/
-	void locate( const QString & suffix );
+	void populate( const QString & suffix, FileInfo * subtree = 0 );
 
 	/**
 	 * Refresh (reload) all data.
@@ -139,6 +153,8 @@ namespace QDirStat
 
 	Ui::LocateFilesWindow * _ui;
 	DirTree *		_tree;
+        FileInfo *              _subtree;
+        QString                 _url;
 	QString			_searchSuffix;
 	SelectionModel *	_selectionModel;
     };
