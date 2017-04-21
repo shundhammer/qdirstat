@@ -17,18 +17,15 @@
 using namespace QDirStat;
 
 
-FileTypeStats::FileTypeStats( DirTree * tree,
-			      QObject * parent ):
+FileTypeStats::FileTypeStats( QObject  * parent ):
     QObject( parent ),
-    _tree( tree )
+    _totalSize( 0LL )
 {
     _mimeCategorizer = new MimeCategorizer( this );
     CHECK_NEW( _mimeCategorizer );
 
     _otherCategory = new MimeCategory( tr( "Other" ) );
     CHECK_NEW( _otherCategory );
-
-    calc();
 }
 
 
@@ -45,6 +42,7 @@ void FileTypeStats::clear()
     _suffixCount.clear();
     _categorySum.clear();
     _categoryCount.clear();
+    _totalSize = 0LL;
 }
 
 
@@ -78,15 +76,6 @@ MimeCategory * FileTypeStats::category( const QString & suffix ) const
 }
 
 
-FileSize FileTypeStats::totalSize() const
-{
-    if ( ! _tree || ! _tree->root() )
-	return 0LL;
-
-    return _tree->root()->totalSize();
-}
-
-
 double FileTypeStats::percentage( FileSize size ) const
 {
     FileSize total = totalSize();
@@ -98,20 +87,18 @@ double FileTypeStats::percentage( FileSize size ) const
 }
 
 
-void FileTypeStats::calc()
+void FileTypeStats::calc( FileInfo * subtree )
 {
     clear();
 
-    if ( ! _tree || ! _tree->root() )
+    if ( subtree && subtree->checkMagicNumber() )
     {
-	logWarning() << "No tree" << endl;
-	return;
+        collect( subtree );
+        _totalSize = subtree->totalSize();
+        removeCruft();
+        removeEmpty();
+        sanityCheck();
     }
-
-    collect( _tree->root() );
-    removeCruft();
-    removeEmpty();
-    sanityCheck();
 
     emit calcFinished();
 }

@@ -35,8 +35,9 @@ namespace QDirStat
 
 
     /**
-     * Class to calculate file type statistics, such as how much disk space is
-     * used for each kind of filename extension (*.jpg, *.mp4 etc.).
+     * Class to calculate file type statistics for a subtree, such as how much
+     * disk space is used for each kind of filename extension (*.jpg, *.mp4
+     * etc.).
      **/
     class FileTypeStats: public QObject
     {
@@ -47,7 +48,7 @@ namespace QDirStat
 	/**
 	 * Constructor.
 	 **/
-	FileTypeStats( DirTree * tree, QObject * parent );
+	FileTypeStats( QObject * parent = 0 );
 
 	/**
 	 * Destructor.
@@ -56,10 +57,10 @@ namespace QDirStat
 
     public slots:
 
-	/**
-	 * Calculate the statistics from the tree.
-	 **/
-	void calc();
+        /**
+         * Calculate the statistics from a new subtree.
+         **/
+	void calc( FileInfo * subtree );
 
 	/**
 	 * Clear all data.
@@ -77,11 +78,6 @@ namespace QDirStat
 	void calcFinished() const;
 
     public:
-
-	/**
-	 * Return the corresponding DirTree.
-	 **/
-	DirTree * tree() const { return _tree; }
 
 	/**
 	 * Return the number of files in the tree with the specified suffix.
@@ -118,7 +114,7 @@ namespace QDirStat
 	/**
 	 * Return the total size of the tree.
 	 **/
-	FileSize totalSize() const;
+	FileSize totalSize() const { return _totalSize; }
 
 	/**
 	 * Return the percentage of 'size' of the tree total size.
@@ -185,7 +181,6 @@ namespace QDirStat
 	// Data members
 	//
 
-	DirTree *		_tree;
 	MimeCategory *		_otherCategory;
 	MimeCategorizer *	_mimeCategorizer;
 
@@ -193,6 +188,8 @@ namespace QDirStat
 	StringIntMap		_suffixCount;
 	CategoryFileSizeMap	_categorySum;
 	CategoryIntMap		_categoryCount;
+
+        FileSize                _totalSize;
     };
 }
 

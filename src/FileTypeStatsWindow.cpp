@@ -38,10 +38,12 @@ FileTypeStatsWindow::FileTypeStatsWindow( DirTree *	   tree,
     QDialog( parent ),
     _ui( new Ui::FileTypeStatsWindow ),
     _tree( tree ),
+    _subtree( 0 ),
     _selectionModel( selectionModel )
 {
     // logDebug() << "init" << endl;
 
+    CHECK_PTR( _tree );
     CHECK_NEW( _ui );
     _ui->setupUi( this );
     initWidgets();
@@ -63,10 +65,8 @@ FileTypeStatsWindow::FileTypeStatsWindow( DirTree *	   tree,
     connect( _ui->actionSizeStats, SIGNAL( triggered()	                 ),
 	     this,		   SLOT	 ( sizeStatsForCurrentFileType() ) );
 
-    _stats = new FileTypeStats( tree, this );
+    _stats = new FileTypeStats( this );
     CHECK_NEW( _stats );
-
-    populate();
 }
 
 
@@ -87,6 +87,10 @@ void FileTypeStatsWindow::clear()
 
 void FileTypeStatsWindow::initWidgets()
 {
+    QFont font = _ui->heading->font();
+    font.setBold( true );
+    _ui->heading->setFont( font );
+
     _ui->treeWidget->setColumnCount( FT_ColumnCount );
     _ui->treeWidget->setHeaderLabels( QStringList()
 				      << tr( "Name" )
@@ -107,31 +111,54 @@ void FileTypeStatsWindow::initWidgets()
 }
 
 
+FileInfo * FileTypeStatsWindow::subtree()
+{
+    CHECK_PTR( _tree );
+
+    if ( ! _subtree )
+        _subtree = _tree->root();
+
+    if ( _subtree && ! _subtree->checkMagicNumber() && ! _url.isEmpty() )
+    {
+        logDebug() << "Subtree has become invalid; locating URL " << _url
+                   << " in the tree" << endl;
+
+        _subtree = _tree->locate( _url,
+                                  true ); // findDotEntries
+    }
+
+    return _subtree;
+}
+
+
 void FileTypeStatsWindow::refresh()
 {
-    calc();
+    populate( subtree() );
 }
 
 
-void FileTypeStatsWindow::calc()
+void FileTypeStatsWindow::populate( FileInfo * subtree )
 {
     clear();
-    _stats->calc();
-    populate();
-}
+    CHECK_PTR( _tree );
 
-
-void FileTypeStatsWindow::populate()
-{
-    _ui->treeWidget->clear();
-
-    if ( ! _tree || ! _tree->root() )
+    if ( ! subtree )
     {
 	logWarning() << "No tree" << endl;
 	return;
     }
 
+    _subtree = subtree;
+    _url     = subtree->debugUrl();
+
+    _stats->calc( _subtree );
+
+    if ( _url == "<root>" )
+	_url = subtree->tree()->url();
+
+    _ui->heading->setText( tr( "File type statistics for %1" ).arg( _url ) );
     _ui->treeWidget->setSortingEnabled( false );
+
 
     //
     // Create toplevel items for the categories
@@ -310,13 +337,14 @@ void FileTypeStatsWindow::locateCurrentFileType()
 void FileTypeStatsWindow::sizeStatsForCurrentFileType()
 {
     QString suffix = currentSuffix().toLower();
+    FileInfo * dir = subtree();
 
-    if ( suffix.isEmpty() || ! _tree || ! _tree->root() )
+    if ( suffix.isEmpty() || ! dir )
         return;
 
     logDebug() << "Size stats for " << suffix << endl;
 
-    FileSizeStatsWindow::populateSharedInstance( _tree->root(), suffix );
+    FileSizeStatsWindow::populateSharedInstance( dir, suffix );
 }
 
 

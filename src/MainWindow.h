@@ -225,12 +225,12 @@ protected slots:
     void openConfigDialog();
 
     /**
-     * Open or close the file type statistics window.
+     * Show file type statistics for the currently selected directory.
      **/
-    void toggleFileTypeStats();
+    void showFileTypeStats();
 
     /**
-     * Show file type statistics for the currently selected directory.
+     * Show file size statistics for the currently selected directory.
      **/
     void showFileSizeStats();
 
@@ -265,6 +265,12 @@ protected slots:
 
 
 protected:
+
+    /**
+     * Return the first selected directory or, if none is selected, the root
+     * directory.
+     **/
+    FileInfo * selectedDirOrRoot() const;
 
     /**
      * Set up QObject connections to the actions from the .ui file

@@ -40,6 +40,9 @@ namespace QDirStat
 
 	/**
 	 * Constructor.
+         *
+         * This creates a file type statistics window, but it does not populate
+         * it with content yet.
 	 *
 	 * Notice that this widget will destroy itself upon window close.
 	 *
@@ -63,12 +66,27 @@ namespace QDirStat
 	 **/
 	DirTree * tree() const { return _tree; }
 
-    public slots:
+        /**
+         * Return the corresponding subtree. If the old subtree has become
+         * invalid, the subtree with the same url as the last time is located
+         * in the tree. If the old subtree is null, use the tree's root.
+         **/
+        FileInfo * subtree();
+
+        /**
+         * Return the url of the subtree. This is useful if the subtree itself
+         * has become invalid in the meantime: It might have been refreshed in
+         * the main window.
+         **/
+        QString url() const { return _url; }
 
 	/**
-	 * Calculate the statistics from the tree.
+	 * Populate the widgets for a subtree.
 	 **/
-	void calc();
+	void populate( FileInfo * subtree );
+
+
+    public slots:
 
 	/**
 	 * Refresh (reload) all data.
@@ -114,11 +132,6 @@ namespace QDirStat
 	 **/
 	void initWidgets();
 
-	/**
-	 * Populate the widgets from the collected information.
-	 **/
-	void populate();
-
         /**
          * Return the suffix of the currently selected file type or an empty
          * string if no suffix is selected.
@@ -132,6 +145,8 @@ namespace QDirStat
 
 	Ui::FileTypeStatsWindow *   _ui;
 	DirTree *		    _tree;
+        FileInfo *                  _subtree;
+        QString                     _url;
 	SelectionModel *	    _selectionModel;
 	FileTypeStats *		    _stats;
 	static QPointer<LocateFilesWindow> _locateFilesWindow;

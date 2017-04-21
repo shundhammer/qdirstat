@@ -80,6 +80,9 @@ void DirTreeView::contextMenu( const QPoint & pos )
 	    << "actionReadExcludedDirectory"
 	    << "actionContinueReadingAtMountPoint"
 	    << "---"
+            << "actionFileSizeStats"
+            << "actionFileTypeStats"
+	    << "---"
 	    << "actionMoveToTrash"
 	;
 

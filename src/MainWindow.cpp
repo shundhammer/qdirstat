@@ -224,8 +224,8 @@ void MainWindow::connectActions()
 
     mapTreeExpandAction( _ui->actionCloseAllTreeLevels, 0 );
 
-    CONNECT_ACTION( _ui->actionFileTypeStats,	   this, toggleFileTypeStats() );
     CONNECT_ACTION( _ui->actionFileSizeStats,	   this, showFileSizeStats() );
+    CONNECT_ACTION( _ui->actionFileTypeStats,	   this, showFileTypeStats() );
 
     _ui->actionFileTypeStats->setShortcutContext( Qt::ApplicationShortcut );
 
@@ -312,10 +312,11 @@ void MainWindow::updateActions()
     _ui->actionContinueReadingAtMountPoint->setEnabled( oneDirSelected && sel->isMountPoint() );
     _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
 
-    _ui->actionFileSizeStats->setEnabled( ! reading &&
-                                          ( selectedItems.isEmpty() ||
-                                            ( selectedItems.size() == 1 &&
-                                              ( sel->isDir() || sel->isDotEntry() ) ) ) );
+    bool nothingOrOneDir = selectedItems.isEmpty() ||
+        ( selectedItems.size() == 1 && ( sel->isDir() || sel->isDotEntry() ) );
+
+    _ui->actionFileSizeStats->setEnabled( ! reading && nothingOrOneDir );
+    _ui->actionFileTypeStats->setEnabled( ! reading && nothingOrOneDir );
 
     bool showingTreemap = _ui->treemapView->isVisible();
 
@@ -766,14 +767,9 @@ void MainWindow::openConfigDialog()
 }
 
 
-void MainWindow::toggleFileTypeStats()
+void MainWindow::showFileTypeStats()
 {
-    if ( _fileTypeStatsWindow )
-    {
-        _fileTypeStatsWindow->deleteLater();
-        // No need to set the variable to 0 - it is a guarded QPointer
-    }
-    else
+    if ( ! _fileTypeStatsWindow )
     {
         // This deletes itself when the user closes it. The associated QPointer
         // keeps track of that and sets the pointer to 0 when it happens.
@@ -781,12 +777,25 @@ void MainWindow::toggleFileTypeStats()
         _fileTypeStatsWindow = new QDirStat::FileTypeStatsWindow( _dirTreeModel->tree(),
                                                                   _selectionModel,
                                                                   this );
-        _fileTypeStatsWindow->show();
     }
+
+    _fileTypeStatsWindow->populate( selectedDirOrRoot() );
+    _fileTypeStatsWindow->show();
 }
 
 
 void MainWindow::showFileSizeStats()
+{
+    FileInfo * sel = selectedDirOrRoot();
+
+    if ( ! sel || ! sel->hasChildren() )
+        return;
+
+    FileSizeStatsWindow::populateSharedInstance( sel );
+}
+
+
+FileInfo * MainWindow::selectedDirOrRoot() const
 {
     FileInfoSet selectedItems = _selectionModel->selectedItems();
     FileInfo * sel = selectedItems.first();
@@ -794,10 +803,7 @@ void MainWindow::showFileSizeStats()
     if ( ! sel )
         sel = _dirTreeModel->tree()->root()->firstChild();
 
-    if ( ! sel || ! sel->hasChildren() )
-        return;
-
-    FileSizeStatsWindow::populateSharedInstance( sel );
+    return sel;
 }
 
 

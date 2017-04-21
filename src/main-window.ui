@@ -79,8 +79,8 @@
     <addaction name="actionCloseAllTreeLevels"/>
     <addaction name="menuExpandTreeToLevel"/>
     <addaction name="separator"/>
-    <addaction name="actionFileTypeStats"/>
     <addaction name="actionFileSizeStats"/>
+    <addaction name="actionFileTypeStats"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">

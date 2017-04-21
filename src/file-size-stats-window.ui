@@ -20,7 +20,7 @@
    <item>
     <widget class="QLabel" name="heading">
      <property name="text">
-      <string>File Size Statistics</string>
+      <string>File size statistics</string>
      </property>
     </widget>
    </item>
@@ -794,8 +794,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>769</width>
-            <height>594</height>
+            <width>272</width>
+            <height>750</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
