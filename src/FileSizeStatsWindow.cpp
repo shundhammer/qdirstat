@@ -171,9 +171,9 @@ void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
 	url = subtree->tree()->url();
 
     if ( _suffix.isEmpty() )
-	_ui->heading->setText( tr( "File size statistics for %1" ).arg( url ) );
+	_ui->heading->setText( tr( "File Size Statistics for %1" ).arg( url ) );
     else
-	_ui->heading->setText( tr( "File size statistics for %1 in %2" )
+	_ui->heading->setText( tr( "File Size Statistics for %1 in %2" )
 			       .arg( suffix ).arg( url ) );
     calc();
 

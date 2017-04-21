@@ -153,7 +153,7 @@ void FileTypeStatsWindow::populate( FileInfo * subtree )
     if ( _url == "<root>" )
 	_url = _tree->url();
 
-    _ui->heading->setText( tr( "File type statistics for %1" ).arg( _url ) );
+    _ui->heading->setText( tr( "File Type Statistics for %1" ).arg( _url ) );
     _ui->treeWidget->setSortingEnabled( false );
 
 

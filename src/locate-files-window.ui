@@ -11,12 +11,19 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Directories With Selected File Type</string>
+   <string>Locate Files by Type</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="heading">
+     <property name="text">
+      <string>Directories with File Type</string>
+     </property>
+    </widget>
+   </item>
    <item>
     <widget class="QTreeWidget" name="treeWidget">
      <property name="sortingEnabled">

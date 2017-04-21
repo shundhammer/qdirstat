@@ -88,6 +88,10 @@ void LocateFilesWindow::refresh()
 
 void LocateFilesWindow::initWidgets()
 {
+    QFont font = _ui->heading->font();
+    font.setBold( true );
+    _ui->heading->setFont( font );
+
     _ui->treeWidget->setColumnCount( SSR_ColumnCount );
     _ui->treeWidget->setHeaderLabels( QStringList()
 				      << tr( "Number" )
@@ -128,10 +132,10 @@ void LocateFilesWindow::populate( const QString & suffix, FileInfo * subtree )
     if ( ! _searchSuffix.startsWith( '.' ) )
 	_searchSuffix.prepend( '.' );
 
-    if ( _url == "<root>" )
-	_url = _tree->url();
+    _ui->heading->setText( tr( "Directories with %1 Files below %2" )
+                           .arg( searchSuffix() )
+                           .arg( _url ) );
 
-    setWindowTitle( tr( "Directories with %1 Files below %2" ).arg( searchSuffix() ).arg( _url ) );
     logDebug() << "Locating all files ending with \""
 	       << _searchSuffix << "\" below " << _url << endl;
 
