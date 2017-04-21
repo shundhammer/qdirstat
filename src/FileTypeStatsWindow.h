@@ -67,11 +67,9 @@ namespace QDirStat
 	DirTree * tree() const { return _tree; }
 
         /**
-         * Return the corresponding subtree. If the old subtree has become
-         * invalid, the subtree with the same url as the last time is located
-         * in the tree. If the old subtree is null, use the tree's root.
+         * Obtain the subtree from the last used URL.
          **/
-        FileInfo * subtree();
+        FileInfo * subtree() const;
 
         /**
          * Return the url of the subtree. This is useful if the subtree itself
@@ -145,7 +143,6 @@ namespace QDirStat
 
 	Ui::FileTypeStatsWindow *   _ui;
 	DirTree *		    _tree;
-        FileInfo *                  _subtree;
         QString                     _url;
 	SelectionModel *	    _selectionModel;
 	FileTypeStats *		    _stats;

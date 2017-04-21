@@ -27,7 +27,6 @@ LocateFilesWindow::LocateFilesWindow( DirTree *	       tree,
     QDialog( parent ),
     _ui( new Ui::LocateFilesWindow ),
     _tree( tree ),
-    _subtree( 0 ),
     _selectionModel( selectionModel )
 {
     // logDebug() << "init" << endl;
@@ -60,23 +59,17 @@ void LocateFilesWindow::clear()
 }
 
 
-FileInfo * LocateFilesWindow::subtree()
+FileInfo * LocateFilesWindow::subtree() const
 {
     CHECK_PTR( _tree );
 
-    if ( ! _subtree )
-        _subtree = _tree->root();
+    FileInfo * subtree = _tree->locate( _url,
+                                        true ); // findDotEntries
 
-    if ( _subtree && ! _subtree->checkMagicNumber() && ! _url.isEmpty() )
-    {
-        logDebug() << "Subtree has become invalid; locating URL " << _url
-                   << " in the tree" << endl;
+    if ( ! subtree )
+        subtree = _tree->root();
 
-        _subtree = _tree->locate( _url,
-                                  true ); // findDotEntries
-    }
-
-    return _subtree;
+    return subtree;
 }
 
 
@@ -119,10 +112,17 @@ void LocateFilesWindow::populate( const QString & suffix, FileInfo * subtree )
     clear();
 
     if ( ! subtree )
+    {
         subtree = _tree->root();
+        _url    = _tree->url();
+    }
+    else
+    {
+        _url = subtree->debugUrl();
 
-    _subtree = subtree;
-    _url    = _subtree->debugUrl();
+        if ( _url == "<root>" )
+            _url = _tree->url();
+    }
 
     _searchSuffix = suffix;
 
