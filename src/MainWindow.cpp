@@ -774,8 +774,7 @@ void MainWindow::showFileTypeStats()
         // This deletes itself when the user closes it. The associated QPointer
         // keeps track of that and sets the pointer to 0 when it happens.
 
-        _fileTypeStatsWindow = new QDirStat::FileTypeStatsWindow( _dirTreeModel->tree(),
-                                                                  _selectionModel,
+        _fileTypeStatsWindow = new QDirStat::FileTypeStatsWindow( _selectionModel,
                                                                   this );
     }
 
@@ -801,7 +800,7 @@ FileInfo * MainWindow::selectedDirOrRoot() const
     FileInfo * sel = selectedItems.first();
 
     if ( ! sel )
-        sel = _dirTreeModel->tree()->root()->firstChild();
+        sel = _dirTreeModel->tree()->firstToplevel();
 
     return sel;
 }

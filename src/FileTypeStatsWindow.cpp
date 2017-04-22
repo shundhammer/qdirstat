@@ -32,17 +32,14 @@ using namespace QDirStat;
 QPointer<LocateFilesWindow> FileTypeStatsWindow::_locateFilesWindow = 0;
 
 
-FileTypeStatsWindow::FileTypeStatsWindow( DirTree *	   tree,
-					  SelectionModel * selectionModel,
+FileTypeStatsWindow::FileTypeStatsWindow( SelectionModel * selectionModel,
 					  QWidget *	   parent ):
     QDialog( parent ),
     _ui( new Ui::FileTypeStatsWindow ),
-    _tree( tree ),
     _selectionModel( selectionModel )
 {
     // logDebug() << "init" << endl;
 
-    CHECK_PTR( _tree );
     CHECK_NEW( _ui );
     _ui->setupUi( this );
     initWidgets();
@@ -110,50 +107,20 @@ void FileTypeStatsWindow::initWidgets()
 }
 
 
-FileInfo * FileTypeStatsWindow::subtree() const
-{
-    CHECK_PTR( _tree );
-
-    FileInfo * subtree = _tree->locate( _url,
-                                        true ); // findDotEntries
-
-    if ( ! subtree )
-        subtree = _tree->root();
-
-    return subtree;
-}
-
-
 void FileTypeStatsWindow::refresh()
 {
-    populate( subtree() );
+    populate( _subtree() );
 }
 
 
-void FileTypeStatsWindow::populate( FileInfo * subtree )
+void FileTypeStatsWindow::populate( FileInfo * newSubtree )
 {
     clear();
-    CHECK_PTR( _tree );
+    _subtree = newSubtree;
+    _stats->calc( newSubtree ? newSubtree : _subtree() );
 
-    if ( ! subtree )
-    {
-        subtree = _tree->root();
-        _url    = _tree->url();
-    }
-    else
-    {
-        _url = subtree->debugUrl();
-
-        if ( _url == "<root>" )
-            _url = _tree->url();
-    }
-
-    _stats->calc( subtree );
-
-    if ( _url == "<root>" )
-	_url = _tree->url();
-
-    _ui->heading->setText( tr( "File Type Statistics for %1" ).arg( _url ) );
+    _ui->heading->setText( tr( "File Type Statistics for %1" )
+                           .arg( _subtree.url() ) );
     _ui->treeWidget->setSortingEnabled( false );
 
 
@@ -306,8 +273,7 @@ void FileTypeStatsWindow::locateCurrentFileType()
 
     if ( ! _locateFilesWindow )
     {
-	_locateFilesWindow = new LocateFilesWindow( _tree,
-						    _selectionModel,
+	_locateFilesWindow = new LocateFilesWindow( _selectionModel,
 						    qobject_cast<QWidget *>( parent() ) );
 	CHECK_NEW( _locateFilesWindow );
 	_locateFilesWindow->show();
@@ -327,14 +293,14 @@ void FileTypeStatsWindow::locateCurrentFileType()
 	_locateFilesWindow->raise();
     }
 
-    _locateFilesWindow->populate( suffix, subtree() );
+    _locateFilesWindow->populate( suffix, _subtree() );
 }
 
 
 void FileTypeStatsWindow::sizeStatsForCurrentFileType()
 {
     QString suffix = currentSuffix().toLower();
-    FileInfo * dir = subtree();
+    FileInfo * dir = _subtree();
 
     if ( suffix.isEmpty() || ! dir )
         return;

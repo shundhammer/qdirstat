@@ -21,12 +21,10 @@
 using namespace QDirStat;
 
 
-LocateFilesWindow::LocateFilesWindow( DirTree *	       tree,
-				      SelectionModel * selectionModel,
+LocateFilesWindow::LocateFilesWindow( SelectionModel * selectionModel,
 				      QWidget *	       parent ):
     QDialog( parent ),
     _ui( new Ui::LocateFilesWindow ),
-    _tree( tree ),
     _selectionModel( selectionModel )
 {
     // logDebug() << "init" << endl;
@@ -59,23 +57,9 @@ void LocateFilesWindow::clear()
 }
 
 
-FileInfo * LocateFilesWindow::subtree() const
-{
-    CHECK_PTR( _tree );
-
-    FileInfo * subtree = _tree->locate( _url,
-                                        true ); // findDotEntries
-
-    if ( ! subtree )
-        subtree = _tree->root();
-
-    return subtree;
-}
-
-
 void LocateFilesWindow::refresh()
 {
-    populate( searchSuffix(), subtree() );
+    populate( searchSuffix(), _subtree() );
 }
 
 
@@ -107,24 +91,12 @@ QString LocateFilesWindow::searchSuffix() const
 }
 
 
-void LocateFilesWindow::populate( const QString & suffix, FileInfo * subtree )
+void LocateFilesWindow::populate( const QString & suffix, FileInfo * newSubtree )
 {
     clear();
 
-    if ( ! subtree )
-    {
-        subtree = _tree->root();
-        _url    = _tree->url();
-    }
-    else
-    {
-        _url = subtree->debugUrl();
-
-        if ( _url == "<root>" )
-            _url = _tree->url();
-    }
-
     _searchSuffix = suffix;
+    _subtree      = newSubtree;
 
     if ( _searchSuffix.startsWith( '*' ) )
 	_searchSuffix.remove( 0, 1 ); // Remove the leading '*'
@@ -134,15 +106,15 @@ void LocateFilesWindow::populate( const QString & suffix, FileInfo * subtree )
 
     _ui->heading->setText( tr( "Directories with %1 Files below %2" )
                            .arg( searchSuffix() )
-                           .arg( _url ) );
+                           .arg( _subtree.url() ) );
 
     logDebug() << "Locating all files ending with \""
-	       << _searchSuffix << "\" below " << _url << endl;
+	       << _searchSuffix << "\" below " << _subtree.url() << endl;
 
     // For better Performance: Disable sorting while inserting many items
     _ui->treeWidget->setSortingEnabled( false );
 
-    locate( subtree );
+    locate( newSubtree ? newSubtree : _subtree() );
 
     _ui->treeWidget->setSortingEnabled( true );
     _ui->treeWidget->sortByColumn( SSR_PathCol, Qt::AscendingOrder );
@@ -248,8 +220,9 @@ void LocateFilesWindow::selectResult( QTreeWidgetItem * item )
     SuffixSearchResultItem * searchResult =
 	dynamic_cast<SuffixSearchResultItem *>( item );
     CHECK_DYNAMIC_CAST( searchResult, "SuffixSearchResultItem" );
+    CHECK_PTR( _subtree.tree() );
 
-    FileInfo * dir = _tree->locate( searchResult->path() );
+    FileInfo * dir = _subtree.tree()->locate( searchResult->path() );
     FileInfoSet matches = matchingFiles( dir );
 
     // logDebug() << "Selecting " << searchResult->path() << " with " << matches.size() << " matches" << endl;

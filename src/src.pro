@@ -75,6 +75,7 @@ SOURCES	  = main.cpp			\
 	    Settings.cpp		\
 	    SettingsHelpers.cpp		\
 	    StdCleanup.cpp		\
+            Subtree.cpp                 \
 	    Trash.cpp			\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
@@ -130,6 +131,7 @@ HEADERS	  =				\
 	    SettingsHelpers.h		\
 	    SignalBlocker.h		\
 	    StdCleanup.h		\
+            Subtree.h                   \
 	    Trash.h			\
 	    TreemapTile.h		\
 	    TreemapView.h		\

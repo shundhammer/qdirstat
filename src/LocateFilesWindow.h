@@ -16,6 +16,7 @@
 #include "ui_locate-files-window.h"
 #include "FileInfo.h"
 #include "FileInfoSet.h"
+#include "Subtree.h"
 
 
 namespace QDirStat
@@ -54,8 +55,7 @@ namespace QDirStat
 	 * of this class. The QPointer will keep track of this window
 	 * auto-deleting itself when closed.
 	 **/
-	LocateFilesWindow( DirTree *	    tree,
-			   SelectionModel * selectionModel,
+	LocateFilesWindow( SelectionModel * selectionModel,
 			   QWidget *	    parent );
 
 	/**
@@ -65,27 +65,15 @@ namespace QDirStat
 
     public:
 
-	/**
-	 * Return the corresponding DirTree.
-	 **/
-	DirTree * tree() const { return _tree; }
-
         /**
          * Obtain the subtree from the last used URL or 0 if none was found.
          **/
-        FileInfo * subtree() const;
+        const Subtree & subtree() const { return _subtree; }
 
 	/**
 	 * Return the current search suffix (with leading '*.')
 	 **/
 	QString searchSuffix() const;
-
-        /**
-         * Return the url of the subtree. This is useful if the subtree itself
-         * has become invalid in the meantime: It might have been refreshed in
-         * the main window.
-         **/
-        QString url() const { return _url; }
 
 
     public slots:
@@ -150,8 +138,7 @@ namespace QDirStat
 	//
 
 	Ui::LocateFilesWindow * _ui;
-	DirTree *		_tree;
-        QString                 _url;
+        Subtree                 _subtree;
 	QString			_searchSuffix;
 	SelectionModel *	_selectionModel;
     };

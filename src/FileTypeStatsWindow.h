@@ -16,12 +16,13 @@
 #include <QPointer>
 
 #include "ui_file-type-stats-window.h"
-#include "FileInfo.h"
+#include "Subtree.h"
 
 
 namespace QDirStat
 {
     class DirTree;
+    class FileInfo;
     class FileTypeStats;
     class MimeCategory;
     class SelectionModel;
@@ -50,8 +51,7 @@ namespace QDirStat
 	 * of this class. The QPointer will keep track of this window
 	 * auto-deleting itself when closed.
 	 **/
-	FileTypeStatsWindow( DirTree *	      tree,
-			     SelectionModel * selectionModel,
+	FileTypeStatsWindow( SelectionModel * selectionModel,
 			     QWidget *	      parent );
 
 	/**
@@ -61,22 +61,10 @@ namespace QDirStat
 
     public:
 
-	/**
-	 * Return the corresponding DirTree.
-	 **/
-	DirTree * tree() const { return _tree; }
-
         /**
          * Obtain the subtree from the last used URL.
          **/
-        FileInfo * subtree() const;
-
-        /**
-         * Return the url of the subtree. This is useful if the subtree itself
-         * has become invalid in the meantime: It might have been refreshed in
-         * the main window.
-         **/
-        QString url() const { return _url; }
+        const Subtree & subtree() const { return _subtree; }
 
 	/**
 	 * Populate the widgets for a subtree.
@@ -142,8 +130,7 @@ namespace QDirStat
 	//
 
 	Ui::FileTypeStatsWindow *   _ui;
-	DirTree *		    _tree;
-        QString                     _url;
+        Subtree                     _subtree;
 	SelectionModel *	    _selectionModel;
 	FileTypeStats *		    _stats;
 	static QPointer<LocateFilesWindow> _locateFilesWindow;
