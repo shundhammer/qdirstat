@@ -26,7 +26,8 @@ using namespace QDirStat;
 
 CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
     ListEditor( parent ),
-    _ui( new Ui::CleanupConfigPage )
+    _ui( new Ui::CleanupConfigPage ),
+    _cleanupCollection( 0 )
 {
     CHECK_NEW( _ui );
 
