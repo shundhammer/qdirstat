@@ -26,9 +26,10 @@ using namespace QDirStat;
 
 
 DirReadJob::DirReadJob( DirTree * tree,
-			DirInfo * dir  )
-    : _tree( tree )
-    , _dir( dir )
+			DirInfo * dir  ):
+    _tree( tree ),
+    _dir( dir ),
+    _queue( 0 )
 {
     _started	= false;
 
