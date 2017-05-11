@@ -223,12 +223,6 @@ int FileInfo::treeLevel() const
     }
 
     return level;
-
-
-    if ( _parent )
-	return _parent->treeLevel() + 1;
-    else
-	return 0;
 }
 
 
