@@ -116,6 +116,7 @@ FileInfo::FileInfo( DirTree *	    tree,
 {
     _name	 = filenameWithoutPath;
     _isLocalFile = true;
+    _device      = 0;
     _mode	 = mode;
     _size	 = size;
     _mtime	 = mtime;
