@@ -214,7 +214,8 @@ void TreemapView::zoomIn()
 
     TreemapTile * newRootTile = _currentItem;
 
-    while ( newRootTile->parentTile() != _rootTile &&
+    while ( newRootTile &&
+            newRootTile->parentTile() != _rootTile &&
 	    newRootTile->parentTile() ) // This should never happen, but who knows?
     {
 	newRootTile = newRootTile->parentTile();
