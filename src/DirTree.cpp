@@ -22,8 +22,9 @@ using namespace QDirStat;
 DirTree::DirTree()
     : QObject()
 {
-    _isBusy    = false;
-    _root      = new DirInfo( this );
+    _isBusy           = false;
+    _crossFileSystems = false;
+    _root = new DirInfo( this );
     CHECK_NEW( _root );
 
     connect( & _jobQueue, SIGNAL( finished()	 ),
