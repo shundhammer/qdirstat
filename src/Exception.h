@@ -352,6 +352,11 @@ private:
 #define CHECK_MAGIC( PTR )					\
     do								\
     {								\
+	if ( ! (PTR) )						\
+	{							\
+	    THROW( NullPointerException() );			\
+	}							\
+                                                                \
 	if ( ! PTR->checkMagicNumber() )			\
 	{							\
 	    THROW( BadMagicNumberException( PTR ) );		\
