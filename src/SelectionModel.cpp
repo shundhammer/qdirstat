@@ -24,7 +24,8 @@ SelectionModel::SelectionModel( DirTreeModel * dirTreeModel, QObject * parent ):
     _dirTreeModel( dirTreeModel ),
     _currentItem(0),
     _currentBranch(0),
-    _selectedItemsDirty(false)
+    _selectedItemsDirty(false),
+    _verbose(false)
 {
     connect( this, SIGNAL( currentChanged	  ( QModelIndex, QModelIndex ) ),
 	     this, SLOT	 ( propagateCurrentChanged( QModelIndex, QModelIndex ) ) );
