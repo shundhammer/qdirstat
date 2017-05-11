@@ -139,7 +139,9 @@ void DirTreeModel::clear()
 
 void DirTreeModel::openUrl( const QString &url )
 {
-    if ( _tree && _tree->root() &&  _tree->root()->hasChildren() )
+    CHECK_PTR( _tree );
+
+    if ( _tree->root() &&  _tree->root()->hasChildren() )
 	clear();
 
     _updateTimer.start();
