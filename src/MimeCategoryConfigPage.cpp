@@ -32,6 +32,7 @@ using namespace QDirStat;
 MimeCategoryConfigPage::MimeCategoryConfigPage( QWidget * parent ):
     ListEditor( parent ),
     _ui( new Ui::MimeCategoryConfigPage ),
+    _categorizer( 0 ),
     _dirTree( 0 )
 {
     CHECK_NEW( _ui );
