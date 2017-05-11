@@ -273,6 +273,7 @@ void DirTree::deleteSubtree( FileInfo *subtree )
 		    parent->parent()->setDotEntry( 0 );
 
 		    delete parent;
+                    parent = 0;
 		}
 	    }
 	    else	// no parent - this should never happen (?)
