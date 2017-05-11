@@ -26,7 +26,10 @@ public:
     /**
      * Constructor.
      */
-    Exception( const QString &msg = QString() ): _what( msg ) {}
+    Exception( const QString &msg = QString() ):
+        _what( msg ),
+        _srcLine(0)
+        {}
 
     /**
      * Destructor.
