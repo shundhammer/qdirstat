@@ -1022,7 +1022,7 @@ http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
 [Spatry: _Quick Look: QDirStat_](https://www.youtube.com/watch?v=ysm4-x_5ftI)
 
 
-## Code Analisis Tools
+## Code Analysis Tools
 
 [QDirStat at Coverity](https://scan.coverity.com/projects/qdirstat?tab=overview)
 
