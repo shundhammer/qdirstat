@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-04-21
+Updated: 2017-05-11
 
 
 ## Overview
@@ -1020,6 +1020,11 @@ http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
 ### YouTube
 
 [Spatry: _Quick Look: QDirStat_](https://www.youtube.com/watch?v=ysm4-x_5ftI)
+
+
+## Code Analisis Tools
+
+[QDirStat at Coverity](https://scan.coverity.com/projects/qdirstat?tab=overview)
 
 
 ## Misc
