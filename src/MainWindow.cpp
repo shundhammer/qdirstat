@@ -305,7 +305,7 @@ void MainWindow::updateActions()
 
     FileInfoSet selectedItems = _selectionModel->selectedItems();
     FileInfo * sel = selectedItems.first();
-    bool oneDirSelected = ( selectedItems.size() == 1 ) && ( sel->isDir() );
+    bool oneDirSelected = ( selectedItems.size() == 1 ) && sel && sel->isDir();
 
     _ui->actionMoveToTrash->setEnabled( sel && ! sel->isDotEntry() );
     _ui->actionRefreshSelected->setEnabled( oneDirSelected && ! sel->isExcluded() && ! sel->isMountPoint() );
