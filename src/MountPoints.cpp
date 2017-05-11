@@ -76,6 +76,7 @@ void MountPoints::init()
     qDeleteAll( _mountPointMap );
     _mountPointMap.clear();
     _isPopulated     = false;
+    _hasBtrfs        = false;
     _checkedForBtrfs = false;
 }
 
