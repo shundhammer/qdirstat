@@ -424,6 +424,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 	    return QVariant();
     }
 
+    /*NOTREACHED*/
     return QVariant();
 }
 
