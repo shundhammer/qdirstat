@@ -305,7 +305,7 @@ void HeaderTweaker::clearSettings()
 {
     Settings settings;
     settings.beginGroup( "TreeViewColumns" );
-    remove( "" ); // Remove all keys in this settings group
+    (void) remove( "" ); // Remove all keys in this settings group
     settings.endGroup();
 }
 
