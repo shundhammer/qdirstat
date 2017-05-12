@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-05-11
+Updated: 2017-05-12
 
 
 ## Overview
@@ -1025,6 +1025,11 @@ http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
 ## Code Analysis Tools
 
 [QDirStat at Coverity](https://scan.coverity.com/projects/qdirstat?tab=overview)
+
+<a href="https://scan.coverity.com/projects/qdirstat">
+  <img alt="Coverity Scan Build Status"
+       src="https://img.shields.io/coverity/scan/12688.svg"/>
+</a>
 
 
 ## Misc
