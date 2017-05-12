@@ -340,6 +340,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 	case Qt::DisplayRole:
 	    {
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+                CHECK_PTR( item );
 		CHECK_MAGIC( item );
 
 		QVariant result = columnText( item, col );
