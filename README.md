@@ -67,6 +67,17 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
 **Latest stable release: V1.3**
 
+- 2017-05-12 Checked code with [Coverity](https://scan.coverity.com/)
+
+  Coverity offers free static code analysis for Open Source projects.
+  This is really an outstanding tool, and it does a really thorough analysis.
+
+  You might be glad to hear that while it complained about some minor things,
+  there was not a single issue that would have been user relevant (let alone
+  any security problems - there were none). Still, I did my best to fix the
+  small complaints it had, and now we are down to zero outstanding defects
+  reported by Coverity in QDirStat's 130,000 lines of code.
+
 - 2017-04-21 More consistency between file type and size statistics
 
   Like the new file size statistics window, the older file type statistics
