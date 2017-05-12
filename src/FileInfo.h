@@ -500,8 +500,8 @@ namespace QDirStat
 	virtual bool isDirInfo() const { return false; }
 
 	/**
-	 * Try to convert this to a @ref DirInfo pointer. This might throw a
-	 * DynamicCastException if the dynamic_cast fails.
+	 * Try to convert this to a @ref DirInfo pointer. This returns null if
+	 * this is not a DirInfo.
 	 **/
 	DirInfo * toDirInfo();
 

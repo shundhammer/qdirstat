@@ -507,13 +507,16 @@ QModelIndex DirTreeModel::index( int row, int column, const QModelIndex & parent
     else
 	parent = _tree->root();
 
-    FileInfo * child = findChild( parent->toDirInfo(), row );
-    CHECK_PTR( child );
+    if ( parent->isDirInfo() )
+    {
+        FileInfo * child = findChild( parent->toDirInfo(), row );
+        CHECK_PTR( child );
 
-    if ( child )
-	return createIndex( row, column, child );
-    else
-	return QModelIndex();
+        if ( child )
+            return createIndex( row, column, child );
+    }
+
+    return QModelIndex();
 }
 
 
@@ -1003,7 +1006,7 @@ void DirTreeModel::refreshSelected()
     CHECK_PTR( _selectionModel );
     FileInfo * sel = _selectionModel->selectedItems().first();
 
-    if ( sel && sel->isDir() )
+    if ( sel && sel->isDirInfo() )
     {
 	logDebug() << "Refreshing " << sel << endl;
 	busyDisplay();
