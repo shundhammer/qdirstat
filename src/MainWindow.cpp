@@ -313,7 +313,7 @@ void MainWindow::updateActions()
     _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
 
     bool nothingOrOneDir = selectedItems.isEmpty() ||
-        ( selectedItems.size() == 1 && ( sel->isDir() || sel->isDotEntry() ) );
+        ( selectedItems.size() == 1 && sel && ( sel->isDir() || sel->isDotEntry() ) );
 
     _ui->actionFileSizeStats->setEnabled( ! reading && nothingOrOneDir );
     _ui->actionFileTypeStats->setEnabled( ! reading && nothingOrOneDir );
