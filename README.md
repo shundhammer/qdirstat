@@ -67,7 +67,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
 **Latest stable release: V1.3**
 
-- 2017-05-31 Fixed (GitHub Issue #61)[https://github.com/shundhammer/qdirstat/issues/61]:
+- 2017-05-31 Fixed [GitHub Issue #61](https://github.com/shundhammer/qdirstat/issues/61):
 Files and directories with UTF-8 special characters in the name not read
 correctly when built with Qt 4.x
 
