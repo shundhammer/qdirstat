@@ -169,7 +169,7 @@ void LocalDirReadJob::startReading()
 
 	while ( ( entry = readdir( _diskDir ) ) )
 	{
-	    QString entryName = entry->d_name;
+	    QString entryName = QString::fromUtf8( entry->d_name );
 
 	    if ( entryName != "."  &&
 		 entryName != ".."   )
