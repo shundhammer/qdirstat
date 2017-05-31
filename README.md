@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-05-12
+Updated: 2017-05-31
 
 
 ## Overview
@@ -66,6 +66,16 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.3**
+
+- 2017-05-31 Fixed (GitHub Issue #61)[https://github.com/shundhammer/qdirstat/issues/61]:
+Files and directories with UTF-8 special characters in the name not read
+correctly when built with Qt 4.x
+
+  This happened only when QDirStat was built against Qt 4.x, but that is the
+  default for NHellFire's PPA, so this affects all Ubuntu users who installed
+  QDirStat from that PPA.
+
+  Thanks to _slodki_ who pointed this problem out!
 
 - 2017-05-12 Checked code with [Coverity](https://scan.coverity.com/)
 
