@@ -401,7 +401,7 @@ QString Logger::createLogDir( const QString & rawLogDir )
 	else
 	{
 	    logError() << "Could not create log dir " << nameTemplate
-		       << ": " << strerror( errno ) << endl;
+		       << ": " << QString::fromUtf8( strerror( errno ) ) << endl;
 
 	    logDir = "/";
 	    // No permissions to write to /,
