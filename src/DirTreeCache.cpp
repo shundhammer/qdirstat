@@ -53,7 +53,7 @@ bool CacheWriter::writeCache( const QString & fileName, DirTree *tree )
 
     if ( cache == 0 )
     {
-	logError() << "Can't open " << fileName << ": " << strerror( errno ) << endl;
+	logError() << "Can't open " << fileName << ": " << QString::fromUtf8( strerror( errno ) ) << endl;
 	return false;
     }
 
@@ -238,7 +238,7 @@ CacheReader::CacheReader( const QString & fileName,
 
     if ( _cache == 0 )
     {
-	logError() << "Can't open " << fileName << ": " << strerror( errno ) << endl;
+	logError() << "Can't open " << fileName << ": " << QString::fromUtf8( strerror( errno ) ) << endl;
 	_ok = false;
 	emit error();
 	return;

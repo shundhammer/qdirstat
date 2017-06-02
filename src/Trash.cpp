@@ -68,7 +68,7 @@ dev_t Trash::device( const QString & path )
     if ( result < 0 )
     {
 	logError() << "stat( " << path << " ) failed: "
-		   << strerror( errno ) << endl;
+		   << QString::fromUtf8( strerror( errno ) ) << endl;
 
 	dev = static_cast<dev_t>( -1 );
     }
@@ -132,7 +132,7 @@ TrashDir * Trash::trashDir( const QString & path )
 	    // stat() failed for some other reason (not "no such file or directory")
 
 	    THROW( FileException( trashPath, "stat() failed for " + trashPath
-				  + ": " + strerror( errno ) ) );
+				  + ": " + QString::fromUtf8( strerror( errno ) ) ) );
 	}
 	else // stat() was successful
 	{
@@ -280,7 +280,7 @@ bool TrashDir::ensureDirExists( const QString & path,
     {
 	THROW( FileException( path,
 			      QString( "Could not create directory %1: %2" )
-			      .arg( path ).arg( strerror( errno ) ) ) );
+			      .arg( path ).arg( QString::fromUtf8( strerror( errno ) ) ) ) );
     }
 
     return result >= 0;

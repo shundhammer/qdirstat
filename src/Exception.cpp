@@ -40,7 +40,7 @@ QString SysCallFailedException::errMsg( const QString & sysCall,
 	msg = QObject::tr( "%1( \"%2\" ) failed: %3" )
 	    .arg( sysCall )
 	    .arg( resourceName )
-	    .arg( strerror( errno ) );
+	    .arg( QString::fromUtf8( strerror( errno ) ) );
     }
     else
     {

@@ -278,7 +278,7 @@ void LocalDirReadJob::startReading()
 		}
 		else			// lstat() error
 		{
-		    logWarning() << "lstat(" << fullName << ") failed: " << strerror( errno ) << endl;
+		    logWarning() << "lstat(" << fullName << ") failed: " << QString::fromUtf8( strerror( errno ) ) << endl;
 
 		    /*
 		     * Not much we can do when lstat() didn't work; let's at
