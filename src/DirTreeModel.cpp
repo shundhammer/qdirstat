@@ -621,7 +621,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     switch ( col )
     {
 	case NameCol:		return item->name();
-	case PercentBarCol:	return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
+	case PercentBarCol:	return item->isExcluded() ? tr( "[Excluded]" ) : item->readState() == DirError ? "[No access]" : QVariant();
 	case OwnSizeCol:	return ownSizeColText( item );
 	case PercentNumCol:	return item == _tree->firstToplevel() ? QVariant() : formatPercent( item->subtreePercent() );
 	case LatestMTimeCol:	return formatTime( item->latestMtime() );
@@ -631,7 +631,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     {
 	QString prefix = item->readState() == DirAborted ? ">" : "";
 
-	switch ( col )
+	if ( item->readState() != DirError ) switch ( col )
 	{
 	    case TotalSizeCol:	  return prefix + formatSize( item->totalSize() );
 	    case TotalItemsCol:	  return prefix + QString( "%1" ).arg( item->totalItems() );
@@ -650,7 +650,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
 QVariant DirTreeModel::ownSizeColText( FileInfo * item ) const
 {
-    if ( item->isDevice() || item->isDotEntry() )
+    if ( item->isDevice() || item->isDotEntry() || ( item->readState() == DirError && item->size() == 0 ) )
 	return QVariant();
 
     QString text;
