@@ -160,17 +160,18 @@ void DirTreeModel::loadIcons()
     if ( ! _treeIconDir.endsWith( "/" ) )
 	_treeIconDir += "/";
 
-    _dirIcon	       = QPixmap( _treeIconDir + "dir.png"	      );
-    _dotEntryIcon      = QPixmap( _treeIconDir + "dot-entry.png"      );
-    _fileIcon	       = QPixmap( _treeIconDir + "file.png"	      );
-    _symlinkIcon       = QPixmap( _treeIconDir + "symlink.png"	      );
-    _unreadableDirIcon = QPixmap( _treeIconDir + "unreadable-dir.png" );
-    _mountPointIcon    = QPixmap( _treeIconDir + "mount-point.png"    );
-    _stopIcon	       = QPixmap( _treeIconDir + "stop.png"	      );
-    _excludedIcon      = QPixmap( _treeIconDir + "excluded.png"	      );
-    _blockDeviceIcon   = QPixmap( _treeIconDir + "block-device.png"   );
-    _charDeviceIcon    = QPixmap( _treeIconDir + "char-device.png"   );
-    _specialIcon       = QPixmap( _treeIconDir + "special.png"	 );
+    _dirIcon            = QPixmap( _treeIconDir + "dir.png" );
+    _dotEntryIcon       = QPixmap( _treeIconDir + "dot-entry.png" );
+    _fileIcon           = QPixmap( _treeIconDir + "file.png" );
+    _symlinkIcon        = QPixmap( _treeIconDir + "symlink.png" );
+    _unreadableDirIcon  = QPixmap( _treeIconDir + "unreadable-dir.png" );
+    _unreadableFileIcon = QPixmap( _treeIconDir + "unreadable-file.png" );
+    _mountPointIcon     = QPixmap( _treeIconDir + "mount-point.png" );
+    _stopIcon           = QPixmap( _treeIconDir + "stop.png" );
+    _excludedIcon       = QPixmap( _treeIconDir + "excluded.png" );
+    _blockDeviceIcon    = QPixmap( _treeIconDir + "block-device.png" );
+    _charDeviceIcon     = QPixmap( _treeIconDir + "char-device.png" );
+    _specialIcon        = QPixmap( _treeIconDir + "special.png" );
 }
 
 
@@ -697,17 +698,24 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
 
     if	    ( item->isDotEntry() )  icon = _dotEntryIcon;
     else if ( item->isExcluded() )  icon = _excludedIcon;
+    else if ( item->readState() == DirError )
+    {
+	if	( item->isDir()		 ) icon = _unreadableDirIcon;
+	else if ( item->isFile()	 ) icon = _unreadableFileIcon;
+	else if ( item->isBlockDevice()	 ) icon = _blockDeviceIcon;
+	else if ( item->isCharDevice()	 ) icon = _charDeviceIcon;
+	else if ( item->isSymLink()	 ) icon = _symlinkIcon; // FIXME
+	else if ( item->isSpecial()	 ) icon = _specialIcon; // FIXME
+    }
     else if ( item->isDir()	 )
     {
 	if	( item->readState() == DirAborted )   icon = _stopIcon;
-	else if ( item->readState() == DirError	  )   icon = _unreadableDirIcon;
 	else if ( item->isMountPoint()		  )   icon = _mountPointIcon;
 	else					      icon = _dirIcon;
     }
     else // ! item->isDir()
     {
-	if	( item->readState() == DirError	  )   icon = _unreadableDirIcon;
-	else if	( item->isFile()		  )   icon = _fileIcon;
+	if	( item->isFile()		  )   icon = _fileIcon;
 	else if ( item->isSymLink()		  )   icon = _symlinkIcon;
 	else if ( item->isBlockDevice()		  )   icon = _blockDeviceIcon;
 	else if ( item->isCharDevice()		  )   icon = _charDeviceIcon;

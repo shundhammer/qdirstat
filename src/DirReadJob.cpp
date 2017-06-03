@@ -294,6 +294,7 @@ void LocalDirReadJob::startReading()
 							-1,  // blocks
 							0 ); // links
 			CHECK_NEW( child );
+			child->setReadState( DirError );
 			_dir->insertChild( child );
 			childAdded( child );
 		    }

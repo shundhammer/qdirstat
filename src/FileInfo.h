@@ -482,10 +482,15 @@ namespace QDirStat
 	/**
 	 * Get the current state of the directory reading process:
 	 *
-	 * This default implementation always returns DirFinished.
 	 * Derived classes should overwrite this.
 	 **/
-	virtual DirReadState readState() const { return DirFinished; }
+	virtual DirReadState readState() const { return _readState; }
+
+	/**
+	 * Set the state of the directory reading process.
+	 * See @ref readState() for details.
+	 **/
+	void setReadState( DirReadState newReadState ) { _readState = newReadState; }
 
 	/**
 	 * Returns true if this is a @ref DirInfo object.
@@ -593,6 +598,8 @@ namespace QDirStat
 	FileSize	_size;			// size in bytes
 	FileSize	_blocks;		// 512 bytes blocks
 	time_t		_mtime;			// modification time
+
+	DirReadState	_readState;
 
 	DirInfo  *	_parent;		// pointer to the parent entry
 	FileInfo *	_next;			// pointer to the next entry
