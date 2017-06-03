@@ -284,15 +284,38 @@ void LocalDirReadJob::startReading()
 		     * Not much we can do when lstat() didn't work; let's at
 		     * least create an (almost empty) entry as a placeholder.
 		     */
-		    DirInfo *child = new DirInfo( _tree, _dir, entryName,
-						  0,   // mode
-						  0,   // size
-						  0 ); // mtime
-		    CHECK_NEW( child );
-		    child->finalizeLocal();
-		    child->setReadState( DirError );
-		    _dir->insertChild( child );
-		    childAdded( child );
+#ifdef _DIRENT_HAVE_D_TYPE
+		    if ( entry->d_type != DT_DIR )
+		    {
+			FileInfo *child = new FileInfo( _tree, _dir, entryName,
+							DTTOIF( entry->d_type ), // mode
+							0,   // size
+							0,   // mtime
+							-1,  // blocks
+							0 ); // links
+			CHECK_NEW( child );
+			_dir->insertChild( child );
+			childAdded( child );
+		    }
+		    else
+#else
+#pragma message "d_type not avaiable in dirent - some unreadable files may be reported as directories"
+#endif
+		    {
+			DirInfo *child = new DirInfo( _tree, _dir, entryName,
+#ifdef _DIRENT_HAVE_D_TYPE
+						      DTTOIF( entry->d_type ), // mode
+#else
+						      0,   // mode
+#endif
+						      0,   // size
+						      0 ); // mtime
+			CHECK_NEW( child );
+			child->finalizeLocal();
+			child->setReadState( DirError );
+			_dir->insertChild( child );
+			childAdded( child );
+		    }
 		}
 	    }
 	}
