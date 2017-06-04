@@ -420,6 +420,7 @@ namespace QDirStat
 	QPixmap	_fileIcon;
 	QPixmap _symlinkIcon;
 	QPixmap	_unreadableDirIcon;
+	QPixmap	_unreadableFileIcon;
 	QPixmap _mountPointIcon;
 	QPixmap _stopIcon;
 	QPixmap _excludedIcon;

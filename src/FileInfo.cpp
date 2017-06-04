@@ -38,6 +38,7 @@ FileInfo::FileInfo( DirTree    * tree,
 {
     _isLocalFile  = true;
     _isSparseFile = false;
+    _readState    = DirFinished;
     _name	  = name ? name : "";
     _device	  = 0;
     _mode	  = 0;
@@ -60,6 +61,7 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
     CHECK_PTR( statInfo );
 
     _isLocalFile = true;
+    _readState   = DirFinished;
     _name	 = filenameWithoutPath;
 
     _device	 = statInfo->st_dev;
@@ -115,6 +117,7 @@ FileInfo::FileInfo( DirTree *	    tree,
     , _tree( tree )
 {
     _name	 = filenameWithoutPath;
+    _readState   = DirFinished;
     _isLocalFile = true;
     _device      = 0;
     _mode	 = mode;
