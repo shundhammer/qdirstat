@@ -7,6 +7,7 @@
  */
 
 
+#define DONT_DEPRECATE_STRERROR
 #include "Logger.h"
 
 #include <QFile>
@@ -401,7 +402,7 @@ QString Logger::createLogDir( const QString & rawLogDir )
 	else
 	{
 	    logError() << "Could not create log dir " << nameTemplate
-		       << ": " << QString::fromUtf8( strerror( errno ) ) << endl;
+		       << ": " << formatErrno() << endl;
 
 	    logDir = "/";
 	    // No permissions to write to /,
@@ -574,3 +575,13 @@ QTextStream & operator<<( QTextStream & str, const QSize & size )
     return str;
 }
 
+
+// Un-deprecate strerror() just for this one call.
+#ifdef strerror
+#    undef strerror
+#endif
+
+QString formatErrno()
+{
+    return QString::fromUtf8( strerror( errno ) );
+}

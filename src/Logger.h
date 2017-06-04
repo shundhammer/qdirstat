@@ -280,5 +280,19 @@ QTextStream & operator<<( QTextStream & str, const QPointF & point );
 QTextStream & operator<<( QTextStream & str, const QSize   & size );
 
 
+/**
+ * Format errno as a QString.
+ * This is a replacement for strerror() that handles UTF-8 well:
+ * In Qt 5.x, const char * is automatically converted to UTF-8 for QString.
+ * In Qt 4.x, however, it uses simply fromAscii() which is almost never correct.
+ **/
+QString formatErrno();
+
+#ifndef DONT_DEPRECATE_STRERROR
+    // Use formatErrno() instead which deals with UTF-8 issues
+    char * strerror(int) __attribute__ ((deprecated));
+#endif
+
+
 #endif // Logger_h
 

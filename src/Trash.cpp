@@ -8,7 +8,6 @@
 
 
 #include <errno.h>
-#include <string.h>	// strerror()
 #include <QDir>
 #include <QDateTime>
 #include <QFile>
@@ -68,7 +67,7 @@ dev_t Trash::device( const QString & path )
     if ( result < 0 )
     {
 	logError() << "stat( " << path << " ) failed: "
-		   << QString::fromUtf8( strerror( errno ) ) << endl;
+		   << formatErrno() << endl;
 
 	dev = static_cast<dev_t>( -1 );
     }
@@ -132,7 +131,7 @@ TrashDir * Trash::trashDir( const QString & path )
 	    // stat() failed for some other reason (not "no such file or directory")
 
 	    THROW( FileException( trashPath, "stat() failed for " + trashPath
-				  + ": " + QString::fromUtf8( strerror( errno ) ) ) );
+				  + ": " + formatErrno() ) );
 	}
 	else // stat() was successful
 	{
@@ -280,7 +279,7 @@ bool TrashDir::ensureDirExists( const QString & path,
     {
 	THROW( FileException( path,
 			      QString( "Could not create directory %1: %2" )
-			      .arg( path ).arg( QString::fromUtf8( strerror( errno ) ) ) ) );
+			      .arg( path ).arg( formatErrno() ) ) );
     }
 
     return result >= 0;

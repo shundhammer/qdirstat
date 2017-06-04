@@ -8,7 +8,6 @@
 
 
 #include <sys/errno.h>
-#include <string.h>	// strerror()
 
 #include "Exception.h"
 
@@ -40,7 +39,7 @@ QString SysCallFailedException::errMsg( const QString & sysCall,
 	msg = QObject::tr( "%1( \"%2\" ) failed: %3" )
 	    .arg( sysCall )
 	    .arg( resourceName )
-	    .arg( QString::fromUtf8( strerror( errno ) ) );
+	    .arg( formatErrno() );
     }
     else
     {

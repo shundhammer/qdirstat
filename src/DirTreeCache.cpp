@@ -8,7 +8,6 @@
 
 
 #include <ctype.h>
-#include <errno.h>
 #include <QUrl>
 
 #include "Logger.h"
@@ -53,7 +52,7 @@ bool CacheWriter::writeCache( const QString & fileName, DirTree *tree )
 
     if ( cache == 0 )
     {
-	logError() << "Can't open " << fileName << ": " << QString::fromUtf8( strerror( errno ) ) << endl;
+	logError() << "Can't open " << fileName << ": " << formatErrno() << endl;
 	return false;
     }
 
@@ -238,7 +237,7 @@ CacheReader::CacheReader( const QString & fileName,
 
     if ( _cache == 0 )
     {
-	logError() << "Can't open " << fileName << ": " << QString::fromUtf8( strerror( errno ) ) << endl;
+	logError() << "Can't open " << fileName << ": " << formatErrno() << endl;
 	_ok = false;
 	emit error();
 	return;
