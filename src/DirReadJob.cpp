@@ -11,7 +11,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <sys/errno.h>
 
 #include <QMutableListIterator>
 
@@ -163,7 +162,31 @@ void LocalDirReadJob::startReading()
 
     // logDebug() << _dir << endl;
 
-    if ( ( _diskDir = opendir( dirName.toUtf8() ) ) )
+    bool ok = true;
+
+    if ( access( dirName.toUtf8(), X_OK | R_OK ) != 0 )
+    {
+        ok = false;
+        logWarning() << "No permission to read directory " << dirName << endl;
+	_dir->setReadState( DirError );
+	finishReading( _dir );
+    }
+
+    if ( ok )
+    {
+        _diskDir = opendir( dirName.toUtf8() );
+
+        if ( ! _diskDir )
+        {
+            ok = false;
+            _dir->setReadState( DirError );
+            logWarning() << "opendir(" << dirName << ") failed" << endl;
+            // opendir() doesn't set 'errno' according to POSIX  :-(
+            finishReading( _dir );
+        }
+    }
+
+    if ( ok )
     {
 	_dir->setReadState( DirReading );
 
@@ -299,13 +322,6 @@ void LocalDirReadJob::startReading()
 
 	closedir( _diskDir );
 	_dir->setReadState( DirFinished );
-	finishReading( _dir );
-    }
-    else
-    {
-	_dir->setReadState( DirError );
-	logWarning() << "opendir(" << dirName << ") failed" << endl;
-	// opendir() doesn't set 'errno' according to POSIX  :-(
 	finishReading( _dir );
     }
 
