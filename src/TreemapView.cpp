@@ -43,7 +43,7 @@ TreemapView::TreemapView( QWidget * parent ):
     _useFixedColor(false),
     _useDirGradient(true)
 {
-    logDebug() << endl;
+    // logDebug() << endl;
 
     readSettings();
 

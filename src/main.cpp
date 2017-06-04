@@ -15,6 +15,8 @@
 #include "MainWindow.h"
 #include "DirTreeModel.h"
 #include "Logger.h"
+#include "Version.h"
+
 
 using std::cerr;
 static const char * progName = "qdirstat";
@@ -34,6 +36,14 @@ void usage( const QStringList & argList )
     logError() << "FATAL: Bad command line args: " << argList.join( " " ) << endl;
     // Simply exit(1) here results in a segfault (?).
     fatal = true;
+}
+
+
+void logVersion()
+{
+    logInfo() << "QDirStat-" << QDIRSTAT_VERSION
+              << " built with Qt " << QT_VERSION_STR
+              << endl;
 }
 
 
@@ -64,6 +74,7 @@ bool commandLineSwitch( const QString & longName,
 int main( int argc, char *argv[] )
 {
     Logger logger( "/tmp/qdirstat-$USER", "qdirstat.log" );
+    logVersion();
 
     // Set org/app name for QSettings
     QCoreApplication::setOrganizationName( "QDirStat" );
