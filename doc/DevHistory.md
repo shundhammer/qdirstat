@@ -10,6 +10,151 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
 ## QDirStat History
 
+- 2017-03-05 **New stable release: V1.3**
+
+- 2017-02-27 Implemented [GitHub issue #30](https://github.com/shundhammer/qdirstat/issues/30):
+
+  When hovering over a treemap tile, display the full path and the total size
+  of that element in the status bar. When the hover ends (when the mouse cursor
+  leaves the treemap tile), display the current selection again in the status
+  bar.
+
+- 2017-02-24 Improved logging: More secure and automatically log-rotating.
+
+  QDirStat now uses its own log directory `/tmp/qdirstat-$USER` (where `$USER`
+  is your user name; the numeric user ID is now only used if the user name
+  cannot be obtained). It no longer keeps one single log file growing, but
+  starts a new one each time it is started. 3 old logs are kept; any older ones
+  are deleted.
+
+  The permissions for that directory are set up in a pretty restrictive way
+  (0700, i.e. `rwx------`) when it is created. If it already exists, QDirStat
+  checks the owner and creates a new one with a random name if it is owned by
+  anyone else than the user who started QDirStat.
+
+      [sh @ balrog] ~ 68 % ls -ld /tmp/qdirstat-sh
+      drwx------ 2 sh sh 4096 Feb 24 18:29 /tmp/qdirstat-sh
+      [sh @ balrog] ~ 69 % ls -l /tmp/qdirstat-sh
+      total 16
+      -rw-rw-r-- 1 sh sh 2067 Feb 24 18:29 qdirstat-00.old
+      -rw-rw-r-- 1 sh sh 2067 Feb 24 18:07 qdirstat-01.old
+      -rw-rw-r-- 1 sh sh 2067 Feb 24 18:07 qdirstat-02.old
+      -rw-rw-r-- 1 sh sh 2067 Feb 24 18:29 qdirstat.log
+
+
+  For anybody regularly watching the log file this means they will now have to
+  use `tail -F qdirstat.log` rather than `tail -f` since the latter does not
+  realize when the file it watches is renamed and a new one is created under
+  the same name.
+
+- 2017-02-23 Fixed [GitHub issue #24](https://github.com/shundhammer/qdirstat/issues/24):
+
+   During directory reading, subdirectories would get out of sync when opening
+   a tree branch.
+
+   It looks like QDirStat's tree display was a bit too dynamic for the concepts
+   of the underlying Qt classes (QTreeView / QAbstractItemModel): During
+   reading, QDirStat would sort the tree by the number of pending read
+   jobs. That number is constantly changing, so the sort order would also
+   constantly need to change. This is very hard to do properly with the
+   limitations those underlying classes impose; basically it would require a
+   reset of all the data the QTreeView keeps, thus making it forget things like
+   its current scrollbar position or which tree branches were expanded or
+   collapsed. That would make the user interface pretty much unusable.
+
+   So the fix for this is to not sort by read jobs, but by directory names
+   instead since they don't change all the time. The user can still sort by any
+   other column, but that sort is a momentary thing that might become invalid
+   moments later as data (accumulated sizes, number of child items) are
+   updated. Everybody please notice that **this is a known limitation** and any
+   complaints about that will flatly be rejected. The alternative would be to
+   not allow the user to sort at all during directory reading, and that is
+   certainly a lot less desirable.
+
+
+- 2017-02-22
+
+  - @flurbius contributed a patch to switch the main window layout from tree
+    view above and treemap below to side-by-side (Menu _Treemap_ -> _Treemap as
+    Side Panel_).
+
+  - Added new document [GitHub-Workflow.md](https://github.com/shundhammer/qdirstat/blob/master/doc/GitHub-Workflow.md)
+    explaining how to work with GitHub and Git to contribute to QDirStat.
+
+- 2017-02-20 Locating files by type from the _File Type Statistics_ window
+
+![Locating FilesWindow](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locating-file-types.png)
+
+  You can now locate files with a specific filename extension directly:
+
+  - You select a file type (a filename extension) in the "File Type Statistics" window.
+
+  - You click "Locate" or you double-click the item.
+
+  - The "Locate Files" window opens.
+
+  - You click a directory there.
+
+  - In the main window, the branch for that directory opens, and all matching
+    files are selected in the tree view and in the treemap.
+
+  - You can now directly start cleanup actions for those files.
+
+  See also [GitHub issue #48](https://github.com/shundhammer/qdirstat/issues/48).
+
+
+- 2017-02-18 New document: [QDirStat for Servers](https://github.com/shundhammer/qdirstat/blob/master/doc/QDirStat-for-Servers.md)
+  describing how to use QDirStat and the `qdirstat-cache-writer` script on
+  headless (no X server, no X libs) servers.
+
+- 2017-02-17 _File Type Statistics_ window merged to Git master
+
+  Latest screenshot:
+
+  ![File Type Statistics Window Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png)
+
+  **Limitations:**
+
+  Since filename extensions (suffixes) don't have as much semantics in
+  Linux/Unix systems as they do in Windows, many files are categorized as
+  "Other". This is a known limitation, but it's a limitation of the whole
+  concept of using suffixes to categorize files by type. And no, checking file
+  headers for magic byte sequences like the "file" command does is not an
+  option here; QDirStat would have to do that for (at least) all the 30,000+
+  files typically listed under the "Other" category. So we'll have to live with
+  that limitation.
+
+  Next thing to come: Locating files with a specific suffix from there.
+  See [GitHub issue #48](https://github.com/shundhammer/qdirstat/issues/48).
+
+
+- 2017-02-12 Working on a _File Type Statistics_ window
+
+  People who know WinDirStat inevitably want that _File Type_ view in QDirStat,
+  too. I was really reluctant to do that because I didn't quite see the point;
+  in WinDirStat, it serves mostly as a legend to the treemap colors since they
+  are constantly changing in WinDirStat: The file type that consumes most disk
+  space always gets color #1, the next-most color #2 etc., so it depends which
+  directory you scan what color each file type gets. In QDirStat, the colors
+  are stable; they are predefined and configurable in the _MIME Type
+  Categories_ configuration dialog.
+
+  And as most of you probably know, filename extensions have a much stricter
+  meaning in Windows than on Linux/Unix systems; Linux people get very creative
+  when it comes to using dots in filenames. Sometimes those dots delimit a
+  filename's extension (suffix) from its base name, sometimes they are used for
+  entirely different purposes.
+
+  Anyway, there was one user who was insistent enough to make me reconsider,
+  and I did some experimenting this weekend, and now we have an (albeit still
+  experimental) **File Type Statistics** view. So far, that code lives in a Git
+  branch, but I think it will stabilize in the next one or two weeks, so I will
+  merge it to Git master.
+
+
+  See the whole discussion with more screenshots at
+  [GitHub issue #45](https://github.com/shundhammer/qdirstat/issues/45)
+
 
 - 2017-01-03 **New stable release: V1.2**
 
