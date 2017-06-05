@@ -10,6 +10,8 @@
 #define MimeCategorizer_h
 
 #include <QObject>
+#include <QMap>
+
 #include "MimeCategory.h"
 
 

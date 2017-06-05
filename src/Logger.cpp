@@ -317,14 +317,14 @@ static void qt_logger( QtMsgType msgType, const char *msg)
 
     if ( msgType == QtFatalMsg )
     {
-	fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
+	fprintf( stderr, "FATAL: %s\n", msg );
 	abort();
     }
 
     if ( msgType == QtWarningMsg &&
 	 QString( msg ).contains( "cannot connect to X server" ) )
     {
-	fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
+	fprintf( stderr, "FATAL: %s\n", msg );
 	exit( 1 );
     }
 }

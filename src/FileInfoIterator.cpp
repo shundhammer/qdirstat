@@ -7,6 +7,8 @@
  */
 
 
+#include <algorithm>
+
 #include "FileInfoIterator.h"
 #include "FileInfoSorter.h"
 #include "Exception.h"
