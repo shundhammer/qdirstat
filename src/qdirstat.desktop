@@ -7,3 +7,4 @@ GenericName=QDirStat Directory Statistics
 Terminal=false
 MimeType=inode/directory;inode/mount-point;
 Categories=Qt;System;Filesystem;
+Keywords=directory;tree;size;statistic;disk;space;
