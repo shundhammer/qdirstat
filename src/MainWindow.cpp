@@ -844,7 +844,7 @@ void MainWindow::showAboutDialog()
     text += tr( "Contact: " ) + QString( "<a href=\"mailto:%1\">%2</a>" ).arg( mailTo ).arg( mailTo );
     text += "</p><p>";
     text += QString( "<p><a href=\"%1\">%2</a></p>" ).arg( homePage ).arg( homePage );
-    text += tr( "License: GPL V2 (GNU Public License Version 2)" );
+    text += tr( "License: GPL V2 (GNU General Public License Version 2)" );
     text += "</p><p>";
     text += tr( "This is free Open Source software, provided to you hoping that it might be "
 		"useful for you. It does not cost you anything, but on the other hand there "
