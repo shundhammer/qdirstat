@@ -9,4 +9,4 @@
 TEMPLATE = subdirs
 CONFIG  += ordered
 
-SUBDIRS  = src scripts doc doc/stats
+SUBDIRS  = src scripts doc doc/stats man
