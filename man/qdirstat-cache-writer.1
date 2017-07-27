@@ -1,0 +1,45 @@
+.TH QDIRSTAT-CACHE-WRITER "1" "July 2017"
+.SH NAME
+qdirstat\-cache\-writer \- script to write QDirStat cache files from cron jobs
+.SH "Usage:"
+\fI\,qdirstat\-cache\-writer\/\fP [\-ldvh] <directory> [<cache\-file\-name>]
+.IP
+If not specified, <cache\-file\-name> defaults to ".qdirstat.cache.gz"
+in <directory>.
+.IP
+If <cache\-file\-name> ends with ".gz", it will be compressed with gzip.
+qdirstat can read gzipped and plain text cache files.
+.TP
+\fB\-l\fR
+long format \- always add full path, even for plain files
+.TP
+\fB\-m\fR
+scan mounted file systems (cross file system boundaries)
+.TP
+\fB\-v\fR
+verbose
+.TP
+\fB\-d\fR
+debug
+.TP
+\fB\-h\fR
+help (this usage message)
+.PP
+QDirStat can read its information from cache files. This is a lot faster than
+reading all the directories in a directory tree and obtaining detailed
+information (size, type, last modification time) for each file and directory
+with the opendir() / readdir() and lstat() system calls for each individual
+file and directory.
+.PP
+QDirStat can also write those cache files ("Write Cache File..." from the
+"File" menu), but the whole point of cache files is being able to do that in
+the background when the user does not have to wait for it \- like in a cron
+job running in the middle of the night. QDirStat itself cannot be used to do
+that because it is a KDE program and thus an X program that needs access to
+an X display \- which cron does not provide.
+.SH "AUTHOR"
+This manual page was written by Patrick Matth\[:a]i <pmatthaei@debian.org>
+for qdirstat.
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU General Public License, Version 2 any
+later version published by the Free Software Foundation.
