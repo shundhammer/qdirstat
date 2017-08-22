@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-06-04
+Updated: 2017-08-22
 
 
 ## Overview
@@ -764,6 +764,7 @@ QDirStat packages for:
 - openSUSE Leap 42.2
 - openSUSE Leap 42.1
 - openSUSE 13.2
+- SUSE Linux Enterprise (SLE) 12 SP3
 - SUSE Linux Enterprise (SLE) 12 SP2
 - SUSE Linux Enterprise (SLE) 12 SP1
 - SUSE Linux Enterprise (SLE) 12
