@@ -761,6 +761,7 @@ called it WinDirStat.
 QDirStat packages for:
 
 - openSUSE Tumbleweed
+- openSUSE Leap 42.3
 - openSUSE Leap 42.2
 - openSUSE Leap 42.1
 - openSUSE 13.2
