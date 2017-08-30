@@ -781,8 +781,15 @@ developers try their best to keep it as stable as possible.
 
 ### Ubuntu
 
-See Nathan Rennie-Waldock's
+Artful Aardvark (17.10) or later:
+
+https://packages.ubuntu.com/search?keywords=qdirstat&searchon=names
+
+Pre-17.10:
+
+Use Nathan Rennie-Waldock's
 [**QDirStat PPA**](https://launchpad.net/~nathan-renniewaldock/+archive/ubuntu/qdirstat)
+
 
 
 ### Debian
