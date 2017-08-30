@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-08-22
+Updated: 2017-08-30
 
 
 ## Overview
@@ -783,6 +783,16 @@ developers try their best to keep it as stable as possible.
 
 See Nathan Rennie-Waldock's
 [**QDirStat PPA**](https://launchpad.net/~nathan-renniewaldock/+archive/ubuntu/qdirstat)
+
+
+### Debian
+
+https://packages.debian.org/search?keywords=qdirstat
+
+
+### Fedora
+
+https://copr.fedorainfracloud.org/coprs/eclipseo/qdirstat/
 
 
 ## Building
