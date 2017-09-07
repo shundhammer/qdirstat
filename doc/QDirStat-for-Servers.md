@@ -25,7 +25,7 @@ can fetch it directly from GitHub:
 
     ssh root@myserver
     cd /usr/local/bin
-    wget https://github.com/shundhammer/qdirstat/blob/master/scripts/qdirstat-cache-writer
+    wget https://github.com/shundhammer/qdirstat/raw/master/scripts/qdirstat-cache-writer
 
 By all means, have a look inside to convince yourself that there is no
 malicious code. It's a very simple script.
