@@ -95,8 +95,7 @@ really wants to change any of them will need to use his favourite editor.
 ### Support for non-UTF-8 Locales
 
 See also
-[Github Issue #19]
-(https://github.com/shundhammer/qdirstat/issues/19)
+[Github Issue #19](https://github.com/shundhammer/qdirstat/issues/19)
 
 Dropped. People who need that should finally try to arrive in the 21st century
 and use UTF-8 like the civilized part of the world.

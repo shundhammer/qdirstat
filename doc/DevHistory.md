@@ -448,8 +448,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     there is a "mixed" selection, i.e., both directories and non-directories
     are selected at the same time:
 
-    ![New cleanup confirmation popup]
-    (https://cloud.githubusercontent.com/assets/11538225/14390476/8b022c9a-fdb7-11e5-8eef-a5ba304d3bab.png)
+    ![New cleanup confirmation popup](https://cloud.githubusercontent.com/assets/11538225/14390476/8b022c9a-fdb7-11e5-8eef-a5ba304d3bab.png)
 
 - 2016-03-20
 
@@ -527,12 +526,10 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
         ````
 
   - Fixed GitHub issue #9:
-    [qdirstat-cache-writer creates broken cache file if some directory lacks Exec flag]
-    (https://github.com/shundhammer/qdirstat/issues/9)
+    [qdirstat-cache-writer creates broken cache file if some directory lacks Exec flag](https://github.com/shundhammer/qdirstat/issues/9)
 
   - Fixed GitHub issue #10:
-    [incorrect handling of sparse files with 0 allocated blocks]
-    (https://github.com/shundhammer/qdirstat/issues/10)
+    [incorrect handling of sparse files with 0 allocated blocks](https://github.com/shundhammer/qdirstat/issues/10)
 
 - 2016-02-02
 
@@ -552,8 +549,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 - 2016-02-01
 
   - Fixed GitHub issue #6:
-    [NullPointerException when reading cache file]
-    (https://github.com/shundhammer/qdirstat/issues/6)
+    [NullPointerException when reading cache file](https://github.com/shundhammer/qdirstat/issues/6)
 
     The DirTreeModel and the DirCacheReader were somewhat out of sync with
     regard to which directory is ready for display in the tree view.
