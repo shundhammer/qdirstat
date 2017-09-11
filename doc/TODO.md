@@ -5,13 +5,6 @@ This is roughly ordered by priority.
 ** See also the GitHub issue tracker! **
 
 
-## Ready-made Packages for SUSE and Ubuntu
-
-- Write a .control file for Ubuntu .deb packages
-
-- Use the openSUSE build service to create .deb packages
-
-
 ## General
 
 ### Translations
@@ -66,7 +59,9 @@ Add config page for at least some of them?
 
 Not sure if all those crazy treemap parameters need to be user configurable.
 They are pretty much expert-only, and most of them look pretty scary to normal
-people. I might leave them in the config file, but most likely anybody who
+people.
+
+Right now, the parameters are available in the config file, so anybody who
 really wants to change any of them will need to use his favourite editor.
 
 
