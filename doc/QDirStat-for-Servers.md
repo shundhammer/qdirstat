@@ -154,8 +154,7 @@ A cache file is a gzipped text file, so it can be viewed with `zless`:
 
 
 The file format is described in detail in 
-[cache-file-format.txt]
-(https://github.com/shundhammer/qdirstat/blob/master/doc/cache-file-format.txt).
+[cache-file-format.txt](https://github.com/shundhammer/qdirstat/blob/master/doc/cache-file-format.txt).
 
 In short, each line contains one entry for a file, directory, or symlink.
 
@@ -215,5 +214,4 @@ for the `locate` command:
 
 ## Cache Files on Desktop Machines
 
-See [scripts/README.md]
-(https://github.com/shundhammer/qdirstat/blob/master/scripts/README.md)
+See [scripts/README.md](https://github.com/shundhammer/qdirstat/blob/master/scripts/README.md)
