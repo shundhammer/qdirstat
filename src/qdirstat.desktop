@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=QDirStat
-Exec=qdirstat %u
+Exec=qdirstat %f
 Icon=qdirstat
 GenericName=QDirStat Directory Statistics
 Terminal=false
