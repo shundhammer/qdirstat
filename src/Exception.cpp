@@ -6,8 +6,11 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
-
-#include <sys/errno.h>
+#if defined(__HAIKU__)
+    #include <errno.h>
+#else
+    #include <sys/errno.h>
+#endif
 
 #include "Exception.h"
 
