@@ -7,8 +7,6 @@
  */
 
 
-#include <sys/errno.h>
-
 #include "Exception.h"
 
 
