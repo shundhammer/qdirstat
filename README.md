@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2017-09-22
+Updated: 2018-01-12
 
 
 ## Overview
@@ -66,6 +66,23 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.4**
+
+- 2018-01-12 Some small fixes:
+
+  - Fixed duplicate keyboard shortcut for actions "Stop Reading" (now: Ctrl-S)
+    and "Copy URL to Clipboard" (still Ctrl-C).
+
+  - Fixed exclude rules not matching correctly against direct root directory
+    children: A rule that should match "/var" now works correctly. You'd need
+    to specify "//var" in the rule which of course was wrong.
+
+  - Now only adding the default exclude rule ".snapshot" once. If you remove
+    that one, it should no longer keep reappearing if there are no other
+    exclude rules.
+
+  - Fixed some minor issues in the exclude rule configuration dialog with some
+    widgets not being correctly disabled if they made no sense to use.
+
 
 - 2017-06-04 **New stable release: V1.4**
 
