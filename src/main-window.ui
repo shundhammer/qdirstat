@@ -318,7 +318,7 @@
     <string>Stop reading directories.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+C</string>
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionAskWriteCache">
