@@ -62,6 +62,11 @@ namespace QDirStat
 
     protected:
 
+        /**
+         * Enable or disable the widgets to edit an exclude rule.
+         **/
+        void enableEditRuleWidgets( bool enable );
+
 	/**
 	 * Fill the exclude rule list widget from the ExcludeRules.
 	 *

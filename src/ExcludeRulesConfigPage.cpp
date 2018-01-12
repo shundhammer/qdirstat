@@ -35,6 +35,8 @@ ExcludeRulesConfigPage::ExcludeRulesConfigPage( QWidget * parent ):
     setAddButton	 ( _ui->addButton	   );
     setRemoveButton	 ( _ui->removeButton	   );
 
+    enableEditRuleWidgets( false );
+
     connect( _ui->patternLineEdit, SIGNAL( textChanged	 ( QString ) ),
 	     this,		   SLOT	 ( patternChanged( QString ) ) );
 }
@@ -107,6 +109,12 @@ void ExcludeRulesConfigPage::patternChanged( const QString & newPattern )
 }
 
 
+void ExcludeRulesConfigPage::enableEditRuleWidgets( bool enable )
+{
+    _ui->rightColumnWidget->setEnabled( enable );
+}
+
+
 void ExcludeRulesConfigPage::save( void * value )
 {
     ExcludeRule * excludeRule = EXCLUDE_RULE_CAST( value );
@@ -136,9 +144,18 @@ void ExcludeRulesConfigPage::load( void * value )
     ExcludeRule * excludeRule = EXCLUDE_RULE_CAST( value );
     // logDebug() << excludeRule << endl;
 
-    if ( ! excludeRule || updatesLocked() )
-	return;
+    if ( updatesLocked() )
+        return;
 
+    if ( ! excludeRule )
+    {
+        enableEditRuleWidgets( false );
+        _ui->patternLineEdit->setText( "" );
+
+	return;
+    }
+
+    enableEditRuleWidgets( true );
     _ui->patternLineEdit->setText( excludeRule->regexp().pattern() );
 
     switch ( excludeRule->regexp().patternSyntax() )
@@ -163,7 +180,8 @@ void ExcludeRulesConfigPage::load( void * value )
 
 void * ExcludeRulesConfigPage::createValue()
 {
-    ExcludeRule * excludeRule = new ExcludeRule( "" );
+    QRegExp regExp( "", Qt::CaseSensitive, QRegExp::Wildcard );
+    ExcludeRule * excludeRule = new ExcludeRule( regExp );
     CHECK_NEW( excludeRule );
     ExcludeRules::instance()->add( excludeRule );
 
