@@ -212,13 +212,14 @@ void ListEditor::remove()
 	if ( ret == QMessageBox::Yes )
 	{
 	    //
-	    // Delete current cleanup
+	    // Delete current item
 	    //
 
 	    _updatesLocked = true;
 	    _listWidget->takeItem( currentRow );
 	    delete currentItem;
 	    removeValue( value );
+            updateActions();
 	    _updatesLocked = false;
 
 	    load( this->value( _listWidget->currentItem() ) );
@@ -229,13 +230,25 @@ void ListEditor::remove()
 
 void ListEditor::updateActions()
 {
-    int currentRow = _listWidget->currentRow();
-    int lastRow	   = _listWidget->count() - 1;
+    if ( _listWidget->count() == 0 )
+    {
+        enableButton( _removeButton,       false );
+        enableButton( _moveToTopButton,    false );
+        enableButton( _moveUpButton,       false );
+        enableButton( _moveDownButton,     false );
+        enableButton( _moveToBottomButton, false );
+    }
+    else
+    {
+        int currentRow = _listWidget->currentRow();
+        int lastRow    = _listWidget->count() - 1;
 
-    enableButton( _moveToTopButton,    currentRow > _firstRow );
-    enableButton( _moveUpButton,       currentRow > _firstRow );
-    enableButton( _moveDownButton,     currentRow < lastRow   );
-    enableButton( _moveToBottomButton, currentRow < lastRow   );
+        enableButton( _removeButton,       true );
+        enableButton( _moveToTopButton,    currentRow > _firstRow );
+        enableButton( _moveUpButton,       currentRow > _firstRow );
+        enableButton( _moveDownButton,     currentRow < lastRow   );
+        enableButton( _moveToBottomButton, currentRow < lastRow   );
+    }
 }
 
 
