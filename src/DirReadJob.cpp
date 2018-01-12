@@ -197,7 +197,8 @@ void LocalDirReadJob::startReading()
 	    if ( entryName != "."  &&
 		 entryName != ".."   )
 	    {
-		QString fullName = dirName + "/" + entryName;
+		QString fullName = dirName == "/" ? "" : dirName; // Avoid leading // when in root dir
+                fullName += "/" + entryName;
 
 		if ( lstat( fullName.toUtf8(), &statInfo ) == 0 )	      // lstat() OK
 		{
