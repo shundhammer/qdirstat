@@ -147,16 +147,6 @@ MainWindow::MainWindow():
 
     connectActions();
 
-
-    if ( ExcludeRules::instance()->isEmpty() )
-    {
-	ExcludeRules::add( QRegExp( ".snapshot",
-				    Qt::CaseSensitive,
-				    QRegExp::FixedString ) );
-    }
-
-    Debug::dumpExcludeRules();
-
     if ( ! _ui->actionShowTreemap->isChecked() )
 	_ui->treemapView->disable();
 
@@ -348,6 +338,7 @@ void MainWindow::readSettings()
 
     readWindowSettings( this, "MainWindow" );
     ExcludeRules::instance()->readSettings();
+    Debug::dumpExcludeRules();
 }
 
 

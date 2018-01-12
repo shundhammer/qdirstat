@@ -230,6 +230,13 @@ namespace QDirStat
 	 **/
 	void writeSettings();
 
+    protected:
+
+        /**
+         * Add some default rules.
+         **/
+        void addDefaultRules();
+
     private:
 
 	ExcludeRuleList		 _rules;

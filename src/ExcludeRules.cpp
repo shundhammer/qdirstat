@@ -191,6 +191,19 @@ void ExcludeRules::moveToBottom( ExcludeRule * rule )
 }
 
 
+void ExcludeRules::addDefaultRules()
+{
+    logInfo() << "Adding default exclude rules" << endl;
+
+    QRegExp regexp( ".snapshot", Qt::CaseSensitive, QRegExp::FixedString );
+    ExcludeRule * rule = new ExcludeRule( regexp );
+    CHECK_NEW( rule );
+    add( rule );
+
+    logInfo() << "Added " << rule << endl;
+}
+
+
 void ExcludeRules::readSettings()
 {
     ExcludeRuleSettings settings;
@@ -231,6 +244,12 @@ void ExcludeRules::readSettings()
 	    settings.endGroup(); // [ExcludeRule_01], [ExcludeRule_02], ...
 	}
     }
+
+    if ( isEmpty() && ! settings.value( "DefaultExcludeRulesAdded", false ).toBool() )
+    {
+        addDefaultRules();
+        settings.setValue( "DefaultExcludeRulesAdded", true );
+    }
 }
 
 
@@ -238,7 +257,7 @@ void ExcludeRules::writeSettings()
 {
     ExcludeRuleSettings settings;
 
-    // Remove all leftover cleanup descriptions
+    // Remove all leftover exclude rule descriptions
     settings.removeGroups( settings.groupPrefix() );
 
     // Similar to CleanupCollection::writeSettings(), using a separate group
