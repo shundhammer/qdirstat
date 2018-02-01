@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-01-12
+Updated: 2018-02-01
 
 
 ## Overview
@@ -930,12 +930,6 @@ Sources: https://bitbucket.org/jeromerobert/k4dirstat/src
 ### WinDirStat (for Windows)
 
 Home page: https://windirstat.info/
-
-
-### iDirStat (MacOS X Sierra port of QDirStat)
-
-http://www.tobiasfeigl.de/2017/05/25/mac-free-mac-os-x-alternatives-of-daisydisk-disk-inventory-x-qdirstat-and-windirstat-sierra-10-12-x/
-
 
 
 ### XDG Trash Spec
