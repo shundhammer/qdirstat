@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-02-01
+Updated: 2018-02-03
 
 
 ## Overview
@@ -66,6 +66,13 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.4**
+
+- 2018-02-03 Fixed [GitHub issue #72](https://github.com/shundhammer/qdirstat/issues/72):
+Allow to specify install prefix
+
+  You can now install to another location like `/usr/local` if desired.
+  The default remains `/usr`. See section _Install to a Custom Directory_.
+
 
 - 2018-01-12 Some small fixes:
 
@@ -891,6 +898,21 @@ commands:
 or
 
     su -c make install
+
+
+### Install to a Custom Directory
+
+The default setup installs everything to `/usr`. To install to another
+directory, set `INSTALL_PREFIX` during `qmake`:
+
+    qmake INSTALL_PREFIX=/usr/local
+
+Beware that some things might not work as expected; for example, you will not
+get a `.desktop` file in the proper place to make QDirStat appear in any menus
+in your graphical desktop environment or in the file manager. You will need to
+copy the `.desktop` file manually to whatever directory your graphical desktop
+environment uses somewhere in your home directory. Similar with the application
+icon used in that `.desktop` file.
 
 
 ## Contributing

@@ -1,5 +1,7 @@
 # qmake .pro file for qdirstat/man
 
+isEmpty(INSTALL_PREFIX):INSTALL_PREFIX = /usr
+
 TEMPLATE     = app
 TARGET       = $(nothing)
 
@@ -12,7 +14,7 @@ MAN_TARGET  ~= s/.1$/.1.gz/g
 
 man.files    = $$MAN_TARGET
 man.commands = gzip --keep --force $$MAN_SRC
-man.path     = /usr/share/man/man1
+man.path     = $$INSTALL_PREFIX/share/man/man1
 
 INSTALLS    += man
 QMAKE_CLEAN += $$MAN_TARGET

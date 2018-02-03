@@ -20,10 +20,11 @@ LIBS		+= -lz
 
 major_is_less_5 = $$find(QT_MAJOR_VERSION, [234])
 !isEmpty(major_is_less_5):DEFINES += 'Q_DECL_OVERRIDE=""'
+isEmpty(INSTALL_PREFIX):INSTALL_PREFIX = /usr
 
 TARGET		 = qdirstat
 TARGET.files	 = qdirstat
-TARGET.path	 = /usr/bin
+TARGET.path	 = $$INSTALL_PREFIX/bin
 INSTALLS	+= TARGET desktop icons
 
 SOURCES	  = main.cpp			\
@@ -155,9 +156,9 @@ FORMS	  = main-window.ui		   \
 RESOURCES = icons.qrc
 
 desktop.files = *.desktop
-desktop.path  = /usr/share/applications
+desktop.path  = $$INSTALL_PREFIX/share/applications
 
 icons.files   = icons/qdirstat.png
-icons.path    = /usr/share/icons/hicolor/32x32/apps
+icons.path    = $$INSTALL_PREFIX/share/icons/hicolor/32x32/apps
 
 mac:ICON      = icons/qdirstat.icns
