@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-02-03
+Updated: 2018-02-04
 
 
 ## Overview
@@ -300,7 +300,7 @@ independent of that; it is based on the old KDE 3 KDirStat directly.
 ## Motivation / Rant
 
 After having used KDE since its early days (since about 1998), I didn't like
-the direction any more that KDE has been taking. I loved KDE 1, KDE 2, KDE
+the direction anymore that KDE has been taking. I loved KDE 1, KDE 2, KDE
 3. When KDE 4 came along, it took me a long time to try to adopt it, and when I
 did, I moved back to KDE 3 after a short while, then tried again with the next
 release, moved back again -- several times.
@@ -325,7 +325,7 @@ To name a few:
   great integration of web and local file manager that was the major strong
   point of Konqueror (and thus KDE) no longer exists.
 
-- I don't like the fact that I can't simply put icons on my desktop any more --
+- I don't like the fact that I can't simply put icons on my desktop anymore --
   no, I have to create a plasmoid first as a container, and those things keep
   doing weird stuff that drives every user crazy. With one false move of your
   mouse, it might be gone, change shape, move to another place or whatever.
@@ -679,9 +679,9 @@ Features ported from the old KDirStat:
 
   - You can specify a cache file to read directly at the command line:
 
-        ```
-        qdirstat --cache cache-file
-        ```
+    ```
+    qdirstat --cache cache-file
+    ```
 
 - Other command line options: See
     ```
@@ -753,10 +753,6 @@ with the other platforms, you will have to make sure that your Qt build
 environment is set up correctly.
 
 _There be dragons._ ;-)
-
-
-Also check out
-[Tobias Feigl's port to MacOS X Sierra](http://www.tobiasfeigl.de/2017/05/25/mac-free-mac-os-x-alternatives-of-daisydisk-disk-inventory-x-qdirstat-and-windirstat-sierra-10-12-x/).
 
 
 ### Architecture maintainer wanted for QDirStat for MacOS X
