@@ -2,7 +2,7 @@
 
 This is roughly ordered by priority.
 
-** See also the GitHub issue tracker! **
+**See also the GitHub issue tracker!**
 
 
 ## General

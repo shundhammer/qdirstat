@@ -236,7 +236,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   `<ERROR>   :0 ():  QXcbConnection: Could not connect to display`
 
   Now this message is also repeated on stderr, and in this particular case
-  ("Could not connect to display"), it does not dump core any more, but just
+  ("Could not connect to display"), it does not dump core anymore, but just
   exits with error code 1.
 
 
@@ -264,7 +264,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   their infinite wisdom decided that `btrfs subvolume list <path>` is a
   privileged operation, so QDirStat would have to use `sudo` with it and prompt
   for the root password (at which point I as a user would terminate the program
-  and not use it any more). **This is broken by design.** A simple info command
+  and not use it anymore). **This is broken by design.** A simple info command
   like that should not require root privileges.
 
 

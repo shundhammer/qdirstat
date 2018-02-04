@@ -16,7 +16,6 @@ it as cache - files, inodes, dentries (directories). Once a directory is read,
 it remains in the cache for a long time, so the speedup upon a subsequent read
 is enormous.
 
-
 ### Fix / Workaround
 
 Drop the kernel caches (as root):
@@ -28,7 +27,7 @@ or
 
     echo 3 | sudo tee /proc/sys/vm/drop_caches
 
-("sudo echo 3 > /proc/sys/vm/drop_caches" would NOT work because your non-root
+(`sudo echo 3 > /proc/sys/vm/drop_caches` would NOT work because your non-root
 shell would do the I/O redirection, so it would not have sufficient privileges)
 
 
