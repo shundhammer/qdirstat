@@ -297,7 +297,7 @@ void MainWindow::updateActions()
     FileInfo * sel = selectedItems.first();
     bool oneDirSelected = ( selectedItems.size() == 1 ) && sel && sel->isDir();
 
-    _ui->actionMoveToTrash->setEnabled( sel && ! sel->isDotEntry() );
+    _ui->actionMoveToTrash->setEnabled( sel && ! sel->isDotEntry() && ! reading );
     _ui->actionRefreshSelected->setEnabled( oneDirSelected && ! sel->isExcluded() && ! sel->isMountPoint() );
     _ui->actionContinueReadingAtMountPoint->setEnabled( oneDirSelected && sel->isMountPoint() );
     _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
