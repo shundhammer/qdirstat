@@ -67,7 +67,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
 **Latest stable release: V1.4**
 
-- 2018-02-08 Fixed [GitHub issue #72](https://github.com/shundhammer/qdirstat/issues/74):
+- 2018-02-08 Fixed [GitHub issue #74](https://github.com/shundhammer/qdirstat/issues/74):
 Crash deleting folder while scan is in progress
 
   For now, this is a GUI-level fix that simply makes sure that the "move to
