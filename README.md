@@ -70,15 +70,16 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 - 2018-02-08 Fixed [GitHub issue #74](https://github.com/shundhammer/qdirstat/issues/74):
 Crash deleting folder while scan is in progress
 
-  For now, this is a GUI-level fix that simply makes sure that the "move to
-  trash" action in the tool bar / context menu is disabled while a directory
-  tree is read.
+  This fix comes on two levels:
 
-  But this should really also be more robust on the lower levels: When a
-  directory node in the in-memory tree is deleted, it should also remove all
-  pending read jobs in the internal job queue, otherwise such a read job will
-  refer to an in-memory directory node that no longer exists, which will result
-  in a segfault.
+  - A fix on the GUI-level that simply makes sure that the "move to trash"
+    action in the tool bar / context menu is disabled while a directory tree is
+    read.
+
+  - A fix on the low-level internal classes for the in-memory directory tree
+    and the read job queue: This now also makes sure that whenever a subtree is
+    deleted from the outside (e.g. because of cleanup actions), any pending
+    directory read jobs for that subtree are removed from the job queue.
 
 - 2018-02-03 Fixed [GitHub issue #72](https://github.com/shundhammer/qdirstat/issues/72):
 Allow to specify install prefix
