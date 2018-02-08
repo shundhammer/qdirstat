@@ -488,6 +488,18 @@ void DirReadJobQueue::enqueue( DirReadJob * job )
 	_queue.append( job );
 	job->setQueue( this );
 
+        if ( job->tree() )
+        {
+            // Using a Qt::UniqueConnection to make sure we can simply set up
+            // this connection for each incoming read job. The tree might be
+            // different over the life time of the queue, so just setting up
+            // this connection once at the start might not be enough.
+
+            connect( job->tree(), SIGNAL( deletingChild      ( FileInfo * ) ),
+                     this,        SLOT  ( deletingChildNotify( FileInfo * ) ),
+                     Qt::UniqueConnection );
+        }
+
 	if ( ! _timer.isActive() )
 	{
 	    // logDebug() << "First job queued" << endl;
@@ -535,6 +547,7 @@ void DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 	return;
 
     QMutableListIterator<DirReadJob *> it( _queue );
+    int count = 0;
 
     while ( it.hasNext() )
     {
@@ -549,10 +562,13 @@ void DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 	if ( job->dir() && job->dir()->isInSubtree( subtree ) )
 	{
 	    // logDebug() << "Killing read job " << job->dir() << endl;
+            ++count;
 	    it.remove();
 	    delete job;
 	}
     }
+
+    logDebug() << "Killed " << count << " read jobs for " << subtree << endl;
 }
 
 
@@ -580,3 +596,12 @@ void DirReadJobQueue::jobFinishedNotify( DirReadJob *job )
     }
 }
 
+
+void DirReadJobQueue::deletingChildNotify( FileInfo * child )
+{
+    if ( child && child->isDirInfo() )
+    {
+        logDebug() << "Killing all pending read jobs for " << child << endl;
+        killAll( child->toDirInfo() );
+    }
+}
