@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-02-04
+Updated: 2018-02-08
 
 
 ## Overview
@@ -66,6 +66,19 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.4**
+
+- 2018-02-08 Fixed [GitHub issue #72](https://github.com/shundhammer/qdirstat/issues/74):
+Crash deleting folder while scan is in progress
+
+  For now, this is a GUI-level fix that simply makes sure that the "move to
+  trash" action in the tool bar / context menu is disabled while a directory
+  tree is read.
+
+  But this should really also be more robust on the lower levels: When a
+  directory node in the in-memory tree is deleted, it should also remove all
+  pending read jobs in the internal job queue, otherwise such a read job will
+  refer to an in-memory directory node that no longer exists, which will result
+  in a segfault.
 
 - 2018-02-03 Fixed [GitHub issue #72](https://github.com/shundhammer/qdirstat/issues/72):
 Allow to specify install prefix
