@@ -389,6 +389,17 @@ namespace QDirStat
 	void finished();
 
 
+    public slots:
+
+        /**
+         * Notification that a child node is about to be deleted from the
+         * outside (i.e., not from this ReadJobQueue), e.g. because of cleanup
+         * actions. This will remove all pending directory read jobs for that
+         * subtree from the job queue.
+         **/
+        void deletingChildNotify( FileInfo * child );
+
+
     protected slots:
 
 	/**
@@ -401,14 +412,6 @@ namespace QDirStat
 	 * into the job queue.
 	 **/
 	void timeSlicedRead();
-
-        /**
-         * Notification that a child node is about to be deleted from the
-         * outside (i.e., not from this ReadJobQueue), e.g. because of cleanup
-         * actions. This will remove all pending directory read jobs for that
-         * subtree from the job queue.
-         **/
-        void deletingChildNotify( FileInfo * child );
 
 
     protected:

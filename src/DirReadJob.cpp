@@ -92,29 +92,29 @@ void DirReadJob::deletingChild( FileInfo *deletedChild )
 bool DirReadJob::crossingFileSystems( DirInfo * parent, DirInfo * child )
 {
     if ( parent->device() == child->device() )
-        return false;
+	return false;
 
-    QString childDevice  = device( child );
+    QString childDevice	 = device( child );
     QString parentDevice = device( parent->findNearestMountPoint() );;
 
     if ( parentDevice.isEmpty() )
-        parentDevice = _tree->device();
+	parentDevice = _tree->device();
 
     bool crossing = true;
 
     if ( ! parentDevice.isEmpty() && ! childDevice.isEmpty() )
-        crossing = parentDevice != childDevice;
+	crossing = parentDevice != childDevice;
 
     if ( crossing )
     {
-            logInfo() << "File system boundary at mount point " << child
-                      << " on device " << ( childDevice.isEmpty() ? "<unknown>" : childDevice )
-                      << endl;
+	    logInfo() << "File system boundary at mount point " << child
+		      << " on device " << ( childDevice.isEmpty() ? "<unknown>" : childDevice )
+		      << endl;
     }
     else
     {
-        logInfo() << "Mount point " << child
-                  << " is still on the same device " << childDevice << endl;
+	logInfo() << "Mount point " << child
+		  << " is still on the same device " << childDevice << endl;
     }
 
     return crossing;
@@ -127,10 +127,10 @@ QString DirReadJob::device( const DirInfo * dir ) const
 
     if ( dir )
     {
-        const MountPoint * mountPoint = MountPoints::findByPath( dir->url() );
+	const MountPoint * mountPoint = MountPoints::findByPath( dir->url() );
 
-        if ( mountPoint )
-            device = mountPoint->device();
+	if ( mountPoint )
+	    device = mountPoint->device();
     }
 
     return device;
@@ -166,24 +166,24 @@ void LocalDirReadJob::startReading()
 
     if ( access( dirName.toUtf8(), X_OK | R_OK ) != 0 )
     {
-        ok = false;
-        logWarning() << "No permission to read directory " << dirName << endl;
+	ok = false;
+	logWarning() << "No permission to read directory " << dirName << endl;
 	_dir->setReadState( DirError );
 	finishReading( _dir );
     }
 
     if ( ok )
     {
-        _diskDir = opendir( dirName.toUtf8() );
+	_diskDir = opendir( dirName.toUtf8() );
 
-        if ( ! _diskDir )
-        {
-            ok = false;
-            _dir->setReadState( DirError );
-            logWarning() << "opendir(" << dirName << ") failed" << endl;
-            // opendir() doesn't set 'errno' according to POSIX  :-(
-            finishReading( _dir );
-        }
+	if ( ! _diskDir )
+	{
+	    ok = false;
+	    _dir->setReadState( DirError );
+	    logWarning() << "opendir(" << dirName << ") failed" << endl;
+	    // opendir() doesn't set 'errno' according to POSIX	 :-(
+	    finishReading( _dir );
+	}
     }
 
     if ( ok )
@@ -198,7 +198,7 @@ void LocalDirReadJob::startReading()
 		 entryName != ".."   )
 	    {
 		QString fullName = dirName == "/" ? "" : dirName; // Avoid leading // when in root dir
-                fullName += "/" + entryName;
+		fullName += "/" + entryName;
 
 		if ( lstat( fullName.toUtf8(), &statInfo ) == 0 )	      // lstat() OK
 		{
@@ -382,7 +382,7 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
     }
     else // lstat() failed
     {
-        THROW( SysCallFailedException( "lstat", url ) );
+	THROW( SysCallFailedException( "lstat", url ) );
 	return 0; // NOTREACHED
     }
 }
@@ -488,18 +488,6 @@ void DirReadJobQueue::enqueue( DirReadJob * job )
 	_queue.append( job );
 	job->setQueue( this );
 
-        if ( job->tree() )
-        {
-            // Using a Qt::UniqueConnection to make sure we can simply set up
-            // this connection for each incoming read job. The tree might be
-            // different over the life time of the queue, so just setting up
-            // this connection once at the start might not be enough.
-
-            connect( job->tree(), SIGNAL( deletingChild      ( FileInfo * ) ),
-                     this,        SLOT  ( deletingChildNotify( FileInfo * ) ),
-                     Qt::UniqueConnection );
-        }
-
 	if ( ! _timer.isActive() )
 	{
 	    // logDebug() << "First job queued" << endl;
@@ -562,7 +550,7 @@ void DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 	if ( job->dir() && job->dir()->isInSubtree( subtree ) )
 	{
 	    // logDebug() << "Killing read job " << job->dir() << endl;
-            ++count;
+	    ++count;
 	    it.remove();
 	    delete job;
 	}
@@ -601,7 +589,7 @@ void DirReadJobQueue::deletingChildNotify( FileInfo * child )
 {
     if ( child && child->isDirInfo() )
     {
-        logDebug() << "Killing all pending read jobs for " << child << endl;
-        killAll( child->toDirInfo() );
+	logDebug() << "Killing all pending read jobs for " << child << endl;
+	killAll( child->toDirInfo() );
     }
 }

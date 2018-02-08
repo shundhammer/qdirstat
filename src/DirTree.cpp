@@ -22,13 +22,16 @@ using namespace QDirStat;
 DirTree::DirTree()
     : QObject()
 {
-    _isBusy           = false;
+    _isBusy	      = false;
     _crossFileSystems = false;
     _root = new DirInfo( this );
     CHECK_NEW( _root );
 
     connect( & _jobQueue, SIGNAL( finished()	 ),
 	     this,	  SLOT	( slotFinished() ) );
+
+    connect( this,	  SIGNAL( deletingChild	     ( FileInfo * ) ),
+	     & _jobQueue, SIGNAL( deletingChildNotify( FileInfo * ) ) );
 }
 
 
@@ -138,8 +141,8 @@ void DirTree::refresh( const FileInfoSet & refreshSet )
 
     foreach ( FileInfo * item, items )
     {
-        // Need to check the magic number here again because a previous
-        // iteration step might have made the item invalid already
+	// Need to check the magic number here again because a previous
+	// iteration step might have made the item invalid already
 
 	if ( item && item->checkMagicNumber() )
 	{
@@ -173,14 +176,14 @@ void DirTree::refresh( DirInfo * subtree )
 
     if ( ! subtree || ! subtree->parent() )	// Refresh all (from first toplevel)
     {
-        try
-        {
-            startReading( QDir::cleanPath( firstToplevel()->url() ) );
-        }
-        catch ( const SysCallFailedException & ex )
-        {
-            CAUGHT( ex );
-        }
+	try
+	{
+	    startReading( QDir::cleanPath( firstToplevel()->url() ) );
+	}
+	catch ( const SysCallFailedException & ex )
+	{
+	    CAUGHT( ex );
+	}
     }
     else	// Refresh subtree
     {
@@ -273,7 +276,7 @@ void DirTree::deleteSubtree( FileInfo *subtree )
 		    parent->parent()->setDotEntry( 0 );
 
 		    delete parent;
-                    parent = 0;
+		    parent = 0;
 		}
 	    }
 	    else	// no parent - this should never happen (?)
