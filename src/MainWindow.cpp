@@ -476,9 +476,11 @@ void MainWindow::openUrl( const QString & url )
     try
     {
 	_dirTreeModel->openUrl( url );
+        setWindowTitle( "QDirStat  " + url );
     }
     catch ( const SysCallFailedException & ex )
     {
+        setWindowFilePath( "QDirStat" );
         CAUGHT( ex );
 
 	QMessageBox errorPopup( QMessageBox::Warning,   // icon
