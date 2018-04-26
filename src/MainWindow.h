@@ -306,6 +306,7 @@ private:
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
     bool			  _verboseSelection;
+    bool                          _urlInWindowTitle;
     int				  _statusBarTimeout; // millisec
     QSignalMapper	       * _treeLevelMapper;
 };

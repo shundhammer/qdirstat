@@ -54,6 +54,7 @@ MainWindow::MainWindow():
     _configDialog(0),
     _modified( false ),
     _verboseSelection( false ),
+    _urlInWindowTitle( false ),
     _statusBarTimeout( 3000 ), // millisec
     _treeLevelMapper(0)
 {
@@ -327,6 +328,7 @@ void MainWindow::readSettings()
     bool showTreemap   = settings.value( "ShowTreemap"	           , true  ).toBool();
     bool treemapOnSide = settings.value( "TreemapOnSide"	   , false ).toBool();
     _verboseSelection  = settings.value( "VerboseSelection"	   , false ).toBool();
+    _urlInWindowTitle  = settings.value( "UrlInWindowTitle"	   , false ).toBool();
 
     settings.endGroup();
 
@@ -351,6 +353,7 @@ void MainWindow::writeSettings()
     settings.setValue( "ShowTreemap"		 , _ui->actionShowTreemap->isChecked() );
     settings.setValue( "TreemapOnSide"		 , _ui->actionTreemapAsSidePanel->isChecked() );
     settings.setValue( "VerboseSelection"	 , _verboseSelection );
+    settings.setValue( "UrlInWindowTitle"	 , _urlInWindowTitle );
 
     settings.endGroup();
 
@@ -476,11 +479,13 @@ void MainWindow::openUrl( const QString & url )
     try
     {
 	_dirTreeModel->openUrl( url );
-        setWindowTitle( "QDirStat  " + url );
+
+        if ( _urlInWindowTitle )
+            setWindowTitle( "QDirStat  " + url );
     }
     catch ( const SysCallFailedException & ex )
     {
-        setWindowFilePath( "QDirStat" );
+        setWindowTitle( "QDirStat" );
         CAUGHT( ex );
 
 	QMessageBox errorPopup( QMessageBox::Warning,   // icon

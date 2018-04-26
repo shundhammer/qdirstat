@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-02-08
+Updated: 2018-04-26
 
 
 ## Overview
@@ -66,6 +66,19 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.4**
+
+- 2018-04-26 Implemented [GitHub issue #77](https://github.com/shundhammer/qdirstat/issues/77):
+  Show the current URL in the window title. This is disabled by default.
+  You can enable it manually in the config file (`~/.config/QDirStat/QDirStat.conf`):
+
+      [MainWindow]
+      ...
+      UrlInWindowTitle=true
+
+  Some day this will be configurable in a new tab in the configuration dialog,
+  but right now there are only some very few options that would go to such a
+  "General" or "Misc" tab that it would look pretty lost and unorganized.
+
 
 - 2018-02-08 Fixed [GitHub issue #74](https://github.com/shundhammer/qdirstat/issues/74):
 Crash deleting folder while scan is in progress
