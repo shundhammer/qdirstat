@@ -76,8 +76,8 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
       UrlInWindowTitle=true
 
   Some day this will be configurable in a new tab in the configuration dialog,
-  but right now there are only some very few options that would go to such a
-  "General" or "Misc" tab that it would look pretty lost and unorganized.
+  but right now there are only so few options that would go to such a "General"
+  or "Misc" tab that it would look pretty lost and unorganized.
 
 
 - 2018-02-08 Fixed [GitHub issue #74](https://github.com/shundhammer/qdirstat/issues/74):
