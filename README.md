@@ -9,7 +9,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-04-26
+Updated: 2018-06-25
 
 
 ## Overview
@@ -812,10 +812,12 @@ called it WinDirStat.
 QDirStat packages for:
 
 - openSUSE Tumbleweed
+- openSUSE Leap 15
 - openSUSE Leap 42.3
 - openSUSE Leap 42.2
 - openSUSE Leap 42.1
 - openSUSE 13.2
+- SUSE Linux Enterprise (SLE) 15
 - SUSE Linux Enterprise (SLE) 12 SP3
 - SUSE Linux Enterprise (SLE) 12 SP2
 - SUSE Linux Enterprise (SLE) 12 SP1
