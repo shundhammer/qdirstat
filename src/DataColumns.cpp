@@ -58,6 +58,8 @@ const DataColumnList DataColumns::defaultColumns() const
     DataColumnList columns;
 
     columns << NameCol
+            << UserCol
+	    << GroupCol
 	    << PercentBarCol
 	    << PercentNumCol
 	    << TotalSizeCol
@@ -66,6 +68,17 @@ const DataColumnList DataColumns::defaultColumns() const
 	    << TotalFilesCol
 	    << TotalSubDirsCol
 	    << LatestMTimeCol;
+
+    return columns;
+}
+
+
+const DataColumnList DataColumns::defaultHiddenColumns() const
+{
+    DataColumnList columns;
+
+    columns << UserCol
+	    << GroupCol;
 
     return columns;
 }
@@ -137,6 +150,8 @@ QString DataColumns::toString( DataColumn col )
 	case TotalFilesCol:	return "TotalFilesCol";
 	case TotalSubDirsCol:	return "TotalSubDirsCol";
 	case LatestMTimeCol:	return "LatestMTimeCol";
+	case UserCol:		return "UserCol";
+	case GroupCol:		return "GroupCol";
 	case ReadJobsCol:	return "ReadJobsCol";
 	case UndefinedCol:	return "UndefinedCol";
 

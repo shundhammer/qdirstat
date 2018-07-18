@@ -24,6 +24,8 @@ namespace QDirStat
     enum DataColumn
     {
 	NameCol	       = 0,	// File / directory name
+        UserCol,                // User (owner)
+        GroupCol,               // Group
 	PercentBarCol,		// Graphical percentage bar
 	PercentNumCol,		// Numeric percentage Value
 	TotalSizeCol,		// Total subtree size
@@ -119,6 +121,11 @@ namespace QDirStat
 	 * Return the default model columns.
 	 **/
 	const DataColumnList defaultColumns() const;
+
+        /**
+         * Return the columns that are hidden by default.
+         **/
+        const DataColumnList defaultHiddenColumns() const;
 
 	/**
 	 * Return the number of columns that are curently displayed.

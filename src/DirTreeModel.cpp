@@ -381,6 +381,8 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 
 		    case NameCol:
 		    case LatestMTimeCol:
+                    case UserCol:
+                    case GroupCol:
 		    default:
 			alignment |= Qt::AlignLeft;
 			break;
@@ -417,6 +419,8 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		    case TotalFilesCol:	  return item->totalFiles();
 		    case TotalSubDirsCol: return item->totalSubDirs();
 		    case LatestMTimeCol:  return (qulonglong) item->latestMtime();
+                    case UserCol:         return item->uid();
+                    case GroupCol:        return item->gid();
 		    default:		  return QVariant();
 		}
 	    }
@@ -451,6 +455,8 @@ QVariant DirTreeModel::headerData( int		   section,
 		case TotalFilesCol:	return tr( "Files"		);
 		case TotalSubDirsCol:	return tr( "Subdirs"		);
 		case LatestMTimeCol:	return tr( "Last Modified"	);
+		case UserCol:           return tr( "User"	        );
+		case GroupCol:          return tr( "Group"	        );
 		default:		return QVariant();
 	    }
 
@@ -624,6 +630,8 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	case OwnSizeCol:	return ownSizeColText( item );
 	case PercentNumCol:	return item == _tree->firstToplevel() ? QVariant() : formatPercent( item->subtreePercent() );
 	case LatestMTimeCol:	return formatTime( item->latestMtime() );
+        case UserCol:           return item->isDotEntry() ? QVariant() : item->userName();
+        case GroupCol:          return item->isDotEntry() ? QVariant() : item->groupName();
     }
 
     if ( item->isDirInfo() || item->isDotEntry() )

@@ -336,11 +336,14 @@ void HeaderTweaker::readSettings()
 
     if ( visibleColList.isEmpty() )
     {
-	// logDebug() << "Falling back to all columns visible" << endl;
+	logDebug() << "Falling back to default visible columns" << endl;
 	visibleColList = colOrderList;
+
+        foreach ( DataColumn col, DataColumns::instance()->defaultHiddenColumns() )
+            visibleColList.removeAll( col );
     }
-    else
-	visibleColList = DataColumns::fixup( visibleColList );
+
+    visibleColList = DataColumns::fixup( visibleColList );
 
     //
     // Set all columns to hidden that are not in visibleColList
@@ -353,7 +356,7 @@ void HeaderTweaker::readSettings()
 	if ( ! visibleColList.contains( col ) )
 	{
 	    logDebug() << "Hiding " << col << endl;
-	    _header->setSectionHidden( section, true );
+	    _header->setSectionHidden( DataColumns::toViewCol( section ), true );
 	}
     }
 

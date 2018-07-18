@@ -38,6 +38,8 @@ bool FileInfoSorter::operator() ( FileInfo * a, FileInfo * b )
 	case TotalFilesCol:   return a->totalFiles()	  < b->totalFiles();
 	case TotalSubDirsCol: return a->totalSubDirs()	  < b->totalSubDirs();
 	case LatestMTimeCol:  return a->latestMtime()	  < b->latestMtime();
+	case UserCol:         return a->uid()	          < b->uid();
+	case GroupCol:        return a->gid()	          < b->gid();
 	case ReadJobsCol:     return a->pendingReadJobs() < b->pendingReadJobs();
 	case UndefinedCol:    return false;
 	    // Intentionally omitting the 'default' branch
