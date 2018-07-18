@@ -9,6 +9,8 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <pwd.h>	// getpwuid()
+#include <grp.h>	// getgrgid()
 #include <unistd.h>
 
 #include <QDateTime>
@@ -42,6 +44,8 @@ FileInfo::FileInfo( DirTree    * tree,
     _device	  = 0;
     _mode	  = 0;
     _links	  = 0;
+    _uid          = 0;
+    _gid          = 0;
     _size	  = 0;
     _blocks	  = 0;
     _mtime	  = 0;
@@ -65,6 +69,8 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
     _device	 = statInfo->st_dev;
     _mode	 = statInfo->st_mode;
     _links	 = statInfo->st_nlink;
+    _uid         = statInfo->st_uid;
+    _gid         = statInfo->st_gid;
     _mtime	 = statInfo->st_mtime;
     _magic	 = FileInfoMagic;
 
@@ -121,6 +127,8 @@ FileInfo::FileInfo( DirTree *	    tree,
     _size	 = size;
     _mtime	 = mtime;
     _links	 = links;
+    _uid         = 0;
+    _gid         = 0;
     _magic	 = FileInfoMagic;
 
     if ( blocks < 0 )
@@ -328,6 +336,34 @@ float FileInfo::subtreePercent()
 QString FileInfo::dotEntryName()
 {
     return QObject::tr( "<Files>" );
+}
+
+
+QString FileInfo::userName() const
+{
+    if ( _parent && _parent->readState() == DirCached )
+        return QString();
+    
+    struct passwd * pw = getpwuid( uid() );
+
+    if ( pw )
+	return pw->pw_name;
+    else
+	return QString::number( uid() );
+}
+
+
+QString FileInfo::groupName() const
+{
+    if ( _parent && _parent->readState() == DirCached )
+        return QString();
+    
+    struct group * grp = getgrgid( gid() );
+
+    if ( grp )
+	return grp->gr_name;
+    else
+	return QString::number( gid() );
 }
 
 

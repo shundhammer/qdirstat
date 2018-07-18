@@ -172,6 +172,38 @@ namespace QDirStat
 	nlink_t links() const { return _links;	}
 
 	/**
+	 * User ID of the owner.
+	 *
+	 * Notice that this might be undefined if this tree branch was read
+	 * from a cache file.
+	 **/
+	uid_t uid() const { return _uid; }
+
+	/**
+	 * Return the user name of the owner.
+	 *
+	 * If this tree branch was read from a cache file, this returns an
+	 * empty string.
+	 **/
+	QString userName() const;
+
+	/**
+	 * Group ID of the owner.
+	 *
+	 * Notice that this might be undefined if this tree branch was read
+	 * from a cache file.
+	 **/
+	gid_t gid() const { return _gid; }
+
+	/**
+	 * Return the group name of the owner.
+	 *
+	 * If this tree branch was read from a cache file, this returns an
+	 * empty string.
+	 **/
+	QString groupName() const;
+
+	/**
 	 * The file size in bytes. This does not take unused space in the last
 	 * disk block (cluster) into account, yet it is the only size all kinds
 	 * of info functions can obtain. This is also what most file system
@@ -590,11 +622,13 @@ namespace QDirStat
 	dev_t		_device;		// device this object resides on
 	mode_t		_mode;			// file permissions + object type
 	nlink_t		_links;			// number of links
+	uid_t		_uid;			// User ID of owner
+	gid_t		_gid;			// Group ID of owner
 	FileSize	_size;			// size in bytes
 	FileSize	_blocks;		// 512 bytes blocks
 	time_t		_mtime;			// modification time
 
-	DirInfo  *	_parent;		// pointer to the parent entry
+	DirInfo	 *	_parent;		// pointer to the parent entry
 	FileInfo *	_next;			// pointer to the next entry
 	DirTree	 *	_tree;			// pointer to the parent tree
 

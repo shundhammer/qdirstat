@@ -31,7 +31,13 @@ DirInfo::DirInfo( DirTree * tree,
 	_name	    = dotEntryName();
 
         if ( parent )
+        {
             _device = parent->device();
+            _mode   = parent->mode();
+            _uid    = parent->uid();
+            _gid    = parent->gid();
+            _mtime  = parent->mtime();
+        }
     }
     else
     {
@@ -687,4 +693,3 @@ const DirInfo * DirInfo::findNearestMountPoint() const
 
     return dir;
 }
-
