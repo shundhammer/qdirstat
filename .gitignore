@@ -1,2 +1,5 @@
 Makefile
 .qmake.stash
+
+# osx app bundle
+*.app

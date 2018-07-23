@@ -82,6 +82,11 @@ int main( int argc, char *argv[] )
     Logger logger( "/tmp/qdirstat-$USER", "qdirstat.log" );
     logVersion();
 
+    // Don't use icons on mac menus
+#ifdef Q_OS_MAC
+    QApplication::instance()->setAttribute(Qt::AA_DontShowIconsInMenus, true);
+#endif
+
     // Set org/app name for QSettings
     QCoreApplication::setOrganizationName( "QDirStat" );
     QCoreApplication::setApplicationName ( "QDirStat" );
