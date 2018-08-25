@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+	<file>icons/qdirstat.svg</file>
 	<file>icons/qdirstat.png</file>
 	<file>icons/add.png</file>
 	<file>icons/delete.png</file>
