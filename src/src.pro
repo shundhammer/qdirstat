@@ -25,7 +25,7 @@ isEmpty(INSTALL_PREFIX):INSTALL_PREFIX = /usr
 TARGET		 = qdirstat
 TARGET.files	 = qdirstat
 TARGET.path	 = $$INSTALL_PREFIX/bin
-INSTALLS	+= TARGET desktop icons icons_svg
+INSTALLS	+= TARGET desktop icons_svg icons_png
 
 SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
@@ -155,13 +155,15 @@ FORMS	  = main-window.ui		   \
 
 RESOURCES = icons.qrc
 
-desktop.files = *.desktop
-desktop.path  = $$INSTALL_PREFIX/share/applications
-
-icons.files   = icons/qdirstat.png
-icons.path    = $$INSTALL_PREFIX/share/icons/hicolor/32x32/apps
+desktop.files   = *.desktop
+desktop.path    = $$INSTALL_PREFIX/share/applications
 
 icons_svg.files = icons/qdirstat.svg
 icons_svg.path  = $$INSTALL_PREFIX/share/icons/hicolor/scalable/apps
+
+# Not sure if this is still needed now that we have an SVG icon
+icons_png.files = icons/qdirstat.png
+icons_png.path  = $$INSTALL_PREFIX/share/icons/hicolor/48x48/apps
+
 
 mac:ICON      = icons/qdirstat.icns
