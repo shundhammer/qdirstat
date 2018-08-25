@@ -1,4 +1,5 @@
 # QDirStat
+<img src="https://github.com/shundhammer/qdirstat/blob/master/src/icons/qdirstat.svg" height="64">
 
 Qt-based directory statistics: KDirStat without any KDE -- from the author of
 the original KDirStat.
@@ -9,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-06-25
+Updated: 2018-08-26
 
 
 ## Overview
@@ -66,6 +67,16 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.4**
+
+- 2018-08-26 Noah Davis (noahdvs) contributed a new application icon for QDirStat:
+
+  <img src="https://github.com/shundhammer/qdirstat/blob/master/src/icons/qdirstat.svg" height="64">
+
+  I had made the old icon myself back in early 2000 for the first KDirStat 0.86
+  release. I never liked it very much, but the new application just needed an
+  icon. Finally somebody with more artistic talent than myself made one that
+  looks a lot more professional. Thank you, Noah!
+
 
 - 2018-04-26 Implemented [GitHub issue #77](https://github.com/shundhammer/qdirstat/issues/77):
   Show the current URL in the window title. This is disabled by default.
