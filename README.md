@@ -4,7 +4,7 @@
 Qt-based directory statistics: KDirStat without any KDE -- from the author of
 the original KDirStat.
 
-(c) 2015-2017 Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+(c) 2015-2018 Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
 
 Target Platforms: Linux, BSD, Unix-like systems
 
