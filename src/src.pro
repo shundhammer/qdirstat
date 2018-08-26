@@ -167,3 +167,8 @@ icons_png.path  = $$INSTALL_PREFIX/share/icons/hicolor/48x48/apps
 
 
 mac:ICON      = icons/qdirstat.icns
+
+# Regenerate this from the .png file with
+#   sudo apt install icnsutils
+#   png2icns qdirstat.icns qdirstat.png
+
