@@ -25,7 +25,7 @@ isEmpty(INSTALL_PREFIX):INSTALL_PREFIX = /usr
 TARGET		 = qdirstat
 TARGET.files	 = qdirstat
 TARGET.path	 = $$INSTALL_PREFIX/bin
-INSTALLS	+= TARGET desktop desktop_icons
+INSTALLS	+= TARGET desktop icons
 
 SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
