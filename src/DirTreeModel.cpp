@@ -448,7 +448,7 @@ QVariant DirTreeModel::headerData( int		   section,
 	    {
 		case NameCol:		return tr( "Name"		);
 		case PercentBarCol:	return tr( "Subtree Percentage" );
-		case PercentNumCol:	return tr( "Percentage"		);
+		case PercentNumCol:	return tr( "%"  		);
 		case TotalSizeCol:	return tr( "Subtree Total"	);
 		case OwnSizeCol:	return tr( "Own Size"		);
 		case TotalItemsCol:	return tr( "Items"		);
