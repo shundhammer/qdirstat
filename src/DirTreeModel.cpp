@@ -461,7 +461,17 @@ QVariant DirTreeModel::headerData( int		   section,
 	    }
 
 	case Qt::TextAlignmentRole:
-	    return Qt::AlignLeft;
+	    switch ( DataColumns::fromViewCol( section ) )
+	    {
+		case PercentBarCol:
+		case PercentNumCol:
+		case TotalSizeCol:
+		case OwnSizeCol:
+		case TotalItemsCol:
+		case TotalFilesCol:
+		case TotalSubDirsCol:   return Qt::AlignHCenter;
+		default:		return Qt::AlignLeft;
+	    }
 
 	default:
 	    return QVariant();
