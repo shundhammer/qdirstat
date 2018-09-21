@@ -48,6 +48,7 @@ SOURCES	  = main.cpp			\
 	    Exception.cpp		\
 	    ExcludeRulesConfigPage.cpp	\
 	    ExcludeRules.cpp		\
+            FileDetailsView.cpp         \
 	    FileInfo.cpp		\
 	    FileInfoIterator.cpp	\
 	    FileInfoSet.cpp		\
@@ -103,7 +104,8 @@ HEADERS	  =				\
 	    DirTreeView.h		\
 	    Exception.h			\
 	    ExcludeRules.h		\
-	    ExcludeRulesConfigPage.h	\
+            ExcludeRulesConfigPage.h	\
+            FileDetailsView.h           \
 	    FileInfo.h			\
 	    FileInfoIterator.h		\
 	    FileInfoSet.h		\
@@ -150,7 +152,8 @@ FORMS	  = main-window.ui		   \
 	    exclude-rules-config-page.ui   \
 	    file-size-stats-window.ui	   \
 	    file-type-stats-window.ui	   \
-	    locate-files-window.ui
+            locate-files-window.ui         \
+            file-details-view.ui
 
 #	    general-config-page.ui
 

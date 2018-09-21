@@ -25,34 +25,54 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QWidget" name="treeViewContainer" native="true">
-       <layout class="QVBoxLayout" name="treeViewLayout">
-        <property name="leftMargin">
-         <number>0</number>
+      <widget class="QSplitter" name="topViewsSplitter">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QWidget" name="treeViewContainer" native="true">
+        <layout class="QVBoxLayout" name="treeViewLayout">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QDirStat::BreadcrumbNavigator" name="breadcrumbNavigator">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;/work/src/&lt;a href=&quot;/work/src/qdirstat&quot;&gt;qdirstat&lt;/a&gt;/&lt;a href=&quot;/work/src/qdirstat/src&quot;&gt;src&lt;/a&gt;/&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="indent">
+            <number>2</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDirStat::DirTreeView" name="dirTreeView"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QScrollArea" name="fileDetailsScrollArea">
+        <property name="widgetResizable">
+         <bool>true</bool>
         </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QDirStat::BreadcrumbNavigator" name="breadcrumbNavigator">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;/work/src/&lt;a href=&quot;/work/src/qdirstat&quot;&gt;qdirstat&lt;/a&gt;/&lt;a href=&quot;/work/src/qdirstat/src&quot;&gt;src&lt;/a&gt;/&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="indent">
-           <number>2</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDirStat::DirTreeView" name="dirTreeView"/>
-        </item>
-       </layout>
+        <widget class="QDirStat::FileDetailsView" name="fileDetailsView">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>520</width>
+           <height>289</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
       </widget>
       <widget class="QDirStat::TreemapView" name="treemapView"/>
      </widget>
@@ -65,7 +85,7 @@
      <x>0</x>
      <y>0</y>
      <width>1157</width>
-     <height>22</height>
+     <height>32</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -625,7 +645,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Treemap as side panel</string>
+    <string>&amp;Treemap as side panel</string>
    </property>
    <property name="toolTip">
     <string>Show the Treeemap beside the directory tree, otherwise it will be shown beneath.</string>
@@ -647,7 +667,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Current Path</string>
+    <string>Show Current &amp;Path</string>
    </property>
    <property name="toolTip">
     <string>Show the directory of the current item above the tree view</string>
@@ -669,6 +689,12 @@
    <class>QDirStat::BreadcrumbNavigator</class>
    <extends>QLabel</extends>
    <header>BreadcrumbNavigator.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QDirStat::FileDetailsView</class>
+   <extends>QWidget</extends>
+   <header>FileDetailsView.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

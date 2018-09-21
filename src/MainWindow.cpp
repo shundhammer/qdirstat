@@ -27,6 +27,7 @@
 #include "DirTreeModel.h"
 #include "Exception.h"
 #include "ExcludeRules.h"
+#include "FileDetailsView.h"
 #include "FileInfo.h"
 #include "FileSizeStatsWindow.h"
 #include "Logger.h"
@@ -103,6 +104,9 @@ MainWindow::MainWindow():
 
     connect( _selectionModel,  SIGNAL( currentBranchChanged( QModelIndex ) ),
 	     _ui->dirTreeView, SLOT  ( closeAllExcept	   ( QModelIndex ) ) );
+
+    connect( _selectionModel,      SIGNAL( selectionChanged( FileInfoSet ) ),
+             _ui->fileDetailsView, SLOT  ( showDetails     ( FileInfoSet ) ) );
 
     connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
 	     this,			SLOT  ( startingReading() ) );
