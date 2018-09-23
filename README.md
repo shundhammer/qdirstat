@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-08-26
+Updated: 2018-09-23
 
 
 ## Overview
@@ -67,6 +67,22 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.4**
+
+- 2018-09-23 Implemented [GitHub issue #80](https://github.com/shundhammer/qdirstat/issues/80):
+  Show directory/file user (owner), group and permissions in the tree view.
+
+  Those new columns are not visible by default. Use the context menu in the
+  tree columns header to enable them. They might be useful for some users; for
+  others, they may be just more clutter being displayed.
+
+  Sorting by those colums is somewhat basic; both user and group are sorted by
+  the numeric uid or guid; the permissions are sorted by the numeric value of
+  the mode field. Looking up user or group names is a somewhat costly
+  operation. It might also make sense to order system files first (user with
+  UID 0, i.e. root; other system users also have small UIDs.)
+
+  See issue #80 for a screenshot.
+
 
 - 2018-08-26 Noah Davis (noahdvs) contributed a new application icon for QDirStat:
 
