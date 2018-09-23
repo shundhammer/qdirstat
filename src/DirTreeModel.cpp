@@ -58,7 +58,7 @@ void DirTreeModel::readSettings()
     _tree->setCrossFileSystems( settings.value( "CrossFileSystems", false ).toBool() );
     _treeIconDir	 = settings.value( "TreeIconDir" , ":/icons/tree-medium/" ).toString();
     _updateTimerMillisec = settings.value( "UpdateTimerMillisec", 333 ).toInt();
-    _slowUpdateMillisec  = settings.value( "SlowUpdateMillisec", 3000 ).toInt();
+    _slowUpdateMillisec	 = settings.value( "SlowUpdateMillisec", 3000 ).toInt();
 
     settings.endGroup();
 }
@@ -84,7 +84,7 @@ void DirTreeModel::setSlowUpdate( bool slow )
     _updateTimer.setInterval( _slowUpdate ? _slowUpdateMillisec : _updateTimerMillisec );
 
     if ( slow )
-        logInfo() << "Display update every " << _updateTimer.interval() << " millisec" << endl;
+	logInfo() << "Display update every " << _updateTimer.interval() << " millisec" << endl;
 }
 
 
@@ -294,15 +294,15 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 
 	case DirError:
 
-            // This is a hybrid case: Depending on the dir reader, the dir may
-            // or may not be finished at this time. For a local dir, it most
-            // likely is; for a cache reader, there might be more to come.
+	    // This is a hybrid case: Depending on the dir reader, the dir may
+	    // or may not be finished at this time. For a local dir, it most
+	    // likely is; for a cache reader, there might be more to come.
 
-            if ( _tree->isBusy() )
-                count = 0;
-            else
-                count = countDirectChildren( item );
-            break;
+	    if ( _tree->isBusy() )
+		count = 0;
+	    else
+		count = countDirectChildren( item );
+	    break;
 
 	case DirFinished:
 	case DirOnRequestOnly:
@@ -340,7 +340,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 	case Qt::DisplayRole:
 	    {
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-                CHECK_PTR( item );
+		CHECK_PTR( item );
 		CHECK_MAGIC( item );
 
 		QVariant result = columnText( item, col );
@@ -376,15 +376,20 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		    case TotalItemsCol:
 		    case TotalFilesCol:
 		    case TotalSubDirsCol:
+		    case OctalPermissionsCol:
 			alignment |= Qt::AlignRight;
 			break;
 
 		    case NameCol:
 		    case LatestMTimeCol:
-                    case UserCol:
-                    case GroupCol:
+		    case UserCol:
+		    case GroupCol:
 		    default:
 			alignment |= Qt::AlignLeft;
+			break;
+
+		    case PermissionsCol:
+			alignment |= Qt::AlignHCenter;
 			break;
 		}
 
@@ -399,7 +404,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 
 		switch ( col )
 		{
-		    case NameCol:	  return item->name();
+		    case NameCol:	      return item->name();
 		    case PercentBarCol:
 			{
 			    if ( ( item->parent() && item->parent()->isBusy() ) ||
@@ -412,16 +417,18 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 				return item->subtreePercent();
 			    }
 			}
-		    case PercentNumCol:	  return item->subtreePercent();
-		    case TotalSizeCol:	  return item->totalSize();
-		    case OwnSizeCol:	  return item->size();
-		    case TotalItemsCol:	  return item->totalItems();
-		    case TotalFilesCol:	  return item->totalFiles();
-		    case TotalSubDirsCol: return item->totalSubDirs();
-		    case LatestMTimeCol:  return (qulonglong) item->latestMtime();
-                    case UserCol:         return item->uid();
-                    case GroupCol:        return item->gid();
-		    default:		  return QVariant();
+		    case PercentNumCol:	      return item->subtreePercent();
+		    case TotalSizeCol:	      return item->totalSize();
+		    case OwnSizeCol:	      return item->size();
+		    case TotalItemsCol:	      return item->totalItems();
+		    case TotalFilesCol:	      return item->totalFiles();
+		    case TotalSubDirsCol:     return item->totalSubDirs();
+		    case LatestMTimeCol:      return (qulonglong) item->latestMtime();
+		    case UserCol:	      return item->uid();
+		    case GroupCol:	      return item->gid();
+		    case PermissionsCol:      return item->mode();
+		    case OctalPermissionsCol: return item->mode();
+		    default:		      return QVariant();
 		}
 	    }
 
@@ -446,18 +453,20 @@ QVariant DirTreeModel::headerData( int		   section,
 	case Qt::DisplayRole:
 	    switch ( DataColumns::fromViewCol( section ) )
 	    {
-		case NameCol:		return tr( "Name"		);
-		case PercentBarCol:	return tr( "Subtree Percentage" );
-		case PercentNumCol:	return tr( "%"  		);
-		case TotalSizeCol:	return tr( "Subtree Total"	);
-		case OwnSizeCol:	return tr( "Own Size"		);
-		case TotalItemsCol:	return tr( "Items"		);
-		case TotalFilesCol:	return tr( "Files"		);
-		case TotalSubDirsCol:	return tr( "Subdirs"		);
-		case LatestMTimeCol:	return tr( "Last Modified"	);
-		case UserCol:           return tr( "User"	        );
-		case GroupCol:          return tr( "Group"	        );
-		default:		return QVariant();
+		case NameCol:		  return tr( "Name"		  );
+		case PercentBarCol:	  return tr( "Subtree Percentage" );
+		case PercentNumCol:	  return tr( "%"		  );
+		case TotalSizeCol:	  return tr( "Subtree Total"	  );
+		case OwnSizeCol:	  return tr( "Own Size"		  );
+		case TotalItemsCol:	  return tr( "Items"		  );
+		case TotalFilesCol:	  return tr( "Files"		  );
+		case TotalSubDirsCol:	  return tr( "Subdirs"		  );
+		case LatestMTimeCol:	  return tr( "Last Modified"	  );
+		case UserCol:		  return tr( "User"		  );
+		case GroupCol:		  return tr( "Group"		  );
+		case PermissionsCol:	  return tr( "Permissions"	  );
+		case OctalPermissionsCol: return tr( "Perm."	    );
+		default:		  return QVariant();
 	    }
 
 	case Qt::TextAlignmentRole:
@@ -469,8 +478,10 @@ QVariant DirTreeModel::headerData( int		   section,
 		case OwnSizeCol:
 		case TotalItemsCol:
 		case TotalFilesCol:
-		case TotalSubDirsCol:   return Qt::AlignHCenter;
-		default:		return Qt::AlignLeft;
+		case TotalSubDirsCol:
+		case PermissionsCol:
+		case OctalPermissionsCol: return Qt::AlignHCenter;
+		default:		  return Qt::AlignLeft;
 	    }
 
 	default:
@@ -527,11 +538,11 @@ QModelIndex DirTreeModel::index( int row, int column, const QModelIndex & parent
 
     if ( parent->isDirInfo() )
     {
-        FileInfo * child = findChild( parent->toDirInfo(), row );
-        CHECK_PTR( child );
+	FileInfo * child = findChild( parent->toDirInfo(), row );
+	CHECK_PTR( child );
 
-        if ( child )
-            return createIndex( row, column, child );
+	if ( child )
+	    return createIndex( row, column, child );
     }
 
     return QModelIndex();
@@ -635,13 +646,15 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
     switch ( col )
     {
-	case NameCol:		return item->name();
-	case PercentBarCol:	return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
-	case OwnSizeCol:	return ownSizeColText( item );
-	case PercentNumCol:	return item == _tree->firstToplevel() ? QVariant() : formatPercent( item->subtreePercent() );
-	case LatestMTimeCol:	return formatTime( item->latestMtime() );
-        case UserCol:           return item->isDotEntry() ? QVariant() : item->userName();
-        case GroupCol:          return item->isDotEntry() ? QVariant() : item->groupName();
+	case NameCol:		  return item->name();
+	case PercentBarCol:	  return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
+	case OwnSizeCol:	  return ownSizeColText( item );
+	case PercentNumCol:	  return item == _tree->firstToplevel() ? QVariant() : formatPercent( item->subtreePercent() );
+	case LatestMTimeCol:	  return formatTime( item->latestMtime() );
+	case UserCol:		  return item->isDotEntry() ? QVariant() : item->userName();
+	case GroupCol:		  return item->isDotEntry() ? QVariant() : item->groupName();
+	case PermissionsCol:	  return item->isDotEntry() ? QVariant() : item->symbolicPermissions();
+	case OctalPermissionsCol: return item->isDotEntry() ? QVariant() : item->octalPermissions();
     }
 
     if ( item->isDirInfo() || item->isDotEntry() )
@@ -654,10 +667,10 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	    case TotalItemsCol:	  return prefix + QString( "%1" ).arg( item->totalItems() );
 	    case TotalFilesCol:	  return prefix + QString( "%1" ).arg( item->totalFiles() );
 	    case TotalSubDirsCol:
-                if ( item->isDotEntry() )
-                    return QVariant();
-                else
-                    return prefix + QString( "%1" ).arg( item->totalSubDirs() );
+		if ( item->isDotEntry() )
+		    return QVariant();
+		else
+		    return prefix + QString( "%1" ).arg( item->totalSubDirs() );
 	}
     }
 
@@ -725,7 +738,7 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
     else // ! item->isDir()
     {
 	if	( item->readState() == DirError	  )   icon = _unreadableDirIcon;
-	else if	( item->isFile()		  )   icon = _fileIcon;
+	else if ( item->isFile()		  )   icon = _fileIcon;
 	else if ( item->isSymLink()		  )   icon = _symlinkIcon;
 	else if ( item->isBlockDevice()		  )   icon = _blockDeviceIcon;
 	else if ( item->isCharDevice()		  )   icon = _charDeviceIcon;

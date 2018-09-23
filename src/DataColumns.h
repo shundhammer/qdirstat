@@ -24,8 +24,6 @@ namespace QDirStat
     enum DataColumn
     {
 	NameCol	       = 0,	// File / directory name
-        UserCol,                // User (owner)
-        GroupCol,               // Group
 	PercentBarCol,		// Graphical percentage bar
 	PercentNumCol,		// Numeric percentage Value
 	TotalSizeCol,		// Total subtree size
@@ -34,6 +32,10 @@ namespace QDirStat
 	TotalFilesCol,		// Total number of files    in subtree
 	TotalSubDirsCol,	// Total number of subdirs  in subtree
 	LatestMTimeCol,		// Latest modification time in subtree
+        UserCol,                // User (owner)
+        GroupCol,               // Group
+        PermissionsCol,         // Permissions (symbolic; -rwxrxxrwx)
+        OctalPermissionsCol,    // Permissions (octal; 0644)
 	ReadJobsCol,		// Number of pending read jobs in subtree
 	UndefinedCol
     };

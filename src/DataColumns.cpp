@@ -58,8 +58,6 @@ const DataColumnList DataColumns::defaultColumns() const
     DataColumnList columns;
 
     columns << NameCol
-            << UserCol
-	    << GroupCol
 	    << PercentBarCol
 	    << PercentNumCol
 	    << TotalSizeCol
@@ -67,7 +65,11 @@ const DataColumnList DataColumns::defaultColumns() const
 	    << TotalItemsCol
 	    << TotalFilesCol
 	    << TotalSubDirsCol
-	    << LatestMTimeCol;
+	    << LatestMTimeCol
+	    << UserCol
+	    << GroupCol
+	    << PermissionsCol
+	    << OctalPermissionsCol;
 
     return columns;
 }
@@ -78,7 +80,9 @@ const DataColumnList DataColumns::defaultHiddenColumns() const
     DataColumnList columns;
 
     columns << UserCol
-	    << GroupCol;
+	    << GroupCol
+	    << PermissionsCol
+	    << OctalPermissionsCol;
 
     return columns;
 }
@@ -120,7 +124,7 @@ DataColumn DataColumns::mappedCol( DataColumn viewCol ) const
 {
     if ( viewCol < 0 || viewCol >= colCount() )
     {
-	logError() << "Invalid view column no.: " << viewCol << endl;
+	logError() << "Invalid view column no.: " << (int) viewCol << endl;
 	return UndefinedCol;
     }
 
@@ -141,25 +145,27 @@ QString DataColumns::toString( DataColumn col )
 {
     switch ( col )
     {
-	case NameCol:		return "NameCol";
-	case PercentBarCol:	return "PercentBarCol";
-	case PercentNumCol:	return "PercentNumCol";
-	case TotalSizeCol:	return "TotalSizeCol";
-	case OwnSizeCol:	return "OwnSizeCol";
-	case TotalItemsCol:	return "TotalItemsCol";
-	case TotalFilesCol:	return "TotalFilesCol";
-	case TotalSubDirsCol:	return "TotalSubDirsCol";
-	case LatestMTimeCol:	return "LatestMTimeCol";
-	case UserCol:		return "UserCol";
-	case GroupCol:		return "GroupCol";
-	case ReadJobsCol:	return "ReadJobsCol";
-	case UndefinedCol:	return "UndefinedCol";
+	case NameCol:			return "NameCol";
+	case PercentBarCol:		return "PercentBarCol";
+	case PercentNumCol:		return "PercentNumCol";
+	case TotalSizeCol:		return "TotalSizeCol";
+	case OwnSizeCol:		return "OwnSizeCol";
+	case TotalItemsCol:		return "TotalItemsCol";
+	case TotalFilesCol:		return "TotalFilesCol";
+	case TotalSubDirsCol:		return "TotalSubDirsCol";
+	case LatestMTimeCol:		return "LatestMTimeCol";
+	case UserCol:			return "UserCol";
+	case GroupCol:			return "GroupCol";
+	case PermissionsCol:		return "PermissionsCol";
+	case OctalPermissionsCol:	return "OctalPermissionsCol";
+	case ReadJobsCol:		return "ReadJobsCol";
+	case UndefinedCol:		return "UndefinedCol";
 
 	    // Intentionally omitting 'default' so the compiler
 	    // can catch unhandled enum values
     }
 
-    logError() << "Unknown DataColumn " << col << endl;
+    logError() << "Unknown DataColumn " << (int) col << endl;
     return QString( "<Unknown DataColumn %1>" ).arg( (int) col );
 }
 

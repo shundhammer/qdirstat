@@ -30,18 +30,20 @@ bool FileInfoSorter::operator() ( FileInfo * a, FileInfo * b )
 		return a->name() < b->name();
 	    }
 
-	case PercentBarCol:   return a->subtreePercent()  < b->subtreePercent();
-	case PercentNumCol:   return a->subtreePercent()  < b->subtreePercent();
-	case TotalSizeCol:    return a->totalSize()	  < b->totalSize();
-	case OwnSizeCol:      return a->size()		  < b->size();
-	case TotalItemsCol:   return a->totalItems()	  < b->totalItems();
-	case TotalFilesCol:   return a->totalFiles()	  < b->totalFiles();
-	case TotalSubDirsCol: return a->totalSubDirs()	  < b->totalSubDirs();
-	case LatestMTimeCol:  return a->latestMtime()	  < b->latestMtime();
-	case UserCol:         return a->uid()	          < b->uid();
-	case GroupCol:        return a->gid()	          < b->gid();
-	case ReadJobsCol:     return a->pendingReadJobs() < b->pendingReadJobs();
-	case UndefinedCol:    return false;
+	case PercentBarCol:	  return a->subtreePercent()  < b->subtreePercent();
+	case PercentNumCol:	  return a->subtreePercent()  < b->subtreePercent();
+	case TotalSizeCol:	  return a->totalSize()	      < b->totalSize();
+	case OwnSizeCol:	  return a->size()	      < b->size();
+	case TotalItemsCol:	  return a->totalItems()      < b->totalItems();
+	case TotalFilesCol:	  return a->totalFiles()      < b->totalFiles();
+	case TotalSubDirsCol:	  return a->totalSubDirs()    < b->totalSubDirs();
+	case LatestMTimeCol:	  return a->latestMtime()     < b->latestMtime();
+	case UserCol:		  return a->uid()	      < b->uid();
+	case GroupCol:		  return a->gid()	      < b->gid();
+	case PermissionsCol:	  return a->mode()	      < b->mode();
+	case OctalPermissionsCol: return a->mode()	      < b->mode();
+	case ReadJobsCol:	  return a->pendingReadJobs() < b->pendingReadJobs();
+	case UndefinedCol:	  return false;
 	    // Intentionally omitting the 'default' branch
 	    // so the compiler can warn about unhandled enum values
     }
