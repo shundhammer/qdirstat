@@ -367,6 +367,19 @@ QString FileInfo::groupName() const
 }
 
 
+QString FileInfo::symbolicPermissions() const
+{
+    return symbolicMode( _mode,
+                         true ); // omitTypeForRegularFiles
+}
+
+
+QString FileInfo::octalPermissions() const
+{
+    return formatOctal( ALLPERMS & _mode );
+}
+
+
 //---------------------------------------------------------------------------
 
 

@@ -162,6 +162,8 @@ namespace QDirStat
 	 * The file permissions and object type as returned by lstat().
 	 * You might want to use the repective convenience methods instead:
 	 * @ref isDir(), @ref isFile(), ...
+         *
+         * See also @ref symbolicPermissions(), octalPermissions()
 	 **/
 	mode_t mode() const { return _mode;   }
 
@@ -202,6 +204,18 @@ namespace QDirStat
 	 * empty string.
 	 **/
 	QString groupName() const;
+
+        /**
+         * File permissions formatted like in "ls -l", i.e. "-rwxrwxrwx",
+         * "drwxrwxrwx"
+         **/
+        QString symbolicPermissions() const;
+
+        /**
+         * File permissions formatted as octal number (like used by the "chmod"
+         * command, i.e. "0644"
+         **/
+        QString octalPermissions() const;
 
 	/**
 	 * The file size in bytes. This does not take unused space in the last
