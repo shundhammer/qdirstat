@@ -672,6 +672,34 @@ namespace QDirStat
      **/
     QString baseName( const QString & fileName );
 
+    /**
+     * Format the mode (the permissions bits) returned from the stat() system
+     * call in the commonly used formats, both symbolic and octal, e.g.
+     *     drwxr-xr-x  0755
+     **/
+    QString formatPermissions( mode_t mode );
+
+    /**
+     * Format a number in octal with a leading zero.
+     **/
+    QString formatOctal( int number );
+
+    /**
+     * Return the mode (the permission bits) returned from stat() like the
+     * "ls -l" shell command does, e.g.
+     *
+     *     drwxr-xr-x
+     *
+     * 'omitTypeForRegularFiles' specifies if the leading "-" should be omitted.
+     **/
+    QString symbolicMode( mode_t perm, bool omitTypeForRegularFiles = false );
+
+    /**
+     * Format the filesystem object type from a mode, e.g. "Directory",
+     * "Symbolic Link", "Block Device", "File".
+     **/
+    QString formatFileSystemObjectType( mode_t mode );
+
 
     /**
      * Print the debugUrl() of a @ref FileInfo in a debug stream.
