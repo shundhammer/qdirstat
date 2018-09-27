@@ -259,24 +259,34 @@ void LocalDirReadJob::startReading()
 			    {
 				logDebug() << "Using cache file " << fullName << " for " << dirName << endl;
 
-				cacheReadJob->reader()->rewind();  // Read offset was moved by firstDir()
-				_tree->addJob( cacheReadJob );	   // Job queue will assume ownership of cacheReadJob
-
-				if ( _dir->parent() )
-				    _dir->parent()->setReadState( DirReading );
-
-				//
-				// Clean up partially read directory content
-				//
-
 				DirTree * tree = _tree;	 // Copy data members to local variables:
-				DirInfo * dir  = _dir;	 // This object will be deleted soon by killAll()
+				DirInfo * dir  = _dir;	 // This object might be deleted soon by killAll()
 
-				_queue->killAll( _dir, cacheReadJob );	// Will delete this job as well!
-				// All data members of this object are invalid from here on!
+                                if ( _tree->isTopLevel( _dir ) )
+                                {
+                                    logDebug() << "Clearing complete tree" << endl;
 
-				logDebug() << "Deleting subtree " << dir << endl;
-				tree->deleteSubtree( dir );
+                                    _tree->clear();
+                                    _tree->readCache( fullName );
+                                }
+                                else
+                                {
+                                    cacheReadJob->reader()->rewind();  // Read offset was moved by firstDir()
+                                    _tree->addJob( cacheReadJob );	   // Job queue will assume ownership of cacheReadJob
+
+                                    if ( _dir->parent() )
+                                        _dir->parent()->setReadState( DirReading );
+
+                                    //
+                                    // Clean up partially read directory content
+                                    //
+
+                                    _queue->killAll( _dir, cacheReadJob );	// Will delete this job as well!
+                                    // All data members of this object are invalid from here on!
+
+                                    logDebug() << "Deleting subtree " << dir << endl;
+                                    tree->deleteSubtree( dir );
+                                }
 
 				return;
 			    }
