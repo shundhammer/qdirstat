@@ -439,6 +439,13 @@ void CacheReader::addItem()
 		       << "Could not locate parent \"" << path << "\" for "
 		       << name << endl;
 
+            if ( ++_errorCount > MAX_ERROR_COUNT )
+            {
+                logError() << "Too many consistency errors. Giving up." << endl;
+                _ok = false;
+                emit error();
+            }
+
 #if DEBUG_LOCATE_PARENT
 	    THROW( Exception( "Could not locate cache item parent" ) );
 #endif
