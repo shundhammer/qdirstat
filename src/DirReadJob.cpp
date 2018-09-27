@@ -543,13 +543,13 @@ void DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 
 	if ( exceptJob && job == exceptJob )
 	{
-	    logDebug() << "NOT killing read job " << job->dir() << endl;
+	    logDebug() << "NOT killing " << job << endl;
 	    continue;
 	}
 
 	if ( job->dir() && job->dir()->isInSubtree( subtree ) )
 	{
-	    // logDebug() << "Killing read job " << job->dir() << endl;
+	    // logDebug() << "Killing " << job << endl;
 	    ++count;
 	    it.remove();
 	    delete job;

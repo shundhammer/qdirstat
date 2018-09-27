@@ -421,8 +421,24 @@ namespace QDirStat
     };
 
 
+    /**
+     * Human-readable output of a DirReadJob in a debug stream.
+     **/
+    inline QTextStream & operator<< ( QTextStream & str, DirReadJob * job )
+    {
+        if ( job )
+        {
+            CacheReadJob * cacheReadJob = dynamic_cast<CacheReadJob *>( job );
+            QString jobType = cacheReadJob ? "CacheReadJob" : "DirReadJob";
+            str << "<" << jobType << " " << job->dir() << ">";
+        }
+        else
+            str << "<NULL DirReadJob *>";
+
+	return str;
+    }
+
 }	// namespace QDirStat
 
 
 #endif // ifndef DirReadJob_h
-
