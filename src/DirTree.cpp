@@ -31,7 +31,7 @@ DirTree::DirTree()
 	     this,	  SLOT	( slotFinished() ) );
 
     connect( this,	  SIGNAL( deletingChild	     ( FileInfo * ) ),
-	     & _jobQueue, SIGNAL( deletingChildNotify( FileInfo * ) ) );
+	     & _jobQueue, SLOT  ( deletingChildNotify( FileInfo * ) ) );
 }
 
 
