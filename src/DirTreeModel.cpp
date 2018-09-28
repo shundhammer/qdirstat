@@ -644,6 +644,8 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     if ( col == _readJobsCol && item->isBusy() )
 	return tr( "[%1 Read Jobs]" ).arg( item->pendingReadJobs() );
 
+    bool limitedInfo = item->isDotEntry() || item->readState() == DirCached;
+
     switch ( col )
     {
 	case NameCol:		  return item->name();
@@ -651,10 +653,10 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	case OwnSizeCol:	  return ownSizeColText( item );
 	case PercentNumCol:	  return item == _tree->firstToplevel() ? QVariant() : formatPercent( item->subtreePercent() );
 	case LatestMTimeCol:	  return formatTime( item->latestMtime() );
-	case UserCol:		  return item->isDotEntry() ? QVariant() : item->userName();
-	case GroupCol:		  return item->isDotEntry() ? QVariant() : item->groupName();
-	case PermissionsCol:	  return item->isDotEntry() ? QVariant() : item->symbolicPermissions();
-	case OctalPermissionsCol: return item->isDotEntry() ? QVariant() : item->octalPermissions();
+	case UserCol:		  return limitedInfo ? QVariant() : item->userName();
+	case GroupCol:		  return limitedInfo ? QVariant() : item->groupName();
+	case PermissionsCol:	  return limitedInfo ? QVariant() : item->symbolicPermissions();
+	case OctalPermissionsCol: return limitedInfo ? QVariant() : item->octalPermissions();
     }
 
     if ( item->isDirInfo() || item->isDotEntry() )
