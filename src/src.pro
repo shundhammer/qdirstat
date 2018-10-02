@@ -29,14 +29,15 @@ INSTALLS	+= TARGET desktop icons
 
 SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
-            BucketsTableModel.cpp       \
+	    BucketsTableModel.cpp	\
+	    BreadcrumbNavigator.cpp	\
 	    Cleanup.cpp			\
 	    CleanupCollection.cpp	\
 	    CleanupConfigPage.cpp	\
 	    ConfigDialog.cpp		\
 	    DataColumns.cpp		\
 	    DebugHelpers.cpp		\
-            DelayedRebuilder.cpp        \
+	    DelayedRebuilder.cpp	\
 	    DirInfo.cpp			\
 	    DirReadJob.cpp		\
 	    DirSaver.cpp		\
@@ -57,9 +58,9 @@ SOURCES	  = main.cpp			\
 	    FileTypeStatsWindow.cpp	\
 	    HeaderTweaker.cpp		\
 	    HistogramView.cpp		\
-	    HistogramDraw.cpp	        \
-	    HistogramItems.cpp	        \
-            HistogramOverflowPanel.cpp  \
+	    HistogramDraw.cpp		\
+	    HistogramItems.cpp		\
+	    HistogramOverflowPanel.cpp	\
 	    ListEditor.cpp		\
 	    LocateFilesWindow.cpp	\
 	    Logger.cpp			\
@@ -76,7 +77,7 @@ SOURCES	  = main.cpp			\
 	    Settings.cpp		\
 	    SettingsHelpers.cpp		\
 	    StdCleanup.cpp		\
-            Subtree.cpp                 \
+	    Subtree.cpp			\
 	    Trash.cpp			\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
@@ -84,14 +85,15 @@ SOURCES	  = main.cpp			\
 
 HEADERS	  =				\
 	    ActionManager.h		\
-            BucketsTableModel.h         \
+	    BucketsTableModel.h		\
+	    BreadcrumbNavigator.h	\
 	    Cleanup.h			\
 	    CleanupCollection.h		\
 	    CleanupConfigPage.h		\
 	    ConfigDialog.h		\
 	    DataColumns.h		\
 	    DebugHelpers.h		\
-            DelayedRebuilder.h          \
+	    DelayedRebuilder.h		\
 	    DirInfo.h			\
 	    DirReadJob.h		\
 	    DirSaver.h			\
@@ -125,14 +127,14 @@ HEADERS	  =				\
 	    OutputWindow.h		\
 	    PercentBar.h		\
 	    Process.h			\
-            Qt4Compat.h                 \
+	    Qt4Compat.h			\
 	    Refresher.h			\
 	    SelectionModel.h		\
 	    Settings.h			\
 	    SettingsHelpers.h		\
 	    SignalBlocker.h		\
 	    StdCleanup.h		\
-            Subtree.h                   \
+	    Subtree.h			\
 	    Trash.h			\
 	    TreemapTile.h		\
 	    TreemapView.h		\
@@ -155,14 +157,14 @@ FORMS	  = main-window.ui		   \
 
 RESOURCES = icons.qrc
 
-desktop.files   = *.desktop
-desktop.path    = $$INSTALL_PREFIX/share/applications
+desktop.files	= *.desktop
+desktop.path	= $$INSTALL_PREFIX/share/applications
 
-icons.files     = icons/qdirstat.svg
-icons.path      = $$INSTALL_PREFIX/share/icons/hicolor/scalable/apps
+icons.files	= icons/qdirstat.svg
+icons.path	= $$INSTALL_PREFIX/share/icons/hicolor/scalable/apps
 
 
-mac:ICON        = icons/qdirstat.icns
+mac:ICON	= icons/qdirstat.icns
 
 # Regenerate this from the .png file with
 #   sudo apt install icnsutils

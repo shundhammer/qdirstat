@@ -119,6 +119,14 @@ namespace QDirStat
 	 **/
 	void setCurrentItem( FileInfo * item, bool select = false );
 
+        /**
+         * Search the dir tree for an item with the specified path and, if
+         * successful, make it the current item.
+         *
+         * See also setCurrentItem( FileInfo *, bool ).
+         **/
+	void setCurrentItem( const QString & path );
+
 	/**
 	 * Make 'item' the current branch. This is meant to notify connected
 	 * tree views to close all other branches. See also the

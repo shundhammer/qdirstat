@@ -25,7 +25,35 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QDirStat::DirTreeView" name="dirTreeView"/>
+      <widget class="QWidget" name="treeViewContainer" native="true">
+       <layout class="QVBoxLayout" name="treeViewLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QDirStat::BreadcrumbNavigator" name="breadcrumbNavigator">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;/work/src/&lt;a href=&quot;/work/src/qdirstat&quot;&gt;qdirstat&lt;/a&gt;/&lt;a href=&quot;/work/src/qdirstat/src&quot;&gt;src&lt;/a&gt;/&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="indent">
+           <number>2</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDirStat::DirTreeView" name="dirTreeView"/>
+        </item>
+       </layout>
+      </widget>
       <widget class="QDirStat::TreemapView" name="treemapView"/>
      </widget>
     </item>
@@ -79,6 +107,7 @@
     <addaction name="actionCloseAllTreeLevels"/>
     <addaction name="menuExpandTreeToLevel"/>
     <addaction name="separator"/>
+    <addaction name="actionShowCurrentPath"/>
     <addaction name="actionFileSizeStats"/>
     <addaction name="actionFileTypeStats"/>
    </widget>
@@ -610,6 +639,20 @@
     <string>F2</string>
    </property>
   </action>
+  <action name="actionShowCurrentPath">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Current Path</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the directory of the current item above the tree view</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -622,9 +665,31 @@
    <extends>QGraphicsView</extends>
    <header>TreemapView.h</header>
   </customwidget>
+  <customwidget>
+   <class>QDirStat::BreadcrumbNavigator</class>
+   <extends>QLabel</extends>
+   <header>BreadcrumbNavigator.h</header>
+  </customwidget>
  </customwidgets>
  <resources>
   <include location="icons.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionShowCurrentPath</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>breadcrumbNavigator</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>578</x>
+     <y>78</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

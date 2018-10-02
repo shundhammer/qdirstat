@@ -119,6 +119,12 @@ MainWindow::MainWindow():
     connect( _selectionModel,  SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
 	     this,	       SLOT  ( updateActions()				   ) );
 
+    connect( _selectionModel,          SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
+	     _ui->breadcrumbNavigator, SLOT  ( setPath           ( FileInfo *             ) ) );
+
+    connect( _ui->breadcrumbNavigator, SIGNAL( pathClicked   ( QString ) ),
+             _selectionModel,          SLOT  ( setCurrentItem( QString ) ) );
+
     connect( _ui->treemapView, SIGNAL( treemapChanged() ),
 	     this,	       SLOT  ( updateActions()	 ) );
 

@@ -177,7 +177,7 @@ void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 	logDebug() << item << " select: " << select << endl;
 
     if ( select )
-        clear();
+	clear();
 
     _currentItem = item;
 
@@ -205,6 +205,17 @@ void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 	clearCurrentIndex();
 #endif
     }
+}
+
+
+void SelectionModel::setCurrentItem( const QString & path )
+{
+    FileInfo * item = _dirTreeModel->tree()->locate( path,
+                                                     true ); // findDotEntries
+    if ( item )
+	setCurrentItem( item, true );
+    else
+	logError() << "No item with path " << path << endl;
 }
 
 

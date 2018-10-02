@@ -9,10 +9,25 @@
 #ifndef Qt4Compat_h
 #define Qt4Compat_h
 
+#include <QString>
+
 
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
 #  define setSectionResizeMode setResizeMode
 #  define sectionResizeMode    resizeMode
+
+inline QString qHtmlEscape( const QString & text )
+{
+    return Qt::escape( text );
+}
+
+#else // Qt 5.x
+
+inline QString qHtmlEscape( const QString & text )
+{
+    return text.toHtmlEscaped();
+}
+
 #endif
 
 
