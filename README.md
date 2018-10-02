@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-09-23
+Updated: 2018-10-02
 
 
 ## Overview
@@ -67,6 +67,12 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.4**
+
+- 2018-10-02 Implemented a _breadcrumbs_ widget to show the current path and
+  for easier navigation up the directory hierarchy. Of course this can be
+  disabled (Menu _View_ -> uncheck _Show Current Path_). See also the updated
+  screenshot at the top of this page.
+
 
 - 2018-09-23 Implemented [GitHub issue #80](https://github.com/shundhammer/qdirstat/issues/80):
   Show directory/file user (owner), group and permissions in the tree view.
