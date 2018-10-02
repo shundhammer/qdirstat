@@ -76,7 +76,6 @@ void FileDetailsView::showDetails( FileInfo * file )
 
     setCurrentWidget( _ui->fileDetailsPage );
 
-    setLabelLimited( _ui->fileParentLabel, parentPath( file ) );
     setLabelLimited(_ui->fileNameLabel, file->name() );
     _ui->fileTypeLabel->setText( formatFileSystemObjectType( file->mode() ) );
 
@@ -112,7 +111,6 @@ void FileDetailsView::showDetails( DirInfo * dir )
     QString name = dir->isDotEntry() ? FileInfo::dotEntryName() : baseName( dir->url() );
     QString dirType = dir->isDotEntry() ? tr( "Pseudo Directory" ) : tr( "Directory" );
 
-    setLabelLimited(_ui->dirParentLabel, parentPath( dir ) );
     setLabelLimited(_ui->dirNameLabel, name );
     _ui->dirTypeLabel->setText( dirType );
 
@@ -157,15 +155,6 @@ void FileDetailsView::showSelectionSummary( const FileInfoSet & selectedItems )
     setLabel( _ui->selFileCountLabel,        fileCount        );
     setLabel( _ui->selDirCountLabel,         dirCount         );
     setLabel( _ui->selSubtreeFileCountLabel, subtreeFileCount );
-}
-
-
-QString FileDetailsView::parentPath( FileInfo * fileInfo )
-{
-    QString path = fileInfo->debugUrl();
-    path.replace( QRegExp( "/[^/]*$" ), "/" );
-
-    return path;
 }
 
 
