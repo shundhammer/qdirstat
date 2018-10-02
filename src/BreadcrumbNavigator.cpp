@@ -85,13 +85,13 @@ void BreadcrumbNavigator::splitBasePath( const QString & path,
             name_ret = components.takeLast();
 
         if ( ! components.empty() )
-        {
             basePath_ret = components.join( "/" ) + "/";
 
-            if ( path.startsWith( "/" ) )
-                basePath_ret.prepend( "/" );
-        }
+        if ( path.startsWith( "/" ) )
+            basePath_ret.prepend( "/" );
     }
+
+    logDebug() << "path: " << path << " basePath: " << basePath_ret << " name: " << name_ret << endl;
 }
 
 
