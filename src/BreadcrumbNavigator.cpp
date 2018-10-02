@@ -53,9 +53,12 @@ void BreadcrumbNavigator::setPath( FileInfo * item )
             else
                 splitBasePath( item->name(), basePath, name );
 
-            QString href= QString( "<a href=\"%1\">%2</a>/" )
+            QString href= QString( "<a href=\"%1\">%2</a>" )
                 .arg( item->debugUrl() )
                 .arg( qHtmlEscape( name ) );
+
+            if ( name != "/" )
+                href += "/";
 
             html = qHtmlEscape( basePath ) + href + html;
         }
