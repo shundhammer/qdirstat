@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>275</width>
-    <height>427</height>
+    <width>362</width>
+    <height>571</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -66,7 +66,7 @@
        </spacer>
       </item>
       <item>
-       <layout class="QGridLayout" name="fileGridLayout">
+       <layout class="QGridLayout" name="fileGridLayout" columnstretch="0,1">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
@@ -329,7 +329,7 @@
        </spacer>
       </item>
       <item>
-       <layout class="QGridLayout" name="dirGridLayout">
+       <layout class="QGridLayout" name="dirGridLayout" columnstretch="0,1">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>

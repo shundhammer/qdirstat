@@ -30,6 +30,12 @@
         <enum>Qt::Horizontal</enum>
        </property>
        <widget class="QWidget" name="treeViewContainer" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
         <layout class="QVBoxLayout" name="treeViewLayout">
          <property name="leftMargin">
           <number>0</number>
@@ -54,11 +60,21 @@
           </widget>
          </item>
          <item>
-          <widget class="QDirStat::DirTreeView" name="dirTreeView"/>
+          <widget class="QDirStat::DirTreeView" name="dirTreeView">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>1</horstretch>
+             <verstretch>1</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
        <widget class="QScrollArea" name="fileDetailsScrollArea">
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
         <property name="widgetResizable">
          <bool>true</bool>
         </property>
@@ -67,8 +83,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>520</width>
-           <height>289</height>
+           <width>217</width>
+           <height>287</height>
           </rect>
          </property>
         </widget>
