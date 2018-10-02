@@ -330,11 +330,12 @@ void MainWindow::readSettings()
     QDirStat::Settings settings;
     settings.beginGroup( "MainWindow" );
 
-    _statusBarTimeout  = settings.value( "StatusBarTimeoutMillisec", 3000  ).toInt();
-    bool showTreemap   = settings.value( "ShowTreemap"	           , true  ).toBool();
-    bool treemapOnSide = settings.value( "TreemapOnSide"	   , false ).toBool();
-    _verboseSelection  = settings.value( "VerboseSelection"	   , false ).toBool();
-    _urlInWindowTitle  = settings.value( "UrlInWindowTitle"	   , false ).toBool();
+    _statusBarTimeout    = settings.value( "StatusBarTimeoutMillisec", 3000  ).toInt();
+    bool showTreemap     = settings.value( "ShowTreemap"	     , true  ).toBool();
+    bool treemapOnSide   = settings.value( "TreemapOnSide"	     , false ).toBool();
+    bool showCurrentPath = settings.value( "ShowCurrentPath"	     , true  ).toBool();
+    _verboseSelection    = settings.value( "VerboseSelection"	     , false ).toBool();
+    _urlInWindowTitle    = settings.value( "UrlInWindowTitle"	     , false ).toBool();
 
     settings.endGroup();
 
@@ -342,6 +343,7 @@ void MainWindow::readSettings()
     _ui->actionTreemapAsSidePanel->setChecked( treemapOnSide );
     treemapAsSidePanel();
 
+    _ui->actionShowCurrentPath->setChecked( showCurrentPath );
     _ui->actionVerboseSelection->setChecked( _verboseSelection );
 
     readWindowSettings( this, "MainWindow" );
@@ -358,6 +360,7 @@ void MainWindow::writeSettings()
     settings.setValue( "StatusBarTimeoutMillisec", _statusBarTimeout );
     settings.setValue( "ShowTreemap"		 , _ui->actionShowTreemap->isChecked() );
     settings.setValue( "TreemapOnSide"		 , _ui->actionTreemapAsSidePanel->isChecked() );
+    settings.setValue( "ShowCurrentPath"	 , _ui->actionShowCurrentPath->isChecked() );
     settings.setValue( "VerboseSelection"	 , _verboseSelection );
     settings.setValue( "UrlInWindowTitle"	 , _urlInWindowTitle );
 
