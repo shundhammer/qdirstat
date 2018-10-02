@@ -25,9 +25,15 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
+      <property name="handleWidth">
+       <number>8</number>
+      </property>
       <widget class="QSplitter" name="topViewsSplitter">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="handleWidth">
+        <number>8</number>
        </property>
        <widget class="QWidget" name="treeViewContainer" native="true">
         <property name="sizePolicy">
@@ -84,7 +90,7 @@
            <x>0</x>
            <y>0</y>
            <width>217</width>
-           <height>287</height>
+           <height>286</height>
           </rect>
          </property>
         </widget>
