@@ -74,6 +74,20 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
   screenshot at the top of this page.
 
 
+- 2018-09-27 Fixed [GitHub issue #84](https://github.com/shundhammer/qdirstat/issues/84):
+  Crash if picking up a cache file in the starting directory (subtree root).
+
+  This was a crash that happened when users had used the supplied
+  _qdirstat-cache-writer_ script to generate cache files in certain directories
+  for faster directory scanning (at the price of having slightly outdated
+  data), and QDirStat was not started with that cache file as a command line
+  argument, but it would find it while reading the directory at the starting
+  directory (and only there). This was probably broken for a long time, yet
+  nobody had noticed (or nobody bothered to write a bug report). This might be
+  an indication that this cache file feature is not widely used, so only a
+  small number of users seem to be affected. Anyway, this is now fixed.
+
+
 - 2018-09-23 Implemented [GitHub issue #80](https://github.com/shundhammer/qdirstat/issues/80):
   Show directory/file user (owner), group and permissions in the tree view.
 
