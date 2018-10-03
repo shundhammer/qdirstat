@@ -105,8 +105,8 @@ MainWindow::MainWindow():
     connect( _selectionModel,  SIGNAL( currentBranchChanged( QModelIndex ) ),
 	     _ui->dirTreeView, SLOT  ( closeAllExcept	   ( QModelIndex ) ) );
 
-    connect( _selectionModel,      SIGNAL( selectionChanged( FileInfoSet ) ),
-             _ui->fileDetailsView, SLOT  ( showDetails     ( FileInfoSet ) ) );
+    connect( _selectionModel,	   SIGNAL( selectionChanged( FileInfoSet ) ),
+	     _ui->fileDetailsView, SLOT	 ( showDetails	   ( FileInfoSet ) ) );
 
     connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
 	     this,			SLOT  ( startingReading() ) );
@@ -123,11 +123,11 @@ MainWindow::MainWindow():
     connect( _selectionModel,  SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
 	     this,	       SLOT  ( updateActions()				   ) );
 
-    connect( _selectionModel,          SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
-	     _ui->breadcrumbNavigator, SLOT  ( setPath           ( FileInfo *             ) ) );
+    connect( _selectionModel,	       SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
+	     _ui->breadcrumbNavigator, SLOT  ( setPath		 ( FileInfo *		  ) ) );
 
     connect( _ui->breadcrumbNavigator, SIGNAL( pathClicked   ( QString ) ),
-             _selectionModel,          SLOT  ( setCurrentItem( QString ) ) );
+	     _selectionModel,	       SLOT  ( setCurrentItem( QString ) ) );
 
     connect( _ui->treemapView, SIGNAL( treemapChanged() ),
 	     this,	       SLOT  ( updateActions()	 ) );
@@ -138,11 +138,11 @@ MainWindow::MainWindow():
     connect( _cleanupCollection, SIGNAL( cleanupFinished( int ) ),
 	     this,		 SLOT  ( cleanupFinished( int ) ) );
 
-    connect( _ui->treemapView,   SIGNAL( hoverEnter ( FileInfo * ) ),
-             this,               SLOT  ( showCurrent( FileInfo * ) ) );
+    connect( _ui->treemapView,	 SIGNAL( hoverEnter ( FileInfo * ) ),
+	     this,		 SLOT  ( showCurrent( FileInfo * ) ) );
 
-    connect( _ui->treemapView,   SIGNAL( hoverLeave ( FileInfo * ) ),
-             this,               SLOT  ( showSummary()             ) );
+    connect( _ui->treemapView,	 SIGNAL( hoverLeave ( FileInfo * ) ),
+	     this,		 SLOT  ( showSummary()		   ) );
 
 
     // Debug connections
@@ -225,6 +225,12 @@ void MainWindow::connectActions()
 
     mapTreeExpandAction( _ui->actionCloseAllTreeLevels, 0 );
 
+    connect( _ui->actionShowCurrentPath,  SIGNAL( toggled   ( bool ) ),
+	     _ui->breadcrumbNavigator,	  SLOT	( setVisible( bool ) ) );
+
+    connect( _ui->actionShowDetailsPanel, SIGNAL( toggled   ( bool ) ),
+	     _ui->fileDetailsPanel,	  SLOT	( setVisible( bool ) ) );
+
     CONNECT_ACTION( _ui->actionFileSizeStats,	   this, showFileSizeStats() );
     CONNECT_ACTION( _ui->actionFileTypeStats,	   this, showFileTypeStats() );
 
@@ -249,8 +255,8 @@ void MainWindow::connectActions()
     connect( _ui->actionShowTreemap, SIGNAL( toggled( bool )   ),
 	     this,		     SLOT  ( showTreemapView() ) );
 
-    connect( _ui->actionTreemapAsSidePanel, SIGNAL( toggled( bool )      ),
-             this,		            SLOT  ( treemapAsSidePanel() ) );
+    connect( _ui->actionTreemapAsSidePanel, SIGNAL( toggled( bool )	 ),
+	     this,			    SLOT  ( treemapAsSidePanel() ) );
 
     CONNECT_ACTION( _ui->actionTreemapZoomIn,	 _ui->treemapView, zoomIn()	    );
     CONNECT_ACTION( _ui->actionTreemapZoomOut,	 _ui->treemapView, zoomOut()	    );
@@ -314,7 +320,7 @@ void MainWindow::updateActions()
     _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
 
     bool nothingOrOneDir = selectedItems.isEmpty() ||
-        ( selectedItems.size() == 1 && sel && ( sel->isDir() || sel->isDotEntry() ) );
+	( selectedItems.size() == 1 && sel && ( sel->isDir() || sel->isDotEntry() ) );
 
     _ui->actionFileSizeStats->setEnabled( ! reading && nothingOrOneDir );
     _ui->actionFileTypeStats->setEnabled( ! reading && nothingOrOneDir );
@@ -334,12 +340,16 @@ void MainWindow::readSettings()
     QDirStat::Settings settings;
     settings.beginGroup( "MainWindow" );
 
-    _statusBarTimeout    = settings.value( "StatusBarTimeoutMillisec", 3000  ).toInt();
-    bool showTreemap     = settings.value( "ShowTreemap"	     , true  ).toBool();
-    bool treemapOnSide   = settings.value( "TreemapOnSide"	     , false ).toBool();
-    bool showCurrentPath = settings.value( "ShowCurrentPath"	     , true  ).toBool();
-    _verboseSelection    = settings.value( "VerboseSelection"	     , false ).toBool();
-    _urlInWindowTitle    = settings.value( "UrlInWindowTitle"	     , false ).toBool();
+    _statusBarTimeout	  = settings.value( "StatusBarTimeoutMillisec", 3000  ).toInt();
+    bool showTreemap	  = settings.value( "ShowTreemap"	      , true  ).toBool();
+    bool treemapOnSide	  = settings.value( "TreemapOnSide"	      , false ).toBool();
+    bool showCurrentPath  = settings.value( "ShowCurrentPath"	      , true  ).toBool();
+    bool showDetailsPanel = settings.value( "ShowDetailsPanel"	      , true  ).toBool();
+    _verboseSelection	  = settings.value( "VerboseSelection"	      , false ).toBool();
+    _urlInWindowTitle	  = settings.value( "UrlInWindowTitle"	      , false ).toBool();
+
+    QByteArray mainSplitterState = settings.value( "MainSplitter" , QByteArray() ).toByteArray();
+    QByteArray topSplitterState	 = settings.value( "TopSplitter"  , QByteArray() ).toByteArray();
 
     settings.endGroup();
 
@@ -348,9 +358,17 @@ void MainWindow::readSettings()
     treemapAsSidePanel();
 
     _ui->actionShowCurrentPath->setChecked( showCurrentPath );
+    _ui->actionShowDetailsPanel->setChecked( showDetailsPanel );
     _ui->actionVerboseSelection->setChecked( _verboseSelection );
 
     readWindowSettings( this, "MainWindow" );
+
+    if ( ! mainSplitterState.isNull() )
+	_ui->mainWinSplitter->restoreState( mainSplitterState );
+
+    if ( ! topSplitterState.isNull() )
+	_ui->topViewsSplitter->restoreState( topSplitterState );
+
     ExcludeRules::instance()->readSettings();
     Debug::dumpExcludeRules();
 }
@@ -365,8 +383,11 @@ void MainWindow::writeSettings()
     settings.setValue( "ShowTreemap"		 , _ui->actionShowTreemap->isChecked() );
     settings.setValue( "TreemapOnSide"		 , _ui->actionTreemapAsSidePanel->isChecked() );
     settings.setValue( "ShowCurrentPath"	 , _ui->actionShowCurrentPath->isChecked() );
+    settings.setValue( "ShowDetailsPanel"	 , _ui->actionShowDetailsPanel->isChecked() );
     settings.setValue( "VerboseSelection"	 , _verboseSelection );
     settings.setValue( "UrlInWindowTitle"	 , _urlInWindowTitle );
+    settings.setValue( "MainSplitter"		 , _ui->mainWinSplitter->saveState()  );
+    settings.setValue( "TopSplitter"		 , _ui->topViewsSplitter->saveState() );
 
     settings.endGroup();
 
@@ -386,9 +407,9 @@ void MainWindow::showTreemapView()
 void MainWindow::treemapAsSidePanel()
 {
     if ( _ui->actionTreemapAsSidePanel->isChecked() )
-        _ui->mainWinSplitter->setOrientation(Qt::Horizontal);
+	_ui->mainWinSplitter->setOrientation(Qt::Horizontal);
     else
-        _ui->mainWinSplitter->setOrientation(Qt::Vertical);
+	_ui->mainWinSplitter->setOrientation(Qt::Vertical);
 }
 
 
@@ -493,22 +514,22 @@ void MainWindow::openUrl( const QString & url )
     {
 	_dirTreeModel->openUrl( url );
 
-        if ( _urlInWindowTitle )
-            setWindowTitle( "QDirStat  " + url );
+	if ( _urlInWindowTitle )
+	    setWindowTitle( "QDirStat  " + url );
     }
     catch ( const SysCallFailedException & ex )
     {
-        setWindowTitle( "QDirStat" );
-        CAUGHT( ex );
+	setWindowTitle( "QDirStat" );
+	CAUGHT( ex );
 
-	QMessageBox errorPopup( QMessageBox::Warning,   // icon
-                                tr( "Error" ),		// title
-                                tr( "Could not open directory %1" ).arg( ex.resourceName() ), // text
-                                QMessageBox::Ok,	// buttons
-                                this );                 // parent
+	QMessageBox errorPopup( QMessageBox::Warning,	// icon
+				tr( "Error" ),		// title
+				tr( "Could not open directory %1" ).arg( ex.resourceName() ), // text
+				QMessageBox::Ok,	// buttons
+				this );			// parent
 	errorPopup.setDetailedText( ex.what() );
 	errorPopup.exec();
-        askOpenUrl();
+	askOpenUrl();
     }
 
     updateActions();
@@ -782,11 +803,11 @@ void MainWindow::showFileTypeStats()
 {
     if ( ! _fileTypeStatsWindow )
     {
-        // This deletes itself when the user closes it. The associated QPointer
-        // keeps track of that and sets the pointer to 0 when it happens.
+	// This deletes itself when the user closes it. The associated QPointer
+	// keeps track of that and sets the pointer to 0 when it happens.
 
-        _fileTypeStatsWindow = new QDirStat::FileTypeStatsWindow( _selectionModel,
-                                                                  this );
+	_fileTypeStatsWindow = new QDirStat::FileTypeStatsWindow( _selectionModel,
+								  this );
     }
 
     _fileTypeStatsWindow->populate( selectedDirOrRoot() );
@@ -799,7 +820,7 @@ void MainWindow::showFileSizeStats()
     FileInfo * sel = selectedDirOrRoot();
 
     if ( ! sel || ! sel->hasChildren() )
-        return;
+	return;
 
     FileSizeStatsWindow::populateSharedInstance( sel );
 }
@@ -811,7 +832,7 @@ FileInfo * MainWindow::selectedDirOrRoot() const
     FileInfo * sel = selectedItems.first();
 
     if ( ! sel )
-        sel = _dirTreeModel->tree()->firstToplevel();
+	sel = _dirTreeModel->tree()->firstToplevel();
 
     return sel;
 }
