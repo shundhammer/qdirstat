@@ -24,6 +24,7 @@ FileDetailsView::FileDetailsView( QWidget * parent ):
     _ui->setupUi( this );
     clear();
 
+    _labelLimit = 0; // Unlimited
     // TODO: Read _labelLimit from the config file
 }
 
@@ -258,7 +259,7 @@ void FileDetailsView::setLabelLimited( QLabel * label, const QString & text )
 
 QString FileDetailsView::limitText( const QString & longText )
 {
-    if ( longText.size() < _labelLimit )
+    if ( _labelLimit < 1 || longText.size() < _labelLimit )
 	return longText;
 
     QString limited = longText.left( _labelLimit / 2 - 2 );
