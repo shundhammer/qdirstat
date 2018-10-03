@@ -132,7 +132,14 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
   - Easily switchable different layouts for the tree columns and the details
     view:
 
-    - Minimalistic: Only the bare essentials of columns plus the details view
+    - Minimalistic: Only the bare essentials of columns plus the details view.
+
+      This should remove a lot of the current clutter on the screen, and it
+      should display the same information, only rearranged a bit. How often do
+      you really need fields like number of items / files / subdirs in the tree
+      view? They would be most useful there if you wish to sort the tree after
+      any of them. How often do you do that? And with the new details view, the
+      information is still available, but does not clutter the table.
 
     - Default: Pretty much what you can see now in the new screenshots
 
