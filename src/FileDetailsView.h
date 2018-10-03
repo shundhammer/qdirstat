@@ -101,11 +101,21 @@ namespace QDirStat
         void setLabel( QLabel * label, FileSize size );
 
         /**
-         * Set a
+         * Set a label with a text of limited size.
          **/
         void setLabelLimited( QLabel * label, const QString & text );
 
         QString limitText( const QString & longText );
+
+        // Boilerplate widget setting methods
+
+        void showFileInfo( FileInfo * file );
+        void showFilePkgInfo( FileInfo * file );
+        void setSystemFileBlockVisibility( bool visible );
+
+        void showSubtreeInfo( DirInfo * dir );
+        void showDirNodeInfo( DirInfo * dir );
+        void setDirBlockVisibility( bool visible );
 
 
         // Data members

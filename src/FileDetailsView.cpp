@@ -75,6 +75,14 @@ void FileDetailsView::showDetails( FileInfo * file )
     }
 
     setCurrentWidget( _ui->fileDetailsPage );
+    showFileInfo( file );
+    showFilePkgInfo( file );
+}
+
+
+void FileDetailsView::showFileInfo( FileInfo * file )
+{
+    CHECK_PTR( file );
 
     setLabelLimited(_ui->fileNameLabel, file->name() );
     _ui->fileTypeLabel->setText( formatFileSystemObjectType( file->mode() ) );
@@ -88,15 +96,27 @@ void FileDetailsView::showDetails( FileInfo * file )
     _ui->filePermissionsLabel->setText( formatPermissions( file->mode() ) );
 
     _ui->fileMTimeLabel->setText( formatTime( file->mtime() ) );
+}
 
-    // TODO: pkg name
 
-    bool isSystemFile = false;
+void FileDetailsView::showFilePkgInfo( FileInfo * file )
+{
+    CHECK_PTR( file );
 
-    _ui->fileSystemFileWarning->setVisible( isSystemFile );
-    _ui->filePackageCaption->setVisible( isSystemFile );
-    _ui->filePackageLabel->setVisible( isSystemFile );
-    _ui->fileSpacerCaption2->setVisible( isSystemFile );
+    setSystemFileBlockVisibility( false ); // TO DO
+
+    // FIXME: TO DO
+    // FIXME: TO DO
+    // FIXME: TO DO
+}
+
+
+void FileDetailsView::setSystemFileBlockVisibility( bool visible )
+{
+    _ui->fileSystemFileWarning->setVisible( visible );
+    _ui->filePackageCaption->setVisible( visible );
+    _ui->filePackageLabel->setVisible( visible );
+    _ui->fileSpacerCaption2->setVisible( visible );
 }
 
 
@@ -120,41 +140,55 @@ void FileDetailsView::showDetails( DirInfo * dir )
 
     // Subtree information
 
+    showSubtreeInfo( dir );
+    showDirNodeInfo( dir );
+}
+
+
+void FileDetailsView::showSubtreeInfo( DirInfo * dir )
+{
+    CHECK_PTR( dir );
+
     setLabel( _ui->dirTotalSizeLabel, dir->totalSize() );
     setLabel( _ui->dirItemCountLabel, dir->totalItems() );
     setLabel( _ui->dirFileCountLabel, dir->totalFiles() );
     setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs() );
 
     _ui->dirLatestMTimeLabel->setText( formatTime( dir->latestMtime() ) );
+}
 
 
-    // Directory itself
+void FileDetailsView::showDirNodeInfo( DirInfo * dir )
+{
+    CHECK_PTR( dir );
+    setDirBlockVisibility( ! dir->isDotEntry() );
 
-    // Show or hide fields in the directory block
+    if ( ! dir->isDotEntry() )
+    {
+        setLabel( _ui->dirOwnSizeLabel, dir->size() );
+        _ui->dirUserLabel->setText( dir->userName() );
+        _ui->dirGroupLabel->setText( dir->groupName() );
+        _ui->dirPermissionsLabel->setText( formatPermissions( dir->mode() ) );
+        _ui->dirMTimeLabel->setText( formatTime( dir->mtime() ) );
+    }
+}
 
-    bool isDir = ! dir->isDotEntry();
 
-    _ui->dirDirectoryHeading->setVisible( isDir );
+void FileDetailsView::setDirBlockVisibility( bool visible )
+{
+    _ui->dirDirectoryHeading->setVisible( visible );
 
-    _ui->dirOwnSizeCaption->setVisible( isDir );
-    _ui->dirUserCaption->setVisible( isDir );
-    _ui->dirGroupCaption->setVisible( isDir );
-    _ui->dirPermissionsCaption->setVisible( isDir );
-    _ui->dirMTimeCaption->setVisible( isDir );
+    _ui->dirOwnSizeCaption->setVisible( visible );
+    _ui->dirUserCaption->setVisible( visible );
+    _ui->dirGroupCaption->setVisible( visible );
+    _ui->dirPermissionsCaption->setVisible( visible );
+    _ui->dirMTimeCaption->setVisible( visible );
 
-    _ui->dirOwnSizeLabel->setVisible( isDir );
-    _ui->dirUserLabel->setVisible( isDir );
-    _ui->dirGroupLabel->setVisible( isDir );
-    _ui->dirPermissionsLabel->setVisible( isDir );
-    _ui->dirMTimeLabel->setVisible( isDir );
-
-    // Set contents
-
-    setLabel( _ui->dirOwnSizeLabel, dir->size() );
-    _ui->dirUserLabel->setText( dir->userName() );
-    _ui->dirGroupLabel->setText( dir->groupName() );
-    _ui->dirPermissionsLabel->setText( formatPermissions( dir->mode() ) );
-    _ui->dirMTimeLabel->setText( formatTime( dir->mtime() ) );
+    _ui->dirOwnSizeLabel->setVisible( visible );
+    _ui->dirUserLabel->setVisible( visible );
+    _ui->dirGroupLabel->setVisible( visible );
+    _ui->dirPermissionsLabel->setVisible( visible );
+    _ui->dirMTimeLabel->setVisible( visible );
 }
 
 
