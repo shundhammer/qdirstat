@@ -134,6 +134,12 @@ namespace QDirStat
 	 **/
 	QString name() const { return _name; }
 
+        /**
+         * Returns the base name of this object, i.e. the last path component,
+         * even if this is a toplevel item.
+         **/
+        QString baseName() const;
+
 	/**
 	 * Returns the full URL of this object with full path.
 	 *
@@ -683,6 +689,8 @@ namespace QDirStat
      *	   "foo.txt"		-> "foo.txt"
      *	   "/usr/bin"		-> "bin"
      *	   "/usr/bin/"		-> "bin"
+     *
+     * Notice that FileInfo also has a member function baseName().
      **/
     QString baseName( const QString & fileName );
 

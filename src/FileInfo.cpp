@@ -44,8 +44,8 @@ FileInfo::FileInfo( DirTree    * tree,
     _device	  = 0;
     _mode	  = 0;
     _links	  = 0;
-    _uid          = 0;
-    _gid          = 0;
+    _uid	  = 0;
+    _gid	  = 0;
     _size	  = 0;
     _blocks	  = 0;
     _mtime	  = 0;
@@ -69,8 +69,8 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
     _device	 = statInfo->st_dev;
     _mode	 = statInfo->st_mode;
     _links	 = statInfo->st_nlink;
-    _uid         = statInfo->st_uid;
-    _gid         = statInfo->st_gid;
+    _uid	 = statInfo->st_uid;
+    _gid	 = statInfo->st_gid;
     _mtime	 = statInfo->st_mtime;
     _magic	 = FileInfoMagic;
 
@@ -122,13 +122,13 @@ FileInfo::FileInfo( DirTree *	    tree,
 {
     _name	 = filenameWithoutPath;
     _isLocalFile = true;
-    _device      = 0;
+    _device	 = 0;
     _mode	 = mode;
     _size	 = size;
     _mtime	 = mtime;
     _links	 = links;
-    _uid         = 0;
-    _gid         = 0;
+    _uid	 = 0;
+    _gid	 = 0;
     _magic	 = FileInfoMagic;
 
     if ( blocks < 0 )
@@ -342,7 +342,7 @@ QString FileInfo::dotEntryName()
 QString FileInfo::userName() const
 {
     if ( _parent && _parent->readState() == DirCached )
-        return QString();
+	return QString();
 
     struct passwd * pw = getpwuid( uid() );
 
@@ -356,7 +356,7 @@ QString FileInfo::userName() const
 QString FileInfo::groupName() const
 {
     if ( _parent && _parent->readState() == DirCached )
-        return QString();
+	return QString();
 
     struct group * grp = getgrgid( gid() );
 
@@ -370,13 +370,19 @@ QString FileInfo::groupName() const
 QString FileInfo::symbolicPermissions() const
 {
     return symbolicMode( _mode,
-                         true ); // omitTypeForRegularFiles
+			 true ); // omitTypeForRegularFiles
 }
 
 
 QString FileInfo::octalPermissions() const
 {
     return formatOctal( ALLPERMS & _mode );
+}
+
+
+QString FileInfo::baseName() const
+{
+    return QDirStat::baseName( _name );
 }
 
 
@@ -444,6 +450,8 @@ QString QDirStat::formatTime( time_t rawTime )
 }
 
 
+// See also FileInfo::baseName()
+
 QString QDirStat::baseName( const QString & fileName )
 {
     QStringList segments = fileName.split( '/', QString::SkipEmptyParts );
@@ -469,12 +477,12 @@ QString QDirStat::symbolicMode( mode_t mode, bool omitTypeForRegularFiles )
 
     // Type
 
-    if      ( S_ISDIR ( mode ) )          result = "d";
-    else if ( S_ISCHR ( mode ) )          result = "c";
-    else if ( S_ISBLK ( mode ) )          result = "b";
-    else if ( S_ISFIFO( mode ) )          result = "p";
-    else if ( S_ISLNK ( mode ) )          result = "l";
-    else if ( S_ISSOCK( mode ) )          result = "s";
+    if	    ( S_ISDIR ( mode ) )	  result = "d";
+    else if ( S_ISCHR ( mode ) )	  result = "c";
+    else if ( S_ISBLK ( mode ) )	  result = "b";
+    else if ( S_ISFIFO( mode ) )	  result = "p";
+    else if ( S_ISLNK ( mode ) )	  result = "l";
+    else if ( S_ISSOCK( mode ) )	  result = "s";
     else if ( ! omitTypeForRegularFiles ) result = "-";
 
     // User
@@ -483,9 +491,9 @@ QString QDirStat::symbolicMode( mode_t mode, bool omitTypeForRegularFiles )
     result += ( mode & S_IWUSR ) ? "w" : "-";
 
     if ( mode & S_ISUID )
-        result += "s";
+	result += "s";
     else
-        result += ( mode & S_IXUSR ) ? "x" : "-";
+	result += ( mode & S_IXUSR ) ? "x" : "-";
 
     // Group
 
@@ -493,9 +501,9 @@ QString QDirStat::symbolicMode( mode_t mode, bool omitTypeForRegularFiles )
     result += ( mode & S_IWGRP ) ? "w" : "-";
 
     if ( mode & S_ISGID )
-        result += "s";
+	result += "s";
     else
-        result += ( mode & S_IXGRP ) ? "x" : "-";
+	result += ( mode & S_IXGRP ) ? "x" : "-";
 
     // Other
 
@@ -503,9 +511,9 @@ QString QDirStat::symbolicMode( mode_t mode, bool omitTypeForRegularFiles )
     result += ( mode & S_IWOTH ) ? "w" : "-";
 
     if ( mode & S_ISVTX )
-        result += "t";
+	result += "t";
     else
-        result += ( mode & S_IXOTH ) ? "x" : "-";
+	result += ( mode & S_IXOTH ) ? "x" : "-";
 
     return result;
 }
@@ -513,11 +521,11 @@ QString QDirStat::symbolicMode( mode_t mode, bool omitTypeForRegularFiles )
 
 QString QDirStat::formatFileSystemObjectType( mode_t mode )
 {
-    if      ( S_ISDIR ( mode ) ) return QObject::tr( "Directory"        );
+    if	    ( S_ISDIR ( mode ) ) return QObject::tr( "Directory"	);
     else if ( S_ISCHR ( mode ) ) return QObject::tr( "Character Device" );
-    else if ( S_ISBLK ( mode ) ) return QObject::tr( "Block Device"     );
-    else if ( S_ISFIFO( mode ) ) return QObject::tr( "Named Pipe"       );
-    else if ( S_ISLNK ( mode ) ) return QObject::tr( "Symbolic Link"    );
-    else if ( S_ISSOCK( mode ) ) return QObject::tr( "Socket"           );
-    else                         return QObject::tr( "File"             );
+    else if ( S_ISBLK ( mode ) ) return QObject::tr( "Block Device"	);
+    else if ( S_ISFIFO( mode ) ) return QObject::tr( "Named Pipe"	);
+    else if ( S_ISLNK ( mode ) ) return QObject::tr( "Symbolic Link"	);
+    else if ( S_ISSOCK( mode ) ) return QObject::tr( "Socket"		);
+    else			 return QObject::tr( "File"		);
 }

@@ -105,9 +105,6 @@ MainWindow::MainWindow():
     connect( _selectionModel,  SIGNAL( currentBranchChanged( QModelIndex ) ),
 	     _ui->dirTreeView, SLOT  ( closeAllExcept	   ( QModelIndex ) ) );
 
-    connect( _selectionModel,	   SIGNAL( selectionChanged( FileInfoSet ) ),
-	     _ui->fileDetailsView, SLOT	 ( showDetails	   ( FileInfoSet ) ) );
-
     connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
 	     this,			SLOT  ( startingReading() ) );
 
@@ -481,6 +478,7 @@ void MainWindow::idleDisplay()
 	expandTreeToLevel( 1 );
     }
 
+    updateFileDetailsView();
     showTreemapView();
 }
 
@@ -668,6 +666,20 @@ void MainWindow::showSummary()
 	_ui->statusBar->showMessage( tr( "%1 items selected (%2 total)" )
 				     .arg( count )
 				     .arg( formatSize( sel.totalSize() ) ) );
+    }
+}
+
+
+void MainWindow::updateFileDetailsView()
+{
+    if ( _ui->fileDetailsView->isVisible() )
+    {
+	FileInfoSet sel = _selectionModel->selectedItems();
+
+	if ( sel.count() <= 1 )
+	    _ui->fileDetailsView->showDetails( _selectionModel->currentItem() );
+	else
+	    _ui->fileDetailsView->showDetails( sel );
     }
 }
 
@@ -936,6 +948,7 @@ void MainWindow::itemClicked( const QModelIndex & index )
 void MainWindow::selectionChanged()
 {
     showSummary();
+    updateFileDetailsView();
 
     if ( _verboseSelection )
     {
@@ -948,6 +961,7 @@ void MainWindow::selectionChanged()
 void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurrent )
 {
     showSummary();
+    updateFileDetailsView();
 
     if ( _verboseSelection )
     {

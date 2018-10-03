@@ -46,37 +46,45 @@ void FileDetailsView::showDetails( const FileInfoSet & selectedItems )
 
     if ( sel.isEmpty() )
     {
-        clear();
+	clear();
     }
     else if ( sel.size() == 1 )
     {
-        FileInfo * item = sel.first();
+	FileInfo * item = sel.first();
 
-        if ( item->isDirInfo() )
-            showDetails( item->toDirInfo() );
-        else
-            showDetails( item );
+	if ( item->isDirInfo() )
+	    showDetails( item->toDirInfo() );
+	else
+	    showDetails( item );
     }
     else
     {
-        showSelectionSummary( sel );
+	showSelectionSummary( sel );
     }
 }
 
 
 void FileDetailsView::showDetails( FileInfo * file )
 {
-    // logDebug() << "Showing file details about " << file << endl;
 
     if ( ! file )
     {
-        clear();
-        return;
+	clear();
+	return;
     }
 
-    setCurrentWidget( _ui->fileDetailsPage );
-    showFileInfo( file );
-    showFilePkgInfo( file );
+    if ( file->isDirInfo() )
+    {
+	showDetails( file->toDirInfo() );
+    }
+    else
+    {
+	// logDebug() << "Showing file details about " << file << endl;
+
+	setCurrentWidget( _ui->fileDetailsPage );
+	showFileInfo( file );
+	showFilePkgInfo( file );
+    }
 }
 
 
@@ -84,7 +92,7 @@ void FileDetailsView::showFileInfo( FileInfo * file )
 {
     CHECK_PTR( file );
 
-    setLabelLimited(_ui->fileNameLabel, file->name() );
+    setLabelLimited(_ui->fileNameLabel, file->baseName() );
     _ui->fileTypeLabel->setText( formatFileSystemObjectType( file->mode() ) );
 
     // TODO: Mime type
@@ -126,13 +134,13 @@ void FileDetailsView::showDetails( DirInfo * dir )
 
     if ( ! dir )
     {
-        clear();
-        return;
+	clear();
+	return;
     }
 
     setCurrentWidget( _ui->dirDetailsPage );
 
-    QString name = dir->isDotEntry() ? FileInfo::dotEntryName() : ( baseName( dir->url() ) + "/" );
+    QString name = dir->isDotEntry() ? FileInfo::dotEntryName() : ( dir->baseName() + "/" );
     QString dirType = dir->isDotEntry() ? tr( "Pseudo Directory" ) : tr( "Directory" );
 
     setLabelLimited(_ui->dirNameLabel, name );
@@ -165,11 +173,11 @@ void FileDetailsView::showDirNodeInfo( DirInfo * dir )
 
     if ( ! dir->isDotEntry() )
     {
-        setLabel( _ui->dirOwnSizeLabel, dir->size() );
-        _ui->dirUserLabel->setText( dir->userName() );
-        _ui->dirGroupLabel->setText( dir->groupName() );
-        _ui->dirPermissionsLabel->setText( formatPermissions( dir->mode() ) );
-        _ui->dirMTimeLabel->setText( formatTime( dir->mtime() ) );
+	setLabel( _ui->dirOwnSizeLabel, dir->size() );
+	_ui->dirUserLabel->setText( dir->userName() );
+	_ui->dirGroupLabel->setText( dir->groupName() );
+	_ui->dirPermissionsLabel->setText( formatPermissions( dir->mode() ) );
+	_ui->dirMTimeLabel->setText( formatTime( dir->mtime() ) );
     }
 }
 
@@ -199,29 +207,29 @@ void FileDetailsView::showSelectionSummary( const FileInfoSet & selectedItems )
     setCurrentWidget( _ui->selectionSummaryPage );
     FileInfoSet sel = selectedItems.normalized();
 
-    int fileCount        = 0;
-    int dirCount         = 0;
+    int fileCount	 = 0;
+    int dirCount	 = 0;
     int subtreeFileCount = 0;
 
     foreach ( FileInfo * item, sel )
     {
-        if ( item->isDir() )
-        {
-            ++dirCount;
-            subtreeFileCount += item->totalFiles();
-        }
-        else
-            ++fileCount;
+	if ( item->isDir() )
+	{
+	    ++dirCount;
+	    subtreeFileCount += item->totalFiles();
+	}
+	else
+	    ++fileCount;
     }
 
     _ui->selFileCountLabel->setEnabled( fileCount > 0 );
     _ui->selDirCountLabel->setEnabled( dirCount > 0 );
     _ui->selSubtreeFileCountLabel->setEnabled( subtreeFileCount > 0 );
 
-    setLabel( _ui->selItemCount,             sel.count()      );
-    setLabel( _ui->selTotalSizeLabel,        sel.totalSize()  );
-    setLabel( _ui->selFileCountLabel,        fileCount        );
-    setLabel( _ui->selDirCountLabel,         dirCount         );
+    setLabel( _ui->selItemCount,	     sel.count()      );
+    setLabel( _ui->selTotalSizeLabel,	     sel.totalSize()  );
+    setLabel( _ui->selFileCountLabel,	     fileCount	      );
+    setLabel( _ui->selDirCountLabel,	     dirCount	      );
     setLabel( _ui->selSubtreeFileCountLabel, subtreeFileCount );
 }
 
@@ -251,7 +259,7 @@ void FileDetailsView::setLabelLimited( QLabel * label, const QString & text )
 QString FileDetailsView::limitText( const QString & longText )
 {
     if ( longText.size() < _labelLimit )
-        return longText;
+	return longText;
 
     QString limited = longText.left( _labelLimit / 2 - 2 );
     limited += "...";

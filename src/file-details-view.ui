@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>265</width>
+    <width>244</width>
     <height>391</height>
    </rect>
   </property>
@@ -14,7 +14,7 @@
    <string>Details</string>
   </property>
   <property name="currentIndex">
-   <number>1</number>
+   <number>0</number>
   </property>
   <widget class="QWidget" name="fileDetailsPage">
    <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -50,7 +50,7 @@
        </spacer>
       </item>
       <item>
-       <layout class="QGridLayout" name="fileGridLayout">
+       <layout class="QGridLayout" name="fileGridLayout" columnstretch="0,1">
         <item row="0" column="0">
          <widget class="QLabel" name="fileTypeCaption">
           <property name="font">
@@ -644,7 +644,7 @@ Subtree</string>
        </spacer>
       </item>
       <item>
-       <layout class="QGridLayout" name="selGridLayout">
+       <layout class="QGridLayout" name="selGridLayout" columnstretch="0,1">
         <property name="horizontalSpacing">
          <number>10</number>
         </property>

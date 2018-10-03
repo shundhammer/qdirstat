@@ -117,6 +117,11 @@ public slots:
     void showSummary();
 
     /**
+     * Show details about the current selection in the details view.
+     **/
+    void updateFileDetailsView();
+
+    /**
      * Copy the URL of the current item (if there is one) to the system
      * clipboard for use in other applications.
      **/
@@ -306,7 +311,7 @@ private:
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
     bool			  _verboseSelection;
-    bool                          _urlInWindowTitle;
+    bool			  _urlInWindowTitle;
     int				  _statusBarTimeout; // millisec
     QSignalMapper	       * _treeLevelMapper;
 };
