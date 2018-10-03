@@ -90,8 +90,6 @@ void BreadcrumbNavigator::splitBasePath( const QString & path,
         if ( path.startsWith( "/" ) )
             basePath_ret.prepend( "/" );
     }
-
-    logDebug() << "path: " << path << " basePath: " << basePath_ret << " name: " << name_ret << endl;
 }
 
 
