@@ -213,6 +213,10 @@ void FileDetailsView::setDirBlockVisibility( bool visible )
     _ui->dirGroupLabel->setVisible( visible );
     _ui->dirPermissionsLabel->setVisible( visible );
     _ui->dirMTimeLabel->setVisible( visible );
+
+    // A dot entry cannot have directory children
+    _ui->dirSubDirCountCaption->setVisible( visible );
+    _ui->dirSubDirCountLabel->setVisible( visible );
 }
 
 
