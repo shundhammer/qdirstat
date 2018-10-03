@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>362</width>
-    <height>571</height>
+    <width>265</width>
+    <height>391</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,15 +17,9 @@
    <number>0</number>
   </property>
   <widget class="QWidget" name="fileDetailsPage">
-   <layout class="QHBoxLayout" name="fileDetailsHBox">
-    <property name="spacing">
-     <number>0</number>
-    </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
      <layout class="QVBoxLayout" name="filePageVBox">
-      <property name="spacing">
-       <number>4</number>
-      </property>
       <item>
        <widget class="QLabel" name="fileNameLabel">
         <property name="font">
@@ -50,16 +44,32 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>12</height>
+          <height>13</height>
          </size>
         </property>
        </spacer>
       </item>
       <item>
-       <layout class="QGridLayout" name="fileGridLayout" columnstretch="0,1">
-        <property name="horizontalSpacing">
-         <number>10</number>
-        </property>
+       <layout class="QGridLayout" name="fileGridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="fileTypeCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Type:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="fileTypeLabel">
+          <property name="text">
+           <string>File</string>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="fileMimeTypeCaption">
           <property name="font">
@@ -72,24 +82,10 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QLabel" name="fileTypeLabel">
-          <property name="text">
-           <string>File</string>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="1">
          <widget class="QLabel" name="fileMimeTypeLabel">
           <property name="text">
            <string>Document</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLabel" name="fileSizeLabel">
-          <property name="text">
-           <string>42.0 kB</string>
           </property>
          </widget>
         </item>
@@ -105,15 +101,10 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="fileTypeCaption">
-          <property name="font">
-           <font>
-            <italic>true</italic>
-           </font>
-          </property>
+        <item row="2" column="1">
+         <widget class="QLabel" name="fileSizeLabel">
           <property name="text">
-           <string>Type:</string>
+           <string>42.0 kB</string>
           </property>
          </widget>
         </item>
@@ -124,90 +115,21 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
-         <widget class="QLabel" name="filePermissionsCaption">
-          <property name="font">
-           <font>
-            <italic>true</italic>
-           </font>
-          </property>
-          <property name="text">
-           <string>Permissions:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="1">
-         <widget class="QLabel" name="filePermissionsLabel">
-          <property name="text">
-           <string>rw-r--r--  0644</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="0">
-         <widget class="QLabel" name="fileMTimeCaption">
-          <property name="font">
-           <font>
-            <italic>true</italic>
-           </font>
-          </property>
-          <property name="text">
-           <string>Last Modified:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="1">
-         <widget class="QLabel" name="fileMTimeLabel">
-          <property name="text">
-           <string>31.06.2018 09:18</string>
-          </property>
-         </widget>
-        </item>
         <item row="4" column="0">
-         <widget class="QLabel" name="fileUserCaption">
+         <widget class="QLabel" name="fileSystemFileWarning">
           <property name="font">
            <font>
+            <weight>75</weight>
             <italic>true</italic>
+            <bold>true</bold>
            </font>
           </property>
           <property name="text">
-           <string>User:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QLabel" name="fileUserLabel">
-          <property name="text">
-           <string>kilroy</string>
+           <string>System File</string>
           </property>
          </widget>
         </item>
         <item row="5" column="0">
-         <widget class="QLabel" name="fileGroupCaption">
-          <property name="font">
-           <font>
-            <italic>true</italic>
-           </font>
-          </property>
-          <property name="text">
-           <string>Group:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1">
-         <widget class="QLabel" name="fileGroupLabel">
-          <property name="text">
-           <string>users</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0">
-         <widget class="QLabel" name="fileSpacerCaption2">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="10" column="0">
          <widget class="QLabel" name="filePackageCaption">
           <property name="font">
            <font>
@@ -219,24 +141,93 @@
           </property>
          </widget>
         </item>
-        <item row="10" column="1">
+        <item row="5" column="1">
          <widget class="QLabel" name="filePackageLabel">
           <property name="text">
            <string>none</string>
           </property>
          </widget>
         </item>
-        <item row="9" column="0">
-         <widget class="QLabel" name="fileSystemFileWarningCaption">
+        <item row="6" column="0">
+         <widget class="QLabel" name="fileSpacerCaption2">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="fileUserCaption">
           <property name="font">
            <font>
-            <weight>75</weight>
             <italic>true</italic>
-            <bold>true</bold>
            </font>
           </property>
           <property name="text">
-           <string>System File</string>
+           <string>User:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1">
+         <widget class="QLabel" name="fileUserLabel">
+          <property name="text">
+           <string>kilroy</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
+         <widget class="QLabel" name="fileGroupCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Group:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="1">
+         <widget class="QLabel" name="fileGroupLabel">
+          <property name="text">
+           <string>users</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="0">
+         <widget class="QLabel" name="filePermissionsCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Permissions:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="1">
+         <widget class="QLabel" name="filePermissionsLabel">
+          <property name="text">
+           <string>rw-r--r--  0644</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="0">
+         <widget class="QLabel" name="fileMTimeCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Last Modified:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="1">
+         <widget class="QLabel" name="fileMTimeLabel">
+          <property name="text">
+           <string>31.06.2018 09:18</string>
           </property>
          </widget>
         </item>
@@ -388,7 +379,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Latest MTime:</string>
+           <string>Last Modified:</string>
           </property>
          </widget>
         </item>
@@ -588,22 +579,53 @@ Subtree</string>
    </layout>
   </widget>
   <widget class="QWidget" name="selectionSummaryPage">
-   <layout class="QHBoxLayout" name="selPageHBox">
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
      <layout class="QVBoxLayout" name="selPageVBox">
       <item>
-       <widget class="QLabel" name="selHeading">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <italic>true</italic>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Selected Items</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="selHeadingLayout">
+        <item>
+         <widget class="QLabel" name="selItemCount">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <italic>true</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>9</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="selHeading">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <italic>true</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Selected Items</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="selHeadingRightStretch">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>31</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
       <item>
        <spacer name="selTopSpacer">
@@ -655,18 +677,6 @@ Subtree</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="selTotalSizeCaption">
-          <property name="font">
-           <font>
-            <italic>true</italic>
-           </font>
-          </property>
-          <property name="text">
-           <string>Total Size:</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
          <widget class="QLabel" name="selTotalSizeLabel">
           <property name="text">
@@ -702,6 +712,18 @@ Subtree</string>
          <widget class="QLabel" name="selSubtreeFileCountLabel">
           <property name="text">
            <string>84</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="selTotalSizeCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Total Size:</string>
           </property>
          </widget>
         </item>

@@ -90,9 +90,13 @@ void FileDetailsView::showDetails( FileInfo * file )
     _ui->fileMTimeLabel->setText( formatTime( file->mtime() ) );
 
     // TODO: pkg name
-    _ui->fileSystemFileWarningCaption->hide();
-    _ui->filePackageCaption->hide();
-    _ui->filePackageLabel->hide();
+
+    bool isSystemFile = false;
+
+    _ui->fileSystemFileWarning->setVisible( isSystemFile );
+    _ui->filePackageCaption->setVisible( isSystemFile );
+    _ui->filePackageLabel->setVisible( isSystemFile );
+    _ui->fileSpacerCaption2->setVisible( isSystemFile );
 }
 
 
@@ -108,11 +112,13 @@ void FileDetailsView::showDetails( DirInfo * dir )
 
     setCurrentWidget( _ui->dirDetailsPage );
 
-    QString name = dir->isDotEntry() ? FileInfo::dotEntryName() : baseName( dir->url() );
+    QString name = dir->isDotEntry() ? FileInfo::dotEntryName() : ( baseName( dir->url() ) + "/" );
     QString dirType = dir->isDotEntry() ? tr( "Pseudo Directory" ) : tr( "Directory" );
 
     setLabelLimited(_ui->dirNameLabel, name );
     _ui->dirTypeLabel->setText( dirType );
+
+    // Subtree information
 
     setLabel( _ui->dirTotalSizeLabel, dir->totalSize() );
     setLabel( _ui->dirItemCountLabel, dir->totalItems() );
@@ -120,6 +126,29 @@ void FileDetailsView::showDetails( DirInfo * dir )
     setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs() );
 
     _ui->dirLatestMTimeLabel->setText( formatTime( dir->latestMtime() ) );
+
+
+    // Directory itself
+
+    // Show or hide fields in the directory block
+
+    bool isDir = ! dir->isDotEntry();
+
+    _ui->dirDirectoryHeading->setVisible( isDir );
+
+    _ui->dirOwnSizeCaption->setVisible( isDir );
+    _ui->dirUserCaption->setVisible( isDir );
+    _ui->dirGroupCaption->setVisible( isDir );
+    _ui->dirPermissionsCaption->setVisible( isDir );
+    _ui->dirMTimeCaption->setVisible( isDir );
+
+    _ui->dirOwnSizeLabel->setVisible( isDir );
+    _ui->dirUserLabel->setVisible( isDir );
+    _ui->dirGroupLabel->setVisible( isDir );
+    _ui->dirPermissionsLabel->setVisible( isDir );
+    _ui->dirMTimeLabel->setVisible( isDir );
+
+    // Set contents
 
     setLabel( _ui->dirOwnSizeLabel, dir->size() );
     _ui->dirUserLabel->setText( dir->userName() );
@@ -151,6 +180,11 @@ void FileDetailsView::showSelectionSummary( const FileInfoSet & selectedItems )
             ++fileCount;
     }
 
+    _ui->selFileCountLabel->setEnabled( fileCount > 0 );
+    _ui->selDirCountLabel->setEnabled( dirCount > 0 );
+    _ui->selSubtreeFileCountLabel->setEnabled( subtreeFileCount > 0 );
+
+    setLabel( _ui->selItemCount,             sel.count()      );
     setLabel( _ui->selTotalSizeLabel,        sel.totalSize()  );
     setLabel( _ui->selFileCountLabel,        fileCount        );
     setLabel( _ui->selDirCountLabel,         dirCount         );
