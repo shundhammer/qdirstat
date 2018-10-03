@@ -228,18 +228,21 @@ void FileDetailsView::showSelectionSummary( const FileInfoSet & selectedItems )
 
 void FileDetailsView::setLabel( QLabel * label, int number )
 {
+    CHECK_PTR( label );
     label->setText( QString::number( number ) );
 }
 
 
 void FileDetailsView::setLabel( QLabel * label, FileSize size )
 {
+    CHECK_PTR( label );
     label->setText( formatSize( size ) );
 }
 
 
 void FileDetailsView::setLabelLimited( QLabel * label, const QString & text )
 {
+    CHECK_PTR( label );
     QString limitedText = limitText( text );
     label->setText( limitedText );
 }
