@@ -52,6 +52,14 @@ namespace QDirStat
          **/
         void setLabelLimit( int newLimit ) { _labelLimit = newLimit; }
 
+        /**
+         * Activate a page of this widget stack. This is similar to
+         * setCurrentWidget(), but it also hides all the other pages to
+         * minimize the screen space requirements: No extra space is reserved
+         * for any of the other pages which might be larger than this one.
+         **/
+        void setCurrentPage( QWidget *page );
+
     public slots:
 
         /**

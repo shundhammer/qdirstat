@@ -37,7 +37,22 @@ FileDetailsView::~FileDetailsView()
 
 void FileDetailsView::clear()
 {
-    setCurrentWidget( _ui->emptyPage );
+    setCurrentPage( _ui->emptyPage );
+}
+
+
+void FileDetailsView::setCurrentPage( QWidget *page )
+{
+    // Simply hiding all other widgets is not enough: The QStackedLayout will
+    // still reserve screen space for the largest widget. The other pages
+    // really need to be removed from the layout. They are still children of
+    // the QStackedWidget, but no longer in the layout.
+
+    while ( count() > 0 )
+        removeWidget( widget( 0 ) );
+
+    addWidget( page );
+    setCurrentWidget( page );
 }
 
 
@@ -82,7 +97,7 @@ void FileDetailsView::showDetails( FileInfo * file )
     {
 	// logDebug() << "Showing file details about " << file << endl;
 
-	setCurrentWidget( _ui->fileDetailsPage );
+	setCurrentPage( _ui->fileDetailsPage );
 	showFileInfo( file );
 	showFilePkgInfo( file );
     }
@@ -139,7 +154,7 @@ void FileDetailsView::showDetails( DirInfo * dir )
 	return;
     }
 
-    setCurrentWidget( _ui->dirDetailsPage );
+    setCurrentPage( _ui->dirDetailsPage );
 
     QString name = dir->isDotEntry() ? FileInfo::dotEntryName() : ( dir->baseName() + "/" );
     QString dirType = dir->isDotEntry() ? tr( "Pseudo Directory" ) : tr( "Directory" );
@@ -205,7 +220,7 @@ void FileDetailsView::showSelectionSummary( const FileInfoSet & selectedItems )
 {
     // logDebug() << "Showing selection summary" << endl;
 
-    setCurrentWidget( _ui->selectionSummaryPage );
+    setCurrentPage( _ui->selectionSummaryPage );
     FileInfoSet sel = selectedItems.normalized();
 
     int fileCount	 = 0;
