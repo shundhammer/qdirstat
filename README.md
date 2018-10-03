@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-02
+Updated: 2018-10-03
 
 
 ## Overview
@@ -68,10 +68,89 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
 **Latest stable release: V1.4**
 
+- 2018-10-03
+
+  - Added a new details view next to the tree view.
+    Of course this can be disabled (Menu _View_ -> uncheck _Show Details Panel_).
+
+    This view shows context-sensitive information about the currently selected
+    item(s); see also the screenshots (still not complete, but you get the idea):
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/details-view-file.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/details-view-file.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/details-view-dir.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/details-view-dir.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/details-view-dot-entry.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/details-view-dot-entry.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/details-view-multi-selection.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/details-view-multi-selection.png)
+
+    What that details view displays so far:
+
+    - File: name, type (file / symlink / block device / character device /
+      FIFO), size, user, group, permissions both as rwxrwxrwx and octal,
+      modification time.
+
+    - Directory: name with appended slash to easier recognize what it is, type
+      (directory), subtree total size, total items, total files, total
+      subdires, latest modification time in the entire subtree; directory own
+      size, user, group, permissions both as rwxrwxrwx and octal, modification
+      time of the directory node itself (that was never shown before).
+
+    - <Files> pseudo directory: Only the subtree information like for a
+      directory, but no user / group / permissions since there is no
+      counterpart for it on the filesystem.
+
+    - Multi-selection: Number of selected items, total size, number of files,
+      number of directories, number of files in any subtrees of those
+      directories. This should show a bit more clearly what is affected if you
+      choose to delete all that selected stuff.
+
+    The view can scroll, so extremely long file names (as are common e.g. below
+    `.git/objects` directories don't blow this view up to take all the screen
+    space away from the tree and the treemap.
+
+
+  - Unified the different size columns into one: No more "Subtree Size" and
+    "Own Size" separately, but now just "Size". The reasoning used to be that
+    there was no way to tell how large the directory node itself was. But that
+    information is now readily available in the details view if anybody is
+    really interested.
+
+  Plans for the immediate future:
+
+  - Add some package manager support, at least for the very common ones on
+    Linux (_deb_ and _rpm_ so far): Find out what package a system file belongs
+    to and show it (on demand or after a short delay) in the details view. This
+    can be done even as non-root with some commands like `dpkg -S` or `rpm
+    -qf`. There will probably be support for adding your own command lines in
+    the config file if you use another package manager.
+
+  - Some simple checks if a file is probably a system file; for example, files
+    below `/usr/bin` (and other very common system directories) and/or files
+    that are owned by a user with a UID < 500 (or so) are very likely system
+    files that should be very careful to delete. The details view should show
+    you that; maybe there should also be a warning in the cleanup actions if
+    any such files are affected by a potentially destructive cleanup action.
+
+  - Easily switchable different layouts for the tree columns and the details
+    view:
+
+    - Minimalistic: Only the bare essentials of columns plus the details view
+
+    - Default: Pretty much what you can see now in the new screenshots
+
+    - Maximum information: All columns, including the new user / group /
+      permissions columns, but (to make space) no details view
+
+    If it makes sense (not sure yet), maybe also user defined views (say, 3 of
+    them?) that you can define to your personal liking. I kinda like how camera
+    makers use that (U1 / U2 on Nikon cameras, C1 / C2 / C3 on Canon and
+    Panasonic). I am not completely sure yet just how useful that is; I'll need
+    to experiment.
+
+
 - 2018-10-02 Implemented a _breadcrumbs_ widget to show the current path and
-  for easier navigation up the directory hierarchy. Of course this can be
-  disabled (Menu _View_ -> uncheck _Show Current Path_). See also the updated
-  screenshot at the top of this page.
+  for easier navigation up the directory hierarchy. See also the new
+  screenshots.
+
+  Of course this can be disabled (Menu _View_ -> uncheck _Show Current Path_).
 
 
 - 2018-09-27 Fixed [GitHub issue #84](https://github.com/shundhammer/qdirstat/issues/84):
