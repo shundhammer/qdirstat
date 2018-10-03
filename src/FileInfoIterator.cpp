@@ -117,7 +117,7 @@ FileInfoSortedBySizeIterator::FileInfoSortedBySizeIterator( FileInfo	  * parent,
 
     std::stable_sort( _sortedChildren.begin(),
 		      _sortedChildren.end(),
-		      FileInfoSorter( TotalSizeCol, sortOrder ) );
+		      FileInfoSorter( SizeCol, sortOrder ) );
 
 }
 

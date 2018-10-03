@@ -26,8 +26,7 @@ namespace QDirStat
 	NameCol	       = 0,	// File / directory name
 	PercentBarCol,		// Graphical percentage bar
 	PercentNumCol,		// Numeric percentage Value
-	TotalSizeCol,		// Total subtree size
-	OwnSizeCol,		// Own size of file / directory
+	SizeCol,		// size (subtree or own size for files)
 	TotalItemsCol,		// Total number of items    in subtree
 	TotalFilesCol,		// Total number of files    in subtree
 	TotalSubDirsCol,	// Total number of subdirs  in subtree
@@ -103,7 +102,7 @@ namespace QDirStat
 	 *   col << QDirStat::NameCol,
 	 *	 << QDirStat::PercentBarCol,
 	 *	 << QDirStat::PercentNumCol,
-	 *	 << QDirStat::TotalSizeCol;
+	 *	 << QDirStat::SizeCol;
 	 *   DataColumns->instance()->setColumns( col );
 	 *
 	 * NOTICE: If a data view is active, use DirTreeModel::setColumns()

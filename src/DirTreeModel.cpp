@@ -371,8 +371,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 		{
 		    case PercentBarCol:
 		    case PercentNumCol:
-		    case TotalSizeCol:
-		    case OwnSizeCol:
+		    case SizeCol:
 		    case TotalItemsCol:
 		    case TotalFilesCol:
 		    case TotalSubDirsCol:
@@ -418,8 +417,7 @@ QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
 			    }
 			}
 		    case PercentNumCol:	      return item->subtreePercent();
-		    case TotalSizeCol:	      return item->totalSize();
-		    case OwnSizeCol:	      return item->size();
+		    case SizeCol:	      return item->totalSize();
 		    case TotalItemsCol:	      return item->totalItems();
 		    case TotalFilesCol:	      return item->totalFiles();
 		    case TotalSubDirsCol:     return item->totalSubDirs();
@@ -456,8 +454,7 @@ QVariant DirTreeModel::headerData( int		   section,
 		case NameCol:		  return tr( "Name"		  );
 		case PercentBarCol:	  return tr( "Subtree Percentage" );
 		case PercentNumCol:	  return tr( "%"		  );
-		case TotalSizeCol:	  return tr( "Subtree Total"	  );
-		case OwnSizeCol:	  return tr( "Own Size"		  );
+		case SizeCol:	          return tr( "Size"	          );
 		case TotalItemsCol:	  return tr( "Items"		  );
 		case TotalFilesCol:	  return tr( "Files"		  );
 		case TotalSubDirsCol:	  return tr( "Subdirs"		  );
@@ -474,8 +471,7 @@ QVariant DirTreeModel::headerData( int		   section,
 	    {
 		case PercentBarCol:
 		case PercentNumCol:
-		case TotalSizeCol:
-		case OwnSizeCol:
+		case SizeCol:
 		case TotalItemsCol:
 		case TotalFilesCol:
 		case TotalSubDirsCol:
@@ -650,8 +646,8 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     {
 	case NameCol:		  return item->name();
 	case PercentBarCol:	  return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
-	case OwnSizeCol:	  return ownSizeColText( item );
 	case PercentNumCol:	  return item == _tree->firstToplevel() ? QVariant() : formatPercent( item->subtreePercent() );
+        case SizeCol:	          return sizeColText( item );
 	case LatestMTimeCol:	  return formatTime( item->latestMtime() );
 	case UserCol:		  return limitedInfo ? QVariant() : item->userName();
 	case GroupCol:		  return limitedInfo ? QVariant() : item->groupName();
@@ -665,7 +661,6 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
 	switch ( col )
 	{
-	    case TotalSizeCol:	  return prefix + formatSize( item->totalSize() );
 	    case TotalItemsCol:	  return prefix + QString( "%1" ).arg( item->totalItems() );
 	    case TotalFilesCol:	  return prefix + QString( "%1" ).arg( item->totalFiles() );
 	    case TotalSubDirsCol:
@@ -680,10 +675,16 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 }
 
 
-QVariant DirTreeModel::ownSizeColText( FileInfo * item ) const
+QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 {
-    if ( item->isDevice() || item->isDotEntry() )
+    if ( item->isDevice() )
 	return QVariant();
+
+    if ( item->isDirInfo() || item->isDotEntry() )
+    {
+        QString prefix = item->readState() == DirAborted ? ">" : "";
+        return prefix + formatSize( item->totalSize() );
+    }
 
     QString text;
 

@@ -32,8 +32,7 @@ bool FileInfoSorter::operator() ( FileInfo * a, FileInfo * b )
 
 	case PercentBarCol:	  return a->subtreePercent()  < b->subtreePercent();
 	case PercentNumCol:	  return a->subtreePercent()  < b->subtreePercent();
-	case TotalSizeCol:	  return a->totalSize()	      < b->totalSize();
-	case OwnSizeCol:	  return a->size()	      < b->size();
+	case SizeCol:             return a->totalSize()	      < b->totalSize();
 	case TotalItemsCol:	  return a->totalItems()      < b->totalItems();
 	case TotalFilesCol:	  return a->totalFiles()      < b->totalFiles();
 	case TotalSubDirsCol:	  return a->totalSubDirs()    < b->totalSubDirs();

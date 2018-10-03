@@ -71,7 +71,7 @@ namespace QDirStat
 	 *   col << QDirStat::NameCol,
 	 *	 << QDirStat::PercentBarCol,
 	 *	 << QDirStat::PercentNumCol,
-	 *	 << QDirStat::TotalSizeCol;
+	 *	 << QDirStat::SizeCol;
 	 *   dirTreeModel->setColumns( col );
 	 */
 	void setColumns( const DataColumnList & columns );
@@ -111,7 +111,7 @@ namespace QDirStat
 	 * d->expandedIndexes is just one example.
 	 *
 	 * OK, I'm fed up with working around this poor design. Let's make our
-	 * own kludge to find out what items are expanded: Check the persisten
+	 * own kludge to find out what items are expanded: Check the persistent
 	 * model indexes: The private class creates a persistend model index
 	 * for each item that is expanded.
 	 **/
@@ -384,10 +384,10 @@ namespace QDirStat
 	 **/
 	QVariant columnIcon( FileInfo * item, int col ) const;
 
-	/**
-	 * Return the text for the own size column for 'item'
-	 **/
-	QVariant ownSizeColText( FileInfo * item ) const;
+        /**
+         * Return the text for the size for 'item'
+         **/
+        QVariant sizeColText( FileInfo * item ) const;
 
 	/**
 	 * Format a percentage value as string if it is non-negative.

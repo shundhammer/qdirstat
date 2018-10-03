@@ -60,8 +60,7 @@ const DataColumnList DataColumns::defaultColumns() const
     columns << NameCol
 	    << PercentBarCol
 	    << PercentNumCol
-	    << TotalSizeCol
-	    << OwnSizeCol
+	    << SizeCol
 	    << TotalItemsCol
 	    << TotalFilesCol
 	    << TotalSubDirsCol
@@ -148,8 +147,7 @@ QString DataColumns::toString( DataColumn col )
 	case NameCol:			return "NameCol";
 	case PercentBarCol:		return "PercentBarCol";
 	case PercentNumCol:		return "PercentNumCol";
-	case TotalSizeCol:		return "TotalSizeCol";
-	case OwnSizeCol:		return "OwnSizeCol";
+	case SizeCol:		        return "SizeCol";
 	case TotalItemsCol:		return "TotalItemsCol";
 	case TotalFilesCol:		return "TotalFilesCol";
 	case TotalSubDirsCol:		return "TotalSubDirsCol";
@@ -172,6 +170,9 @@ QString DataColumns::toString( DataColumn col )
 
 DataColumn DataColumns::fromString( const QString & str )
 {
+    if ( str == "TotalSizeCol" ) // Backwards compatibility for settings
+        return SizeCol;
+
     for ( int i = DataColumnBegin; i <= DataColumnEnd; ++i )
     {
 	DataColumn col = static_cast<DataColumn>( i );
