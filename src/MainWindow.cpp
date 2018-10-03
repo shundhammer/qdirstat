@@ -348,10 +348,13 @@ void MainWindow::readSettings()
     _verboseSelection	  = settings.value( "VerboseSelection"	      , false ).toBool();
     _urlInWindowTitle	  = settings.value( "UrlInWindowTitle"	      , false ).toBool();
 
+    settings.endGroup();
+
+    settings.beginGroup( "MainWindow-Subwindows" );
     QByteArray mainSplitterState = settings.value( "MainSplitter" , QByteArray() ).toByteArray();
     QByteArray topSplitterState	 = settings.value( "TopSplitter"  , QByteArray() ).toByteArray();
-
     settings.endGroup();
+
 
     _ui->actionShowTreemap->setChecked( showTreemap );
     _ui->actionTreemapAsSidePanel->setChecked( treemapOnSide );
@@ -386,12 +389,15 @@ void MainWindow::writeSettings()
     settings.setValue( "ShowDetailsPanel"	 , _ui->actionShowDetailsPanel->isChecked() );
     settings.setValue( "VerboseSelection"	 , _verboseSelection );
     settings.setValue( "UrlInWindowTitle"	 , _urlInWindowTitle );
-    settings.setValue( "MainSplitter"		 , _ui->mainWinSplitter->saveState()  );
-    settings.setValue( "TopSplitter"		 , _ui->topViewsSplitter->saveState() );
 
     settings.endGroup();
 
     writeWindowSettings( this, "MainWindow" );
+
+    settings.beginGroup( "MainWindow-Subwindows" );
+    settings.setValue( "MainSplitter"		 , _ui->mainWinSplitter->saveState()  );
+    settings.setValue( "TopSplitter"		 , _ui->topViewsSplitter->saveState() );
+    settings.endGroup();
 }
 
 
