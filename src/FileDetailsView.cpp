@@ -223,8 +223,13 @@ void FileDetailsView::showSelectionSummary( const FileInfoSet & selectedItems )
 	    ++fileCount;
     }
 
+    _ui->selFileCountCaption->setEnabled( fileCount > 0 );
     _ui->selFileCountLabel->setEnabled( fileCount > 0 );
+
+    _ui->selDirCountCaption->setEnabled( dirCount > 0 );
     _ui->selDirCountLabel->setEnabled( dirCount > 0 );
+
+    _ui->selSubtreeFileCountCaption->setEnabled( subtreeFileCount > 0 );
     _ui->selSubtreeFileCountLabel->setEnabled( subtreeFileCount > 0 );
 
     setLabel( _ui->selItemCount,	     sel.count()      );
