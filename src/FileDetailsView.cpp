@@ -178,10 +178,41 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
 {
     CHECK_PTR( dir );
 
-    setLabel( _ui->dirTotalSizeLabel, dir->totalSize() );
-    setLabel( _ui->dirItemCountLabel, dir->totalItems() );
-    setLabel( _ui->dirFileCountLabel, dir->totalFiles() );
-    setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs() );
+    if ( ! dir->isBusy() &&
+         ( dir->readState() == DirFinished ||
+           dir->readState() == DirCached     ) )
+    {
+        setLabel( _ui->dirTotalSizeLabel, dir->totalSize() );
+        setLabel( _ui->dirItemCountLabel, dir->totalItems() );
+        setLabel( _ui->dirFileCountLabel, dir->totalFiles() );
+        setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs() );
+    }
+    else
+    {
+        QString msg;
+
+        if ( dir->isBusy() )
+        {
+            msg = tr( "[Reading]" );
+        }
+        else
+        {
+            switch ( dir->readState() )
+            {
+                case DirOnRequestOnly: msg = tr( "[Not Read]"   ); break;
+                case DirAborted:       msg = tr( "[Aborted]"    ); break;
+                case DirError:         msg = tr( "[Read Error]" ); break;
+
+                default:
+                    break;
+            }
+        }
+
+        _ui->dirTotalSizeLabel->setText( msg );
+        _ui->dirItemCountLabel->clear();
+        _ui->dirFileCountLabel->clear();
+        _ui->dirSubDirCountLabel->clear();
+    }
 
     _ui->dirLatestMTimeLabel->setText( formatTime( dir->latestMtime() ) );
 }
