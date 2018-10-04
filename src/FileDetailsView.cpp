@@ -9,6 +9,7 @@
 #include "FileDetailsView.h"
 #include "DirInfo.h"
 #include "FileInfoSet.h"
+#include "MimeCategorizer.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -18,7 +19,8 @@ using namespace QDirStat;
 FileDetailsView::FileDetailsView( QWidget * parent ):
     QStackedWidget( parent ),
     _ui( new Ui::FileDetailsView ),
-    _labelLimit( 40 )
+    _labelLimit( 40 ),
+    _mimeCategorizer( 0 )
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this );
@@ -111,8 +113,11 @@ void FileDetailsView::showFileInfo( FileInfo * file )
     setLabelLimited(_ui->fileNameLabel, file->baseName() );
     _ui->fileTypeLabel->setText( formatFileSystemObjectType( file->mode() ) );
 
-    // TODO: Mime type
-    _ui->fileMimeTypeLabel->setText( "" );
+    QString category = mimeCategory( file );
+
+    _ui->fileMimeTypeCaption->setEnabled( ! category.isEmpty() );
+    _ui->fileMimeTypeLabel->setEnabled( ! category.isEmpty() );
+    _ui->fileMimeTypeLabel->setText( category );
 
     setLabel( _ui->fileSizeLabel, file->totalSize() );
     _ui->fileUserLabel->setText( file->userName() );
@@ -293,4 +298,18 @@ QString FileDetailsView::limitText( const QString & longText )
     logDebug() << "Limiting \"" << longText << "\"" << endl;
 
     return limited;
+}
+
+
+QString FileDetailsView::mimeCategory( FileInfo * file )
+{
+    if ( ! _mimeCategorizer )
+    {
+        _mimeCategorizer = new MimeCategorizer( this );
+        CHECK_NEW( _mimeCategorizer );
+    }
+
+    MimeCategory * category = _mimeCategorizer->category( file );
+
+    return category ? category->name() : "";
 }

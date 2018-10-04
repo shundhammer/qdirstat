@@ -16,6 +16,8 @@
 
 namespace QDirStat
 {
+    class MimeCategorizer;
+
     /**
      * Details view for the current selection (file, directory, multiple
      * objects).
@@ -63,7 +65,7 @@ namespace QDirStat
     public slots:
 
         /**
-         * Show an empty page
+         * Show an empty page.
          **/
         void clear();
 
@@ -82,14 +84,19 @@ namespace QDirStat
         void showDetails( FileInfo * fileInfo );
 
         /**
-         * Show details about a directory
+         * Show details about a directory.
          **/
         void showDetails( DirInfo * dirInfo );
 
         /**
-         * Show a summary of the current selection
+         * Show a summary of the current selection.
          **/
         void showSelectionSummary( const FileInfoSet & selectedItems );
+
+        /**
+         * Return the MIME category of a file.
+         **/
+        QString mimeCategory( FileInfo * fileInfo );
 
     protected:
 
@@ -130,6 +137,7 @@ namespace QDirStat
 
         Ui::FileDetailsView * _ui;
         int                   _labelLimit;
+        MimeCategorizer *     _mimeCategorizer;
 
     };  // class FileDetailsView
 }	// namespace QDirStat
