@@ -126,7 +126,8 @@ namespace QDirStat
 
         void showFileInfo( FileInfo * file );
         void showFilePkgInfo( FileInfo * file );
-        void setSystemFileBlockVisibility( bool visible );
+        void setSystemFileWarningVisibility( bool visible );
+        void setFilePkgBlockVisibility( bool visible );
 
         void showSubtreeInfo( DirInfo * dir );
         void showDirNodeInfo( DirInfo * dir );

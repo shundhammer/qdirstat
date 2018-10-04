@@ -339,9 +339,30 @@ QString FileInfo::dotEntryName()
 }
 
 
+bool FileInfo::isCached() const
+{
+    if ( isDirInfo() && ! isDotEntry() )
+        return readState() == DirCached;
+    else
+        return _parent && _parent->readState() == DirCached;
+}
+
+
+bool FileInfo::hasUid() const
+{
+    return ! isCached();
+}
+
+
+bool FileInfo::hasGid() const
+{
+    return ! isCached();
+}
+
+
 QString FileInfo::userName() const
 {
-    if ( _parent && _parent->readState() == DirCached )
+    if ( ! hasUid() )
 	return QString();
 
     struct passwd * pw = getpwuid( uid() );
@@ -355,7 +376,7 @@ QString FileInfo::userName() const
 
 QString FileInfo::groupName() const
 {
-    if ( _parent && _parent->readState() == DirCached )
+    if ( ! hasGid() )
 	return QString();
 
     struct group * grp = getgrgid( gid() );

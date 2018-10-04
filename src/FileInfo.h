@@ -183,7 +183,7 @@ namespace QDirStat
 	 * User ID of the owner.
 	 *
 	 * Notice that this might be undefined if this tree branch was read
-	 * from a cache file.
+	 * from a cache file. Check that with hasUid().
 	 **/
 	uid_t uid() const { return _uid; }
 
@@ -195,11 +195,19 @@ namespace QDirStat
 	 **/
 	QString userName() const;
 
+        /**
+         * Return 'true' if this FileInfo has a UID (user ID).x
+         *
+         * It might not have that information e.g. if it was read from a cache
+         * file.
+         **/
+        bool hasUid() const;
+
 	/**
 	 * Group ID of the owner.
 	 *
 	 * Notice that this might be undefined if this tree branch was read
-	 * from a cache file.
+	 * from a cache file. Check that with hasGid().
 	 **/
 	gid_t gid() const { return _gid; }
 
@@ -210,6 +218,14 @@ namespace QDirStat
 	 * empty string.
 	 **/
 	QString groupName() const;
+
+        /**
+         * Return 'true' if this FileInfo has a GID (group ID).
+         *
+         * It might not have that information e.g. if it was read from a cache
+         * file.
+         **/
+        bool hasGid() const;
 
         /**
          * File permissions formatted like in "ls -l", i.e. "-rwxrwxrwx",
@@ -547,7 +563,8 @@ namespace QDirStat
 	 * know - better be safe than sorry!
 	 *
 	 * This default implementation always returns 'false'. Derived classes
-	 * (in particular, those derived from @ref DirInfo) should overwrite this.
+	 * (in particular, those derived from @ref DirInfo) should overwrite
+	 * this.
 	 **/
 	virtual bool isDirInfo() const { return false; }
 
@@ -569,6 +586,11 @@ namespace QDirStat
 	 * Please not that @ref size() already takes this into account.
 	 **/
 	bool isSparseFile() const { return _isSparseFile; }
+
+        /**
+         * Returns true if this FileInfo was read from a cache file.
+         **/
+        bool isCached() const;
 
 
 	//

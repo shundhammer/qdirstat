@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>244</width>
+    <width>256</width>
     <height>391</height>
    </rect>
   </property>
@@ -14,7 +14,7 @@
    <string>Details</string>
   </property>
   <property name="currentIndex">
-   <number>1</number>
+   <number>0</number>
   </property>
   <widget class="QWidget" name="fileDetailsPage">
    <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -74,21 +74,21 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="fileMimeTypeCaption">
+         <widget class="QLabel" name="fileMimeCategoryCaption">
           <property name="font">
            <font>
             <italic>true</italic>
            </font>
           </property>
           <property name="text">
-           <string>MIME Type:</string>
+           <string>MIME Category:</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLabel" name="fileMimeTypeLabel">
+         <widget class="QLabel" name="fileMimeCategoryLabel">
           <property name="text">
-           <string>Document</string>
+           <string>Documents</string>
           </property>
          </widget>
         </item>

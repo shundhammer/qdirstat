@@ -10,6 +10,7 @@
 #include "DirInfo.h"
 #include "FileInfoSet.h"
 #include "MimeCategorizer.h"
+#include "SystemFileChecker.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -84,7 +85,6 @@ void FileDetailsView::showDetails( const FileInfoSet & selectedItems )
 
 void FileDetailsView::showDetails( FileInfo * file )
 {
-
     if ( ! file )
     {
 	clear();
@@ -115,9 +115,9 @@ void FileDetailsView::showFileInfo( FileInfo * file )
 
     QString category = mimeCategory( file );
 
-    _ui->fileMimeTypeCaption->setEnabled( ! category.isEmpty() );
-    _ui->fileMimeTypeLabel->setEnabled( ! category.isEmpty() );
-    _ui->fileMimeTypeLabel->setText( category );
+    _ui->fileMimeCategoryCaption->setEnabled( ! category.isEmpty() );
+    _ui->fileMimeCategoryLabel->setEnabled( ! category.isEmpty() );
+    _ui->fileMimeCategoryLabel->setText( category );
 
     setLabel( _ui->fileSizeLabel, file->totalSize() );
     _ui->fileUserLabel->setText( file->userName() );
@@ -132,7 +132,8 @@ void FileDetailsView::showFilePkgInfo( FileInfo * file )
 {
     CHECK_PTR( file );
 
-    setSystemFileBlockVisibility( false ); // TO DO
+    setSystemFileWarningVisibility( SystemFileChecker::isSystemFile( file ) );
+    setFilePkgBlockVisibility( false ); // TO DO
 
     // FIXME: TO DO
     // FIXME: TO DO
@@ -140,12 +141,16 @@ void FileDetailsView::showFilePkgInfo( FileInfo * file )
 }
 
 
-void FileDetailsView::setSystemFileBlockVisibility( bool visible )
+void FileDetailsView::setSystemFileWarningVisibility( bool visible )
 {
     _ui->fileSystemFileWarning->setVisible( visible );
+    _ui->fileSpacerCaption2->setVisible( visible );
+}
+
+void FileDetailsView::setFilePkgBlockVisibility( bool visible )
+{
     _ui->filePackageCaption->setVisible( visible );
     _ui->filePackageLabel->setVisible( visible );
-    _ui->fileSpacerCaption2->setVisible( visible );
 }
 
 
