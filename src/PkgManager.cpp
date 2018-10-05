@@ -74,9 +74,8 @@ QString PkgQuery::getOwningPackage( const QString & path )
 
 	if ( ! pkg.isEmpty() )
 	{
-	    logDebug() << pkgManager->name() << ": "
-		       << path << " is owned by package " << pkg
-		       << endl;
+	    logDebug() << pkgManager->name()
+                       << ": Package " << pkg << " owns " << path << endl;
 	    return pkg;
 	}
     }
