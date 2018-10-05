@@ -48,7 +48,7 @@ SOURCES	  = main.cpp			\
 	    Exception.cpp		\
 	    ExcludeRulesConfigPage.cpp	\
 	    ExcludeRules.cpp		\
-            FileDetailsView.cpp         \
+	    FileDetailsView.cpp		\
 	    FileInfo.cpp		\
 	    FileInfoIterator.cpp	\
 	    FileInfoSet.cpp		\
@@ -72,14 +72,15 @@ SOURCES	  = main.cpp			\
 	    MountPoints.cpp		\
 	    OutputWindow.cpp		\
 	    PercentBar.cpp		\
+	    PkgManager.cpp		\
 	    Process.cpp			\
 	    Refresher.cpp		\
 	    SelectionModel.cpp		\
 	    Settings.cpp		\
 	    SettingsHelpers.cpp		\
 	    StdCleanup.cpp		\
-            Subtree.cpp			\
-            SystemFileChecker.cpp       \
+	    Subtree.cpp			\
+	    SystemFileChecker.cpp	\
 	    Trash.cpp			\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
@@ -105,8 +106,8 @@ HEADERS	  =				\
 	    DirTreeView.h		\
 	    Exception.h			\
 	    ExcludeRules.h		\
-            ExcludeRulesConfigPage.h	\
-            FileDetailsView.h           \
+	    ExcludeRulesConfigPage.h	\
+	    FileDetailsView.h		\
 	    FileInfo.h			\
 	    FileInfoIterator.h		\
 	    FileInfoSet.h		\
@@ -129,6 +130,7 @@ HEADERS	  =				\
 	    MountPoints.h		\
 	    OutputWindow.h		\
 	    PercentBar.h		\
+	    PkgManager.h		\
 	    Process.h			\
 	    Qt4Compat.h			\
 	    Refresher.h			\
@@ -138,7 +140,7 @@ HEADERS	  =				\
 	    SignalBlocker.h		\
 	    StdCleanup.h		\
 	    Subtree.h			\
-            SystemFileChecker.h         \
+	    SystemFileChecker.h		\
 	    Trash.h			\
 	    TreemapTile.h		\
 	    TreemapView.h		\
@@ -154,8 +156,8 @@ FORMS	  = main-window.ui		   \
 	    exclude-rules-config-page.ui   \
 	    file-size-stats-window.ui	   \
 	    file-type-stats-window.ui	   \
-            locate-files-window.ui         \
-            file-details-view.ui
+	    locate-files-window.ui	   \
+	    file-details-view.ui
 
 #	    general-config-page.ui
 

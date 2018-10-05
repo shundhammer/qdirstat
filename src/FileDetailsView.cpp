@@ -10,6 +10,7 @@
 #include "DirInfo.h"
 #include "FileInfoSet.h"
 #include "MimeCategorizer.h"
+#include "PkgManager.h"
 #include "SystemFileChecker.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -132,12 +133,16 @@ void FileDetailsView::showFilePkgInfo( FileInfo * file )
 {
     CHECK_PTR( file );
 
-    setSystemFileWarningVisibility( SystemFileChecker::isSystemFile( file ) );
-    setFilePkgBlockVisibility( false ); // TO DO
+    bool isSystemFile = SystemFileChecker::isSystemFile( file );
+    setSystemFileWarningVisibility( isSystemFile );
+    setFilePkgBlockVisibility( isSystemFile ); // TO DO
 
-    // FIXME: TO DO
-    // FIXME: TO DO
-    // FIXME: TO DO
+    if ( isSystemFile )
+    {
+        QString pkg = PkgQuery::owningPkg( file->url() );
+        _ui->filePackageLabel->setText( pkg );
+        _ui->filePackageCaption->setEnabled( ! pkg.isEmpty() );
+    }
 }
 
 
