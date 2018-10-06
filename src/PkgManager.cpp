@@ -19,6 +19,10 @@
 #define CACHE_SIZE		500
 #define CACHE_COST		1
 
+#define VERBOSE_PKG_QUERY       1
+#define VERBOSE_COMMANDS        1
+#define VERBOSE_OUTPUT          0
+
 using namespace QDirStat;
 
 
@@ -109,11 +113,12 @@ QString PkgQuery::getOwningPackage( const QString & path )
 	_cache.insert( path, new QString( pkg ), CACHE_COST );
     }
 
+#if VERBOSE_PKG_QUERY
     if ( pkg.isEmpty() )
-	logDebug() << ( ! foundBy.isEmpty() ? ( foundBy + ": " ) : "" )
-		   << "No package owns " << path << endl;
+	logDebug() << foundBy << ": No package owns " << path << endl;
     else
 	logDebug() << foundBy << ": Package " << pkg << " owns " << path << endl;
+#endif
 
     return pkg;
 }
@@ -128,7 +133,7 @@ bool PkgManager::tryRunCommand( const QString & commandLine,
 
     if ( exitCode != 0 )
     {
-	logDebug() << "Exit code: " << exitCode << " command line: \"" << commandLine << "\"" << endl;
+	// logDebug() << "Exit code: " << exitCode << " command line: \"" << commandLine << "\"" << endl;
 	return false;
     }
 
@@ -180,7 +185,11 @@ QString PkgManager::runCommand( const QString &	    command,
     process.setArguments( args );
     process.setProcessEnvironment( env );
     process.setProcessChannelMode( QProcess::MergedChannels ); // combine stdout and stderr
-    logDebug() << "Running \"" << command << "\" args: " << args << endl;
+
+#if VERBOSE_COMMANDS
+    logDebug() << command << " " << args.join( " " ) << endl;
+#endif
+
     process.start();
     bool success = process.waitForFinished( COMMAND_TIMEOUT_SEC * 1000 );
     QString output = QString::fromUtf8( process.readAll() );
@@ -204,7 +213,9 @@ QString PkgManager::runCommand( const QString &	    command,
 	output = "ERROR: Timeout or crash\n\n" + output;
     }
 
-    // logDebug() << "Output: \n" << output << endl;
+#if VERBOSE_OUTPUT
+    logDebug() << "Output: \n" << output << endl;
+#endif
 
     return output;
 }
@@ -227,7 +238,6 @@ QString DpkgPkgManager::owningPkg( const QString & path )
 	return "";
 
     QString pkg = output.section( ":", 0, 0 );
-    // logDebug() << path << " is owned by pkg " << pkg << endl;
 
     return pkg;
 }
@@ -252,7 +262,6 @@ QString RpmPkgManager::owningPkg( const QString & path )
 	return "";
 
     QString pkg = output;
-    // logDebug() << path << " is owned by pkg " << pkg << endl;
 
     return pkg;
 }
