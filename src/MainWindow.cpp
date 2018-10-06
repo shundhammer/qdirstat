@@ -961,7 +961,9 @@ void MainWindow::selectionChanged()
 void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurrent )
 {
     showSummary();
-    updateFileDetailsView();
+
+    if ( ! oldCurrent )
+        updateFileDetailsView();
 
     if ( _verboseSelection )
     {
