@@ -175,6 +175,8 @@ QString PkgManager::runCommand( const QString &     command,
 }
 
 
+
+
 bool DpkgPkgManager::isActiveOnSystem()
 {
     return tryRunCommand( "/usr/bin/dpkg -S /usr/bin/dpkg", QRegExp( "^dpkg:.*" ) );
@@ -208,13 +210,13 @@ QString RpmPkgManager::owningPkg( const QString & path )
 {
     int exitCode = -1;
     QString output = runCommand( "/usr/bin/rpm",
-                                 QStringList() << "-qf" << "--queryformat" << "'%{NAME}'" << path,
+                                 QStringList() << "-qf" << "--queryformat" << "%{NAME}" << path,
                                  &exitCode );
 
     if ( exitCode != 0 || output.contains( "not owned by any package" ) )
         return "";
 
-    QString pkg = output.section( "\n", 0, 0 );
+    QString pkg = output;
     // logDebug() << path << " is owned by pkg " << pkg << endl;
 
     return pkg;
