@@ -120,12 +120,54 @@ void FileDetailsView::showFileInfo( FileInfo * file )
     _ui->fileMimeCategoryLabel->setEnabled( ! category.isEmpty() );
     _ui->fileMimeCategoryLabel->setText( category );
 
-    setLabel( _ui->fileSizeLabel, file->totalSize() );
+    _ui->fileSizeLabel->setText( fileSizeText( file ) );
     _ui->fileUserLabel->setText( file->userName() );
     _ui->fileGroupLabel->setText( file->groupName() );
     _ui->filePermissionsLabel->setText( formatPermissions( file->mode() ) );
 
     _ui->fileMTimeLabel->setText( formatTime( file->mtime() ) );
+}
+
+
+QString FileDetailsView::fileSizeText( FileInfo * file ) const
+{
+    CHECK_PTR( file );
+
+    // Taken from DirTreeModel::sizeColText()
+
+    QString text;
+
+    if ( file->isFile() && ( file->links() > 1 ) ) // Regular file with multiple links
+    {
+	if ( file->isSparseFile() )
+	{
+	    text = tr( "%1 / %2 Links (allocated: %3)" )
+		.arg( formatSize( file->byteSize() ) )
+		.arg( formatSize( file->links() ) )
+		.arg( formatSize( file->allocatedSize() ) );
+	}
+	else
+	{
+	    text = tr( "%1 / %2 Links" )
+		.arg( formatSize( file->byteSize() ) )
+		.arg( file->links() );
+	}
+    }
+    else // No multiple links or no regular file
+    {
+	if ( file->isSparseFile() )
+	{
+	    text = tr( "%1 (allocated: %2)" )
+		.arg( formatSize( file->byteSize() ) )
+		.arg( formatSize( file->allocatedSize() ) );
+	}
+	else
+	{
+	    text = formatSize( file->size() );
+	}
+    }
+
+    return text;
 }
 
 

@@ -122,6 +122,12 @@ namespace QDirStat
 
         QString limitText( const QString & longText );
 
+        /**
+         * Format a file size suitable for this view, including handling sparse
+         * files and files with multiple hard links.
+         **/
+        QString fileSizeText( FileInfo * file ) const;
+
         // Boilerplate widget setting methods
 
         void showFileInfo( FileInfo * file );
