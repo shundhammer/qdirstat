@@ -56,15 +56,17 @@ namespace QDirStat
 	QString getOwningPackage( const QString & path );
 
 	/**
-	 * Try to add a package manager to the internal list.
+	 * Check if a package manager is available; add it to one of the
+	 * internal lists if it is, or delete it if not.
 	 **/
-	void tryAdd( PkgManager * pkgManager );
+	void checkPkgManager( PkgManager * pkgManager );
 
 
 	// Data members
 
 	static PkgQuery *	 _instance;
 	QList <PkgManager *>	 _pkgManagers;
+	QList <PkgManager *>	 _secondaryPkgManagers;
 	QCache<QString, QString> _cache;
 
     }; // class PkgQuery
@@ -95,21 +97,40 @@ namespace QDirStat
 	virtual QString name() const = 0;
 
 	/**
-	 * Check if this package manager is active on the currently running
-	 * system.
+	 * Check if this package manager is active as a primary package manager
+	 * on the currently running system.
 	 *
 	 * Derived classes are required to implement this.
 	 *
 	 * Remember that a system might support installing 'foreign' package
 	 * managers; for example, on Debian / Ubuntu you can also install the
 	 * 'rpm' package. It is strongly advised to do a more sophisticated
-	 * test than just checking if a certain executable (like /usr/bin/dpkg
-	 * or /usr/bin/rpm) exists.
+	 * test here than just checking if a certain executable (like
+	 * /usr/bin/dpkg or /usr/bin/rpm) exists.
 	 *
 	 * The PkgQuery class will only execute this once at its startup phase,
 	 * so this information does not need to be cached.
 	 **/
-	virtual bool isActiveOnSystem() = 0;
+	virtual bool isPrimaryPkgManager() = 0;
+
+        /**
+         * Check if this package manager is available on the currently running
+         * system, even if just as a secondary package manager. This is a
+         * weaker check than isPrimaryPkgPanager(); just checking if the
+         * relevant binary exists and is executable (use haveCommand() for
+         * that) is sufficient.
+         *
+         * This means that this can be used as a secondary package manager; it
+         * does not manage itself, but maybe it manages some other 'foreign'
+         * packages.
+         *
+         * For example, if you install rpm.deb on Ubuntu, /usr/bin/rpm belongs
+         * to the rpm.deb package, unlike on a SUSE system where it belongs to
+         * the rpm.rpm package. Still, it probably manages some packages
+         * (albeit not itself) on such an Ubuntu system which might be useful
+         * for the purposes of this PkgQuery class.
+         **/
+        virtual bool isAvailable() = 0;
 
 	/**
 	 * Return the owning package of a file or directory with full path
@@ -165,6 +186,11 @@ namespace QDirStat
 			    const QStringList & args,
 			    int *		exitCode_ret ) const;
 
+        /**
+         * Return 'true' if the specified command is available and executable.
+         **/
+        bool haveCommand( const QString & command ) const;
+
     }; // class PkgManager
 
 
@@ -194,7 +220,15 @@ namespace QDirStat
 	 *
 	 * Implemented from PkgManager.
 	 **/
-	virtual bool isActiveOnSystem() Q_DECL_OVERRIDE;
+	virtual bool isPrimaryPkgManager() Q_DECL_OVERRIDE;
+
+	/**
+	 * Check if the dpkg command is available on the currently running
+	 * system.
+	 *
+	 * Implemented from PkgManager.
+	 **/
+        virtual bool isAvailable() Q_DECL_OVERRIDE;
 
 	/**
 	 * Return the owning package of a file or directory with full path
@@ -230,7 +264,15 @@ namespace QDirStat
 	 *
 	 * Implemented from PkgManager.
 	 **/
-	virtual bool isActiveOnSystem() Q_DECL_OVERRIDE;
+	virtual bool isPrimaryPkgManager() Q_DECL_OVERRIDE;
+
+	/**
+	 * Check if the rpm command is available on the currently running
+	 * system.
+	 *
+	 * Implemented from PkgManager.
+	 **/
+        virtual bool isAvailable() Q_DECL_OVERRIDE;
 
 	/**
 	 * Return the owning package of a file or directory with full path

@@ -45,8 +45,11 @@ PkgQuery::PkgQuery()
 {
     _cache.setMaxCost( CACHE_SIZE );
 
-    tryAdd( new DpkgPkgManager() );
-    tryAdd( new RpmPkgManager()	 );
+    checkPkgManager( new DpkgPkgManager() );
+    checkPkgManager( new RpmPkgManager()  );
+
+    _pkgManagers += _secondaryPkgManagers;
+    _secondaryPkgManagers.clear();
 }
 
 
@@ -56,14 +59,19 @@ PkgQuery::~PkgQuery()
 }
 
 
-void PkgQuery::tryAdd( PkgManager * pkgManager )
+void PkgQuery::checkPkgManager( PkgManager * pkgManager )
 {
     CHECK_PTR( pkgManager );
 
-    if ( pkgManager->isActiveOnSystem() )
+    if ( pkgManager->isPrimaryPkgManager() )
     {
-	logInfo() << "Found package manager " << pkgManager->name() << endl;
+	logInfo() << "Found primary package manager " << pkgManager->name() << endl;
 	_pkgManagers << pkgManager;
+    }
+    else if ( pkgManager->isAvailable() )
+    {
+	logInfo() << "Found secondary package manager " << pkgManager->name() << endl;
+        _secondaryPkgManagers << pkgManager;
     }
     else
     {
@@ -96,7 +104,7 @@ QString PkgQuery::getOwningPackage( const QString & path )
     {
 	foreach ( PkgManager * pkgManager, _pkgManagers )
 	{
-	    pkg	    = pkgManager->owningPkg( path );
+	    pkg	= pkgManager->owningPkg( path );
 
 	    if ( ! pkg.isEmpty() )
 	    {
@@ -171,7 +179,7 @@ QString PkgManager::runCommand( const QString &	    command,
     if ( exitCode_ret )
 	*exitCode_ret = -1;
 
-    if ( access( command.toUtf8(), X_OK ) != 0 )
+    if ( ! haveCommand( command ) )
     {
 	logInfo() << "Command not found: \"" << command << "\"" << endl;
 	return "ERROR: Command not found";
@@ -221,11 +229,23 @@ QString PkgManager::runCommand( const QString &	    command,
 }
 
 
+bool PkgManager::haveCommand( const QString & command ) const
+{
+    return access( command.toUtf8(), X_OK ) == 0;
+}
 
 
-bool DpkgPkgManager::isActiveOnSystem()
+
+
+bool DpkgPkgManager::isPrimaryPkgManager()
 {
     return tryRunCommand( "/usr/bin/dpkg -S /usr/bin/dpkg", QRegExp( "^dpkg:.*" ) );
+}
+
+
+bool DpkgPkgManager::isAvailable()
+{
+    return haveCommand( "/usr/bin/dpkg" );
 }
 
 
@@ -245,9 +265,15 @@ QString DpkgPkgManager::owningPkg( const QString & path )
 
 
 
-bool RpmPkgManager::isActiveOnSystem()
+bool RpmPkgManager::isPrimaryPkgManager()
 {
     return tryRunCommand( "/usr/bin/rpm -qf /usr/bin/rpm", QRegExp( "^rpm.*" ) );
+}
+
+
+bool RpmPkgManager::isAvailable()
+{
+    return haveCommand( "/usr/bin/rpm" );
 }
 
 
