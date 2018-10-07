@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-03
+Updated: 2018-10-07
 
 
 ## Overview
@@ -67,6 +67,69 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.4**
+
+- 2018-10-07
+
+  Added better classification of files to the new file details view:
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/details-view-file.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/details-view-file.png)
+
+  - MIME Category - this is the same as in the treemap colors, the same as you
+    can configure in the _MIME Categories_ page in the QDirStat configuration
+    dialog. By default, it shows very broad categories ("Documents, "Music",
+    "Images", "Videos", "Source Files", ...), but you can configure them to
+    much finer detail if you wish.
+
+  - System file or not. This is important if you want to run any cleanup
+    actions in that directory; you probably don't want to mess with system
+    files, even if running QDirStat as root.
+
+    A system file in this context is a file that is either owned by a system
+    user (a UID < 500) or that is located in a known system directory (/usr,
+    /lib, ..., but not /usr/local).
+
+  - For system files, the package that this file belongs to. This gives a
+    surprising amount of insight (it was surprising to me, at least) where all
+    the disk space on the system directories goes to, most importantly some of
+    the big blobs in the tremap.
+
+    As of now, this is supported for Linux systems using a package manager
+    based on "dpkg" or on "rpm":
+
+    - Debian
+
+    - Ubuntu / Kubuntu / Xubuntu / Lubuntu
+
+    - SUSE (openSUSE Tumbleweed or Leap, SLES)
+
+    - Red Hat (Fedora, RHEL)
+
+    ... and dozens more (basically all that are based on any of the above).
+
+    This works by running "dpkg -S" or "rpm -qf" as external commands, so this
+    is a somewhat expensive operation. To keep the user interface responsive,
+    QDirStat now has an "adaptive timer" for updating that information:
+    Normally, the result is shown instantly, but if you click around wildly,
+    there is a timer that is increased or decreased (thus "adaptive") for a
+    delayed update after that timeout (0 / 333 / 1000 / 2500 millisec).
+
+    It can even handle rpm installed as a foreign package manager on a dpkg
+    based system (and the other way round); it tries the primary package
+    manager first, then any others that are also installed.
+
+    Please notice that "apt", "synaptic", "zypper", "pkgkit" and whatnot are
+    all higher level package managers that ultimately use one of the low level
+    ones, so even if you only use a higher level package manager, it still
+    works without restriction.
+
+    If your system does not use "dpkg" or "rpm", those who can are invited to
+    contribute patches for other package managers; it's really simple:
+
+    https://github.com/shundhammer/qdirstat/blob/master/src/PkgManager.cpp#L240
+
+    The API is not final yet; there may be more regexp support in the near
+    future (so it will only get simpler). But you get the idea.
+
 
 - 2018-10-03
 
