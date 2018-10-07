@@ -19,9 +19,9 @@
 #define CACHE_SIZE		500
 #define CACHE_COST		1
 
-#define VERBOSE_PKG_QUERY       1
-#define VERBOSE_COMMANDS        1
-#define VERBOSE_OUTPUT          0
+#define VERBOSE_PKG_QUERY	1
+#define VERBOSE_COMMANDS	1
+#define VERBOSE_OUTPUT		0
 
 using namespace QDirStat;
 
@@ -71,7 +71,7 @@ void PkgQuery::checkPkgManager( PkgManager * pkgManager )
     else if ( pkgManager->isAvailable() )
     {
 	logInfo() << "Found secondary package manager " << pkgManager->name() << endl;
-        _secondaryPkgManagers << pkgManager;
+	_secondaryPkgManagers << pkgManager;
     }
     else
     {
