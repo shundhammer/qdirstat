@@ -60,9 +60,25 @@ namespace QDirStat
         void addDelayStage( int delayMillisec );
 
         /**
+         * Add another period for cooling down.
+         * If nothing is set, the period defaults to 3 sec.
+         **/
+        void addCoolDownPeriod( int coolDownMillisec );
+
+        /**
          * Clear all internal data, including all defined delays and intervals.
          **/
         void clear();
+
+        /**
+         * Return the current delay stage.
+         **/
+        int delayStage() const { return _delayStage; }
+
+        /**
+         * Return the current cool down stage.
+         **/
+        int coolDownStage() const { return _coolDownStage; }
 
     public slots:
 
@@ -90,11 +106,40 @@ namespace QDirStat
          **/
         void deliveryTimeout();
 
+        /**
+         * Timeout for the cool down timer.
+         **/
+        void coolDown();
+
+
     protected:
 
+        /**
+         * Use the next higher cooldown stage if there is any.
+         **/
+        void heatUp();
+
+        /**
+         * Increase the delivery delay.
+         **/
+        void increaseDelay();
+
+        /**
+         * Decrease the delivery delay.
+         **/
+        void decreaseDelay();
+
+
+        // Data members
+
         QVariant _payload;
-        IntList  _delayStages;
+        int      _delayStage;
+        IntList  _delays;
         QTimer   _deliveryTimer;
+
+        int      _coolDownStage;
+        IntList  _coolDownPeriods;
+        QTimer   _coolDownTimer;
 
     }; // class AdaptiveTimer
 

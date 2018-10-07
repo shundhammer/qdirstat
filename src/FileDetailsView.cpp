@@ -28,18 +28,22 @@ FileDetailsView::FileDetailsView( QWidget * parent ):
 {
     CHECK_NEW( _ui );
     CHECK_NEW( _pkgUpdateTimer );
-    
+
     _ui->setupUi( this );
     clear();
 
     _labelLimit = 0; // Unlimited
     // TODO: Read _labelLimit from the config file
 
-    // _pkgUpdateTimer->addDelayStage(    0 );
+    _pkgUpdateTimer->addDelayStage(    0 );
     _pkgUpdateTimer->addDelayStage(  333 ); // millisec
-    _pkgUpdateTimer->addDelayStage( 1000 ); // millisec
-    _pkgUpdateTimer->addDelayStage( 2500 ); // millisec
-    
+    _pkgUpdateTimer->addDelayStage(  800 ); // millisec
+    _pkgUpdateTimer->addDelayStage( 1200 ); // millisec
+
+    _pkgUpdateTimer->addCoolDownPeriod(  500 ); // millisec
+    _pkgUpdateTimer->addCoolDownPeriod( 1500 ); // millisec
+    _pkgUpdateTimer->addCoolDownPeriod( 3000 ); // millisec
+
     connect( _pkgUpdateTimer, SIGNAL( deliverRequest( QVariant ) ),
              this,            SLOT  ( updatePkgInfo ( QVariant ) ) );
 }
@@ -193,7 +197,9 @@ void FileDetailsView::showFilePkgInfo( FileInfo * file )
 
     if ( isSystemFile )
     {
-        _ui->filePackageLabel->setText( "..." );
+        QString delayHint = QString( _pkgUpdateTimer->delayStage(), '.' );
+        _ui->filePackageLabel->setText( delayHint );
+
         _ui->filePackageCaption->setEnabled( true );
         _pkgUpdateTimer->delayedRequest( file->url() );
     }
@@ -203,8 +209,8 @@ void FileDetailsView::showFilePkgInfo( FileInfo * file )
 void FileDetailsView::updatePkgInfo( const QVariant & pathVariant )
 {
     QString path = pathVariant.toString();
-    logDebug() << "Updating pkg info for " << path << endl;
-    
+    // logDebug() << "Updating pkg info for " << path << endl;
+
     QString pkg = PkgQuery::owningPkg( path );
     _ui->filePackageLabel->setText( pkg );
     _ui->filePackageCaption->setEnabled( ! pkg.isEmpty() );
