@@ -7,6 +7,7 @@
  */
 
 #include "FileDetailsView.h"
+#include "AdaptiveTimer.h"
 #include "DirInfo.h"
 #include "FileInfoSet.h"
 #include "MimeCategorizer.h"
@@ -21,15 +22,26 @@ using namespace QDirStat;
 FileDetailsView::FileDetailsView( QWidget * parent ):
     QStackedWidget( parent ),
     _ui( new Ui::FileDetailsView ),
+    _pkgUpdateTimer( new AdaptiveTimer( this ) ),
     _labelLimit( 40 ),
     _mimeCategorizer( 0 )
 {
     CHECK_NEW( _ui );
+    CHECK_NEW( _pkgUpdateTimer );
+    
     _ui->setupUi( this );
     clear();
 
     _labelLimit = 0; // Unlimited
     // TODO: Read _labelLimit from the config file
+
+    // _pkgUpdateTimer->addDelayStage(    0 );
+    _pkgUpdateTimer->addDelayStage(  333 ); // millisec
+    _pkgUpdateTimer->addDelayStage( 1000 ); // millisec
+    _pkgUpdateTimer->addDelayStage( 2500 ); // millisec
+    
+    connect( _pkgUpdateTimer, SIGNAL( deliverRequest( QVariant ) ),
+             this,            SLOT  ( updatePkgInfo ( QVariant ) ) );
 }
 
 
@@ -181,10 +193,21 @@ void FileDetailsView::showFilePkgInfo( FileInfo * file )
 
     if ( isSystemFile )
     {
-        QString pkg = PkgQuery::owningPkg( file->url() );
-        _ui->filePackageLabel->setText( pkg );
-        _ui->filePackageCaption->setEnabled( ! pkg.isEmpty() );
+        _ui->filePackageLabel->setText( "..." );
+        _ui->filePackageCaption->setEnabled( true );
+        _pkgUpdateTimer->delayedRequest( file->url() );
     }
+}
+
+
+void FileDetailsView::updatePkgInfo( const QVariant & pathVariant )
+{
+    QString path = pathVariant.toString();
+    logDebug() << "Updating pkg info for " << path << endl;
+    
+    QString pkg = PkgQuery::owningPkg( path );
+    _ui->filePackageLabel->setText( pkg );
+    _ui->filePackageCaption->setEnabled( ! pkg.isEmpty() );
 }
 
 

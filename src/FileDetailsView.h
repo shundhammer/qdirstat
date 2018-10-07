@@ -17,6 +17,7 @@
 namespace QDirStat
 {
     class MimeCategorizer;
+    class AdaptiveTimer;
 
     /**
      * Details view for the current selection (file, directory, multiple
@@ -98,6 +99,13 @@ namespace QDirStat
          **/
         QString mimeCategory( FileInfo * fileInfo );
 
+    protected slots:
+
+        /**
+         * Update package information via the AdaptiveTimer.
+         **/
+        void updatePkgInfo( const QVariant & path );
+        
     protected:
 
         /**
@@ -143,6 +151,7 @@ namespace QDirStat
         // Data members
 
         Ui::FileDetailsView * _ui;
+        AdaptiveTimer *       _pkgUpdateTimer;
         int                   _labelLimit;
         MimeCategorizer *     _mimeCategorizer;
 

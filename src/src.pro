@@ -29,7 +29,8 @@ INSTALLS	+= TARGET desktop icons
 
 SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
-	    BucketsTableModel.cpp	\
+            AdaptiveTimer.cpp           \
+            BucketsTableModel.cpp	\
 	    BreadcrumbNavigator.cpp	\
 	    Cleanup.cpp			\
 	    CleanupCollection.cpp	\
@@ -88,6 +89,7 @@ SOURCES	  = main.cpp			\
 
 HEADERS	  =				\
 	    ActionManager.h		\
+            AdaptiveTimer.h             \
 	    BucketsTableModel.h		\
 	    BreadcrumbNavigator.h	\
 	    Cleanup.h			\
