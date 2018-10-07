@@ -114,7 +114,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     delayed update after that timeout (0 / 333 / 1000 / 2500 millisec right
     now).
 
-    It can even handle rpm installed as a foreign package manager on a _dpkg_
+    It can even handle _rpm_ installed as a foreign package manager on a _dpkg_
     based system (and the other way round); it tries the primary package
     manager first, then any others that are also installed.
 
@@ -217,7 +217,6 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     Panasonic). I am not completely sure yet just how useful that is; I'll need
     to experiment.
 
---------------------------------------------------
 
 - 2018-10-02 Implemented a _breadcrumbs_ widget to show the current path and
   for easier navigation up the directory hierarchy. See also the new
