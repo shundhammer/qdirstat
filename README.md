@@ -94,7 +94,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     the big blobs in the tremap.
 
     As of now, this is supported for Linux systems using a package manager
-    based on "dpkg" or on "rpm":
+    based on _dpkg_ or on _rpm_:
 
     - Debian
 
@@ -106,23 +106,24 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
     ... and dozens more (basically all that are based on any of the above).
 
-    This works by running "dpkg -S" or "rpm -qf" as external commands, so this
+    This works by running `dpkg -S` or `rpm -qf` as external commands, so this
     is a somewhat expensive operation. To keep the user interface responsive,
     QDirStat now has an "adaptive timer" for updating that information:
     Normally, the result is shown instantly, but if you click around wildly,
     there is a timer that is increased or decreased (thus "adaptive") for a
-    delayed update after that timeout (0 / 333 / 1000 / 2500 millisec).
+    delayed update after that timeout (0 / 333 / 1000 / 2500 millisec right
+    now).
 
-    It can even handle rpm installed as a foreign package manager on a dpkg
+    It can even handle rpm installed as a foreign package manager on a _dpkg_
     based system (and the other way round); it tries the primary package
     manager first, then any others that are also installed.
 
-    Please notice that "apt", "synaptic", "zypper", "pkgkit" and whatnot are
+    Please notice that _apt_, _synaptic_, _zypper_, _pkgkit_ and whatnot are
     all higher level package managers that ultimately use one of the low level
     ones, so even if you only use a higher level package manager, it still
     works without restriction.
 
-    If your system does not use "dpkg" or "rpm", those who can are invited to
+    If your system does not use _dpkg_ or _rpm_, those who can are invited to
     contribute patches for other package managers; it's really simple:
 
     https://github.com/shundhammer/qdirstat/blob/master/src/PkgManager.cpp#L240
@@ -130,6 +131,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     The API is not final yet; there may be more regexp support in the near
     future (so it will only get simpler). But you get the idea.
 
+--------------------------------------------------
 
 - 2018-10-03
 
@@ -215,6 +217,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     Panasonic). I am not completely sure yet just how useful that is; I'll need
     to experiment.
 
+--------------------------------------------------
 
 - 2018-10-02 Implemented a _breadcrumbs_ widget to show the current path and
   for easier navigation up the directory hierarchy. See also the new
@@ -222,6 +225,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
   Of course this can be disabled (Menu _View_ -> uncheck _Show Current Path_).
 
+--------------------------------------------------
 
 - 2018-09-27 Fixed [GitHub issue #84](https://github.com/shundhammer/qdirstat/issues/84):
   Crash if picking up a cache file in the starting directory (subtree root).
