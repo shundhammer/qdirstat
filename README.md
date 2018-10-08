@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-07
+Updated: 2018-10-08
 
 
 ## Overview
@@ -154,7 +154,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
     - Directory: name with appended slash to easier recognize what it is, type
       (directory), subtree total size, total items, total files, total
-      subdires, latest modification time in the entire subtree; directory own
+      subdirs, latest modification time in the entire subtree; directory own
       size, user, group, permissions both as rwxrwxrwx and octal, modification
       time of the directory node itself (that was never shown before).
 
