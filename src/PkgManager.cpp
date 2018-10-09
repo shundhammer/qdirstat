@@ -268,20 +268,24 @@ QString DpkgPkgManager::owningPkg( const QString & path )
 
 bool RpmPkgManager::isPrimaryPkgManager()
 {
-    return tryRunCommand( "/usr/bin/rpm -qf /usr/bin/rpm", QRegExp( "^rpm.*" ) );
+    // Using /bin/rpm, not /usr/bin/rpm because older systems only have
+    // /bin/rpm, but they all have at least a symlink /bin/rpm -> /usr/bin/rpm
+    // so it's safe to use /bin/rpm for both old and new systems.
+
+    return tryRunCommand( "/bin/rpm -qf /bin/rpm", QRegExp( "^rpm.*" ) );
 }
 
 
 bool RpmPkgManager::isAvailable()
 {
-    return haveCommand( "/usr/bin/rpm" );
+    return haveCommand( "/bin/rpm" );
 }
 
 
 QString RpmPkgManager::owningPkg( const QString & path )
 {
     int exitCode = -1;
-    QString output = runCommand( "/usr/bin/rpm",
+    QString output = runCommand( "/bin/rpm",
 				 QStringList() << "-qf" << "--queryformat" << "%{NAME}" << path,
 				 &exitCode );
 
