@@ -13,9 +13,11 @@
 
 
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-#include <qtextdocument.h>
-#  define setSectionResizeMode setResizeMode
-#  define sectionResizeMode    resizeMode
+
+#include <qtextdocument.h> // Qt::escape()
+
+#define setSectionResizeMode setResizeMode
+#define sectionResizeMode    resizeMode
 
 inline QString qHtmlEscape( const QString & text )
 {
