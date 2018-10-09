@@ -11,6 +11,7 @@
 #include <QProcess>
 
 #include "PkgManager.h"
+#include "Process.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -188,7 +189,7 @@ QString PkgManager::runCommand( const QString &	    command,
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     env.insert( "LANG", "C" ); // Prevent output in translated languages
 
-    QProcess process;
+    Process process;
     process.setProgram( command );
     process.setArguments( args );
     process.setProcessEnvironment( env );
