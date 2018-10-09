@@ -679,10 +679,15 @@ void MainWindow::updateFileDetailsView()
     {
 	FileInfoSet sel = _selectionModel->selectedItems();
 
-	if ( sel.count() <= 1 )
+	if ( sel.isEmpty() )
 	    _ui->fileDetailsView->showDetails( _selectionModel->currentItem() );
 	else
-	    _ui->fileDetailsView->showDetails( sel );
+        {
+            if ( sel.count() == 1 )
+                _ui->fileDetailsView->showDetails( sel.first() );
+            else
+                _ui->fileDetailsView->showDetails( sel );
+        }
     }
 }
 
