@@ -13,7 +13,8 @@
 
 
 #define DEFAULT_COOLDOWN_PERIOD 3000 // millisec
-#define VERBOSE_STAGES          1
+#define VERBOSE_STAGES          0
+#define VERBOSE_DELAY           1
 
 
 using namespace QDirStat;
@@ -101,7 +102,7 @@ void AdaptiveTimer::increaseDelay()
     {
         int delay = _delays[ ++_delayStage ];
 
-#if VERBOSE_STAGES
+#if VERBOSE_DELAY
         logDebug() << "Increasing delay to stage " << _delayStage
                    << ": " << delay << " millisec"
                    << endl;
@@ -120,7 +121,7 @@ void AdaptiveTimer::decreaseDelay()
     {
         int delay = _delays[ --_delayStage ];
 
-#if VERBOSE_STAGES
+#if VERBOSE_DELAY
         logDebug() << "Decreasing delay to stage " << _delayStage
                    << ": " << delay << " millisec"
                    << endl;
