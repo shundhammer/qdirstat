@@ -759,7 +759,8 @@ void DirTreeModel::readJobFinished( DirInfo * dir )
 
     if ( anyAncestorBusy( dir ) )
     {
-	logDebug() << "Ancestor busy - ignoring readJobFinished for " << dir << endl;
+        if  ( dir && ! dir->isMountPoint() )
+            logDebug() << "Ancestor busy - ignoring readJobFinished for " << dir << endl;
     }
     else
     {
