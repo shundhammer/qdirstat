@@ -495,8 +495,10 @@ void MainWindow::readingFinished()
     logInfo() << endl;
 
     idleDisplay();
-    _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1")
-				 .arg( formatTime( _stopWatch.elapsed() ) ) );
+
+    QString elapsedTime = formatTime( _stopWatch.elapsed() );
+    _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1").arg( elapsedTime ) );
+    logInfo() << "Reading finished after " << elapsedTime << endl;
 
     // Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );
 }
@@ -507,8 +509,9 @@ void MainWindow::readingAborted()
     logInfo() << endl;
 
     idleDisplay();
-    _ui->statusBar->showMessage( tr( "Aborted. Elapsed time: %1")
-				 .arg( formatTime( _stopWatch.elapsed() ) ) );
+    QString elapsedTime = formatTime( _stopWatch.elapsed() );
+    _ui->statusBar->showMessage( tr( "Aborted. Elapsed time: %1").arg( elapsedTime ) );
+    logInfo() << "Reading aborted after " << elapsedTime << endl;
 }
 
 
