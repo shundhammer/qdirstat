@@ -73,7 +73,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
   - QDirStat now shows `[root]` in the window title if it is running with root
     privileges.
 
-  - If invoked with 'sudo', now restoring the owner of the config files to the
+  - If invoked with `sudo`, now restoring the owner of the config files to the
     real user (if possible). Previously they were owned by _root_ which meant
     they were no longer writable by the real user, silently discarding all
     subsequent changes to the configuration (including window sizes etc).
