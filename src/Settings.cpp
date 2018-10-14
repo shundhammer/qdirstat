@@ -13,6 +13,7 @@
 // STUFF before you become a general PITA to the working software developers!
 #define DONT_DEPRECATE_STRERROR
 #include <unistd.h> // chown()
+#include <errno.h>
 
 #include <QCoreApplication>
 
