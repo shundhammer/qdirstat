@@ -87,21 +87,21 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     behaviour: **I REFUSE TO USE THAT SHIT** until you get your stuff sorted
     out. Seriously, not only using 1970s C string buffers, but also in one
     version modifying the buffer that I gave you, in the other returning a char
-    pointer that I am to use and returning an int.
+    pointer that I am to use and returning an int._
 
-    What were you thinking? Are you sometimes thinking? Do you seriously
+    _What were you thinking? Are you sometimes thinking? Do you seriously
     believe application programmers want to play your silly games? Fix your API
     **before** you deprecate the one version that we used for 30+ years and
-    that still works for 99.8% of all people!
+    that still works for 99.8% of all people!_
 
-    Concerns about thread safety - okay, but then, why does such a function
+    _Concerns about thread safety - okay, but then, why does such a function
     even need anything else than return a pointer to a constant static string
     which would not be concerned by thread issues? And if you feel you must
     replace such a function, by all means **talk** to each other before you get
     into a replacing frenzy which now saddled us with **TWO** completely
-    incompatible versions of the same thing!
+    incompatible versions of the same thing!_
 
-    I am no longer willing to waste life time and life energy with stuff like
+    _I am no longer willing to waste life time and life energy with stuff like
     that. Seriously. Get it right or get out of my life!_
 
 
