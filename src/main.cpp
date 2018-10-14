@@ -12,7 +12,9 @@
 #include <QApplication>
 #include "MainWindow.h"
 #include "DirTreeModel.h"
+#include "Settings.h"
 #include "Logger.h"
+#include "Exception.h"
 #include "Version.h"
 
 
@@ -88,14 +90,15 @@ int main( int argc, char *argv[] )
     QStringList argList = QCoreApplication::arguments();
     argList.removeFirst(); // Remove program name
 
-    MainWindow mainWin;
-    mainWin.show();
+    MainWindow * mainWin = new MainWindow();
+    CHECK_PTR( mainWin );
+    mainWin->show();
 
     if ( commandLineSwitch( "--slow-update", "-s", argList ) )
-	mainWin.dirTreeModel()->setSlowUpdate();
+	mainWin->dirTreeModel()->setSlowUpdate();
 
     if ( argList.isEmpty() )
-	mainWin.askOpenUrl();
+	mainWin->askOpenUrl();
     else
     {
 	QString arg = argList.first();
@@ -106,7 +109,7 @@ int main( int argc, char *argv[] )
 	    {
 		QString cacheFileName = argList.at(1);
 		logDebug() << "Reading cache file " << cacheFileName << endl;
-		mainWin.readCache( cacheFileName );
+		mainWin->readCache( cacheFileName );
 	    }
 	    else
 		usage( argList );
@@ -117,12 +120,20 @@ int main( int argc, char *argv[] )
 	    usage( argList );
 	else if ( ! arg.isEmpty() )
 	{
-	    mainWin.openUrl( arg );
+	    mainWin->openUrl( arg );
 	}
     }
 
     if ( ! fatal )
 	app.exec();
+
+    delete mainWin;
+
+    // If running with 'sudo', this would leave all config files behind owned
+    // by root which means that the real user can't write to those files
+    // anymore if once invoking QDirStat with 'sudo'. Fixing the file owner for
+    // our config files if possible.
+    QDirStat::Settings::fixFileOwners();
 
     return fatal ? 1 : 0;
 }

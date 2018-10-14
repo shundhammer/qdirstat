@@ -11,6 +11,7 @@
 
 #include <QSettings>
 #include <QStringList>
+#include <QSet>
 
 
 namespace QDirStat
@@ -75,8 +76,20 @@ namespace QDirStat
 	 **/
 	void ensureToplevel();
 
+        /**
+         * Set the owner of all used config files to the correct one if this
+         * program was started with 'sudo'.
+         **/
+        static void fixFileOwners();
+
 
     protected:
+
+        /**
+         * Change the owner of the config file to the user in the $SUDO_UID /
+         * $SUDO_GID environment variables (if set).
+         **/
+        static void fixFileOwner( const QString & filename );
 
 	/**
 	 * Move all settings groups starting with 'groupPrefix' from settings
@@ -89,6 +102,8 @@ namespace QDirStat
 
 	QString _name;
 	QString _groupPrefix;
+
+        static QSet<QString> _usedConfigFiles;
     };
 
 
