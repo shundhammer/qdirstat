@@ -70,7 +70,39 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
 - 2018-10-14
 
-  QDirStat now shows in the window title if it is running with root privileges.
+  - QDirStat now shows `[root]` in the window title if it is running with root
+    privileges.
+
+  - If invoked with 'sudo', now restoring the owner of the config files to the
+    real user (if possible). Previously they were owned by _root_ which meant
+    they were no longer writable by the real user, silently discarding all
+    subsequent changes to the configuration (including window sizes etc).
+
+    When I fixed that, I needed to log system errors that might appear, but
+    that's no longer so easy today...
+
+    _A word to the geniusses who deprecated the old `strerror()` Glibc function
+    and came up with no less than 3 (!) replacements, two of which share the
+    same name `strerror_r()`, but have different return values and different
+    behaviour: **I REFUSE TO USE THAT SHIT** until you get your stuff sorted
+    out. Seriously, not only using 1970s C string buffers, but also in one
+    version modifying the buffer that I gave you, in the other returning a char
+    pointer that I am to use and returning an int.
+
+    What were you thinking? Are you sometimes thinking? Do you seriously
+    believe application programmers want to play your silly games? Fix your API
+    **before** you deprecate the one version that we used for 30+ years and
+    that still works for 99.8% of all people!
+
+    Concerns about thread safety - okay, but then, why does such a function
+    even need anything else than return a pointer to a constant static string
+    which would not be concerned by thread issues? And if you feel you must
+    replace such a function, by all means **talk** to each other before you get
+    into a replacing frenzy which now saddled us with **TWO** completely
+    incompatible versions of the same thing!
+
+    I am no longer willing to waste life time and life energy with stuff like
+    that. Seriously. Get it right or get out of my life!_
 
 
 - 2018-10-07
