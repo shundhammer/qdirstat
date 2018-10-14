@@ -79,7 +79,7 @@ namespace QDirStat
     protected:
 
 	/**
-	 * Mmove all settings groups starting with 'groupPrefix' from settings
+	 * Move all settings groups starting with 'groupPrefix' from settings
 	 * object 'from' to settings object 'to'.
 	 **/
 	void moveGroups( const QString & groupPrefix, Settings * from, Settings * to );
