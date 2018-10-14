@@ -7,7 +7,7 @@
  */
 
 
-#include <unistd.h>	// access()
+#include <unistd.h>	// access(), getuid(), geteduid()
 
 #include "SysUtil.h"
 #include "Process.h"
@@ -122,4 +122,22 @@ QString SysUtil::runCommand( const QString &	 command,
 bool SysUtil::haveCommand( const QString & command )
 {
     return access( command.toUtf8(), X_OK ) == 0;
+}
+
+
+bool SysUtil::runningAsRoot()
+{
+    return geteuid() == 0;
+}
+
+
+bool SysUtil::runningWithSudo()
+{
+    return ! qgetenv( "SUDO_USER" ).isEmpty();
+}
+
+
+bool SysUtil::runningAsTrueRoot()
+{
+    return runningAsRoot() && ! runningWithSudo();
 }

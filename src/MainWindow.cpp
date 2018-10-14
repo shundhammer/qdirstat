@@ -38,6 +38,7 @@
 #include "SelectionModel.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
+#include "SysUtil.h"
 #include "Trash.h"
 #include "Version.h"
 
@@ -517,16 +518,23 @@ void MainWindow::readingAborted()
 
 void MainWindow::openUrl( const QString & url )
 {
+    QString windowTitle = "QDirStat";
+
+    if ( SysUtil::runningAsRoot() )
+	windowTitle += tr( " [root]" );
+
     try
     {
 	_dirTreeModel->openUrl( url );
 
 	if ( _urlInWindowTitle )
-	    setWindowTitle( "QDirStat  " + url );
+	    windowTitle += " " + url;
+
+	setWindowTitle( windowTitle );
     }
     catch ( const SysCallFailedException & ex )
     {
-	setWindowTitle( "QDirStat" );
+	setWindowTitle( windowTitle );
 	CAUGHT( ex );
 
 	QMessageBox errorPopup( QMessageBox::Warning,	// icon
@@ -682,12 +690,12 @@ void MainWindow::updateFileDetailsView()
 	if ( sel.isEmpty() )
 	    _ui->fileDetailsView->showDetails( _selectionModel->currentItem() );
 	else
-        {
-            if ( sel.count() == 1 )
-                _ui->fileDetailsView->showDetails( sel.first() );
-            else
-                _ui->fileDetailsView->showDetails( sel );
-        }
+	{
+	    if ( sel.count() == 1 )
+		_ui->fileDetailsView->showDetails( sel.first() );
+	    else
+		_ui->fileDetailsView->showDetails( sel );
+	}
     }
 }
 
@@ -971,7 +979,7 @@ void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurren
     showSummary();
 
     if ( ! oldCurrent )
-        updateFileDetailsView();
+	updateFileDetailsView();
 
     if ( _verboseSelection )
     {

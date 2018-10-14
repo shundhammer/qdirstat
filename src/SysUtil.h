@@ -96,6 +96,23 @@ namespace QDirStat
 	 **/
 	bool haveCommand( const QString & command );
 
+        /**
+         * Check if this program runs with root privileges, i.e. with effective
+         * user ID 0.
+         **/
+        bool runningAsRoot();
+
+        /**
+         * Check if this program runs with 'sudo'.
+         **/
+        bool runningWithSudo();
+
+        /**
+         * Check if this program runs as the real root user, with root
+         * permissions, but not with 'sudo'.
+         **/
+        bool runningAsTrueRoot();
+
     }	// namespace SysUtil
 }	// namespace QDirStat
 
