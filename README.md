@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-08
+Updated: 2018-10-14
 
 
 ## Overview
@@ -67,6 +67,11 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.4**
+
+- 2018-10-14
+
+  QDirStat now shows in the window title if it is running with root privileges.
+
 
 - 2018-10-07
 
