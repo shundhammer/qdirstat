@@ -7,8 +7,6 @@
  */
 
 
-#include <unistd.h>	// getuid()
-#include <sys/types.h>	// uid_t
 #include <iostream>	// cerr
 
 #include <QApplication>
