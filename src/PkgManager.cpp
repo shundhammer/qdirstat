@@ -7,24 +7,26 @@
  */
 
 
-#include <unistd.h>	// access()
-#include <QProcess>
-
 #include "PkgManager.h"
-#include "Process.h"
 #include "Logger.h"
 #include "Exception.h"
 
+#define LOG_COMMANDS	true
+#define LOG_OUTPUT	false
+#include "SysUtil.h"
 
-#define COMMAND_TIMEOUT_SEC	5
+
 #define CACHE_SIZE		500
 #define CACHE_COST		1
 
 #define VERBOSE_PKG_QUERY	1
-#define VERBOSE_COMMANDS	1
-#define VERBOSE_OUTPUT		0
+
 
 using namespace QDirStat;
+
+using SysUtil::runCommand;
+using SysUtil::tryRunCommand;
+using SysUtil::haveCommand;
 
 
 PkgQuery * PkgQuery::_instance = 0;
@@ -105,7 +107,7 @@ QString PkgQuery::getOwningPackage( const QString & path )
     {
 	foreach ( PkgManager * pkgManager, _pkgManagers )
 	{
-	    pkg	= pkgManager->owningPkg( path );
+	    pkg = pkgManager->owningPkg( path );
 
 	    if ( ! pkg.isEmpty() )
 	    {
@@ -130,109 +132,6 @@ QString PkgQuery::getOwningPackage( const QString & path )
 #endif
 
     return pkg;
-}
-
-
-
-bool PkgManager::tryRunCommand( const QString & commandLine,
-				const QRegExp & expectedResult ) const
-{
-    int exitCode = -1;
-    QString output = runCommand( commandLine, &exitCode );
-
-    if ( exitCode != 0 )
-    {
-	// logDebug() << "Exit code: " << exitCode << " command line: \"" << commandLine << "\"" << endl;
-	return false;
-    }
-
-    bool expected = expectedResult.exactMatch( output );
-    // logDebug() << "Expected: " << expected << endl;
-
-    return expected;
-}
-
-
-QString PkgManager::runCommand( const QString & commandLine,
-				int *		exitCode_ret ) const
-{
-    if ( exitCode_ret )
-	*exitCode_ret = -1;
-
-    QStringList args = commandLine.split( QRegExp( "\\s+" ) );
-
-    if ( args.size() < 1 )
-    {
-	logError() << "Bad command line: \"" << commandLine << "\"" << endl;
-	return "ERROR: Bad command line";
-    }
-
-    QString command = args.takeFirst();
-
-    return runCommand( command, args, exitCode_ret );
-}
-
-
-QString PkgManager::runCommand( const QString &	    command,
-				const QStringList & args,
-				int *		    exitCode_ret ) const
-{
-    if ( exitCode_ret )
-	*exitCode_ret = -1;
-
-    if ( ! haveCommand( command ) )
-    {
-	logInfo() << "Command not found: \"" << command << "\"" << endl;
-	return "ERROR: Command not found";
-    }
-
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.insert( "LANG", "C" ); // Prevent output in translated languages
-
-    Process process;
-    process.setProgram( command );
-    process.setArguments( args );
-    process.setProcessEnvironment( env );
-    process.setProcessChannelMode( QProcess::MergedChannels ); // combine stdout and stderr
-
-#if VERBOSE_COMMANDS
-    logDebug() << command << " " << args.join( " " ) << endl;
-#endif
-
-    process.start();
-    bool success = process.waitForFinished( COMMAND_TIMEOUT_SEC * 1000 );
-    QString output = QString::fromUtf8( process.readAll() );
-
-    if ( success )
-    {
-	if ( process.exitStatus() == QProcess::NormalExit )
-	{
-	    if ( exitCode_ret )
-		*exitCode_ret = process.exitCode();
-	}
-	else
-	{
-	    logError() << "Command crashed: \"" << command << "\" args: " << args << endl;
-	    output = "ERROR: Command crashed\n\n" + output;
-	}
-    }
-    else
-    {
-	logError() << "Timeout or crash: \"" << command << "\" args: " << args << endl;
-	output = "ERROR: Timeout or crash\n\n" + output;
-    }
-
-#if VERBOSE_OUTPUT
-    logDebug() << "Output: \n" << output << endl;
-#endif
-
-    return output;
-}
-
-
-bool PkgManager::haveCommand( const QString & command ) const
-{
-    return access( command.toUtf8(), X_OK ) == 0;
 }
 
 

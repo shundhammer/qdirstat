@@ -82,6 +82,7 @@ SOURCES	  = main.cpp			\
 	    StdCleanup.cpp		\
 	    Subtree.cpp			\
 	    SystemFileChecker.cpp	\
+	    SysUtil.cpp                 \
 	    Trash.cpp			\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
@@ -143,6 +144,7 @@ HEADERS	  =				\
 	    StdCleanup.h		\
 	    Subtree.h			\
 	    SystemFileChecker.h		\
+	    SysUtil.h                   \
 	    Trash.h			\
 	    TreemapTile.h		\
 	    TreemapView.h		\

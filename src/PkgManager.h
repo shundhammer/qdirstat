@@ -113,24 +113,24 @@ namespace QDirStat
 	 **/
 	virtual bool isPrimaryPkgManager() = 0;
 
-        /**
-         * Check if this package manager is available on the currently running
-         * system, even if just as a secondary package manager. This is a
-         * weaker check than isPrimaryPkgPanager(); just checking if the
-         * relevant binary exists and is executable (use haveCommand() for
-         * that) is sufficient.
-         *
-         * This means that this can be used as a secondary package manager; it
-         * does not manage itself, but maybe it manages some other 'foreign'
-         * packages.
-         *
-         * For example, if you install rpm.deb on Ubuntu, /usr/bin/rpm belongs
-         * to the rpm.deb package, unlike on a SUSE system where it belongs to
-         * the rpm.rpm package. Still, it probably manages some packages
-         * (albeit not itself) on such an Ubuntu system which might be useful
-         * for the purposes of this PkgQuery class.
-         **/
-        virtual bool isAvailable() = 0;
+	/**
+	 * Check if this package manager is available on the currently running
+	 * system, even if just as a secondary package manager. This is a
+	 * weaker check than isPrimaryPkgPanager(); just checking if the
+	 * relevant binary exists and is executable (use haveCommand() for
+	 * that) is sufficient.
+	 *
+	 * This means that this can be used as a secondary package manager; it
+	 * does not manage itself, but maybe it manages some other 'foreign'
+	 * packages.
+	 *
+	 * For example, if you install rpm.deb on Ubuntu, /usr/bin/rpm belongs
+	 * to the rpm.deb package, unlike on a SUSE system where it belongs to
+	 * the rpm.rpm package. Still, it probably manages some packages
+	 * (albeit not itself) on such an Ubuntu system which might be useful
+	 * for the purposes of this PkgQuery class.
+	 **/
+	virtual bool isAvailable() = 0;
 
 	/**
 	 * Return the owning package of a file or directory with full path
@@ -139,57 +139,6 @@ namespace QDirStat
 	 * Derived classes are required to implement this.
 	 **/
 	virtual QString owningPkg( const QString & path ) = 0;
-
-    protected:
-
-	/**
-	 * Try running a command and compare it against an expected result.
-	 * Return 'true' if ok, 'false' if not.
-	 **/
-	bool tryRunCommand( const QString & commandLine,
-			    const QRegExp & expectedResult ) const;
-
-	/**
-	 * Run a command line and return its output. If exitCode_ret is
-	 * non-null, return the command's exit code in exitCode_ret.
-	 *
-	 * Notice 1: This uses a very basic command line parser; it simply
-	 * splits the command up whereever whitespace might occur. If any of
-	 * the arguments (no matter how sophisticated they might be quoted)
-	 * possibly contains any whitespace, this is unsafe; in that case, use
-	 * the overloaded version instead that accepts a QStringList as
-	 * arguments.
-	 *
-	 * Notice 2: This does not start a shell with that command, it runs the
-	 * command directly, so only binaries can be executed, no shell scripts
-	 * or scripts of other interpreted languages. If that is desired, wrap
-	 * the command into "/bin/sh -c".
-	 **/
-	QString runCommand( const QString & commandLine,
-			    int *	    exitCode_ret ) const;
-
-	/**
-	 * Run a command with arguments 'args' and return its output. If
-	 * exitCode_ret is non-null, return the command's exit code in
-	 * exitCode_ret.
-	 *
-	 * Use this version to avoid any side effects due to command line
-	 * parsing.
-	 *
-	 * Notice: This does not start a shell with that command, it runs the
-	 * command directly, so only binaries can be executed, no shell scripts
-	 * or scripts of other interpreted languages. If that is desired, use
-	 * "/bin/sh" as the command, "-c" as the first argument and the command
-	 * line to be executed as the second. Beware of shell quoting quirks!
-	 **/
-	QString runCommand( const QString &	command,
-			    const QStringList & args,
-			    int *		exitCode_ret ) const;
-
-        /**
-         * Return 'true' if the specified command is available and executable.
-         **/
-        bool haveCommand( const QString & command ) const;
 
     }; // class PkgManager
 
@@ -228,7 +177,7 @@ namespace QDirStat
 	 *
 	 * Implemented from PkgManager.
 	 **/
-        virtual bool isAvailable() Q_DECL_OVERRIDE;
+	virtual bool isAvailable() Q_DECL_OVERRIDE;
 
 	/**
 	 * Return the owning package of a file or directory with full path
@@ -272,7 +221,7 @@ namespace QDirStat
 	 *
 	 * Implemented from PkgManager.
 	 **/
-        virtual bool isAvailable() Q_DECL_OVERRIDE;
+	virtual bool isAvailable() Q_DECL_OVERRIDE;
 
 	/**
 	 * Return the owning package of a file or directory with full path
