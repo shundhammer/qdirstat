@@ -198,7 +198,7 @@ namespace QDirStat
     {
     public:
 
-	RpmPkgManager() {}
+	RpmPkgManager();
 	virtual ~RpmPkgManager() {}
 
 	/**
@@ -234,6 +234,11 @@ namespace QDirStat
 	 *   /usr/bin/rpm -qf ${path}
 	 **/
 	virtual QString owningPkg( const QString & path ) Q_DECL_OVERRIDE;
+
+
+    protected:
+
+	QString _rpmCommand;
 
     }; // class RpmPkgManager
 
