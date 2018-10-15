@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-14
+Updated: 2018-10-15
 
 
 ## Overview
@@ -163,7 +163,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     If your system does not use _dpkg_ or _rpm_, those who can are invited to
     contribute patches for other package managers; it's really simple:
 
-    https://github.com/shundhammer/qdirstat/blob/master/src/PkgManager.cpp#L240
+    https://github.com/shundhammer/qdirstat/blob/master/src/PkgManager.cpp#L140
 
     The API is not final yet; there may be more regexp support in the near
     future (so it will only get simpler). But you get the idea.
