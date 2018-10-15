@@ -105,7 +105,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     _Adding insult to injury, they want me to check which version is available
     with an abomination like this:_
 
-    ```
+    ```C
     #if (_POSIX_C_SOURCE >= 200112L) && !  _GNU_SOURCE
         ... // use the XSI strerror_r() function
     #else
@@ -114,7 +114,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     ```
 
     _No, I flatly refuse to clutter my code with gibberish like this. Couldn't
-    you at least provide a human readable check macro for this?__
+    you at least provide a human readable check macro for this?_
 
     _What were you thinking? Are you sometimes thinking? Do you seriously
     believe application programmers want to play your silly games? Fix your API
