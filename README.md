@@ -68,15 +68,20 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
 **Latest stable release: V1.4**
 
-- 2018-10-14
+- 2018-10-16
 
   - QDirStat now shows `[root]` in the window title if it is running with root
     privileges.
 
   - If invoked with `sudo`, now restoring the owner of the config files to the
-    real user (if possible). Previously they were owned by _root_ which meant
-    they were no longer writable by the real user, silently discarding all
-    subsequent changes to the configuration (including window sizes etc).
+    real user (if possible) if those file are in the user's home directory.
+    Previously on some systems they were owned by _root_ which meant they were
+    no longer writable by the real user, silently discarding all subsequent
+    changes to the configuration (including window sizes etc).
+
+    This might be different depending on how `sudo` is configured on a system;
+    on SUSE, it uses the root user's home directory, on Ubuntu, the home
+    directory of the user who invoked `sudo`.
 
     When I fixed that, I needed to log system errors that might appear, but
     that's no longer so easy today...
@@ -101,7 +106,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     failure (seriously, what do you want me to do when even your error reporting
     function fails?), but at least it is consistent enough to always fill the
     buffer that I have to provide with the message._
-    
+
     _Adding insult to injury, they want me to check which version is available
     with an abomination like this:_
 
@@ -114,7 +119,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     ```
 
     _No, I flatly refuse to clutter my code with gibberish like this. Couldn't
-    you at least provide a human readable check macro for this?_
+    you at least provide a human readable check macro for it?_
 
     _What were you thinking? Are you sometimes thinking? Do you seriously
     believe application programmers want to play your silly games? Fix your API
