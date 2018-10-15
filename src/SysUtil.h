@@ -10,6 +10,8 @@
 #ifndef SysUtil_h
 #define SysUtil_h
 
+#include <sys/types.h> // uid_t
+
 #include <QString>
 #include <QRegExp>
 
@@ -112,6 +114,11 @@ namespace QDirStat
          * permissions, but not with 'sudo'.
          **/
         bool runningAsTrueRoot();
+
+        /**
+         * Return the home directory of the user with the specified user ID.
+         **/
+        QString homeDir( uid_t uid );
 
     }	// namespace SysUtil
 }	// namespace QDirStat

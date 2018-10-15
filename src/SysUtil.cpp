@@ -8,6 +8,7 @@
 
 
 #include <unistd.h>	// access(), getuid(), geteduid()
+#include <pwd.h>        // getpwuid()
 
 #include "SysUtil.h"
 #include "Process.h"
@@ -140,4 +141,12 @@ bool SysUtil::runningWithSudo()
 bool SysUtil::runningAsTrueRoot()
 {
     return runningAsRoot() && ! runningWithSudo();
+}
+
+
+QString SysUtil::homeDir( uid_t uid )
+{
+    struct passwd * pw = getpwuid( uid );
+
+    return pw ? QString::fromUtf8( pw->pw_dir ) : QString();
 }

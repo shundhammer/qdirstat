@@ -61,27 +61,41 @@ void Settings::fixFileOwner( const QString & filename )
 
     if ( ! sudoUid.isEmpty() && ! sudoGid.isEmpty() )
     {
-        uid_t uid = sudoUid.toInt();
-        gid_t gid = sudoGid.toInt();
+        uid_t   uid     = sudoUid.toInt();
+        gid_t   gid     = sudoGid.toInt();
+        QString homeDir = SysUtil::homeDir( uid );
 
-        int result = ::chown( filename.toUtf8(), uid, gid );
-
-        if ( result != 0 )
+        if ( homeDir.isEmpty() )
         {
-            logError() << "Can't chown " << filename
-                       << " to UID "  << uid
-                       << " and GID " << gid
-                       << ": " << strerror( errno )
-                       << endl;
+            logWarning() << "Can't get home directory for UID " << uid << endl;
+            return;
+        }
+
+        if ( filename.startsWith( homeDir ) )
+        {
+            int result = ::chown( filename.toUtf8(), uid, gid );
+
+            if ( result != 0 )
+            {
+                logError() << "Can't chown " << filename
+                           << " to UID "  << uid
+                           << " and GID " << gid
+                           << ": " << strerror( errno )
+                           << endl;
+            }
+            else
+            {
+#if 1
+                logDebug() << "Success: chown " << filename
+                           << " to UID "  << uid
+                           << " and GID " << gid
+                           << endl;
+#endif
+            }
         }
         else
         {
-#if 1
-            logDebug() << "Success: chown " << filename
-                       << " to UID "  << uid
-                       << " and GID " << gid
-                       << endl;
-#endif
+            // logInfo() << "Not touching " << filename << endl;
         }
     }
     else
