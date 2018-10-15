@@ -89,7 +89,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     one version modifying the buffer that I gave you, in the other returning a
     char pointer that I am to use and returning an int._
 
-    https://linux.die.net/man/3/strerror_r
+    [strerror() / strerror_r() man page](https://linux.die.net/man/3/strerror_r)
 
     _The GNU version does what I would expect the old `strerror()` to do:
     Return a const pointer to a static string. Yet it also expects me to
@@ -97,13 +97,13 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     moon is full or whatever. But it doesn't always fill the buffer, just when
     it feels like it._
 
-   _The XSI version always fills the buffer and returns an int for success or
-   failure (seriously, what do you want me to do when even your error reporting
-   function fails?), but at least it is consistent enough to always fill the
-   buffer that I have to provide with the message._
-
-   _Adding insult to injury, they want me to check which version is available
-   with an abomination like this:_
+    _The XSI version always fills the buffer and returns an int for success or
+    failure (seriously, what do you want me to do when even your error reporting
+    function fails?), but at least it is consistent enough to always fill the
+    buffer that I have to provide with the message._
+    
+    _Adding insult to injury, they want me to check which version is available
+    with an abomination like this:_
 
     ```
     #if (_POSIX_C_SOURCE >= 200112L) && !  _GNU_SOURCE
@@ -131,6 +131,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     _I am no longer willing to waste life time and life energy with stuff like
     that. Seriously. Get it right or get out of my life!_
 
+--------------------------------------------------
 
 - 2018-10-07
 
