@@ -84,10 +84,37 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     _A word to the geniusses who deprecated the old `strerror()` Glibc function
     and came up with no less than 3 (!) replacements, two of which share the
     same name `strerror_r()`, but have different return values and different
-    behaviour: **I REFUSE TO USE THAT SHIT** until you get your stuff sorted
-    out. Seriously, not only using 1970s C string buffers, but also in one
-    version modifying the buffer that I gave you, in the other returning a char
-    pointer that I am to use and returning an int._
+    behaviour: **I REFUSE TO USE THAT STUFF** until you get your API
+    consistent. Seriously, not only using 1970s C string buffers, but also in
+    one version modifying the buffer that I gave you, in the other returning a
+    char pointer that I am to use and returning an int._
+
+    https://linux.die.net/man/3/strerror_r
+
+    _The GNU version does what I would expect the old `strerror()` to do:
+    Return a const pointer to a static string. Yet it also expects me to
+    reserve a buffer because sometimes it MIGHT copy a message into it - when the
+    moon is full or whatever. But it doesn't always fill the buffer, just when
+    it feels like it._
+
+   _The XSI version always fills the buffer and returns an int for success or
+   failure (seriously, what do you want me to do when even your error reporting
+   function fails?), but at least it is consistent enough to always fill the
+   buffer that I have to provide with the message._
+
+   _Adding insult to injury, they want me to check which version is available
+   with an abomination like this:_
+
+    ```
+    #if (_POSIX_C_SOURCE >= 200112L) && !  _GNU_SOURCE
+        ... // use the XSI strerror_r() function
+    #else
+        ... // use the GNU strerror_r() function
+    #endif
+    ```
+
+    _No, I flatly refuse to clutter my code with gibberish like this. Couldn't
+    you at least provide a human readable check macro for this?__
 
     _What were you thinking? Are you sometimes thinking? Do you seriously
     believe application programmers want to play your silly games? Fix your API
