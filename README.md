@@ -118,7 +118,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
     _What were you thinking? Are you sometimes thinking? Do you seriously
     believe application programmers want to play your silly games? Fix your API
-    **before** you deprecate the one version that we used for 30+ years and
+    **before** you deprecate the one version that we used for 25+ years and
     that still works for 99.8% of all people!_
 
     _Concerns about thread safety - okay, but then, why does such a function
