@@ -37,6 +37,17 @@ namespace QDirStat
 	 **/
 	static PkgQuery * instance();
 
+        /**
+         * Return 'true' if any of the supported package managers was found.
+         **/
+        static bool foundSupportedPkgManager();
+
+	/**
+	 * Return the owning package of a file or directory with full path
+	 * 'path' or an empty string if it is not owned by any package.
+	 **/
+	QString getOwningPackage( const QString & path );
+
     protected:
 
 	/**
@@ -49,11 +60,11 @@ namespace QDirStat
 	 **/
 	virtual ~PkgQuery();
 
-	/**
-	 * Return the owning package of a file or directory with full path
-	 * 'path' or an empty string if it is not owned by any package.
-	 **/
-	QString getOwningPackage( const QString & path );
+        /**
+         * Check which supported package managers are available and add them to
+         * the internal list.
+         **/
+        void checkPkgManagers();
 
 	/**
 	 * Check if a package manager is available; add it to one of the

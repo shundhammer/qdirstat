@@ -193,15 +193,23 @@ void FileDetailsView::showFilePkgInfo( FileInfo * file )
 
     bool isSystemFile = SystemFileChecker::isSystemFile( file );
     setSystemFileWarningVisibility( isSystemFile );
-    setFilePkgBlockVisibility( isSystemFile ); // TO DO
 
-    if ( isSystemFile )
+    if ( PkgQuery::foundSupportedPkgManager() )
     {
-        QString delayHint = QString( _pkgUpdateTimer->delayStage(), '.' );
-        _ui->filePackageLabel->setText( delayHint );
+        setFilePkgBlockVisibility( isSystemFile );
 
-        _ui->filePackageCaption->setEnabled( true );
-        _pkgUpdateTimer->delayedRequest( file->url() );
+            if ( isSystemFile )
+            {
+                QString delayHint = QString( _pkgUpdateTimer->delayStage(), '.' );
+                _ui->filePackageLabel->setText( delayHint );
+
+                _ui->filePackageCaption->setEnabled( true );
+                _pkgUpdateTimer->delayedRequest( file->url() );
+            }
+    }
+    else // No supported package manager found
+    {
+        setFilePkgBlockVisibility( false );
     }
 }
 

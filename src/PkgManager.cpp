@@ -47,6 +47,19 @@ PkgQuery * PkgQuery::instance()
 PkgQuery::PkgQuery()
 {
     _cache.setMaxCost( CACHE_SIZE );
+    checkPkgManagers();
+}
+
+
+PkgQuery::~PkgQuery()
+{
+    qDeleteAll( _pkgManagers );
+}
+
+
+void PkgQuery::checkPkgManagers()
+{
+    logInfo() << "Checking available supported package managers..." << endl;
 
     checkPkgManager( new DpkgPkgManager()   );
     checkPkgManager( new RpmPkgManager()    );
@@ -54,12 +67,18 @@ PkgQuery::PkgQuery()
 
     _pkgManagers += _secondaryPkgManagers;
     _secondaryPkgManagers.clear();
-}
 
+    if ( _pkgManagers.isEmpty() )
+        logInfo() << "No supported package manager found." << endl;
+    else
+    {
+        QStringList available;
 
-PkgQuery::~PkgQuery()
-{
-    qDeleteAll( _pkgManagers );
+        foreach ( PkgManager * pkgManager, _pkgManagers )
+            available << pkgManager->name();
+
+        logInfo() << "Found " << available.join( ", " )  << endl;
+    }
 }
 
 
@@ -81,6 +100,12 @@ void PkgQuery::checkPkgManager( PkgManager * pkgManager )
     {
 	delete pkgManager;
     }
+}
+
+
+bool PkgQuery::foundSupportedPkgManager()
+{
+    return ! instance()->_pkgManagers.isEmpty();
 }
 
 

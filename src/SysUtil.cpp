@@ -74,7 +74,7 @@ QString SysUtil::runCommand( const QString &	 command,
 
     if ( ! haveCommand( command ) )
     {
-	logInfo() << "Command not found: \"" << command << "\"" << endl;
+	logInfo() << "Command not found: " << command << endl;
 	return "ERROR: Command not found";
     }
 
@@ -88,7 +88,7 @@ QString SysUtil::runCommand( const QString &	 command,
     process.setProcessChannelMode( QProcess::MergedChannels ); // combine stdout and stderr
 
     if ( logCommand )
-	logInfo() << command << " " << args.join( " " ) << endl;
+	logDebug() << command << " " << args.join( " " ) << endl;
 
     process.start();
     bool success = process.waitForFinished( COMMAND_TIMEOUT_SEC * 1000 );
@@ -114,7 +114,7 @@ QString SysUtil::runCommand( const QString &	 command,
     }
 
     if ( logOutput )
-	logInfo() << "Output: \n" << output << endl;
+	logDebug() << "Output: \n" << output << endl;
 
     return output;
 }
