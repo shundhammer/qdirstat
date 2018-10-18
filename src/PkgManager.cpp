@@ -48,8 +48,9 @@ PkgQuery::PkgQuery()
 {
     _cache.setMaxCost( CACHE_SIZE );
 
-    checkPkgManager( new DpkgPkgManager() );
-    checkPkgManager( new RpmPkgManager()  );
+    checkPkgManager( new DpkgPkgManager()   );
+    checkPkgManager( new RpmPkgManager()    );
+    checkPkgManager( new PacManPkgManager() );
 
     _pkgManagers += _secondaryPkgManagers;
     _secondaryPkgManagers.clear();
