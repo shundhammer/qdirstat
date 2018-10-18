@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-15
+Updated: 2018-10-18
 
 
 ## Overview
@@ -68,6 +68,23 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
 **Latest stable release: V1.4**
 
+- 2018-10-18
+
+  - Added support for the _pacman_ package manager for Manjaro and Arch Linux.
+
+    This should now cover the most common package managers for Linux to find
+    out what package a system file belongs to: _dpkg_, _rpm_, _pacman_.
+
+    As mentioned before, higher-level package managers such as _apt_, _zypper_,
+    _yum_ or front-ends like _synaptic_, _PackageKit_ all use one of the
+    lower-level package managers internally, so it doesn't matter if you never
+    used one of the lower-level tools before.
+
+    Still hoping to get some support for FreeBSD / OpenBSD, but "pkg info"
+    there does not seem to know anything about files belonging to the base
+    system (?) which would make it an exercise in futility.
+
+
 - 2018-10-16
 
   - QDirStat now shows `[root]` in the window title if it is running with root
@@ -83,60 +100,6 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     on SUSE, it uses the root user's home directory, on Ubuntu, the home
     directory of the user who invoked `sudo`.
 
-    When I fixed that, I needed to log system errors that might appear, but
-    that's no longer so easy today...
-
-    _A word to the geniusses who deprecated the old `strerror()` Glibc function
-    and came up with no less than 3 (!) replacements, two of which share the
-    same name `strerror_r()`, but have different return values and different
-    behaviour: **I REFUSE TO USE THAT STUFF** until you get your API
-    consistent. Seriously, not only using 1970s C string buffers, but also in
-    one version modifying the buffer that I gave you, in the other returning a
-    char pointer that I am to use and returning an int._
-
-    [strerror() / strerror_r() man page](https://linux.die.net/man/3/strerror_r)
-
-    _The GNU version does what I would expect the old `strerror()` to do:
-    Return a const pointer to a static string. Yet it also expects me to
-    reserve a buffer because sometimes it MIGHT copy a message into it - when the
-    moon is full or whatever. But it doesn't always fill the buffer, just when
-    it feels like it._
-
-    _The XSI version always fills the buffer and returns an int for success or
-    failure (seriously, what do you want me to do when even your error reporting
-    function fails?), but at least it is consistent enough to always fill the
-    buffer that I have to provide with the message._
-
-    _Adding insult to injury, they want me to check which version is available
-    with an abomination like this:_
-
-    ```C
-    #if (_POSIX_C_SOURCE >= 200112L) && !  _GNU_SOURCE
-        ... // use the XSI strerror_r() function
-    #else
-        ... // use the GNU strerror_r() function
-    #endif
-    ```
-
-    _No, I flatly refuse to clutter my code with gibberish like this. Couldn't
-    you at least provide a human readable check macro for it?_
-
-    _What were you thinking? Are you sometimes thinking? Do you seriously
-    believe application programmers want to play your silly games? Fix your API
-    **before** you deprecate the one version that we used for 25+ years and
-    that still works for 99.8% of all people!_
-
-    _Concerns about thread safety - okay, but then, why does such a function
-    even need anything else than return a pointer to a constant static string
-    which would not be concerned by thread issues? And if you feel you must
-    replace such a function, by all means **talk** to each other before you get
-    into a replacing frenzy which now saddled us with **TWO** completely
-    incompatible versions of the same thing!_
-
-    _I am no longer willing to waste life time and life energy with stuff like
-    that. Seriously. Get it right or get out of my life!_
-
---------------------------------------------------
 
 - 2018-10-07
 
