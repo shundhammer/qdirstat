@@ -80,9 +80,13 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     lower-level package managers internally, so it doesn't matter if you never
     used one of the lower-level tools before.
 
-    Still hoping to get some support for FreeBSD / OpenBSD, but "pkg info"
-    there does not seem to know anything about files belonging to the base
-    system (?) which would make it an exercise in futility.
+  - Tried to add support for the _pkg_ package manager ("pkg info") for FreeBSD
+    / OpenBSD, but unfortunately it only knows what package owns files of
+    _ports_ / _3rd party_, not for the base system.
+
+    The helpful people in the _#freebsd_ IRC channel on _freenode_ confirmed
+    that. So this will have to wait until there is useful support for it from
+    the system side on those platforms. _BSD people, let me know!_
 
 
 - 2018-10-16
