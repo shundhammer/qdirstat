@@ -194,6 +194,15 @@ namespace QDirStat
     }; // class DpkgPkgManager
 
 
+    /**
+     * Simple interface to 'rpm' for all RPM-based Linux distros such as SUSE,
+     * openSUSE, Red Hat, Fedora.
+     *
+     * Remember that 'zypper' and 'yum' are based on 'rpm' and 'rpm' already
+     * does the simple things needed here, so there is no need to create a
+     * specialized version for 'zypper' or 'yum' or any higher-level rpm-based
+     * package managers.
+     **/
     class RpmPkgManager: public PkgManager
     {
     public:
@@ -241,6 +250,53 @@ namespace QDirStat
 	QString _rpmCommand;
 
     }; // class RpmPkgManager
+
+
+    /**
+     * Simple interface to 'pacman' for Manjaro / Arch Linux.
+     **/
+    class PacManPkgManager: public PkgManager
+    {
+    public:
+
+	PacManPkgManager() {}
+	virtual ~PacManPkgManager() {}
+
+	/**
+	 * Return the name of this package manager.
+	 *
+	 * Implemented from PkgManager.
+	 **/
+	virtual QString name() const { return "pacman"; }
+
+	/**
+	 * Check if RPM is active on the currently running system.
+	 *
+	 * Implemented from PkgManager.
+	 **/
+	virtual bool isPrimaryPkgManager() Q_DECL_OVERRIDE;
+
+	/**
+	 * Check if the rpm command is available on the currently running
+	 * system.
+	 *
+	 * Implemented from PkgManager.
+	 **/
+	virtual bool isAvailable() Q_DECL_OVERRIDE;
+
+	/**
+	 * Return the owning package of a file or directory with full path
+	 * 'path' or an empty string if it is not owned by any package.
+	 *
+	 * Implemented from PkgManager.
+	 *
+	 * This basically executes this command:
+	 *
+	 *   /usr/bin/rpm -qf ${path}
+	 **/
+	virtual QString owningPkg( const QString & path ) Q_DECL_OVERRIDE;
+
+    }; // class PacManPkgManager
 
 } // namespace QDirStat
 
