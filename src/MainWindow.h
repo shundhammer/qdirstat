@@ -344,17 +344,18 @@ private:
     QDirStat::CleanupCollection * _cleanupCollection;
     QDirStat::MimeCategorizer	* _mimeCategorizer;
     QDirStat::ConfigDialog	* _configDialog;
-    QActionGroup                * _layoutActionGroup;
+    QActionGroup		* _layoutActionGroup;
     QPointer<FileTypeStatsWindow> _fileTypeStatsWindow;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
     bool			  _verboseSelection;
     bool			  _urlInWindowTitle;
-    QString                       _layoutName;
+    bool			  _useTreemapHover;
+    QString			  _layoutName;
     int				  _statusBarTimeout; // millisec
     QSignalMapper	       *  _treeLevelMapper;
-    QMap<QString, TreeLayout *>   _layouts;
-    TreeLayout *                  _currentLayout;
+    QMap<QString, TreeLayout *>	  _layouts;
+    TreeLayout *		  _currentLayout;
 
 }; // class MainWindow
 
@@ -366,10 +367,10 @@ class TreeLayout
 {
 public:
     TreeLayout( const QString & name ):
-        name( name ),
-        showCurrentPath( true ),
-        showDetailsPanel( true )
-        {}
+	name( name ),
+	showCurrentPath( true ),
+	showDetailsPanel( true )
+	{}
 
     QString name;
     bool    showCurrentPath;

@@ -58,6 +58,7 @@ MainWindow::MainWindow():
     _modified( false ),
     _verboseSelection( false ),
     _urlInWindowTitle( false ),
+    _useTreemapHover( false ),
     _statusBarTimeout( 3000 ), // millisec
     _treeLevelMapper(0),
     _currentLayout( 0 )
@@ -141,11 +142,14 @@ MainWindow::MainWindow():
     connect( _cleanupCollection, SIGNAL( cleanupFinished( int ) ),
 	     this,		 SLOT  ( cleanupFinished( int ) ) );
 
-    connect( _ui->treemapView,	 SIGNAL( hoverEnter ( FileInfo * ) ),
-	     this,		 SLOT  ( showCurrent( FileInfo * ) ) );
+    if ( _useTreemapHover )
+    {
+	connect( _ui->treemapView, SIGNAL( hoverEnter ( FileInfo * ) ),
+		 this,		   SLOT	 ( showCurrent( FileInfo * ) ) );
 
-    connect( _ui->treemapView,	 SIGNAL( hoverLeave ( FileInfo * ) ),
-	     this,		 SLOT  ( showSummary()		   ) );
+	connect( _ui->treemapView, SIGNAL( hoverLeave ( FileInfo * ) ),
+		 this,		   SLOT	 ( showSummary()	   ) );
+    }
 
 
     // Debug connections
@@ -172,7 +176,7 @@ MainWindow::MainWindow():
 MainWindow::~MainWindow()
 {
     if ( _currentLayout )
-        saveLayout( _currentLayout );
+	saveLayout( _currentLayout );
 
     writeSettings();
     ExcludeRules::instance()->writeSettings();
@@ -239,9 +243,9 @@ void MainWindow::connectActions()
     connect( _ui->actionShowDetailsPanel, SIGNAL( toggled   ( bool ) ),
 	     _ui->fileDetailsPanel,	  SLOT	( setVisible( bool ) ) );
 
-    CONNECT_ACTION( _ui->actionLayout1,	           this, changeLayout() );
-    CONNECT_ACTION( _ui->actionLayout2,	           this, changeLayout() );
-    CONNECT_ACTION( _ui->actionLayout3,	           this, changeLayout() );
+    CONNECT_ACTION( _ui->actionLayout1,		   this, changeLayout() );
+    CONNECT_ACTION( _ui->actionLayout2,		   this, changeLayout() );
+    CONNECT_ACTION( _ui->actionLayout3,		   this, changeLayout() );
 
     CONNECT_ACTION( _ui->actionFileSizeStats,	   this, showFileSizeStats() );
     CONNECT_ACTION( _ui->actionFileTypeStats,	   this, showFileTypeStats() );
@@ -358,7 +362,8 @@ void MainWindow::readSettings()
 
     _verboseSelection	  = settings.value( "VerboseSelection"	      , false ).toBool();
     _urlInWindowTitle	  = settings.value( "UrlInWindowTitle"	      , false ).toBool();
-    _layoutName           = settings.value( "Layout"                  , "L2"  ).toString();
+    _useTreemapHover	  = settings.value( "UseTreemapHover"	      , false ).toBool();
+    _layoutName		  = settings.value( "Layout"		      , "L2"  ).toString();
 
     settings.endGroup();
 
@@ -375,8 +380,8 @@ void MainWindow::readSettings()
 
     foreach ( QAction * action, _layoutActionGroup->actions() )
     {
-        if ( action->data().toString() == _layoutName )
-            action->setChecked( true );
+	if ( action->data().toString() == _layoutName )
+	    action->setChecked( true );
     }
 
     readWindowSettings( this, "MainWindow" );
@@ -388,11 +393,11 @@ void MainWindow::readSettings()
 	_ui->topViewsSplitter->restoreState( topSplitterState );
     else
     {
-        // The Qt designer refuses to let me set a reasonable size for that
-        // widget, so let's set one here. Yes, that's not really how this is
-        // supposed to be, but I am fed up with that stuff.
+	// The Qt designer refuses to let me set a reasonable size for that
+	// widget, so let's set one here. Yes, that's not really how this is
+	// supposed to be, but I am fed up with that stuff.
 
-        _ui->fileDetailsPanel->resize( QSize( 300, 300 ) );
+	_ui->fileDetailsPanel->resize( QSize( 300, 300 ) );
     }
 
     foreach ( TreeLayout * layout, _layouts )
@@ -427,7 +432,8 @@ void MainWindow::writeSettings()
     settings.setValue( "TreemapOnSide"		 , _ui->actionTreemapAsSidePanel->isChecked() );
     settings.setValue( "VerboseSelection"	 , _verboseSelection );
     settings.setValue( "UrlInWindowTitle"	 , _urlInWindowTitle );
-    settings.setValue( "Layout"                  , _layoutName );
+    settings.setValue( "UseTreemapHover"	 , _useTreemapHover );
+    settings.setValue( "Layout"			 , _layoutName );
 
     settings.endGroup();
 
@@ -682,17 +688,17 @@ void MainWindow::askWriteCache()
     {
 	bool ok = _dirTreeModel->tree()->writeCache( fileName );
 
-        if ( ok )
-        {
-            _ui->statusBar->showMessage( tr( "Directory tree written to file %1" ).arg( fileName )
-                                         , _statusBarTimeout );
-        }
-        else
-        {
-            QMessageBox::critical( this,
-                                   tr( "Error" ), // Title
-                                   tr( "ERROR writing cache file %1").arg( fileName ) );
-        }
+	if ( ok )
+	{
+	    _ui->statusBar->showMessage( tr( "Directory tree written to file %1" ).arg( fileName )
+					 , _statusBarTimeout );
+	}
+	else
+	{
+	    QMessageBox::critical( this,
+				   tr( "Error" ), // Title
+				   tr( "ERROR writing cache file %1").arg( fileName ) );
+	}
     }
 }
 
@@ -970,11 +976,11 @@ void MainWindow::changeLayout( const QString & name )
 
     if ( _layoutName.isEmpty() )
     {
-        // Get the layout to use from data() from the QAction that sent the signal.
+	// Get the layout to use from data() from the QAction that sent the signal.
 
-        QAction * action   = qobject_cast<QAction *>( sender() );
-        _layoutName = action && action->data().isValid() ?
-            action->data().toString() : "L2";
+	QAction * action   = qobject_cast<QAction *>( sender() );
+	_layoutName = action && action->data().isValid() ?
+	    action->data().toString() : "L2";
     }
 
     logDebug() << "Changing to layout " << _layoutName << endl;
@@ -982,16 +988,16 @@ void MainWindow::changeLayout( const QString & name )
     _ui->dirTreeView->headerTweaker()->changeLayout( _layoutName );
 
     if ( _currentLayout )
-        saveLayout( _currentLayout );
+	saveLayout( _currentLayout );
 
     if ( _layouts.contains( _layoutName ) )
     {
-        _currentLayout = _layouts[ _layoutName ];
-        applyLayout( _currentLayout );
+	_currentLayout = _layouts[ _layoutName ];
+	applyLayout( _currentLayout );
     }
     else
     {
-        logError() << "No layout " << _layoutName << endl;
+	logError() << "No layout " << _layoutName << endl;
     }
 }
 
