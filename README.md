@@ -108,8 +108,9 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
   - There is still some (limited) time to add even more package managers if
     anybody feels inclined to submit patches. But please be advised that I
-    can't do much maintenance for any of those since I don't have any systems
-    readily available to test anything.
+    can't do much maintenance for any of those since I don't have any system
+    with them readily available to test anything; the ones that I have use
+    _dpkg_ or _rpm_.
 
 
 - 2018-10-18
