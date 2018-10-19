@@ -443,8 +443,6 @@ void HeaderTweaker::writeLayoutSettings( ColumnLayout * layout )
     Settings settings;
     settings.beginGroup( QString( "TreeViewLayout_%1" ).arg( layout->name ) );
 
-    logDebug() << "Layout " << layout->name << " vis: " << layout->visibleColList << endl;
-
     settings.setValue( "VisibleColumns", DataColumns::toStringList( layout->visibleColList ) );
     settings.setValue( "ColumnOrder",	 DataColumns::toStringList( layout->colOrderList ) );
 
