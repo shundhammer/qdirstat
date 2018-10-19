@@ -152,6 +152,10 @@
     <addaction name="actionShowCurrentPath"/>
     <addaction name="actionShowDetailsPanel"/>
     <addaction name="separator"/>
+    <addaction name="actionLayout1"/>
+    <addaction name="actionLayout2"/>
+    <addaction name="actionLayout3"/>
+    <addaction name="separator"/>
     <addaction name="actionFileSizeStats"/>
     <addaction name="actionFileTypeStats"/>
    </widget>
@@ -232,7 +236,12 @@
    <addaction name="actionTreemapZoomOut"/>
    <addaction name="actionResetTreemapZoom"/>
    <addaction name="separator"/>
+   <addaction name="actionLayout1"/>
+   <addaction name="actionLayout2"/>
+   <addaction name="actionLayout3"/>
+   <addaction name="separator"/>
    <addaction name="actionMoveToTrash"/>
+   <addaction name="separator"/>
   </widget>
   <action name="actionQuit">
    <property name="icon">
@@ -706,6 +715,51 @@
    </property>
    <property name="toolTip">
     <string>Show &amp;Details Panel</string>
+   </property>
+  </action>
+  <action name="actionLayout1">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Layout 1 (Short)</string>
+   </property>
+   <property name="iconText">
+    <string>L1</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+1</string>
+   </property>
+  </action>
+  <action name="actionLayout2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Layout 2 (Classic)</string>
+   </property>
+   <property name="iconText">
+    <string>L2</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+2</string>
+   </property>
+  </action>
+  <action name="actionLayout3">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Layout 3 (Full)</string>
+   </property>
+   <property name="iconText">
+    <string>L3</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+3</string>
    </property>
   </action>
  </widget>

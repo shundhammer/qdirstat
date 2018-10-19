@@ -64,6 +64,7 @@ MainWindow::MainWindow():
 
     _ui->setupUi( this );
     ActionManager::instance()->addWidgetTree( this );
+    initLayoutActions();
     readSettings();
 
     _dirTreeModel = new DirTreeModel( this );
@@ -79,6 +80,7 @@ MainWindow::MainWindow():
     _ui->treemapView->setSelectionModel( _selectionModel );
 
     _dirTreeModel->setSelectionModel( _selectionModel );
+    changeLayout( _layoutName );
 
     _cleanupCollection = new CleanupCollection( _selectionModel );
     CHECK_NEW( _cleanupCollection );
@@ -229,6 +231,10 @@ void MainWindow::connectActions()
     connect( _ui->actionShowDetailsPanel, SIGNAL( toggled   ( bool ) ),
 	     _ui->fileDetailsPanel,	  SLOT	( setVisible( bool ) ) );
 
+    CONNECT_ACTION( _ui->actionLayout1,	           this, changeLayout() );
+    CONNECT_ACTION( _ui->actionLayout2,	           this, changeLayout() );
+    CONNECT_ACTION( _ui->actionLayout3,	           this, changeLayout() );
+
     CONNECT_ACTION( _ui->actionFileSizeStats,	   this, showFileSizeStats() );
     CONNECT_ACTION( _ui->actionFileTypeStats,	   this, showFileTypeStats() );
 
@@ -345,6 +351,7 @@ void MainWindow::readSettings()
     bool showDetailsPanel = settings.value( "ShowDetailsPanel"	      , true  ).toBool();
     _verboseSelection	  = settings.value( "VerboseSelection"	      , false ).toBool();
     _urlInWindowTitle	  = settings.value( "UrlInWindowTitle"	      , false ).toBool();
+    _layoutName           = settings.value( "Layout"                  , "L2"  ).toString();
 
     settings.endGroup();
 
@@ -361,6 +368,12 @@ void MainWindow::readSettings()
     _ui->actionShowCurrentPath->setChecked( showCurrentPath );
     _ui->actionShowDetailsPanel->setChecked( showDetailsPanel );
     _ui->actionVerboseSelection->setChecked( _verboseSelection );
+
+    foreach ( QAction * action, _layoutActionGroup->actions() )
+    {
+        if ( action->data().toString() == _layoutName )
+            action->setChecked( true );
+    }
 
     readWindowSettings( this, "MainWindow" );
 
@@ -387,6 +400,7 @@ void MainWindow::writeSettings()
     settings.setValue( "ShowDetailsPanel"	 , _ui->actionShowDetailsPanel->isChecked() );
     settings.setValue( "VerboseSelection"	 , _verboseSelection );
     settings.setValue( "UrlInWindowTitle"	 , _urlInWindowTitle );
+    settings.setValue( "Layout"                  , _layoutName );
 
     settings.endGroup();
 
@@ -857,6 +871,43 @@ void MainWindow::showFileSizeStats()
 	return;
 
     FileSizeStatsWindow::populateSharedInstance( sel );
+}
+
+
+void MainWindow::initLayoutActions()
+{
+    // Qt Designer does not support QActionGroups; it was there for Qt 3, but
+    // they dropped that feature for Qt 4/5.
+
+    _layoutActionGroup = new QActionGroup( this );
+    CHECK_NEW( _layoutActionGroup );
+
+    _layoutActionGroup->addAction( _ui->actionLayout1 );
+    _layoutActionGroup->addAction( _ui->actionLayout2 );
+    _layoutActionGroup->addAction( _ui->actionLayout3 );
+
+    _ui->actionLayout1->setData( "L1" );
+    _ui->actionLayout2->setData( "L2" );
+    _ui->actionLayout3->setData( "L3" );
+}
+
+
+void MainWindow::changeLayout( const QString & name )
+{
+    _layoutName = name;
+
+    if ( _layoutName.isEmpty() )
+    {
+        // Get the layout to use from data() from the QAction that sent the signal.
+
+        QAction * action   = qobject_cast<QAction *>( sender() );
+        _layoutName = action && action->data().isValid() ?
+            action->data().toString() : "L2";
+    }
+
+    logInfo() << "Changing to layout " << _layoutName << endl;
+
+    // TO DO: Actually change the layout
 }
 
 

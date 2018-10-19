@@ -240,6 +240,12 @@ protected slots:
     void showFileSizeStats();
 
     /**
+     * Change the main window layout. If no name is passed, the function tries
+     * to check if the sender is a QAction and use its data().
+     **/
+    void changeLayout( const QString & name = QString() );
+
+    /**
      * Switch verbose logging for selection changes on or off.
      *
      * This is normally done by the invisible checkable action
@@ -289,6 +295,11 @@ protected:
     void mapTreeExpandAction( QAction * action, int level );
 
     /**
+     * Initialize the layout actions.
+     **/
+    void initLayoutActions();
+
+    /**
      * Window close event ([x] icon in the top right window)
      **/
     virtual void closeEvent( QCloseEvent *event ) Q_DECL_OVERRIDE;
@@ -307,11 +318,13 @@ private:
     QDirStat::CleanupCollection * _cleanupCollection;
     QDirStat::MimeCategorizer	* _mimeCategorizer;
     QDirStat::ConfigDialog	* _configDialog;
+    QActionGroup                * _layoutActionGroup;
     QPointer<FileTypeStatsWindow> _fileTypeStatsWindow;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
     bool			  _verboseSelection;
     bool			  _urlInWindowTitle;
+    QString                       _layoutName;
     int				  _statusBarTimeout; // millisec
     QSignalMapper	       * _treeLevelMapper;
 };
