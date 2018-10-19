@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-18
+Updated: 2018-10-19
 
 
 ## Overview
@@ -67,6 +67,50 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.4**
+
+- 2018-10-19
+
+  - Added different layouts to the main window:
+
+    You can now switch between three (at the moment) different layout options
+    for the upper half of QDirStat's main window.
+
+    - Layout 1 (short): Display only a bare minimum of columns in the tree
+      view, but show the new details panel on the right side. This is to
+      minimize clutter in the tree view, yet keep all the information
+      available.
+
+    - Layout 2 (classic): Display the same columns as always in the tree view
+      and additionally the new details panel on the right side.
+
+    - Layout 3 (full): Display all available columns in the tree view,
+      including the new file owner, group, permissions in both "rwxrwxrwx" and
+      octal. But don't display the new display side panel so there is enough
+      screen space to show all those columns.
+
+    Switching between the layouts is as easy as pressing one of the three new
+    buttons in the tool bar: L1, L2, L3. Or use the corresponding entries in
+    the "View" menu. Or use the Alt-1, Alt-2, Alt-3 key combinations.
+
+    For each view, you can individually configure what columns to display and
+    whether or not to display the new details side panel and / or the new
+    breadcrumbs navigator.
+
+    The column widths are still configured globally (and this will remain like
+    that); I experimented with that and found it _very_ awkward to have to set
+    all of them individually for each layout.
+
+    Screenshots will follow.
+
+  - We are approaching a new release (I guess you figured that with all the
+    recent changes). Most likely there will be at least one Beta release (if
+    there are problems maybe more) before the 1.5-stable release.
+
+  - There is still some (limited) time to add even more package managers if
+    anybody feels inclined to submit patches. But please be advised that I
+    can't do much maintenance for any of those since I don't have any systems
+    readily available to test anything.
+
 
 - 2018-10-18
 
