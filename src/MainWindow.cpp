@@ -59,13 +59,15 @@ MainWindow::MainWindow():
     _verboseSelection( false ),
     _urlInWindowTitle( false ),
     _statusBarTimeout( 3000 ), // millisec
-    _treeLevelMapper(0)
+    _treeLevelMapper(0),
+    _currentLayout( 0 )
 {
     CHECK_PTR( _ui );
 
     _ui->setupUi( this );
     ActionManager::instance()->addWidgetTree( this );
     initLayoutActions();
+    createLayouts();
     readSettings();
 
     _dirTreeModel = new DirTreeModel( this );
@@ -169,6 +171,9 @@ MainWindow::MainWindow():
 
 MainWindow::~MainWindow()
 {
+    if ( _currentLayout )
+        saveLayout( _currentLayout );
+
     writeSettings();
     ExcludeRules::instance()->writeSettings();
 
@@ -183,6 +188,8 @@ MainWindow::~MainWindow()
     delete _mimeCategorizer;
     delete _selectionModel;
     delete _dirTreeModel;
+
+    qDeleteAll( _layouts );
 }
 
 
@@ -349,11 +356,6 @@ void MainWindow::readSettings()
     bool showTreemap	  = settings.value( "ShowTreemap"	      , true  ).toBool();
     bool treemapOnSide	  = settings.value( "TreemapOnSide"	      , false ).toBool();
 
-#if 0
-    bool showCurrentPath  = settings.value( "ShowCurrentPath"	      , true  ).toBool();
-    bool showDetailsPanel = settings.value( "ShowDetailsPanel"	      , true  ).toBool();
-#endif
-
     _verboseSelection	  = settings.value( "VerboseSelection"	      , false ).toBool();
     _urlInWindowTitle	  = settings.value( "UrlInWindowTitle"	      , false ).toBool();
     _layoutName           = settings.value( "Layout"                  , "L2"  ).toString();
@@ -365,15 +367,9 @@ void MainWindow::readSettings()
     QByteArray topSplitterState	 = settings.value( "TopSplitter"  , QByteArray() ).toByteArray();
     settings.endGroup();
 
-
     _ui->actionShowTreemap->setChecked( showTreemap );
     _ui->actionTreemapAsSidePanel->setChecked( treemapOnSide );
     treemapAsSidePanel();
-
-#if 0
-    _ui->actionShowCurrentPath->setChecked( showCurrentPath );
-    _ui->actionShowDetailsPanel->setChecked( showDetailsPanel );
-#endif
 
     _ui->actionVerboseSelection->setChecked( _verboseSelection );
 
@@ -390,9 +386,34 @@ void MainWindow::readSettings()
 
     if ( ! topSplitterState.isNull() )
 	_ui->topViewsSplitter->restoreState( topSplitterState );
+    else
+    {
+        // The Qt designer refuses to let me set a reasonable size for that
+        // widget, so let's set one here. Yes, that's not really how this is
+        // supposed to be, but I am fed up with that stuff.
+
+        _ui->fileDetailsPanel->resize( QSize( 300, 300 ) );
+    }
+
+    foreach ( TreeLayout * layout, _layouts )
+	readLayoutSettings( layout );
 
     ExcludeRules::instance()->readSettings();
     Debug::dumpExcludeRules();
+}
+
+
+void MainWindow::readLayoutSettings( TreeLayout * layout )
+{
+    CHECK_PTR( layout );
+
+    Settings settings;
+    settings.beginGroup( QString( "TreeViewLayout_%1" ).arg( layout->name ) );
+
+    layout->showCurrentPath  = settings.value( "ShowCurrentPath" , layout->showCurrentPath  ).toBool();
+    layout->showDetailsPanel = settings.value( "ShowDetailsPanel", layout->showDetailsPanel ).toBool();
+
+    settings.endGroup();
 }
 
 
@@ -404,12 +425,6 @@ void MainWindow::writeSettings()
     settings.setValue( "StatusBarTimeoutMillisec", _statusBarTimeout );
     settings.setValue( "ShowTreemap"		 , _ui->actionShowTreemap->isChecked() );
     settings.setValue( "TreemapOnSide"		 , _ui->actionTreemapAsSidePanel->isChecked() );
-
-#if 0
-    settings.setValue( "ShowCurrentPath"	 , _ui->actionShowCurrentPath->isChecked() );
-    settings.setValue( "ShowDetailsPanel"	 , _ui->actionShowDetailsPanel->isChecked() );
-#endif
-
     settings.setValue( "VerboseSelection"	 , _verboseSelection );
     settings.setValue( "UrlInWindowTitle"	 , _urlInWindowTitle );
     settings.setValue( "Layout"                  , _layoutName );
@@ -421,6 +436,23 @@ void MainWindow::writeSettings()
     settings.beginGroup( "MainWindow-Subwindows" );
     settings.setValue( "MainSplitter"		 , _ui->mainWinSplitter->saveState()  );
     settings.setValue( "TopSplitter"		 , _ui->topViewsSplitter->saveState() );
+    settings.endGroup();
+
+    foreach ( TreeLayout * layout, _layouts )
+	writeLayoutSettings( layout );
+}
+
+
+void MainWindow::writeLayoutSettings( TreeLayout * layout )
+{
+    CHECK_PTR( layout );
+
+    Settings settings;
+    settings.beginGroup( QString( "TreeViewLayout_%1" ).arg( layout->name ) );
+
+    settings.setValue( "ShowCurrentPath" , layout->showCurrentPath  );
+    settings.setValue( "ShowDetailsPanel", layout->showDetailsPanel );
+
     settings.endGroup();
 }
 
@@ -904,6 +936,26 @@ void MainWindow::initLayoutActions()
 }
 
 
+void MainWindow::createLayouts()
+{
+    TreeLayout * layout;
+
+    layout = new TreeLayout( "L1" );
+    CHECK_NEW( layout );
+    _layouts[ "L1" ] = layout;
+
+    layout = new TreeLayout( "L2" );
+    CHECK_NEW( layout );
+    _layouts[ "L2" ] = layout;
+
+    layout = new TreeLayout( "L3" );
+    CHECK_NEW( layout );
+    _layouts[ "L3" ] = layout;
+
+    layout->showDetailsPanel = false;
+}
+
+
 void MainWindow::changeLayout( const QString & name )
 {
     _layoutName = name;
@@ -917,11 +969,40 @@ void MainWindow::changeLayout( const QString & name )
             action->data().toString() : "L2";
     }
 
-    logInfo() << "Changing to layout " << _layoutName << endl;
+    logDebug() << "Changing to layout " << _layoutName << endl;
 
     _ui->dirTreeView->headerTweaker()->changeLayout( _layoutName );
 
-    // TO DO: Actually change the layout
+    if ( _currentLayout )
+        saveLayout( _currentLayout );
+
+    if ( _layouts.contains( _layoutName ) )
+    {
+        _currentLayout = _layouts[ _layoutName ];
+        applyLayout( _currentLayout );
+    }
+    else
+    {
+        logError() << "No layout " << _layoutName << endl;
+    }
+}
+
+
+void MainWindow::saveLayout( TreeLayout * layout )
+{
+    CHECK_PTR( layout );
+
+    layout->showCurrentPath  = _ui->actionShowCurrentPath->isChecked();
+    layout->showDetailsPanel = _ui->actionShowDetailsPanel->isChecked();
+}
+
+
+void MainWindow::applyLayout( TreeLayout * layout )
+{
+    CHECK_PTR( layout );
+
+    _ui->actionShowCurrentPath->setChecked ( layout->showCurrentPath  );
+    _ui->actionShowDetailsPanel->setChecked( layout->showDetailsPanel );
 }
 
 

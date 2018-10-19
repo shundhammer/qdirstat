@@ -21,6 +21,7 @@
 class QCloseEvent;
 class QSortFilterProxyModel;
 class QSignalMapper;
+class TreeLayout;
 
 
 namespace QDirStat
@@ -300,6 +301,31 @@ protected:
     void initLayoutActions();
 
     /**
+     * Create the different top layouts.
+     **/
+    void createLayouts();
+
+    /**
+     * Save the current settings in 'layout'.
+     **/
+    void saveLayout( TreeLayout * layout );
+
+    /**
+     * Apply a layout to the current settings.
+     **/
+    void applyLayout( TreeLayout * layout );
+
+    /**
+     * Read settings for one layout.
+     **/
+    void readLayoutSettings( TreeLayout * layout );
+
+    /**
+     * Write settings for one layout.
+     **/
+    void writeLayoutSettings( TreeLayout * layout );
+
+    /**
      * Window close event ([x] icon in the top right window)
      **/
     virtual void closeEvent( QCloseEvent *event ) Q_DECL_OVERRIDE;
@@ -326,8 +352,30 @@ private:
     bool			  _urlInWindowTitle;
     QString                       _layoutName;
     int				  _statusBarTimeout; // millisec
-    QSignalMapper	       * _treeLevelMapper;
-};
+    QSignalMapper	       *  _treeLevelMapper;
+    QMap<QString, TreeLayout *>   _layouts;
+    TreeLayout *                  _currentLayout;
+
+}; // class MainWindow
+
+
+/**
+ * Helper class for the different layouts of the tree view layout.
+ **/
+class TreeLayout
+{
+public:
+    TreeLayout( const QString & name ):
+        name( name ),
+        showCurrentPath( true ),
+        showDetailsPanel( true )
+        {}
+
+    QString name;
+    bool    showCurrentPath;
+    bool    showDetailsPanel;
+
+}; // class TreeLayout
+
 
 #endif // MainWindow_H
-
