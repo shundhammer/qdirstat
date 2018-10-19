@@ -124,9 +124,9 @@ namespace QDirStat
 	const DataColumnList defaultColumns() const;
 
         /**
-         * Return the columns that are hidden by default.
+         * Return all model columns in default order.
          **/
-        const DataColumnList defaultHiddenColumns() const;
+	const DataColumnList allColumns() const { return defaultColumns(); }
 
 	/**
 	 * Return the number of columns that are curently displayed.

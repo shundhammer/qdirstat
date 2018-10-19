@@ -103,18 +103,7 @@ void HeaderTweaker::createColumnLayouts()
     CHECK_PTR( layout );
     _layouts[ "L3" ] = layout;
 
-    layout->visibleColList << NameCol
-			   << PercentBarCol
-			   << PercentNumCol
-			   << SizeCol
-			   << TotalItemsCol
-			   << TotalFilesCol
-			   << TotalSubDirsCol
-			   << LatestMTimeCol
-			   << UserCol
-			   << GroupCol
-			   << PermissionsCol
-			   << OctalPermissionsCol;
+    layout->visibleColList = DataColumns::instance()->allColumns();
 
     foreach ( layout, _layouts )
 	layout->defaultVisibleColList = layout->visibleColList;

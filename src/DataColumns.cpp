@@ -74,19 +74,6 @@ const DataColumnList DataColumns::defaultColumns() const
 }
 
 
-const DataColumnList DataColumns::defaultHiddenColumns() const
-{
-    DataColumnList columns;
-
-    columns << UserCol
-	    << GroupCol
-	    << PermissionsCol
-	    << OctalPermissionsCol;
-
-    return columns;
-}
-
-
 void DataColumns::readSettings()
 {
     Settings settings;
