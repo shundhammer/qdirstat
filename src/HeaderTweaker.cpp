@@ -407,7 +407,7 @@ void HeaderTweaker::writeSettings()
 
     // Remove any leftovers from old config file versions
 
-    (void) remove( "" ); // Remove all keys in this settings group
+    (void) settings.remove( "" ); // Remove all keys in this settings group
 
 
     // Save column widths
