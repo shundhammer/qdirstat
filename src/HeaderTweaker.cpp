@@ -25,7 +25,8 @@ HeaderTweaker::HeaderTweaker( QHeaderView * header, DirTreeView * parent ):
     QObject( parent ),
     _treeView( parent ),
     _header( header ),
-    _currentSection( -1 )
+    _currentSection( -1 ),
+    _currentLayout( 0 )
 {
     CHECK_PTR( _header );
 
@@ -35,6 +36,7 @@ HeaderTweaker::HeaderTweaker( QHeaderView * header, DirTreeView * parent ):
 
     setAllColumnsAutoSize( true );
     createActions();
+    createColumnLayouts();
 
     connect( _header, SIGNAL( sectionCountChanged( int, int ) ),
 	     this,    SLOT  ( initHeader()		      ) );
@@ -46,7 +48,12 @@ HeaderTweaker::HeaderTweaker( QHeaderView * header, DirTreeView * parent ):
 
 HeaderTweaker::~HeaderTweaker()
 {
+    if ( _currentLayout )
+	saveLayout( _currentLayout );
+
     writeSettings();
+
+    qDeleteAll( _layouts );
 }
 
 
@@ -58,6 +65,59 @@ void HeaderTweaker::initHeader()
 
     // logDebug() << "Header count: " << _header->count() << endl;
     readSettings();
+}
+
+
+void HeaderTweaker::createColumnLayouts()
+{
+    // Layout L1: Short
+
+    ColumnLayout * layout = new ColumnLayout( "L1" );
+    CHECK_PTR( layout );
+    _layouts[ "L1" ] = layout;
+
+    layout->visibleColList << NameCol
+			   << PercentBarCol
+			   << PercentNumCol
+			   << SizeCol
+			   << LatestMTimeCol;
+
+    // L2: Classic QDirStat Style
+
+    layout = new ColumnLayout( "L2" );
+    CHECK_PTR( layout );
+    _layouts[ "L2" ] = layout;
+
+    layout->visibleColList << NameCol
+			   << PercentBarCol
+			   << PercentNumCol
+			   << SizeCol
+			   << TotalItemsCol
+			   << TotalFilesCol
+			   << TotalSubDirsCol
+			   << LatestMTimeCol;
+
+    // L3: Full
+
+    layout = new ColumnLayout( "L3" );
+    CHECK_PTR( layout );
+    _layouts[ "L3" ] = layout;
+
+    layout->visibleColList << NameCol
+			   << PercentBarCol
+			   << PercentNumCol
+			   << SizeCol
+			   << TotalItemsCol
+			   << TotalFilesCol
+			   << TotalSubDirsCol
+			   << LatestMTimeCol
+			   << UserCol
+			   << GroupCol
+			   << PermissionsCol
+			   << OctalPermissionsCol;
+
+    foreach ( layout, _layouts )
+	layout->defaultVisibleColList = layout->visibleColList;
 }
 
 
@@ -270,16 +330,12 @@ void HeaderTweaker::showAllHiddenColumns()
 
 void HeaderTweaker::resetToDefaults()
 {
-    showAllHiddenColumns();
-    setAllColumnsAutoSize( true );
-    clearSettings();
-    setColumnOrder( DataColumns::instance()->defaultColumns() );
-
-    // Restore column order: Make sure logical and visual index are the same.
-
-    for ( int section = 0; section < _header->count(); ++section )
+    if ( _currentLayout )
     {
-	_header->moveSection( _header->visualIndex( section ), section );
+	_currentLayout->colOrderList   = DataColumns::instance()->defaultColumns();
+	_currentLayout->visibleColList = _currentLayout->defaultVisibleColList;
+
+	applyLayout( _currentLayout );
     }
 }
 
@@ -301,64 +357,10 @@ void HeaderTweaker::setColumnOrder( const DataColumnList & colOrderList)
 }
 
 
-void HeaderTweaker::clearSettings()
-{
-    Settings settings;
-    settings.beginGroup( "TreeViewColumns" );
-    (void) remove( "" ); // Remove all keys in this settings group
-    settings.endGroup();
-}
-
-
 void HeaderTweaker::readSettings()
 {
     Settings settings;
     settings.beginGroup( "TreeViewColumns" );
-
-    QStringList strList = settings.value( "ColumnOrder" ).toStringList();
-    DataColumnList colOrderList = DataColumns::fromStringList( strList );
-
-    if ( colOrderList.isEmpty() )
-    {
-	// logDebug() << "Falling back to default column order" << endl;
-	colOrderList = DataColumns::instance()->defaultColumns();
-    }
-    else
-    {
-	colOrderList = DataColumns::fixup( colOrderList );
-	addMissingColumns( colOrderList );
-    }
-
-    setColumnOrder( colOrderList);
-
-    strList = settings.value( "VisibleColumns" ).toStringList();
-    DataColumnList visibleColList = DataColumns::fromStringList( strList );
-
-    if ( visibleColList.isEmpty() )
-    {
-	logDebug() << "Falling back to default visible columns" << endl;
-	visibleColList = colOrderList;
-
-        foreach ( DataColumn col, DataColumns::instance()->defaultHiddenColumns() )
-            visibleColList.removeAll( col );
-    }
-
-    visibleColList = DataColumns::fixup( visibleColList );
-
-    //
-    // Set all columns to hidden that are not in visibleColList
-    //
-
-    for ( int section = 0; section < _header->count(); ++section )
-    {
-	DataColumn col = static_cast<DataColumn>( section );
-
-	if ( ! visibleColList.contains( col ) )
-	{
-	    logDebug() << "Hiding " << col << endl;
-	    _header->setSectionHidden( DataColumns::toViewCol( section ), true );
-	}
-    }
 
     //
     // Set all column widths that are specified
@@ -384,6 +386,28 @@ void HeaderTweaker::readSettings()
     }
 
     settings.endGroup();
+
+    foreach ( ColumnLayout * layout, _layouts )
+	readLayoutSettings( layout );
+}
+
+
+void HeaderTweaker::readLayoutSettings( ColumnLayout * layout )
+{
+    CHECK_PTR( layout );
+
+    Settings settings;
+    settings.beginGroup( QString( "TreeViewLayout_%1" ).arg( layout->name ) );
+
+    QStringList strList = settings.value( "ColumnOrder" ).toStringList();
+    layout->colOrderList = DataColumns::fromStringList( strList );
+
+    strList = settings.value( "VisibleColumns" ).toStringList();
+    layout->visibleColList = DataColumns::fromStringList( strList );
+
+    fixupLayout( layout );
+
+    settings.endGroup();
 }
 
 
@@ -392,27 +416,18 @@ void HeaderTweaker::writeSettings()
     Settings settings;
     settings.beginGroup( "TreeViewColumns" );
 
-    QStringList colOrderList;
-    QStringList visibleColList;
+    // Remove any leftovers from old config file versions
+
+    (void) remove( "" ); // Remove all keys in this settings group
+
+
+    // Save column widths
 
     for ( int visualIndex = 0; visualIndex < _header->count(); ++visualIndex )
     {
-	//
-	// Collect column order and visibility for all columns
-	//
-
 	int logicalIndex = _header->logicalIndex( visualIndex );
 	DataColumn col	 = static_cast<DataColumn>( logicalIndex );
 	QString colName	 = DataColumns::toString( col );
-
-	colOrderList << colName;
-
-	if ( ! _header->isSectionHidden( logicalIndex ) )
-	    visibleColList << colName;
-
-	//
-	// Write column width for all columns that don't have auto size
-	//
 
 	QString widthKey = QString( "Width_%1" ).arg( colName );
 
@@ -422,10 +437,40 @@ void HeaderTweaker::writeSettings()
 	    settings.setValue( widthKey, _header->sectionSize( logicalIndex ) );
     }
 
-    settings.setValue( "ColumnOrder",	 colOrderList );
-    settings.setValue( "VisibleColumns", visibleColList );
+    settings.endGroup();
+
+
+    // Save column layouts
+
+    foreach ( ColumnLayout * layout, _layouts )
+	writeLayoutSettings( layout );
+}
+
+
+void HeaderTweaker::writeLayoutSettings( ColumnLayout * layout )
+{
+    CHECK_PTR( layout );
+
+    Settings settings;
+    settings.beginGroup( QString( "TreeViewLayout_%1" ).arg( layout->name ) );
+
+    logDebug() << "Layout " << layout->name << " vis: " << layout->visibleColList << endl;
+
+    settings.setValue( "VisibleColumns", DataColumns::toStringList( layout->visibleColList ) );
+    settings.setValue( "ColumnOrder",	 DataColumns::toStringList( layout->colOrderList ) );
 
     settings.endGroup();
+}
+
+
+void HeaderTweaker::setColumnVisibility( const DataColumnList & visibleColList )
+{
+    for ( int section = 0; section < _header->count(); ++section )
+    {
+	DataColumn col = static_cast<DataColumn>( section );
+	bool visible   = visibleColList.contains( col );
+	_header->setSectionHidden( DataColumns::toViewCol( section ), ! visible );
+    }
 }
 
 
@@ -435,6 +480,77 @@ void HeaderTweaker::addMissingColumns( DataColumnList & colList )
     {
 	if ( ! colList.contains( col ) )
 	     colList << col;
+    }
+}
+
+
+void HeaderTweaker::changeLayout( const QString & name )
+{
+    if ( ! _layouts.contains( name ) )
+    {
+	logError() << "No layout " << name << endl;
+	return;
+    }
+
+    // logDebug() << "Changing to layout " << name << endl;
+
+    if ( _currentLayout )
+	saveLayout( _currentLayout );
+
+    _currentLayout = _layouts[ name ];
+    applyLayout( _currentLayout );
+}
+
+
+void HeaderTweaker::saveLayout( ColumnLayout * layout )
+{
+    CHECK_PTR( layout );
+
+    layout->colOrderList.clear();
+    layout->visibleColList.clear();
+
+    for ( int visualIndex = 0; visualIndex < _header->count(); ++visualIndex )
+    {
+	int logicalIndex = _header->logicalIndex( visualIndex );
+	DataColumn col	 = static_cast<DataColumn>( logicalIndex );
+
+	layout->colOrderList << col;
+
+	if ( ! _header->isSectionHidden( logicalIndex ) )
+	    layout->visibleColList << col;
+    }
+}
+
+
+void HeaderTweaker::applyLayout( ColumnLayout * layout )
+{
+    CHECK_PTR( layout );
+
+    fixupLayout( layout );
+    setColumnOrder( layout->colOrderList );
+    setColumnVisibility( layout->visibleColList );
+}
+
+
+void HeaderTweaker::fixupLayout( ColumnLayout * layout )
+{
+    CHECK_PTR( layout );
+
+    if ( layout->colOrderList.isEmpty() )
+    {
+	// logDebug() << "Falling back to default column order" << endl;
+	layout->colOrderList = DataColumns::instance()->defaultColumns();
+    }
+    else
+    {
+	DataColumns::ensureNameColFirst( layout->colOrderList );
+	addMissingColumns( layout->colOrderList );
+    }
+
+    if ( layout->visibleColList.isEmpty() )
+    {
+	logDebug() << "Falling back to default visible columns" << endl;
+	layout->visibleColList = layout->defaultVisibleColList;
     }
 }
 
@@ -453,5 +569,5 @@ void HeaderTweaker::setResizeMode( int section, QHeaderView::ResizeMode resizeMo
 void HeaderTweaker::resizeToContents( QHeaderView * header )
 {
     for ( int col = 0; col < header->count(); ++col )
-        header->setSectionResizeMode( col, QHeaderView::ResizeToContents );
+	header->setSectionResizeMode( col, QHeaderView::ResizeToContents );
 }

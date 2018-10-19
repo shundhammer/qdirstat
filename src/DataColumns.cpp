@@ -99,7 +99,7 @@ void DataColumns::readSettings()
     if ( _columns.isEmpty() )
 	_columns = defaultColumns();
     else
-	_columns = fixup( _columns );
+	ensureNameColFirst( _columns );
 }
 
 
@@ -215,17 +215,13 @@ DataColumnList DataColumns::fromStringList( const QStringList & strList )
 }
 
 
-DataColumnList DataColumns::fixup( const DataColumnList & colList )
+void DataColumns::ensureNameColFirst( DataColumnList & colList )
 {
-    DataColumnList fixedList = colList;
-
-    if ( fixedList.first() != NameCol )
+    if ( colList.first() != NameCol )
     {
 	logError() << "NameCol is required to be first!" << endl;
-	fixedList.removeAll( NameCol );
-	fixedList.prepend( NameCol );
-	logError() << "Fixed column list: " << toStringList( fixedList ) << endl;
+	colList.removeAll( NameCol );
+	colList.prepend( NameCol );
+	logError() << "Fixed column list: " << toStringList( colList ) << endl;
     }
-
-    return fixedList;
 }

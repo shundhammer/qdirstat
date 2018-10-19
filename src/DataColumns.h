@@ -154,10 +154,9 @@ namespace QDirStat
 	static DataColumnList fromStringList( const QStringList & strList );
 
 	/**
-	 * Fix a data column list to make sure it contains NameCol at the first
-	 * position.
+	 * Ensure that NameCol at the first position of colList.
 	 **/
-	static DataColumnList fixup( const DataColumnList & colList );
+	static void ensureNameColFirst( DataColumnList & colList );
 
 
     public slots:
@@ -202,6 +201,20 @@ namespace QDirStat
     inline QTextStream & operator<< ( QTextStream & stream, DataColumn col )
     {
 	stream << DataColumns::toString( col );
+
+	return stream;
+    }
+
+
+    /**
+     * Print a DataColumn in text form to a debug stream.
+     **/
+    inline QTextStream & operator<< ( QTextStream &          stream,
+                                      const DataColumnList & colList )
+    {
+	stream << "[ "
+               << DataColumns::toStringList( colList ).join( ", " )
+               << " ]";
 
 	return stream;
     }

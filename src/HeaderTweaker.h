@@ -11,6 +11,7 @@
 
 
 #include <QHeaderView>
+#include <QMap>
 #include "DataColumns.h"
 
 class QHeaderView;
@@ -21,6 +22,7 @@ class QMenu;
 namespace QDirStat
 {
     class DirTreeView;
+    class ColumnLayout;
 
     /**
      * Decorator class for a DirTreeView's QHeaderView that takes care about
@@ -48,10 +50,10 @@ namespace QDirStat
 	 **/
 	void setColumnOrder( const DataColumnList & colOrderList);
 
-        /**
-         * Resize a header view to contents.
-         **/
-        static void resizeToContents( QHeaderView * header );
+	/**
+	 * Resize a header view to contents.
+	 **/
+	static void resizeToContents( QHeaderView * header );
 
     public slots:
 
@@ -85,6 +87,10 @@ namespace QDirStat
 	 **/
 	void writeSettings();
 
+	/**
+	 * Switch the layout to the one with the specified name.
+	 **/
+	void changeLayout( const QString & name );
 
 
     protected slots:
@@ -118,9 +124,14 @@ namespace QDirStat
 	void autoSizeCurrentCol();
 
 	/**
-	 * Reset this settings section to defaults.
+	 * Read the settings for a layout.
 	 **/
-	void clearSettings();
+	void readLayoutSettings( ColumnLayout * layout );
+
+	/**
+	 * Write the settings for a layout.
+	 **/
+	void writeLayoutSettings( ColumnLayout * layout );
 
 
     protected:
@@ -132,6 +143,11 @@ namespace QDirStat
 	void createActions();
 
 	/**
+	 * Create the column layouts.
+	 **/
+	void createColumnLayouts();
+
+	/**
 	 * Update all actions for a context menu for logical section
 	 * 'section'.
 	 **/
@@ -141,6 +157,26 @@ namespace QDirStat
 	 * Create a submenu for the currently hidden columns.
 	 **/
 	QMenu * createHiddenColMenu( QWidget * parent );
+
+	/**
+	 * Save the current status in 'layout'.
+	 **/
+	void saveLayout( ColumnLayout * layout );
+
+	/**
+	 * Apply the settings from 'layout'.
+	 **/
+	void applyLayout( ColumnLayout * layout );
+
+	/**
+	 * Ensure consistency of a layout.
+	 **/
+	void fixupLayout( ColumnLayout * layout );
+
+	/**
+	 * Show the columns that are in 'visibleColList'.
+	 **/
+	void setColumnVisibility( const DataColumnList & visibleColList );
 
 	/**
 	 * Return the column name for the specified logical section number.
@@ -173,17 +209,37 @@ namespace QDirStat
 	// Data members
 	//
 
-	DirTreeView	  * _treeView;
-	QHeaderView	  * _header;
-	QAction		  * _actionAllColumnsAutoSize;
-	QAction		  * _actionAllColumnsInteractiveSize;
-	QAction		  * _actionAutoSizeCurrentCol;
-	QAction		  * _actionHideCurrentCol;
-	QAction		  * _actionShowAllHiddenColumns;
-	QAction		  * _actionResetToDefaults;
-	int		    _currentSection;
+	DirTreeView		      * _treeView;
+	QHeaderView		      * _header;
+	QAction			      * _actionAllColumnsAutoSize;
+	QAction			      * _actionAllColumnsInteractiveSize;
+	QAction			      * _actionAutoSizeCurrentCol;
+	QAction			      * _actionHideCurrentCol;
+	QAction			      * _actionShowAllHiddenColumns;
+	QAction			      * _actionResetToDefaults;
+	int				_currentSection;
+	QMap<QString, ColumnLayout *>	_layouts;
+	ColumnLayout *			_currentLayout;
 
     };	// class HeaderTweaker
+
+
+    /**
+     * Helper class to store information about different column layouts.
+     **/
+    class ColumnLayout
+    {
+    public:
+	ColumnLayout( const QString name ):
+	    name( name )
+	    {}
+
+	QString	       name;
+	DataColumnList colOrderList;
+	DataColumnList visibleColList;
+	DataColumnList defaultVisibleColList;
+
+    };	// class ColumnLayout
 
 }	// namespace QDirStat
 

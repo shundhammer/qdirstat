@@ -30,6 +30,7 @@
 #include "FileDetailsView.h"
 #include "FileInfo.h"
 #include "FileSizeStatsWindow.h"
+#include "HeaderTweaker.h"
 #include "Logger.h"
 #include "MimeCategorizer.h"
 #include "MimeCategoryConfigPage.h"
@@ -347,8 +348,12 @@ void MainWindow::readSettings()
     _statusBarTimeout	  = settings.value( "StatusBarTimeoutMillisec", 3000  ).toInt();
     bool showTreemap	  = settings.value( "ShowTreemap"	      , true  ).toBool();
     bool treemapOnSide	  = settings.value( "TreemapOnSide"	      , false ).toBool();
+
+#if 0
     bool showCurrentPath  = settings.value( "ShowCurrentPath"	      , true  ).toBool();
     bool showDetailsPanel = settings.value( "ShowDetailsPanel"	      , true  ).toBool();
+#endif
+
     _verboseSelection	  = settings.value( "VerboseSelection"	      , false ).toBool();
     _urlInWindowTitle	  = settings.value( "UrlInWindowTitle"	      , false ).toBool();
     _layoutName           = settings.value( "Layout"                  , "L2"  ).toString();
@@ -365,8 +370,11 @@ void MainWindow::readSettings()
     _ui->actionTreemapAsSidePanel->setChecked( treemapOnSide );
     treemapAsSidePanel();
 
+#if 0
     _ui->actionShowCurrentPath->setChecked( showCurrentPath );
     _ui->actionShowDetailsPanel->setChecked( showDetailsPanel );
+#endif
+
     _ui->actionVerboseSelection->setChecked( _verboseSelection );
 
     foreach ( QAction * action, _layoutActionGroup->actions() )
@@ -396,8 +404,12 @@ void MainWindow::writeSettings()
     settings.setValue( "StatusBarTimeoutMillisec", _statusBarTimeout );
     settings.setValue( "ShowTreemap"		 , _ui->actionShowTreemap->isChecked() );
     settings.setValue( "TreemapOnSide"		 , _ui->actionTreemapAsSidePanel->isChecked() );
+
+#if 0
     settings.setValue( "ShowCurrentPath"	 , _ui->actionShowCurrentPath->isChecked() );
     settings.setValue( "ShowDetailsPanel"	 , _ui->actionShowDetailsPanel->isChecked() );
+#endif
+
     settings.setValue( "VerboseSelection"	 , _verboseSelection );
     settings.setValue( "UrlInWindowTitle"	 , _urlInWindowTitle );
     settings.setValue( "Layout"                  , _layoutName );
@@ -906,6 +918,8 @@ void MainWindow::changeLayout( const QString & name )
     }
 
     logInfo() << "Changing to layout " << _layoutName << endl;
+
+    _ui->dirTreeView->headerTweaker()->changeLayout( _layoutName );
 
     // TO DO: Actually change the layout
 }

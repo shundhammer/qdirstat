@@ -77,11 +77,19 @@ namespace QDirStat
 	 **/
 	QModelIndexList expandedIndexes() const;
 
+        /**
+         * Return this view's header tweaker.
+         **/
+        HeaderTweaker * headerTweaker() const { return _headerTweaker; }
+
+
     public slots:
+
 	/**
 	 * Close (collapse) all branches except the one that 'branch' is in.
 	 **/
 	void closeAllExcept( const QModelIndex & branch );
+
 
     protected slots:
 
@@ -89,6 +97,7 @@ namespace QDirStat
 	 * Post a context menu for the item at 'pos'.
 	 **/
 	void contextMenu( const QPoint & pos );
+
 
     protected:
 
