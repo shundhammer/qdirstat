@@ -174,9 +174,9 @@ namespace QDirStat
 	void fixupLayout( ColumnLayout * layout );
 
 	/**
-	 * Show the columns that are in 'visibleColList'.
+	 * Show the columns that are in 'columns'.
 	 **/
-	void setColumnVisibility( const DataColumnList & visibleColList );
+	void setColumnVisibility( const DataColumnList & columns );
 
 	/**
 	 * Return the column name for the specified logical section number.
@@ -235,9 +235,8 @@ namespace QDirStat
 	    {}
 
 	QString	       name;
-	DataColumnList colOrderList;
-	DataColumnList visibleColList;
-	DataColumnList defaultVisibleColList;
+	DataColumnList columns;
+	DataColumnList defaultColumns;
 
     };	// class ColumnLayout
 

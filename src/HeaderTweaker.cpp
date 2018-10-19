@@ -76,11 +76,11 @@ void HeaderTweaker::createColumnLayouts()
     CHECK_PTR( layout );
     _layouts[ "L1" ] = layout;
 
-    layout->visibleColList << NameCol
-			   << PercentBarCol
-			   << PercentNumCol
-			   << SizeCol
-			   << LatestMTimeCol;
+    layout->columns << NameCol
+                    << PercentBarCol
+                    << PercentNumCol
+                    << SizeCol
+                    << LatestMTimeCol;
 
     // L2: Classic QDirStat Style
 
@@ -88,14 +88,14 @@ void HeaderTweaker::createColumnLayouts()
     CHECK_PTR( layout );
     _layouts[ "L2" ] = layout;
 
-    layout->visibleColList << NameCol
-			   << PercentBarCol
-			   << PercentNumCol
-			   << SizeCol
-			   << TotalItemsCol
-			   << TotalFilesCol
-			   << TotalSubDirsCol
-			   << LatestMTimeCol;
+    layout->columns << NameCol
+                    << PercentBarCol
+                    << PercentNumCol
+                    << SizeCol
+                    << TotalItemsCol
+                    << TotalFilesCol
+                    << TotalSubDirsCol
+                    << LatestMTimeCol;
 
     // L3: Full
 
@@ -103,10 +103,10 @@ void HeaderTweaker::createColumnLayouts()
     CHECK_PTR( layout );
     _layouts[ "L3" ] = layout;
 
-    layout->visibleColList = DataColumns::instance()->allColumns();
+    layout->columns = DataColumns::instance()->allColumns();
 
     foreach ( layout, _layouts )
-	layout->defaultVisibleColList = layout->visibleColList;
+	layout->defaultColumns = layout->columns;
 }
 
 
@@ -321,16 +321,17 @@ void HeaderTweaker::resetToDefaults()
 {
     if ( _currentLayout )
     {
-	_currentLayout->colOrderList   = DataColumns::instance()->defaultColumns();
-	_currentLayout->visibleColList = _currentLayout->defaultVisibleColList;
-
+	_currentLayout->columns = _currentLayout->defaultColumns;
 	applyLayout( _currentLayout );
     }
 }
 
 
-void HeaderTweaker::setColumnOrder( const DataColumnList & colOrderList)
+void HeaderTweaker::setColumnOrder( const DataColumnList & columns )
 {
+    DataColumnList colOrderList = columns;
+    addMissingColumns( colOrderList );
+
     int visualIndex = 0;
 
     foreach ( DataColumn col, colOrderList )
@@ -388,11 +389,8 @@ void HeaderTweaker::readLayoutSettings( ColumnLayout * layout )
     Settings settings;
     settings.beginGroup( QString( "TreeViewLayout_%1" ).arg( layout->name ) );
 
-    QStringList strList = settings.value( "ColumnOrder" ).toStringList();
-    layout->colOrderList = DataColumns::fromStringList( strList );
-
-    strList = settings.value( "VisibleColumns" ).toStringList();
-    layout->visibleColList = DataColumns::fromStringList( strList );
+    QStringList strList = settings.value( "Columns" ).toStringList();
+    layout->columns = DataColumns::fromStringList( strList );
 
     fixupLayout( layout );
 
@@ -442,20 +440,17 @@ void HeaderTweaker::writeLayoutSettings( ColumnLayout * layout )
 
     Settings settings;
     settings.beginGroup( QString( "TreeViewLayout_%1" ).arg( layout->name ) );
-
-    settings.setValue( "VisibleColumns", DataColumns::toStringList( layout->visibleColList ) );
-    settings.setValue( "ColumnOrder",	 DataColumns::toStringList( layout->colOrderList ) );
-
+    settings.setValue( "Columns", DataColumns::toStringList( layout->columns ) );
     settings.endGroup();
 }
 
 
-void HeaderTweaker::setColumnVisibility( const DataColumnList & visibleColList )
+void HeaderTweaker::setColumnVisibility( const DataColumnList & columns )
 {
     for ( int section = 0; section < _header->count(); ++section )
     {
 	DataColumn col = static_cast<DataColumn>( section );
-	bool visible   = visibleColList.contains( col );
+	bool visible   = columns.contains( col );
 	_header->setSectionHidden( DataColumns::toViewCol( section ), ! visible );
     }
 }
@@ -493,18 +488,15 @@ void HeaderTweaker::saveLayout( ColumnLayout * layout )
 {
     CHECK_PTR( layout );
 
-    layout->colOrderList.clear();
-    layout->visibleColList.clear();
+    layout->columns.clear();
 
     for ( int visualIndex = 0; visualIndex < _header->count(); ++visualIndex )
     {
 	int logicalIndex = _header->logicalIndex( visualIndex );
 	DataColumn col	 = static_cast<DataColumn>( logicalIndex );
 
-	layout->colOrderList << col;
-
 	if ( ! _header->isSectionHidden( logicalIndex ) )
-	    layout->visibleColList << col;
+	    layout->columns << col;
     }
 }
 
@@ -514,8 +506,8 @@ void HeaderTweaker::applyLayout( ColumnLayout * layout )
     CHECK_PTR( layout );
 
     fixupLayout( layout );
-    setColumnOrder( layout->colOrderList );
-    setColumnVisibility( layout->visibleColList );
+    setColumnOrder( layout->columns );
+    setColumnVisibility( layout->columns );
 }
 
 
@@ -523,22 +515,13 @@ void HeaderTweaker::fixupLayout( ColumnLayout * layout )
 {
     CHECK_PTR( layout );
 
-    if ( layout->colOrderList.isEmpty() )
-    {
-	// logDebug() << "Falling back to default column order" << endl;
-	layout->colOrderList = DataColumns::instance()->defaultColumns();
-    }
-    else
-    {
-	DataColumns::ensureNameColFirst( layout->colOrderList );
-	addMissingColumns( layout->colOrderList );
-    }
-
-    if ( layout->visibleColList.isEmpty() )
+    if ( layout->columns.isEmpty() )
     {
 	logDebug() << "Falling back to default visible columns" << endl;
-	layout->visibleColList = layout->defaultVisibleColList;
+	layout->columns = layout->defaultColumns;
     }
+
+    DataColumns::ensureNameColFirst( layout->columns );
 }
 
 
