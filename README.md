@@ -123,7 +123,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
     The effect is that nobody pays attention anymore at all to that status bar
     because it's flickering all the time anyway, so it has become useless as a
-    tool to report anyting of importance; and status bar messages are gone
+    tool to report anything of importance; and status bar messages are gone
     immediately, too, when the user happens to move the mouse across the
     treemap.
 
