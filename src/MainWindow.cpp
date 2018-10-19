@@ -682,9 +682,17 @@ void MainWindow::askWriteCache()
     {
 	bool ok = _dirTreeModel->tree()->writeCache( fileName );
 
-	QString msg = ok ? tr( "Directory tree written to file %1" ).arg( fileName ) :
-			   tr( "ERROR writing cache file %1").arg( fileName );
-	_ui->statusBar->showMessage( msg, _statusBarTimeout );
+        if ( ok )
+        {
+            _ui->statusBar->showMessage( tr( "Directory tree written to file %1" ).arg( fileName )
+                                         , _statusBarTimeout );
+        }
+        else
+        {
+            QMessageBox::critical( this,
+                                   tr( "Error" ), // Title
+                                   tr( "ERROR writing cache file %1").arg( fileName ) );
+        }
     }
 }
 
