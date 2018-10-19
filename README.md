@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-19
+Updated: 2018-10-20
 
 
 ## Overview
@@ -111,6 +111,27 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     can't do much maintenance for any of those since I don't have any system
     with them readily available to test anything; the ones that I have use
     _dpkg_ or _rpm_.
+
+  - Fixed [GitHub Issue #86](https://github.com/shundhammer/qdirstat/issues/86):
+    CacheWriter errors go unnoticed much too easily.
+
+    This was a direct result of me giving in to nagging people wanting features
+    of very limited value: The status bar flickering like crazy all the time
+    because somebody back some time ago had wanted the current treemap tile's
+    path and size in the status bar as the mouse hovers over it.
+    [GitHub Issue #30](https://github.com/shundhammer/qdirstat/issues/30)
+
+    The effect is that nobody pays attention anymore at all to that status bar
+    because it's flickering all the time anyway, so it has become useless as a
+    tool to report anyting of importance; and status bar messages are gone
+    immediately, too, when the user happens to move the mouse across the
+    treemap.
+
+    As a consequence, I just disabled that by default; if anybody really wants
+    it, edit the QDirStat config file (`~/.config/QDirStat/QDirStat.conf`) and
+    enable it again:
+
+        UseTreemapHover=true
 
 
 - 2018-10-18
