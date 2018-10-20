@@ -97,9 +97,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     for the upper half of QDirStat's main window.
 
     [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout1.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout1.png)
-
     [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout2.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout2.png)
-    
     [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout3.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout3.png)
 
     - Layout 1 (short): Display only a bare minimum of columns in the tree
