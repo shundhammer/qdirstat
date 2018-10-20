@@ -43,6 +43,9 @@
 #include "Trash.h"
 #include "Version.h"
 
+#define LONG_MESSAGE	25*1000
+#define UPDATE_MILLISEC 200
+
 using namespace QDirStat;
 
 using QDirStat::DataColumns;
@@ -70,6 +73,7 @@ MainWindow::MainWindow():
     initLayoutActions();
     createLayouts();
     readSettings();
+    _updateTimer.setInterval( UPDATE_MILLISEC );
 
     _dirTreeModel = new DirTreeModel( this );
     CHECK_NEW( _dirTreeModel );
@@ -104,65 +108,12 @@ MainWindow::MainWindow():
     _ui->treemapView->setMimeCategorizer( _mimeCategorizer );
 
 #ifdef Q_OS_MACX
-    // this makes the application to look like more "native" on macOS
+    // This makes the application to look like more "native" on macOS
     setUnifiedTitleAndToolBarOnMac(true);
     _ui->toolBar->setMovable(false);
 #endif
 
-    connect( _selectionModel,  SIGNAL( currentBranchChanged( QModelIndex ) ),
-	     _ui->dirTreeView, SLOT  ( closeAllExcept	   ( QModelIndex ) ) );
-
-    connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
-	     this,			SLOT  ( startingReading() ) );
-
-    connect( _dirTreeModel->tree(),	SIGNAL( finished()	  ),
-	     this,			SLOT  ( readingFinished() ) );
-
-    connect( _dirTreeModel->tree(),	SIGNAL( aborted()	  ),
-	     this,			SLOT  ( readingAborted()  ) );
-
-    connect( _selectionModel,  SIGNAL( selectionChanged() ),
-	     this,	       SLOT  ( updateActions()	 ) );
-
-    connect( _selectionModel,  SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
-	     this,	       SLOT  ( updateActions()				   ) );
-
-    connect( _selectionModel,	       SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
-	     _ui->breadcrumbNavigator, SLOT  ( setPath		 ( FileInfo *		  ) ) );
-
-    connect( _ui->breadcrumbNavigator, SIGNAL( pathClicked   ( QString ) ),
-	     _selectionModel,	       SLOT  ( setCurrentItem( QString ) ) );
-
-    connect( _ui->treemapView, SIGNAL( treemapChanged() ),
-	     this,	       SLOT  ( updateActions()	 ) );
-
-    connect( _cleanupCollection, SIGNAL( startingCleanup( QString ) ),
-	     this,		 SLOT  ( startingCleanup( QString ) ) );
-
-    connect( _cleanupCollection, SIGNAL( cleanupFinished( int ) ),
-	     this,		 SLOT  ( cleanupFinished( int ) ) );
-
-    if ( _useTreemapHover )
-    {
-	connect( _ui->treemapView, SIGNAL( hoverEnter ( FileInfo * ) ),
-		 this,		   SLOT	 ( showCurrent( FileInfo * ) ) );
-
-	connect( _ui->treemapView, SIGNAL( hoverLeave ( FileInfo * ) ),
-		 this,		   SLOT	 ( showSummary()	   ) );
-    }
-
-
-    // Debug connections
-
-    connect( _ui->dirTreeView, SIGNAL( clicked	  ( QModelIndex ) ),
-	     this,	       SLOT  ( itemClicked( QModelIndex ) ) );
-
-    connect( _selectionModel, SIGNAL( selectionChanged() ),
-	     this,	      SLOT  ( selectionChanged() ) );
-
-    connect( _selectionModel, SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
-	     this,	      SLOT  ( currentItemChanged( FileInfo *, FileInfo * ) ) );
-
+    connectSignals();
     connectActions();
 
     if ( ! _ui->actionShowTreemap->isChecked() )
@@ -194,6 +145,66 @@ MainWindow::~MainWindow()
     delete _dirTreeModel;
 
     qDeleteAll( _layouts );
+}
+
+
+void MainWindow::connectSignals()
+{
+    connect( _selectionModel,		SIGNAL( currentBranchChanged( QModelIndex ) ),
+	     _ui->dirTreeView,		SLOT  ( closeAllExcept	    ( QModelIndex ) ) );
+
+    connect( _dirTreeModel->tree(),	SIGNAL( startingReading() ),
+	     this,			SLOT  ( startingReading() ) );
+
+    connect( _dirTreeModel->tree(),	SIGNAL( finished()	  ),
+	     this,			SLOT  ( readingFinished() ) );
+
+    connect( _dirTreeModel->tree(),	SIGNAL( aborted()	  ),
+	     this,			SLOT  ( readingAborted()  ) );
+
+    connect( _selectionModel,		SIGNAL( selectionChanged() ),
+	     this,			SLOT  ( updateActions()	   ) );
+
+    connect( _selectionModel,		SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
+	     this,			SLOT  ( updateActions()				    ) );
+
+    connect( _selectionModel,		SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
+	     _ui->breadcrumbNavigator,	SLOT  ( setPath		  ( FileInfo *		   ) ) );
+
+    connect( _ui->breadcrumbNavigator,	SIGNAL( pathClicked   ( QString ) ),
+	     _selectionModel,		SLOT  ( setCurrentItem( QString ) ) );
+
+    connect( _ui->treemapView,		SIGNAL( treemapChanged() ),
+	     this,			SLOT  ( updateActions()	 ) );
+
+    connect( _cleanupCollection,	SIGNAL( startingCleanup( QString ) ),
+	     this,			SLOT  ( startingCleanup( QString ) ) );
+
+    connect( _cleanupCollection,	SIGNAL( cleanupFinished( int ) ),
+	     this,			SLOT  ( cleanupFinished( int ) ) );
+
+    connect( &_updateTimer,		SIGNAL( timeout()	  ),
+	     this,			SLOT  ( showElapsedTime() ) );
+
+    if ( _useTreemapHover )
+    {
+	connect( _ui->treemapView,	SIGNAL( hoverEnter ( FileInfo * ) ),
+		 this,			SLOT  ( showCurrent( FileInfo * ) ) );
+
+	connect( _ui->treemapView,	SIGNAL( hoverLeave ( FileInfo * ) ),
+		 this,			SLOT  ( showSummary()		) );
+    }
+
+    // Debug connections
+
+    connect( _ui->dirTreeView,		SIGNAL( clicked	   ( QModelIndex ) ),
+	     this,			SLOT  ( itemClicked( QModelIndex ) ) );
+
+    connect( _selectionModel,		SIGNAL( selectionChanged() ),
+	     this,			SLOT  ( selectionChanged() ) );
+
+    connect( _selectionModel,		SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
+	     this,			SLOT  ( currentItemChanged( FileInfo *, FileInfo * ) ) );
 }
 
 
@@ -515,6 +526,7 @@ void MainWindow::busyDisplay()
 {
     _ui->treemapView->disable();
     updateActions();
+    _updateTimer.start();
 
     // It would be nice to sort by read jobs during reading, but this confuses
     // the hell out of the Qt side of the data model; so let's sort by name
@@ -534,6 +546,7 @@ void MainWindow::busyDisplay()
 void MainWindow::idleDisplay()
 {
     updateActions();
+    _updateTimer.stop();
     int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::PercentNumCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
 
@@ -562,7 +575,7 @@ void MainWindow::readingFinished()
     idleDisplay();
 
     QString elapsedTime = formatTime( _stopWatch.elapsed() );
-    _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1").arg( elapsedTime ) );
+    _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );
     logInfo() << "Reading finished after " << elapsedTime << endl;
 
     // Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );
@@ -575,7 +588,7 @@ void MainWindow::readingAborted()
 
     idleDisplay();
     QString elapsedTime = formatTime( _stopWatch.elapsed() );
-    _ui->statusBar->showMessage( tr( "Aborted. Elapsed time: %1").arg( elapsedTime ) );
+    _ui->statusBar->showMessage( tr( "Aborted. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );
     logInfo() << "Reading aborted after " << elapsedTime << endl;
 }
 
@@ -655,7 +668,7 @@ void MainWindow::stopReading()
     if ( _dirTreeModel->tree()->isBusy() )
     {
 	_dirTreeModel->tree()->abortReading();
-	_ui->statusBar->showMessage( tr( "Reading aborted." ) );
+	_ui->statusBar->showMessage( tr( "Reading aborted." ), LONG_MESSAGE );
     }
 }
 
@@ -690,8 +703,7 @@ void MainWindow::askWriteCache()
 
 	if ( ok )
 	{
-	    _ui->statusBar->showMessage( tr( "Directory tree written to file %1" ).arg( fileName )
-					 , _statusBarTimeout );
+	    showProgress( tr( "Directory tree written to file %1" ).arg( fileName ) );
 	}
 	else
 	{
@@ -902,6 +914,13 @@ void MainWindow::openConfigDialog()
 	_configDialog->setup();
 	_configDialog->show();
     }
+}
+
+
+void MainWindow::showElapsedTime()
+{
+    showProgress( tr( "Reading... %1" )
+		  .arg( formatTime( _stopWatch.elapsed(), false ) ) );
 }
 
 
@@ -1150,7 +1169,7 @@ void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurren
 }
 
 
-QString MainWindow::formatTime( qint64 millisec )
+QString MainWindow::formatTime( qint64 millisec, bool showMillisec )
 {
     QString formattedTime;
     int hours;
@@ -1168,7 +1187,12 @@ QString MainWindow::formatTime( qint64 millisec )
 
     if ( hours < 1 && min < 1 && sec < 60 )
     {
-	formattedTime.sprintf ( "%2d.%03lld ", sec, millisec );
+	if ( showMillisec )
+	    formattedTime.sprintf ( "%2d.%03lld ", sec, millisec );
+	else
+	    formattedTime.sprintf ( "%2d ", sec );
+	    // formattedTime.sprintf ( "%2d.%1lld ", sec, millisec / 100 );
+
 	formattedTime += tr( "sec" );
     }
     else

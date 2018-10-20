@@ -13,6 +13,7 @@
 #include <QMainWindow>
 #include <QString>
 #include <QElapsedTimer>
+#include <QTimer>
 #include <QPointer>
 
 #include "ui_main-window.h"
@@ -247,6 +248,11 @@ protected slots:
     void changeLayout( const QString & name = QString() );
 
     /**
+     * Show the elapsed time while reading.
+     **/
+    void showElapsedTime();
+
+    /**
      * Switch verbose logging for selection changes on or off.
      *
      * This is normally done by the invisible checkable action
@@ -285,7 +291,12 @@ protected:
     FileInfo * selectedDirOrRoot() const;
 
     /**
-     * Set up QObject connections to the actions from the .ui file
+     * Set up QObject connections (all except from QActions)
+     **/
+    void connectSignals();
+
+    /**
+     * Set up QObject connections from the actions from the .ui file
      **/
     void connectActions();
 
@@ -333,7 +344,7 @@ protected:
     /**
      * Format a millisecond-based time
      **/
-    QString formatTime( qint64 millisec );
+    QString formatTime( qint64 millisec, bool showMillisec = true );
 
 
 private:
@@ -356,6 +367,7 @@ private:
     QSignalMapper	       *  _treeLevelMapper;
     QMap<QString, TreeLayout *>	  _layouts;
     TreeLayout *		  _currentLayout;
+    QTimer			  _updateTimer;
 
 }; // class MainWindow
 
