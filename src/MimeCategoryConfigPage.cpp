@@ -56,7 +56,7 @@ MimeCategoryConfigPage::MimeCategoryConfigPage( QWidget * parent ):
 
 MimeCategoryConfigPage::~MimeCategoryConfigPage()
 {
-    logDebug() << "MimeCategoryConfigPage destructor" << endl;
+    // logDebug() << "MimeCategoryConfigPage destructor" << endl;
 
     _ui->treemapView->setDirTree(0);
 

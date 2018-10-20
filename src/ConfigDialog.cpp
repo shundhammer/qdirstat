@@ -11,10 +11,23 @@
 #include "CleanupConfigPage.h"
 #include "MimeCategoryConfigPage.h"
 #include "ExcludeRulesConfigPage.h"
+#include "GeneralConfigPage.h"
 #include "Logger.h"
 #include "Exception.h"
 
 using namespace QDirStat;
+
+#define CONNECT_CONFIG_PAGE(PAGE)			\
+							\
+    connect( this,   SIGNAL( reinit() ),		\
+	     (PAGE), SLOT  ( setup()  ) );		\
+							\
+    connect( this,   SIGNAL( applyChanges() ),		\
+	     (PAGE), SLOT  ( applyChanges() ) );	\
+							\
+    connect( this,   SIGNAL( discardChanges() ),	\
+	     (PAGE), SLOT  ( discardChanges() ) )
+
 
 
 ConfigDialog::ConfigDialog( QWidget * parent ):
@@ -24,68 +37,35 @@ ConfigDialog::ConfigDialog( QWidget * parent ):
     CHECK_NEW( _ui );
     _ui->setupUi( this );
 
-    _cleanupConfigPage = new CleanupConfigPage();
+    _cleanupConfigPage = new CleanupConfigPage( this );
     CHECK_NEW( _cleanupConfigPage );
     _ui->pagesTabWidget->addTab( _cleanupConfigPage, tr( "Cleanup Actions" ) );
 
-    _mimeCategoryConfigPage = new MimeCategoryConfigPage();
+    _mimeCategoryConfigPage = new MimeCategoryConfigPage( this );
     CHECK_NEW( _mimeCategoryConfigPage );
     _ui->pagesTabWidget->addTab( _mimeCategoryConfigPage, tr( "MIME Categories" ) );
 
-    _excludeRulesConfigPage = new ExcludeRulesConfigPage();
+    _excludeRulesConfigPage = new ExcludeRulesConfigPage( this );
     CHECK_NEW( _excludeRulesConfigPage );
     _ui->pagesTabWidget->addTab( _excludeRulesConfigPage, tr( "Exclude Rules" ) );
+
+    _generalConfigPage = new GeneralConfigPage( this );
+    CHECK_NEW( _generalConfigPage );
+    _ui->pagesTabWidget->addTab( _generalConfigPage, tr( "General" ) );
 
     connect( _ui->applyButton,	 SIGNAL( clicked() ),
 	     this,		 SLOT  ( apply()   ) );
 
-    //
-    // Connect cleanup config page
-    //
-
-    connect( this,		 SIGNAL( reinit() ),
-	     _cleanupConfigPage, SLOT  ( setup()  ) );
-
-    connect( this,		 SIGNAL( applyChanges() ),
-	     _cleanupConfigPage, SLOT  ( applyChanges() ) );
-
-    connect( this,		 SIGNAL( discardChanges() ),
-	     _cleanupConfigPage, SLOT  ( discardChanges() ) );
-
-    //
-    // Connect mime category config page
-    //
-
-    connect( this,		      SIGNAL( reinit() ),
-	     _mimeCategoryConfigPage, SLOT  ( setup()  ) );
-
-    connect( this,		      SIGNAL( applyChanges() ),
-	     _mimeCategoryConfigPage, SLOT  ( applyChanges() ) );
-
-    connect( this,		      SIGNAL( discardChanges() ),
-	     _mimeCategoryConfigPage, SLOT  ( discardChanges() ) );
-    
-    //
-    // Connect exclude rules config page
-    //
-
-    connect( this,		      SIGNAL( reinit() ),
-	     _excludeRulesConfigPage, SLOT  ( setup()  ) );
-
-    connect( this,		      SIGNAL( applyChanges() ),
-	     _excludeRulesConfigPage, SLOT  ( applyChanges() ) );
-
-    connect( this,		      SIGNAL( discardChanges() ),
-	     _excludeRulesConfigPage, SLOT  ( discardChanges() ) );
+    CONNECT_CONFIG_PAGE( _cleanupConfigPage      );
+    CONNECT_CONFIG_PAGE( _mimeCategoryConfigPage );
+    CONNECT_CONFIG_PAGE( _excludeRulesConfigPage );
+    CONNECT_CONFIG_PAGE( _generalConfigPage      );
 }
 
 
 ConfigDialog::~ConfigDialog()
 {
     // logDebug() << "ConfigDialog destructor" << endl;
-    delete _cleanupConfigPage;
-    delete _mimeCategoryConfigPage;
-    delete _excludeRulesConfigPage;
 }
 
 

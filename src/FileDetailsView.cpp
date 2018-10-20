@@ -33,7 +33,7 @@ FileDetailsView::FileDetailsView( QWidget * parent ):
     clear();
 
     _labelLimit = 0; // Unlimited
-    // TODO: Read _labelLimit from the config file
+    // TO DO: Read _labelLimit from the config file
 
     _pkgUpdateTimer->addDelayStage(    0 );
     _pkgUpdateTimer->addDelayStage(  333 ); // millisec

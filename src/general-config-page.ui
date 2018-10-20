@@ -1,63 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>generalPage</class>
- <widget class="QWidget" name="generalPage">
+ <class>GeneralConfigPage</class>
+ <widget class="QWidget" name="GeneralConfigPage">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>671</width>
-    <height>435</height>
+    <width>564</width>
+    <height>548</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <spacer name="verticalSpacer">
+    <spacer name="horizontalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>58</height>
+       <width>16</width>
+       <height>20</height>
       </size>
      </property>
     </spacer>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <spacer name="horizontalSpacer">
+      <spacer name="verticalSpacer_6">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>28</width>
+         <width>20</width>
          <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <layout class="QGridLayout" name="generalPageGridLayout">
-       <property name="horizontalSpacing">
-        <number>12</number>
-       </property>
-       <property name="verticalSpacing">
-        <number>15</number>
-       </property>
-       <item row="0" column="0" colspan="2">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCheckBox" name="showUrlInWindowTitleCheckBox">
+         <property name="text">
+          <string>Show &amp;URL in window title</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="useTreemapHoverCheckBox">
+         <property name="text">
+          <string>Use &amp;hover effect in treemap</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="crossFileSystemsCheckBox">
          <property name="text">
           <string>&amp;Cross file system boundaries while reading</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+      </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
         <widget class="QLabel" name="treeIconThemeCaption">
          <property name="text">
           <string>Tree icon &amp;theme:</string>
@@ -67,7 +92,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="0" column="1">
         <widget class="QComboBox" name="treeIconThemeComboBox">
          <item>
           <property name="text">
@@ -81,17 +106,30 @@
          </item>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="0" column="2">
+        <spacer name="horizontalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>36</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
         <widget class="QLabel" name="treeUpdateIntervalCaption">
          <property name="text">
-          <string>Tree &amp;update interval while reading:</string>
+          <string>Tree update &amp;interval while reading:</string>
          </property>
          <property name="buddy">
           <cstring>treeUpdateIntervalSpinBox</cstring>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="1" column="1">
         <widget class="QSpinBox" name="treeUpdateIntervalSpinBox">
          <property name="suffix">
           <string> millisec</string>
@@ -107,7 +145,20 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="1" column="2">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>36</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="0">
         <widget class="QLabel" name="statusBarTimeoutCaption">
          <property name="text">
           <string>Timeout for status bar &amp;messages:</string>
@@ -117,7 +168,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="2" column="1">
         <widget class="QDoubleSpinBox" name="statusBarTimeoutSpinBox">
          <property name="suffix">
           <string> sec</string>
@@ -136,42 +187,67 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="2">
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>36</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </item>
      <item>
-      <spacer name="horizontalSpacer_2">
+      <spacer name="verticalSpacer_5">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>20</width>
          <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <spacer name="horizontalSpacer_3">
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <italic>true</italic>
+        </font>
+       </property>
+       <property name="text">
+        <string>Most options on this page take effect only after restarting the program.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_3">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>20</width>
          <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <spacer name="horizontalSpacer_4">
+      <spacer name="verticalSpacer_7">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>20</width>
          <height>20</height>
         </size>
        </property>
@@ -180,40 +256,27 @@
     </layout>
    </item>
    <item>
-    <spacer name="verticalSpacer_2">
+    <spacer name="horizontalSpacer_3">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>58</height>
+       <width>17</width>
+       <height>20</height>
       </size>
      </property>
     </spacer>
    </item>
    <item>
-    <spacer name="verticalSpacer_3">
+    <spacer name="horizontalSpacer_4">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>58</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <spacer name="verticalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>58</height>
+       <width>15</width>
+       <height>20</height>
       </size>
      </property>
     </spacer>
