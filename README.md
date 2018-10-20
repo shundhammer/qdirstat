@@ -78,8 +78,8 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     expensive in terms of performance now. And QDirStat does a LOT of system
     calls while reading directories: `opendir()` / `readdir()` for each
     directory in the tree and `lstat()` for every single file or directory
-    found in the tree: My 6.8 GB root filesystem has 275.000 items total and
-    25.500 directories which means well over 300.000 system calls. Every single
+    found in the tree: My 6.8 GB root filesystem has 275,000 items total and
+    25,500 directories which means well over 300,000 system calls. Every single
     one of them now causes kernel page tables to be cleared and restored for
     every switch between user space and kernel space, and that means quite some
     performance impact.
