@@ -64,7 +64,8 @@ ExcludeRules::ExcludeRules():
     QObject(),
     _listMover( _rules )
 {
-    _lastMatchingRule = 0;
+    _lastMatchingRule  = 0;
+    _defaultRulesAdded = false;
 }
 
 
@@ -199,6 +200,7 @@ void ExcludeRules::addDefaultRules()
     ExcludeRule * rule = new ExcludeRule( regexp );
     CHECK_NEW( rule );
     add( rule );
+    _defaultRulesAdded = true;
 
     logInfo() << "Added " << rule << endl;
 }
@@ -245,11 +247,10 @@ void ExcludeRules::readSettings()
 	}
     }
 
-    if ( isEmpty() && ! settings.value( "DefaultExcludeRulesAdded", false ).toBool() )
-    {
+    _defaultRulesAdded = settings.value( "DefaultExcludeRulesAdded", false ).toBool();
+
+    if ( isEmpty() && ! _defaultRulesAdded )
         addDefaultRules();
-        settings.setValue( "DefaultExcludeRulesAdded", true );
-    }
 }
 
 
@@ -285,4 +286,7 @@ void ExcludeRules::writeSettings()
 	    settings.endGroup(); // [ExcludeRule_01], [ExcludeRule_02], ...
 	}
     }
+
+    if ( _defaultRulesAdded )
+        settings.setValue( "DefaultExcludeRulesAdded", true );
 }

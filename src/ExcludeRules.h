@@ -242,6 +242,7 @@ namespace QDirStat
 	ExcludeRuleList		 _rules;
 	ListMover<ExcludeRule *> _listMover;
 	ExcludeRule *		 _lastMatchingRule;
+        bool                     _defaultRulesAdded;
     };
 
 
