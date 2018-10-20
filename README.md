@@ -96,19 +96,19 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     You can now switch between three (at the moment) different layout options
     for the upper half of QDirStat's main window.
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout1.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout1.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout1.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout1.png)
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout2.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout2.png)
+    
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout3.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout3.png)
 
     - Layout 1 (short): Display only a bare minimum of columns in the tree
       view, but show the new details panel on the right side. This is to
       minimize clutter in the tree view, yet keep all the information
       available.
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout2.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout2.png)
-
     - Layout 2 (classic): Display the same columns as always in the tree view
       and additionally the new details panel on the right side.
-
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout3.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout3.png)
 
     - Layout 3 (full): Display all available columns in the tree view,
       including the new file owner, group, permissions in both "rwxrwxrwx" and
