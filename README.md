@@ -68,6 +68,27 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
 **Latest stable release: V1.4**
 
+- 2018-10-20
+
+  - Reintroduced showing the elapsed time during directory reading.
+
+    You might have noticed that QDirStat's performance has decreased with all
+    the kernel patches to work around the Meltdown and Spectre security
+    problems caused by CPU design; system calls have become a lot more
+    expensive in terms of performance now. And QDirStat does a LOT of system
+    calls while reading directories: `opendir()` / `readdir()` for each
+    directory in the tree and `lstat()` for every single file or directory
+    found in the tree: My 6.8 GB root filesystem has 275.000 items total and
+    25.500 directories which means well over 300.000 system calls. Every single
+    one of them now causes kernel page tables to be cleared and restored for
+    every switch between user space and kernel space, and that means quite some
+    performance impact.
+
+    This all means that it's now worthwhile again to display the elapsed time
+    during directory reading. It used to be over in a heartbeat, so it wasn't
+    worthwhile to display that; but that's different now.
+
+
 - 2018-10-19
 
   - Added different layouts to the main window:
@@ -75,13 +96,19 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     You can now switch between three (at the moment) different layout options
     for the upper half of QDirStat's main window.
 
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout1.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout1.png)
+
     - Layout 1 (short): Display only a bare minimum of columns in the tree
       view, but show the new details panel on the right side. This is to
       minimize clutter in the tree view, yet keep all the information
       available.
 
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout2.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout2.png)
+
     - Layout 2 (classic): Display the same columns as always in the tree view
       and additionally the new details panel on the right side.
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout3.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout3.png)
 
     - Layout 3 (full): Display all available columns in the tree view,
       including the new file owner, group, permissions in both "rwxrwxrwx" and
@@ -99,8 +126,6 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     The column widths are still configured globally (and this will remain like
     that); I experimented with that and found it _very_ awkward to have to set
     all of them individually for each layout.
-
-    Screenshots will follow.
 
   - We are approaching a new release (I guess you figured that with all the
     recent changes). Most likely there will be at least one Beta release (if
