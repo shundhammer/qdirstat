@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-20
+Updated: 2018-10-21
 
 
 ## Overview
@@ -87,6 +87,20 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     This all means that it's now worthwhile again to display the elapsed time
     during directory reading. It used to be over in a heartbeat, so it wasn't
     worthwhile to display that; but that's different now.
+
+  - Added a _General_ page to the configuration dialog for miscellaneous
+    settings.
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-general-config.png" width="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-general-config.png)
+
+    This is a bit unorganized (as might be expected for misc settings), but
+    those misc settings had accumulated over time, so I decided to finally add
+    such a page.
+
+    The settings were always accessible, but only by editing the config file
+    (`~/.config/QDirStat/QDirStat.conf`) manually. For some settings you might
+    still have to do that: Some are too exotic for general use, some others
+    would confuse the average user much more than they would help.
 
 
 - 2018-10-19
