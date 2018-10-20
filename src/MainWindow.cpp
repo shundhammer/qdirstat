@@ -605,7 +605,13 @@ void MainWindow::openUrl( const QString & url )
 	_dirTreeModel->openUrl( url );
 
 	if ( _urlInWindowTitle )
-	    windowTitle += " " + url;
+	{
+	    // The URL we got at the command line might be relative;
+	    // the DirTree converts this into an absolute URL.
+	    // Let's use that.
+
+	    windowTitle += " " + _dirTreeModel->tree()->url();
+	}
 
 	setWindowTitle( windowTitle );
     }
