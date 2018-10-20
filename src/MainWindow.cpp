@@ -438,13 +438,16 @@ void MainWindow::writeSettings()
     QDirStat::Settings settings;
     settings.beginGroup( "MainWindow" );
 
-    settings.setValue( "StatusBarTimeoutMillisec", _statusBarTimeout );
-    settings.setValue( "ShowTreemap"		 , _ui->actionShowTreemap->isChecked() );
-    settings.setValue( "TreemapOnSide"		 , _ui->actionTreemapAsSidePanel->isChecked() );
-    settings.setValue( "VerboseSelection"	 , _verboseSelection );
-    settings.setValue( "UrlInWindowTitle"	 , _urlInWindowTitle );
-    settings.setValue( "UseTreemapHover"	 , _useTreemapHover );
-    settings.setValue( "Layout"			 , _layoutName );
+    settings.setValue( "ShowTreemap"	 , _ui->actionShowTreemap->isChecked() );
+    settings.setValue( "TreemapOnSide"	 , _ui->actionTreemapAsSidePanel->isChecked() );
+    settings.setValue( "VerboseSelection", _verboseSelection );
+    settings.setValue( "Layout"		 , _layoutName );
+
+    // Those are only set if not already in the settings (they might have been
+    // set from a config dialog).
+    settings.setDefaultValue( "StatusBarTimeoutMillisec", _statusBarTimeout );
+    settings.setDefaultValue( "UrlInWindowTitle"	, _urlInWindowTitle );
+    settings.setDefaultValue( "UseTreemapHover"		, _useTreemapHover );
 
     settings.endGroup();
 

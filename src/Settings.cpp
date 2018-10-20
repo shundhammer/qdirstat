@@ -54,6 +54,27 @@ void Settings::fixFileOwners()
 }
 
 
+void Settings::setDefaultValue( const QString & key, bool newValue )
+{
+    if ( ! contains( key ) )
+        setValue( key, newValue );
+}
+
+
+void Settings::setDefaultValue( const QString & key, int newValue )
+{
+    if ( ! contains( key ) )
+        setValue( key, newValue );
+}
+
+
+void Settings::setDefaultValue( const QString & key, const QString & newValue )
+{
+    if ( ! contains( key ) )
+        setValue( key, newValue );
+}
+
+
 void Settings::fixFileOwner( const QString & filename )
 {
     QString sudoUid = QString::fromUtf8( qgetenv( "SUDO_UID" ) );

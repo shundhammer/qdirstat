@@ -55,6 +55,13 @@ namespace QDirStat
 	 **/
 	const QString & groupPrefix() const { return _groupPrefix; }
 
+        /**
+         * Set a value, but only if that key is not already in the settings.
+         **/
+        void setDefaultValue( const QString & key, bool            newValue );
+        void setDefaultValue( const QString & key, int             newValue );
+        void setDefaultValue( const QString & key, const QString & newValue );
+
 	/**
 	 * Find all settings groups that start with 'groupPrefix'.
 	 **/

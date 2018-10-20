@@ -8,6 +8,7 @@
 
 
 #include "GeneralConfigPage.h"
+#include "Settings.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -27,38 +28,82 @@ GeneralConfigPage::GeneralConfigPage( QWidget * parent ):
 
 GeneralConfigPage::~GeneralConfigPage()
 {
-    logDebug() << endl;
-
+    // NOP
 }
 
 
 void GeneralConfigPage::setup()
 {
-    logDebug() << endl;
-
+    readSettings();
 }
 
 
 void GeneralConfigPage::applyChanges()
 {
-    logDebug() << endl;
-
+    writeSettings();
 }
 
 
 void GeneralConfigPage::discardChanges()
 {
-    logDebug() << endl;
+    readSettings();
 }
 
 
 void GeneralConfigPage::readSettings()
 {
-    logDebug() << endl;
+    // logDebug() << endl;
+
+    QDirStat::Settings settings;
+    settings.beginGroup( "MainWindow" );
+
+    _ui->urlInWindowTitleCheckBox->setChecked( settings.value( "UrlInWindowTitle" , false ).toBool() );
+    _ui->useTreemapHoverCheckBox->setChecked ( settings.value( "UseTreemapHover"  , false ).toBool() );
+
+    int statusBarTimeoutMillisec = settings.value( "StatusBarTimeoutMillisec" , 3000 ).toInt();
+    _ui->statusBarTimeoutSpinBox->setValue( statusBarTimeoutMillisec / 1000.0 );
+
+    settings.endGroup();
+
+
+    settings.beginGroup( "DirectoryTree" );
+
+    _ui->crossFileSystemsCheckBox->setChecked( settings.value( "CrossFileSystems"    , false ).toBool() );
+    _ui->treeUpdateIntervalSpinBox->setValue ( settings.value( "UpdateTimerMillisec" ,   333 ).toInt()  );
+    QString treeIconDir = settings.value( "TreeIconDir", ":/icons/tree-medium" ).toString();
+
+    int index = treeIconDir.endsWith( "medium" ) ? 0 : 1;
+    _ui->treeIconThemeComboBox->setCurrentIndex( index );
+
+    settings.endGroup();
 }
 
 
 void GeneralConfigPage::writeSettings()
 {
-    logDebug() << endl;
+    // logDebug() << endl;
+
+    QDirStat::Settings settings;
+    settings.beginGroup( "MainWindow" );
+
+    settings.setValue( "UrlInWindowTitle"        , _ui->urlInWindowTitleCheckBox->isChecked() );
+    settings.setValue( "UseTreemapHover"         , _ui->useTreemapHoverCheckBox->isChecked()  );
+    settings.setValue( "StatusBarTimeoutMillisec", (int) ( 1000 * _ui->statusBarTimeoutSpinBox->value() ) );
+
+    settings.endGroup();
+
+
+    settings.beginGroup( "DirectoryTree" );
+
+    settings.setValue( "CrossFileSystems"    , _ui->crossFileSystemsCheckBox->isChecked() );
+    settings.setValue( "UpdateTimerMillisec" , _ui->treeUpdateIntervalSpinBox->value()    );
+
+    switch ( _ui->treeIconThemeComboBox->currentIndex() )
+    {
+        default:
+        case 0:  settings.setValue( "TreeIconDir", ":/icons/tree-medium" ); break;
+        case 1:  settings.setValue( "TreeIconDir", ":/icons/tree-small"  ); break;
+    }
+
+    settings.endGroup();
 }

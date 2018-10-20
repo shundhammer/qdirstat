@@ -68,7 +68,7 @@ void CleanupConfigPage::setup()
 
 void CleanupConfigPage::applyChanges()
 {
-    logDebug() << endl;
+    // logDebug() << endl;
 
     save( value( listWidget()->currentItem() ) );
     _cleanupCollection->writeSettings();
@@ -77,7 +77,7 @@ void CleanupConfigPage::applyChanges()
 
 void CleanupConfigPage::discardChanges()
 {
-    logDebug() << endl;
+    // logDebug() << endl;
 
     listWidget()->clear();
     _cleanupCollection->clear();

@@ -69,10 +69,11 @@ void DirTreeModel::writeSettings()
     Settings settings;
     settings.beginGroup( "DirectoryTree" );
 
-    settings.setValue( "CrossFileSystems",    _tree ? _tree->crossFileSystems() : false );
-    settings.setValue( "TreeIconDir" ,	      _treeIconDir	   );
-    settings.setValue( "UpdateTimerMillisec", _updateTimerMillisec );
-    settings.setValue( "SlowUpdateMillisec",  _slowUpdateMillisec  );
+    settings.setValue( "SlowUpdateMillisec", _slowUpdateMillisec  );
+
+    settings.setDefaultValue( "CrossFileSystems",    _tree ? _tree->crossFileSystems() : false );
+    settings.setDefaultValue( "TreeIconDir" ,	     _treeIconDir	  );
+    settings.setDefaultValue( "UpdateTimerMillisec", _updateTimerMillisec );
 
     settings.endGroup();
 }
