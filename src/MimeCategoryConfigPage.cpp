@@ -74,7 +74,7 @@ void MimeCategoryConfigPage::setup()
 
 void MimeCategoryConfigPage::applyChanges()
 {
-    logDebug() << endl;
+    // logDebug() << endl;
 
     save( value( listWidget()->currentItem() ) );
     _categorizer->writeSettings();
@@ -83,7 +83,7 @@ void MimeCategoryConfigPage::applyChanges()
 
 void MimeCategoryConfigPage::discardChanges()
 {
-    logDebug() << endl;
+    // logDebug() << endl;
 
     listWidget()->clear();
     _categorizer->clear();

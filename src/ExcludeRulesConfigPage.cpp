@@ -57,7 +57,7 @@ void ExcludeRulesConfigPage::setup()
 
 void ExcludeRulesConfigPage::applyChanges()
 {
-    logDebug() << endl;
+    // logDebug() << endl;
 
     save( value( listWidget()->currentItem() ) );
     ExcludeRules::instance()->writeSettings();
@@ -66,7 +66,7 @@ void ExcludeRulesConfigPage::applyChanges()
 
 void ExcludeRulesConfigPage::discardChanges()
 {
-    logDebug() << endl;
+    // logDebug() << endl;
 
     listWidget()->clear();
     ExcludeRules::instance()->clear();
