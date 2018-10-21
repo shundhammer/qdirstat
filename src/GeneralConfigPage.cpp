@@ -23,6 +23,7 @@ GeneralConfigPage::GeneralConfigPage( QWidget * parent ):
     CHECK_NEW( _ui );
 
     _ui->setupUi( this );
+    readSettings();
 }
 
 
@@ -34,18 +35,22 @@ GeneralConfigPage::~GeneralConfigPage()
 
 void GeneralConfigPage::setup()
 {
-    readSettings();
+    // NOP
 }
 
 
 void GeneralConfigPage::applyChanges()
 {
+    // logDebug() << endl;
+
     writeSettings();
 }
 
 
 void GeneralConfigPage::discardChanges()
 {
+    // logDebug() << endl;
+
     readSettings();
 }
 
