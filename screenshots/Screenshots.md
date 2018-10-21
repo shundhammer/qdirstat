@@ -31,8 +31,8 @@ but no details panel to make room for all the columns._
 
 ![Details Panel for a File](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-file-L2.png)
 
-_File selected. Notice that QDirStat queries the system's package manager
-(dpkg / rpm / pacman) for system files which package a system file belongs to._
+_File selected. Notice the "Package" field: For system files, QDirStat queries
+the package manager (dpkg / rpm / pacman) which package the file belongs to._
 
 ![Details Panel for a Directory](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-dir.png)
 
