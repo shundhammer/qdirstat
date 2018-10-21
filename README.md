@@ -49,9 +49,10 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
 [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locating-file-types.png" height="337">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-locating-file-types.png)
 
 
-[<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-config.png" height="245">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-cleanup-config.png)
-[<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-mime-config.png" height="245">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-mime-config.png)
-[<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-exclude-rules-config.png" height="245">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-exclude-rules-config.png)
+[<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-cleanups.png" height="245">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-cleanups.png)
+[<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-mime.png" height="245">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-mime.png)
+[<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-exclude.png" height="245">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-exclude.png)
+[<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-general.png" height="245">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-general.png)
 
 
 [<img src="https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-histogram.png" height="262">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-histogram.png)
@@ -67,6 +68,16 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 ## Latest News
 
 **Latest stable release: V1.4**
+
+
+- 2018-10-21
+
+  - Updated all screenshots to the latest Git source version in preparation for the
+    upcoming pre-1.5 Beta.
+
+  - Added a little left margin to the "Latest MTime" column in the tree to make
+    it look less overcrowded.
+
 
 - 2018-10-20
 
@@ -91,7 +102,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
   - Added a _General_ page to the configuration dialog for miscellaneous
     settings.
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-general-config.png" width="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-general-config.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-general.png" width="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-general.png)
 
     This is a bit unorganized (as might be expected for misc settings), but
     those misc settings had accumulated over time, so I decided to finally add
@@ -110,9 +121,9 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     You can now switch between three (at the moment) different layout options
     for the upper half of QDirStat's main window.
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout1.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout1.png)
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout2.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout2.png)
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/QDirStat-Layout3.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/QDirStat-Layout3.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-file-L1.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-details-file-L1.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-file-L2.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-details-file-L2.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-file-L3.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-details-file-L3.png)
 
     - Layout 1 (short): Display only a bare minimum of columns in the tree
       view, but show the new details panel on the right side. This is to
@@ -212,7 +223,7 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
   Added better classification of files to the new file details view:
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/details-view-file.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/details-view-file.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-file-L2.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-details-file-L2.png)
 
   - MIME Category - this is the same as in the treemap colors, the same as you
     can configure in the _MIME Categories_ page in the QDirStat configuration
@@ -281,10 +292,10 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
     This view shows context-sensitive information about the currently selected
     item(s); see also the screenshots (still not complete, but you get the idea):
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/details-view-file.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/details-view-file.png)
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/details-view-dir.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/details-view-dir.png)
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/details-view-dot-entry.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/details-view-dot-entry.png)
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/git-version/details-view-multi-selection.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/git-version/details-view-multi-selection.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-file-L2.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-details-file-L2.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-dir.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-details-dir.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-dot-entry.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-details-dot-entry.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-multi-sel.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-details-multi-sel.png)
 
     What that details view displays so far:
 
