@@ -476,6 +476,7 @@ QVariant DirTreeModel::headerData( int		   section,
 		case TotalItemsCol:
 		case TotalFilesCol:
 		case TotalSubDirsCol:
+                case LatestMTimeCol:
 		case PermissionsCol:
 		case OctalPermissionsCol: return Qt::AlignHCenter;
 		default:		  return Qt::AlignLeft;
@@ -649,7 +650,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	case PercentBarCol:	  return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
 	case PercentNumCol:	  return item == _tree->firstToplevel() ? QVariant() : formatPercent( item->subtreePercent() );
         case SizeCol:	          return sizeColText( item );
-	case LatestMTimeCol:	  return formatTime( item->latestMtime() );
+	case LatestMTimeCol:	  return QString( "  " ) + formatTime( item->latestMtime() );
 	case UserCol:		  return limitedInfo ? QVariant() : item->userName();
 	case GroupCol:		  return limitedInfo ? QVariant() : item->groupName();
 	case PermissionsCol:	  return limitedInfo ? QVariant() : item->symbolicPermissions();
