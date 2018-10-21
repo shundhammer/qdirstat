@@ -13,6 +13,41 @@ License: GPL V2
 
 ![Main Window Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png)
 
+
+### Different Main Window Layouts
+
+![Layout 1 (short)](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-file-L1.png)
+_Layout 1 (short): Only the bare minimum of tree columns plus the details panel for the selected item._
+
+![Layout 2 (classic)](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-file-L2.png)
+_Layout 2 (classic): The classic QDirStat tree columns plus the details panel for the selected item._
+
+![Layout 3 (full)](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-file-L3.png)
+_Layout 3 (full): All tree columns including file owner, group and permissions in both "rwxrwxrwx" and octal,
+but no details panel to make room for all the columns._
+
+
+### Details Panel
+
+![Details Panel for a File](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-file-L2.png)
+
+_File selected. Notice that QDirStat queries the system's package manager
+(dpkg / rpm / pacman) for system files which package a system file belongs to._
+
+![Details Panel for a Directory](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-dir.png)
+
+_Directory selected_
+
+![Details Panel for a <Files> Pseudo Directory](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-dot-entry.png)
+
+_<Files> pseudo directory selected_
+
+![Details Panel for Multiple Selected Items](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-multi-sel.png)
+
+_Multi-selection_
+
+
+
 ## Output During Cleanup Actions
 
 ![Cleanup Action Output Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-output.png)
@@ -42,19 +77,23 @@ in the tree view in the main window, and all matching files in that directory ar
 ## Configuration
 
 
-![Cleanup Action Configuration Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-config.png)
+![Cleanup Action Configuration Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-cleanups.png)
 
 _Screenshot of cleanup actions configuration._
 
-![MIME Categories Configuration Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-mime-config.png)
+![MIME Categories Configuration Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-mime.png)
 
 _Screenshot of MIME category configuration where you can set the treemap colors
 for different file types (MIME types), complete with a real treemap widget as preview._
 
-![Exclude Rules Configuration Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-exclude-rules-config.png)
+![Exclude Rules Configuration Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-exclude.png)
 
 _Screenshot of the exclude rules configuration where you can define rules which
 directories to exclude when reading directory trees._
+
+![General Options Configuration Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-general.png)
+
+_Screenshot of the general (miscellaneous) configuration options._
 
 ------------------
 
