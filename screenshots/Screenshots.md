@@ -38,9 +38,9 @@ the package manager (dpkg / rpm / pacman) which package the file belongs to._
 
 _Directory selected_
 
-![Details Panel for a <Files> Pseudo Directory](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-dot-entry.png)
+![Details Panel for a "Files" Pseudo Directory](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-dot-entry.png)
 
-_<Files> pseudo directory selected_
+_"Files" pseudo directory selected_
 
 ![Details Panel for Multiple Selected Items](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-details-multi-sel.png)
 

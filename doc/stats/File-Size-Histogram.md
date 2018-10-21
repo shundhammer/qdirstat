@@ -128,8 +128,8 @@ looks like this:
 This histogram does not really give away any useful information: You can see
 that the vast majority of files is at the left side, and then there are wide
 stretches of file sizes that don't appear anywhere in that directory tree
-(where all the gaps are), and then there are some very large files in the 2 GB
-area. This is not very useful.
+(where all the gaps are), and then there are some very large files in the 2.5
+GB area. This is not very useful.
 
 This is why QDirStat by default uses some heuristics to determine useful
 boundaries for the histogram: It uses the _interquartile distance_ (Q3 - Q1)
@@ -146,10 +146,11 @@ much more useful:
 
 ![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-P99.png)
 
-As you can see, the right boundary is still at 8 MB, and the "interesting" area
-between Q1 and Q3 is still pretty much crammed together at the left, but now at
-least we can make some sense of it all (notice that it's using a logarithmic
-vertical scale, so it's not nearly as evenly distributed as you might think).
+As you can see, the right boundary is still at 10.7 MB, and the "interesting"
+area between Q1 and Q3 is still pretty much crammed together at the left, but
+now at least we can make some sense of it all (notice that it's using a
+logarithmic vertical scale, so it's not nearly as evenly distributed as you
+might think).
 
 Percentile data for reference:
 
