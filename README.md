@@ -182,6 +182,9 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
         UseTreemapHover=true
 
+    _Update 2018-10-20: This can now be changed in the new "General" page of
+    the configuration dialog; no need to edit the config file manually._
+
 
 - 2018-10-18
 
@@ -376,7 +379,6 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
   Of course this can be disabled (Menu _View_ -> uncheck _Show Current Path_).
 
---------------------------------------------------
 
 - 2018-09-27 Fixed [GitHub issue #84](https://github.com/shundhammer/qdirstat/issues/84):
   Crash if picking up a cache file in the starting directory (subtree root).
@@ -468,7 +470,6 @@ Allow to specify install prefix
   - Fixed some minor issues in the exclude rule configuration dialog with some
     widgets not being correctly disabled if they made no sense to use.
 
---------------------------
 
 - 2017-06-04 **New stable release: V1.4**
 
