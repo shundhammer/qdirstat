@@ -74,6 +74,7 @@ MainWindow::MainWindow():
     createLayouts();
     readSettings();
     _updateTimer.setInterval( UPDATE_MILLISEC );
+    _dUrl = _ui->actionDonate->iconText();
 
     _dirTreeModel = new DirTreeModel( this );
     CHECK_NEW( _dirTreeModel );
@@ -300,6 +301,7 @@ void MainWindow::connectActions()
     CONNECT_ACTION( _ui->actionHelp,	this, showHelp() );
     CONNECT_ACTION( _ui->actionAbout,	this, showAboutDialog() );
     CONNECT_ACTION( _ui->actionAboutQt, qApp, aboutQt() );
+    CONNECT_ACTION( _ui->actionDonate,  this, showDonateDialog() );
 
 
     // Invisible debug actions
@@ -1076,10 +1078,7 @@ void MainWindow::toggleVerboseSelection()
 
 void MainWindow::showHelp()
 {
-    QString helpUrl = "https://github.com/shundhammer/qdirstat/blob/master/README.md";
-    QString program = "/usr/bin/xdg-open";
-    logInfo() << "Starting " << program << " " << helpUrl << endl;
-    QProcess::startDetached( program, QStringList() << helpUrl );
+    SysUtil::openInBrowser( "https://github.com/shundhammer/qdirstat/blob/master/README.md" );
 }
 
 
@@ -1114,6 +1113,25 @@ void MainWindow::showAboutDialog()
 }
 
 
+void MainWindow::showDonateDialog()
+{
+    QString dUrl = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EYJXAVLGNRR5W";
+
+    QString text = "<h2>Donate</h2>";
+    text += "<p>";
+    text += tr( "QDirStat is Free Open Source Software. "
+                "You are not required to pay anything. "
+                "Donations are most welcome, of course." );
+    text += "</p><p>";
+    text += tr( "You can donate any amount of your choice:" );
+    text += "</p><p>";
+    text += QString( "<a href=\"%1\">QDirStat at PayPal</a>" ).arg(_dUrl );
+    text += "</p><p>";
+    text += tr( "(external browser window)" );
+    text += "</p>";
+
+    QMessageBox::about( this, tr( "Donate" ), text );
+}
 
 
 

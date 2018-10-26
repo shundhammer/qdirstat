@@ -120,6 +120,14 @@ QString SysUtil::runCommand( const QString &	 command,
 }
 
 
+void SysUtil::openInBrowser( const QString & url )
+{
+    logDebug() << "Opening URL " << url << endl;
+
+    Process::startDetached( "/usr/bin/xdg-open", QStringList() << url );
+}
+
+
 bool SysUtil::haveCommand( const QString & command )
 {
     return access( command.toUtf8(), X_OK ) == 0;

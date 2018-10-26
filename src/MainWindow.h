@@ -150,6 +150,11 @@ public slots:
     void showAboutDialog();
 
     /**
+     * Show the "Donate" dialog.
+     **/
+    void showDonateDialog();
+
+    /**
      * Read parameters from the settings file.
      **/
     void readSettings();
@@ -357,6 +362,7 @@ private:
     QDirStat::ConfigDialog	* _configDialog;
     QActionGroup		* _layoutActionGroup;
     QPointer<FileTypeStatsWindow> _fileTypeStatsWindow;
+    QString                       _dUrl;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
     bool			  _verboseSelection;

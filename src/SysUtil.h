@@ -99,6 +99,12 @@ namespace QDirStat
 	bool haveCommand( const QString & command );
 
         /**
+         * Open a URL in the desktop's default browser (using the
+         * /usr/bin/xdg-open command).
+         **/
+        void openInBrowser( const QString & url );
+
+        /**
          * Check if this program runs with root privileges, i.e. with effective
          * user ID 0.
          **/

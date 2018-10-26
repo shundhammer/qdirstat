@@ -192,6 +192,7 @@
     <addaction name="actionHelp"/>
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
+    <addaction name="actionDonate"/>
    </widget>
    <widget class="QMenu" name="menuCleanup">
     <property name="tearOffEnabled">
@@ -760,6 +761,17 @@
    </property>
    <property name="shortcut">
     <string>Alt+3</string>
+   </property>
+  </action>
+  <action name="actionDonate">
+   <property name="text">
+    <string>&amp;Donate...</string>
+   </property>
+   <property name="iconText">
+    <string notr="true">https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=EYJXAVLGNRR5W</string>
+   </property>
+   <property name="toolTip">
+    <string>Make a donation to support the QDirStat project</string>
    </property>
   </action>
  </widget>
