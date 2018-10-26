@@ -80,6 +80,13 @@ Donate via PayPal (freely select the amount to donate):
 **Latest stable release: V1.4**
 
 
+- 2018-10-26
+
+  The pre-1.5 Beta is out: [QDirStat-1.4.97-Beta](https://github.com/shundhammer/qdirstat/releases/tag/1.4.97-Beta)
+
+  Please test!
+
+
 - 2018-10-21
 
   - Updated all screenshots to the latest Git source version in preparation for the
