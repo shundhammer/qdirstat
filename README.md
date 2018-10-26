@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-22
+Updated: 2018-10-26
 
 
 ## Overview
@@ -64,6 +64,15 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
 
 -----------------------
+
+## Donate
+
+QDirStat is Free Open Source Software. You are not required to pay anything.
+Donations are most welcome, of course.
+
+Donate via PayPal (freely select the amount to donate):
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EYJXAVLGNRR5W)
 
 
 ## Latest News
@@ -1218,3 +1227,13 @@ http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
 http://moo.nac.uci.edu/~hjm/HOWTO_move_data.html#qdirstat
 
 http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html
+
+
+## Donate
+
+QDirStat is Free Open Source Software. You are not required to pay anything.
+Donations are most welcome, of course.
+
+Donate via PayPal (freely select the amount to donate):
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EYJXAVLGNRR5W)
