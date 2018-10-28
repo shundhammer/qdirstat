@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-26
+Updated: 2018-10-28
 
 
 ## Overview
@@ -920,7 +920,7 @@ Features ported from the old KDirStat:
     finds a file .qdirstat.cache.gz in a directory, it checks if the toplevel
     directory in that cache file is the same as the current directory, and if
     it is, it uses the cache file for that directory rather than reading all
-    subdirectories from disk. If you or the users that machine use QDirStat
+    subdirectories from disk. If you or the users of that machine use QDirStat
     often, this might take a lot of I/O load from the server.
 
   - If you use the '-l' option of the qdirstat-cache-writer script, it uses the
