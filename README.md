@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-28
+Updated: 2018-10-31
 
 
 ## Overview
@@ -1234,6 +1234,11 @@ http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
 http://moo.nac.uci.edu/~hjm/HOWTO_move_data.html#qdirstat
 
 http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html
+
+
+Repology: QDirStat versions in Linux distributions:
+
+https://repology.org/metapackage/qdirstat/versions
 
 
 ## Donate
