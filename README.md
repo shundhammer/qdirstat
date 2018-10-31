@@ -1219,16 +1219,6 @@ http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
 [Spatry: _Quick Look: QDirStat_](https://www.youtube.com/watch?v=ysm4-x_5ftI)
 
 
-## Code Analysis Tools
-
-[QDirStat at Coverity](https://scan.coverity.com/projects/qdirstat?tab=overview)
-
-<a href="https://scan.coverity.com/projects/qdirstat">
-  <img alt="Coverity Scan Build Status"
-       src="https://img.shields.io/coverity/scan/12688.svg"/>
-</a>
-
-
 ## Misc
 
 http://moo.nac.uci.edu/~hjm/HOWTO_move_data.html#qdirstat
