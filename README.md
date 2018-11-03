@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-10-31
+Updated: 2018-11-03
 
 
 ## Overview
@@ -78,6 +78,12 @@ Donate via PayPal (freely select the amount to donate):
 ## Latest News
 
 **Latest stable release: V1.4**
+
+
+- 2018-11-03
+
+  Added showing release notes (in an external web browser) to the "Help" menu
+  ("What's New in this Release").
 
 
 - 2018-10-26
