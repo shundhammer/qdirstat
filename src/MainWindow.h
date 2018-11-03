@@ -145,6 +145,11 @@ public slots:
     void navigateToToplevel();
 
     /**
+     * Show online help.
+     **/
+    void showHelp();
+
+    /**
      * Show the "about" dialog.
      **/
     void showAboutDialog();
@@ -155,6 +160,11 @@ public slots:
     void showDonateDialog();
 
     /**
+     * Show the release notes for the last released version in a web browser.
+     **/
+    void showWhatsNew();
+
+    /**
      * Read parameters from the settings file.
      **/
     void readSettings();
@@ -163,11 +173,6 @@ public slots:
      * Write parameters to the settings file.
      **/
     void writeSettings();
-
-    /**
-     * Show online help.
-     **/
-    void showHelp();
 
 
 protected slots:

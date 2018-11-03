@@ -298,10 +298,11 @@ void MainWindow::connectActions()
 
     // "Help" menu
 
-    CONNECT_ACTION( _ui->actionHelp,	this, showHelp() );
-    CONNECT_ACTION( _ui->actionAbout,	this, showAboutDialog() );
-    CONNECT_ACTION( _ui->actionAboutQt, qApp, aboutQt() );
-    CONNECT_ACTION( _ui->actionDonate,  this, showDonateDialog() );
+    CONNECT_ACTION( _ui->actionHelp,	    this, showHelp() );
+    CONNECT_ACTION( _ui->actionAbout,	    this, showAboutDialog() );
+    CONNECT_ACTION( _ui->actionAboutQt,	    qApp, aboutQt() );
+    CONNECT_ACTION( _ui->actionWhatsNew,    this, showWhatsNew() );
+    CONNECT_ACTION( _ui->actionDonate,	    this, showDonateDialog() );
 
 
     // Invisible debug actions
@@ -1079,6 +1080,12 @@ void MainWindow::toggleVerboseSelection()
 void MainWindow::showHelp()
 {
     SysUtil::openInBrowser( "https://github.com/shundhammer/qdirstat/blob/master/README.md" );
+}
+
+
+void MainWindow::showWhatsNew()
+{
+    SysUtil::openInBrowser( RELEASE_URL ); // defined in Version.h
 }
 
 

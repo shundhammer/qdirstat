@@ -192,6 +192,7 @@
     <addaction name="actionHelp"/>
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
+    <addaction name="actionWhatsNew"/>
     <addaction name="actionDonate"/>
    </widget>
    <widget class="QMenu" name="menuCleanup">
@@ -772,6 +773,14 @@
    </property>
    <property name="toolTip">
     <string>Make a donation to support the QDirStat project</string>
+   </property>
+  </action>
+  <action name="actionWhatsNew">
+   <property name="text">
+    <string>What's &amp;New in this Release...</string>
+   </property>
+   <property name="toolTip">
+    <string>Show release notes in external web browser</string>
    </property>
   </action>
  </widget>
