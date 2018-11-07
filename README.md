@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-11-03
+Updated: 2018-11-07
 
 
 ## Overview
@@ -77,7 +77,34 @@ Donate via PayPal (freely select the amount to donate):
 
 ## Latest News
 
-**Latest stable release: V1.4**
+**Latest stable release: V1.5**
+
+- 2018-11-07 **New stable release: V1.5**
+
+  Summary:
+
+  - (Optional) breadcrumbs navigation
+
+  - (Optional) a new "details" panel for the currently selected item
+
+  - (Optional) new tree columns:
+    owner, group, permissions both in "rwxrwxrwx" and in octal format
+
+  - Package manager support for the major Linux package managers (dpkg / rpm /
+    pacman) to see what package a system file belongs to.
+
+  - Quick-switchable different layouts for the main window
+
+  - A new "General" page in the configuration dialog
+
+  - Show in the window title if the program runs with root permissions (`sudo`
+    etc.)
+
+  - (Optional) show the URL in the window title
+
+  - Some bug fixes
+
+  For more details, see the [full release announcement](https://github.com/shundhammer/qdirstat/releases/tag/1.5).
 
 
 - 2018-11-03
@@ -89,8 +116,6 @@ Donate via PayPal (freely select the amount to donate):
 - 2018-10-26
 
   The pre-1.5 Beta is out: [QDirStat-1.4.97-Beta](https://github.com/shundhammer/qdirstat/releases/tag/1.4.97-Beta)
-
-  Please test!
 
 
 - 2018-10-21
@@ -503,6 +528,8 @@ for older entries._
 
 
 This is just a rough summary. For more details, see [DevHistory.md](https://github.com/shundhammer/qdirstat/blob/master/doc/DevHistory.md)
+
+- 2018-11-07 New stable release: V1.5
 
 - 2017-06-04 New stable release: V1.4
 
