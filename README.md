@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-11-07
+Updated: 2018-11-08
 
 
 ## Overview
@@ -1068,6 +1068,9 @@ called it WinDirStat.
 
 ## Ready-made Packages
 
+[![Packaging status](https://repology.org/badge/tiny-repos/qdirstat.svg)](https://repology.org/metapackage/qdirstat/versions)
+
+
 ### openSUSE / SUSE Linux Enterprise
 
 QDirStat packages for:
@@ -1252,16 +1255,20 @@ http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
 [Spatry: _Quick Look: QDirStat_](https://www.youtube.com/watch?v=ysm4-x_5ftI)
 
 
+## Packaging Status
+
+Repology: QDirStat versions in Linux / BSD distributions:
+
+[![Repology](https://repology.org/badge/tiny-repos/qdirstat.svg)](https://repology.org/metapackage/qdirstat/versions)
+
+(click for details)
+
+
 ## Misc
 
 http://moo.nac.uci.edu/~hjm/HOWTO_move_data.html#qdirstat
 
 http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html
-
-
-Repology: QDirStat versions in Linux distributions:
-
-https://repology.org/metapackage/qdirstat/versions
 
 
 ## Donate
