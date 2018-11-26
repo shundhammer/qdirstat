@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2018-11-08
+Updated: 2018-11-26
 
 
 ## Overview
@@ -1116,7 +1116,7 @@ https://packages.debian.org/search?keywords=qdirstat
 
 ### Fedora
 
-https://copr.fedorainfracloud.org/coprs/eclipseo/qdirstat/
+https://apps.fedoraproject.org/packages/qdirstat/builds/
 
 
 ## Building
