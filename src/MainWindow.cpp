@@ -599,6 +599,23 @@ void MainWindow::readingAborted()
 }
 
 
+MainWindow * MainWindow::activeWindow()
+{
+    MainWindow * result = 0;
+
+    QWidgetList toplevel = QApplication::topLevelWidgets();
+
+    for ( QWidgetList::const_iterator it = toplevel.constBegin();
+          it != toplevel.constEnd() && ! result;
+          ++it )
+    {
+        result = qobject_cast<MainWindow *>( *it );
+    }
+
+    return result;
+}
+
+
 void MainWindow::openUrl( const QString & url )
 {
     QString windowTitle = "QDirStat";

@@ -8,6 +8,8 @@
 
 
 #include "GeneralConfigPage.h"
+#include "DirTreeModel.h"
+#include "MainWindow.h"
 #include "Settings.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -39,11 +41,25 @@ void GeneralConfigPage::setup()
 }
 
 
+static DirTreeModel * dirTreeModel()
+{
+    DirTreeModel * result = 0;
+    const MainWindow * window = MainWindow::activeWindow();
+    if ( ! window )
+        return result;
+    return window->dirTreeModel();
+}
+
+
 void GeneralConfigPage::applyChanges()
 {
     // logDebug() << endl;
 
     writeSettings();
+
+    DirTreeModel * model = dirTreeModel();
+    if ( model )
+        model->readSettings();
 }
 
 

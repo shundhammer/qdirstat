@@ -72,19 +72,7 @@ FileSizeStatsWindow * FileSizeStatsWindow::sharedInstance()
 {
     if ( ! _sharedInstance )
     {
-	QWidget * parent = 0;
-
-	QWidgetList toplevel = QApplication::topLevelWidgets();
-
-	for ( QWidgetList::const_iterator it = toplevel.constBegin();
-	      it != toplevel.constEnd() && ! parent;
-	      ++it )
-	{
-	    parent = qobject_cast<MainWindow *>( *it );
-	}
-
-	if ( ! parent )
-	    logWarning() << "NULL parent for shared instance" << endl;
+	QWidget * parent = MainWindow::activeWindow();
 
 	_sharedInstance = new FileSizeStatsWindow( parent );
 	CHECK_NEW( _sharedInstance );

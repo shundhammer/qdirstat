@@ -53,6 +53,11 @@ public:
      **/
     QDirStat::DirTreeModel * dirTreeModel() const { return _dirTreeModel; }
 
+    /**
+     * Return the active main window, if any.
+     */
+    static MainWindow * activeWindow();
+
 public slots:
 
     /**
