@@ -179,6 +179,31 @@ namespace QDirStat
 	    { _crossFileSystems = doCross; }
 
 	/**
+	 * Whether directory scans should avoid recursing into directories
+	 * containing excludeDirFilename.
+	 */
+	bool excludeDirWithFile() const { return _excludeDirWithFile; }
+
+	/**
+	 * Set or unset the "exclude dir with file" flag.
+	 */
+	void setExcludeDirWithFile( bool exclude )
+	    { _excludeDirWithFile = exclude; }
+
+	/**
+	 * Filename which, when encountered for a regular file in a directory,
+	 * indicates that the directory should not be scanned (when excludeDirWithFile
+	 * is set).
+	 */
+	QString excludeDirFilename() const { return _excludeDirFilename; }
+
+	/**
+	 * Set the filename that marks a directory for exclusion.
+	 */
+	void setExcludeDirFilename( const QString & name )
+	    { _excludeDirFilename = name; }
+
+	/**
 	 * Notification that a child has been added.
 	 *
 	 * Directory read jobs are required to call this for each child added
@@ -353,10 +378,12 @@ namespace QDirStat
     protected:
 
 	DirInfo *	_root;
-	DirReadJobQueue _jobQueue;
+	DirReadJobQueue	_jobQueue;
 	bool		_crossFileSystems;
+	bool		_excludeDirWithFile;
+	QString		_excludeDirFilename;
 	bool		_isBusy;
-        QString         _device;
+	QString		_device;
 
     };	// class DirTree
 
@@ -364,4 +391,3 @@ namespace QDirStat
 
 
 #endif // ifndef DirTree_h
-

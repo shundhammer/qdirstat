@@ -153,6 +153,21 @@ LocalDirReadJob::~LocalDirReadJob()
 }
 
 
+static bool excludeFileApplies( const DirTree * tree,
+                                const QString & fullDirName )
+{
+    if ( !tree->excludeDirWithFile() )
+        return false;
+
+    QString filename = tree->excludeDirFilename();
+    if ( filename.isEmpty() )
+        return false;
+
+    QString fullFilename = fullDirName + "/" + filename;
+    return access( fullFilename.toUtf8(), F_OK ) == 0;
+}
+
+
 void LocalDirReadJob::startReading()
 {
     struct dirent *	entry;
@@ -210,7 +225,9 @@ void LocalDirReadJob::startReading()
 			_dir->insertChild( subDir );
 			childAdded( subDir );
 
-			if ( ExcludeRules::instance()->match( fullName, entryName ) )
+			bool excludeDir = ExcludeRules::instance()->match( fullName, entryName )
+			               || excludeFileApplies( _tree, fullName );
+			if ( excludeDir )
 			{
 			    subDir->setExcluded();
 			    subDir->setReadState( DirOnRequestOnly );

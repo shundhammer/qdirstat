@@ -19,11 +19,12 @@
 using namespace QDirStat;
 
 
-DirTree::DirTree()
-    : QObject()
+DirTree::DirTree():
+    QObject(),
+    _crossFileSystems( false ),
+    _excludeDirWithFile( false ),
+    _isBusy( false )
 {
-    _isBusy	      = false;
-    _crossFileSystems = false;
     _root = new DirInfo( this );
     CHECK_NEW( _root );
 

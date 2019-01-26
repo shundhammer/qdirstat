@@ -73,8 +73,10 @@ void GeneralConfigPage::readSettings()
 
     settings.beginGroup( "DirectoryTree" );
 
-    _ui->crossFileSystemsCheckBox->setChecked( settings.value( "CrossFileSystems"    , false ).toBool() );
-    _ui->treeUpdateIntervalSpinBox->setValue ( settings.value( "UpdateTimerMillisec" ,   333 ).toInt()  );
+    _ui->crossFileSystemsCheckBox->setChecked  ( settings.value( "CrossFileSystems"    , false       ).toBool() );
+    _ui->excludeDirWithFileCheckBox->setChecked( settings.value( "ExcludeDirWithFile"  , false       ).toBool() );
+    _ui->excludeDirFilenameLineEdit->setText   ( settings.value( "ExcludeDirFilename"  , ".nobackup" ).toString() );
+    _ui->treeUpdateIntervalSpinBox->setValue   ( settings.value( "UpdateTimerMillisec" , 333         ).toInt() );
     QString treeIconDir = settings.value( "TreeIconDir", ":/icons/tree-medium" ).toString();
 
     int index = treeIconDir.endsWith( "medium" ) ? 0 : 1;
@@ -100,8 +102,10 @@ void GeneralConfigPage::writeSettings()
 
     settings.beginGroup( "DirectoryTree" );
 
-    settings.setValue( "CrossFileSystems"    , _ui->crossFileSystemsCheckBox->isChecked() );
-    settings.setValue( "UpdateTimerMillisec" , _ui->treeUpdateIntervalSpinBox->value()    );
+    settings.setValue( "CrossFileSystems"    , _ui->crossFileSystemsCheckBox->isChecked()   );
+    settings.setValue( "ExcludeDirWithFile"  , _ui->excludeDirWithFileCheckBox->isChecked() );
+    settings.setValue( "ExcludeDirFilename"  , _ui->excludeDirFilenameLineEdit->text()      );
+    settings.setValue( "UpdateTimerMillisec" , _ui->treeUpdateIntervalSpinBox->value()      );
 
     switch ( _ui->treeIconThemeComboBox->currentIndex() )
     {

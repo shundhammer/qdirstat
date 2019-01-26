@@ -55,7 +55,9 @@ void DirTreeModel::readSettings()
     Settings settings;
     settings.beginGroup( "DirectoryTree" );
 
-    _tree->setCrossFileSystems( settings.value( "CrossFileSystems", false ).toBool() );
+    _tree->setCrossFileSystems  ( settings.value( "CrossFileSystems"   , false ).toBool() );
+    _tree->setExcludeDirWithFile( settings.value( "ExcludeDirWithFile" , false ).toBool() );
+    _tree->setExcludeDirFilename( settings.value( "ExcludeDirFilename" , ""    ).toString() );
     _treeIconDir	 = settings.value( "TreeIconDir" , ":/icons/tree-medium/" ).toString();
     _updateTimerMillisec = settings.value( "UpdateTimerMillisec", 333 ).toInt();
     _slowUpdateMillisec	 = settings.value( "SlowUpdateMillisec", 3000 ).toInt();
@@ -69,11 +71,13 @@ void DirTreeModel::writeSettings()
     Settings settings;
     settings.beginGroup( "DirectoryTree" );
 
-    settings.setValue( "SlowUpdateMillisec", _slowUpdateMillisec  );
+    settings.setValue( "SlowUpdateMillisec", _slowUpdateMillisec );
 
-    settings.setDefaultValue( "CrossFileSystems",    _tree ? _tree->crossFileSystems() : false );
-    settings.setDefaultValue( "TreeIconDir" ,	     _treeIconDir	  );
-    settings.setDefaultValue( "UpdateTimerMillisec", _updateTimerMillisec );
+    settings.setDefaultValue( "CrossFileSystems"    , _tree ? _tree->crossFileSystems()   : false );
+    settings.setDefaultValue( "ExcludeDirWithFile"  , _tree ? _tree->excludeDirWithFile() : false );
+    settings.setDefaultValue( "ExcludeDirFilename"  , _tree ? _tree->excludeDirFilename() : ""    );
+    settings.setDefaultValue( "TreeIconDir"         , _treeIconDir         );
+    settings.setDefaultValue( "UpdateTimerMillisec" , _updateTimerMillisec );
 
     settings.endGroup();
 }
@@ -1056,4 +1060,3 @@ void DirTreeModel::refreshSelected()
 	logWarning() << "NOT refreshing " << sel << endl;
     }
 }
-
