@@ -258,6 +258,12 @@ protected slots:
     void changeLayout( const QString & name = QString() );
 
     /**
+     * Change the scale mode of the treemap view (linear, logarithmic) according
+     * to the action that sent the signal.
+     **/
+    void changeTreemapScaleMode();
+
+    /**
      * Show the elapsed time while reading.
      **/
     void showElapsedTime();
@@ -317,9 +323,10 @@ protected:
     void mapTreeExpandAction( QAction * action, int level );
 
     /**
-     * Initialize the layout actions.
+     * Initialize the action groups for radio button behaviour:
+     * Qt Designer does not support that directly.
      **/
-    void initLayoutActions();
+    void initActionGroups();
 
     /**
      * Create the different top layouts.
@@ -366,6 +373,7 @@ private:
     QDirStat::MimeCategorizer	* _mimeCategorizer;
     QDirStat::ConfigDialog	* _configDialog;
     QActionGroup		* _layoutActionGroup;
+    QActionGroup		* _treemapScaleActionGroup;
     QPointer<FileTypeStatsWindow> _fileTypeStatsWindow;
     QString                       _dUrl;
     QElapsedTimer		  _stopWatch;

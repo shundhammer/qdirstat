@@ -31,6 +31,7 @@ using namespace QDirStat;
 TreemapView::TreemapView( QWidget * parent ):
     QGraphicsView( parent ),
     _tree(0),
+    _scaleMode( LinearScale ),
     _selectionModel(0),
     _selectionModelProxy(0),
     _cleanupCollection(0),
@@ -286,6 +287,19 @@ bool TreemapView::canZoomOut() const
 	return false;
 
     return _rootTile->orig() != _tree->firstToplevel();
+}
+
+
+void TreemapView::setScaleMode( ScaleMode mode )
+{
+    if ( mode == _scaleMode )
+        return;
+
+    _scaleMode = mode;
+    logInfo() << _scaleMode << endl;
+
+    if ( _tree && _rootTile )
+        rebuildTreemap( _rootTile->orig() );
 }
 
 

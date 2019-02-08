@@ -70,7 +70,7 @@ MainWindow::MainWindow():
 
     _ui->setupUi( this );
     ActionManager::instance()->addWidgetTree( this );
-    initLayoutActions();
+    initActionGroups();
     createLayouts();
     readSettings();
     _updateTimer.setInterval( UPDATE_MILLISEC );
@@ -285,6 +285,9 @@ void MainWindow::connectActions()
 
     connect( _ui->actionTreemapAsSidePanel, SIGNAL( toggled( bool )	 ),
 	     this,			    SLOT  ( treemapAsSidePanel() ) );
+
+    CONNECT_ACTION( _ui->actionLinearTreemapScale,      this, changeTreemapScaleMode() );
+    CONNECT_ACTION( _ui->actionLogTreemapScale,         this, changeTreemapScaleMode() );
 
     CONNECT_ACTION( _ui->actionTreemapZoomIn,	 _ui->treemapView, zoomIn()	    );
     CONNECT_ACTION( _ui->actionTreemapZoomOut,	 _ui->treemapView, zoomOut()	    );
@@ -963,7 +966,7 @@ void MainWindow::showFileSizeStats()
 }
 
 
-void MainWindow::initLayoutActions()
+void MainWindow::initActionGroups()
 {
     // Qt Designer does not support QActionGroups; it was there for Qt 3, but
     // they dropped that feature for Qt 4/5.
@@ -978,6 +981,13 @@ void MainWindow::initLayoutActions()
     _ui->actionLayout1->setData( "L1" );
     _ui->actionLayout2->setData( "L2" );
     _ui->actionLayout3->setData( "L3" );
+
+    _treemapScaleActionGroup = new QActionGroup( this );
+    _treemapScaleActionGroup->addAction( _ui->actionLinearTreemapScale );
+    _treemapScaleActionGroup->addAction( _ui->actionLogTreemapScale );
+
+    _ui->actionLinearTreemapScale->setData( QDirStat::TreemapView::LinearScale );
+    _ui->actionLogTreemapScale->setData   ( QDirStat::TreemapView::LogScale );
 }
 
 
@@ -1060,6 +1070,18 @@ FileInfo * MainWindow::selectedDirOrRoot() const
 	sel = _dirTreeModel->tree()->firstToplevel();
 
     return sel;
+}
+
+
+void MainWindow::changeTreemapScaleMode()
+{
+    QAction * action   = qobject_cast<QAction *>( sender() );
+
+    if ( action && action->data().isValid() )
+    {
+        int scaleMode = action->data().toInt();
+        _ui->treemapView->setScaleMode( (QDirStat::TreemapView::ScaleMode) scaleMode );
+    }
 }
 
 

@@ -173,6 +173,9 @@
     <addaction name="actionShowTreemap"/>
     <addaction name="actionTreemapAsSidePanel"/>
     <addaction name="separator"/>
+    <addaction name="actionLinearTreemapScale"/>
+    <addaction name="actionLogTreemapScale"/>
+    <addaction name="separator"/>
     <addaction name="actionTreemapZoomIn"/>
     <addaction name="actionTreemapZoomOut"/>
     <addaction name="actionResetTreemapZoom"/>
@@ -781,6 +784,43 @@
    </property>
    <property name="toolTip">
     <string>Show release notes in external web browser</string>
+   </property>
+  </action>
+  <action name="actionLinearTreemapScale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Li&amp;near Scale</string>
+   </property>
+   <property name="toolTip">
+    <string>Show file/directory sizes in the treemap with a linear scale</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+N</string>
+   </property>
+  </action>
+  <action name="actionLogTreemapScale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Logarithmic Scale</string>
+   </property>
+   <property name="toolTip">
+    <string>Show file/directory sizes in the treemap with a logarithmic scale</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+L</string>
    </property>
   </action>
  </widget>

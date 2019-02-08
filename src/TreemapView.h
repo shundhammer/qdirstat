@@ -55,6 +55,13 @@ namespace QDirStat
 	Q_OBJECT
 
     public:
+
+        enum ScaleMode
+        {
+            LinearScale,
+            LogScale
+        };
+
 	/**
 	 * Constructor. Remember to set the directory tree with setDirTree()
 	 * and the selection model with setSelectionModel() after creating this
@@ -153,6 +160,11 @@ namespace QDirStat
 
 
     public slots:
+
+        /**
+         * Set the scale mode: Linear or logarithmic.
+         **/
+        void setScaleMode( ScaleMode mode );
 
 	/**
 	 * Update the selected items that have been selected in another view.
@@ -284,6 +296,11 @@ namespace QDirStat
 	 * is really executed (when all the resizing has settled somehow).
 	 **/
 	void scheduleRebuildTreemap( FileInfo * newRoot );
+
+        /**
+         * Return the scale mode: LinearScale (default) or LogScale.
+         **/
+        ScaleMode scaleMode() const { return _scaleMode; }
 
 	/**
 	 * Returns the visible size of the viewport presuming no scrollbars are
@@ -490,6 +507,7 @@ namespace QDirStat
 	// Data members
 
 	DirTree		    * _tree;
+        ScaleMode             _scaleMode;
 	SelectionModel	    * _selectionModel;
 	SelectionModelProxy * _selectionModelProxy;
 	CleanupCollection   * _cleanupCollection;
@@ -612,6 +630,20 @@ namespace QDirStat
 	    HighlightRect( tile, color, lineWidth )
 	    {}
     };
+
+
+    inline QTextStream & operator<< ( QTextStream & str, TreemapView::ScaleMode scaleMode )
+    {
+        switch ( scaleMode )
+        {
+            case TreemapView::LinearScale:   str << "LinearScale";   return str;
+            case TreemapView::LogScale:      str << "LogScale";      return str;
+        }
+
+        str << "<Unknown ScaleMode " << (int) scaleMode << ">";
+
+        return str;
+    }
 
 }	// namespace QDirStat
 
