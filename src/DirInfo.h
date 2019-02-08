@@ -367,6 +367,21 @@ namespace QDirStat
 	 **/
 	void clearTouched( bool recursive = false );
 
+        /**
+         * Return the custom sum that other parts of the application can use to
+         * do their own calculations. The treemap view uses this for the sums
+         * of the logarithms of files. Notice that it is entirely up to the
+         * application to calculate this value whenever appropriate, and also
+         * to traverse the tree while doing the calculations. This is just a
+         * convenience to allow caching expensive values within the tree.
+         **/
+        double customSum() const { return _customSum; }
+
+        /**
+         * Set the custom sum.
+         **/
+        void setCustomSum( double newVal ) { _customSum = newVal; }
+
 	/**
 	 * Returns true if this is a @ref DirInfo object.
 	 *
@@ -425,6 +440,7 @@ namespace QDirStat
 	int		_totalSubDirs;
 	int		_totalFiles;
 	time_t		_latestMtime;
+        double          _customSum;             // App custom sum
 
 	FileInfoList *	_sortedChildren;
 	DataColumn	_lastSortCol;

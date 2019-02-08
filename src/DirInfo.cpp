@@ -100,6 +100,7 @@ void DirInfo::init()
     _sortedChildren  = 0;
     _lastSortCol     = UndefinedCol;
     _lastSortOrder   = Qt::AscendingOrder;
+    _customSum       = 0.0;
 }
 
 

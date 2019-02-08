@@ -115,10 +115,22 @@ void TreemapTile::init()
 }
 
 
+double TreemapTile::scaledSize( FileInfo * item ) const
+{
+    return _parentView->scaledSize( item );
+}
+
+
+double TreemapTile::scaledSize( FileSize size ) const
+{
+    return _parentView->scaledSize( size );
+}
+
+
 void TreemapTile::createChildren( const QRectF & rect,
 				  Orientation	 orientation )
 {
-    if ( _orig->totalSize() == 0 )	// Prevent division by zero
+    if ( scaledSize( _orig ) == 0.0 )	// Prevent division by zero
 	return;
 
     if ( _parentView->squarify() )
@@ -143,17 +155,18 @@ void TreemapTile::createChildrenSimple( const QRectF & rect,
     int offset	 = 0;
     int size	 = dir == TreemapHorizontal ? rect.width() : rect.height();
     int count	 = 0;
-    double scale = (double) size / (double) _orig->totalSize();
+    double scale = (double) size / scaledSize( _orig );
 
     _cushionSurface.addRidge( childDir, _cushionSurface.height(), rect );
-    FileSize minSize = (FileSize) ( _parentView->minTileSize() / scale );
+    FileSize minSize = (FileSize) ( scaledSize( _parentView->minTileSize() / scale ) );
+
     FileInfoSortedBySizeIterator it( _orig, minSize );
 
     while ( *it )
     {
 	int childSize = 0;
 
-	childSize = (int) ( scale * (*it)->totalSize() );
+	childSize = (int) ( scale * scaledSize( (*it) ) );
 
 	if ( childSize >= _parentView->minTileSize() )
 	{
@@ -182,14 +195,14 @@ void TreemapTile::createChildrenSimple( const QRectF & rect,
 
 void TreemapTile::createSquarifiedChildren( const QRectF & rect )
 {
-    if ( _orig->totalSize() == 0 )
+    if ( scaledSize( _orig ) == 0.0 )
     {
-	logError()  << "Zero totalSize()" << endl;
+	logError()  << "Zero scaledSize()" << endl;
 	return;
     }
 
-    double scale	= rect.width() * (double) rect.height() / _orig->totalSize();
-    FileSize minSize	= (FileSize) ( _parentView->minTileSize() / scale );
+    double scale	= rect.width() * (double) rect.height() / scaledSize( _orig );
+    FileSize minSize	= (FileSize) ( scaledSize( _parentView->minTileSize() / scale ) );
 
     FileInfoSortedBySizeIterator it( _orig, minSize );
     QRectF childrenRect = rect;
@@ -203,7 +216,7 @@ void TreemapTile::createSquarifiedChildren( const QRectF & rect )
 
 
 FileInfoList TreemapTile::squarify( const QRectF & rect,
-				    double	  scale,
+				    double	   scale,
 				    FileInfoSortedBySizeIterator & it )
 {
     // logDebug() << "squarify() " << this << " " << rect << endl;
@@ -233,13 +246,13 @@ FileInfoList TreemapTile::squarify( const QRectF & rect,
 
     while ( *it && improvingAspectRatio )
     {
-	sum += (*it)->totalSize();
+	sum += scaledSize( *it );
 
-	if ( ! row.isEmpty() && sum != 0 && (*it)->totalSize() != 0 )
+	if ( ! row.isEmpty() && sum != 0 && scaledSize( *it ) != 0.0 )
 	{
 	    double sumSquare	    = sum * sum;
-	    double worstAspectRatio = qMax( scaledLengthSquare * row.first()->totalSize() / sumSquare,
-                                            sumSquare / ( scaledLengthSquare * (*it)->totalSize() ) );
+	    double worstAspectRatio = qMax( scaledLengthSquare * scaledSize( row.first() ) / sumSquare,
+                                            sumSquare / ( scaledLengthSquare * scaledSize( *it ) ) );
 
 	    if ( lastWorstAspectRatio >= 0.0 &&
 		 worstAspectRatio > lastWorstAspectRatio )
@@ -283,14 +296,14 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
     // This row's secondary length is determined by the area (the number of
     // pixels) to be allocated for all of the row's items.
 
-    FileSize sum = 0;
+    double sum = 0;
 
     foreach ( FileInfo * item, row )
-	sum += item->totalSize();
+	sum += scaledSize( item );
 
     int secondary = (int) ( sum * scale / primary );
 
-    if ( sum == 0 )	// Prevent division by zero.
+    if ( sum == 0.0 )	// Prevent division by zero.
 	return rect;
 
     if ( secondary < _parentView->minTileSize() )	// We don't want tiles that small.
@@ -314,7 +327,7 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
 
     while ( it != end )
     {
-	int childSize = (int) ( (*it)->totalSize() / (double) sum * primary + 0.5 );
+	int childSize = (int) ( scaledSize( *it ) / sum * primary + 0.5 );
 
 	if ( childSize > remaining )	// Prevent overflow because of accumulated rounding errors
 	    childSize = remaining;

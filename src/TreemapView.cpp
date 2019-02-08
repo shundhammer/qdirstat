@@ -7,6 +7,8 @@
  */
 
 
+#include <math.h>       // log()
+
 #include <QResizeEvent>
 #include <QRegExp>
 #include <QTimer>
@@ -295,8 +297,10 @@ void TreemapView::setScaleMode( ScaleMode mode )
     if ( mode == _scaleMode )
         return;
 
+    logInfo() << mode << endl;
+
     _scaleMode = mode;
-    logInfo() << _scaleMode << endl;
+    recalcLogSums();
 
     if ( _tree && _rootTile )
         rebuildTreemap( _rootTile->orig() );
@@ -711,6 +715,75 @@ void TreemapView::sendHoverLeave( FileInfo * node )
 }
 
 
+void TreemapView::recalcLogSums()
+{
+    if ( _scaleMode == LinearScale )
+        return;
+
+    if ( ! _tree || ! _tree->root() )
+        return;
+
+    logInfo() << "Recalculating logarithms..." << endl;
+    recalcLogSums( _tree->root() );
+    logInfo() << "Done." << endl;
+}
+
+
+double TreemapView::recalcLogSums( DirInfo * dir )
+{
+    CHECK_PTR( dir );
+
+    double     sum   = qMax( log( dir->size() ), 0.0 );
+    FileInfo * child = dir->firstChild();
+
+    while ( child )
+    {
+        if ( child->isDirInfo() )
+            sum += recalcLogSums( child->toDirInfo() );
+        else
+            sum += qMax( log( child->totalSize() ), 0.0 );
+
+        child = child->next();
+    }
+
+    if ( dir->dotEntry() )
+        sum += recalcLogSums( dir->dotEntry() );
+
+    dir->setCustomSum( sum );
+
+    return sum;
+}
+
+
+double TreemapView::scaledSize( FileInfo * item ) const
+{
+    CHECK_PTR( item );
+
+    if ( _scaleMode == LogScale )
+    {
+        if ( item->isDirInfo() )
+            return item->toDirInfo()->customSum();
+        else
+            return qMax( log( item->totalSize() ), 0.0 );
+    }
+    else // LinearScale
+    {
+        return item->totalSize();
+    }
+}
+
+
+double TreemapView::scaledSize( FileSize size ) const
+{
+    if ( _scaleMode == LogScale )
+    {
+        return qMax( log( size ), 0.0 );
+    }
+    else // LinearScale
+    {
+        return size;
+    }
+}
 
 
 

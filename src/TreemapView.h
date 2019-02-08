@@ -302,6 +302,18 @@ namespace QDirStat
          **/
         ScaleMode scaleMode() const { return _scaleMode; }
 
+        /**
+         * Return an item's scaled size according to the current scale mode
+         * (LinearScale or LogScale).
+         **/
+        double scaledSize( FileInfo * item ) const;
+
+        /**
+         * Return a scaled size according to the current scale mode
+         * (LinearScale or LogScale).
+         **/
+        double scaledSize( FileSize size ) const;
+
 	/**
 	 * Returns the visible size of the viewport presuming no scrollbars are
 	 * needed - which makes a lot more sense than fiddling with scrollbars
@@ -502,6 +514,16 @@ namespace QDirStat
 	 * Reimplemented from QFrame.
 	 **/
 	virtual void resizeEvent( QResizeEvent * event ) Q_DECL_OVERRIDE;
+
+        /**
+         * Recalculate the logarithm sums for the entire tree.
+         **/
+        void recalcLogSums();
+
+        /**
+         * Recalculate the logarithm sums for a subtree and return that sum.
+         **/
+        double recalcLogSums( DirInfo * dir );
 
 
 	// Data members

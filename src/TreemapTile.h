@@ -193,6 +193,18 @@ namespace QDirStat
 
     protected:
 
+        /**
+         * Return an item's scaled size according to the parrent view's current
+         * scale mode (LinearScale or LogScale).
+         **/
+        double scaledSize( FileInfo * item ) const;
+
+        /**
+         * Return a scaled size according to the parrent view's current scale
+         * mode (LinearScale or LogScale).
+         **/
+        double scaledSize( FileSize size ) const;
+
 	/**
 	 * Create children (sub-tiles) of this tile.
 	 **/
