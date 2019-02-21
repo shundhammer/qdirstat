@@ -12,6 +12,7 @@
 
 #include <QList>
 #include <QString>
+#include <QStringList>
 #include <QObject>
 #include <QTextStream>
 
