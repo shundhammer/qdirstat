@@ -335,19 +335,90 @@ static void qt_logger( QtMsgType msgType,
 		       const QMessageLogContext & context,
 		       const QString & msg )
 {
-    Logger::log( 0, // use default logger
-		 context.file, context.line, context.function,
-		 toLogSeverity( msgType ) )
-	<< msg << endl;
+    QStringList lines = msg.split("\n");
+
+    foreach ( QString line, msg.split( "\n" ) )
+    {
+        // Remove utterly misleading message that will just dump a ton of bug
+        // reports on the application maintainers just because some clueless
+        // moron put this message into the Qt libs
+
+        line.remove( "Reinstalling the application may fix this problem." );
+
+        if ( ! line.trimmed().isEmpty() )
+        {
+            Logger::log( 0, // use default logger
+                         context.file, context.line, context.function,
+                         toLogSeverity( msgType ) )
+                << "[Qt] " << line << endl;
+        }
+    }
 
     if ( msgType == QtFatalMsg )
     {
-	fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
+	if ( msg.contains( "Could not connect to display" ) ||
+             msg.contains( "failed to start because no Qt platform plugin" ) )
+        {
+            if ( msg.contains( "Reinstalling the application may fix this problem" ) )
+            {
+                // Suppress this new message which is complete and utter garbage:
+                //
+                // "This application failed to start because no Qt platform
+                // plugin could be initialized. Reinstalling the application
+                // may fix this problem.
+                //
+                // Available platform plugins are: wayland-org.kde.kwin.qpa,
+                // eglfs, linuxfb, minimal, minimalegl, offscreen, vnc,
+                // wayland-egl, wayland, wayland-xcomposite-egl,
+                // wayland-xcomposite-glx, xcb."
+                //
+                // Seriously, who comes up with bullshit like this?
+                //
+                // Anybody who thinks that this might help a user does not have
+                // the first clue about user interaction. This only confuses
+                // and frightens most users. Telling users to reinstall the
+                // application (!) is no more than computer voodoo and cargo
+                // cult. There is not even the slightest shred of evidence that
+                // this might help, yet it is the most destructive approach.
+                //
+                // Even a simple "I don't know what the problem is" is more
+                // helpful than this.
+                //
+                // Worse, the plethora of plug-ins and methods how to start a
+                // Qt application and thus how to connect to a display only
+                // multiplies the confusion. WTF is a normal user expected to
+                // do? What user even knows which of those technologies his
+                // system uses? And WTF should a user do with that
+                // non-information about the various plug-ins? This is a
+                // perfect example of completely overengineered bullshit.
+                //
+                // I with my 25+ years as a Unix/Linux/X11 software developer
+                // have no clue what to do when they dump this message on
+                // me. WTF do they expect from a normal user?
+                //
+                // Get it right or get out of this business. Seriously. The IT
+                // world already has enough morons with enough useless messages
+                // designed by a committee of clueless product managers and
+                // marketing people.
 
-	if ( msg.contains( "Could not connect to display" ) )
-	    exit( 1 );
+                QString text = "FATAL: Could not connect to the display.";
+                fprintf( stderr, "\n%s\n", qPrintable( text ) );
+                logError() << text << endl;
+            }
+            else
+            {
+                fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
+            }
+
+            logInfo() << "-- Exiting --\n" << endl;
+	    exit( 1 ); // Don't dump core, just exit
+        }
 	else
-	    abort();
+        {
+            fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
+            logInfo() << "-- Aborting with core dump --\n" << endl;
+	    abort(); // Exit with core dump (it might contain a useful backtrace)
+        }
     }
 }
 
