@@ -34,7 +34,7 @@ itself) and save it to that corresponding directory.
 If QDirStat finds a file .qdirstat.cache.gz in a directory, it checks if the
 toplevel directory in that cache file is the same as the current directory, and
 if it is, it uses the cache file for that directory rather than reading all
-subdirectories from disk. If you or the users that machine user QDirStat often,
+subdirectories from disk. If you or the users of that machine use QDirStat often,
 this might take a lot of I/O load from the server.
 
 
