@@ -51,7 +51,7 @@ namespace QDirStat
 
 
     /**
-     * The most basic building block of a @ref DirTree:
+     * The most basic building block of a DirTree:
      *
      * Information about one single directory entry. This is the type of info
      * typically obtained by stat() / lstat() or similar calls.
@@ -102,7 +102,7 @@ namespace QDirStat
 	/**
 	 * Destructor.
 	 *
-	 * Don't forget to call @ref FileInfo::unlinkChild() when deleting
+	 * Don't forget to call FileInfo::unlinkChild() when deleting
 	 * objects of this class!
 	 **/
 	virtual ~FileInfo();
@@ -149,10 +149,11 @@ namespace QDirStat
 	QString url() const;
 
 	/**
-	 * Very much like @ref FileInfo::url(), but with "/<Files>" appended
-	 * if this is a dot entry. Useful for debugging.
-	 * Notice: You can simply use the @ref QTextStream operator<< to
-	 * output exactly this:
+	 * Very much like FileInfo::url(), but with "/<Files>" appended if this
+	 * is a dot entry. Useful for debugging.
+         *
+         * Notice: You can simply use the QTextStream operator<< to output
+	 * exactly this:
 	 *
 	 * logDebug() << "Found fileInfo " << info << endl;
 	 **/
@@ -167,9 +168,9 @@ namespace QDirStat
 	/**
 	 * The file permissions and object type as returned by lstat().
 	 * You might want to use the repective convenience methods instead:
-	 * @ref isDir(), @ref isFile(), ...
+	 * isDir(), isFile(), ...
          *
-         * See also @ref symbolicPermissions(), octalPermissions()
+         * See also symbolicPermissions(), octalPermissions()
 	 **/
 	mode_t mode() const { return _mode;   }
 
@@ -249,14 +250,14 @@ namespace QDirStat
 
 	/**
 	 * The number of bytes actually allocated on the file system. Usually
-	 * this will be more than @ref byteSize() since the last few bytes of a
-	 * file usually consume an additional cluster on the file system.
+	 * this will be more than byteSize() since the last few bytes of a file
+	 * usually consume an additional cluster on the file system.
 	 *
 	 * In the case of sparse files, however, this might as well be
-	 * considerably less than @ref byteSize() - this means that this file
-	 * has "holes", i.e. large portions filled with zeros. This is typical
-	 * for large core dumps for example. The only way to create such a file
-	 * is to lseek() far ahead of the previous file size and then writing
+	 * considerably less than byteSize() - this means that this file has
+	 * "holes", i.e. large portions filled with zeros. This is typical for
+	 * large core dumps for example. The only way to create such a file is
+	 * to lseek() far ahead of the previous file size and then writing
 	 * data. Most file system utilities will however disregard the fact
 	 * that files are sparse files and simply allocate the holes as well,
 	 * thus greatly increasing the disk space consumption of such a
@@ -280,7 +281,7 @@ namespace QDirStat
 	FileSize blocks() const { return _blocks; }
 
 	/**
-	 * The size of one single block that @ref blocks() returns.
+	 * The size of one single block that blocks() returns.
 	 * Notice: This is _not_ the blocksize that lstat() returns!
 	 **/
 	FileSize blockSize() const { return 512L;    }
@@ -399,7 +400,7 @@ namespace QDirStat
 	//
 
 	/**
-	 * Returns a pointer to the @ref DirTree this entry belongs to.
+	 * Returns a pointer to the DirTree this entry belongs to.
 	 **/
 	DirTree * tree() const { return _tree; }
 
@@ -501,7 +502,7 @@ namespace QDirStat
 
 	/**
 	 * Returns true if this is a "Dot Entry".
-	 * See @ref dotEntry() for details.
+	 * See dotEntry() for details.
 	 *
 	 * This default implementation always returns false.
 	 **/
@@ -556,21 +557,20 @@ namespace QDirStat
 	virtual DirReadState readState() const { return DirFinished; }
 
 	/**
-	 * Returns true if this is a @ref DirInfo object.
+	 * Returns true if this is a DirInfo object.
 	 *
-	 * Don't confuse this with @ref isDir() which tells whether or not this
-	 * is a disk directory! Both should return the same, but you'll never
-	 * know - better be safe than sorry!
+	 * Don't confuse this with isDir() which tells whether or not this is a
+	 * disk directory! Both should return the same, but you'll never know -
+	 * better be safe than sorry!
 	 *
 	 * This default implementation always returns 'false'. Derived classes
-	 * (in particular, those derived from @ref DirInfo) should overwrite
-	 * this.
+	 * (in particular, those derived from DirInfo) should overwrite this.
 	 **/
 	virtual bool isDirInfo() const { return false; }
 
 	/**
-	 * Try to convert this to a @ref DirInfo pointer. This returns null if
-	 * this is not a DirInfo.
+	 * Try to convert this to a DirInfo pointer. This returns null if this
+	 * is not a DirInfo.
 	 **/
 	DirInfo * toDirInfo();
 
@@ -583,7 +583,7 @@ namespace QDirStat
 	 * calculated in the constructor rather than doing repeated
 	 * calculations and comparisons.
 	 *
-	 * Please not that @ref size() already takes this into account.
+	 * Please not that size() already takes this into account.
 	 **/
 	bool isSparseFile() const { return _isSparseFile; }
 
@@ -746,7 +746,7 @@ namespace QDirStat
 
 
     /**
-     * Print the debugUrl() of a @ref FileInfo in a debug stream.
+     * Print the debugUrl() of a FileInfo in a debug stream.
      **/
     inline QTextStream & operator<< ( QTextStream & stream, const FileInfo * info )
     {

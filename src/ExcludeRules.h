@@ -298,7 +298,7 @@ namespace QDirStat
 
 
     /**
-     * Print the regexp of a @ref FileInfo in a debug stream.
+     * Print the regexp of a FileInfo in a debug stream.
      **/
     inline QTextStream & operator<< ( QTextStream & stream, const ExcludeRule * rule )
     {

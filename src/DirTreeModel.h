@@ -54,7 +54,7 @@ namespace QDirStat
 	virtual ~DirTreeModel();
 
 	/**
-	 * Returns the internal @ref DirTree this view works on.
+	 * Returns the internal DirTree this view works on.
 	 *
 	 * Handle with caution: This might be short-lived information.	The
 	 * model might choose to create a new tree shortly after returning

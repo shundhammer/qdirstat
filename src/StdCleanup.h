@@ -21,7 +21,7 @@ namespace QDirStat
     class Cleanup;
 
     /**
-     * Create any of the predefined standard @ref Cleanup actions to be
+     * Create any of the predefined standard Cleanup actions to be
      * performed on DirTree items. Ownership of the objects is passed to the
      * caller.
      *

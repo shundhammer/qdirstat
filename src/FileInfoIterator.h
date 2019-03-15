@@ -18,7 +18,7 @@
 namespace QDirStat
 {
     /**
-     * Iterator class for children of a @ref FileInfo object. For optimum
+     * Iterator class for children of a FileInfo object. For optimum
      * performance, this iterator class does NOT return children in any
      * specific sort order.
      *
@@ -38,7 +38,7 @@ namespace QDirStat
      * Notice: This does not recurse into subdirectories, and the dot entry is
      * treated just like a subdirectory!
      *
-     * @short (unsorted) iterator for @ref FileInfo children.
+     * @short (unsorted) iterator for FileInfo children.
      **/
     class FileInfoIterator
     {
@@ -69,23 +69,23 @@ namespace QDirStat
 
 	/**
 	 * Return the current child object or 0 if there is no more.
-	 * Same as @ref operator*() .
+	 * Same as operator*() .
 	 **/
 	FileInfo * current() { return _current; }
 
 	/**
 	 * Return the current child object or 0 if there is no more.
-	 * Same as @ref current().
+	 * Same as current().
 	 **/
 	FileInfo * operator*() { return current(); }
 
 	/**
-	 * Advance to the next child. Same as @ref operator++().
+	 * Advance to the next child. Same as operator++().
 	 **/
 	void next();
 
 	/**
-	 * Advance to the next child. Same as @ref next().
+	 * Advance to the next child. Same as next().
 	 **/
 	void operator++() { next(); }
 
@@ -111,7 +111,8 @@ namespace QDirStat
     public:
 
 	/**
-	 * Constructor. Children below 'minSize' will be ignored by this iterator.
+	 * Constructor. Children below 'minSize' will be ignored by this
+	 * iterator.
 	 **/
 	FileInfoSortedBySizeIterator( FileInfo	    * parent,
 				      FileSize	      minSize	= 0,
@@ -119,23 +120,23 @@ namespace QDirStat
 
 	/**
 	 * Return the current child object or 0 if there is no more.
-	 * Same as @ref operator*() .
+	 * Same as operator*() .
 	 **/
 	FileInfo * current();
 
 	/**
 	 * Return the current child object or 0 if there is no more.
-	 * Same as @ref current().
+	 * Same as current().
 	 **/
 	FileInfo * operator*() { return current(); }
 
 	/**
-	 * Advance to the next child. Same as @ref operator++().
+	 * Advance to the next child. Same as operator++().
 	 **/
 	void next();
 
 	/**
-	 * Advance to the next child. Same as @ref next().
+	 * Advance to the next child. Same as next().
 	 **/
 	void operator++() { next(); }
 

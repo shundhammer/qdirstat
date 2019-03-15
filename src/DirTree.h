@@ -48,7 +48,7 @@ namespace QDirStat
 	/**
 	 * Constructor.
 	 *
-	 * Remember to call @ref startReading() after the constructor and
+	 * Remember to call startReading() after the constructor and
 	 * setting up connections.
 	 **/
 	DirTree();
@@ -82,8 +82,8 @@ namespace QDirStat
 	 *
 	 * All children of the old subtree will be deleted and rebuilt from
 	 * scratch, i.e. all pointers to elements within this subtree will
-	 * become invalid (a @ref subtreeDeleted() signal will be emitted to
-	 * notify about that fact).
+	 * become invalid (a subtreeDeleted() signal will be emitted to notify
+	 * about that fact).
 	 *
 	 * When 0 is passed, the entire tree will be refreshed, i.e. from the
 	 * first toplevel element on.
@@ -116,8 +116,8 @@ namespace QDirStat
 	QString url() const;
 
 	/**
-	 * Return the root item of this tree. Notice that this is a pseudo
-	 * root that doesn not really correspond to a filesystem object.
+	 * Return the root item of this tree. Notice that this is a pseudo root
+	 * that doesn not really correspond to a filesystem object.
 	 **/
 	DirInfo * root() const { return _root; }
 
@@ -188,7 +188,7 @@ namespace QDirStat
 	 * Notification that a child has been added.
 	 *
 	 * Directory read jobs are required to call this for each child added
-	 * so the tree can emit the corresponding @ref childAdded() signal.
+	 * so the tree can emit the corresponding childAdded() signal.
 	 **/
 	virtual void childAddedNotify( FileInfo *newChild );
 
@@ -196,7 +196,7 @@ namespace QDirStat
 	 * Notification that a child is about to be deleted.
 	 *
 	 * Directory read jobs are required to call this for each deleted child
-	 * so the tree can emit the corresponding @ref deletingChild() signal.
+	 * so the tree can emit the corresponding deletingChild() signal.
 	 **/
 	virtual void deletingChildNotify( FileInfo *deletedChild );
 
@@ -204,41 +204,41 @@ namespace QDirStat
 	 * Notification that one or more children have been deleted.
 	 *
 	 * Directory read jobs are required to call this when one or more
-	 * children are deleted so the tree can emit the corresponding @ref
+	 * children are deleted so the tree can emit the corresponding
 	 * deletingChild() signal. For multiple deletions (e.g. entire
 	 * subtrees) this should only happen once at the end.
 	 **/
 	virtual void childDeletedNotify();
 
 	/**
-	 * Send a @ref startingReading() signal.
+	 * Send a startingReading() signal.
 	 **/
 	void sendStartingReading();
 
 	/**
-	 * Send a @ref finished() signal.
+	 * Send a finished() signal.
 	 **/
 	void sendFinished();
 
 	/**
-	 * Send a @ref aborted() signal.
+	 * Send a aborted() signal.
 	 **/
 	void sendAborted();
 
 	/**
-	 * Send a @ref startingReading( DirInfo * ) signal.
+	 * Send a startingReading( DirInfo * ) signal.
 	 **/
 	void sendStartingReading( DirInfo * dir );
 
 	/**
-	 * Send a @ref readJobFinished( DirInfo * ) signal.
+	 * Send a readJobFinished( DirInfo * ) signal.
 	 **/
 	void sendReadJobFinished( DirInfo * dir );
 
 	/**
-	 * Send a @ref finalizeLocal() signal to give views a chance to
-	 * finalize the display of this directory level - e.g. clean up dot
-	 * entries, set the final "expandable" state etc.
+	 * Send a finalizeLocal() signal to give views a chance to finalize the
+	 * display of this directory level - e.g. clean up dot entries, set the
+	 * final "expandable" state etc.
 	 **/
 	void sendFinalizeLocal( DirInfo *dir );
 
@@ -279,9 +279,10 @@ namespace QDirStat
 
 	/**
 	 * Emitted after a child is deleted. If you are interested which child
-	 * it was, better use the @ref deletingChild() signal.
-	 * @ref childDeleted() is only useful to rebuild a view etc. completely.
-	 * If possible, this signal is sent only once for multiple deletions -
+	 * it was, better use the deletingChild() signal.
+         *
+	 * childDeleted() is only useful to rebuild a view etc. completely.
+         * If possible, this signal is sent only once for multiple deletions -
 	 * e.g., when entire subtrees are deleted.
 	 **/
 	void childDeleted();
@@ -331,8 +332,8 @@ namespace QDirStat
 	 * WARNING: 'dir' may be 0 if the the tree's root could not be read.
 	 *
 	 * Use this signal to do similar cleanups like
-	 * @ref DirInfo::finalizeLocal(), e.g. cleaning up unused / undesired
-	 * dot entries like in @ref DirInfo::cleanupDotEntries().
+	 * DirInfo::finalizeLocal(), e.g. cleaning up unused / undesired dot
+	 * entries like in DirInfo::cleanupDotEntries().
 	 *
 	 * Notice that the dot entry might be removed and its children
 	 * reparented after this signal.

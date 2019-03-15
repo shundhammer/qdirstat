@@ -35,17 +35,15 @@ namespace QDirStat
      *
      * Objects of this kind are transient by nature: They live only as long as
      * the job is queued or executed. When it is done, the data is contained in
-     * the corresponding @ref DirInfo subtree of the corresponding @ref
-     * DirTree.
+     * the corresponding DirInfo subtree of the corresponding DirTree.
      *
-     * For each entry automatically a @ref FileInfo or @ref DirInfo will be
-     * created and added to the parent @ref DirInfo. For each directory a new
-     * @ref DirReadJob will be created and added to the @ref DirTree 's job
-     * queue.
+     * For each entry automatically a FileInfo or DirInfo will be created and
+     * added to the parent DirInfo. For each directory a new DirReadJob will be
+     * created and added to the DirTree 's job queue.
      *
-     * Notice: This class contains pure virtuals - you cannot use it
-     * directly. Derive your own class from it or use one of
-     * @ref LocalDirReadJob or @ref CacheReadJob.
+     * Notice: This class contains pure virtuals - you cannot use it directly.
+     * Derive your own class from it or use one of LocalDirReadJob or
+     * CacheReadJob.
      *
      * @short Abstract base class for directory reading.
      **/
@@ -76,13 +74,13 @@ namespace QDirStat
 	virtual void read();
 
 	/**
-	 * Returns the corresponding @ref DirInfo item.
+	 * Returns the corresponding DirInfo item.
 	 * Caution: This may be 0.
 	 **/
 	virtual DirInfo * dir() { return _dir; }
 
 	/**
-	 * Set the corresponding @ref DirInfo item.
+	 * Set the corresponding DirInfo item.
 	 **/
 	virtual void setDir( DirInfo * dir );
 
@@ -115,8 +113,8 @@ namespace QDirStat
 	 * Notification that a new child has been added.
 	 *
 	 * Derived classes are required to call this whenever a new child is
-	 * added so this notification can be passed up to the @ref DirTree
-	 * which in turn emits a corresponding signal.
+	 * added so this notification can be passed up to the DirTree which in
+	 * turn emits a corresponding signal.
 	 **/
 	void childAdded( FileInfo *newChild );
 
@@ -124,8 +122,8 @@ namespace QDirStat
 	 * Notification that a child is about to be deleted.
 	 *
 	 * Derived classes are required to call this just before a child is
-	 * deleted so this notification can be passed up to the @ref DirTree
-	 * which in turn emits a corresponding signal.
+	 * deleted so this notification can be passed up to the DirTree which
+	 * in turn emits a corresponding signal.
 	 *
 	 * Derived classes are not required to handle child deletion at all,
 	 * but if they do, calling this method is required.
@@ -184,7 +182,7 @@ namespace QDirStat
 
 
     /**
-     * Impementation of the abstract @ref DirReadJob class that reads a local
+     * Impementation of the abstract DirReadJob class that reads a local
      * directory.
      *
      * This will use lstat() system calls rather than KDE's network transparent
@@ -210,11 +208,11 @@ namespace QDirStat
 	virtual ~LocalDirReadJob();
 
 	/**
-	 * Obtain information about the URL specified and create a new @ref
-	 * FileInfo or a @ref DirInfo (whatever is appropriate) from that
-	 * information. Use @ref FileInfo::isDirInfo() to find out which.
-	 * Returns 0 if such information cannot be obtained (i.e. the
-	 * appropriate stat() call fails).
+	 * Obtain information about the URL specified and create a new FileInfo
+	 * or a DirInfo (whatever is appropriate) from that information. Use
+	 * FileInfo::isDirInfo() to find out which.  Returns 0 if such
+	 * information cannot be obtained (i.e. the appropriate stat() call
+	 * fails).
 	 **/
 	static FileInfo * stat( const QString & url,
 				DirTree	      * tree,
@@ -243,7 +241,7 @@ namespace QDirStat
 	/**
 	 * Read the directory. Prior to this nothing happens.
 	 *
-	 * Inherited and reimplemented from @ref DirReadJob.
+	 * Inherited and reimplemented from DirReadJob.
 	 **/
 	virtual void startReading();
 
@@ -319,8 +317,8 @@ namespace QDirStat
 	 * Constructor for a cache reader that is already open.
 	 *
 	 * The CacheReadJob takes over ownership of the CacheReader. In
-	 * particular, the CacheReader will be destroyed with 'delete' when
-	 * the read job is done.
+	 * particular, the CacheReader will be destroyed with 'delete' when the
+	 * read job is done.
 	 *
 	 * If 'parent' is 0, the content of the cache file will replace all
 	 * current tree items.
@@ -347,7 +345,7 @@ namespace QDirStat
 	/**
 	 * Start reading the cache. Prior to this nothing happens.
 	 *
-	 * Inherited and reimplemented from @ref DirReadJob.
+	 * Inherited and reimplemented from DirReadJob.
 	 **/
 	virtual void read();
 

@@ -35,7 +35,7 @@ public:
     virtual ~DirSaver();
 
     /**
-     * Change directory. Unlike @ref QDir::cd(), this method really performs a
+     * Change directory. Unlike QDir::cd(), this method really performs a
      * system chdir() so subsequent system calls will have the directory
      * specified as the new current working directory.
      **/

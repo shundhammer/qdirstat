@@ -90,7 +90,7 @@ namespace QDirStat
 	TreemapTile * rootTile() const { return _rootTile; }
 
 	/**
-	 * Returns this treemap view's @ref DirTree.
+	 * Returns this treemap view's DirTree.
 	 **/
 	DirTree * tree() const { return _tree; }
 

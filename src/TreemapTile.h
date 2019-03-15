@@ -170,18 +170,18 @@ namespace QDirStat
 	virtual ~TreemapTile();
 
 	/**
-	 * Returns the original @ref FileInfo item that corresponds to this
+	 * Returns the original FileInfo item that corresponds to this
 	 * treemap tile.
 	 **/
 	FileInfo * orig() const { return _orig; }
 
 	/**
-	 * Returns the parent @ref TreemapView.
+	 * Returns the parent TreemapView.
 	 **/
 	TreemapView * parentView() const { return _parentView; }
 
 	/**
-	 * Returns the parent @ref TreemapTile or 0 if there is none.
+	 * Returns the parent TreemapTile or 0 if there is none.
 	 **/
 	TreemapTile * parentTile() const { return _parentTile; }
 

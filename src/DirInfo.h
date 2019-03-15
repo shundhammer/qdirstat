@@ -22,12 +22,12 @@ namespace QDirStat
     class DirTree;
 
     /**
-     * A more specialized version of @ref FileInfo: This class can actually
-     * manage children. The base class (@ref FileInfo) has only stubs for the
-     * respective methods to integrate seamlessly with the abstraction of a
-     * file / directory tree; this class fills those stubs with life.
+     * A more specialized version of FileInfo: This class can actually manage
+     * children. The base class (FileInfo) has only stubs for the respective
+     * methods to integrate seamlessly with the abstraction of a file /
+     * directory tree; this class fills those stubs with life.
      *
-     * @short directory item within a @ref DirTree.
+     * @short directory item within a DirTree.
      **/
     class DirInfo: public FileInfo
     {
@@ -35,8 +35,8 @@ namespace QDirStat
 	/**
 	 * Default constructor.
 	 *
-	 * If "asDotEntry" is set, this will be used as the parent's
-	 * "dot entry", i.e. the pseudo directory that holds all the parent's
+	 * If "asDotEntry" is set, this will be used as the parent's "dot
+	 * entry", i.e. the pseudo directory that holds all the parent's
 	 * non-directory children. This is the only way to create a "dot
 	 * entry"!
 	 **/
@@ -71,14 +71,14 @@ namespace QDirStat
 	/**
 	 * Returns the total size in bytes of this subtree.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual FileSize totalSize() Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns the total size in blocks of this subtree.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual FileSize totalBlocks() Q_DECL_OVERRIDE;
 
@@ -86,7 +86,7 @@ namespace QDirStat
 	 * Returns the total number of children in this subtree, excluding this
 	 * item.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual int totalItems() Q_DECL_OVERRIDE;
 
@@ -94,7 +94,7 @@ namespace QDirStat
 	 * Returns the total number of subdirectories in this subtree,
 	 * excluding this item. Dot entries and "." or ".." are not counted.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual int totalSubDirs() Q_DECL_OVERRIDE;
 
@@ -102,14 +102,14 @@ namespace QDirStat
 	 * Returns the total number of plain file children in this subtree,
 	 * excluding this item.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual int totalFiles() Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns the latest modification time of this subtree.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual time_t latestMtime() Q_DECL_OVERRIDE;
 
@@ -131,7 +131,7 @@ namespace QDirStat
 	 * This will return 'false' only if this information can be obtained at
 	 * all, i.e. if local directory reading methods are used.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual bool isMountPoint() const  Q_DECL_OVERRIDE
 	    { return _isMountPoint; }
@@ -140,7 +140,7 @@ namespace QDirStat
 	 * Sets the mount point state, i.e. whether or not this is a mount
 	 * point.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual void setMountPoint( bool isMountPoint = true ) Q_DECL_OVERRIDE;
 
@@ -153,7 +153,7 @@ namespace QDirStat
 	/**
 	 * Returns true if this subtree is finished reading.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual bool isFinished() Q_DECL_OVERRIDE;
 
@@ -161,7 +161,7 @@ namespace QDirStat
 	 * Returns true if this subtree is busy, i.e. it is not finished
 	 * reading yet.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual bool isBusy() Q_DECL_OVERRIDE;
 
@@ -169,7 +169,7 @@ namespace QDirStat
 	 * Returns the number of pending read jobs in this subtree. When this
 	 * number reaches zero, the entire subtree is done.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual int pendingReadJobs() Q_DECL_OVERRIDE
 	    { return _pendingReadJobs;	}
@@ -185,7 +185,7 @@ namespace QDirStat
 	 * Set this entry's first child.
 	 * Use this method only if you know exactly what you are doing.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual void setFirstChild( FileInfo *newfirstChild ) Q_DECL_OVERRIDE
 	    { _firstChild = newfirstChild; }
@@ -214,10 +214,10 @@ namespace QDirStat
 	virtual void setDotEntry( FileInfo *newDotEntry ) Q_DECL_OVERRIDE;
 
 	/**
-	 * Returns true if this is a "Dot Entry". See @ref dotEntry() for
+	 * Returns true if this is a "Dot Entry". See dotEntry() for
 	 * details.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual bool isDotEntry() const Q_DECL_OVERRIDE
 	    { return _isDotEntry; }
@@ -225,7 +225,7 @@ namespace QDirStat
 	/**
 	 * Notification that a child has been added somewhere in the subtree.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual void childAdded( FileInfo *newChild ) Q_DECL_OVERRIDE;
 
@@ -237,7 +237,7 @@ namespace QDirStat
 	 * destructor: Important parts of the object might already be destroyed
 	 * (e.g., the virtual table - no more virtual methods).
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual void unlinkChild( FileInfo *deletedChild ) Q_DECL_OVERRIDE;
 
@@ -245,7 +245,7 @@ namespace QDirStat
 	 * Notification that a child is about to be deleted somewhere in the
 	 * subtree.
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual void deletingChild( FileInfo *deletedChild ) Q_DECL_OVERRIDE;
 
@@ -290,13 +290,13 @@ namespace QDirStat
 	 *    DirAborted   reading aborted upon user request
 	 *    DirError	   error while reading
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual DirReadState readState() const Q_DECL_OVERRIDE;
 
 	/**
 	 * Set the state of the directory reading process.
-	 * See @ref readState() for details.
+	 * See readState() for details.
 	 **/
 	void setReadState( DirReadState newReadState );
 
@@ -368,13 +368,13 @@ namespace QDirStat
 	void clearTouched( bool recursive = false );
 
 	/**
-	 * Returns true if this is a @ref DirInfo object.
+	 * Returns true if this is a DirInfo object.
 	 *
-	 * Don't confuse this with @ref isDir() which tells whether or not this
-	 * is a disk directory! Both should return the same, but you'll never
-	 * know - better be safe than sorry!
+	 * Don't confuse this with isDir() which tells whether or not this is a
+	 * disk directory! Both should return the same, but you'll never know -
+	 * better be safe than sorry!
 	 *
-	 * Reimplemented - inherited from @ref FileInfo.
+	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual bool isDirInfo() const Q_DECL_OVERRIDE
 	    { return true; }

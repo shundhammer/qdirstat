@@ -69,7 +69,7 @@ namespace QDirStat
 	/**
 	 * Return the user title of this command as displayed in menus.
 	 * This may include '&' characters for keyboard shortcuts.
-	 * See also @ref cleanTitle() .
+	 * See also cleanTitle() .
 	 **/
 	const QString & title() const { return _title; }
 
@@ -98,8 +98,8 @@ namespace QDirStat
 
 	/**
 	 * Return whether or not this cleanup action works for directories,
-	 * i.e. whether or not @ref Cleanup::execute() will be successful if
-	 * the object passed is a directory.
+	 * i.e. whether or not Cleanup::execute() will be successful if the
+	 * object passed is a directory.
 	 **/
 	bool worksForDir() const { return _worksForDir; }
 
