@@ -258,11 +258,7 @@ void LocalDirReadJob::startReading()
         if ( _applyFileChildExcludeRules &&
              ExcludeRules::instance()->matchDirectChildren( _dir ) )
         {
-            // Kill all queued jobs for this dir except this one
-            _queue->killAll( _dir, this );
-
-            _tree->clearSubtree( _dir );
-            _dir->setExcluded();
+            excludeDirLate();
             readState = DirOnRequestOnly;
         }
 
@@ -276,7 +272,7 @@ void LocalDirReadJob::startReading()
 
 void LocalDirReadJob::finishReading( DirInfo * dir, DirReadState readState )
 {
-    // logDebug() << dir << endl;
+    logDebug() << dir << endl;
     CHECK_PTR( dir );
 
     dir->setReadState( readState );
@@ -378,6 +374,18 @@ bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
 
 	return false;
     }
+}
+
+
+void LocalDirReadJob::excludeDirLate()
+{
+    logDebug() << "Excluding dir " << _dir << endl;
+
+    // Kill all queued jobs for this dir except this one
+    _queue->killAll( _dir, this );
+
+    _tree->clearSubtree( _dir );
+    _dir->setExcluded();
 }
 
 

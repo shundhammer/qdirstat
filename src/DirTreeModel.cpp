@@ -29,7 +29,8 @@ DirTreeModel::DirTreeModel( QObject * parent ):
     _slowUpdateMillisec( 3000 ),
     _slowUpdate( false ),
     _sortCol( NameCol ),
-    _sortOrder( Qt::AscendingOrder )
+    _sortOrder( Qt::AscendingOrder ),
+    _removingRows( false )
 {
     createTree();
     readSettings();
@@ -950,6 +951,36 @@ void DirTreeModel::updatePersistentIndexes()
 }
 
 
+void DirTreeModel::beginRemoveRows( const QModelIndex & parent, int first, int last )
+{
+    if ( _removingRows )
+    {
+        logError() << "Removing rows already in progress" << endl;
+        return;
+    }
+
+
+    if ( ! parent.isValid() )
+    {
+        logError() << "Invalid QModelIndex" << endl;
+        return;
+    }
+
+    _removingRows = true;
+    QAbstractItemModel::beginRemoveRows( parent, first, last );
+}
+
+
+void DirTreeModel::endRemoveRows()
+{
+    if ( _removingRows )
+    {
+        QAbstractItemModel::endRemoveRows();
+        _removingRows = false;
+    }
+}
+
+
 void DirTreeModel::deletingChild( FileInfo * child )
 {
     logDebug() << "Deleting child " << child << endl;
@@ -970,14 +1001,13 @@ void DirTreeModel::deletingChild( FileInfo * child )
 
 void DirTreeModel::childDeleted()
 {
-    logDebug() << "endRemoveRows()" << endl;
     endRemoveRows();
 }
 
 
 void DirTreeModel::clearingSubtree( DirInfo * subtree )
 {
-    // logDebug() << "Deleting all children of " << subtree << endl;
+    logDebug() << "Deleting all children of " << subtree << endl;
 
     if ( subtree == _tree->root() || subtree->isTouched() )
     {
@@ -986,7 +1016,7 @@ void DirTreeModel::clearingSubtree( DirInfo * subtree )
 
 	if ( count > 0 )
 	{
-	    // logDebug() << "beginRemoveRows for " << subtree << " row 0 to " << count - 1 << endl;
+	    logDebug() << "beginRemoveRows for " << subtree << " row 0 to " << count - 1 << endl;
 	    beginRemoveRows( subtreeIndex, 0, count - 1 );
 	}
     }
@@ -999,7 +1029,6 @@ void DirTreeModel::subtreeCleared( DirInfo * subtree )
 {
     Q_UNUSED( subtree );
 
-    // logDebug() << "endRemoveRows()" << endl;
     endRemoveRows();
 }
 

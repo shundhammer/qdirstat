@@ -220,6 +220,24 @@ namespace QDirStat
 				DirTree	      * tree,
 				DirInfo	      * parent = 0 );
 
+        /**
+         * Return 'true' if any exclude rules matching against any direct file
+         * child should be applied. This is generally useful only for
+         * second-level read jobs, not for the starting point of a directory
+         * scan, so it is easily possible to continue reading at an excluded
+         * directory.
+         *
+         * The default is 'false'.
+         **/
+        bool applyFileChildExcludeRules() const
+            { return _applyFileChildExcludeRules; }
+
+        /**
+         * Set the applyFileChildExcludeRules flag.
+         **/
+        void setApplyFileChildExcludeRules( bool val )
+            { _applyFileChildExcludeRules = val; }
+
     protected:
 
 	/**
@@ -263,28 +281,20 @@ namespace QDirStat
 	 **/
 	void handleLstatError( const QString & entryName );
 
+        /**
+         * Exclude the directory of this read job after it is almost completely
+         * read. This is used when checking for exclude rules matching direct
+         * file children of a directory.
+         *
+         * The main purpose of having this as a separate function is to have a
+         * clear backtrace if it segfaults.
+         **/
+        void excludeDirLate();
+
 	/**
 	 * Return the full name with path of an entry of this directory.
 	 **/
 	QString fullName( const QString & entryName ) const;
-
-        /**
-         * Return 'true' if any exclude rules matching against any direct file
-         * child should be applied. This is generally useful only for
-         * second-level read jobs, not for the starting point of a directory
-         * scan, so it is easily possible to continue reading at an excluded
-         * directory.
-         *
-         * The default is 'false'.
-         **/
-        bool applyFileChildExcludeRules() const
-            { return _applyFileChildExcludeRules; }
-
-        /**
-         * Set the applyFileChildExcludeRules flag.
-         **/
-        void setApplyFileChildExcludeRules( bool val )
-            { _applyFileChildExcludeRules = val; }
 
 
 	//

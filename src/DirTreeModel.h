@@ -176,6 +176,7 @@ namespace QDirStat
          **/
         bool slowUpdate() const { return _slowUpdate; }
 
+
     public:
 
 	// Mapping of tree items to model rows and vice versa.
@@ -269,6 +270,7 @@ namespace QDirStat
 	 **/
 	virtual void sort( int column,
 			   Qt::SortOrder order = Qt::AscendingOrder ) Q_DECL_OVERRIDE;
+
 
     protected slots:
 
@@ -395,6 +397,24 @@ namespace QDirStat
 	 **/
 	QVariant formatPercent( float percent ) const;
 
+        /**
+         * Start removing rows.
+         **/
+        void beginRemoveRows( const QModelIndex & parent, int first, int last );
+
+        /**
+         * End removing rows.
+         *
+         * Unlike the QAbstractItemModel's implementation, this method checks
+         * if removing rows is in progress in the first place so there will not
+         * be a segfault (!) if endRemoveRows is called without a corresponding
+         * beginRemoveRows().
+         *
+         * As usual, Qt's item classes don't even give it an honest try to do
+         * the most basic checking. This implementation does.
+         **/
+        void endRemoveRows();
+
 
 	//
 	// Data members
@@ -411,6 +431,7 @@ namespace QDirStat
         bool             _slowUpdate;
 	DataColumn	 _sortCol;
 	Qt::SortOrder	 _sortOrder;
+        bool             _removingRows;
 
 
 	// The various icons
