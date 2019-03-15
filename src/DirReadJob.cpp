@@ -145,6 +145,8 @@ LocalDirReadJob::LocalDirReadJob( DirTree * tree,
     : DirReadJob( tree, dir )
     , _diskDir( 0 )
 {
+    if ( _dir )
+	_dirName = _dir->url();
 }
 
 
@@ -155,34 +157,31 @@ LocalDirReadJob::~LocalDirReadJob()
 
 void LocalDirReadJob::startReading()
 {
-    struct dirent *	entry;
-    struct stat		statInfo;
-    QString		dirName		 = _dir->url();
-    QString		defaultCacheName = DEFAULT_CACHE_NAME;
+    struct dirent * entry;
+    struct stat	    statInfo;
+    QString	    defaultCacheName = DEFAULT_CACHE_NAME;
 
     // logDebug() << _dir << endl;
 
     bool ok = true;
 
-    if ( access( dirName.toUtf8(), X_OK | R_OK ) != 0 )
+    if ( access( _dirName.toUtf8(), X_OK | R_OK ) != 0 )
     {
 	ok = false;
-	logWarning() << "No permission to read directory " << dirName << endl;
-	_dir->setReadState( DirError );
-	finishReading( _dir );
+	logWarning() << "No permission to read directory " << _dirName << endl;
+	finishReading( _dir, DirError );
     }
 
     if ( ok )
     {
-	_diskDir = opendir( dirName.toUtf8() );
+	_diskDir = ::opendir( _dirName.toUtf8() );
 
 	if ( ! _diskDir )
 	{
+	    logWarning() << "opendir(" << _dirName << ") failed" << endl;
 	    ok = false;
-	    _dir->setReadState( DirError );
-	    logWarning() << "opendir(" << dirName << ") failed" << endl;
 	    // opendir() doesn't set 'errno' according to POSIX	 :-(
-	    finishReading( _dir );
+	    finishReading( _dir, DirError );
 	}
     }
 
@@ -197,143 +196,47 @@ void LocalDirReadJob::startReading()
 	    if ( entryName != "."  &&
 		 entryName != ".."   )
 	    {
-		QString fullName = dirName == "/" ? "" : dirName; // Avoid leading // when in root dir
-		fullName += "/" + entryName;
-
-		if ( lstat( fullName.toUtf8(), &statInfo ) == 0 )	      // lstat() OK
+		if ( lstat( fullName( entryName ).toUtf8(), &statInfo ) == 0 )	// lstat() OK
 		{
 		    if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
 		    {
 			DirInfo *subDir = new DirInfo( entryName, &statInfo, _tree, _dir );
 			CHECK_NEW( subDir );
 
-			_dir->insertChild( subDir );
-			childAdded( subDir );
+			processSubDir( entryName, subDir );
 
-			if ( ExcludeRules::instance()->match( fullName, entryName ) )
-			{
-			    subDir->setExcluded();
-			    subDir->setReadState( DirOnRequestOnly );
-			    finishReading( subDir );
-			}
-			else // No exclude rule matched
-			{
-			    if ( ! crossingFileSystems(_dir, subDir ) )	// normal case
-			    {
-				LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
-				CHECK_NEW( job );
-				_tree->addJob( job );
-			    }
-			    else	// The subdirectory we just found is a mount point.
-			    {
-				subDir->setMountPoint();
-
-				if ( _tree->crossFileSystems() )
-				{
-				    LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
-				    CHECK_NEW( job );
-				    _tree->addJob( job );
-				}
-				else
-				{
-				    subDir->setReadState( DirOnRequestOnly );
-				    finishReading( subDir );
-				}
-			    }
-			}
 		    }
-		    else		// non-directory child
+		    else  // non-directory child
 		    {
 			if ( entryName == defaultCacheName )	// .qdirstat.cache.gz found?
 			{
 			    logDebug() << "Found cache file " << defaultCacheName << endl;
 
-			    //
-			    // Read content of this subdirectory from cache file
-			    //
+			    // Try to read the cache file. If that was successful and the toplevel
+			    // path in that cache file matches the path of the directory we are
+			    // reading right now, the directory is finished reading, the read job
+			    // (this object) was just deleted, and we may no longer access any
+			    // member variables; just return.
 
-			    CacheReadJob * cacheReadJob = new CacheReadJob( _tree, _dir->parent(), fullName );
-			    CHECK_NEW( cacheReadJob );
-			    QString firstDirInCache = cacheReadJob->reader()->firstDir();
-
-			    if ( firstDirInCache == dirName )	// Does this cache file match this directory?
-			    {
-				logDebug() << "Using cache file " << fullName << " for " << dirName << endl;
-
-				DirTree * tree = _tree;	 // Copy data members to local variables:
-				DirInfo * dir  = _dir;	 // This object might be deleted soon by killAll()
-
-                                if ( _tree->isTopLevel( _dir ) )
-                                {
-                                    logDebug() << "Clearing complete tree" << endl;
-
-                                    _tree->clear();
-                                    _tree->readCache( fullName );
-                                }
-                                else
-                                {
-                                    cacheReadJob->reader()->rewind();  // Read offset was moved by firstDir()
-                                    _tree->addJob( cacheReadJob );	   // Job queue will assume ownership of cacheReadJob
-
-                                    if ( _dir->parent() )
-                                        _dir->parent()->setReadState( DirReading );
-
-                                    //
-                                    // Clean up partially read directory content
-                                    //
-
-                                    _queue->killAll( _dir, cacheReadJob );	// Will delete this job as well!
-                                    // All data members of this object are invalid from here on!
-
-                                    logDebug() << "Deleting subtree " << dir << endl;
-                                    tree->deleteSubtree( dir );
-                                }
-
+			    if ( readCacheFile( entryName ) )
 				return;
-			    }
-			    else
-			    {
-				logWarning() << "NOT using cache file " << fullName
-					     << " with dir " << firstDirInCache
-					     << " for " << dirName
-					     << endl;
+			}
 
-				delete cacheReadJob;
-			    }
-			}
-			else
-			{
-			    FileInfo *child = new FileInfo( entryName, &statInfo, _tree, _dir );
-			    CHECK_NEW( child );
-			    _dir->insertChild( child );
-			    childAdded( child );
-			}
+			FileInfo *child = new FileInfo( entryName, &statInfo, _tree, _dir );
+			CHECK_NEW( child );
+			_dir->insertChild( child );
+			childAdded( child );
 		    }
 		}
-		else			// lstat() error
+		else  // lstat() error
 		{
-		    logWarning() << "lstat(" << fullName << ") failed: " << formatErrno() << endl;
-
-		    /*
-		     * Not much we can do when lstat() didn't work; let's at
-		     * least create an (almost empty) entry as a placeholder.
-		     */
-		    DirInfo *child = new DirInfo( _tree, _dir, entryName,
-						  0,   // mode
-						  0,   // size
-						  0 ); // mtime
-		    CHECK_NEW( child );
-		    child->finalizeLocal();
-		    child->setReadState( DirError );
-		    _dir->insertChild( child );
-		    childAdded( child );
+		    handleLstatError( entryName );
 		}
 	    }
 	}
 
 	closedir( _diskDir );
-	_dir->setReadState( DirFinished );
-	finishReading( _dir );
+	finishReading( _dir, DirFinished );
     }
 
     finished();
@@ -341,10 +244,12 @@ void LocalDirReadJob::startReading()
 }
 
 
-void LocalDirReadJob::finishReading( DirInfo * dir )
+void LocalDirReadJob::finishReading( DirInfo * dir, DirReadState readState )
 {
     // logDebug() << dir << endl;
+    CHECK_PTR( dir );
 
+    dir->setReadState( readState );
     _tree->sendFinalizeLocal( dir );
     dir->finalizeLocal();
     _tree->sendReadJobFinished( dir );
@@ -395,6 +300,129 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
 	THROW( SysCallFailedException( "lstat", url ) );
 	return 0; // NOTREACHED
     }
+}
+
+
+void LocalDirReadJob::processSubDir( const QString & entryName, DirInfo * subDir )
+{
+    _dir->insertChild( subDir );
+    childAdded( subDir );
+
+    if ( ExcludeRules::instance()->match( fullName( entryName ), entryName ) )
+    {
+	subDir->setExcluded();
+	finishReading( subDir, DirOnRequestOnly );
+    }
+    else // No exclude rule matched
+    {
+	if ( ! crossingFileSystems(_dir, subDir ) ) // normal case
+	{
+	    LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
+	    CHECK_NEW( job );
+	    _tree->addJob( job );
+	}
+	else	    // The subdirectory we just found is a mount point.
+	{
+	    subDir->setMountPoint();
+
+	    if ( _tree->crossFileSystems() )
+	    {
+		LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
+		CHECK_NEW( job );
+		_tree->addJob( job );
+	    }
+	    else
+	    {
+		finishReading( subDir, DirOnRequestOnly );
+	    }
+	}
+    }
+}
+
+
+QString LocalDirReadJob::fullName( const QString & entryName ) const
+{
+    QString result = _dirName == "/" ? "" : _dirName;  // Avoid leading // when in root dir
+    result += "/" + entryName;
+
+    return result;
+}
+
+
+bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
+{
+    QString cacheFullName = fullName( cacheFileName );
+    CacheReadJob * cacheReadJob = new CacheReadJob( _tree, _dir->parent(), cacheFullName );
+    CHECK_NEW( cacheReadJob );
+    QString firstDirInCache = cacheReadJob->reader()->firstDir();
+
+    if ( firstDirInCache == _dirName )	 // Does this cache file match this directory?
+    {
+	logDebug() << "Using cache file " << cacheFullName << " for " << _dirName << endl;
+
+	DirTree * tree = _tree;	 // Copy data members to local variables:
+	DirInfo * dir  = _dir;	 // This object might be deleted soon by killAll()
+
+	if ( _tree->isTopLevel( _dir ) )
+	{
+	    logDebug() << "Clearing complete tree" << endl;
+
+	    _tree->clear();
+	    _tree->readCache( cacheFullName );
+	}
+	else
+	{
+	    cacheReadJob->reader()->rewind();  // Read offset was moved by firstDir()
+	    _tree->addJob( cacheReadJob );     // The job queue will assume ownership of cacheReadJob
+
+	    if ( _dir->parent() )
+		_dir->parent()->setReadState( DirReading );
+
+	    //
+	    // Clean up partially read directory content
+	    //
+
+	    _queue->killAll( _dir, cacheReadJob );	// Will delete this job as well!
+	    // All data members of this object are invalid from here on!
+
+	    logDebug() << "Deleting subtree " << dir << endl;
+	    tree->deleteSubtree( dir );
+	}
+
+	return true;
+    }
+    else
+    {
+	logWarning() << "NOT using cache file " << cacheFullName
+		     << " with dir " << firstDirInCache
+		     << " for " << _dirName
+		     << endl;
+
+	delete cacheReadJob;
+
+	return false;
+    }
+}
+
+
+void LocalDirReadJob::handleLstatError( const QString & entryName )
+{
+    logWarning() << "lstat(" << fullName( entryName ) << ") failed: "
+		 << formatErrno() << endl;
+
+    /*
+     * Not much we can do when lstat() didn't work; let's at
+     * least create an (almost empty) entry as a placeholder.
+     */
+    DirInfo *child = new DirInfo( _tree, _dir, entryName,
+				  0,   // mode
+				  0,   // size
+				  0 ); // mtime
+    CHECK_NEW( child );
+    child->finalizeLocal();
+    child->setReadState( DirError );
+    _dir->insertChild( child );
+    childAdded( child );
 }
 
 

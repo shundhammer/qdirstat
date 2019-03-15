@@ -14,13 +14,13 @@
 #include <dirent.h>
 #include <QTimer>
 
+#include "FileInfo.h"
 #include "Logger.h"
 
 
 namespace QDirStat
 {
     // Forward declarations
-    class FileInfo;
     class DirInfo;
     class DirTree;
     class CacheReader;
@@ -86,10 +86,10 @@ namespace QDirStat
 	 **/
 	virtual void setDir( DirInfo * dir );
 
-        /**
-         * Return the corresponding DirTree.
-         **/
-        DirTree * tree() const { return _tree; }
+	/**
+	 * Return the corresponding DirTree.
+	 **/
+	DirTree * tree() const { return _tree; }
 
 	/**
 	 * Return the job queue this job is in or 0 if it isn't queued.
@@ -138,17 +138,17 @@ namespace QDirStat
 	 **/
 	void finished();
 
-        /**
-         * Check if going from 'parent' to 'child' would cross a file system
-         * boundary. This take Btrfs subvolumes into account.
-         **/
-        bool crossingFileSystems( DirInfo * parent, DirInfo * child );
+	/**
+	 * Check if going from 'parent' to 'child' would cross a file system
+	 * boundary. This take Btrfs subvolumes into account.
+	 **/
+	bool crossingFileSystems( DirInfo * parent, DirInfo * child );
 
-        /**
-         * Return the device name where 'dir' is on if it's a mount point.
-         * This uses MountPoints which reads /proc/mounts.
-         **/
-        QString device( const DirInfo * dir ) const;
+	/**
+	 * Return the device name where 'dir' is on if it's a mount point.
+	 * This uses MountPoints which reads /proc/mounts.
+	 **/
+	QString device( const DirInfo * dir ) const;
 
 
 	DirTree *	   _tree;
@@ -230,13 +230,51 @@ namespace QDirStat
 	virtual void startReading();
 
 	/**
-	 * Finish reading the directory: Send signals and finalize the
-	 * directory (clean up dot entries etc.).
+	 * Finish reading the directory: Set the specified read state, send
+	 * signals and finalize the directory (clean up dot entries etc.).
 	 **/
-	void finishReading( DirInfo * dir );
+	void finishReading( DirInfo * dir, DirReadState readState );
+
+	/**
+	 * Process one subdirectory entry.
+	 **/
+	void processSubDir( const QString & entryName,
+			    DirInfo	  * subDir    );
+
+	/**
+	 * Read a cache file that was picked up along the way:
+	 *
+	 * If one of the non-directory entries of this directory was
+	 * ".qdirstat.cache.gz", open it, and if the toplevel entry in that
+	 * file matches the current path, read all the cache contents, kill all
+	 * pending read jobs for subdirectories of this directory and return
+	 * 'true'. In that case, the current read job is finished and deleted
+	 * (!), control needs to be returned to the caller, and using any data
+	 * members of this object is no longer safe (since they have just been
+	 * deleted).
+	 *
+	 * In all other cases, consider that entry as a plain file and return
+	 * 'false'.
+	 **/
+	bool readCacheFile( const QString & cacheFileName );
+
+	/**
+	 * Handle an error during lstat() of a directory entry.
+	 **/
+	void handleLstatError( const QString & entryName );
+
+	/**
+	 * Return the full name with path of an entry of this directory.
+	 **/
+	QString fullName( const QString & entryName ) const;
 
 
-	DIR * _diskDir;
+	//
+	// Data members
+	//
+
+	QString _dirName;
+	DIR *	_diskDir;
 
     };	// LocalDirReadJob
 
@@ -391,13 +429,13 @@ namespace QDirStat
 
     public slots:
 
-        /**
-         * Notification that a child node is about to be deleted from the
-         * outside (i.e., not from this ReadJobQueue), e.g. because of cleanup
-         * actions. This will remove all pending directory read jobs for that
-         * subtree from the job queue.
-         **/
-        void deletingChildNotify( FileInfo * child );
+	/**
+	 * Notification that a child node is about to be deleted from the
+	 * outside (i.e., not from this ReadJobQueue), e.g. because of cleanup
+	 * actions. This will remove all pending directory read jobs for that
+	 * subtree from the job queue.
+	 **/
+	void deletingChildNotify( FileInfo * child );
 
 
     protected slots:
@@ -426,14 +464,14 @@ namespace QDirStat
      **/
     inline QTextStream & operator<< ( QTextStream & str, DirReadJob * job )
     {
-        if ( job )
-        {
-            CacheReadJob * cacheReadJob = dynamic_cast<CacheReadJob *>( job );
-            QString jobType = cacheReadJob ? "CacheReadJob" : "DirReadJob";
-            str << "<" << jobType << " " << job->dir() << ">";
-        }
-        else
-            str << "<NULL DirReadJob *>";
+	if ( job )
+	{
+	    CacheReadJob * cacheReadJob = dynamic_cast<CacheReadJob *>( job );
+	    QString jobType = cacheReadJob ? "CacheReadJob" : "DirReadJob";
+	    str << "<" << jobType << " " << job->dir() << ">";
+	}
+	else
+	    str << "<NULL DirReadJob *>";
 
 	return str;
     }
