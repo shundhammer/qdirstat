@@ -51,6 +51,9 @@ ExcludeRule::~ExcludeRule()
 
 bool ExcludeRule::match( const QString & fullPath, const QString & fileName )
 {
+    if ( _checkAnyFileChild )  // use matchDirectChildren() for those rules
+        return false;
+
     QString matchText = _useFullPath ? fullPath : fileName;
 
     if ( matchText.isEmpty() )
