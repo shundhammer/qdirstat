@@ -100,6 +100,12 @@ namespace QDirStat
 	 **/
 	void deleteSubtree( FileInfo * subtree );
 
+        /**
+         * Delete all children of a subtree, but leave the subtree inself
+         * intact.
+         **/
+	void clearSubtree( DirInfo * subtree );
+
 
     public:
 

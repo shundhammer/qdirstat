@@ -189,12 +189,7 @@ void DirTree::refresh( DirInfo * subtree )
     {
 	// logDebug() << "Refreshing subtree " << subtree << endl;
 
-	if ( subtree->hasChildren() )
-	{
-	    emit clearingSubtree( subtree );
-	    subtree->clear();
-	    emit subtreeCleared( subtree );
-	}
+        clearSubtree( subtree );
 
 	subtree->reset();
 	subtree->setExcluded( false );
@@ -309,6 +304,17 @@ void DirTree::deleteSubtree( FileInfo *subtree )
     }
 
     emit childDeleted();
+}
+
+
+void DirTree::clearSubtree( DirInfo * subtree )
+{
+    if ( subtree->hasChildren() )
+    {
+        emit clearingSubtree( subtree );
+        subtree->clear();
+        emit subtreeCleared( subtree );
+    }
 }
 
 

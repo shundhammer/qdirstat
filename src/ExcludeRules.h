@@ -21,6 +21,8 @@
 
 namespace QDirStat
 {
+    class DirInfo;
+
     /**
      * One single exclude rule to check text (file names) against.
      **/
@@ -33,16 +35,30 @@ namespace QDirStat
 	 *
 	 * 'useFullPath' indicates if this exclude rule uses the full path
 	 * ('true') or only the file name without path ('false') for matching.
+         *
+         * 'checkAnyFileChild' specifies whether the non-directory children of
+         * the directory should be used for matching rather than the path or
+         * name of the directory itself. That makes it possible to exclude a
+         * directory that contains a file ".nobackup".
 	 **/
-	ExcludeRule( const QRegExp & regexp, bool useFullPath = false );
+	ExcludeRule( const QRegExp & regexp,
+                     bool            useFullPath       = false,
+                     bool            checkAnyFileChild = false );
 
 	/**
 	 * Constructor from a QString. The string will be used as a regexp.
 	 *
 	 * 'useFullPath' indicates if this exclude rule uses the full path
 	 * ('true') or only the file name without path ('false') for matching.
+         *
+         * 'checkAnyFileChild' specifies whether the non-directory children of
+         * the directory should be used for matching rather than the path or
+         * name of the directory itself. That makes it possible to exclude a
+         * directory that contains a file ".nobackup".
 	 **/
-	ExcludeRule( const QString & regexp, bool useFullPath = false );
+	ExcludeRule( const QString & regexp,
+                     bool            useFullPath       = false,
+                     bool            checkAnyFileChild = false );
 
 	/**
 	 * Destructor.
@@ -58,6 +74,15 @@ namespace QDirStat
 	 * excluded.
 	 **/
 	bool match( const QString & fullPath, const QString & fileName );
+
+        /**
+         * If this exclude rule has the 'checkAnyFileChild' flag set, check if
+         * any non-directory direct child of 'dir' (or of its dot entry if it
+         * has one) matches the rule.
+         *
+         * This returns 'false' immediately if 'checkAnyFileChild' is not set.
+         **/
+        bool matchDirectChildren( DirInfo * dir );
 
 	/**
 	 * Returns this rule's regular expression.
@@ -80,10 +105,23 @@ namespace QDirStat
 	 **/
 	void setUseFullPath( bool useFullPath ) { _useFullPath = useFullPath; }
 
+        /**
+         * Return 'true' if this exclude rule should be used to check against
+         * any direct non-directory child of a directory rather than just the
+         * directory name or path.
+         **/
+        bool checkAnyFileChild() const { return _checkAnyFileChild; }
+
+        /**
+         * Set the 'check any file child' flag.
+         **/
+        void setCheckAnyFileChild( bool check ) { _checkAnyFileChild = check; }
+
     private:
 
 	QRegExp _regexp;
 	bool	_useFullPath;
+        bool    _checkAnyFileChild;
     };
 
 
@@ -143,11 +181,16 @@ namespace QDirStat
 	void remove( ExcludeRule * rule );
 
 	/**
-	 * Create a new rule with 'regexp' and 'useFullPath' and add it to this
-	 * rule set.
+	 * Create a new rule with 'regexp', 'useFullPath' and
+	 * 'checkAnyFileChild' and add it to this rule set.
 	 **/
-	static void add( const QRegExp & regexp, bool useFullPath = false );
-	static void add( const QString & regexp, bool useFullPath = false );
+	static void add( const QRegExp & regexp,
+                         bool            useFullPath       = false,
+                         bool            checkAnyFileChild = false );
+
+	static void add( const QString & regexp,
+                         bool            useFullPath       = false,
+                         bool            checkAnyFileChild = false );
 
 	/**
 	 * Check a file name against the exclude rules. Each exclude rule
@@ -160,6 +203,14 @@ namespace QDirStat
 	 * Note that this operation will move current().
 	 **/
 	bool match( const QString & fullPath, const QString & fileName );
+
+        /**
+         * Check the direct non-directory children of 'dir' against any rules
+         * that have the 'checkAnyFileChild' flag set.
+         *
+	 * This will return 'true' if the text matches any rule.
+         **/
+        bool matchDirectChildren( DirInfo * dir );
 
 	/**
 	 * Find the exclude rule that matches 'text'.

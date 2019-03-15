@@ -236,7 +236,35 @@ void LocalDirReadJob::startReading()
 	}
 
 	closedir( _diskDir );
-	finishReading( _dir, DirFinished );
+        DirReadState readState = DirFinished;
+
+        //
+        // Check all entries against exclude rules that match against any
+        // direct non-directory entry.
+        //
+        // Doing this now is a performance optimization: This could also be
+        // done immediately after each entry is read, but that would mean
+        // iterating over all exclude rules for every single directory entry,
+        // even if there are no exclude rules that match against any
+        // files, so it would be a general performance penalty.
+        //
+        // Doing this after all entries are read means more cleanup if any
+        // exclude rule does match, but that is the exceptional case; if there
+        // are no such rules to begin with, the match function returns 'false'
+        // immediately, so the performance impact is minimal.
+        //
+
+        if ( ExcludeRules::instance()->matchDirectChildren( _dir ) )
+        {
+            // Kill all queued jobs for this dir except this one
+            _queue->killAll( _dir, this );
+
+            _tree->clearSubtree( _dir );
+            _dir->setExcluded();
+            readState = DirOnRequestOnly;
+        }
+
+        finishReading( _dir, readState );
     }
 
     finished();
@@ -253,53 +281,6 @@ void LocalDirReadJob::finishReading( DirInfo * dir, DirReadState readState )
     _tree->sendFinalizeLocal( dir );
     dir->finalizeLocal();
     _tree->sendReadJobFinished( dir );
-}
-
-
-
-FileInfo * LocalDirReadJob::stat( const QString & url,
-				  DirTree	* tree,
-				  DirInfo	* parent )
-{
-    struct stat statInfo;
-    logDebug() << "url: \"" << url << "\"" << endl;
-
-    if ( lstat( url.toUtf8(), &statInfo ) == 0 ) // lstat() OK
-    {
-	if ( S_ISDIR( statInfo.st_mode ) )	// directory?
-	{
-	    DirInfo * dir = new DirInfo( url, &statInfo, tree, parent );
-	    CHECK_NEW( dir );
-
-	    if ( parent )
-		parent->insertChild( dir );
-
-	    if ( dir && parent &&
-		 ! tree->isTopLevel( dir )
-		 && dir->device() != parent->device() )
-	    {
-		logDebug() << dir << " is a mount point" << endl;
-		dir->setMountPoint();
-	    }
-
-	    return dir;
-	}
-	else					// no directory
-	{
-	    FileInfo * file = new FileInfo( url, &statInfo, tree, parent );
-	    CHECK_NEW( file );
-
-	    if ( parent )
-		parent->insertChild( file );
-
-	    return file;
-	}
-    }
-    else // lstat() failed
-    {
-	THROW( SysCallFailedException( "lstat", url ) );
-	return 0; // NOTREACHED
-    }
 }
 
 
@@ -337,15 +318,6 @@ void LocalDirReadJob::processSubDir( const QString & entryName, DirInfo * subDir
 	    }
 	}
     }
-}
-
-
-QString LocalDirReadJob::fullName( const QString & entryName ) const
-{
-    QString result = _dirName == "/" ? "" : _dirName;  // Avoid leading // when in root dir
-    result += "/" + entryName;
-
-    return result;
 }
 
 
@@ -423,6 +395,61 @@ void LocalDirReadJob::handleLstatError( const QString & entryName )
     child->setReadState( DirError );
     _dir->insertChild( child );
     childAdded( child );
+}
+
+
+QString LocalDirReadJob::fullName( const QString & entryName ) const
+{
+    QString result = _dirName == "/" ? "" : _dirName;  // Avoid leading // when in root dir
+    result += "/" + entryName;
+
+    return result;
+}
+
+
+FileInfo * LocalDirReadJob::stat( const QString & url,
+				  DirTree	* tree,
+				  DirInfo	* parent )
+{
+    struct stat statInfo;
+    logDebug() << "url: \"" << url << "\"" << endl;
+
+    if ( lstat( url.toUtf8(), &statInfo ) == 0 ) // lstat() OK
+    {
+	if ( S_ISDIR( statInfo.st_mode ) )	// directory?
+	{
+	    DirInfo * dir = new DirInfo( url, &statInfo, tree, parent );
+	    CHECK_NEW( dir );
+
+	    if ( parent )
+		parent->insertChild( dir );
+
+	    if ( dir && parent &&
+		 ! tree->isTopLevel( dir )
+		 && dir->device() != parent->device() )
+	    {
+		logDebug() << dir << " is a mount point" << endl;
+		dir->setMountPoint();
+	    }
+
+	    return dir;
+	}
+	else					// no directory
+	{
+	    FileInfo * file = new FileInfo( url, &statInfo, tree, parent );
+	    CHECK_NEW( file );
+
+	    if ( parent )
+		parent->insertChild( file );
+
+	    return file;
+	}
+    }
+    else // lstat() failed
+    {
+	THROW( SysCallFailedException( "lstat", url ) );
+	return 0; // NOTREACHED
+    }
 }
 
 

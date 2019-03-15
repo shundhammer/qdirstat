@@ -191,7 +191,7 @@ You can create as many as you like.</string>
           <item>
            <widget class="QRadioButton" name="fixedStringRadioButton">
             <property name="text">
-             <string>&amp;Fixed String</string>
+             <string>Fixed &amp;String</string>
             </property>
            </widget>
           </item>
@@ -242,6 +242,13 @@ You can create as many as you like.</string>
            <widget class="QRadioButton" name="fullPathRadioButton">
             <property name="text">
              <string>F&amp;ull Path</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="checkAnyFileChildRadioButton">
+            <property name="text">
+             <string>Any &amp;File in that Directory</string>
             </property>
            </widget>
           </item>

@@ -136,6 +136,7 @@ void ExcludeRulesConfigPage::save( void * value )
 
     excludeRule->setRegexp( regexp );
     excludeRule->setUseFullPath( _ui->fullPathRadioButton->isChecked() );
+    excludeRule->setCheckAnyFileChild( _ui->checkAnyFileChildRadioButton->isChecked() );
 }
 
 
@@ -175,6 +176,9 @@ void ExcludeRulesConfigPage::load( void * value )
 	_ui->fullPathRadioButton->setChecked( true );
     else
 	_ui->dirNameWithoutPathRadioButton->setChecked( true );
+
+    if ( excludeRule->checkAnyFileChild() )
+        _ui->checkAnyFileChildRadioButton->setChecked( true );
 }
 
 
