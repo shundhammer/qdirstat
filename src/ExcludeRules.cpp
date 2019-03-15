@@ -79,7 +79,10 @@ bool ExcludeRule::matchDirectChildren( DirInfo * dir )
     while ( *it )
     {
         if ( ! (*it)->isDir() )
-            return _regexp.exactMatch( (*it)->name() );
+        {
+            if ( _regexp.exactMatch( (*it)->name() ) )
+                return true;
+        }
 
         ++it;
     }
