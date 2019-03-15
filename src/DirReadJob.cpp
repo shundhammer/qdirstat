@@ -272,7 +272,7 @@ void LocalDirReadJob::startReading()
 
 void LocalDirReadJob::finishReading( DirInfo * dir, DirReadState readState )
 {
-    logDebug() << dir << endl;
+    // logDebug() << dir << endl;
     CHECK_PTR( dir );
 
     dir->setReadState( readState );
