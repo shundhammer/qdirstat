@@ -268,6 +268,24 @@ namespace QDirStat
 	 **/
 	QString fullName( const QString & entryName ) const;
 
+        /**
+         * Return 'true' if any exclude rules matching against any direct file
+         * child should be applied. This is generally useful only for
+         * second-level read jobs, not for the starting point of a directory
+         * scan, so it is easily possible to continue reading at an excluded
+         * directory.
+         *
+         * The default is 'false'.
+         **/
+        bool applyFileChildExcludeRules() const
+            { return _applyFileChildExcludeRules; }
+
+        /**
+         * Set the applyFileChildExcludeRules flag.
+         **/
+        void setApplyFileChildExcludeRules( bool val )
+            { _applyFileChildExcludeRules = val; }
+
 
 	//
 	// Data members
@@ -275,6 +293,7 @@ namespace QDirStat
 
 	QString _dirName;
 	DIR *	_diskDir;
+        bool    _applyFileChildExcludeRules;
 
     };	// LocalDirReadJob
 

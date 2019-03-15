@@ -144,6 +144,7 @@ LocalDirReadJob::LocalDirReadJob( DirTree * tree,
 				  DirInfo * dir )
     : DirReadJob( tree, dir )
     , _diskDir( 0 )
+    , _applyFileChildExcludeRules( false )
 {
     if ( _dir )
 	_dirName = _dir->url();
@@ -254,7 +255,8 @@ void LocalDirReadJob::startReading()
         // immediately, so the performance impact is minimal.
         //
 
-        if ( ExcludeRules::instance()->matchDirectChildren( _dir ) )
+        if ( _applyFileChildExcludeRules &&
+             ExcludeRules::instance()->matchDirectChildren( _dir ) )
         {
             // Kill all queued jobs for this dir except this one
             _queue->killAll( _dir, this );
@@ -300,6 +302,7 @@ void LocalDirReadJob::processSubDir( const QString & entryName, DirInfo * subDir
 	{
 	    LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
 	    CHECK_NEW( job );
+            job->setApplyFileChildExcludeRules( true );
 	    _tree->addJob( job );
 	}
 	else	    // The subdirectory we just found is a mount point.
@@ -310,6 +313,7 @@ void LocalDirReadJob::processSubDir( const QString & entryName, DirInfo * subDir
 	    {
 		LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
 		CHECK_NEW( job );
+                job->setApplyFileChildExcludeRules( true );
 		_tree->addJob( job );
 	    }
 	    else
