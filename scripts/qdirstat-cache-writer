@@ -118,7 +118,6 @@ sub main()
     }
 
     write_cache_file( $toplevel_dir, $cache_file_name );
-    compress_file( $cache_file_name );
 }
 
 
@@ -136,7 +135,18 @@ sub write_cache_file()
     my ( $toplevel_dir, $cache_file_name ) = @_;
     my $start_time = time();
 
-    open( CACHE,  ">" . $cache_file_name ) or die "Can't open $cache_file_name";
+    my $cache_file_name_part = $cache_file_name . ".part";
+
+    my $open_type = ">";
+    my $open_name = $cache_file_name_part;
+
+    if ( $cache_file_name =~ /.*\.gz$/ )
+    {
+	$open_type = "|-";
+	$open_name = "gzip > '$open_name'";
+    }
+
+    open( CACHE,  $open_type , $open_name ) or die "Can't open $cache_file_name";
     binmode( CACHE, ":bytes" );
     write_cache_header();
     write_cache_tree( $toplevel_dir );
@@ -146,30 +156,7 @@ sub write_cache_file()
     printf CACHE "# Elapsed time: %d:%02d:%02d\n", $hours, $min, $sec;
 
     close( CACHE );
-}
-
-
-#-----------------------------------------------------------------------------
-
-
-# Compress a file if its extension is ".gz".
-#
-# Parameters:
-#	$file_name
-
-sub compress_file()
-{
-    my ( $file_name ) = @_;
-
-    if ( $file_name =~ /.*\.gz$/ )
-    {
-	my $uncompressed_name = $file_name;
-	$uncompressed_name =~ s/\.gz$//;	# Cut off ".gz" extension
-	rename( $file_name, $uncompressed_name );
-	logf( "Compressing $file_name" );
-	system( "gzip $uncompressed_name" );
-    }
-
+    rename($cache_file_name_part, $cache_file_name);
 }
 
 
