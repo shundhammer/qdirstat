@@ -232,14 +232,6 @@ int DirTreeModel::rowNumber( FileInfo * child ) const
 }
 
 
-int DirTreeModel::countDirectChildren( FileInfo * parent ) const
-{
-    FileInfoIterator it( parent );
-
-    return it.count();
-}
-
-
 
 //
 // Reimplented from QAbstractItemModel
@@ -303,14 +295,14 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 	    if ( _tree->isBusy() )
 		count = 0;
 	    else
-		count = countDirectChildren( item );
+		count = item->directChildrenCount();
 	    break;
 
 	case DirFinished:
 	case DirOnRequestOnly:
 	case DirCached:
 	case DirAborted:
-	    count = countDirectChildren( item );
+	    count = item->directChildrenCount();
 	    break;
 
 	// intentionally omitting 'default' case so the compiler can report
@@ -806,7 +798,7 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
     }
 
     QModelIndex index = modelIndex( dir );
-    int count = countDirectChildren( dir );
+    int count = dir->directChildrenCount();
     // Debug::dumpDirectChildren( dir );
 
     if ( count > 0 )
@@ -1012,7 +1004,7 @@ void DirTreeModel::clearingSubtree( DirInfo * subtree )
     if ( subtree == _tree->root() || subtree->isTouched() )
     {
 	QModelIndex subtreeIndex = modelIndex( subtree, 0 );
-	int count = countDirectChildren( subtree );
+	int count = subtree->directChildrenCount();
 
 	if ( count > 0 )
 	{

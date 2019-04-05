@@ -199,11 +199,6 @@ namespace QDirStat
 	int rowNumber( FileInfo * child ) const;
 
 	/**
-	 * Count the direct children (including the "dot entry") of 'parent'.
-	 **/
-	int countDirectChildren( FileInfo * parent ) const;
-
-	/**
 	 * Return a model index for 'item' and 'column'.
 	 **/
 	QModelIndex modelIndex( FileInfo * item, int column = 0 ) const;

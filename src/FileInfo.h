@@ -325,6 +325,13 @@ namespace QDirStat
 	virtual int totalFiles() { return 0; }
 
 	/**
+	 * Returns the total number of direct children of this item.
+         *
+	 * Derived classes that have children should overwrite this.
+	 **/
+	virtual int directChildrenCount() { return 0; }
+
+	/**
 	 * Returns the latest modification time of this subtree.
 	 * Derived classes that have children should overwrite this.
 	 **/

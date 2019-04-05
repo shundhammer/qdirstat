@@ -107,6 +107,20 @@ namespace QDirStat
 	virtual int totalFiles() Q_DECL_OVERRIDE;
 
 	/**
+	 * Returns the total number of direct children of this directory.
+         *
+         * If this directory has a dot entry, the dot entry itself is counted,
+         * but not the file children of the dot entry.
+         *
+         * This method uses a cached value whenever possible, so it is
+         * considerably faster than the unconditional countDirectChildren()
+         * method.
+         *
+	 * Reimplemented - inherited from FileInfo.
+	 **/
+	virtual int directChildrenCount() Q_DECL_OVERRIDE;
+
+	/**
 	 * Returns the latest modification time of this subtree.
 	 *
 	 * Reimplemented - inherited from FileInfo.
@@ -382,6 +396,11 @@ namespace QDirStat
 
     protected:
 
+        /**
+         * Count the direct children unconditionally and update _directChildrenCount.
+         **/
+        int countDirectChildren();
+
 	/**
 	 * Recursively recalculate the summary fields when they are dirty.
 	 *
@@ -424,6 +443,7 @@ namespace QDirStat
 	int		_totalItems;
 	int		_totalSubDirs;
 	int		_totalFiles;
+        int             _directChildrenCount;
 	time_t		_latestMtime;
 
 	FileInfoList *	_sortedChildren;

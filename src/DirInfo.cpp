@@ -14,6 +14,9 @@
 #include "FileInfoIterator.h"
 #include "FileInfoSorter.h"
 #include "Exception.h"
+#include "DebugHelpers.h"
+
+#define DIRECT_CHILDREN_COUNT_SANITY_CHECK 1
 
 using namespace QDirStat;
 
@@ -30,14 +33,14 @@ DirInfo::DirInfo( DirTree * tree,
 	_isDotEntry = true;
 	_name	    = dotEntryName();
 
-        if ( parent )
-        {
-            _device = parent->device();
-            _mode   = parent->mode();
-            _uid    = parent->uid();
-            _gid    = parent->gid();
-            _mtime  = parent->mtime();
-        }
+	if ( parent )
+	{
+	    _device = parent->device();
+	    _mode   = parent->mode();
+	    _uid    = parent->uid();
+	    _gid    = parent->gid();
+	    _mtime  = parent->mtime();
+	}
     }
     else
     {
@@ -57,6 +60,7 @@ DirInfo::DirInfo( const QString & filenameWithoutPath,
 {
     init();
     _dotEntry = new DirInfo( tree, this, true );
+    _directChildrenCount++;
 }
 
 
@@ -75,31 +79,33 @@ DirInfo::DirInfo( DirTree *	  tree,
 {
     init();
     _dotEntry = new DirInfo( tree, this, true );
+    _directChildrenCount++;
 }
 
 
 void DirInfo::init()
 {
-    _isDotEntry	     = false;
-    _isMountPoint    = false;
-    _isExcluded	     = false;
-    _summaryDirty    = false;
-    _deletingAll     = false;
-    _locked	     = false;
-    _touched	     = false;
-    _pendingReadJobs = 0;
-    _dotEntry	     = 0;
-    _firstChild	     = 0;
-    _totalSize	     = _size;
-    _totalBlocks     = _blocks;
-    _totalItems	     = 0;
-    _totalSubDirs    = 0;
-    _totalFiles	     = 0;
-    _latestMtime     = _mtime;
-    _readState	     = DirQueued;
-    _sortedChildren  = 0;
-    _lastSortCol     = UndefinedCol;
-    _lastSortOrder   = Qt::AscendingOrder;
+    _isDotEntry		 = false;
+    _isMountPoint	 = false;
+    _isExcluded		 = false;
+    _summaryDirty	 = false;
+    _deletingAll	 = false;
+    _locked		 = false;
+    _touched		 = false;
+    _pendingReadJobs	 = 0;
+    _dotEntry		 = 0;
+    _firstChild		 = 0;
+    _totalSize		 = _size;
+    _totalBlocks	 = _blocks;
+    _totalItems		 = 0;
+    _totalSubDirs	 = 0;
+    _totalFiles		 = 0;
+    _directChildrenCount = 0;
+    _latestMtime	 = _mtime;
+    _readState		 = DirQueued;
+    _sortedChildren	 = 0;
+    _lastSortCol	 = UndefinedCol;
+    _lastSortOrder	 = Qt::AscendingOrder;
 }
 
 
@@ -167,17 +173,19 @@ void DirInfo::recalc()
 {
     // logDebug() << this << endl;
 
-    _totalSize	  = _size;
-    _totalBlocks  = _blocks;
-    _totalItems	  = 0;
-    _totalSubDirs = 0;
-    _totalFiles	  = 0;
-    _latestMtime  = _mtime;
+    _totalSize		 = _size;
+    _totalBlocks	 = _blocks;
+    _totalItems		 = 0;
+    _totalSubDirs	 = 0;
+    _totalFiles		 = 0;
+    _directChildrenCount = 0;
+    _latestMtime	 = _mtime;
 
     FileInfoIterator it( this );
 
     while ( *it )
     {
+	_directChildrenCount++;
 	_totalSize    += (*it)->totalSize();
 	_totalBlocks  += (*it)->totalBlocks();
 	_totalItems   += (*it)->totalItems() + 1;
@@ -253,6 +261,36 @@ int DirInfo::totalFiles()
 }
 
 
+int DirInfo::directChildrenCount()
+{
+    if ( _summaryDirty )
+	recalc();
+
+    return _directChildrenCount;
+}
+
+
+int DirInfo::countDirectChildren()
+{
+    // logDebug() << this << endl;
+
+    _directChildrenCount = 0;
+
+    FileInfo * child = _firstChild;
+
+    while ( child )
+    {
+	++_directChildrenCount;
+	child = child->next();
+    }
+
+    if ( _dotEntry )
+	++_directChildrenCount;
+
+    return _directChildrenCount;
+}
+
+
 time_t DirInfo::latestMtime()
 {
     if ( _summaryDirty )
@@ -298,6 +336,8 @@ void DirInfo::setDotEntry( FileInfo *newDotEntry )
 	_dotEntry = newDotEntry->toDirInfo();
     else
 	_dotEntry = 0;
+
+    countDirectChildren();
 }
 
 
@@ -346,6 +386,9 @@ void DirInfo::childAdded( FileInfo *newChild )
 	_totalSize   += newChild->size();
 	_totalBlocks += newChild->blocks();
 	_totalItems++;
+
+	if ( newChild->parent() == this )
+	    _directChildrenCount++;
 
 	if ( newChild->isDir() )
 	    _totalSubDirs++;
@@ -550,8 +593,11 @@ void DirInfo::cleanupDotEntries()
 	if ( child )
 	{
 	    // logDebug() << "Reparenting children of solo dot entry " << this << endl;
+
+	    // _directChildrenCount += _dotEntry->directChildrenCount();
 	    _firstChild = child;	    // Move the entire children chain here.
 	    _dotEntry->setFirstChild( 0 );  // _dotEntry will be deleted below.
+            _directChildrenCount = -1;
 
 	    while ( child )
 	    {
@@ -573,7 +619,12 @@ void DirInfo::cleanupDotEntries()
 
 	delete _dotEntry;
 	_dotEntry = 0;
+	// _directChildrenCount--;
+	_directChildrenCount = -1;
     }
+
+    if ( _directChildrenCount < 0 )
+        countDirectChildren();
 }
 
 
@@ -638,6 +689,20 @@ const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
     _lastSortCol   = sortCol;
     _lastSortOrder = sortOrder;
 
+
+#if DIRECT_CHILDREN_COUNT_SANITY_CHECK
+
+    if ( _sortedChildren->size() != _directChildrenCount )
+    {
+	Debug::dumpChildrenList( this, *_sortedChildren );
+
+        THROW( Exception( QString( "_directChildrenCount of %1 corrupted; is %2, should be %3" )
+                          .arg( debugUrl() )
+                          .arg( _directChildrenCount )
+                          .arg( _sortedChildren->size() ) ) );
+    }
+#endif
+
     return *_sortedChildren;
 }
 
@@ -689,7 +754,7 @@ const DirInfo * DirInfo::findNearestMountPoint() const
     const DirInfo * dir = this;
 
     while ( dir && ! dir->isMountPoint() )
-        dir = dir->parent();
+	dir = dir->parent();
 
     return dir;
 }
