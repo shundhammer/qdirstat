@@ -1,0 +1,73 @@
+#!/bin/sh
+#
+# Create a huge number of files in a directory
+#
+# (c) 2019 Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+#
+# License: GPL V2
+
+
+SCRIPT_NAME=$(basename $0)
+
+usage()
+{
+    echo
+    echo "Usage: $SCRIPT_NAME <target-dir> <file-count>"
+    echo
+    exit 1
+}
+
+
+get_args()
+{
+    target_dir=$1
+    file_count=$2
+
+    test "$#" -eq "2" || usage
+    test -d "$target_dir" || usage
+
+    if [ "$file_count" -lt "1" ]; then
+       usage
+    fi
+}
+
+
+create_files()
+{
+    file_size=128 # bytes
+    large_file=$target_dir/large.$$
+
+    #
+    # Create one large file to split up
+    #
+    
+    dd if=/dev/zero of=$large_file bs=$file_size count=$file_count >/dev/null 2>&1
+
+    #
+    # Split that large file into tiny chunks
+    #
+    
+    saved_dir=$(pwd)  # pushd can't shut up
+    cd $target_dir
+    split -b $file_size -d -a 10 $large_file tmp.
+    cd $saved_dir
+    
+    rm $large_file
+}
+
+
+show_summary()
+{
+    du -hs $target_dir
+    count=$(ls -U $target_dir | wc -l)
+    echo "$count entries"
+}
+
+
+#
+# main
+#
+
+get_args $*
+create_files
+show_summary
