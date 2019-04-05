@@ -88,13 +88,15 @@ Donate via PayPal (freely select the amount to donate):
     value for each directory so it does not have to be recalculated over and
     over again even if nothing changed. Amazingly enough, this little thing had
     turned out to be the performance bottleneck that had made QDirStat
-    prohibitively slow for such directories. It was not sorting the entries
-    (the sort order was always cached), no, something as trivial as counting
-    the children on the current level of the tree view.
+    prohibitively slow for such directories. It was not the sorting of the
+    entries (the sort order was always cached), no, the problem was something
+    as trivial as counting the children on the current level of the tree view.
 
     Of course, a directory that contains 100.000 entries in a single level
-    still has quite some performance impact, but at least now it's tolerable. I
-    tested with up to 500.000 entries in a single directory.
+    still has quite some performance impact, but at least now it's
+    tolerable. This was tested with up to 500.000 entries in a single directory
+    (there is now a script that can create such a directory in the test/util
+    directory of the source tree).
 
     Hint: Avoid dragging the vertical scroll bar of the tree view in such a
     directory; better use keyboard commands such as the _Home_ or the _End_
