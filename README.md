@@ -79,18 +79,20 @@ Donate via PayPal (freely select the amount to donate):
 
 **Latest stable release: V1.5**
 
-- 2019-04-05 Implemented [GitHub Issue #90](https://github.com/shundhammer/qdirstat/issues/90):
+- 2019-04-05
+
+  Implemented [GitHub Issue #90](https://github.com/shundhammer/qdirstat/issues/90):
   Support excluding directories containing a file with a specific name or pattern.
 
   Similar to some backup tools, you can now specify an exclude rule that lets
-  you exclude a directory that contains a file like like `.nobackup` or
+  you exclude a directory that contains a file like `.nobackup` or
   `.qdirstatexclude`. The exclude rule configuration now has a new option for
-  that.
+  that:
+
+  [<img width="300" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-exclude.png" >](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-exclude.png)
 
   This makes it possible to reuse such files that are there anyway for some
   other tool and get a good idea how large the resulting backup will become.
-
-  [<img width="300" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-exclude.png" >](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-exclude.png)
 
   Since this change required some refactoring in a quite sensitive part
   (reading the directories), please watch out for possible bugs that this might
