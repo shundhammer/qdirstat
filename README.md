@@ -81,22 +81,44 @@ Donate via PayPal (freely select the amount to donate):
 
 - 2019-04-05
 
-  Implemented [GitHub Issue #90](https://github.com/shundhammer/qdirstat/issues/90):
-  Support excluding directories containing a file with a specific name or pattern.
+  - Performance boost for huge directories (with 100.000 entries or more in a single
+    directory):
 
-  Similar to some backup tools, you can now specify an exclude rule that lets
-  you exclude a directory that contains a file like `.nobackup` or
-  `.qdirstatexclude`. The exclude rule configuration now has a new option for
-  that:
+    A routine that counts the direct children of a directory now uses a cached
+    value for each directory so it does not have to be recalculated over and
+    over again even if nothing changed. Amazingly enough, this little thing had
+    turned out to be the performance bottleneck that had made QDirStat
+    prohibitively slow for such directories. It was not sorting the entries
+    (the sort order was always cached), no, something as trivial as counting
+    the children on the current level of the tree view.
 
-  [<img width="300" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-exclude.png" >](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-exclude.png)
+    Of course, a directory that contains 100.000 entries in a single level
+    still has quite some performance impact, but at least now it's tolerable. I
+    tested with up to 500.000 entries in a single directory.
 
-  This makes it possible to reuse such files that are there anyway for some
-  other tool and get a good idea how large the resulting backup will become.
+    Hint: Avoid dragging the vertical scroll bar of the tree view in such a
+    directory; better use keyboard commands such as the _Home_ or the _End_
+    key. The scroll bar will make the underlying Qt widget go through every
+    single entry in turn, and that will take a while (it will eventually become
+    responsive again, though).
 
-  Since this change required some refactoring in a quite sensitive part
-  (reading the directories), please watch out for possible bugs that this might
-  have introduced and report it if you find something.
+
+  - Implemented [GitHub Issue #90](https://github.com/shundhammer/qdirstat/issues/90):
+    Support excluding directories containing a file with a specific name or pattern.
+
+    Similar to some backup tools, you can now specify an exclude rule that lets
+    you exclude a directory that contains a file like `.nobackup` or
+    `.qdirstatexclude`. The exclude rule configuration now has a new option for
+    that:
+
+    [<img width="300" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-exclude.png" >](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-exclude.png)
+
+    This makes it possible to reuse such files that are there anyway for some
+    other tool and get a good idea how large the resulting backup will become.
+
+    Since this change required some refactoring in a quite sensitive part
+    (reading the directories), please watch out for possible bugs that this might
+    have introduced and report it if you find something.
 
 
 - 2018-11-07 **New stable release: V1.5**
