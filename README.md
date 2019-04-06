@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-04-05
+Updated: 2019-04-06
 
 
 ## Overview
@@ -78,6 +78,14 @@ Donate via PayPal (freely select the amount to donate):
 ## Latest News
 
 **Latest stable release: V1.5**
+
+- 2019-04-06
+
+  - New article _Linux Disk Usage Tools Compared: QDirStat vs. K4DirStat
+    vs. Baobab vs. Filelight vs. ncdu_ including benchmarks:
+    [GitHub Issue #97](https://github.com/shundhammer/qdirstat/issues/97)
+
+    (written in the GitHub issue tracker so users can join the discussion)
 
 - 2019-04-05
 
