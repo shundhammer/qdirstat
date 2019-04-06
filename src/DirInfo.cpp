@@ -261,6 +261,15 @@ int DirInfo::totalFiles()
 }
 
 
+time_t DirInfo::latestMtime()
+{
+    if ( _summaryDirty )
+	recalc();
+
+    return _latestMtime;
+}
+
+
 int DirInfo::directChildrenCount()
 {
     if ( _summaryDirty )
@@ -288,15 +297,6 @@ int DirInfo::countDirectChildren()
 	++_directChildrenCount;
 
     return _directChildrenCount;
-}
-
-
-time_t DirInfo::latestMtime()
-{
-    if ( _summaryDirty )
-	recalc();
-
-    return _latestMtime;
 }
 
 
@@ -431,7 +431,7 @@ void DirInfo::deletingChild( FileInfo * child )
      * recalculated: The child now being deleted might just be the one with the
      * latest mtime, and figuring out the second-latest cannot easily be
      * done. So we merely mark the summary as dirty and wait until a recalc()
-     * will be triggered from outside - which might as well never happen when
+     * will be triggered from outside - which might as well never happen if
      * nobody wants to know some summary field anyway.
      **/
 
@@ -594,7 +594,6 @@ void DirInfo::cleanupDotEntries()
 	{
 	    // logDebug() << "Reparenting children of solo dot entry " << this << endl;
 
-	    // _directChildrenCount += _dotEntry->directChildrenCount();
 	    _firstChild = child;	    // Move the entire children chain here.
 	    _dotEntry->setFirstChild( 0 );  // _dotEntry will be deleted below.
             _directChildrenCount = -1;
@@ -619,7 +618,6 @@ void DirInfo::cleanupDotEntries()
 
 	delete _dotEntry;
 	_dotEntry = 0;
-	// _directChildrenCount--;
 	_directChildrenCount = -1;
     }
 
