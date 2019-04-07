@@ -34,3 +34,31 @@ shell would do the I/O redirection, so it would not have sufficient privileges)
 ### Reference
 
 http://unix.stackexchange.com/questions/87908/how-do-you-empty-the-buffers-and-cache-on-a-linux-system
+
+
+## Profiling QDirStat with Valgrind / KCachegrind
+
+### Prerequesites
+
+Install vallgrind and kcachgrind:
+
+    sudo apt install valgrind kcachegrind
+
+
+### Profile
+
+Start QDirStat with the valgrind profiler:
+
+    valgrind --tool=callgrind --dump-instr=yes --simulate-cache=yes --collect-jumps=yes qdirstat ~
+
+Don't use a huge directory since the profiling slows down everyting
+considerably!
+
+The results go to a file `callgrind.out.*` in that directory. Visualize with
+
+    kcachegrind
+
+
+### Reference
+
+https://developer.mantidproject.org/ProfilingWithValgrind.html
