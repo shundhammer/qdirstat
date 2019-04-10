@@ -9,6 +9,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>      // AT_ constants (fstatat() flags)
 #include <unistd.h>
 #include <stdio.h>
 
@@ -189,6 +190,8 @@ void LocalDirReadJob::startReading()
     if ( ok )
     {
 	_dir->setReadState( DirReading );
+        int dirFd = dirfd( _diskDir );
+        int flags = AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
 
 	while ( ( entry = readdir( _diskDir ) ) )
 	{
@@ -197,7 +200,7 @@ void LocalDirReadJob::startReading()
 	    if ( entryName != "."  &&
 		 entryName != ".."   )
 	    {
-		if ( lstat( fullName( entryName ).toUtf8(), &statInfo ) == 0 )	// lstat() OK
+		if ( fstatat( dirFd, entry->d_name, &statInfo, flags ) == 0 )	// OK?
 		{
 		    if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
 		    {
