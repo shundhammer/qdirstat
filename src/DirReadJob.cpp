@@ -144,7 +144,6 @@ QString DirReadJob::device( const DirInfo * dir ) const
 LocalDirReadJob::LocalDirReadJob( DirTree * tree,
 				  DirInfo * dir )
     : DirReadJob( tree, dir )
-    , _diskDir( 0 )
     , _applyFileChildExcludeRules( false )
 {
     if ( _dir )
@@ -162,6 +161,7 @@ void LocalDirReadJob::startReading()
     struct dirent * entry;
     struct stat	    statInfo;
     QString	    defaultCacheName = DEFAULT_CACHE_NAME;
+    DIR *	    diskDir;
 
     // logDebug() << _dir << endl;
 
@@ -176,9 +176,9 @@ void LocalDirReadJob::startReading()
 
     if ( ok )
     {
-	_diskDir = ::opendir( _dirName.toUtf8() );
+	diskDir = ::opendir( _dirName.toUtf8() );
 
-	if ( ! _diskDir )
+	if ( ! diskDir )
 	{
 	    logWarning() << "opendir(" << _dirName << ") failed" << endl;
 	    ok = false;
@@ -190,56 +190,69 @@ void LocalDirReadJob::startReading()
     if ( ok )
     {
 	_dir->setReadState( DirReading );
-        int dirFd = dirfd( _diskDir );
+        int dirFd = dirfd( diskDir );
         int flags = AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
 
-	while ( ( entry = readdir( _diskDir ) ) )
+        QMap<ino_t, QString> entryMap;
+
+	while ( ( entry = readdir( diskDir ) ) )
 	{
 	    QString entryName = QString::fromUtf8( entry->d_name );
 
 	    if ( entryName != "."  &&
 		 entryName != ".."   )
 	    {
-		if ( fstatat( dirFd, entry->d_name, &statInfo, flags ) == 0 )	// OK?
-		{
-		    if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
-		    {
-			DirInfo *subDir = new DirInfo( entryName, &statInfo, _tree, _dir );
-			CHECK_NEW( subDir );
+                entryMap[ entry->d_ino ] = entryName;
+            }
+        }
 
-			processSubDir( entryName, subDir );
+        // QMap guarantees sort order by keys, so we are now iterating over the
+        // directory entries by i-number order. Most filesystems will benefit
+        // from that since they store i-nodes sorted by i-number on disk, so
+        // (at least with rotational disks) seek times are minimized by this
+        // strategy.
 
-		    }
-		    else  // non-directory child
-		    {
-			if ( entryName == defaultCacheName )	// .qdirstat.cache.gz found?
-			{
-			    logDebug() << "Found cache file " << defaultCacheName << endl;
+        foreach ( QString entryName, entryMap )
+        {
+            if ( fstatat( dirFd, entryName.toUtf8(), &statInfo, flags ) == 0 )	// OK?
+            {
+                if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
+                {
+                    DirInfo *subDir = new DirInfo( entryName, &statInfo, _tree, _dir );
+                    CHECK_NEW( subDir );
 
-			    // Try to read the cache file. If that was successful and the toplevel
-			    // path in that cache file matches the path of the directory we are
-			    // reading right now, the directory is finished reading, the read job
-			    // (this object) was just deleted, and we may no longer access any
-			    // member variables; just return.
+                    processSubDir( entryName, subDir );
 
-			    if ( readCacheFile( entryName ) )
-				return;
-			}
+                }
+                else  // non-directory child
+                {
+                    if ( entryName == defaultCacheName )	// .qdirstat.cache.gz found?
+                    {
+                        logDebug() << "Found cache file " << defaultCacheName << endl;
 
-			FileInfo *child = new FileInfo( entryName, &statInfo, _tree, _dir );
-			CHECK_NEW( child );
-			_dir->insertChild( child );
-			childAdded( child );
-		    }
-		}
-		else  // lstat() error
-		{
-		    handleLstatError( entryName );
-		}
-	    }
+                        // Try to read the cache file. If that was successful and the toplevel
+                        // path in that cache file matches the path of the directory we are
+                        // reading right now, the directory is finished reading, the read job
+                        // (this object) was just deleted, and we may no longer access any
+                        // member variables; just return.
+
+                        if ( readCacheFile( entryName ) )
+                            return;
+                    }
+
+                    FileInfo *child = new FileInfo( entryName, &statInfo, _tree, _dir );
+                    CHECK_NEW( child );
+                    _dir->insertChild( child );
+                    childAdded( child );
+                }
+            }
+            else  // lstat() error
+            {
+                handleLstatError( entryName );
+            }
 	}
 
-	closedir( _diskDir );
+	closedir( diskDir );
         DirReadState readState = DirFinished;
 
         //

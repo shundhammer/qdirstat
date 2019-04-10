@@ -300,7 +300,6 @@ namespace QDirStat
 	//
 
 	QString _dirName;
-	DIR *	_diskDir;
         bool    _applyFileChildExcludeRules;
 
     };	// LocalDirReadJob
