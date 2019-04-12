@@ -596,7 +596,7 @@ void DirInfo::cleanupDotEntries()
 
 	    _firstChild = child;	    // Move the entire children chain here.
 	    _dotEntry->setFirstChild( 0 );  // _dotEntry will be deleted below.
-            _directChildrenCount = -1;
+	    _directChildrenCount = -1;
 
 	    while ( child )
 	    {
@@ -622,7 +622,7 @@ void DirInfo::cleanupDotEntries()
     }
 
     if ( _directChildrenCount < 0 )
-        countDirectChildren();
+	countDirectChildren();
 }
 
 
@@ -680,6 +680,18 @@ const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
 
     // logDebug() << "Sorting children of " << this << " by " << sortCol << endl;
 
+    if ( sortCol != NameCol )
+    {
+	// Do secondary sorting by NameCol (always in ascending order)
+
+	std::stable_sort( _sortedChildren->begin(),
+			  _sortedChildren->end(),
+			  FileInfoSorter( NameCol, Qt::AscendingOrder ) );
+    }
+
+
+    // Primary sorting by sortCol ascending or descending (as specified in sortOrder)
+
     std::stable_sort( _sortedChildren->begin(),
 		      _sortedChildren->end(),
 		      FileInfoSorter( sortCol, sortOrder ) );
@@ -694,10 +706,10 @@ const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
     {
 	Debug::dumpChildrenList( this, *_sortedChildren );
 
-        THROW( Exception( QString( "_directChildrenCount of %1 corrupted; is %2, should be %3" )
-                          .arg( debugUrl() )
-                          .arg( _directChildrenCount )
-                          .arg( _sortedChildren->size() ) ) );
+	THROW( Exception( QString( "_directChildrenCount of %1 corrupted; is %2, should be %3" )
+			  .arg( debugUrl() )
+			  .arg( _directChildrenCount )
+			  .arg( _sortedChildren->size() ) ) );
     }
 #endif
 

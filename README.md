@@ -97,6 +97,7 @@ Donate via PayPal (freely select the amount to donate):
     in sequential order, thus saving disk seek times. SSD users will not
     benefit from that since there are no disk seek times on an SSD.
 
+
 - 2019-04-06
 
   - New article _Linux Disk Usage Tools Compared: QDirStat vs. K4DirStat
@@ -104,6 +105,7 @@ Donate via PayPal (freely select the amount to donate):
     [GitHub Issue #97](https://github.com/shundhammer/qdirstat/issues/97)
 
     (written in the GitHub issue tracker so users can join the discussion)
+
 
 - 2019-04-05
 
