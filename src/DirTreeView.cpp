@@ -36,6 +36,7 @@ DirTreeView::DirTreeView( QWidget * parent ):
     setSelectionMode( ExtendedSelection );
     setContextMenuPolicy( Qt::CustomContextMenu );
     setTextElideMode( Qt::ElideMiddle );
+    setUniformRowHeights( true ); // Important for very large directories
 
     _headerTweaker = new HeaderTweaker( header(), this );
     CHECK_NEW( _headerTweaker );

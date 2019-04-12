@@ -97,6 +97,34 @@ Donate via PayPal (freely select the amount to donate):
     in sequential order, thus saving disk seek times. SSD users will not
     benefit from that since there are no disk seek times on an SSD.
 
+  - Now using the name as the secondary sort field in the tree view if the
+    primary sort field (usually the size) is equal for two items.
+
+  - Vast performance improvement for huge directories (with 100.000 entries or
+    more in a single directory) in the tree view: There is now instant response
+    for jumping from the first to the last item, dragging the scroll bar or
+    using the mouse wheel.
+
+    It had turned out that by default the underlying QTreeView widget queries
+    each item in turn how tall it wants to become (using the `sizeHint()`)
+    which in turn had to query the font for each one for its metrics.
+
+    QDirStat now sets the QTreeView's `uniformRowHeights` flag to indicate that
+    all rows have the same height, so this only needs to be done for the first
+    one, and the result is simply multiplied by the number of items.
+
+    Amazingly enough it was not sorting the items (which is what comes to mind
+    when there is such a performance bottleneck), no, it was someting as
+    mundane as the widget having to figure out the proportions of its scroll
+    bar slider vs. the scroll bar overall length. And for that, it needs to
+    know the number of items (which is simple) and the height of each one
+    (which was not).
+
+    The reason why the widget does that is because each item might have a
+    different font or a different icon, and then each item might have a
+    different height. That `uniformRowHeights` flag tells it that this is not
+    the case.
+
 
 - 2019-04-06
 
@@ -131,6 +159,9 @@ Donate via PayPal (freely select the amount to donate):
     key. The scroll bar will make the underlying Qt widget go through every
     single entry in turn, and that will take a while (it will eventually become
     responsive again, though).
+
+    _Update 2019-04-12: This is now no longer an issue; using
+    `uniformRowHeights` fixed that._
 
 
   - Implemented [GitHub Issue #90](https://github.com/shundhammer/qdirstat/issues/90):
