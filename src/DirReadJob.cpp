@@ -14,6 +14,7 @@
 #include <stdio.h>
 
 #include <QMutableListIterator>
+#include <QMultiMap>
 
 #include "DirTree.h"
 #include "DirReadJob.h"
@@ -193,7 +194,7 @@ void LocalDirReadJob::startReading()
         int dirFd = dirfd( diskDir );
         int flags = AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
 
-        QMap<ino_t, QString> entryMap;
+        QMultiMap<ino_t, QString> entryMap;
 
 	while ( ( entry = readdir( diskDir ) ) )
 	{
@@ -202,15 +203,19 @@ void LocalDirReadJob::startReading()
 	    if ( entryName != "."  &&
 		 entryName != ".."   )
 	    {
-                entryMap[ entry->d_ino ] = entryName;
+                entryMap.insert( entry->d_ino, entryName );
             }
         }
 
-        // QMap guarantees sort order by keys, so we are now iterating over the
-        // directory entries by i-number order. Most filesystems will benefit
-        // from that since they store i-nodes sorted by i-number on disk, so
-        // (at least with rotational disks) seek times are minimized by this
-        // strategy.
+        // QMultiMap (just like QMap) guarantees sort order by keys, so we are
+        // now iterating over the directory entries by i-number order. Most
+        // filesystems will benefit from that since they store i-nodes sorted
+        // by i-number on disk, so (at least with rotational disks) seek times
+        // are minimized by this strategy.
+        //
+        // Notice that we need a QMultiMap, not just a map: If a file has
+        // multiple hard links in the same directory, a QMap would store only
+        // one of them, all others would go missing in the DirTree.
 
         foreach ( QString entryName, entryMap )
         {
