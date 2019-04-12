@@ -19,7 +19,7 @@ The `test-dir.tar.bz2` tarball contains:
 
 ## Packing the Tarball
 
-    sudo tar xcvf test-dir.tar.bz2 -S test
+    sudo tar cjvf test-dir.tar.bz2 -S test
 
 **Don't forget** `sudo`, or the directories with restrictive permissions will
 not be included into the tarball!
