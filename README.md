@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-04-06
+Updated: 2019-04-12
 
 
 ## Overview
@@ -78,6 +78,24 @@ Donate via PayPal (freely select the amount to donate):
 ## Latest News
 
 **Latest stable release: V1.5**
+
+- 2019-04-12
+
+  - **Performance improvement** while reading directories: **25% faster** on my
+    /work directory with an ext4 filesystem with 230 GB / 216k items on a
+    rotational (non-SSD) disk; with cleared caches now 24.5 sec average
+    compared to previously 32.5 sec average (with filled caches down to 1.5
+    from previously 2.0 sec).
+
+    It now uses `fstatat()` which accepts the file descriptor of an open
+    directory, so glibc and the kernel save the time previously needed for
+    parsing the path and locating the directory; that part will also bring some
+    speed improvement for SSDs.
+
+    In addition to that, the entries for each directory are now sorted by i-no
+    before calling `fstatat()` so the kernel can now read the i-nodes on disk
+    in sequential order, thus saving disk seek times. SSD users will not
+    benefit from that since there are no disk seek times on an SSD.
 
 - 2019-04-06
 
