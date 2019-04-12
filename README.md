@@ -87,10 +87,10 @@ Donate via PayPal (freely select the amount to donate):
     compared to previously 32.5 sec average (with filled caches down to 1.5
     from previously 2.0 sec).
 
-    It now uses `fstatat()` which accepts the file descriptor of an open
-    directory, so glibc and the kernel save the time previously needed for
-    parsing the path and locating the directory; that part will also bring some
-    speed improvement for SSDs.
+    It now uses `fstatat()` (instead of `lstat()`) which accepts the file
+    descriptor of an open directory, so glibc and the kernel save the time
+    previously needed for parsing the path and locating the directory; that
+    part will also bring some speed improvement for SSDs.
 
     In addition to that, the entries for each directory are now sorted by i-no
     before calling `fstatat()` so the kernel can now read the i-nodes on disk
