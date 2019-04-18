@@ -71,13 +71,6 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
 1. [Troubleshooting](#troubleshooting)
    1. [Can't Move a Directory to Trash](#cant-move-a-directory-to-trash)
 1. [Reference](#reference)
-   1. [Original KDirStat](#original-kdirstat)
-   1. [K4Dirstat](#k4dirstat)
-   1. [WinDirStat (for Windows)](#windirstat-for-windows)
-   1. [Disk Usage Tools Compared](#disk-usage-tools-compared)
-   1. [XDG Trash Spec](#xdg-trash-spec)
-   1. [Reviews](#reviews)
-   1. [Misc](#misc)
 1. [Packaging Status](#packaging-status)
 1. [Donate](#donate)
 
@@ -1409,50 +1402,15 @@ See file [Troubleshooting.md](https://github.com/shundhammer/qdirstat/blob/maste
 
 ## Reference
 
-### Original KDirStat
-
-Home page: http://kdirstat.sourceforge.net/
-
-Sources: https://github.com/shundhammer/kdirstat
-
-
-### K4Dirstat
-
-Home page: https://bitbucket.org/jeromerobert/k4dirstat/wiki/Home
-
-Sources: https://bitbucket.org/jeromerobert/k4dirstat/src
-
-
-### WinDirStat (for Windows)
-
-Home page: https://windirstat.info/
-
-
-### Disk Usage Tools Compared
-
-QDirStat, K4DirStat, Baobab, Filelight, ncdu, du compared (including benchmarks):
-
-https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared)
-
-
-### XDG Trash Spec
-
-http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
-
-
-### Reviews
-
-#### YouTube
-
-[Spatry: _Quick Look: QDirStat_](https://www.youtube.com/watch?v=ysm4-x_5ftI)
-
-
-
-### Misc
-
-http://moo.nac.uci.edu/~hjm/HOWTO_move_data.html#qdirstat
-
-http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html
+- Original [KDirStat](http://kdirstat.sourceforge.net/)  [source code](https://github.com/shundhammer/kdirstat)
+- [K4Dirstat](https://bitbucket.org/jeromerobert/k4dirstat/wiki/Home) [source code](https://bitbucket.org/jeromerobert/k4dirstat/src)
+- [WinDirStat (for Windows)](https://windirstat.info/)
+- [Disk Usage Tools Compared: QDirStat vs. K4DirStat vs. Baobab vs. Filelight vs. ncdu vs. du (including benchmarks)](https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared)
+- [XDG Trash Spec](http://standards.freedesktop.org/trash-spec/trashspec-1.0.html)
+- [Spatry's QDirStat Review on YouTube](https://www.youtube.com/watch?v=ysm4-x_5ftI)
+- Articles by Harry Mangalam (University of California, Irvine)
+  - [QDirStat](http://moo.nac.uci.edu/~hjm/HOWTO_move_data.html#qdirstat)
+  - [KDirStat for Clusters](http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html)
 
 
 ## Packaging Status
