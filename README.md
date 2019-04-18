@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-04-12
+Updated: 2019-04-18
 
 
 ## Overview
@@ -31,15 +31,57 @@ QDirStat has a number of new features compared to KDirStat. To name a few:
 - Exclude rules for directories are easily configurable.
 - Desktop-agnostic; no longer relies on KDE or any other specific desktop.
 
-See section _New Features_ for more details.
+See section [_New Features_](#new-features) for more details.
 
 
 
-## Screenshots
+## Screenshot
 
 [<img width="900" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-main-win.png)
 
 _Main window screenshot - notice the multi-selection in the tree and the treemap_
+
+
+## Table of Contents
+
+1. [Screenshot](#screenshot)
+1. [More Screenshots](#more-screenshots)
+1. [Latest Stable Release](#latest-stable-release)
+1. [Latest News](#latest-news)
+1. [History](#history)
+1. [Related Software](#related-software)
+   1. [WinDirStat and QDirStat](#windirstat-and-qdirstat)
+   1. [QDirStat and K4DirStat](#qdirstat-and-k4dirstat)
+   1. [Other](#other)
+1. [Motivation / Rant](#motivation--rant)
+1. [Features](#features)
+   1. [New Features](#new-features)
+   1. [Old Features](#old-features)
+   1. [Features that are Gone (Compared to the Old KDirStat)](#features-that-are-gone)
+1. [MacOS X Compatibility](#macos-x-compatibility)
+1. [Windows Compatibility](#windows-compatibility)
+1. [Ready-made Packages](#ready-made-packages)
+1. [Building](#building)
+   1. [Build Environment](#build-environment)
+   1. [Compiling](#compiling)
+   1. [Installing](#installing)
+   1. [Install to a Custom Directory](#install-to-a-custom-directory)
+1. [Contributing](#contributing)
+1. [To Do](#to-do)
+1. [Troubleshooting](#troubleshooting)
+   1. [Can't Move a Directory to Trash](#cant-move-a-directory-to-trash)
+1. [Reference](#reference)
+   1. [Original KDirStat](#original-kdirstat)
+   1. [K4Dirstat](#k4dirstat)
+   1. [WinDirStat (for Windows)](#windirstat-for-windows)
+   1. [XDG Trash Spec](#xdg-trash-spec)
+   1. [Reviews](#reviews)
+   1. [Misc](#misc)
+1. [Packaging Status](#packaging-status)
+1. [Donate](#donate)
+
+
+## More Screenshots
 
 
 [<img align="top" height="237" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-file-type-stats.png)
@@ -75,9 +117,17 @@ Donate via PayPal (freely select the amount to donate):
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EYJXAVLGNRR5W)
 
 
-## Latest News
+## Latest Stable Release
 
-**Latest stable release: V1.5**
+**QDirStat V1.5**
+
+See the [release announcement](https://github.com/shundhammer/qdirstat/releases).
+
+Download installable binary packages for various Linux distributions here:
+[Ready-made packages](#ready-made-packages)
+
+
+## Latest News
 
 - 2019-04-12
 
@@ -666,7 +716,9 @@ This is just a rough summary. For more details, see [DevHistory.md](https://gith
   - 2000-01-21 KDirStat 0.86 for KDE 1 announced: First public version.
 
 
-## WinDirStat and QDirStat
+## Related Software
+
+### WinDirStat and QDirStat
 
 I keep reading articles and user forum comments about QDirStat being a "nice
 Linux port of WinDirStat". Well, nothing could be further from the truth:
@@ -681,11 +733,21 @@ dialog.
 
 
 
-## QDirStat and K4DirStat
+### QDirStat and K4DirStat
 
 K4DirStat is a port to KDE 4 / Qt 4 of my old KDE 3 / Qt 3 KDirStat. QDirStat is
 independent of that; it is based on the old KDE 3 KDirStat directly.
 
+
+### Other
+
+- Baobab
+- Filelight
+- ncdu
+- du
+
+See
+[Disk Usage Compared](https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared) (including benchmarks) in the Wiki.
 
 
 ## Motivation / Rant
@@ -785,7 +847,9 @@ old code base that had been long overdue.
 
 
 
-## New Features
+## Features
+
+### New Features
 
 - Multi-selection:
 
@@ -951,7 +1015,7 @@ old code base that had been long overdue.
 
 
 
-## Old Features
+### Old Features
 
 Features ported from the old KDirStat:
 
@@ -1080,9 +1144,9 @@ Features ported from the old KDirStat:
     ```
 
 
-## Features that are Gone
+### Features that are Gone
 
-(Compared with the old KDirStat)
+(Compared to the old KDirStat)
 
 
 - KPacman: That was that PacMan animation wile reading directory reading. This
@@ -1118,6 +1182,11 @@ Features ported from the old KDirStat:
 
 ## MacOS X Compatibility
 
+<summary>
+_Experimental_
+</summary>
+<details>
+
 I was amazed to find that it doesn't take more than the normal "qmake" and then
 "make" to build QDirStat for MacOS X. We (Sonja Krause-Harder and I) did some
 basic testing, and it seems to work.
@@ -1143,6 +1212,8 @@ There is no support. If you try this, you are on your own. Even more so than
 with the other platforms, you will have to make sure that your Qt build
 environment is set up correctly.
 
+</details>
+
 _There be dragons._ ;-)
 
 
@@ -1155,8 +1226,11 @@ the team.
 
 ## Windows Compatibility
 
-None for the forseeable future.
+<summary>
+None for the forseeable future. Use WinDirStat.
+</summary>
 
+<details>
 Directory reading might be quite easy to replace for Windows; we don't have
 that problem with devices and crossing filesystems on that platform.
 
@@ -1167,6 +1241,7 @@ So, for the time being, use [WinDirStat](https://windirstat.info/) instead.
 WinDirStat is a close relative to the KDirStat family anyway; the author had
 liked KDirStat on Linux so much that he decided to write a Windows clone and
 called it WinDirStat.
+</details>
 
 
 ## Ready-made Packages
@@ -1179,7 +1254,8 @@ called it WinDirStat.
 QDirStat packages for:
 
 - openSUSE Tumbleweed
-- openSUSE Leap 15
+- openSUSE Leap 15.1
+- openSUSE Leap 15.0
 - openSUSE Leap 42.3
 - openSUSE Leap 42.2
 - openSUSE Leap 42.1
@@ -1201,7 +1277,7 @@ developers try their best to keep it as stable as possible.
 
 ### Ubuntu
 
-Artful Aardvark (17.10) or later:
+Recent releases (Artful Aardvark (17.10) or later):
 
 https://packages.ubuntu.com/search?keywords=qdirstat&searchon=names
 
@@ -1294,8 +1370,12 @@ or
 
 ### Install to a Custom Directory
 
+<summary>
 The default setup installs everything to `/usr`. To install to another
-directory, set `INSTALL_PREFIX` during `qmake`:
+directory, set `INSTALL_PREFIX` during `qmake`.
+</summary>
+
+<details>
 
     qmake INSTALL_PREFIX=/usr/local
 
@@ -1305,6 +1385,7 @@ in your graphical desktop environment or in the file manager. You will need to
 copy the `.desktop` file manually to whatever directory your graphical desktop
 environment uses somewhere in your home directory. Similar with the application
 icon used in that `.desktop` file.
+</details>
 
 
 ## Contributing
@@ -1351,11 +1432,19 @@ Home page: https://windirstat.info/
 http://standards.freedesktop.org/trash-spec/trashspec-1.0.html
 
 
-## Reviews
+### Reviews
 
-### YouTube
+#### YouTube
 
 [Spatry: _Quick Look: QDirStat_](https://www.youtube.com/watch?v=ysm4-x_5ftI)
+
+
+
+### Misc
+
+http://moo.nac.uci.edu/~hjm/HOWTO_move_data.html#qdirstat
+
+http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html
 
 
 ## Packaging Status
@@ -1365,13 +1454,6 @@ Repology: QDirStat versions in Linux / BSD distributions:
 [![Repology](https://repology.org/badge/tiny-repos/qdirstat.svg)](https://repology.org/metapackage/qdirstat/versions)
 
 (click for details)
-
-
-## Misc
-
-http://moo.nac.uci.edu/~hjm/HOWTO_move_data.html#qdirstat
-
-http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html
 
 
 ## Donate
