@@ -74,6 +74,7 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
    1. [Original KDirStat](#original-kdirstat)
    1. [K4Dirstat](#k4dirstat)
    1. [WinDirStat (for Windows)](#windirstat-for-windows)
+   1. [Disk Usage Tools Compared](#disk-usage-tools-compared)
    1. [XDG Trash Spec](#xdg-trash-spec)
    1. [Reviews](#reviews)
    1. [Misc](#misc)
@@ -1425,6 +1426,13 @@ Sources: https://bitbucket.org/jeromerobert/k4dirstat/src
 ### WinDirStat (for Windows)
 
 Home page: https://windirstat.info/
+
+
+### Disk Usage Tools Compared
+
+QDirStat, K4DirStat, Baobab, Filelight, ncdu, du compared (including benchmarks):
+
+https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared)
 
 
 ### XDG Trash Spec
