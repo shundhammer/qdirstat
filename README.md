@@ -741,7 +741,9 @@ independent of that; it is based on the old KDE 3 KDirStat directly.
 - du
 
 See
-[Disk Usage Compared](https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared) (including benchmarks) in the Wiki.
+[Disk Usage Tools Compared](https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared): 
+QDirStat vs. K4DirStat vs. Baobab vs. Filelight vs. ncdu (including benchmarks)
+in the Wiki.
 
 
 ## Motivation / Rant
