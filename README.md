@@ -667,14 +667,14 @@ Allow to specify install prefix
 
 - 2017-06-04 **New stable release: V1.4**
 
-_See [DevHistory.md](https://github.com/shundhammer/qdirstat/blob/master/doc/DevHistory.md)
+_See [DevHistory.md](doc/DevHistory.md)
 for older entries._
 
 
 ## History
 
 
-This is just a rough summary. For more details, see [DevHistory.md](https://github.com/shundhammer/qdirstat/blob/master/doc/DevHistory.md)
+This is just a rough summary. For more details, see [DevHistory.md](doc/DevHistory.md)
 
 - 2018-11-07 New stable release: V1.5
 
@@ -1384,20 +1384,20 @@ icon used in that `.desktop` file.
 
 ## Contributing
 
-See file [Contributing.md](https://github.com/shundhammer/qdirstat/blob/master/doc/Contributing.md)
-and [GitHub-Workflow.md](https://github.com/shundhammer/qdirstat/blob/master/doc/GitHub-Workflow.md)
+See file [Contributing.md](doc/Contributing.md)
+and [GitHub-Workflow.md](doc/GitHub-Workflow.md)
 
 
 ## To Do
 
-See file [TODO.md](https://github.com/shundhammer/qdirstat/blob/master/doc/TODO.md)
+See file [TODO.md](doc/TODO.md)
 
 
 ## Troubleshooting
 
 ### Can't Move a Directory to Trash
 
-See file [Troubleshooting.md](https://github.com/shundhammer/qdirstat/blob/master/doc/Troubleshooting.md)
+See file [Troubleshooting.md](doc/Troubleshooting.md)
 
 
 ## Reference
