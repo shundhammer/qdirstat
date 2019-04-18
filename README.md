@@ -1245,40 +1245,27 @@ called it WinDirStat.
 
 ### openSUSE / SUSE Linux Enterprise
 
-QDirStat packages for:
+QDirStat packages for openSUSE Tumbleweed / Leap (15.x, 42.x) and SLE (15, 12):
 
-- openSUSE Tumbleweed
-- openSUSE Leap 15.1
-- openSUSE Leap 15.0
-- openSUSE Leap 42.3
-- openSUSE Leap 42.2
-- openSUSE Leap 42.1
-- openSUSE 13.2
-- SUSE Linux Enterprise (SLE) 15
-- SUSE Linux Enterprise (SLE) 12 SP3
-- SUSE Linux Enterprise (SLE) 12 SP2
-- SUSE Linux Enterprise (SLE) 12 SP1
-- SUSE Linux Enterprise (SLE) 12
+- Download page for the [**latest stable release**](https://software.opensuse.org/download/package?project=home:shundhammer:qdirstat-stable&package=qdirstat)
 
-Download page for the [**latest stable release**](https://software.opensuse.org/download/package?project=home:shundhammer:qdirstat-stable&package=qdirstat)
+- Download page for the [**current development version** (git master)](https://software.opensuse.org/download/package?project=home:shundhammer:qdirstat-git&package=qdirstat)
 
-Download page for the [**current development version** (git master)](https://software.opensuse.org/download/package?project=home:shundhammer:qdirstat-git&package=qdirstat)
-
-Since this version is in development, it may be not quite as stable and
-reliable as the latest official stable release, although the QDirStat
-developers try their best to keep it as stable as possible.
+  Since this version is in development, it may be not quite as stable and
+  reliable as the latest official stable release, although the QDirStat
+  developers try their best to keep it as stable as possible.
 
 
 ### Ubuntu
 
-Recent releases (Artful Aardvark (17.10) or later):
+- Recent releases (Artful Aardvark (17.10) or later):
 
-https://packages.ubuntu.com/search?keywords=qdirstat&searchon=names
+  https://packages.ubuntu.com/search?keywords=qdirstat&searchon=names
 
-Pre-17.10:
+- Older releases (Pre-17.10):
 
-Use Nathan Rennie-Waldock's
-[**QDirStat PPA**](https://launchpad.net/~nathan-renniewaldock/+archive/ubuntu/qdirstat)
+  Use Nathan Rennie-Waldock's
+  [**QDirStat PPA**](https://launchpad.net/~nathan-renniewaldock/+archive/ubuntu/qdirstat)
 
 
 
