@@ -1142,6 +1142,11 @@ Features ported from the old KDirStat:
 
 (Compared to the old KDirStat)
 
+- Pacman animation
+- KIO slave support
+- Feedback form
+
+<details>
 
 - KPacman: That was that PacMan animation wile reading directory reading. This
   is gone now. KPacMan looked out of place pretty soon after it got to KDirStat
@@ -1171,6 +1176,8 @@ Features ported from the old KDirStat:
   interesting in with their self-loving marketing bullshit? -- KActivityTracker
   was made to avoid exactly this: Ask the user only once you know that he
   actually used the program for a while.
+
+</details>
 
 
 
