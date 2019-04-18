@@ -1177,7 +1177,7 @@ Features ported from the old KDirStat:
 ## MacOS X Compatibility
 
 <summary>
-_Experimental_
+There is some experimental support for MacOS X, but it's really only that: Experimental.
 </summary>
 <details>
 
@@ -1364,10 +1364,8 @@ or
 
 ### Install to a Custom Directory
 
-<summary>
 The default setup installs everything to `/usr`. To install to another
 directory, set `INSTALL_PREFIX` during `qmake`.
-</summary>
 
 <details>
 
@@ -1402,15 +1400,17 @@ See file [Troubleshooting.md](doc/Troubleshooting.md)
 
 ## Reference
 
-- Original [KDirStat](http://kdirstat.sourceforge.net/)  [source code](https://github.com/shundhammer/kdirstat)
-- [K4Dirstat](https://bitbucket.org/jeromerobert/k4dirstat/wiki/Home) [source code](https://bitbucket.org/jeromerobert/k4dirstat/src)
-- [WinDirStat (for Windows)](https://windirstat.info/)
-- [Disk Usage Tools Compared: QDirStat vs. K4DirStat vs. Baobab vs. Filelight vs. ncdu vs. du (including benchmarks)](https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared)
+- Original [KDirStat](http://kdirstat.sourceforge.net/)  ([source code](https://github.com/shundhammer/kdirstat))
+- [K4Dirstat](https://bitbucket.org/jeromerobert/k4dirstat/wiki/Home) ([source code](https://bitbucket.org/jeromerobert/k4dirstat/src))
+- [WinDirStat](https://windirstat.info/) (for Windows)
+- [Disk Usage Tools Compared: QDirStat vs. K4DirStat vs. Baobab vs. Filelight vs. ncdu](https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared) (including benchmarks)
 - [XDG Trash Spec](http://standards.freedesktop.org/trash-spec/trashspec-1.0.html)
 - [Spatry's QDirStat Review on YouTube](https://www.youtube.com/watch?v=ysm4-x_5ftI)
 - Articles by Harry Mangalam (University of California, Irvine)
   - [QDirStat](http://moo.nac.uci.edu/~hjm/HOWTO_move_data.html#qdirstat)
   - [KDirStat for Clusters](http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html)
+
+Of course, don't forget to check out the [doc directory](doc/).
 
 
 ## Packaging Status
