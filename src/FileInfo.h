@@ -197,7 +197,7 @@ namespace QDirStat
 	QString userName() const;
 
         /**
-         * Return 'true' if this FileInfo has a UID (user ID).x
+         * Return 'true' if this FileInfo has a UID (user ID).
          *
          * It might not have that information e.g. if it was read from a cache
          * file.

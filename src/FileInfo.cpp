@@ -210,7 +210,7 @@ QString FileInfo::url() const
 
 QString FileInfo::debugUrl() const
 {
-    if ( this == _tree->root() )
+    if ( _tree && this == _tree->root() )
 	return "<root>";
 
     if ( isDotEntry() )
@@ -259,6 +259,9 @@ bool FileInfo::isInSubtree( const FileInfo *subtree ) const
 
 FileInfo * FileInfo::locate( QString url, bool findDotEntries )
 {
+    if ( ! _tree )
+        return 0;
+
     if ( ! url.startsWith( _name ) && this != _tree->root() )
 	return 0;
     else					// URL starts with this node's name

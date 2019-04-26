@@ -74,6 +74,7 @@ SOURCES   = main.cpp                    \
             MountPoints.cpp             \
             OutputWindow.cpp            \
             PercentBar.cpp              \
+            PkgInfo.cpp                 \
             PkgManager.cpp              \
             Process.cpp                 \
             Refresher.cpp               \
@@ -135,6 +136,7 @@ HEADERS   =                             \
             MountPoints.h               \
             OutputWindow.h              \
             PercentBar.h                \
+            PkgInfo.h                   \
             PkgManager.h                \
             Process.h                   \
             Qt4Compat.h                 \

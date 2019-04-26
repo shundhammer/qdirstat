@@ -30,6 +30,7 @@ void usage( const QStringList & argList )
 	 << "\n"
 	 << "  " << progName << " [--slow-update|-s] [<directory-name>]\n"
 	 << "  " << progName << " --cache|-c <cache-file-name>\n"
+	 << "  " << progName << " --pkg|-p\n"
 	 << "  " << progName << " --help|-h\n"
 	 << std::endl;
 
@@ -97,7 +98,9 @@ int main( int argc, char *argv[] )
     if ( commandLineSwitch( "--slow-update", "-s", argList ) )
 	mainWin->dirTreeModel()->setSlowUpdate();
 
-    if ( argList.isEmpty() )
+    if ( commandLineSwitch( "--pkg", "-p", argList ) )
+        mainWin->readPkg();
+    else if ( argList.isEmpty() )
 	mainWin->askOpenUrl();
     else
     {

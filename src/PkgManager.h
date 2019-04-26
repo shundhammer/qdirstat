@@ -13,6 +13,8 @@
 #include <QString>
 #include <QCache>
 
+#include "PkgInfo.h"
+
 
 namespace QDirStat
 {
@@ -42,11 +44,36 @@ namespace QDirStat
          **/
         static bool foundSupportedPkgManager();
 
+        /**
+         * Return the list of installed packages.
+         *
+         * Ownership of the list elements is transferred to the caller.
+         **/
+        static PkgInfoList installedPkg();
+
+        /**
+         * Return the list of files and directories owned by a package.
+         **/
+        static QStringList fileList( PkgInfo * pkg );
+
 	/**
 	 * Return the owning package of a file or directory with full path
 	 * 'path' or an empty string if it is not owned by any package.
 	 **/
 	QString getOwningPackage( const QString & path );
+
+        /**
+         * Return the list of installed packages.
+         *
+         * Ownership of the list elements is transferred to the caller.
+         **/
+        PkgInfoList getInstalledPkg();
+
+        /**
+         * Return the list of files and directories owned by a package.
+         **/
+        QStringList getFileList( PkgInfo * pkg );
+
 
     protected:
 
@@ -151,6 +178,19 @@ namespace QDirStat
 	 **/
 	virtual QString owningPkg( const QString & path ) = 0;
 
+        /**
+         * Return the list of installed packages.
+         *
+         * Ownership of the list elements is transferred to the caller.
+         **/
+        virtual PkgInfoList installedPkg() { return PkgInfoList(); }
+
+        /**
+         * Return the list of files and directories owned by a package.
+         **/
+        virtual QStringList fileList( PkgInfo * pkg )
+            { Q_UNUSED( pkg ); return QStringList(); }
+
     }; // class PkgManager
 
 
@@ -201,6 +241,30 @@ namespace QDirStat
 	 *   /usr/bin/dpkg -S ${path}
 	 **/
 	virtual QString owningPkg( const QString & path ) Q_DECL_OVERRIDE;
+
+        /**
+         * Return the list of installed packages.
+         *
+         * Ownership of the list elements is transferred to the caller.
+         *
+	 * Implemented from PkgManager.
+         **/
+        virtual PkgInfoList installedPkg();
+
+        /**
+         * Return the list of files and directories owned by a package.
+         *
+	 * Implemented from PkgManager.
+         **/
+        virtual QStringList fileList( PkgInfo * pkg );
+
+    protected:
+
+        /**
+         * Parse a package list as output by "dpkg-query --show --showformat".
+         **/
+        PkgInfoList parsePkgList( const QString & output );
+
 
     }; // class DpkgPkgManager
 

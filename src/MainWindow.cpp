@@ -35,6 +35,8 @@
 #include "MimeCategorizer.h"
 #include "MimeCategoryConfigPage.h"
 #include "OutputWindow.h"
+#include "PkgInfo.h"
+#include "PkgManager.h"
 #include "Refresher.h"
 #include "SelectionModel.h"
 #include "Settings.h"
@@ -107,6 +109,7 @@ MainWindow::MainWindow():
     CHECK_NEW( _mimeCategorizer );
 
     _ui->treemapView->setMimeCategorizer( _mimeCategorizer );
+    _ui->breadcrumbNavigator->clear();
 
 #ifdef Q_OS_MACX
     // This makes the application to look like more "native" on macOS
@@ -724,6 +727,16 @@ void MainWindow::askWriteCache()
 				   tr( "ERROR writing cache file %1").arg( fileName ) );
 	}
     }
+}
+
+
+void MainWindow::readPkg()
+{
+    logInfo() << endl;
+
+    QDirStat::PkgInfoList pkgList = QDirStat::PkgQuery::installedPkg();
+
+    qDeleteAll( pkgList );
 }
 
 

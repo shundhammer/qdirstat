@@ -115,6 +115,18 @@ QString PkgQuery::owningPkg( const QString & path )
 }
 
 
+PkgInfoList PkgQuery::installedPkg()
+{
+    return instance()->getInstalledPkg();
+}
+
+
+QStringList PkgQuery::fileList( PkgInfo * pkg )
+{
+    return instance()->getFileList( pkg );
+}
+
+
 QString PkgQuery::getOwningPackage( const QString & path )
 {
     QString pkg = "";
@@ -161,6 +173,34 @@ QString PkgQuery::getOwningPackage( const QString & path )
 }
 
 
+PkgInfoList PkgQuery::getInstalledPkg()
+{
+    PkgInfoList pkgList;
+
+    foreach ( PkgManager * pkgManager, _pkgManagers )
+    {
+        pkgList.append( pkgManager->installedPkg() );
+    }
+
+    return pkgList;
+}
+
+
+QStringList PkgQuery::getFileList( PkgInfo * pkg )
+{
+    foreach ( PkgManager * pkgManager, _pkgManagers )
+    {
+        QStringList fileList = pkgManager->fileList( pkg );
+
+        if ( ! fileList.isEmpty() )
+            return fileList;
+    }
+
+    return QStringList();
+}
+
+
+
 
 
 bool DpkgPkgManager::isPrimaryPkgManager()
@@ -187,6 +227,68 @@ QString DpkgPkgManager::owningPkg( const QString & path )
 
     return pkg;
 }
+
+
+PkgInfoList DpkgPkgManager::installedPkg()
+{
+    int exitCode = -1;
+    QString output = runCommand( "/usr/bin/dpkg-query",
+                                 QStringList()
+                                 << "--show"
+                                 << "--showformat=${Package} ${Architecture} ${Version}\n",
+                                 &exitCode );
+
+    PkgInfoList pkgList;
+
+    if ( exitCode == 0 )
+        pkgList = parsePkgList( output );
+
+    return pkgList;
+}
+
+
+PkgInfoList DpkgPkgManager::parsePkgList( const QString & output )
+{
+    PkgInfoList pkgList;
+
+    foreach ( const QString & line, output.split( "\n" ) )
+    {
+        if ( ! line.isEmpty() )
+        {
+            QStringList fields = line.split( " ", QString::KeepEmptyParts );
+
+            if ( fields.size() != 3 )
+                logError() << "Invalid dpkg-query output: \"" << line << "\n" << endl;
+            else
+            {
+                QString name    = fields.takeFirst();
+                QString arch    = fields.takeFirst();
+                QString version = fields.takeFirst();
+
+                PkgInfo * pkg = new PkgInfo( name, arch, version );
+                CHECK_NEW( pkg );
+
+                pkgList << pkg;
+            }
+        }
+    }
+
+    return pkgList;
+}
+
+
+QStringList DpkgPkgManager::fileList( PkgInfo * pkg )
+{
+    QStringList fileList;
+
+    Q_UNUSED( pkg );
+    // FIXME: TO DO
+    // FIXME: TO DO
+    // FIXME: TO DO
+
+    return fileList;
+}
+
 
 
 

@@ -112,7 +112,7 @@ namespace QDirStat
 	 *
 	 * OK, I'm fed up with working around this poor design. Let's make our
 	 * own kludge to find out what items are expanded: Check the persistent
-	 * model indexes: The private class creates a persistend model index
+	 * model indexes: The private class creates a persistent model index
 	 * for each item that is expanded.
 	 **/
 	QModelIndexList persistentIndexList() const

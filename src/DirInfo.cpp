@@ -161,7 +161,9 @@ void DirInfo::reset()
     if ( ! _dotEntry )
     {
 	_dotEntry = new DirInfo( _tree, this, true );
-	_tree->childAddedNotify( _dotEntry );
+
+        if ( _tree )
+            _tree->childAddedNotify( _dotEntry );
     }
 
     recalc();
@@ -565,7 +567,8 @@ void DirInfo::finalizeAll()
     // get all their plain file children reparented to themselves, so they
     // would need to be processed in the loop, too.
 
-     _tree->sendFinalizeLocal( this ); // Must be sent _before_ finalizeLocal()!
+    if ( _tree )
+        _tree->sendFinalizeLocal( this ); // Must be sent _before_ finalizeLocal()!
     finalizeLocal();
 }
 

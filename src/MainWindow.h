@@ -81,6 +81,12 @@ public slots:
     void stopReading();
 
     /**
+     * Clear the current tree and treplace it with the list of installed
+     * packages from the system's package manager.
+     **/
+    void readPkg();
+
+    /**
      * Clear the current tree and replace it with the content of the specified
      * cache file.
      **/
