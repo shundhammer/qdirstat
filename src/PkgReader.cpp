@@ -13,6 +13,8 @@
 #include "Logger.h"
 #include "Exception.h"
 
+#define DEBUG_LIMIT_READ_JOBS   0
+
 
 using namespace QDirStat;
 
@@ -147,18 +149,11 @@ void PkgReader::createReadJobs()
         CHECK_NEW( job );
         _tree->addJob( job );
 
-#if 0
-        // FIXME: DEBUG
-        // FIXME: DEBUG
-        // FIXME: DEBUG
+#if DEBUG_LIMIT_READ_JOBS
         static int debugCount = 0;
 
-        if ( ++debugCount > 10 )
+        if ( ++debugCount > 100 )
             return;
-
-        // FIXME: DEBUG
-        // FIXME: DEBUG
-        // FIXME: DEBUG
 #endif
     }
 }
