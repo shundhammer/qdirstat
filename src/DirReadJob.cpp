@@ -442,7 +442,8 @@ QString LocalDirReadJob::fullName( const QString & entryName ) const
 
 FileInfo * LocalDirReadJob::stat( const QString & url,
 				  DirTree	* tree,
-				  DirInfo	* parent )
+				  DirInfo	* parent,
+                                  bool            doThrow )
 {
     struct stat statInfo;
     // logDebug() << "url: \"" << url << "\"" << endl;
@@ -489,8 +490,10 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
     }
     else // lstat() failed
     {
-	THROW( SysCallFailedException( "lstat", url ) );
-	return 0; // NOTREACHED
+        if ( doThrow )
+            THROW( SysCallFailedException( "lstat", url ) );
+
+	return 0;
     }
 }
 

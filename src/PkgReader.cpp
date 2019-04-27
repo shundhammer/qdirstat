@@ -191,6 +191,7 @@ void PkgReadJob::startReading()
     }
 
     finalizeAll( _pkg );
+    _tree->sendReadJobFinished( _pkg );
     finished();
     // Don't add anything after finished() since this deletes this job!
 }
@@ -214,43 +215,27 @@ void PkgReadJob::addFile( const QString & fileListPath )
         {
             QString path = QString( "/" ) + currentPath.join( "/" );
 
-            try
-            {
-                newParent = LocalDirReadJob::stat( path, _tree, parent );
-                // logDebug() << "Created " << newParent << endl;
-            }
-            catch( const SysCallFailedException & exception )
-            {
-                CAUGHT( exception );
-                logWarning() << "Can't check files in file list of " << _pkg << endl;
+            newParent = LocalDirReadJob::stat( path, _tree, parent,
+                                               false ); // doThrow
 
-                if ( parent )
-                    parent->setReadState( DirError );
-
-                // Don't continue with this line in the file list - it's
-                // pointless.
-                //
-                // The user may not have sufficient permissions to lstat() the
-                // file itself or one of the intermediate directories, or the
-                // file of one of the intermediate directory may be missing
-                // (manually removed?).
+            if ( ! newParent )
+            {
+                parent->setReadState( DirError );
                 return;
             }
 
-            CHECK_PTR( newParent );
-
-#if 0
-            if ( remaining.isEmpty() )
-                logDebug() << "Created leaf item " << newParent << endl;
-            else
-                logDebug() << "  Created missing intermediate item " << newParent << endl;
-#endif
+            // logDebug() << "Created " << newParent << endl;
         }
 
         if ( ! remaining.isEmpty() )
         {
             parent = newParent->toDirInfo();
-            CHECK_PTR( parent );
+
+            if ( ! parent )
+            {
+                logWarning() << newParent << " should be a directory, but is not" << endl;
+                return;
+            }
         }
     }
 }
