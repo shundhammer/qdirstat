@@ -117,7 +117,7 @@ QStringList DpkgPkgManager::fileList( PkgInfo * pkg )
                                  false );       // logOutput
 
     if ( exitCode != 0 )
-        logError() << "dpg-query failed: " << output << endl;
+        logError() << "dpkg-query failed: " << output << endl;
     else
     {
         fileList = output.split( "\n" );
