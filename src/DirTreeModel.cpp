@@ -635,7 +635,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     if ( col == _readJobsCol && item->isBusy() )
 	return tr( "[%1 Read Jobs]" ).arg( item->pendingReadJobs() );
 
-    bool limitedInfo = item->isDotEntry() || item->readState() == DirCached;
+    bool limitedInfo = item->isDotEntry() || item->readState() == DirCached || item->isPkgInfo();
 
     switch ( col )
     {

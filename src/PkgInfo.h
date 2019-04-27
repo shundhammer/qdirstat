@@ -75,6 +75,14 @@ namespace QDirStat
          **/
         void setTree( DirTree * tree ) { _tree = tree; }
 
+        /**
+         * Returns true if this is a PkgInfo object.
+         *
+         * Reimplemented - inherited from FileInfo.
+         **/
+        virtual bool isPkgInfo() const Q_DECL_OVERRIDE
+            { return true; }
+
     protected:
         QString _baseName;
         QString _version;

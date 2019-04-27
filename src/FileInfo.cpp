@@ -353,13 +353,13 @@ bool FileInfo::isCached() const
 
 bool FileInfo::hasUid() const
 {
-    return ! isCached();
+    return ! isPkgInfo() && ! isCached();
 }
 
 
 bool FileInfo::hasGid() const
 {
-    return ! isCached();
+    return ! isPkgInfo() && ! isCached();
 }
 
 

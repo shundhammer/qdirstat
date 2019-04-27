@@ -575,6 +575,14 @@ namespace QDirStat
 	 **/
 	virtual bool isDirInfo() const { return false; }
 
+        /**
+         * Returns true if this is a PkgInfo object.
+         *
+	 * This default implementation always returns 'false'. Derived classes
+	 * (in particular, those derived from PkgInfo) should overwrite this.
+         **/
+        virtual bool isPkgInfo() const { return false; }
+
 	/**
 	 * Try to convert this to a DirInfo pointer. This returns null if this
 	 * is not a DirInfo.
