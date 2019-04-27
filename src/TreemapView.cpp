@@ -225,7 +225,7 @@ void TreemapView::zoomIn()
     {
 	FileInfo * newRoot = newRootTile->orig();
 
-	if ( newRoot->isDir() || newRoot->isDotEntry() )
+	if ( newRoot->isDirInfo() )
 	    rebuildTreemap( newRoot );
     }
 }
@@ -272,7 +272,7 @@ bool TreemapView::canZoomIn() const
     {
 	FileInfo * newRoot = newRootTile->orig();
 
-	if ( newRoot->isDir() || newRoot->isDotEntry() )
+	if ( newRoot->isDirInfo() )
 	    return true;
     }
 
