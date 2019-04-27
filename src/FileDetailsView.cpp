@@ -11,7 +11,7 @@
 #include "DirInfo.h"
 #include "FileInfoSet.h"
 #include "MimeCategorizer.h"
-#include "PkgManager.h"
+#include "PkgQuery.h"
 #include "SystemFileChecker.h"
 #include "Logger.h"
 #include "Exception.h"

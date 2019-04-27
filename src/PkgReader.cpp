@@ -7,7 +7,7 @@
  */
 
 #include "PkgReader.h"
-#include "PkgManager.h"
+#include "PkgQuery.h"
 #include "DirTree.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -100,10 +100,16 @@ void PkgReader::createDisplayName( const QString & pkgName )
         QString name = pkgName;
 
         if ( ! sameVersion )
+        {
             name += "-" + pkg->version();
+            pkg->setMultiVersion( true );
+        }
 
         if ( ! sameArch )
+        {
             name += ":" + pkg->arch();
+            pkg->setMultiArch( true );
+        }
 
         // logDebug() << " Setting name " << name << endl;
         pkg->setName( name );

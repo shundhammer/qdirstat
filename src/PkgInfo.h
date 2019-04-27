@@ -76,6 +76,28 @@ namespace QDirStat
         void setTree( DirTree * tree ) { _tree = tree; }
 
         /**
+         * Return 'true' if this package is installed for more than one
+         * architecture.
+         **/
+        bool isMultiArch() const { return _multiArch; }
+
+        /**
+         * Set the multiArch flag.
+         **/
+        void setMultiArch( bool val ) { _multiArch = val; }
+
+        /**
+         * Return 'true' if this package is installed in multiple versions
+         * (but possibly for only one architecture).
+         **/
+        bool isMultiVersion() const { return _multiVersion; }
+
+        /**
+         * Set the multiVersion flag.
+         **/
+        void setMultiVersion( bool val ) { _multiVersion = val; }
+
+        /**
          * Returns true if this is a PkgInfo object.
          *
          * Reimplemented - inherited from FileInfo.
@@ -83,10 +105,15 @@ namespace QDirStat
         virtual bool isPkgInfo() const Q_DECL_OVERRIDE
             { return true; }
 
+
     protected:
+
         QString _baseName;
         QString _version;
         QString _arch;
+
+        bool    _multiArch    :1;
+        bool    _multiVersion :1;
 
     };  // class PkgInfo
 
