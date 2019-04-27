@@ -129,6 +129,20 @@ namespace QDirStat
 
     protected:
 
+        /**
+         * Add all files belonging to 'path' to this package.
+         * Create all directories as needed.
+         **/
+        void addFile( const QString & path );
+
+        /**
+         * Recursively finalize all directories in the subtree.
+         **/
+        void finalizeAll( DirInfo * subtree );
+
+
+        // Data members
+
 	PkgInfo * _pkg;
 
     };	// class PkgReadJob

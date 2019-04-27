@@ -146,7 +146,7 @@ namespace QDirStat
 	 * This is a (somewhat) expensive operation since it will recurse up
 	 * to the top of the tree.
 	 **/
-	QString url() const;
+	virtual QString url() const;
 
 	/**
 	 * Very much like FileInfo::url(), but with "/<Files>" appended if this
@@ -157,7 +157,7 @@ namespace QDirStat
 	 *
 	 * logDebug() << "Found fileInfo " << info << endl;
 	 **/
-	QString debugUrl() const;
+	virtual QString debugUrl() const;
 
 	/**
 	 * Returns the major and minor device numbers of the device this file

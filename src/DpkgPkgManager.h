@@ -87,6 +87,14 @@ namespace QDirStat
          **/
         PkgInfoList parsePkgList( const QString & output );
 
+        /**
+         * Return a name suitable for a detailed queries for 'pkg'.
+         *
+         * This might include the architecture and the version if this is a
+         * multi-arch or multi-version package.
+         **/
+        QString queryName( PkgInfo * pkg );
+
 
     };  // class DpkgPkgManager
 

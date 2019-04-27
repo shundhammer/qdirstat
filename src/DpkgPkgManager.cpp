@@ -109,10 +109,36 @@ QStringList DpkgPkgManager::fileList( PkgInfo * pkg )
 {
     QStringList fileList;
 
-    Q_UNUSED( pkg );
-    // FIXME: TO DO
-    // FIXME: TO DO
-    // FIXME: TO DO
+    int exitCode = -1;
+    QString output = runCommand( "/usr/bin/dpkg-query",
+                                 QStringList() << "--listfiles" << queryName( pkg ),
+                                 &exitCode,
+                                 false,         // logCommand
+                                 false );       // logOutput
+
+    if ( exitCode != 0 )
+        logError() << "dpg-query failed: " << output << endl;
+    else
+    {
+        fileList = output.split( "\n" );
+        fileList.removeAll( "/." );     // Remove cruft
+    }
 
     return fileList;
+}
+
+
+QString DpkgPkgManager::queryName( PkgInfo * pkg )
+{
+    CHECK_PTR( pkg );
+
+    QString name = pkg->baseName();
+
+    if ( pkg->isMultiVersion() )
+        name += "_" + pkg->version();
+
+    if ( pkg->isMultiArch() )
+        name += ":" + pkg->arch();
+
+    return name;
 }

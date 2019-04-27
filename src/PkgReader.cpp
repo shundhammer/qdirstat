@@ -9,6 +9,7 @@
 #include "PkgReader.h"
 #include "PkgQuery.h"
 #include "DirTree.h"
+#include "DirReadJob.h"         // LocalDirReadJob
 #include "Logger.h"
 #include "Exception.h"
 
@@ -42,8 +43,8 @@ void PkgReader::read()
     addPkgToTree();
     createReadJobs();
 
-    // The PkgInfo * items in _pkgList are now owned by the tree,
-    // so intentionally NOT calling qDeleteItems( _pkgList )
+    // Ownership of the PkgInfo * items in _pkgList was transferred to the
+    // tree, so intentionally NOT calling qDeleteItems( _pkgList ) !
 
     _pkgList.clear();
     _multiPkg.clear();
@@ -122,7 +123,7 @@ void PkgReader::addPkgToTree()
     CHECK_PTR( _tree );
     CHECK_PTR( _tree->root() );
 
-    PkgInfo * top = new PkgInfo( _tree, _tree->root(), "Pkg:/" );
+    PkgInfo * top = new PkgInfo( _tree, _tree->root(), "Pkg:" );
     CHECK_NEW( top );
     _tree->root()->insertChild( top );
 
@@ -145,6 +146,20 @@ void PkgReader::createReadJobs()
         PkgReadJob * job = new PkgReadJob( _tree, pkg );
         CHECK_NEW( job );
         _tree->addJob( job );
+
+#if 0
+        // FIXME: DEBUG
+        // FIXME: DEBUG
+        // FIXME: DEBUG
+        static int debugCount = 0;
+
+        if ( ++debugCount > 10 )
+            return;
+
+        // FIXME: DEBUG
+        // FIXME: DEBUG
+        // FIXME: DEBUG
+#endif
     }
 }
 
@@ -174,11 +189,94 @@ void PkgReadJob::startReading()
 
     _pkg->setReadState( DirReading );
 
+    foreach ( const QString & path, PkgQuery::fileList( _pkg ) )
+    {
+        if ( ! path.isEmpty() )
+            addFile( path );
+    }
 
-    _pkg->setReadState( DirFinished );
-    _tree->sendFinalizeLocal( _pkg );
-    _pkg->finalizeLocal();
-
+    finalizeAll( _pkg );
     finished();
     // Don't add anything after finished() since this deletes this job!
 }
+
+
+void PkgReadJob::addFile( const QString & fileListPath )
+{
+    // logDebug() << "Adding " << fileListPath << " to " << _pkg << endl;
+
+    QStringList remaining = fileListPath.split( "/", QString::SkipEmptyParts );
+    QStringList currentPath;
+    DirInfo *   parent = _pkg;
+
+    while ( ! remaining.isEmpty() )
+    {
+        QString currentName = remaining.takeFirst();
+        currentPath << currentName;
+        FileInfo * newParent = _pkg->locate( parent, QStringList() << currentName );
+
+        if ( ! newParent )
+        {
+            QString path = QString( "/" ) + currentPath.join( "/" );
+
+            try
+            {
+                newParent = LocalDirReadJob::stat( path, _tree, parent );
+                // logDebug() << "Created " << newParent << endl;
+            }
+            catch( const SysCallFailedException & exception )
+            {
+                CAUGHT( exception );
+                logWarning() << "Can't check files in file list of " << _pkg << endl;
+
+                if ( parent )
+                    parent->setReadState( DirError );
+
+                // Don't continue with this line in the file list - it's
+                // pointless.
+                //
+                // The user may not have sufficient permissions to lstat() the
+                // file itself or one of the intermediate directories, or the
+                // file of one of the intermediate directory may be missing
+                // (manually removed?).
+                return;
+            }
+
+            CHECK_PTR( newParent );
+
+#if 0
+            if ( remaining.isEmpty() )
+                logDebug() << "Created leaf item " << newParent << endl;
+            else
+                logDebug() << "  Created missing intermediate item " << newParent << endl;
+#endif
+        }
+
+        if ( ! remaining.isEmpty() )
+        {
+            parent = newParent->toDirInfo();
+            CHECK_PTR( parent );
+        }
+    }
+}
+
+
+void PkgReadJob::finalizeAll( DirInfo * subtree )
+{
+    FileInfo * child = subtree->firstChild();
+
+    while( child )
+    {
+        if ( child->isDirInfo() )
+            finalizeAll( child->toDirInfo() );
+
+        child = child->next();
+    }
+
+    if ( subtree->readState() != DirError )
+        subtree->setReadState( DirFinished );
+
+    _tree->sendFinalizeLocal( subtree );
+    subtree->finalizeLocal();
+}
+

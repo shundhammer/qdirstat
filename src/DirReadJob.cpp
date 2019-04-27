@@ -445,21 +445,30 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
 				  DirInfo	* parent )
 {
     struct stat statInfo;
-    logDebug() << "url: \"" << url << "\"" << endl;
+    // logDebug() << "url: \"" << url << "\"" << endl;
 
     if ( lstat( url.toUtf8(), &statInfo ) == 0 ) // lstat() OK
     {
+        QString name = url;
+
+        if ( parent && parent != tree->root() )
+        {
+            QStringList components = url.split( "/", QString::SkipEmptyParts );
+            name = components.last();
+        }
+
 	if ( S_ISDIR( statInfo.st_mode ) )	// directory?
 	{
-	    DirInfo * dir = new DirInfo( url, &statInfo, tree, parent );
+	    DirInfo * dir = new DirInfo( name, &statInfo, tree, parent );
 	    CHECK_NEW( dir );
 
 	    if ( parent )
 		parent->insertChild( dir );
 
 	    if ( dir && parent &&
-		 ! tree->isTopLevel( dir )
-		 && dir->device() != parent->device() )
+		 ! tree->isTopLevel( dir ) &&
+                 ! parent->isPkgInfo() &&
+		 dir->device() != parent->device() )
 	    {
 		logDebug() << dir << " is a mount point" << endl;
 		dir->setMountPoint();
@@ -469,7 +478,7 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
 	}
 	else					// no directory
 	{
-	    FileInfo * file = new FileInfo( url, &statInfo, tree, parent );
+	    FileInfo * file = new FileInfo( name, &statInfo, tree, parent );
 	    CHECK_NEW( file );
 
 	    if ( parent )

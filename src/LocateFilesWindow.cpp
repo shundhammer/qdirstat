@@ -12,7 +12,6 @@
 #include "LocateFilesWindow.h"
 #include "DirTree.h"
 #include "SelectionModel.h"
-#include "FileInfoIterator.h"
 #include "SettingsHelpers.h"
 #include "HeaderTweaker.h"
 #include "Logger.h"

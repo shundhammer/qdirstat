@@ -173,6 +173,9 @@ void DirTreeModel::loadIcons()
     _blockDeviceIcon   = QPixmap( _treeIconDir + "block-device.png"   );
     _charDeviceIcon    = QPixmap( _treeIconDir + "char-device.png"   );
     _specialIcon       = QPixmap( _treeIconDir + "special.png"	 );
+
+    // FIXME: Find a real icon for packages.
+    _pkgIcon           = _dirIcon;
 }
 
 
@@ -725,6 +728,7 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
     QPixmap icon;
 
     if	    ( item->isDotEntry() )  icon = _dotEntryIcon;
+    else if ( item->isPkgInfo()  )  icon = _pkgIcon;
     else if ( item->isExcluded() )  icon = _excludedIcon;
     else if ( item->isDir()	 )
     {

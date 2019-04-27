@@ -105,8 +105,47 @@ namespace QDirStat
         virtual bool isPkgInfo() const Q_DECL_OVERRIDE
             { return true; }
 
+	/**
+	 * Returns the full URL of this object with full path.
+	 *
+         * Reimplemented - inherited from FileInfo.
+	 **/
+	virtual QString url() const Q_DECL_OVERRIDE;
+
+        /**
+         * Return 'true' if this is a package URL, i.e. it starts with "Pkg:".
+         **/
+        static bool isPkgUrl( const QString & url );
+
+        /**
+         * Create a package URL from 'path'. If it already is a package URL,
+         * just return 'path'.
+         **/
+        QString pkgUrl( const QString & path ) const;
+
+        /**
+         * Locate a path in this PkgInfo subtree:
+         * Return the corresponding FileInfo or 0 if not found.
+         **/
+        FileInfo * locate( const QString & path );
+
+        /**
+         * Locate a path that is already split up into its components in this
+         * PkgInfo subtree: Return the corresponding FileInfo or 0 if not
+         * found.
+         **/
+        FileInfo * locate( const QStringList & pathComponents );
+
+        /**
+         * Locate a path that is already split up into its components within a
+         * subtree: Return the corresponding FileInfo or 0 if not found.
+         **/
+        FileInfo * locate( DirInfo *           subtree,
+                           const QStringList & pathComponents );
 
     protected:
+
+        // Data members
 
         QString _baseName;
         QString _version;
@@ -129,7 +168,7 @@ namespace QDirStat
 	if ( info )
 	{
 	    if ( info->checkMagicNumber() )
-		stream << "<Pkg " << info->debugUrl() << ">";
+		stream << "<Pkg " << info->name() << ">";
 	    else
 		stream << "<INVALID PkgInfo *>";
 	}

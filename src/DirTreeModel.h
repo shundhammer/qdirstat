@@ -442,6 +442,7 @@ namespace QDirStat
 	QPixmap _blockDeviceIcon;
 	QPixmap _charDeviceIcon;
 	QPixmap _specialIcon;
+        QPixmap _pkgIcon;
 
     };	// class DirTreeModel
 
