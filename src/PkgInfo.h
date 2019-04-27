@@ -151,8 +151,8 @@ namespace QDirStat
         QString _version;
         QString _arch;
 
-        bool    _multiArch    :1;
         bool    _multiVersion :1;
+        bool    _multiArch    :1;
 
     };  // class PkgInfo
 

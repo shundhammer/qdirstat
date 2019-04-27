@@ -25,7 +25,9 @@ PkgInfo::PkgInfo( const QString & name,
              0 ), // mtime
     _baseName( name ),
     _version( version ),
-    _arch( arch )
+    _arch( arch ),
+    _multiVersion( false ),
+    _multiArch( false )
 {
     // logDebug() << "Creating " << this << endl;
 }
@@ -40,7 +42,9 @@ PkgInfo::PkgInfo( DirTree *       tree,
              0,   // mode
              0,   // size
              0 ), // mtime
-    _baseName( name )
+    _baseName( name ),
+    _multiVersion( false ),
+    _multiArch( false )
 {
     // logDebug() << "Creating " << this << endl;
 }
