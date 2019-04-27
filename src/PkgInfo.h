@@ -27,16 +27,38 @@ namespace QDirStat
     public:
 
         /**
-         * Constructor.
+         * Constructors
          **/
         PkgInfo( const QString & name,
                  const QString & version,
-                 const QString & arch    );
+                 const QString & arch );
+
+        PkgInfo( DirTree *       tree,
+                 DirInfo *       parent,
+                 const QString & name );
 
         /**
          * Destructor.
          **/
         virtual ~PkgInfo();
+
+        /**
+         * Return the package's base name, i.e. the short name without any
+         * version number or architecture information. This may be different
+         * from name() if this package is installed in multiple versions or for
+         * different architectures. Initially, this starts with a copy of
+         * name().
+         **/
+        const QString & baseName() const { return _baseName; }
+
+        /**
+         * Set the (display) name for this package.
+         *
+         * This is useful if this package is installed in multiple versions or
+         * for multiple architectures; in that case, it is advisable to use the
+         * base name plus either the version or the architecture or both.
+         **/
+        void setName( const QString & newName ) { _name = newName; }
 
         /**
          * Return the version of this package.
@@ -48,7 +70,13 @@ namespace QDirStat
          **/
         const QString & arch() const { return _arch; }
 
+        /**
+         * Set the parent DirTree for this pkg.
+         **/
+        void setTree( DirTree * tree ) { _tree = tree; }
+
     protected:
+        QString _baseName;
         QString _version;
         QString _arch;
 

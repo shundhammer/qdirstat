@@ -76,6 +76,7 @@ SOURCES   = main.cpp                    \
             PercentBar.cpp              \
             PkgInfo.cpp                 \
             PkgManager.cpp              \
+            PkgReader.cpp               \
             Process.cpp                 \
             Refresher.cpp               \
             SelectionModel.cpp          \
@@ -138,6 +139,7 @@ HEADERS   =                             \
             PercentBar.h                \
             PkgInfo.h                   \
             PkgManager.h                \
+            PkgReader.h                 \
             Process.h                   \
             Qt4Compat.h                 \
             Refresher.h                 \

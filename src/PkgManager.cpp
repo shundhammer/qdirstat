@@ -265,7 +265,7 @@ PkgInfoList DpkgPkgManager::parsePkgList( const QString & output )
                 QString arch    = fields.takeFirst();
                 QString version = fields.takeFirst();
 
-                PkgInfo * pkg = new PkgInfo( name, arch, version );
+                PkgInfo * pkg = new PkgInfo( name, version, arch );
                 CHECK_NEW( pkg );
 
                 pkgList << pkg;

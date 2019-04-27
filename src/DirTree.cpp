@@ -14,6 +14,7 @@
 #include "FileInfoSet.h"
 #include "Exception.h"
 #include "DirTreeCache.h"
+#include "PkgReader.h"
 #include "MountPoints.h"
 
 using namespace QDirStat;
@@ -373,6 +374,16 @@ void DirTree::readCache( const QString & cacheFileName )
     _isBusy = true;
     emit startingReading();
     addJob( new CacheReadJob( this, 0, cacheFileName ) );
+}
+
+
+void DirTree::readPkg()
+{
+    _isBusy = true;
+    emit startingReading();
+    
+    PkgReader reader( this );
+    reader.read();
 }
 
 

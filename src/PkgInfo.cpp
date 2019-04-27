@@ -22,10 +22,26 @@ PkgInfo::PkgInfo( const QString & name,
              0,   // mode
              0,   // size
              0 ), // mtime
+    _baseName( name ),
     _version( version ),
     _arch( arch )
 {
-    logDebug() << "Creating " << this << endl;
+    // logDebug() << "Creating " << this << endl;
+}
+
+
+PkgInfo::PkgInfo( DirTree *       tree,
+                  DirInfo *       parent,
+                  const QString & name ):
+    DirInfo( tree,
+             parent,
+             name,
+             0,   // mode
+             0,   // size
+             0 ), // mtime
+    _baseName( name )
+{
+    // logDebug() << "Creating " << this << endl;
 }
 
 

@@ -35,8 +35,6 @@
 #include "MimeCategorizer.h"
 #include "MimeCategoryConfigPage.h"
 #include "OutputWindow.h"
-#include "PkgInfo.h"
-#include "PkgManager.h"
 #include "Refresher.h"
 #include "SelectionModel.h"
 #include "Settings.h"
@@ -734,9 +732,7 @@ void MainWindow::readPkg()
 {
     logInfo() << endl;
 
-    QDirStat::PkgInfoList pkgList = QDirStat::PkgQuery::installedPkg();
-
-    qDeleteAll( pkgList );
+    _dirTreeModel->tree()->readPkg();
 }
 
 

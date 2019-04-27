@@ -32,7 +32,7 @@ DirReadJob::DirReadJob( DirTree * tree,
     _dir( dir ),
     _queue( 0 )
 {
-    _started	= false;
+    _started = false;
 
     if ( _dir )
 	_dir->readJobAdded();
