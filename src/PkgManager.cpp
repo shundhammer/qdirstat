@@ -235,7 +235,7 @@ PkgInfoList DpkgPkgManager::installedPkg()
     QString output = runCommand( "/usr/bin/dpkg-query",
                                  QStringList()
                                  << "--show"
-                                 << "--showformat=${Package} ${Architecture} ${Version}\n",
+                                 << "--showformat=${Package} | ${Version} | ${Architecture} | ${Status}\n",
                                  &exitCode );
 
     PkgInfoList pkgList;
@@ -255,20 +255,28 @@ PkgInfoList DpkgPkgManager::parsePkgList( const QString & output )
     {
         if ( ! line.isEmpty() )
         {
-            QStringList fields = line.split( " ", QString::KeepEmptyParts );
+            QStringList fields = line.split( " | ", QString::KeepEmptyParts );
 
-            if ( fields.size() != 3 )
+            if ( fields.size() != 4 )
                 logError() << "Invalid dpkg-query output: \"" << line << "\n" << endl;
             else
             {
                 QString name    = fields.takeFirst();
-                QString arch    = fields.takeFirst();
                 QString version = fields.takeFirst();
+                QString arch    = fields.takeFirst();
+                QString status  = fields.takeFirst();
 
-                PkgInfo * pkg = new PkgInfo( name, version, arch );
-                CHECK_NEW( pkg );
+                if ( status == "install ok installed" )
+                {
+                    PkgInfo * pkg = new PkgInfo( name, version, arch );
+                    CHECK_NEW( pkg );
 
-                pkgList << pkg;
+                    pkgList << pkg;
+                }
+                else
+                {
+                    logDebug() << "Ignoring " << line << endl;
+                }
             }
         }
     }
