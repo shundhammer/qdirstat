@@ -35,6 +35,7 @@
 #include "MimeCategorizer.h"
 #include "MimeCategoryConfigPage.h"
 #include "OutputWindow.h"
+#include "PkgFilter.h"
 #include "Refresher.h"
 #include "SelectionModel.h"
 #include "Settings.h"
@@ -602,29 +603,14 @@ void MainWindow::readingAborted()
 
 void MainWindow::openUrl( const QString & url )
 {
-    QString windowTitle = "QDirStat";
-
-    if ( SysUtil::runningAsRoot() )
-	windowTitle += tr( " [root]" );
-
     try
     {
 	_dirTreeModel->openUrl( url );
-
-	if ( _urlInWindowTitle )
-	{
-	    // The URL we got at the command line might be relative;
-	    // the DirTree converts this into an absolute URL.
-	    // Let's use that.
-
-	    windowTitle += " " + _dirTreeModel->tree()->url();
-	}
-
-	setWindowTitle( windowTitle );
+        updateWindowTitle( _dirTreeModel->tree()->url() );
     }
     catch ( const SysCallFailedException & ex )
     {
-	setWindowTitle( windowTitle );
+        updateWindowTitle( "" );
 	CAUGHT( ex );
 
 	QMessageBox errorPopup( QMessageBox::Warning,	// icon
@@ -658,7 +644,12 @@ void MainWindow::refreshAll()
     if ( ! url.isEmpty() )
     {
 	logDebug() << "Refreshing " << url << endl;
-	_dirTreeModel->openUrl( url );
+
+        if ( PkgFilter::isPkgUrl( url ) )
+            _dirTreeModel->tree()->readPkg( url );
+        else
+            _dirTreeModel->openUrl( url );
+
 	updateActions();
     }
     else
@@ -732,7 +723,22 @@ void MainWindow::readPkg( const QString & pkgUrl )
 {
     logInfo() << "URL: " << pkgUrl << endl;
 
+    updateWindowTitle( pkgUrl );
     _dirTreeModel->tree()->readPkg( pkgUrl );
+}
+
+
+void MainWindow::updateWindowTitle( const QString & url )
+{
+    QString windowTitle = "QDirStat";
+
+    if ( SysUtil::runningAsRoot() )
+	windowTitle += tr( " [root]" );
+
+    if ( _urlInWindowTitle )
+        windowTitle += " " + url;
+
+    setWindowTitle( windowTitle );
 }
 
 

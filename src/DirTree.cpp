@@ -53,6 +53,9 @@ void DirTree::setRoot( DirInfo *newRoot )
     }
 
     _root = newRoot;
+
+    FileInfo * realRoot = firstToplevel();
+    _url = realRoot ? realRoot->url() : "";
 }
 
 
@@ -70,9 +73,7 @@ bool DirTree::isTopLevel( FileInfo *item ) const
 
 QString DirTree::url() const
 {
-    FileInfo * realRoot = firstToplevel();
-
-    return realRoot ? realRoot->url() : "";
+    return _url;
 }
 
 
@@ -94,10 +95,10 @@ void DirTree::clear()
 void DirTree::startReading( const QString & rawUrl )
 {
     QFileInfo fileInfo( rawUrl );
-    QString url = fileInfo.absoluteFilePath();
+    _url = fileInfo.absoluteFilePath();
     // logDebug() << "rawUrl: \"" << rawUrl << "\"" << endl;
-    logInfo() << "   url: \"" << url	 << "\"" << endl;
-    const MountPoint * mountPoint = MountPoints::findNearestMountPoint( url );
+    logInfo() << "   url: \"" << _url	 << "\"" << endl;
+    const MountPoint * mountPoint = MountPoints::findNearestMountPoint( _url );
     _device = mountPoint ? mountPoint->device() : "";
     logInfo() << "device: " << _device << endl;
 
@@ -107,7 +108,7 @@ void DirTree::startReading( const QString & rawUrl )
     _isBusy = true;
     emit startingReading();
 
-    FileInfo * item = LocalDirReadJob::stat( url, this, _root );
+    FileInfo * item = LocalDirReadJob::stat( _url, this, _root );
     CHECK_PTR( item );
 
     if ( item )
@@ -128,7 +129,7 @@ void DirTree::startReading( const QString & rawUrl )
     }
     else	// stat() failed
     {
-	logWarning() << "stat(" << url << ") failed" << endl;
+	logWarning() << "stat(" << _url << ") failed" << endl;
 	_isBusy = false;
 	emit finished();
 	emit finalizeLocal( 0 );
@@ -398,6 +399,7 @@ void DirTree::readCache( const QString & cacheFileName )
 void DirTree::readPkg( const QString & pkgUrl )
 {
     _isBusy = true;
+    _url    = pkgUrl;
     emit startingReading();
 
     PkgReader reader( this );

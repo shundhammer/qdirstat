@@ -366,6 +366,7 @@ namespace QDirStat
 	bool		_crossFileSystems;
 	bool		_isBusy;
         QString         _device;
+        QString         _url;
 
     };	// class DirTree
 

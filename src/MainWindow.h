@@ -105,6 +105,12 @@ public slots:
     void askWriteCache();
 
     /**
+     * Update the window title: Show "[root]" if running as root and add the
+     * URL if that is configured.
+     **/
+    void updateWindowTitle( const QString & url );
+
+    /**
      * Expand the directory tree's branches to depth 'level'.
      **/
     void expandTreeToLevel( int level );
