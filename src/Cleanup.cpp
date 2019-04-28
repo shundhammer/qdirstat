@@ -148,7 +148,7 @@ void Cleanup::executeRecursive( FileInfo *item, OutputWindow * outputWindow )
 
 const QString Cleanup::itemDir( const FileInfo *item ) const
 {
-    QString dir = item->url();
+    QString dir = item->path();
 
     if ( ! item->isDir() && ! item->isDotEntry() )
     {
@@ -183,11 +183,11 @@ QString Cleanup::expandVariables( const FileInfo * item,
     QString dirName = "";
 
     if ( item->isDir() )
-	dirName = item->url();
+	dirName = item->path();
     else if ( item->parent() )
-	dirName = item->parent()->url();
+	dirName = item->parent()->path();
 
-    expanded.replace( "%p", quoted( escaped( item->url()  ) ) );
+    expanded.replace( "%p", quoted( escaped( item->path() ) ) );
     expanded.replace( "%n", quoted( escaped( item->name() ) ) );
 
     if ( ! dirName.isEmpty() )

@@ -269,8 +269,8 @@ void MainWindow::connectActions()
 
     // "Edit" menu
 
-    CONNECT_ACTION( _ui->actionCopyUrlToClipboard, this, copyCurrentUrlToClipboard() );
-    CONNECT_ACTION( _ui->actionMoveToTrash,	   this, moveToTrash() );
+    CONNECT_ACTION( _ui->actionCopyPathToClipboard, this, copyCurrentPathToClipboard() );
+    CONNECT_ACTION( _ui->actionMoveToTrash,         this, moveToTrash() );
 
 
     // "Go To" menu
@@ -337,7 +337,7 @@ void MainWindow::updateActions()
     bool haveCurrentItem = ( _selectionModel->currentItem() != 0 );
     bool treeNotEmpty	 = ( _dirTreeModel->tree()->firstToplevel() != 0 );
 
-    _ui->actionCopyUrlToClipboard->setEnabled( haveCurrentItem );
+    _ui->actionCopyPathToClipboard->setEnabled( haveCurrentItem );
     _ui->actionGoUp->setEnabled( haveCurrentItem );
     _ui->actionGoToToplevel->setEnabled( treeNotEmpty );
 
@@ -828,16 +828,16 @@ void MainWindow::notImplemented()
 }
 
 
-void MainWindow::copyCurrentUrlToClipboard()
+void MainWindow::copyCurrentPathToClipboard()
 {
     FileInfo * currentItem = _selectionModel->currentItem();
 
     if ( currentItem )
     {
 	QClipboard * clipboard = QApplication::clipboard();
-	QString url = currentItem->url();
-	clipboard->setText( url );
-	showProgress( tr( "Copied to system clipboard: %1" ).arg( url ) );
+	QString path = currentItem->path();
+	clipboard->setText( path );
+	showProgress( tr( "Copied to system clipboard: %1" ).arg( path ) );
     }
     else
     {
@@ -897,12 +897,12 @@ void MainWindow::moveToTrash()
 
     foreach ( FileInfo * item, selectedItems )
     {
-	bool success = Trash::trash( item->url() );
+	bool success = Trash::trash( item->path() );
 
 	if ( success )
-	    outputWindow->addStdout( tr( "Moved to trash: %1" ).arg( item->url() ) );
+	    outputWindow->addStdout( tr( "Moved to trash: %1" ).arg( item->path() ) );
 	else
-	    outputWindow->addStderr( tr( "Move to trash failed for %1" ).arg( item->url() ) );
+	    outputWindow->addStderr( tr( "Move to trash failed for %1" ).arg( item->path() ) );
     }
 
     outputWindow->noMoreProcesses();

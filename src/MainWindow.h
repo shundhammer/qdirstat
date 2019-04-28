@@ -130,10 +130,10 @@ public slots:
     void updateFileDetailsView();
 
     /**
-     * Copy the URL of the current item (if there is one) to the system
+     * Copy the path of the current item (if there is one) to the system
      * clipboard for use in other applications.
      **/
-    void copyCurrentUrlToClipboard();
+    void copyCurrentPathToClipboard();
 
     /**
      * Move the selected items to the trash bin.

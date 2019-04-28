@@ -149,6 +149,20 @@ namespace QDirStat
 	 **/
 	virtual QString url() const;
 
+        /**
+         * Returns the full path of this object. Unlike url(), this never has a
+         * protocol prefix or a part that identifies the package this belongs
+         * to. This is the path that can be used to find this object in the
+         * filesystem.
+         *
+         * url()  might return  "Pkg:/chromium-browser/usr/lib/chromium/foo.z"
+         * path() returns just  "/usr/lib/chromium/foo.z"
+         *
+         * Like url(), this is somewhat expensive since it recurses up the
+         * tree, but it stops when a PkgInfo node is found there.
+         **/
+        virtual QString path() const;
+
 	/**
 	 * Very much like FileInfo::url(), but with "/<Files>" appended if this
 	 * is a dot entry. Useful for debugging.

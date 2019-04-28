@@ -163,7 +163,7 @@
     <property name="title">
      <string>&amp;Edit</string>
     </property>
-    <addaction name="actionCopyUrlToClipboard"/>
+    <addaction name="actionCopyPathToClipboard"/>
     <addaction name="actionMoveToTrash"/>
    </widget>
    <widget class="QMenu" name="menuTreemap">
@@ -444,13 +444,13 @@
     <string>F5</string>
    </property>
   </action>
-  <action name="actionCopyUrlToClipboard">
+  <action name="actionCopyPathToClipboard">
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/icons/edit-copy.png</normaloff>:/icons/edit-copy.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Copy URL</string>
+    <string>&amp;Copy Path</string>
    </property>
    <property name="toolTip">
     <string>Copy the full path of the current item to the system clipboard for use in other applications.</string>

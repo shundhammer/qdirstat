@@ -209,6 +209,28 @@ QString FileInfo::url() const
 }
 
 
+QString FileInfo::path() const
+{
+    if ( isPkgInfo() )
+        return "";
+
+    if ( _parent )
+    {
+	QString parentPath = _parent->isPkgInfo() ? "/" : _parent->path();
+
+	if ( isDotEntry() )	// don't append "/." for dot entries
+	    return parentPath;
+
+	if ( ! parentPath.endsWith( "/" ) && ! _name.startsWith( "/" ) )
+	    parentPath += "/";
+
+	return parentPath + _name;
+    }
+    else
+	return _name;
+}
+
+
 QString FileInfo::debugUrl() const
 {
     if ( _tree && this == _tree->root() )
