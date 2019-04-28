@@ -614,6 +614,11 @@ namespace QDirStat
          **/
         bool isCached() const;
 
+        /**
+         * Return the nearest PkgInfo parent or 0 if there is none.
+         **/
+        PkgInfo * pkgInfoParent() const;
+
 
 	//
 	// File type / mode convenience methods.

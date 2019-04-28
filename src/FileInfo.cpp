@@ -473,6 +473,22 @@ PkgInfo * FileInfo::toPkgInfo()
 }
 
 
+PkgInfo * FileInfo::pkgInfoParent() const
+{
+    FileInfo * pkg = _parent;
+
+    while ( pkg )
+    {
+        if ( pkg->isPkgInfo() )
+            return pkg->toPkgInfo();
+
+        pkg = pkg->parent();
+    }
+
+    return 0;
+}
+
+
 QString QDirStat::formatTime( time_t rawTime )
 {
     if ( rawTime == (time_t) 0 )

@@ -122,7 +122,28 @@ void FileDetailsView::showDetails( FileInfo * file )
 
 	setCurrentPage( _ui->fileDetailsPage );
 	showFileInfo( file );
-	showFilePkgInfo( file );
+
+        PkgInfo * pkg = file->pkgInfoParent();
+
+        if ( pkg )
+        {
+            // The simple case: We are in package view mode, and this file has
+            // a PkgInfo ancestor. So we know that this belongs to a package,
+            // also to which one, and that this is inherently a system file
+            // since it belongs to a package.
+
+            setSystemFileWarningVisibility( true );
+            _ui->filePackageLabel->setEnabled( true );
+            _ui->filePackageLabel->setText( pkg->name() );
+        }
+        else
+        {
+            // The not-so-simple case: Use heuristics to check if this file is
+            // in a system directory and then query the package manager after a
+            // timeout what (if any) package this file belongs to.
+
+            showFilePkgInfo( file );
+        }
     }
 }
 
