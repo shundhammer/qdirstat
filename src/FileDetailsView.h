@@ -18,6 +18,7 @@ namespace QDirStat
 {
     class MimeCategorizer;
     class AdaptiveTimer;
+    class PkgInfo;
 
     /**
      * Details view for the current selection (file, directory, multiple
@@ -90,6 +91,11 @@ namespace QDirStat
         void showDetails( DirInfo * dirInfo );
 
         /**
+         * Show details about a package.
+         **/
+        void showDetails( PkgInfo * pkgInfo );
+
+        /**
          * Show a summary of the current selection.
          **/
         void showSelectionSummary( const FileInfoSet & selectedItems );
@@ -105,7 +111,7 @@ namespace QDirStat
          * Update package information via the AdaptiveTimer.
          **/
         void updatePkgInfo( const QVariant & path );
-        
+
     protected:
 
         /**

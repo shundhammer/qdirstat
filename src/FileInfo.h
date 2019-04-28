@@ -32,6 +32,7 @@ namespace QDirStat
 
     // Forward declarations
     class DirInfo;
+    class PkgInfo;
     class DirTree;
 
 
@@ -588,6 +589,12 @@ namespace QDirStat
 	 * is not a DirInfo.
 	 **/
 	DirInfo * toDirInfo();
+
+	/**
+	 * Try to convert this to a PkgInfo pointer. This returns null if this
+	 * is not a DirInfo.
+	 **/
+        PkgInfo * toPkgInfo();
 
 	/**
 	 * Returns true if this is a sparse file, i.e. if this file has

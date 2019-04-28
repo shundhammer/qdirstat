@@ -108,7 +108,11 @@ void FileDetailsView::showDetails( FileInfo * file )
 	return;
     }
 
-    if ( file->isDirInfo() )
+    if ( file->isPkgInfo() )
+    {
+        showDetails( file->toPkgInfo() );
+    }
+    else if ( file->isDirInfo() )
     {
 	showDetails( file->toDirInfo() );
     }
@@ -271,9 +275,9 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
          ( dir->readState() == DirFinished ||
            dir->readState() == DirCached     ) )
     {
-        setLabel( _ui->dirTotalSizeLabel, dir->totalSize() );
-        setLabel( _ui->dirItemCountLabel, dir->totalItems() );
-        setLabel( _ui->dirFileCountLabel, dir->totalFiles() );
+        setLabel( _ui->dirTotalSizeLabel,   dir->totalSize()    );
+        setLabel( _ui->dirItemCountLabel,   dir->totalItems()   );
+        setLabel( _ui->dirFileCountLabel,   dir->totalFiles()   );
         setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs() );
     }
     else
@@ -342,6 +346,53 @@ void FileDetailsView::setDirBlockVisibility( bool visible )
     // A dot entry cannot have directory children
     _ui->dirSubDirCountCaption->setVisible( visible );
     _ui->dirSubDirCountLabel->setVisible( visible );
+}
+
+
+void FileDetailsView::showDetails( PkgInfo * pkg )
+{
+    logDebug() << "Showing pkg details about " << pkg << endl;
+
+    if ( ! pkg )
+    {
+	clear();
+	return;
+    }
+
+    setCurrentPage( _ui->pkgDetailsPage );
+
+    setLabelLimited( _ui->pkgNameLabel, pkg->name() );
+    _ui->pkgVersionLabel->setText( pkg->version() );
+    _ui->pkgArchLabel->setText( pkg->arch() );
+
+    if ( ! pkg->isBusy() && pkg->readState() == DirFinished )
+    {
+        setLabel( _ui->pkgTotalSizeLabel,   pkg->totalSize()    );
+        setLabel( _ui->pkgItemCountLabel,   pkg->totalItems()   );
+        setLabel( _ui->pkgFileCountLabel,   pkg->totalFiles()   );
+        setLabel( _ui->pkgSubDirCountLabel, pkg->totalSubDirs() );
+    }
+    else
+    {
+        QString msg;
+
+        if ( pkg->isBusy() )
+        {
+            msg = tr( "[Reading]" );
+        }
+        else
+        {
+            if ( pkg->readState() == DirError )
+                msg = tr( "[Read Error]" );
+        }
+
+        _ui->pkgTotalSizeLabel->setText( msg );
+        _ui->pkgItemCountLabel->clear();
+        _ui->pkgFileCountLabel->clear();
+        _ui->pkgSubDirCountLabel->clear();
+    }
+
+    _ui->pkgLatestMTimeLabel->setText( formatTime( pkg->latestMtime() ) );
 }
 
 

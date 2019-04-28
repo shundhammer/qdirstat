@@ -18,6 +18,7 @@
 #include "FileInfo.h"
 #include "DirInfo.h"
 #include "DirTree.h"
+#include "PkgInfo.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -461,6 +462,14 @@ DirInfo * FileInfo::toDirInfo()
     DirInfo * dirInfo = dynamic_cast<DirInfo *>( this );
 
     return dirInfo;
+}
+
+
+PkgInfo * FileInfo::toPkgInfo()
+{
+    PkgInfo * pkgInfo = dynamic_cast<PkgInfo *>( this );
+
+    return pkgInfo;
 }
 
 
