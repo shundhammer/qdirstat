@@ -351,7 +351,7 @@ void FileDetailsView::setDirBlockVisibility( bool visible )
 
 void FileDetailsView::showDetails( PkgInfo * pkg )
 {
-    logDebug() << "Showing pkg details about " << pkg << endl;
+    // logDebug() << "Showing pkg details about " << pkg << endl;
 
     if ( ! pkg )
     {
