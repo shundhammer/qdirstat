@@ -362,6 +362,24 @@ void DirTree::sendReadJobFinished( DirInfo * dir )
 }
 
 
+FileInfo * DirTree::locate( QString url, bool findDotEntries )
+{
+    if ( ! _root )
+        return 0;
+
+    FileInfo * topItem = _root->firstChild();
+
+    if ( topItem              &&
+         topItem->isPkgInfo() &&
+         topItem->url() == url  )
+    {
+        return topItem;
+    }
+
+    return _root->locate( url, findDotEntries );
+}
+
+
 bool DirTree::writeCache( const QString & cacheFileName )
 {
     CacheWriter writer( cacheFileName.toUtf8(), this );
@@ -381,7 +399,7 @@ void DirTree::readPkg( const QString & pkgUrl )
 {
     _isBusy = true;
     emit startingReading();
-    
+
     PkgReader reader( this );
     reader.read( PkgFilter( pkgUrl, PkgFilter::Auto ) );
 }

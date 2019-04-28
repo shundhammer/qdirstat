@@ -157,12 +157,8 @@ namespace QDirStat
 	 *
 	 * 'findDotEntries' specifies if locating "dot entries" (".../<Files>")
 	 * is desired.
-	 *
-	 * This is just a convenience method that maps to
-	 *    DirTree::root()->locate( url, findDotEntries )
 	 **/
-	FileInfo * locate( QString url, bool findDotEntries = false )
-	    { return _root ? _root->locate( url, findDotEntries ) : 0; }
+	FileInfo * locate( QString url, bool findDotEntries = false );
 
 	/**
 	 * Add a new directory read job to the queue.
