@@ -151,6 +151,18 @@ void DirTreeModel::openUrl( const QString &url )
 }
 
 
+void DirTreeModel::readPkg( const QString &url )
+{
+    CHECK_PTR( _tree );
+
+    if ( _tree->root() &&  _tree->root()->hasChildren() )
+	clear();
+
+    _updateTimer.start();
+    _tree->readPkg( url );
+}
+
+
 void DirTreeModel::loadIcons()
 {
     if ( _treeIconDir.isEmpty() )

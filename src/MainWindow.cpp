@@ -646,7 +646,7 @@ void MainWindow::refreshAll()
 	logDebug() << "Refreshing " << url << endl;
 
         if ( PkgFilter::isPkgUrl( url ) )
-            _dirTreeModel->tree()->readPkg( url );
+            _dirTreeModel->readPkg( url );
         else
             _dirTreeModel->openUrl( url );
 
@@ -724,7 +724,7 @@ void MainWindow::readPkg( const QString & pkgUrl )
     logInfo() << "URL: " << pkgUrl << endl;
 
     updateWindowTitle( pkgUrl );
-    _dirTreeModel->tree()->readPkg( pkgUrl );
+    _dirTreeModel->readPkg( pkgUrl );
 }
 
 

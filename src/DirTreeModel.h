@@ -125,6 +125,11 @@ namespace QDirStat
 	 **/
 	void openUrl( const QString &url );
 
+        /**
+         * Open a pkg URl.
+         **/
+        void readPkg( const QString &pkgUrl );
+
 	/**
 	 * Clear this view's contents.
 	 **/

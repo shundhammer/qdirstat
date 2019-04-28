@@ -35,9 +35,6 @@ void PkgReader::read( const PkgFilter & filter )
 {
     logInfo() << endl;
 
-    CHECK_PTR( _tree );
-    _tree->clear();
-
     _pkgList = PkgQuery::installedPkg();
     filterPkgList( filter );
     handleMultiPkg();

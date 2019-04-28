@@ -398,6 +398,7 @@ void DirTree::readCache( const QString & cacheFileName )
 
 void DirTree::readPkg( const QString & pkgUrl )
 {
+    clear();
     _isBusy = true;
     _url    = pkgUrl;
     emit startingReading();
