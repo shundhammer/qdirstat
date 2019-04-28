@@ -12,6 +12,7 @@
 #include <QApplication>
 #include "MainWindow.h"
 #include "DirTreeModel.h"
+#include "PkgFilter.h"
 #include "Settings.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -29,8 +30,8 @@ void usage( const QStringList & argList )
 	 << "Usage: \n"
 	 << "\n"
 	 << "  " << progName << " [--slow-update|-s] [<directory-name>]\n"
+	 << "  " << progName << " pkg:/pkgpattern\n"
 	 << "  " << progName << " --cache|-c <cache-file-name>\n"
-	 << "  " << progName << " --pkg|-p\n"
 	 << "  " << progName << " --help|-h\n"
 	 << std::endl;
 
@@ -98,8 +99,6 @@ int main( int argc, char *argv[] )
     if ( commandLineSwitch( "--slow-update", "-s", argList ) )
 	mainWin->dirTreeModel()->setSlowUpdate();
 
-    if ( commandLineSwitch( "--pkg", "-p", argList ) )
-        mainWin->readPkg();
     else if ( argList.isEmpty() )
 	mainWin->askOpenUrl();
     else
@@ -123,7 +122,10 @@ int main( int argc, char *argv[] )
 	    usage( argList );
 	else if ( ! arg.isEmpty() )
 	{
-	    mainWin->openUrl( arg );
+            if ( QDirStat::PkgFilter::isPkgUrl( arg ) )
+                mainWin->readPkg( arg );
+            else
+                mainWin->openUrl( arg );
 	}
     }
 

@@ -377,13 +377,13 @@ void DirTree::readCache( const QString & cacheFileName )
 }
 
 
-void DirTree::readPkg()
+void DirTree::readPkg( const QString & pkgUrl )
 {
     _isBusy = true;
     emit startingReading();
     
     PkgReader reader( this );
-    reader.read();
+    reader.read( PkgFilter( pkgUrl, PkgFilter::Auto ) );
 }
 
 

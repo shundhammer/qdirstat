@@ -728,11 +728,11 @@ void MainWindow::askWriteCache()
 }
 
 
-void MainWindow::readPkg()
+void MainWindow::readPkg( const QString & pkgUrl )
 {
-    logInfo() << endl;
+    logInfo() << "URL: " << pkgUrl << endl;
 
-    _dirTreeModel->tree()->readPkg();
+    _dirTreeModel->tree()->readPkg( pkgUrl );
 }
 
 

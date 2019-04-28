@@ -75,7 +75,8 @@ SOURCES	  = main.cpp			\
 	    MountPoints.cpp		\
 	    OutputWindow.cpp		\
 	    PacManPkgManager.cpp	\
-	    PercentBar.cpp		\
+            PercentBar.cpp		\
+            PkgFilter.cpp               \
 	    PkgInfo.cpp			\
 	    PkgManager.cpp		\
 	    PkgQuery.cpp		\
@@ -143,6 +144,7 @@ HEADERS	  =				\
 	    OutputWindow.h		\
 	    PacManPkgManager.h		\
 	    PercentBar.h		\
+            PkgFilter.h                 \
 	    PkgInfo.h			\
 	    PkgManager.h		\
 	    PkgQuery.h			\

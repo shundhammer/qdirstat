@@ -13,6 +13,7 @@
 
 #include "DirReadJob.h"
 #include "PkgInfo.h"
+#include "PkgFilter.h"
 
 
 namespace QDirStat
@@ -46,15 +47,23 @@ namespace QDirStat
 	~PkgReader();
 
 	/**
-	 * Read all installed packages from the system's package manager(s) and
-	 * create a PkgReadJob for each one to read its file list. Like all
-	 * read jobs, this is done with a zero duration timer in the Qt event
-	 * loop, so whenever there is no user or X11 event to process, it will
-	 * pick one read job and execute it.
+	 * Read installed packages from the system's package manager(s), select
+	 * those that match the specified filter and create a PkgReadJob for
+	 * each one to read its file list.
+         *
+         * Like all read jobs, this is done with a zero duration timer in the
+	 * Qt event loop, so whenever there is no user or X11 event to process,
+	 * it will pick one read job and execute it.
 	 **/
-	void read();
+	void read( const PkgFilter & filter = PkgFilter( "", PkgFilter::SelectAll ) );
 
     protected:
+
+        /**
+         * Filter the package list: Remove those package that don't match the
+         * filter.
+         **/
+        void filterPkgList( const PkgFilter & filter );
 
 	/**
 	 * Handle packages that are installed in multiple versions or for

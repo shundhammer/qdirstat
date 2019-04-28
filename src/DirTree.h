@@ -260,10 +260,10 @@ namespace QDirStat
 	void readCache( const QString & cacheFileName );
 
         /**
-         * Read all installed packages and their file lists from the system's
-         * package manager(s).
+         * Read installed packages that match 'pkgUrl' and their file lists
+         * from the system's package manager(s).
          **/
-        void readPkg();
+        void readPkg( const QString & pkgUrl );
 
 
     signals:

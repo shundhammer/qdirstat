@@ -81,10 +81,10 @@ public slots:
     void stopReading();
 
     /**
-     * Clear the current tree and treplace it with the list of installed
-     * packages from the system's package manager.
+     * Clear the current tree and replace it with the list of installed
+     * packages from the system's package manager that match 'pkgUrl'.
      **/
-    void readPkg();
+    void readPkg( const QString & pkgUrl );
 
     /**
      * Clear the current tree and replace it with the content of the specified

@@ -33,7 +33,7 @@ PkgReader::~PkgReader()
 }
 
 
-void PkgReader::read()
+void PkgReader::read( const PkgFilter & filter )
 {
     logInfo() << endl;
 
@@ -41,6 +41,7 @@ void PkgReader::read()
     _tree->clear();
 
     _pkgList = PkgQuery::installedPkg();
+    filterPkgList( filter );
     handleMultiPkg();
     addPkgToTree();
     createReadJobs();
@@ -50,6 +51,26 @@ void PkgReader::read()
 
     _pkgList.clear();
     _multiPkg.clear();
+}
+
+
+void PkgReader::filterPkgList( const PkgFilter & filter )
+{
+    if ( filter.filterMode() == PkgFilter::SelectAll )
+        return;
+
+    PkgInfoList matches;
+
+    foreach ( PkgInfo * pkg, _pkgList )
+    {
+        if ( filter.matches( pkg->baseName() ) )
+        {
+            // logDebug() << "Selecting pkg " << pkg << endl;
+            matches << pkg;
+        }
+    }
+
+    _pkgList = matches;
 }
 
 
