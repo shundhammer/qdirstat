@@ -33,6 +33,16 @@ void usage( const QStringList & argList )
 	 << "  " << progName << " pkg:/pkgpattern\n"
 	 << "  " << progName << " --cache|-c <cache-file-name>\n"
 	 << "  " << progName << " --help|-h\n"
+	 << "\n"
+	 << "\n"
+         << "Supported pkg patterns:\n"
+	 << "\n"
+         << "- Default: \"Starts with\" \"pkg:/mypkg\"\n"
+         << "- Wildcards with '*' and '?'\n"
+         << "- Full regexps with \".*\" and/or \"^\" and/or \"$\"\n"
+         << "- Exact match: \"pkg:/=mypkg\"\n"
+         << "- All packages: \"pkg:/\"\n"
+	 << "\n"
 	 << std::endl;
 
     logError() << "FATAL: Bad command line args: " << argList.join( " " ) << endl;
