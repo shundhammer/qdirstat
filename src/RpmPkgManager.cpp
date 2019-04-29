@@ -50,7 +50,7 @@ QString RpmPkgManager::owningPkg( const QString & path )
 {
     int exitCode = -1;
     QString output = runCommand( _rpmCommand,
-				 QStringList() << "-qf" << "--queryformat" << "%{NAME}" << path,
+				 QStringList() << "-qf" << "--queryformat" << "%{name}" << path,
 				 &exitCode );
 
     if ( exitCode != 0 || output.contains( "not owned by any package" ) )
@@ -59,4 +59,93 @@ QString RpmPkgManager::owningPkg( const QString & path )
     QString pkg = output;
 
     return pkg;
+}
+
+
+PkgInfoList RpmPkgManager::installedPkg()
+{
+    int exitCode = -1;
+    QString output = runCommand( _rpmCommand,
+                                 QStringList()
+                                 << "-qa"
+                                 << "--queryformat"
+                                 << "%{name} | %{version}-%{release} | %{arch}\n",
+                                 &exitCode );
+
+    PkgInfoList pkgList;
+
+    if ( exitCode == 0 )
+        pkgList = parsePkgList( output );
+
+    return pkgList;
+}
+
+
+PkgInfoList RpmPkgManager::parsePkgList( const QString & output )
+{
+    PkgInfoList pkgList;
+
+    foreach ( const QString & line, output.split( "\n" ) )
+    {
+        if ( ! line.isEmpty() )
+        {
+            QStringList fields = line.split( " | ", QString::KeepEmptyParts );
+
+            if ( fields.size() != 3 )
+                logError() << "Invalid rpm -qa output: " << line << "\n" << endl;
+            else
+            {
+                QString name    = fields.takeFirst();
+                QString version = fields.takeFirst(); // includes release
+                QString arch    = fields.takeFirst();
+
+                if ( arch == "(none)" )
+                    arch = "";
+
+                PkgInfo * pkg = new PkgInfo( name, version, arch );
+                CHECK_NEW( pkg );
+
+                pkgList << pkg;
+            }
+        }
+    }
+
+    return pkgList;
+}
+
+
+QStringList RpmPkgManager::fileList( PkgInfo * pkg )
+{
+    QStringList fileList;
+
+    int exitCode = -1;
+    QString output = runCommand( _rpmCommand,
+                                 QStringList() << "-ql" << queryName( pkg ),
+                                 &exitCode,
+                                 false,         // logCommand
+                                 false );       // logOutput
+
+    if ( exitCode == 0 )
+    {
+        fileList = output.split( "\n" );
+        fileList.removeAll( "(contains no files)" );
+    }
+
+    return fileList;
+}
+
+
+QString RpmPkgManager::queryName( PkgInfo * pkg )
+{
+    CHECK_PTR( pkg );
+
+    QString name = pkg->baseName();
+
+    if ( ! pkg->version().isEmpty() )
+        name += "-" + pkg->version();
+
+    if ( ! pkg->arch().isEmpty() )
+        name += "." + pkg->arch();
+
+    return name;
 }

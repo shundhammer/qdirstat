@@ -68,8 +68,40 @@ namespace QDirStat
 	 **/
 	virtual QString owningPkg( const QString & path ) Q_DECL_OVERRIDE;
 
+        /**
+         * Return the list of installed packages.
+         *
+         * Ownership of the list elements is transferred to the caller.
+         *
+	 * Implemented from PkgManager.
+         **/
+        virtual PkgInfoList installedPkg();
+
+        /**
+         * Return the list of files and directories owned by a package.
+         *
+	 * Implemented from PkgManager.
+         **/
+        virtual QStringList fileList( PkgInfo * pkg );
+
 
     protected:
+
+        /**
+         * Parse a package list as output by "dpkg-query --show --showformat".
+         **/
+        PkgInfoList parsePkgList( const QString & output );
+
+        /**
+         * Return a name suitable for a detailed queries for 'pkg'.
+         *
+         * This might include the architecture and the version if this is a
+         * multi-arch or multi-version package.
+         **/
+        QString queryName( PkgInfo * pkg );
+
+
+        // Data members
 
 	QString _rpmCommand;
 
