@@ -53,6 +53,9 @@ namespace QDirStat
 	 * Log the command that is executed if 'logCommand' is 'true',
 	 * log the command's output if 'logOutput' is 'true'.
 	 *
+	 * If the command exits with a non-zero exit code, both the command and
+	 * the output are logged anyway unless 'ignoreErrCode' is 'true'.
+	 *
 	 * NOTICE 1: This uses a very basic command line parser; it simply
 	 * splits the command up whereever whitespace might occur. If any of
 	 * the arguments (no matter how sophisticated they might be quoted)
@@ -66,9 +69,10 @@ namespace QDirStat
 	 * the command into "/bin/sh -c".
 	 **/
 	QString runCommand( const QString & commandLine,
-			    int *	    exitCode_ret = 0,
-			    bool	    logCommand	 = LOG_COMMANDS,
-			    bool	    logOutput	 = LOG_OUTPUT	);
+			    int *	    exitCode_ret  = 0,
+			    bool	    logCommand	  = LOG_COMMANDS,
+			    bool	    logOutput	  = LOG_OUTPUT,
+			    bool	    ignoreErrCode = false );
 
 	/**
 	 * Run a command with arguments 'args' and return its output. If
@@ -81,6 +85,9 @@ namespace QDirStat
 	 * Log the command that is executed if 'logCommand' is 'true',
 	 * log the command's output if 'logOutput' is 'true'.
 	 *
+	 * If the command exits with a non-zero exit code, both the command and
+	 * the output are logged anyway unless 'ignoreErrCode' is 'true'.
+	 *
 	 * NOTICE: This does not start a shell with that command, it runs the
 	 * command directly, so only binaries can be executed, no shell scripts
 	 * or scripts of other interpreted languages. If that is desired, use
@@ -89,42 +96,43 @@ namespace QDirStat
 	 **/
 	QString runCommand( const QString &	command,
 			    const QStringList & args,
-			    int *		exitCode_ret = 0,
-			    bool		logCommand   = LOG_COMMANDS,
-			    bool		logOutput    = LOG_OUTPUT   );
+			    int *		exitCode_ret  = 0,
+			    bool		logCommand    = LOG_COMMANDS,
+			    bool		logOutput     = LOG_OUTPUT,
+			    bool		ignoreErrCode = false );
 
 	/**
 	 * Return 'true' if the specified command is available and executable.
 	 **/
 	bool haveCommand( const QString & command );
 
-        /**
-         * Open a URL in the desktop's default browser (using the
-         * /usr/bin/xdg-open command).
-         **/
-        void openInBrowser( const QString & url );
+	/**
+	 * Open a URL in the desktop's default browser (using the
+	 * /usr/bin/xdg-open command).
+	 **/
+	void openInBrowser( const QString & url );
 
-        /**
-         * Check if this program runs with root privileges, i.e. with effective
-         * user ID 0.
-         **/
-        bool runningAsRoot();
+	/**
+	 * Check if this program runs with root privileges, i.e. with effective
+	 * user ID 0.
+	 **/
+	bool runningAsRoot();
 
-        /**
-         * Check if this program runs with 'sudo'.
-         **/
-        bool runningWithSudo();
+	/**
+	 * Check if this program runs with 'sudo'.
+	 **/
+	bool runningWithSudo();
 
-        /**
-         * Check if this program runs as the real root user, with root
-         * permissions, but not with 'sudo'.
-         **/
-        bool runningAsTrueRoot();
+	/**
+	 * Check if this program runs as the real root user, with root
+	 * permissions, but not with 'sudo'.
+	 **/
+	bool runningAsTrueRoot();
 
-        /**
-         * Return the home directory of the user with the specified user ID.
-         **/
-        QString homeDir( uid_t uid );
+	/**
+	 * Return the home directory of the user with the specified user ID.
+	 **/
+	QString homeDir( uid_t uid );
 
     }	// namespace SysUtil
 }	// namespace QDirStat

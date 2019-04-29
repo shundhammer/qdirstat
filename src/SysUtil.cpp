@@ -8,7 +8,7 @@
 
 
 #include <unistd.h>	// access(), getuid(), geteduid()
-#include <pwd.h>        // getpwuid()
+#include <pwd.h>	// getpwuid()
 
 #include "SysUtil.h"
 #include "Process.h"
@@ -26,7 +26,8 @@ bool SysUtil::tryRunCommand( const QString & commandLine,
 			     bool	     logOutput	)
 {
     int exitCode = -1;
-    QString output = runCommand( commandLine, &exitCode, logCommand, logOutput );
+    QString output = runCommand( commandLine, &exitCode, logCommand, logOutput,
+				 true ); // ignoreErrCode
 
     if ( exitCode != 0 )
     {
@@ -44,7 +45,8 @@ bool SysUtil::tryRunCommand( const QString & commandLine,
 QString SysUtil::runCommand( const QString & commandLine,
 			     int *	     exitCode_ret,
 			     bool	     logCommand,
-			     bool	     logOutput	)
+			     bool	     logOutput,
+			     bool	     ignoreErrCode )
 {
     if ( exitCode_ret )
 	*exitCode_ret = -1;
@@ -59,7 +61,7 @@ QString SysUtil::runCommand( const QString & commandLine,
 
     QString command = args.takeFirst();
 
-    return runCommand( command, args, exitCode_ret, logCommand, logOutput );
+    return runCommand( command, args, exitCode_ret, logCommand, logOutput, ignoreErrCode );
 }
 
 
@@ -67,7 +69,8 @@ QString SysUtil::runCommand( const QString &	 command,
 			     const QStringList & args,
 			     int *		 exitCode_ret,
 			     bool		 logCommand,
-			     bool		 logOutput  )
+			     bool		 logOutput,
+			     bool		 ignoreErrCode )
 {
     if ( exitCode_ret )
 	*exitCode_ret = -1;
@@ -100,6 +103,14 @@ QString SysUtil::runCommand( const QString &	 command,
 	{
 	    if ( exitCode_ret )
 		*exitCode_ret = process.exitCode();
+
+	    if ( ! ignoreErrCode && process.exitCode() )
+	    {
+		logError() << "Command exited with exit code "
+			   << process.exitCode() << ": "
+			   << command << "\" args: " << args
+			   << endl;
+	    }
 	}
 	else
 	{
@@ -113,7 +124,7 @@ QString SysUtil::runCommand( const QString &	 command,
 	output = "ERROR: Timeout or crash\n\n" + output;
     }
 
-    if ( logOutput )
+    if ( logOutput || ( process.exitCode() != 0 && ! ignoreErrCode ) )
 	logDebug() << "Output: \n" << output << endl;
 
     return output;
