@@ -116,9 +116,7 @@ QStringList DpkgPkgManager::fileList( PkgInfo * pkg )
                                  false,         // logCommand
                                  false );       // logOutput
 
-    if ( exitCode != 0 )
-        logError() << "dpkg-query failed: " << output << endl;
-    else
+    if ( exitCode == 0 )
     {
         fileList = output.split( "\n" );
         fileList.removeAll( "/." );     // Remove cruft

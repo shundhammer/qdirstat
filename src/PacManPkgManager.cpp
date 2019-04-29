@@ -31,7 +31,9 @@ bool PacManPkgManager::isAvailable()
 QString PacManPkgManager::owningPkg( const QString & path )
 {
     int exitCode = -1;
-    QString output = runCommand( "/usr/bin/pacman", QStringList() << "-Qo" << path, &exitCode );
+    QString output = runCommand( "/usr/bin/pacman",
+                                 QStringList() << "-Qo" << path,
+                                 &exitCode );
 
     if ( exitCode != 0 || output.contains( "No package owns" ) )
 	return "";
@@ -48,4 +50,68 @@ QString PacManPkgManager::owningPkg( const QString & path )
     QString pkg = output.section( " ", 0, 0 );
 
     return pkg;
+}
+
+
+PkgInfoList PacManPkgManager::installedPkg()
+{
+    int exitCode = -1;
+    QString output = runCommand( "/usr/bin/pacman",
+                                 QStringList() << "-Qn",
+                                 &exitCode );
+
+    PkgInfoList pkgList;
+
+    if ( exitCode == 0 )
+        pkgList = parsePkgList( output );
+
+    return pkgList;
+}
+
+
+PkgInfoList PacManPkgManager::parsePkgList( const QString & output )
+{
+    PkgInfoList pkgList;
+
+    foreach ( const QString & line, output.split( "\n" ) )
+    {
+        if ( ! line.isEmpty() )
+        {
+            QStringList fields = line.split( " ", QString::KeepEmptyParts );
+
+            if ( fields.size() != 2 )
+                logError() << "Invalid pacman -Qn output: \"" << line << "\n" << endl;
+            else
+            {
+                QString name    = fields.takeFirst();
+                QString version = fields.takeFirst();
+                QString arch    = "";
+
+                PkgInfo * pkg = new PkgInfo( name, version, arch );
+                CHECK_NEW( pkg );
+
+                pkgList << pkg;
+            }
+        }
+    }
+
+    return pkgList;
+}
+
+
+QStringList PacManPkgManager::fileList( PkgInfo * pkg )
+{
+    QStringList fileList;
+
+    int exitCode = -1;
+    QString output = runCommand( "/usr/bin/pacman",
+                                 QStringList() << "-Qlq" << pkg->baseName(),
+                                 &exitCode,
+                                 false,         // logCommand
+                                 false );       // logOutput
+
+    if ( exitCode == 0 )
+        fileList = output.split( "\n" );
+
+    return fileList;
 }

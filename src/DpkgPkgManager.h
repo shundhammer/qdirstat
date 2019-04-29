@@ -95,7 +95,6 @@ namespace QDirStat
          **/
         QString queryName( PkgInfo * pkg );
 
-
     };  // class DpkgPkgManager
 
 }       // namespace QDirStat
