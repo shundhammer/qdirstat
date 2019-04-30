@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-04-18
+Updated: 2019-04-30
 
 
 ## Overview
@@ -1230,7 +1230,7 @@ the team.
 ## Windows Compatibility
 
 <summary>
-None for the forseeable future. Use WinDirStat.
+None for the forseeable future. Use [WinDirStat](https://windirstat.info/).
 </summary>
 
 <details>
