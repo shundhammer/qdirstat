@@ -1229,9 +1229,7 @@ the team.
 
 ## Windows Compatibility
 
-<summary>
 None for the forseeable future. Use [WinDirStat](https://windirstat.info/).
-</summary>
 
 <details>
 Directory reading might be quite easy to replace for Windows; we don't have
