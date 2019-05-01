@@ -114,22 +114,20 @@ PkgInfoList RpmPkgManager::parsePkgList( const QString & output )
 }
 
 
-QStringList RpmPkgManager::fileList( PkgInfo * pkg )
+QString RpmPkgManager::fileListCommand( PkgInfo * pkg )
+{
+    return QString( "%1 -ql %2" )
+        .arg( _rpmCommand )
+        .arg( queryName( pkg ) );
+}
+
+
+QStringList RpmPkgManager::parseFileList( const QString & output )
 {
     QStringList fileList;
 
-    int exitCode = -1;
-    QString output = runCommand( _rpmCommand,
-                                 QStringList() << "-ql" << queryName( pkg ),
-                                 &exitCode,
-                                 false,         // logCommand
-                                 false );       // logOutput
-
-    if ( exitCode == 0 )
-    {
-        fileList = output.split( "\n" );
-        fileList.removeAll( "(contains no files)" );
-    }
+    fileList = output.split( "\n" );
+    fileList.removeAll( "(contains no files)" );
 
     return fileList;
 }

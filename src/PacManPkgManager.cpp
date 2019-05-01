@@ -99,19 +99,14 @@ PkgInfoList PacManPkgManager::parsePkgList( const QString & output )
 }
 
 
-QStringList PacManPkgManager::fileList( PkgInfo * pkg )
+QString PacManPkgManager::fileListCommand( PkgInfo * pkg )
 {
-    QStringList fileList;
-
-    int exitCode = -1;
-    QString output = runCommand( "/usr/bin/pacman",
-                                 QStringList() << "-Qlq" << pkg->baseName(),
-                                 &exitCode,
-                                 false,         // logCommand
-                                 false );       // logOutput
-
-    if ( exitCode == 0 )
-        fileList = output.split( "\n" );
-
-    return fileList;
+    return QString( "/usr/bin/pacman -Qlq %1" ).arg( pkg->baseName() );
 }
+
+
+QStringList PacManPkgManager::parseFileList( const QString & output )
+{
+    return output.split( "\n" );
+}
+

@@ -105,22 +105,16 @@ PkgInfoList DpkgPkgManager::parsePkgList( const QString & output )
 }
 
 
-QStringList DpkgPkgManager::fileList( PkgInfo * pkg )
+QString DpkgPkgManager::fileListCommand( PkgInfo * pkg )
 {
-    QStringList fileList;
+    return QString( "/usr/bin/dpkg-query --listfiles %1" ).arg( queryName( pkg ) );
+}
 
-    int exitCode = -1;
-    QString output = runCommand( "/usr/bin/dpkg-query",
-                                 QStringList() << "--listfiles" << queryName( pkg ),
-                                 &exitCode,
-                                 false,         // logCommand
-                                 false );       // logOutput
 
-    if ( exitCode == 0 )
-    {
-        fileList = output.split( "\n" );
-        fileList.removeAll( "/." );     // Remove cruft
-    }
+QStringList DpkgPkgManager::parseFileList( const QString & output )
+{
+    QStringList fileList = output.split( "\n" );
+    fileList.removeAll( "/." );     // Remove cruft
 
     return fileList;
 }

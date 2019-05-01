@@ -108,10 +108,25 @@ namespace QDirStat
 
         /**
          * Return the list of files and directories owned by a package.
+         **/
+        virtual QStringList fileList( PkgInfo * pkg );
+
+        /**
+         * Return the command for getting the list of files and directories
+         * owned by a package.
+         *
          * This default implementation does nothing.
          **/
-        virtual QStringList fileList( PkgInfo * pkg )
-            { Q_UNUSED( pkg ); return QStringList(); }
+        virtual QString fileListCommand( PkgInfo * pkg )
+            { Q_UNUSED( pkg ); return ""; }
+
+        /**
+         * Parse the output of the file list command.
+         *
+         * This default implementation does nothing.
+         **/
+        virtual QStringList parseFileList( const QString & output )
+            { Q_UNUSED( output); return QStringList(); }
 
     }; // class PkgManager
 

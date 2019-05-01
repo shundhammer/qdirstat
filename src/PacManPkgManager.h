@@ -71,11 +71,16 @@ namespace QDirStat
         virtual PkgInfoList installedPkg();
 
         /**
-         * Return the list of files and directories owned by a package.
-         *
-	 * Implemented from PkgManager.
+         * Return the command for getting the list of files and directories
+         * owned by a package.
          **/
-        virtual QStringList fileList( PkgInfo * pkg );
+        virtual QString fileListCommand( PkgInfo * pkg ) Q_DECL_OVERRIDE;
+
+        /**
+         * Parse the output of the file list command.
+         **/
+        virtual QStringList parseFileList( const QString & output ) Q_DECL_OVERRIDE;
+
 
     protected:
 

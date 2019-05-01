@@ -25,3 +25,24 @@ PkgManager::~PkgManager()
 {
     // NOP
 }
+
+
+QStringList PkgManager::fileList( PkgInfo * pkg )
+{
+    QStringList fileList;
+    QString     command = fileListCommand( pkg );
+
+    if ( ! command.isEmpty() )
+    {
+        int exitCode = -1;
+        QString output = runCommand( command,
+                                     &exitCode,
+                                     false,         // logCommand
+                                     false );       // logOutput
+        if ( exitCode == 0 )
+            fileList = parseFileList( output );
+    }
+
+    return fileList;
+}
+
