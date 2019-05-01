@@ -87,7 +87,7 @@ PkgInfoList PacManPkgManager::parsePkgList( const QString & output )
                 QString version = fields.takeFirst();
                 QString arch    = "";
 
-                PkgInfo * pkg = new PkgInfo( name, version, arch );
+                PkgInfo * pkg = new PkgInfo( name, version, arch, this );
                 CHECK_NEW( pkg );
 
                 pkgList << pkg;

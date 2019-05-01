@@ -326,6 +326,18 @@ void DirTree::addJob( DirReadJob * job )
 }
 
 
+void DirTree::addBlockedJob( DirReadJob * job )
+{
+    _jobQueue.addBlocked( job );
+}
+
+
+void DirTree::unblock( DirReadJob * job )
+{
+    _jobQueue.unblock( job );
+}
+
+
 void DirTree::sendFinalizeLocal( DirInfo *dir )
 {
     emit finalizeLocal( dir );

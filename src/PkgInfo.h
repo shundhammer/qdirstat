@@ -18,6 +18,7 @@
 namespace QDirStat
 {
     class DirTree;
+    class PkgManager;
 
     /**
      * Information about one (installed) package.
@@ -31,11 +32,13 @@ namespace QDirStat
          **/
         PkgInfo( const QString & name,
                  const QString & version,
-                 const QString & arch );
+                 const QString & arch,
+                 PkgManager    * pkgManager );
 
         PkgInfo( DirTree *       tree,
                  DirInfo *       parent,
-                 const QString & name );
+                 const QString & name,
+                 PkgManager    * pkgManager );
 
         /**
          * Destructor.
@@ -69,6 +72,11 @@ namespace QDirStat
          * Return the architecture of this package ("x86_64", "i386").
          **/
         const QString & arch() const { return _arch; }
+
+        /**
+         * Return the package manager that this package is managed by.
+         **/
+        PkgManager * pkgManager() const { return _pkgManager; }
 
         /**
          * Set the parent DirTree for this pkg.
@@ -147,12 +155,13 @@ namespace QDirStat
 
         // Data members
 
-        QString _baseName;
-        QString _version;
-        QString _arch;
+        QString      _baseName;
+        QString      _version;
+        QString      _arch;
+        PkgManager * _pkgManager;
 
-        bool    _multiVersion :1;
-        bool    _multiArch    :1;
+        bool         _multiVersion :1;
+        bool         _multiArch    :1;
 
     };  // class PkgInfo
 

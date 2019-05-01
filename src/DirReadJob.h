@@ -410,12 +410,26 @@ namespace QDirStat
 	/**
 	 * Count the number of pending jobs in the queue.
 	 **/
-	int count() const   { return _queue.count(); }
+	int count() const   { return _queue.count() + _blocked.count(); }
 
 	/**
 	 * Check if the queue is empty.
 	 **/
-	bool isEmpty() const { return _queue.isEmpty(); }
+	bool isEmpty() const { return _queue.isEmpty() && _blocked.isEmpty(); }
+
+        /**
+         * Add a job to the list of blocked jobs: Jobs that are not yet ready
+         * yet, e.g. because they are waiting for results from an external
+         * process.
+         **/
+        void addBlocked( DirReadJob * job );
+
+        /**
+         * Notification that a job that was blocked is now ready to be
+         * scheduled, so it will be taken out of the list of blocked jobs and
+         * added to the end of the queue.
+         **/
+        void unblock( DirReadJob * job );
 
 	/**
 	 * Clear the queue: Remove all pending jobs from the queue and destroy
@@ -439,6 +453,7 @@ namespace QDirStat
 	 * Read jobs are required to call this when they are finished.
 	 **/
 	void jobFinishedNotify( DirReadJob *job );
+
 
     signals:
 
@@ -483,6 +498,7 @@ namespace QDirStat
     protected:
 
 	QList<DirReadJob *>  _queue;
+        QList<DirReadJob *>  _blocked;
 	QTimer		     _timer;
     };
 

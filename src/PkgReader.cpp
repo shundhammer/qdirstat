@@ -8,10 +8,15 @@
 
 #include "PkgReader.h"
 #include "PkgQuery.h"
+#include "PkgManager.h"
 #include "DirTree.h"
 #include "DirReadJob.h"         // LocalDirReadJob
+#include "ProcessStarter.h"
 #include "Logger.h"
 #include "Exception.h"
+
+
+#define MAX_PARALLEL_PROCESSES  6
 
 
 using namespace QDirStat;
@@ -141,7 +146,7 @@ void PkgReader::addPkgToTree()
     CHECK_PTR( _tree );
     CHECK_PTR( _tree->root() );
 
-    PkgInfo * top = new PkgInfo( _tree, _tree->root(), "Pkg:" );
+    PkgInfo * top = new PkgInfo( _tree, _tree->root(), "Pkg:", 0 );
     CHECK_NEW( top );
     _tree->root()->insertChild( top );
 
@@ -159,12 +164,56 @@ void PkgReader::addPkgToTree()
 
 void PkgReader::createReadJobs()
 {
+    ProcessStarter * processStarter = new ProcessStarter;
+    CHECK_NEW( processStarter );
+    processStarter->setAutoDelete( true );
+    processStarter->setMaxParallel( MAX_PARALLEL_PROCESSES );
+
     foreach ( PkgInfo * pkg, _pkgList )
     {
-        PkgReadJob * job = new PkgReadJob( _tree, pkg );
-        CHECK_NEW( job );
-        _tree->addJob( job );
+        Process * process = createReadFileListProcess( pkg );
+
+        if ( process )
+        {
+            PkgReadJob * job = new PkgReadJob( _tree, pkg, process );
+            CHECK_NEW( job );
+            _tree->addBlockedJob( job );
+            processStarter->add( process );
+        }
     }
+
+    processStarter->start();
+}
+
+
+Process * PkgReader::createReadFileListProcess( PkgInfo * pkg )
+{
+    CHECK_PTR( pkg );
+    CHECK_PTR( pkg->pkgManager() );
+
+    QString command = pkg->pkgManager()->fileListCommand( pkg );
+
+    if ( command.isEmpty() )
+    {
+        logError() << "Empty file list command for " << pkg << endl;
+        return 0;
+    }
+
+    QStringList args     = command.split( QRegExp( "\\s+" ) );
+    QString     program  = args.takeFirst();
+
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert( "LANG", "C" ); // Prevent output in translated languages
+
+    Process * process = new Process();
+    process->setProgram( program );
+    process->setArguments( args );
+    process->setProcessEnvironment( env );
+    process->setProcessChannelMode( QProcess::MergedChannels ); // combine stdout and stderr
+
+    // Intentionally NOT starting the process yet
+
+    return process;
 }
 
 
@@ -172,17 +221,65 @@ void PkgReader::createReadJobs()
 
 
 
-PkgReadJob::PkgReadJob( DirTree * tree, PkgInfo * pkg ):
-    DirReadJob( tree, pkg ),
-    _pkg( pkg )
+PkgReadJob::PkgReadJob( DirTree * tree,
+                        PkgInfo * pkg,
+                        Process * readFileListProcess ):
+    ObjDirReadJob( tree, pkg ),
+    _pkg( pkg ),
+    _readFileListProcess( readFileListProcess )
 {
-
+    if ( _readFileListProcess )
+    {
+        connect( _readFileListProcess, SIGNAL( finished	           ( int, QProcess::ExitStatus ) ),
+                 this,                 SLOT  ( readFileListFinished( int, QProcess::ExitStatus ) ) );
+    }
 }
 
 
 PkgReadJob::~PkgReadJob()
 {
 
+}
+
+
+void PkgReadJob::readFileListFinished( int                  exitCode,
+                                       QProcess::ExitStatus exitStatus )
+{
+    CHECK_PTR( _readFileListProcess );
+    CHECK_PTR( _pkg );
+    CHECK_PTR( _pkg->pkgManager() );
+
+    bool ok        = true;
+
+    if ( exitStatus != QProcess::NormalExit )
+    {
+        ok = false;
+        logError() << "Get file list command crashed for " << _pkg << endl;
+    }
+
+    if ( ok && exitCode != 0 )
+    {
+        ok = false;
+        logError() << "Get file list command exited with "
+                   << exitStatus << " for " << _pkg << endl;
+    }
+
+    if ( ok )
+    {
+        QString output = QString::fromUtf8( _readFileListProcess->readAll() );
+        _fileList      = _pkg->pkgManager()->parseFileList( output );
+        _tree->unblock( this ); // schedule this job
+        _readFileListProcess->deleteLater();
+    }
+    else
+    {
+        _pkg->setReadState( DirError );
+        _tree->sendReadJobFinished( _pkg );
+        delete _readFileListProcess;
+        _readFileListProcess = 0;
+        finished();
+        // Don't add anything after finished() since this deletes this job!
+    }
 }
 
 
@@ -193,7 +290,7 @@ void PkgReadJob::startReading()
 
     _pkg->setReadState( DirReading );
 
-    foreach ( const QString & path, PkgQuery::fileList( _pkg ) )
+    foreach ( const QString & path, _fileList )
     {
         if ( ! path.isEmpty() )
             addFile( path );

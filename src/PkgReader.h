@@ -14,6 +14,7 @@
 #include "DirReadJob.h"
 #include "PkgInfo.h"
 #include "PkgFilter.h"
+#include "Process.h"
 
 
 namespace QDirStat
@@ -91,6 +92,12 @@ namespace QDirStat
          **/
         void createReadJobs();
 
+        /**
+         * Create a process for reading the file list for 'pkg' with the
+         * appropriate external command. The process is not started yet.
+         **/
+        Process * createReadFileListProcess( PkgInfo * pkg );
+
 
 	// Data members
 
@@ -104,8 +111,10 @@ namespace QDirStat
     /**
      * A read job class for reading information about a package.
      **/
-    class PkgReadJob: public DirReadJob
+    class PkgReadJob: public ObjDirReadJob
     {
+        Q_OBJECT
+
     public:
 
 	/**
@@ -117,7 +126,9 @@ namespace QDirStat
 	 * when possible. Reading is then started from the outside with
 	 * startReading().
 	 **/
-	PkgReadJob( DirTree * tree, PkgInfo * pkg );
+	PkgReadJob( DirTree * tree,
+                    PkgInfo * pkg,
+                    Process * readFileListProcess );
 
 	/**
 	 * Destructor.
@@ -136,6 +147,16 @@ namespace QDirStat
 	 **/
 	PkgInfo * pkg() const { return _pkg; }
 
+
+    protected slots:
+
+        /**
+         * Notification that the attached read file list process is finished.
+         **/
+        void readFileListFinished( int                  exitCode,
+                                   QProcess::ExitStatus exitStatus );
+
+
     protected:
 
         /**
@@ -152,7 +173,9 @@ namespace QDirStat
 
         // Data members
 
-	PkgInfo * _pkg;
+	PkgInfo *   _pkg;
+        Process *   _readFileListProcess;
+        QStringList _fileList;
 
     };	// class PkgReadJob
 

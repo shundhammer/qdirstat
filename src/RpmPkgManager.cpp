@@ -102,7 +102,7 @@ PkgInfoList RpmPkgManager::parsePkgList( const QString & output )
                 if ( arch == "(none)" )
                     arch = "";
 
-                PkgInfo * pkg = new PkgInfo( name, version, arch );
+                PkgInfo * pkg = new PkgInfo( name, version, arch, this );
                 CHECK_NEW( pkg );
 
                 pkgList << pkg;

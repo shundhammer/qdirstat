@@ -88,7 +88,7 @@ PkgInfoList DpkgPkgManager::parsePkgList( const QString & output )
 
                 if ( status == "install ok installed" )
                 {
-                    PkgInfo * pkg = new PkgInfo( name, version, arch );
+                    PkgInfo * pkg = new PkgInfo( name, version, arch, this );
                     CHECK_NEW( pkg );
 
                     pkgList << pkg;

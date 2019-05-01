@@ -75,13 +75,14 @@ SOURCES	  = main.cpp			\
 	    MountPoints.cpp		\
 	    OutputWindow.cpp		\
 	    PacManPkgManager.cpp	\
-            PercentBar.cpp		\
-            PkgFilter.cpp               \
+	    PercentBar.cpp		\
+	    PkgFilter.cpp		\
 	    PkgInfo.cpp			\
 	    PkgManager.cpp		\
 	    PkgQuery.cpp		\
 	    PkgReader.cpp		\
 	    Process.cpp			\
+	    ProcessStarter.cpp		\
 	    Refresher.cpp		\
 	    RpmPkgManager.cpp		\
 	    SelectionModel.cpp		\
@@ -144,12 +145,13 @@ HEADERS	  =				\
 	    OutputWindow.h		\
 	    PacManPkgManager.h		\
 	    PercentBar.h		\
-            PkgFilter.h                 \
+	    PkgFilter.h			\
 	    PkgInfo.h			\
 	    PkgManager.h		\
 	    PkgQuery.h			\
 	    PkgReader.h			\
 	    Process.h			\
+	    ProcessStarter.h		\
 	    Qt4Compat.h			\
 	    Refresher.h			\
 	    RpmPkgManager.h		\

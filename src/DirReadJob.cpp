@@ -610,8 +610,7 @@ void DirReadJobQueue::enqueue( DirReadJob * job )
 
 DirReadJob * DirReadJobQueue::dequeue()
 {
-    DirReadJob * job = _queue.first();
-    _queue.removeFirst();
+    DirReadJob * job = _queue.takeFirst();
 
     if ( job )
 	job->setQueue( 0 );
@@ -623,13 +622,21 @@ DirReadJob * DirReadJobQueue::dequeue()
 void DirReadJobQueue::clear()
 {
     qDeleteAll( _queue );
+    qDeleteAll( _blocked );
     _queue.clear();
+    _blocked.clear();
 }
 
 
 void DirReadJobQueue::abort()
 {
     foreach ( DirReadJob * job, _queue )
+    {
+	if ( job->dir() )
+	    job->dir()->readJobAborted();
+    }
+
+    foreach ( DirReadJob * job, _blocked )
     {
 	if ( job->dir() )
 	    job->dir()->readJobAborted();
@@ -646,6 +653,27 @@ void DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 
     QMutableListIterator<DirReadJob *> it( _queue );
     int count = 0;
+
+    while ( it.hasNext() )
+    {
+	DirReadJob * job = it.next();
+
+	if ( exceptJob && job == exceptJob )
+	{
+	    logDebug() << "NOT killing " << job << endl;
+	    continue;
+	}
+
+	if ( job->dir() && job->dir()->isInSubtree( subtree ) )
+	{
+	    // logDebug() << "Killing " << job << endl;
+	    ++count;
+	    it.remove();
+	    delete job;
+	}
+    }
+
+    it = QMutableListIterator<DirReadJob *>( _blocked );
 
     while ( it.hasNext() )
     {
@@ -690,7 +718,9 @@ void DirReadJobQueue::jobFinishedNotify( DirReadJob *job )
     {
 	_timer.stop();
 	// logDebug() << "No more jobs - finishing" << endl;
-	emit finished();
+
+        if ( _blocked.isEmpty() )
+            emit finished();
     }
 }
 
@@ -702,4 +732,20 @@ void DirReadJobQueue::deletingChildNotify( FileInfo * child )
 	logDebug() << "Killing all pending read jobs for " << child << endl;
 	killAll( child->toDirInfo() );
     }
+}
+
+
+void DirReadJobQueue::addBlocked( DirReadJob * job )
+{
+    _blocked.append( job );
+}
+
+
+void DirReadJobQueue::unblock( DirReadJob * job )
+{
+    _blocked.removeAll( job );
+    enqueue( job );
+
+    if ( _blocked.isEmpty() )
+        logDebug() << "No more jobs waiting for external processes" << endl;
 }

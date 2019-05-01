@@ -37,7 +37,7 @@ QStringList PkgManager::fileList( PkgInfo * pkg )
         int exitCode = -1;
         QString output = runCommand( command,
                                      &exitCode,
-                                     false,         // logCommand
+                                     true,          // logCommand
                                      false );       // logOutput
         if ( exitCode == 0 )
             fileList = parseFileList( output );

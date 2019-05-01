@@ -165,6 +165,19 @@ namespace QDirStat
 	 **/
 	void addJob( DirReadJob * job );
 
+        /**
+         * Add a new directory read job to the list of blocked jobs. A job may
+         * be blocked because it may be waiting for an external process to
+         * finish.
+         **/
+        void addBlockedJob( DirReadJob * job );
+
+        /**
+         * Unblock a previously blocked read job so it is scheduled along with
+         * the other pending jobs.
+         **/ 
+        void unblock( DirReadJob * job );
+
 	/**
 	 * Should directory scans cross file systems?
 	 *

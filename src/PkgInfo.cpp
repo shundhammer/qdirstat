@@ -16,7 +16,8 @@ using namespace QDirStat;
 
 PkgInfo::PkgInfo( const QString & name,
                   const QString & version,
-                  const QString & arch    ):
+                  const QString & arch,
+                  PkgManager    * pkgManager ):
     DirInfo( 0,   // tree,
              0,   // parent
              name,
@@ -26,6 +27,7 @@ PkgInfo::PkgInfo( const QString & name,
     _baseName( name ),
     _version( version ),
     _arch( arch ),
+    _pkgManager( pkgManager ),
     _multiVersion( false ),
     _multiArch( false )
 {
@@ -35,7 +37,8 @@ PkgInfo::PkgInfo( const QString & name,
 
 PkgInfo::PkgInfo( DirTree *       tree,
                   DirInfo *       parent,
-                  const QString & name ):
+                  const QString & name,
+                  PkgManager    * pkgManager ):
     DirInfo( tree,
              parent,
              name,
@@ -43,6 +46,7 @@ PkgInfo::PkgInfo( DirTree *       tree,
              0,   // size
              0 ), // mtime
     _baseName( name ),
+    _pkgManager( pkgManager ),
     _multiVersion( false ),
     _multiArch( false )
 {
