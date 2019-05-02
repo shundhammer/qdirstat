@@ -57,6 +57,11 @@ namespace QDirStat
 	 **/
 	bool containsSpecial() const;
 
+        /**
+         * Return 'true' if the set contains any PkgInfo item.
+         **/
+        bool containsPkg() const;
+
 	/**
 	 * Return the sum of all total sizes in the set.
 	 *

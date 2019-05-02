@@ -139,6 +139,7 @@ void CleanupCollection::updateActions()
 
     bool dirSelected	  = sel.containsDir();
     bool fileSelected	  = sel.containsFile();
+    bool pkgSelected      = sel.containsPkg();
     bool dotEntrySelected = sel.containsDotEntry();
     bool busy		  = sel.containsBusyItem();
     bool treeBusy	  = sel.treeIsBusy();
@@ -162,6 +163,9 @@ void CleanupCollection::updateActions()
 
 	    if ( fileSelected && ! cleanup->worksForFile() )
 		enabled = false;
+
+            if ( pkgSelected )
+                enabled = false;
 
 	    cleanup->setEnabled( enabled );
 	}

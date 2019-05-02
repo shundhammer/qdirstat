@@ -127,6 +127,18 @@ bool FileInfoSet::containsSpecial() const
 }
 
 
+bool FileInfoSet::containsPkg() const
+{
+    foreach ( FileInfo * item, *this )
+    {
+	if ( item  && item->isPkgInfo() )
+	    return true;
+    }
+
+    return false;
+}
+
+
 bool FileInfoSet::containsBusyItem() const
 {
     foreach ( FileInfo * item, *this )
