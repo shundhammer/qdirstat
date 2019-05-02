@@ -380,6 +380,12 @@ void FileDetailsView::showDetails( PkgInfo * pkg )
 	return;
     }
 
+    if ( pkg->url() == "Pkg:/" )
+    {
+        showPkgSummary( pkg );
+        return;
+    }
+
     setCurrentPage( _ui->pkgDetailsPage );
 
     setLabelLimited( _ui->pkgNameLabel, pkg->name() );
@@ -414,6 +420,57 @@ void FileDetailsView::showDetails( PkgInfo * pkg )
     }
 
     _ui->pkgLatestMTimeLabel->setText( formatTime( pkg->latestMtime() ) );
+}
+
+
+void FileDetailsView::showPkgSummary( PkgInfo * pkg )
+{
+    // logDebug() << "Showing pkg details about " << pkg << endl;
+
+    if ( ! pkg )
+    {
+	clear();
+	return;
+    }
+
+    if ( pkg->url() != "Pkg:/" )
+    {
+        showDetails( pkg );
+        return;
+    }
+
+    setCurrentPage( _ui->pkgSummaryPage );
+
+    setLabel( _ui->pkgSummaryPkgCountLabel, pkg->directChildrenCount() );
+
+    if ( ! pkg->isBusy() && pkg->readState() == DirFinished )
+    {
+        setLabel( _ui->pkgSummaryTotalSizeLabel,   pkg->totalSize()    );
+        setLabel( _ui->pkgSummaryItemCountLabel,   pkg->totalItems()   );
+        setLabel( _ui->pkgSummaryFileCountLabel,   pkg->totalFiles()   );
+        setLabel( _ui->pkgSummarySubDirCountLabel, pkg->totalSubDirs() );
+    }
+    else
+    {
+        QString msg;
+
+        if ( pkg->isBusy() )
+        {
+            msg = tr( "[Reading]" );
+        }
+        else
+        {
+            if ( pkg->readState() == DirError )
+                msg = tr( "[Read Error]" );
+        }
+
+        _ui->pkgSummaryTotalSizeLabel->setText( msg );
+        _ui->pkgSummaryItemCountLabel->clear();
+        _ui->pkgSummaryFileCountLabel->clear();
+        _ui->pkgSummarySubDirCountLabel->clear();
+    }
+
+    _ui->pkgSummaryLatestMTimeLabel->setText( formatTime( pkg->latestMtime() ) );
 }
 
 

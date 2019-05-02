@@ -14,12 +14,12 @@
    <string>Details</string>
   </property>
   <property name="currentIndex">
-   <number>4</number>
+   <number>5</number>
   </property>
   <widget class="QWidget" name="fileDetailsPage">
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <layout class="QHBoxLayout" name="fileDetailsPageHBox">
     <item>
-     <layout class="QVBoxLayout" name="filePageVBox">
+     <layout class="QVBoxLayout" name="fileDetailsPageVBox">
       <item>
        <widget class="QLabel" name="fileNameLabel">
         <property name="font">
@@ -270,12 +270,12 @@
    </layout>
   </widget>
   <widget class="QWidget" name="dirDetailsPage">
-   <layout class="QHBoxLayout" name="dirDetailsHBox">
+   <layout class="QHBoxLayout" name="dirDetailsPageHBox">
     <property name="spacing">
      <number>0</number>
     </property>
     <item>
-     <layout class="QVBoxLayout" name="dirPageVBox">
+     <layout class="QVBoxLayout" name="dirDetailsPageVBox">
       <property name="spacing">
        <number>4</number>
       </property>
@@ -588,9 +588,9 @@ Subtree</string>
    </layout>
   </widget>
   <widget class="QWidget" name="pkgDetailsPage">
-   <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <layout class="QHBoxLayout" name="pkgDetailsPageHBox">
     <item>
-     <layout class="QVBoxLayout" name="pkgPageVBox">
+     <layout class="QVBoxLayout" name="pkgDetailsPageVBox">
       <item>
        <widget class="QLabel" name="pkgNameLabel">
         <property name="font">
@@ -821,8 +821,205 @@ Installed Files</string>
     </item>
    </layout>
   </widget>
+  <widget class="QWidget" name="pkgSummaryPage">
+   <layout class="QHBoxLayout" name="pkgSummaryPageHBox">
+    <item>
+     <layout class="QVBoxLayout" name="pkgSummaryPageVBox">
+      <item>
+       <widget class="QLabel" name="pkgSummaryHeading">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="text">
+         <string>Packages Summary</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="pkgSummaryTopSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>13</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="pkgSummaryGridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="pkgSummaryPkgCountCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Packages:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="pkgSummaryPkgCountLabel">
+          <property name="text">
+           <string>42</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <widget class="QLabel" name="pkgSummaryInstalledFilesHeading">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <italic>true</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>
+Installed Files</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="pkgSummaryTotalSizeCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Total Size:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="pkgSummaryTotalSizeLabel">
+          <property name="text">
+           <string>240 MB</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="pkgSummaryItemCountCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Items:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="pkgSummaryItemCountLabel">
+          <property name="text">
+           <string>317</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="pkgSummaryFileCountCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Files:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLabel" name="pkgSummaryFileCountLabel">
+          <property name="text">
+           <string>280</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="pkgSummarySubDirCountCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Subdirs:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLabel" name="pkgSummarySubDirCountLabel">
+          <property name="text">
+           <string>37</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="pkgSummaryLatestMTimeCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Last Modified:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QLabel" name="pkgSummaryLatestMTimeLabel">
+          <property name="text">
+           <string>2019-04-28 16:02</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="pkgSummaryBottomStretch">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>38</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="pkgSummaryRightStretch">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>7</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
   <widget class="QWidget" name="selectionSummaryPage">
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
+   <layout class="QHBoxLayout" name="selPageHBox">
     <item>
      <layout class="QVBoxLayout" name="selPageVBox">
       <item>
@@ -1003,7 +1200,7 @@ Installed Files</string>
    </layout>
   </widget>
   <widget class="QWidget" name="emptyPage">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout" name="emptyPageHBox">
     <item>
      <spacer name="dummySpacer">
       <property name="orientation">

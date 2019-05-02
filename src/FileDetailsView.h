@@ -101,9 +101,15 @@ namespace QDirStat
         void showSelectionSummary( const FileInfoSet & selectedItems );
 
         /**
+         * Show the packages summary (pkg:/).
+         **/
+        void showPkgSummary( PkgInfo * pkgInfo );
+
+        /**
          * Return the MIME category of a file.
          **/
         QString mimeCategory( FileInfo * fileInfo );
+
 
     protected slots:
 
@@ -111,6 +117,7 @@ namespace QDirStat
          * Update package information via the AdaptiveTimer.
          **/
         void updatePkgInfo( const QVariant & path );
+
 
     protected:
 
