@@ -12,25 +12,27 @@
 #include "DirTree.h"
 #include "DirReadJob.h"         // LocalDirReadJob
 #include "ProcessStarter.h"
+#include "Settings.h"
 #include "Logger.h"
 #include "Exception.h"
-
-
-#define MAX_PARALLEL_PROCESSES  6
 
 
 using namespace QDirStat;
 
 
 PkgReader::PkgReader( DirTree * tree ):
-    _tree( tree )
+    _tree( tree ),
+    _maxParallelProcesses( 6 )
 {
     logInfo() << endl;
+    readSettings();
 }
 
 
 PkgReader::~PkgReader()
 {
+    writeSettings();
+
     // Intentionally NOT deleting the PkgInfo * items of _pkgList:
     // They are now owned by the DirTree.
 }
@@ -167,7 +169,7 @@ void PkgReader::createReadJobs()
     ProcessStarter * processStarter = new ProcessStarter;
     CHECK_NEW( processStarter );
     processStarter->setAutoDelete( true );
-    processStarter->setMaxParallel( MAX_PARALLEL_PROCESSES );
+    processStarter->setMaxParallel( _maxParallelProcesses );
 
     foreach ( PkgInfo * pkg, _pkgList )
     {
@@ -214,6 +216,28 @@ Process * PkgReader::createReadFileListProcess( PkgInfo * pkg )
     // Intentionally NOT starting the process yet
 
     return process;
+}
+
+
+void PkgReader::readSettings()
+{
+    Settings settings;
+    settings.beginGroup( "Pkg" );
+
+    _maxParallelProcesses = settings.value( "MaxParallelProcesses", 6 ).toInt();
+
+    settings.endGroup();
+}
+
+
+void PkgReader::writeSettings()
+{
+    Settings settings;
+    settings.beginGroup( "Pkg" );
+
+    settings.setValue( "MaxParallelProcesses", _maxParallelProcesses );
+
+    settings.endGroup();
 }
 
 
