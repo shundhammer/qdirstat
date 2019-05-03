@@ -126,7 +126,7 @@ Cleanup * StdCleanup::gitClean( QObject * parent )
 
 Cleanup * StdCleanup::deleteJunk( QObject * parent )
 {
-    Cleanup *cleanup = new Cleanup( "rm -f *.o *~ *.bak *.auto core",
+    Cleanup *cleanup = new Cleanup( "rm -f *~ *.bak *.auto core",
 				    QObject::tr( "Delete &Junk Files" ),
 				    parent );
     CHECK_NEW( cleanup );
