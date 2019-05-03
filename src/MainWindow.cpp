@@ -328,23 +328,25 @@ void MainWindow::mapTreeExpandAction( QAction * action, int level )
 
 void MainWindow::updateActions()
 {
-    bool reading         = _dirTreeModel->tree()->isBusy();
-    bool haveCurrentItem = ( _selectionModel->currentItem() != 0 );
-    bool treeNotEmpty	 = ( _dirTreeModel->tree()->firstToplevel() != 0 );
-    bool pkgView         = treeNotEmpty && _dirTreeModel->tree()->firstToplevel()->isPkgInfo();
+    bool reading             = _dirTreeModel->tree()->isBusy();
+    FileInfo * currentItem   = _selectionModel->currentItem();
+    FileInfo * firstToplevel = _dirTreeModel->tree()->firstToplevel();
+    bool pkgView             = firstToplevel && firstToplevel->isPkgInfo();
 
     _ui->actionStopReading->setEnabled( reading );
-    _ui->actionRefreshAll->setEnabled	( ! reading && ! pkgView );
+    _ui->actionRefreshAll->setEnabled	( ! reading );
     _ui->actionAskReadCache->setEnabled ( ! reading );
     _ui->actionAskWriteCache->setEnabled( ! reading );
 
-    _ui->actionCopyPathToClipboard->setEnabled( haveCurrentItem );
-    _ui->actionGoUp->setEnabled( haveCurrentItem );
-    _ui->actionGoToToplevel->setEnabled( treeNotEmpty );
+    _ui->actionCopyPathToClipboard->setEnabled( currentItem );
+    _ui->actionGoUp->setEnabled( currentItem && currentItem->treeLevel() > 1 );
+    _ui->actionGoToToplevel->setEnabled( firstToplevel && ( ! currentItem || currentItem->treeLevel() > 1 ));
 
     FileInfoSet selectedItems = _selectionModel->selectedItems();
-    FileInfo * sel        = selectedItems.first();
-    bool oneDirSelected   = ( selectedItems.size() == 1 ) && sel && sel->isDir() && ! sel->isPkgInfo();
+    FileInfo * sel            = selectedItems.first();
+    int selSize               = selectedItems.size();
+
+    bool oneDirSelected   = selSize == 1 && sel && sel->isDir() && ! sel->isPkgInfo();
     bool dotEntrySelected = selectedItems.containsDotEntry();
     bool pkgSelected      = selectedItems.containsPkg();
 
@@ -353,8 +355,7 @@ void MainWindow::updateActions()
     _ui->actionContinueReadingAtMountPoint->setEnabled( oneDirSelected && sel->isMountPoint() );
     _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
 
-    bool nothingOrOneDir = selectedItems.isEmpty() ||
-	( selectedItems.size() == 1 && sel && ( sel->isDir() || sel->isDotEntry() ) && ! sel->isPkgInfo() );
+    bool nothingOrOneDir = selectedItems.isEmpty() || oneDirSelected;
 
     _ui->actionFileSizeStats->setEnabled( ! reading && nothingOrOneDir );
     _ui->actionFileTypeStats->setEnabled( ! reading && nothingOrOneDir );
