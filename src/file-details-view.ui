@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>256</width>
-    <height>391</height>
+    <height>399</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,24 +17,44 @@
    <number>5</number>
   </property>
   <widget class="QWidget" name="fileDetailsPage">
-   <layout class="QHBoxLayout" name="fileDetailsPageHBox">
+   <layout class="QHBoxLayout" name="fileDetailsHBox">
     <item>
-     <layout class="QVBoxLayout" name="fileDetailsPageVBox">
+     <layout class="QVBoxLayout" name="fileDetailsVBox">
       <item>
-       <widget class="QLabel" name="fileNameLabel">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>myfile.txt</string>
-        </property>
-        <property name="textInteractionFlags">
-         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="fileHeadingHBox">
+        <item>
+         <widget class="QLabel" name="fileIcon">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="icons.qrc">:/icons/tree-medium/file.png</pixmap>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="fileNameLabel">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>myfile.txt</string>
+          </property>
+          <property name="textInteractionFlags">
+           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <spacer name="fileTopSpacer">
@@ -270,30 +290,47 @@
    </layout>
   </widget>
   <widget class="QWidget" name="dirDetailsPage">
-   <layout class="QHBoxLayout" name="dirDetailsPageHBox">
-    <property name="spacing">
-     <number>0</number>
-    </property>
+   <layout class="QHBoxLayout" name="dirDetailsHBox">
     <item>
-     <layout class="QVBoxLayout" name="dirDetailsPageVBox">
-      <property name="spacing">
-       <number>4</number>
-      </property>
+     <layout class="QVBoxLayout" name="dirDetailsVBox">
       <item>
-       <widget class="QLabel" name="dirNameLabel">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>doc/</string>
-        </property>
-        <property name="textInteractionFlags">
-         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="dirHeadingHBox">
+        <item>
+         <widget class="QLabel" name="dirIcon">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="icons.qrc">:/icons/tree-medium/dir.png</pixmap>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="dirNameLabel">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>doc/</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+          </property>
+          <property name="textInteractionFlags">
+           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <spacer name="dirTopSpacer">
@@ -588,21 +625,44 @@ Subtree</string>
    </layout>
   </widget>
   <widget class="QWidget" name="pkgDetailsPage">
-   <layout class="QHBoxLayout" name="pkgDetailsPageHBox">
+   <layout class="QHBoxLayout" name="pkgDetailsHBox">
     <item>
-     <layout class="QVBoxLayout" name="pkgDetailsPageVBox">
+     <layout class="QVBoxLayout" name="pkgDetailsVBox">
       <item>
-       <widget class="QLabel" name="pkgNameLabel">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>superfoomatic</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="pkgHeadingHBox">
+        <item>
+         <widget class="QLabel" name="pkgIcon">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="icons.qrc">:/icons/tree-medium/folder-pkg.png</pixmap>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="pkgNameLabel">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>superfoomatic</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <spacer name="pkgTopSpacer">
@@ -822,16 +882,16 @@ Installed Files</string>
    </layout>
   </widget>
   <widget class="QWidget" name="pkgSummaryPage">
-   <layout class="QHBoxLayout" name="pkgSummaryPageHBox">
+   <layout class="QHBoxLayout" name="pkgSummaryHBox">
     <item>
-     <layout class="QVBoxLayout" name="pkgSummaryPageVBox">
+     <layout class="QVBoxLayout" name="pkgSummaryVBox">
       <item>
        <widget class="QLabel" name="pkgSummaryHeading">
         <property name="font">
          <font>
           <weight>75</weight>
-          <bold>true</bold>
           <italic>true</italic>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -1217,6 +1277,8 @@ Installed Files</string>
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>
