@@ -90,7 +90,11 @@ void PkgFilter::guessFilterMode()
         _filterMode = StartsWith;
     }
 
-    logDebug() << "using filter mode " << toString( _filterMode ) << endl;
+#if 0
+    logDebug() << "using filter mode " << toString( _filterMode )
+               << " from \"" << _pattern << "\""
+               << endl;
+#endif
 }
 
 

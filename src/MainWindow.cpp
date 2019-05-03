@@ -34,6 +34,7 @@
 #include "Logger.h"
 #include "MimeCategorizer.h"
 #include "MimeCategoryConfigPage.h"
+#include "OpenPkgDialog.h"
 #include "OutputWindow.h"
 #include "Refresher.h"
 #include "SelectionModel.h"
@@ -219,7 +220,8 @@ void MainWindow::connectActions()
 {
     // "File" menu
 
-    CONNECT_ACTION( _ui->actionOpen,			    this, askOpenUrl()	    );
+    CONNECT_ACTION( _ui->actionOpenDir,			    this, askOpenDir()	    );
+    CONNECT_ACTION( _ui->actionOpenPkg,			    this, askOpenPkg()	    );
     CONNECT_ACTION( _ui->actionRefreshAll,		    this, refreshAll()	    );
     CONNECT_ACTION( _ui->actionRefreshSelected,		    this, refreshSelected() );
     CONNECT_ACTION( _ui->actionReadExcludedDirectory,	    this, refreshSelected() );
@@ -606,6 +608,15 @@ void MainWindow::readingAborted()
 
 void MainWindow::openUrl( const QString & url )
 {
+    if ( PkgFilter::isPkgUrl( url ) )
+        readPkg( url );
+    else
+        openDir( url );
+}
+
+
+void MainWindow::openDir( const QString & url )
+{
     try
     {
 	_dirTreeModel->openUrl( url );
@@ -623,7 +634,7 @@ void MainWindow::openUrl( const QString & url )
 				this );			// parent
 	errorPopup.setDetailedText( ex.what() );
 	errorPopup.exec();
-	askOpenUrl();
+	askOpenDir();
     }
 
     updateActions();
@@ -631,12 +642,22 @@ void MainWindow::openUrl( const QString & url )
 }
 
 
-void MainWindow::askOpenUrl()
+void MainWindow::askOpenDir()
 {
     QString url = QFileDialog::getExistingDirectory( this, // parent
 						     tr("Select directory to scan") );
     if ( ! url.isEmpty() )
 	openUrl( url );
+}
+
+
+void MainWindow::askOpenPkg()
+{
+    bool canceled;
+    PkgFilter pkgFilter = OpenPkgDialog::askPkgFilter( canceled );
+
+    if ( ! canceled )
+        readPkg( pkgFilter );
 }
 
 
@@ -657,7 +678,7 @@ void MainWindow::refreshAll()
     }
     else
     {
-	askOpenUrl();
+	askOpenDir();
     }
 }
 
@@ -724,7 +745,7 @@ void MainWindow::askWriteCache()
 
 void MainWindow::readPkg( const PkgFilter & pkgFilter )
 {
-    logInfo() << "URL: " << pkgFilter.url() << endl;
+    // logInfo() << "URL: " << pkgFilter.url() << endl;
 
     updateWindowTitle( pkgFilter.url() );
     _dirTreeModel->readPkg( pkgFilter );

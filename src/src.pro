@@ -73,6 +73,7 @@ SOURCES	  = main.cpp			\
 	    MimeCategory.cpp		\
 	    MimeCategoryConfigPage.cpp	\
 	    MountPoints.cpp		\
+	    OpenPkgDialog.cpp		\
 	    OutputWindow.cpp		\
 	    PacManPkgManager.cpp	\
 	    PercentBar.cpp		\
@@ -143,6 +144,7 @@ HEADERS	  =				\
 	    MimeCategoryConfigPage.h	\
 	    MountPoints.h		\
 	    OutputWindow.h		\
+	    OpenPkgDialog.h		\
 	    PacManPkgManager.h		\
 	    PercentBar.h		\
 	    PkgFilter.h			\
@@ -180,6 +182,7 @@ FORMS	  = main-window.ui		   \
 	    file-size-stats-window.ui	   \
 	    file-type-stats-window.ui	   \
 	    locate-files-window.ui	   \
+	    open-pkg-dialog.ui		   \
 	    file-details-view.ui
 
 

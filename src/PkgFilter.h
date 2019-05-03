@@ -11,6 +11,7 @@
 
 #include <QString>
 #include <QRegExp>
+#include <QTextStream>
 
 
 namespace QDirStat
@@ -24,13 +25,13 @@ namespace QDirStat
 
         enum FilterMode
         {
+            Auto,       // Guess from pattern (see below)
             Contains,   // Fixed string
             StartsWith, // Fixed string
             ExactMatch, // Fixed string
             Wildcard,
             RegExp,
-            SelectAll,  // Pattern is irrelevant
-            Auto        // Guess from pattern (see below)
+            SelectAll   // Pattern is irrelevant
         };
 
         /**
@@ -126,6 +127,15 @@ namespace QDirStat
 
     };  // class PkgFilter
 
+
+    inline QTextStream & operator<< ( QTextStream     & stream,
+                                      const PkgFilter & pkgFilter )
+    {
+        stream << pkgFilter.url() << " filter mode \""
+               << PkgFilter::toString( pkgFilter.filterMode() ) << "\"";
+
+        return stream;
+    }
 }
 
 #endif  // PkgFilter_h

@@ -114,7 +114,8 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="actionOpen"/>
+    <addaction name="actionOpenDir"/>
+    <addaction name="actionOpenPkg"/>
     <addaction name="actionRefreshAll"/>
     <addaction name="actionRefreshSelected"/>
     <addaction name="separator"/>
@@ -260,13 +261,13 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionOpen">
+  <action name="actionOpenDir">
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/icons/open-dir.png</normaloff>:/icons/open-dir.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Open...</string>
+    <string>&amp;Open Directory...</string>
    </property>
    <property name="toolTip">
     <string>Open a directory to scan.</string>
@@ -781,6 +782,14 @@
    </property>
    <property name="toolTip">
     <string>Show release notes in external web browser</string>
+   </property>
+  </action>
+  <action name="actionOpenPkg">
+   <property name="text">
+    <string>Show Installed &amp;Packages...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>

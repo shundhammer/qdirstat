@@ -153,6 +153,7 @@ void DirTreeModel::openUrl( const QString & url )
 
 void DirTreeModel::readPkg( const PkgFilter & pkgFilter )
 {
+    // logDebug() << "Reading " << pkgFilter << endl;
     CHECK_PTR( _tree );
 
     if ( _tree->root() &&  _tree->root()->hasChildren() )

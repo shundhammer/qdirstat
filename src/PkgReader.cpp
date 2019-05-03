@@ -24,7 +24,7 @@ PkgReader::PkgReader( DirTree * tree ):
     _tree( tree ),
     _maxParallelProcesses( 6 )
 {
-    logInfo() << endl;
+    // logInfo() << endl;
     readSettings();
 }
 
@@ -40,7 +40,7 @@ PkgReader::~PkgReader()
 
 void PkgReader::read( const PkgFilter & filter )
 {
-    logInfo() << endl;
+    logInfo() << "Reading " << filter << endl;
 
     _pkgList = PkgQuery::installedPkg();
     filterPkgList( filter );

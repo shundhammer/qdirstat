@@ -58,14 +58,24 @@ public:
 public slots:
 
     /**
-     * Open an URL (start reading that directory).
+     * Open an URL (directory or package URL).
      **/
     void openUrl( const QString & url );
 
     /**
+     * Open a directory URL (start reading that directory).
+     **/
+    void openDir( const QString & url );
+
+    /**
      * Open a directory selection dialog and open the selected URL.
      **/
-    void askOpenUrl();
+    void askOpenDir();
+
+    /**
+     * Open a package selection dialog and open the selected URL.
+     **/
+    void askOpenPkg();
 
     /**
      * Re-read the complete directory tree.

@@ -415,6 +415,7 @@ void DirTree::readPkg( const PkgFilter & pkgFilter )
     _url    = pkgFilter.url();
     emit startingReading();
 
+    // logDebug() << "Reading " << pkgFilter << endl;
     PkgReader reader( this );
     reader.read( pkgFilter );
 }

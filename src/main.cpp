@@ -31,6 +31,7 @@ void usage( const QStringList & argList )
 	 << "\n"
 	 << "  " << progName << " [--slow-update|-s] [<directory-name>]\n"
 	 << "  " << progName << " pkg:/pkgpattern\n"
+	 << "  " << progName << " --dont-ask|-d\n"
 	 << "  " << progName << " --cache|-c <cache-file-name>\n"
 	 << "  " << progName << " --help|-h\n"
 	 << "\n"
@@ -106,11 +107,15 @@ int main( int argc, char *argv[] )
     CHECK_PTR( mainWin );
     mainWin->show();
 
+    bool dont_ask = commandLineSwitch( "--dont-ask", "-d", argList );
+
     if ( commandLineSwitch( "--slow-update", "-s", argList ) )
 	mainWin->dirTreeModel()->setSlowUpdate();
-
     else if ( argList.isEmpty() )
-	mainWin->askOpenUrl();
+    {
+        if ( ! dont_ask )
+            mainWin->askOpenDir();
+    }
     else
     {
 	QString arg = argList.first();
@@ -132,10 +137,7 @@ int main( int argc, char *argv[] )
 	    usage( argList );
 	else if ( ! arg.isEmpty() )
 	{
-            if ( QDirStat::PkgFilter::isPkgUrl( arg ) )
-                mainWin->readPkg( arg );
-            else
-                mainWin->openUrl( arg );
+            mainWin->openUrl( arg );
 	}
     }
 
