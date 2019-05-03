@@ -785,6 +785,11 @@
    </property>
   </action>
   <action name="actionOpenPkg">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/tree-medium/package.png</normaloff>
+     <normalon>:/icons/tree-medium/folder-pkg.png</normalon>:/icons/tree-medium/package.png</iconset>
+   </property>
    <property name="text">
     <string>Show Installed &amp;Packages...</string>
    </property>

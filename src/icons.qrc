@@ -37,6 +37,7 @@
 	<file>icons/tree-medium/char-device.png</file>
 	<file>icons/tree-medium/special.png</file>
 	<file>icons/tree-medium/package.png</file>
+	<file>icons/tree-medium/folder-pkg.png</file>
 
 	<file>icons/tree-small/dir.png</file>
 	<file>icons/tree-small/dot-entry.png</file>
@@ -50,6 +51,7 @@
 	<file>icons/tree-small/char-device.png</file>
 	<file>icons/tree-small/special.png</file>
 	<file>icons/tree-small/package.png</file>
+	<file>icons/tree-small/folder-pkg.png</file>
 
     </qresource>
 </RCC>
