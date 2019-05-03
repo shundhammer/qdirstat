@@ -61,23 +61,50 @@ namespace QDirStat
 	 **/
 	virtual QString owningPkg( const QString & path ) Q_DECL_OVERRIDE;
 
+
+        //-----------------------------------------------------------------
+        //                     Optional Features
+        //-----------------------------------------------------------------
+
+        /**
+         * Return 'true' if this package manager supports getting the list of
+         * installed packages.
+         *
+	 * Reimplemented from PkgManager.
+         **/
+        virtual bool supportsGetInstalledPkg() Q_DECL_OVERRIDE
+            { return true; }
+
         /**
          * Return the list of installed packages.
          *
          * Ownership of the list elements is transferred to the caller.
          *
-	 * Implemented from PkgManager.
+	 * Reimplemented from PkgManager.
          **/
         virtual PkgInfoList installedPkg();
 
         /**
+         * Return 'true' if this package manager supports getting the file list
+         * for a package.
+         *
+	 * Reimplemented from PkgManager.
+         **/
+        virtual bool supportsFileList() Q_DECL_OVERRIDE
+            { return true; }
+
+        /**
          * Return the command for getting the list of files and directories
          * owned by a package.
+         *
+	 * Reimplemented from PkgManager.
          **/
         virtual QString fileListCommand( PkgInfo * pkg ) Q_DECL_OVERRIDE;
 
         /**
          * Parse the output of the file list command.
+         *
+	 * Reimplemented from PkgManager.
          **/
         virtual QStringList parseFileList( const QString & output ) Q_DECL_OVERRIDE;
 

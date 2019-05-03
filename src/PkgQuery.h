@@ -45,11 +45,23 @@ namespace QDirStat
         static bool foundSupportedPkgManager();
 
         /**
+         * Return 'true' if any of the package managers has support for getting
+         * the list of installed packages.
+         **/
+        static bool haveGetInstalledPkgSupport();
+
+        /**
          * Return the list of installed packages.
          *
          * Ownership of the list elements is transferred to the caller.
          **/
         static PkgInfoList installedPkg();
+
+        /**
+         * Return 'true' if any of the package managers has support for getting
+         * the the file list for a package.
+         **/
+        static bool haveFileListSupport();
 
         /**
          * Return the list of files and directories owned by a package.
@@ -73,6 +85,18 @@ namespace QDirStat
          * Return the list of files and directories owned by a package.
          **/
         QStringList getFileList( PkgInfo * pkg );
+
+        /**
+         * Return 'true' if any of the package managers has support for getting
+         * the list of installed packages.
+         **/
+        bool checkGetInstalledPkgSupport();
+
+        /**
+         * Return 'true' if any of the package managers has support for getting
+         * the the file list for a package.
+         **/
+        bool checkFileListSupport();
 
 
     protected:

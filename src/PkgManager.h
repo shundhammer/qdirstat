@@ -99,10 +99,26 @@ namespace QDirStat
 	 **/
 	virtual QString owningPkg( const QString & path ) = 0;
 
+
+        //-----------------------------------------------------------------
+        //                     Optional Features
+        //-----------------------------------------------------------------
+
+        /**
+         * Return 'true' if this package manager supports getting the list of
+         * installed packages.
+         **/
+        virtual bool supportsGetInstalledPkg() { return false; }
+
         /**
          * Return the list of installed packages.
          *
          * Ownership of the list elements is transferred to the caller.
+         *
+         * This is an optional feature; a package manager that implements this
+         * should also return 'true' in supportsGetInstalledPkg().
+         *
+         * This default implementation returns nothing.
          **/
         virtual PkgInfoList installedPkg() { return PkgInfoList(); }
 
@@ -112,10 +128,19 @@ namespace QDirStat
         virtual QStringList fileList( PkgInfo * pkg );
 
         /**
+         * Return 'true' if this package manager supports getting the file list
+         * for a package.
+         **/
+        virtual bool supportsFileList() { return false; }
+
+        /**
          * Return the command for getting the list of files and directories
          * owned by a package.
          *
-         * This default implementation does nothing.
+         * This is an optional feature; a package manager that implements this
+         * should also return 'true' in supportsGetFileList().
+         *
+         * This default implementation returns nothing.
          **/
         virtual QString fileListCommand( PkgInfo * pkg )
             { Q_UNUSED( pkg ); return ""; }

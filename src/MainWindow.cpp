@@ -36,6 +36,7 @@
 #include "MimeCategoryConfigPage.h"
 #include "OpenPkgDialog.h"
 #include "OutputWindow.h"
+#include "PkgQuery.h"
 #include "Refresher.h"
 #include "SelectionModel.h"
 #include "Settings.h"
@@ -119,6 +120,16 @@ MainWindow::MainWindow():
 
     connectSignals();
     connectActions();
+
+    if ( ! PkgQuery::haveGetInstalledPkgSupport() ||
+         ! PkgQuery::haveFileListSupport()          )
+    {
+        logInfo() << "No package manager support "
+                  << "for getting installed packages or file lists"
+                  << endl;
+
+        _ui->actionOpenPkg->setEnabled( false );
+    }
 
     if ( ! _ui->actionShowTreemap->isChecked() )
 	_ui->treemapView->disable();

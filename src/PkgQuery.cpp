@@ -202,3 +202,39 @@ QStringList PkgQuery::getFileList( PkgInfo * pkg )
 
     return QStringList();
 }
+
+
+bool PkgQuery::haveGetInstalledPkgSupport()
+{
+    return instance()->checkGetInstalledPkgSupport();
+}
+
+
+bool PkgQuery::haveFileListSupport()
+{
+    return instance()->checkFileListSupport();
+}
+
+
+bool PkgQuery::checkGetInstalledPkgSupport()
+{
+    foreach ( PkgManager * pkgManager, _pkgManagers )
+    {
+        if ( pkgManager->supportsGetInstalledPkg() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool PkgQuery::checkFileListSupport()
+{
+    foreach ( PkgManager * pkgManager, _pkgManagers )
+    {
+        if ( pkgManager->supportsFileList() )
+            return true;
+    }
+
+    return false;
+}
