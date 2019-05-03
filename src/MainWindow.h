@@ -18,6 +18,8 @@
 
 #include "ui_main-window.h"
 #include "FileTypeStatsWindow.h"
+#include "PkgFilter.h"
+
 
 class QCloseEvent;
 class QSortFilterProxyModel;
@@ -84,7 +86,7 @@ public slots:
      * Clear the current tree and replace it with the list of installed
      * packages from the system's package manager that match 'pkgUrl'.
      **/
-    void readPkg( const QString & pkgUrl );
+    void readPkg( const QDirStat::PkgFilter & pkgFilter );
 
     /**
      * Clear the current tree and replace it with the content of the specified

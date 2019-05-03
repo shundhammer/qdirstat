@@ -35,7 +35,6 @@
 #include "MimeCategorizer.h"
 #include "MimeCategoryConfigPage.h"
 #include "OutputWindow.h"
-#include "PkgFilter.h"
 #include "Refresher.h"
 #include "SelectionModel.h"
 #include "Settings.h"
@@ -53,6 +52,7 @@ using QDirStat::DataColumns;
 using QDirStat::DirTreeModel;
 using QDirStat::SelectionModel;
 using QDirStat::CleanupCollection;
+using QDirStat::PkgFilter;
 
 
 MainWindow::MainWindow():
@@ -722,12 +722,12 @@ void MainWindow::askWriteCache()
 }
 
 
-void MainWindow::readPkg( const QString & pkgUrl )
+void MainWindow::readPkg( const PkgFilter & pkgFilter )
 {
-    logInfo() << "URL: " << pkgUrl << endl;
+    logInfo() << "URL: " << pkgFilter.url() << endl;
 
-    updateWindowTitle( pkgUrl );
-    _dirTreeModel->readPkg( pkgUrl );
+    updateWindowTitle( pkgFilter.url() );
+    _dirTreeModel->readPkg( pkgFilter );
 }
 
 

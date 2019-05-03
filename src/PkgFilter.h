@@ -54,7 +54,7 @@ namespace QDirStat
          * - If it's empty (i.e. just "Pkg:/"), it uses "SelectAll".
          **/
         PkgFilter( const QString & pattern,
-                   FilterMode      filterMode = StartsWith );
+                   FilterMode      filterMode = Auto );
 
         /**
          * Constructor: Create a package filter with the specified regexp
@@ -78,9 +78,14 @@ namespace QDirStat
         static bool isPkgUrl( const QString & url );
 
         /**
-         * Return the pattern.
+         * Return the pattern without the leading "Pkg:/".
          **/
         const QString & pattern() const { return _pattern; }
+
+        /**
+         * Return the package URL including the leading "Pkg:/".
+         **/
+        QString url() const;
 
         /**
          * Return the regexp. This is only meaningful in filter modes RegExp

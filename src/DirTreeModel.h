@@ -18,6 +18,7 @@
 
 #include "DataColumns.h"
 #include "FileInfo.h"
+#include "PkgFilter.h"
 
 
 namespace QDirStat
@@ -123,12 +124,23 @@ namespace QDirStat
 	/**
 	 * Open a directory URL.
 	 **/
-	void openUrl( const QString &url );
+	void openUrl( const QString & url );
 
         /**
-         * Open a pkg URl.
+         * Open a pkg URL: Read installed packages that match the specified
+         * PkgFilter and their file lists from the system's package manager(s).
+         *
+         * Notice that PkgFilter has a constructor that takes a QString and
+         * uses PkgFilter::Auto as the default filter mode to determine the
+         * filter mode from any special characters present in the URL, e.g.
+         *
+         * "Pkg:/"                     -> PkgFilter::SelectAll
+         * contains "*" or "?"         -> PkgFilter::Wildcard
+         * contains "^" or "$" or ".*" -> PkgFilter::RegExp
+         * "Pkg:/=foo"                 -> PkgFilter::ExactMatch
+         * otherwise                   -> PkgFilter::StartsWith
          **/
-        void readPkg( const QString &pkgUrl );
+        void readPkg( const PkgFilter & pkgFilter );
 
 	/**
 	 * Clear this view's contents.
@@ -250,7 +262,7 @@ namespace QDirStat
 	 * Return item flags for the specified model index. This specifies if
 	 * the item can be selected, edited etc.
 	 **/
-	virtual Qt::ItemFlags flags( const QModelIndex &index ) const Q_DECL_OVERRIDE;
+	virtual Qt::ItemFlags flags( const QModelIndex & index ) const Q_DECL_OVERRIDE;
 
 	/**
 	 * Return the model index for the specified row (direct tree child

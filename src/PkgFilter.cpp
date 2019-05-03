@@ -136,3 +136,8 @@ bool PkgFilter::isPkgUrl( const QString & url )
     return url.startsWith( "Pkg:", Qt::CaseInsensitive );
 }
 
+
+QString PkgFilter::url() const
+{
+    return QString( "Pkg:/%1" ).arg( _pattern );
+}

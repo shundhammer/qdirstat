@@ -56,8 +56,7 @@ namespace QDirStat
 	 * Qt event loop, so whenever there is no user or X11 event to process,
 	 * it will pick one read job and execute it.
 	 **/
-	void read( const PkgFilter & filter =
-                   PkgFilter( "", PkgFilter::SelectAll ) );
+	void read( const PkgFilter & filter );
 
 	/**
 	 * Read parameters from the settings file.

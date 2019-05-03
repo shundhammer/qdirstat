@@ -139,7 +139,7 @@ void DirTreeModel::clear()
 }
 
 
-void DirTreeModel::openUrl( const QString &url )
+void DirTreeModel::openUrl( const QString & url )
 {
     CHECK_PTR( _tree );
 
@@ -151,7 +151,7 @@ void DirTreeModel::openUrl( const QString &url )
 }
 
 
-void DirTreeModel::readPkg( const QString &url )
+void DirTreeModel::readPkg( const PkgFilter & pkgFilter )
 {
     CHECK_PTR( _tree );
 
@@ -159,7 +159,7 @@ void DirTreeModel::readPkg( const QString &url )
 	clear();
 
     _updateTimer.start();
-    _tree->readPkg( url );
+    _tree->readPkg( pkgFilter );
 }
 
 
@@ -252,7 +252,7 @@ int DirTreeModel::rowNumber( FileInfo * child ) const
 // Reimplented from QAbstractItemModel
 //
 
-int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
+int DirTreeModel::rowCount( const QModelIndex & parentIndex ) const
 {
     if ( ! _tree )
 	return 0;
@@ -329,7 +329,7 @@ int DirTreeModel::rowCount( const QModelIndex &parentIndex ) const
 }
 
 
-int DirTreeModel::columnCount( const QModelIndex &parent ) const
+int DirTreeModel::columnCount( const QModelIndex & parent ) const
 {
     Q_UNUSED( parent );
 
@@ -337,7 +337,7 @@ int DirTreeModel::columnCount( const QModelIndex &parent ) const
 }
 
 
-QVariant DirTreeModel::data( const QModelIndex &index, int role ) const
+QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 {
     if ( ! index.isValid() )
 	return QVariant();
@@ -496,7 +496,7 @@ QVariant DirTreeModel::headerData( int		   section,
 }
 
 
-Qt::ItemFlags DirTreeModel::flags( const QModelIndex &index ) const
+Qt::ItemFlags DirTreeModel::flags( const QModelIndex & index ) const
 {
     if ( ! index.isValid() )
 	return Qt::NoItemFlags;
@@ -555,7 +555,7 @@ QModelIndex DirTreeModel::index( int row, int column, const QModelIndex & parent
 }
 
 
-QModelIndex DirTreeModel::parent( const QModelIndex &index ) const
+QModelIndex DirTreeModel::parent( const QModelIndex & index ) const
 {
     if ( ! index.isValid() )
 	return QModelIndex();

@@ -19,6 +19,7 @@
 #include "Logger.h"
 #include "DirInfo.h"
 #include "DirReadJob.h"
+#include "PkgFilter.h"
 
 
 namespace QDirStat
@@ -175,7 +176,7 @@ namespace QDirStat
         /**
          * Unblock a previously blocked read job so it is scheduled along with
          * the other pending jobs.
-         **/ 
+         **/
         void unblock( DirReadJob * job );
 
 	/**
@@ -269,10 +270,10 @@ namespace QDirStat
 	void readCache( const QString & cacheFileName );
 
         /**
-         * Read installed packages that match 'pkgUrl' and their file lists
-         * from the system's package manager(s).
+         * Read installed packages that match the specified PkgFilter and their
+         * file lists from the system's package manager(s).
          **/
-        void readPkg( const QString & pkgUrl );
+        void readPkg( const PkgFilter & pkgFilter );
 
 
     signals:

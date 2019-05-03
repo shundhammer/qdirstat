@@ -408,15 +408,15 @@ void DirTree::readCache( const QString & cacheFileName )
 }
 
 
-void DirTree::readPkg( const QString & pkgUrl )
+void DirTree::readPkg( const PkgFilter & pkgFilter )
 {
     clear();
     _isBusy = true;
-    _url    = pkgUrl;
+    _url    = pkgFilter.url();
     emit startingReading();
 
     PkgReader reader( this );
-    reader.read( PkgFilter( pkgUrl, PkgFilter::Auto ) );
+    reader.read( pkgFilter );
 }
 
 
