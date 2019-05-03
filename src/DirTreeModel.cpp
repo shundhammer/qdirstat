@@ -184,11 +184,9 @@ void DirTreeModel::loadIcons()
     _stopIcon	       = QPixmap( _treeIconDir + "stop.png"	      );
     _excludedIcon      = QPixmap( _treeIconDir + "excluded.png"	      );
     _blockDeviceIcon   = QPixmap( _treeIconDir + "block-device.png"   );
-    _charDeviceIcon    = QPixmap( _treeIconDir + "char-device.png"   );
-    _specialIcon       = QPixmap( _treeIconDir + "special.png"	 );
-
-    // FIXME: Find a real icon for packages.
-    _pkgIcon           = _dirIcon;
+    _charDeviceIcon    = QPixmap( _treeIconDir + "char-device.png"    );
+    _specialIcon       = QPixmap( _treeIconDir + "special.png"	      );
+    _pkgIcon	       = QPixmap( _treeIconDir + "package.png"	      );
 }
 
 
@@ -464,7 +462,7 @@ QVariant DirTreeModel::headerData( int		   section,
 		case NameCol:		  return tr( "Name"		  );
 		case PercentBarCol:	  return tr( "Subtree Percentage" );
 		case PercentNumCol:	  return tr( "%"		  );
-		case SizeCol:	          return tr( "Size"	          );
+		case SizeCol:		  return tr( "Size"		  );
 		case TotalItemsCol:	  return tr( "Items"		  );
 		case TotalFilesCol:	  return tr( "Files"		  );
 		case TotalSubDirsCol:	  return tr( "Subdirs"		  );
@@ -485,7 +483,7 @@ QVariant DirTreeModel::headerData( int		   section,
 		case TotalItemsCol:
 		case TotalFilesCol:
 		case TotalSubDirsCol:
-                case LatestMTimeCol:
+		case LatestMTimeCol:
 		case PermissionsCol:
 		case OctalPermissionsCol: return Qt::AlignHCenter;
 		default:		  return Qt::AlignLeft;
@@ -658,7 +656,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	case NameCol:		  return item->name();
 	case PercentBarCol:	  return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
 	case PercentNumCol:	  return item == _tree->firstToplevel() ? QVariant() : formatPercent( item->subtreePercent() );
-        case SizeCol:	          return sizeColText( item );
+	case SizeCol:		  return sizeColText( item );
 	case LatestMTimeCol:	  return QString( "  " ) + formatTime( item->latestMtime() );
 	case UserCol:		  return limitedInfo ? QVariant() : item->userName();
 	case GroupCol:		  return limitedInfo ? QVariant() : item->groupName();
@@ -693,8 +691,8 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 
     if ( item->isDirInfo() || item->isDotEntry() )
     {
-        QString prefix = item->readState() == DirAborted ? ">" : "";
-        return prefix + formatSize( item->totalSize() );
+	QString prefix = item->readState() == DirAborted ? ">" : "";
+	return prefix + formatSize( item->totalSize() );
     }
 
     QString text;
@@ -741,7 +739,7 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
     QPixmap icon;
 
     if	    ( item->isDotEntry() )  icon = _dotEntryIcon;
-    else if ( item->isPkgInfo()  )  icon = _pkgIcon;
+    else if ( item->isPkgInfo()	 )  icon = _pkgIcon;
     else if ( item->isExcluded() )  icon = _excludedIcon;
     else if ( item->isDir()	 )
     {
@@ -771,8 +769,8 @@ void DirTreeModel::readJobFinished( DirInfo * dir )
 
     if ( anyAncestorBusy( dir ) )
     {
-        if  ( dir && ! dir->isMountPoint() )
-            logDebug() << "Ancestor busy - ignoring readJobFinished for " << dir << endl;
+	if  ( dir && ! dir->isMountPoint() )
+	    logDebug() << "Ancestor busy - ignoring readJobFinished for " << dir << endl;
     }
     else
     {
@@ -964,15 +962,15 @@ void DirTreeModel::beginRemoveRows( const QModelIndex & parent, int first, int l
 {
     if ( _removingRows )
     {
-        logError() << "Removing rows already in progress" << endl;
-        return;
+	logError() << "Removing rows already in progress" << endl;
+	return;
     }
 
 
     if ( ! parent.isValid() )
     {
-        logError() << "Invalid QModelIndex" << endl;
-        return;
+	logError() << "Invalid QModelIndex" << endl;
+	return;
     }
 
     _removingRows = true;
@@ -984,8 +982,8 @@ void DirTreeModel::endRemoveRows()
 {
     if ( _removingRows )
     {
-        QAbstractItemModel::endRemoveRows();
-        _removingRows = false;
+	QAbstractItemModel::endRemoveRows();
+	_removingRows = false;
     }
 }
 
