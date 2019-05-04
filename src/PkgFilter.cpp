@@ -27,6 +27,8 @@ PkgFilter::PkgFilter( const QString & pattern,
 
     if ( _filterMode == Wildcard )
         _regexp.setPatternSyntax( QRegExp::Wildcard );
+
+    _regexp.setCaseSensitivity( Qt::CaseInsensitive );
 }
 
 
@@ -76,7 +78,10 @@ void PkgFilter::guessFilterMode()
     }
     else if ( _pattern.contains( ".*" ) ||
               _pattern.contains( "^"  ) ||
-              _pattern.contains( "$"  )   )
+              _pattern.contains( "$"  ) ||
+              _pattern.contains( "("  ) ||
+              _pattern.contains( "|"  ) ||
+              _pattern.contains( "["  )   )
     {
         _filterMode = RegExp;
     }
@@ -102,11 +107,11 @@ bool PkgFilter::matches( const QString & str ) const
 {
     switch ( _filterMode )
     {
-        case Contains:   return str.contains  ( _pattern );
-        case StartsWith: return str.startsWith( _pattern );
-        case ExactMatch: return str == _pattern;
-        case Wildcard:
-        case RegExp:     return _regexp.exactMatch( str );
+        case Contains:   return str.contains  ( _pattern, Qt::CaseInsensitive );
+        case StartsWith: return str.startsWith( _pattern, Qt::CaseInsensitive );
+        case ExactMatch: return QString::compare( str, _pattern, Qt::CaseInsensitive ) == 0;
+        case Wildcard:   return _regexp.exactMatch( str );
+        case RegExp:     return str.contains( _regexp );
         case SelectAll:  return true;
         case Auto:
             logWarning() << "Unexpected filter mode 'Auto' - assuming 'Contains'" << endl;
