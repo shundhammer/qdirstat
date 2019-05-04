@@ -102,7 +102,7 @@ qdirstat pkg:/chrom
 
 All packages starting with "chrom" or "Chrom" or "CHROM".
 
-_Notice that all patterns are case insensitive (mostly because distro makers
+_Notice that all patterns are case insensitive -- mostly because distro makers
 and packagers tend to get creative when to use uppercase characters in package
 names, and most users can't remember when or why._
 
@@ -148,7 +148,7 @@ qdirstat -d
 ```
 
 Of course you can always simply click that dialog away with the _Cancel_
-button, but it might be useful for .desktop files to have that command line
+button, but it might be useful for `.desktop` files to have that command line
 parameter.
 
 
@@ -168,11 +168,11 @@ are treated internally as separate packages.
 To get the package list, QDirStat uses any of those commands:
 
 ```
-dpkg-query --show --showformat="${Package} | ${Version} | ${Architecture} | ${Status}\n"
+dpkg-query --show --showformat='${Package} | ${Version} | ${Architecture} | ${Status}\n'
 ```
 
 ```
-rpm -qa --queryformat ""%{name} | %{version}-%{release} | %{arch}\n"
+rpm -qa --queryformat '%{name} | %{version}-%{release} | %{arch}\n'
 ```
 
 ```
@@ -204,8 +204,8 @@ As you can imagine, waiting for all those external commands to return
 information takes a while, in particular when all installed packages are
 selected to display.
 
-The first version of this took about 4 min to fetch all the information for a
-quite normal Xubuntu 18.04 LTS installation -- much longer than just reading
+The first version of this took about 4 minutes to fetch all the information for
+a quite normal Xubuntu 18.04 LTS installation -- much longer than just reading
 the complete root filesystem with cold kernel buffers.
 
 This is why now QDirStat starts a number of those external commands in
@@ -240,8 +240,8 @@ more files in such a directory; for most directories, this is almost
 guaranteed.
 
 If you identify a disk space hog with the packages view, it is strongly advised
-that you use your package manager to try to get rid of it -- and even then only
-if you know really well what you are doing.
+that you use your package manager to try to get rid of it, i.e. uninstall that
+package -- and even then only if you know really well what you are doing.
 
 
 ### Dependencies
@@ -254,8 +254,8 @@ much less indirect dependencies. This is the package manager's job.
 
 If you identified a package that uses a lot of disk space, you will very likely
 find that some other package requires it, and yet another package requires that
-one etc. until you get to the level where you even recognize a package that you
-actively use.
+one etc. until you get to the level where you can even recognize a package that
+you actively use.
 
 Big fat `libfoo-locale` might be required by `libfoo` which might be required
 by `foomatic` which might be required by `bar-desktop-base` which may be
@@ -276,21 +276,31 @@ also need to be removed.
 Most higher-level package managers such as `zypper` or `apt` have a _dry run_
 feature that could be used for this: Try a dry run of removing the `libfoo`
 package, and it will show you all the direct and indirect dependencies, so you
-can make an informed decision if you really can (and want) to live without all
+can make an informed decision if you really can (and want to) live without all
 those packages.
 
-But all those commands require root permissions, even for the _dry run_ mode,
-and a desktop program like QDirStat asking for your _sudo_ password to get
-those root permissions might be scary (and for good reasons) to many users.
+But those commands tend to require root permissions, even for the _dry run_
+mode, and a desktop program like QDirStat asking for your _sudo_ password to
+get those root permissions might be scary (and for good reasons) to many users.
 
 
 ## Support for More Package Managers
 
 It's not that hard to add more package managers to the existing set, but there
 must be reasonable support for that by people who actively use that platform
-and have the know-how to identify and fix problems.
+and who have the know-how to identify and fix problems.
 
 Check out the existing ones to get an idea; it's little more than copy & paste
 programming. Finding the right external programs and the right parameters is
 the major challenge; then there might be some minor programming work for
 parsing the output.
+
+https://github.com/shundhammer/qdirstat/blob/master/src/RpmPkgManager.h
+https://github.com/shundhammer/qdirstat/blob/master/src/RpmPkgManager.cpp
+
+https://github.com/shundhammer/qdirstat/blob/master/src/DpkgPkgManager.h
+https://github.com/shundhammer/qdirstat/blob/master/src/DpkgPkgManager.cpp
+
+https://github.com/shundhammer/qdirstat/blob/master/src/PacManPkgManager.h
+https://github.com/shundhammer/qdirstat/blob/master/src/PacManPkgManager.cpp
+
