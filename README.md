@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-04-30
+Updated: 2019-05-04
 
 
 ## Overview
@@ -122,6 +122,34 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2019-05-04
+
+  New **packages view**:
+  QDirStat can now visualize the file lists of installed packages:
+
+  [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-pkg-details.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-pkg-details.png)
+
+  I.e. files are now grouped by the package they belong to, and in each subtree
+  only the files that belong to the package are displayed: In this example, in
+  `/usr/bin` only the `chromium-browser` binary is displayed, not all the other
+  files in `/usr/bin`. This is intentional.
+
+  You can display all installed packages with their file lists (but that takes
+  a while), or you can select just a subset. Use Menu _File_ -> _Show Installed
+  Packages_ or start QDirStat with a `pkg:/` command line argument.
+
+  As with the other package manager related features, this is supported for all
+  Linux distributions that use one of _dpkg_, _rpm_ or _pacman_ (or any
+  higher-level package manager based on any of those like _apt_, _zypper_ etc.).
+
+  More details at [Pkg-View.md](doc/Pkg-View.md).
+
+  Comments and questions are welcome at [GitHub Issue #100](https://github.com/shundhammer/qdirstat/issues/100).
+
+  If you have a genuine problem with the new feature, please open a separate
+  issue so it can be tracked properly.
+
 
 - 2019-04-12
 
@@ -741,7 +769,7 @@ independent of that; it is based on the old KDE 3 KDirStat directly.
 - du
 
 See
-[Disk Usage Tools Compared](https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared): 
+[Disk Usage Tools Compared](https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared):
 QDirStat vs. K4DirStat vs. Baobab vs. Filelight vs. ncdu (including benchmarks)
 in the Wiki.
 
@@ -896,6 +924,11 @@ old code base that had been long overdue.
   documentation that everybody should be able to understand. Even if (or,
   better yet, in particular if) your math teacher or statistics professor never
   explained it properly, please have a lot at it.
+
+- Packages view: Show installed packages and their files in the tree. Supported
+  for all Linux distributions using any of _dpkg_, _rpm_, _pacman_ as their
+  low-level package manager or any higher-level package manager like _apt_,
+  _zypper_ etc.; more details at [Pkg-View.md](doc/Pkg-View.md).
 
 - New macros to use in cleanup actions:
 
