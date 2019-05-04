@@ -74,6 +74,36 @@ _Locating files with a specific extension. That branch is automatically opened
 in the tree view in the main window, and all matching files in that directory are selected._
 
 
+## Packages View
+
+![Packages View Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-pkg-details.png)
+
+_Packages View: All packages of a Xubuntu 18.04 LTS installation. Notice that
+each directory contains only the files that belong to that package: /usr/bin
+only contains the chromium-browser binary in this view._
+
+
+![Packages Summary Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-pkg-summary.png)
+
+_Packages Summary_
+
+
+![Packages View Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-pkg-emacs.png)
+
+_Packages view limited to package names starting with "emacs"._
+
+
+!["Open Packages" Dialog Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-open-pkg-dialog.png)
+
+_Dialog for selecting which packages to display. Use menu "File" -> "Show
+Installed Packages"._
+
+_To avoid the initial "Choose Directory" dialog, start QDirStat with the "-d"
+or "--dont-ask" command line parameter (or simply click "Cancel" in the "Choose
+Directory" dialog)._
+
+
+
 ## Configuration
 
 
