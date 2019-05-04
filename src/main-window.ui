@@ -193,6 +193,7 @@
     <addaction name="actionHelp"/>
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
+    <addaction name="actionPkgViewHelp"/>
     <addaction name="actionWhatsNew"/>
     <addaction name="actionDonate"/>
    </widget>
@@ -795,6 +796,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionPkgViewHelp">
+   <property name="text">
+    <string>The Packages View...</string>
+   </property>
+   <property name="toolTip">
+    <string>Help about the Packages View (external browser)</string>
    </property>
   </action>
  </widget>

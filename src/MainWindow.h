@@ -174,6 +174,11 @@ public slots:
     void showHelp();
 
     /**
+     * Show online help about the packages view.
+     **/
+    void showPkgViewHelp();
+
+    /**
      * Show the "about" dialog.
      **/
     void showAboutDialog();
