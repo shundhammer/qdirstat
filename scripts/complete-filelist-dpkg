@@ -48,35 +48,6 @@ filter_filelist()
 }
 
 
-# Change each line of the file list to a line that matches a file (not a
-# directory!) entry in a QDirStat cache file.
-#
-# We don't want to match directories here because they might not be empty even
-# after disregarding all packaged files in them. So we use a file entry ('F')
-# for the regexp in each case; if it's a directory, it simply won't match
-# against the entry in the cache file.
-#
-# Sample cache file entries:
-#
-# F /bin/bash	1113504	0x5ac519c2
-# D /usr/include	12288	0x5caa0bed
-#
-create_regexp_list()
-{
-    echo -n "Creating regexps..."
-    
-    # Need to escape a literal [ for the alias for /usr/bin/test and its man page.
-    # Notice that egrep does not understand \d for digits.
-    sed \
-        -e 's:\[:\\[:'          \
-        -e 's:^/:^F\\s+/:'      \
-        -e 's:$:\\s+[0-9]+.*:'    \
-        <$FILELIST >$REGEXP_LIST
-    echo " done"
-}
-
-
 create_pkglist
 get_complete_filelist
 filter_filelist
-# create_regexp_list
