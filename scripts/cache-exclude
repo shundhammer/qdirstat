@@ -1,0 +1,203 @@
+#!/usr/bin/perl -w
+#
+# cache-exclude - script to filter out a list of files from a cache file.
+#
+# Author:  Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+# License: GPL V2
+#
+
+use strict;
+use English;
+use Getopt::Std;
+use vars qw( $opt_l $opt_m $opt_v $opt_d $opt_h );
+
+
+
+# Forward declarations.
+
+sub main();
+
+# Global variables.
+
+my $verbose	= 0;
+my $debug	= 0;
+
+my %excludes;
+
+
+# Call the main function and exit.
+# DO NOT enter any other code outside a sub -
+# any variables would otherwise be global.
+
+
+main();
+exit 0;
+
+
+#-----------------------------------------------------------------------------
+
+
+sub main()
+{
+    # Extract command line options.
+    # This will set a variable opt_? for any option,
+    # e.g. opt_v if option '-v' is passed on the command line.
+
+    getopts('vdh');
+
+    usage()			if $opt_h;
+    $verbose		= 1 	if $opt_v;
+    $debug		= 1 	if $opt_d;
+
+    # One or two parameters are required
+    # (yes, Perl does weird counting)
+    usage() if $#ARGV < 0 || $#ARGV > 1;
+
+    my $exclude_file_name = shift @ARGV;
+
+    read_exclude_file( $exclude_file_name );
+    filter_cache_file();
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Read an exclude file consisting of paths to exclude and store each path in
+# the %excludes hash.
+
+sub read_exclude_file()
+{
+    my ( $filename ) = @_;
+    logf( "Reading excludes from $filename" );
+
+    open( EXCLUDE, $filename ) or die "FATAL: Can't open $filename";
+
+    while ( my $line = <EXCLUDE> )
+    {
+        chomp $line;            # Remove trailing newline
+        $line =~ s/^\s*//;      # Remove leading  whitespace
+        $line =~ s/\s*$//;      # Remove trailing whitespace
+
+        if ( $line ne "" )
+        {
+            # deb( "Adding exclude \"$line\"" );
+            $excludes{ $line } = 1;
+        }
+    }
+    
+    close( EXCLUDE );
+
+    my $size = keys %excludes;
+    logf( "Read $size exitems from exclude file $filename" );
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Filter a QDirStat cache file: Read stdin, filter out all file paths in the
+# %exclude hash and write the remaining lines to stdout.
+
+sub filter_cache_file()
+{
+    while ( my $line = <> )
+    {
+        my $suppress = 0;
+        chomp $line;
+
+        if ( $line !~ /^\s*$/ && $line !~ /^\s*#/ ) # skip empty and comment lines
+        {
+            my ( $type, $path ) = split( /\s+/, $line );
+
+            if ( $type ne "D" ) # don't try to exclude directories
+            {
+                $suppress = defined $excludes{ $path };
+                deb( "Excluding line $line" ) if $suppress;
+            }
+        }
+
+        print "$line\n" unless $suppress;
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Log a message to stdout if verbose mode is set
+# (command line option '-v').
+#
+# Parameters:
+#	Messages to write (any number).
+
+sub logf()
+{
+    my $msg;
+
+    if ( $verbose )
+    {
+	foreach $msg( @_ )
+	{
+	    print STDERR $msg . " ";
+	}
+
+	$OUTPUT_AUTOFLUSH = 1;	# inhibit buffering
+	print STDERR "\n";
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Log a debugging message to stdout if debug mode is set
+# (command line option '-d').
+#
+# Parameters:
+#	Messages to write (any number).
+
+sub deb()
+{
+    my $msg;
+
+    if ( $debug )
+    {
+	foreach $msg( @_ )
+	{
+	    print STDERR $msg . " ";
+	}
+
+	$OUTPUT_AUTOFLUSH = 1;	# inhibit buffering
+	print STDERR "\n";
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Print usage message and abort program.
+#
+# Parameters:
+#	---
+
+sub usage()
+{
+    die <<"USAGE-END";
+
+cache-exclude - script to filter out file lists from a QDirStat cache file
+
+Usage:
+	$0 [-ldh] <exclude-file>
+
+        Redirect stdin and stdout for the input and output cache file.
+
+	-v	verbose
+	-d	debug
+	-h	help (this usage message)
+
+USAGE-END
+
+}
+
