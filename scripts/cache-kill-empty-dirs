@@ -1,0 +1,255 @@
+#!/usr/bin/perl -w
+#
+# cache-kill-empty-dirs - script to filter out empty directories from a cache
+# file
+#
+# Author:  Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+# License: GPL V2
+#
+
+use strict;
+use English;
+use Getopt::Std;
+use vars qw( $opt_l $opt_m $opt_v $opt_d $opt_h );
+
+
+
+# Forward declarations.
+
+sub main();
+
+# Global variables.
+
+my $verbose	= 0;
+my $debug	= 0;
+
+my @lines;
+my %paths;
+
+
+# Call the main function and exit.
+# DO NOT enter any other code outside a sub -
+# any variables would otherwise be global.
+
+
+main();
+exit 0;
+
+
+#-----------------------------------------------------------------------------
+
+
+sub main()
+{
+    # Extract command line options.
+    # This will set a variable opt_? for any option,
+    # e.g. opt_v if option '-v' is passed on the command line.
+
+    getopts('vdh');
+
+    usage()			if $opt_h;
+    $verbose		= 1 	if $opt_v;
+    $debug		= 1 	if $opt_d;
+
+    # One or two parameters are required
+    # (yes, Perl does weird counting)
+    usage() if $#ARGV != -1;
+
+    read_cache_file();
+    kill_empty_dirs();
+    write_cache_file();
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Read a QDirStat cache file from stdin and store the content in the @lines array.
+
+sub read_cache_file()
+{
+    @lines = ();
+
+    while ( my $line = <> )
+    {
+        chomp $line;
+        push @lines, $line;
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Write a QDirStat cache file to stdout from the @lines array
+
+sub write_cache_file()
+{
+    my $line;
+
+    foreach $line ( @lines )
+    {
+        print "$line\n";
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Remove empty directories from the cache file.
+
+sub kill_empty_dirs()
+{
+    my @reverse_lines = reverse @lines;
+    @lines = ();
+    my $line;
+    my %used_paths;
+
+    foreach $line ( @reverse_lines )
+    {
+        my $suppress = 0;
+
+        if ( $line =~ /# File system boundary at mount point/ )
+        {
+            # Keep mount points: There is a comment in the line after the
+            # directory line:
+            #
+            #   # File system boundary at mount point /work on device /dev/sdb5
+            #
+            # Since we are iterating in reverse over the cache, we can simply
+            # mark that path as used to keep the directory entry that we will
+            # read in the next loop iteration.
+
+            my $path = $line;
+            $path =~ s:^.*at mount point /:/:;
+            $path =~ s: on device.*::;
+
+            deb( "Keeping mount point $path" );
+            $used_paths{ $path } = 1;
+        }
+        elsif ( $line !~ /^\s*$/ && $line !~ /^\s*#/ ) # skip empty and comment lines
+        {
+            my ( $type, $path ) = split( /\s+/, $line );
+
+            if ( $type eq "D" )
+            {
+                $suppress = ! defined $used_paths{ $path };
+
+                if ( $suppress )
+                {
+                    deb( "Killing dir $path" );
+                }
+                else
+                {
+                    $used_paths{ parent_path( $path ) } = 1;
+                }
+            }
+            else
+            {
+                $used_paths{ parent_path( $path ) } = 1;
+            }
+        }
+
+        push @lines, $line unless $suppress;
+    }
+
+    @lines = reverse @lines;
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+sub parent_path()
+{
+    my ( $path ) = @_;
+    my $parent_path = $path;
+    $parent_path =~ s:(.*)/+.*:$1:;
+    $parent_path = "/" if $parent_path eq "";
+
+    # deb( "path: $path parent_path: $parent_path" );
+
+    return $parent_path;
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Log a message to stdout if verbose mode is set
+# (command line option '-v').
+#
+# Parameters:
+#	Messages to write (any number).
+
+sub logf()
+{
+    my $msg;
+
+    if ( $verbose )
+    {
+	foreach $msg( @_ )
+	{
+	    print STDERR $msg . " ";
+	}
+
+	$OUTPUT_AUTOFLUSH = 1;	# inhibit buffering
+	print STDERR "\n";
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Log a debugging message to stdout if debug mode is set
+# (command line option '-d').
+#
+# Parameters:
+#	Messages to write (any number).
+
+sub deb()
+{
+    my $msg;
+
+    if ( $debug )
+    {
+	foreach $msg( @_ )
+	{
+	    print STDERR $msg . " ";
+	}
+
+	$OUTPUT_AUTOFLUSH = 1;	# inhibit buffering
+	print STDERR "\n";
+    }
+}
+
+
+#-----------------------------------------------------------------------------
+
+
+# Print usage message and abort program.
+#
+# Parameters:
+#	---
+
+sub usage()
+{
+    die <<"USAGE-END";
+
+cache-kill-empty-dirs - remove empty directories from a QDirStat cache file
+
+Usage:
+	$0 [-ldh]
+
+        Redirect stdin and stdout for the input and output cache file.
+
+	-v	verbose
+	-d	debug
+	-h	help (this usage message)
+
+USAGE-END
+
+}
+

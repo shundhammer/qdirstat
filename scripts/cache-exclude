@@ -186,7 +186,7 @@ sub usage()
 {
     die <<"USAGE-END";
 
-cache-exclude - script to filter out file lists from a QDirStat cache file
+cache-exclude - exclude the content of a file list from a QDirStat cache file
 
 Usage:
 	$0 [-ldh] <exclude-file>
