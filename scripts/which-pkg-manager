@@ -1,0 +1,35 @@
+#/!bin/sh
+#
+# Show which primary package manager is used in the system.
+# Currently supported: dpkg, rpm, pacman
+#
+# Author:  Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+# License: GPL V2
+#
+
+RPM=/bin/rpm
+DPKG=/usr/bin/dpkg
+PACMAN=/usr/bin/pacman
+
+
+check_primary_rpm()
+{
+    test -x $RPM && $RPM -qf $RPM | sed -e 's/-.*//'
+}
+
+
+check_primary_dpkg()
+{
+    test -x $DPKG && $DPKG -S $DPKG | grep '^dpkg:' | sed -e 's/:.*/'
+}
+
+
+check_primary_pacman()
+{
+    test -x $PACMAN && $PACMAN -Qo $PACMAN | grep "is owned by pacman" | sed -e 's/^.*is owned by //'
+}
+
+
+check_primary_rpm
+check_primary_dpkg
+check_primary_pacman
