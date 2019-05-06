@@ -9,6 +9,11 @@
 
 SCRIPT_NAME=$(basename $0)
 
+TMPDIR=/tmp/qdirstat-$USER
+PKGLIST=$TMPDIR/pkglist.txt
+FILELIST=$TMPDIR/filelist.txt
+
+
 die()
 {
     msg="$*"
@@ -36,67 +41,23 @@ check_tmpdir_security()
 }
 
 
-TMPDIR=/tmp/qdirstat-$USER
+get_complete_filelist()
+{
+    rm -f $FILELIST
+    
+    echo -n "Reading file lists... "
+    rpm -qla | sort -u >$FILELIST
+    echo " done"
+
+    wc -l $FILELIST
+}
+
+
+#
+# main()
+#
+
 create_tmpdir
 check_tmpdir_security
 
-
-PKGLIST=$TMPDIR/pkglist.txt
-FILELIST_RAW=$TMPDIR/filelist-raw.txt
-FILELIST=$TMPDIR/filelist.txt
-
-
-create_pkglist()
-{
-    rpm -qa >$PKGLIST
-    wc -l $PKGLIST
-}
-
-
-clear_last_line()
-{
-    tput cuu 1 && tput el
-}
-
-
-add_filelist()
-{
-    pkg=$1
-    clear_last_line
-    echo "Reading file list for $pkg"
-    rpm -ql $pkg >>$FILELIST_RAW
-}
-
-
-get_complete_filelist()
-{
-    rm -f $FILELIST_RAW
-    rm -f $FILELIST
-
-    echo "Reading file lists..."
-
-    for pkg in $(sort $PKGLIST); do
-        add_filelist $pkg
-    done
-
-    clear_last_line
-}
-
-
-sort_filelist()
-{
-    echo -n "Sorting file list... "
-    
-    sort -u <$FILELIST_RAW >$FILELIST
-    
-    echo " done"
-    clear_last_line
-    wc -l $FILELIST
-
-    rm $FILELIST_RAW
-}
-
-
-create_pkglist
 get_complete_filelist
-sort_filelist
