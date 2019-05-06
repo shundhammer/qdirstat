@@ -1,0 +1,102 @@
+#/bin/sh
+#
+# Create a complete file list for all installed packages
+# rpm version
+#
+# Author:  Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+# License: GPL V2
+
+
+SCRIPT_NAME=$(basename $0)
+
+die()
+{
+    msg="$*"
+    echo "$SCRIPT_NAME: FATAL: $msg"
+    exit 1
+}
+
+
+create_tmpdir()
+{
+    test -d $TMPDIR || mkdir -p $TMPDIR
+    test -d $TMPDIR || die "Can't create tmp dir $TMPDIR"
+}
+
+
+# Make sure the tmp directory has the right user and group ownership and
+# permissions
+
+check_tmpdir_security()
+{
+
+    test $(stat $TMPDIR --format "%u") -eq $(id -u) || die "$TMPDIR: Wrong user ownership"
+    test $(stat $TMPDIR --format "%g") -eq $(id -g) || die "$TMPDIR: Wrong group ownership"
+    chmod 700 $TMPDIR
+}
+
+
+TMPDIR=/tmp/qdirstat-$USER
+create_tmpdir
+check_tmpdir_security
+
+
+PKGLIST=$TMPDIR/pkglist.txt
+FILELIST_RAW=$TMPDIR/filelist-raw.txt
+FILELIST=$TMPDIR/filelist.txt
+
+
+create_pkglist()
+{
+    rpm -qa >$PKGLIST
+    wc -l $PKGLIST
+}
+
+
+clear_last_line()
+{
+    tput cuu 1 && tput el
+}
+
+
+add_filelist()
+{
+    pkg=$1
+    clear_last_line
+    echo "Reading file list for $pkg"
+    rpm -ql $pkg >>$FILELIST_RAW
+}
+
+
+get_complete_filelist()
+{
+    rm -f $FILELIST_RAW
+    rm -f $FILELIST
+
+    echo "Reading file lists..."
+
+    for pkg in $(sort $PKGLIST); do
+        add_filelist $pkg
+    done
+
+    clear_last_line
+}
+
+
+sort_filelist()
+{
+    echo -n "Sorting file list... "
+    
+    sort -u <$FILELIST_RAW >$FILELIST
+    
+    echo " done"
+    clear_last_line
+    wc -l $FILELIST
+
+    rm $FILELIST_RAW
+}
+
+
+create_pkglist
+get_complete_filelist
+sort_filelist
