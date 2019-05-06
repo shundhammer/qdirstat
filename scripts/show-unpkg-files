@@ -7,11 +7,14 @@
 #
 
 SCRIPT_NAME=$(basename $0)
+SCRIPT_DIR=$(dirname $0)
 
-TMP_DIR=/tmp/qdirstat-$USER
-ROOT_CACHE=$TMP_DIR/root.cache.gz
-UNPKG_CACHE=$TMP_DIR/root-unpkg.cache.gz
-FILELIST=$TMP_DIR/filelist.txt
+TMPDIR=/tmp/qdirstat-$USER
+ROOT_CACHE=$TMPDIR/root.cache.gz
+UNPKG_CACHE=$TMPDIR/root-unpkg.cache.gz
+FILELIST=$TMPDIR/filelist.txt
+
+PATH=$SCRIPT_DIR:$PATH
 
 
 die()
@@ -46,34 +49,37 @@ create_cache_file()
     create_tmpdir
     check_tmpdir_security
 
+    echo -n "Creating QDirStat cache file $ROOT_CACHE for / ... "
+
     # Create a normal QDirStat cache file in long format (-l; all paths complete)
     #
     # This needs root permissions to access all files in directories.
     # If "sudo" is not configured for this user, do this step manually.
 
     sudo qdirstat-cache-writer -l / $ROOT_CACHE
+    echo "done."
 }
 
 
-create_complete_pkg_filelist()
+create_complete_filelist()
 {
     # This takes a while
 
-    case $(which_pkg_manager) in
+    case $(which-pkg-manager) in
         rpm)
             complete-filelist-rpm
-            ;;;
+            ;;
 
         dpkg)
             complete-filelist-dpkg
-            ;;;
+            ;;
 
         pacman)
             complete-filelist-pacman
-            ;;;
+            ;;
         *)
             die "No supported package manager found"
-            ;;;
+            ;;
     esac
 }
 
@@ -90,6 +96,7 @@ filter_out_pkg_files_from_cache()
 
 show_filtered_cache()
 {
+    echo "qdirstat -c $UNPKG_CACHE"
     qdirstat -c $UNPKG_CACHE
 }
 
