@@ -26,6 +26,10 @@
 #  define LOG_OUTPUT	false
 #endif
 
+#ifndef COMMAND_TIMEOUT_SEC
+#  define COMMAND_TIMEOUT_SEC	15
+#endif
+
 
 namespace QDirStat
 {
@@ -43,8 +47,8 @@ namespace QDirStat
 	 **/
 	bool tryRunCommand( const QString & commandLine,
 			    const QRegExp & expectedResult,
-			    bool	    logCommand = LOG_COMMANDS,
-			    bool	    logOutput  = LOG_OUTPUT   );
+			    bool	    logCommand	= LOG_COMMANDS,
+			    bool	    logOutput	= LOG_OUTPUT   );
 
 	/**
 	 * Run a command line and return its output. If exitCode_ret is
@@ -70,6 +74,7 @@ namespace QDirStat
 	 **/
 	QString runCommand( const QString & commandLine,
 			    int *	    exitCode_ret  = 0,
+			    int		    timeout_sec	  = COMMAND_TIMEOUT_SEC,
 			    bool	    logCommand	  = LOG_COMMANDS,
 			    bool	    logOutput	  = LOG_OUTPUT,
 			    bool	    ignoreErrCode = false );
@@ -97,6 +102,7 @@ namespace QDirStat
 	QString runCommand( const QString &	command,
 			    const QStringList & args,
 			    int *		exitCode_ret  = 0,
+			    int			timeout_sec   = COMMAND_TIMEOUT_SEC,
 			    bool		logCommand    = LOG_COMMANDS,
 			    bool		logOutput     = LOG_OUTPUT,
 			    bool		ignoreErrCode = false );

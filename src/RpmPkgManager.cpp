@@ -11,8 +11,10 @@
 #include "Logger.h"
 #include "Exception.h"
 
-using namespace QDirStat;
+#define GET_PKGLIST_TIMEOUT_SEC         30
 
+
+using namespace QDirStat;
 
 
 RpmPkgManager::RpmPkgManager()
@@ -70,7 +72,8 @@ PkgInfoList RpmPkgManager::installedPkg()
                                  << "-qa"
                                  << "--queryformat"
                                  << "%{name} | %{version}-%{release} | %{arch}\n",
-                                 &exitCode );
+                                 &exitCode,
+                                 GET_PKGLIST_TIMEOUT_SEC );
 
     PkgInfoList pkgList;
 

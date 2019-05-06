@@ -15,7 +15,6 @@
 #include "Logger.h"
 #include "Exception.h"
 
-#define COMMAND_TIMEOUT_SEC	15
 
 using namespace QDirStat;
 
@@ -26,7 +25,8 @@ bool SysUtil::tryRunCommand( const QString & commandLine,
 			     bool	     logOutput	)
 {
     int exitCode = -1;
-    QString output = runCommand( commandLine, &exitCode, logCommand, logOutput,
+    QString output = runCommand( commandLine, &exitCode,
+				 COMMAND_TIMEOUT_SEC, logCommand, logOutput,
 				 true ); // ignoreErrCode
 
     if ( exitCode != 0 )
@@ -44,6 +44,7 @@ bool SysUtil::tryRunCommand( const QString & commandLine,
 
 QString SysUtil::runCommand( const QString & commandLine,
 			     int *	     exitCode_ret,
+			     int	     timeout_sec,
 			     bool	     logCommand,
 			     bool	     logOutput,
 			     bool	     ignoreErrCode )
@@ -61,13 +62,15 @@ QString SysUtil::runCommand( const QString & commandLine,
 
     QString command = args.takeFirst();
 
-    return runCommand( command, args, exitCode_ret, logCommand, logOutput, ignoreErrCode );
+    return runCommand( command, args, exitCode_ret,
+		       timeout_sec, logCommand, logOutput, ignoreErrCode );
 }
 
 
 QString SysUtil::runCommand( const QString &	 command,
 			     const QStringList & args,
 			     int *		 exitCode_ret,
+			     int		 timeout_sec,
 			     bool		 logCommand,
 			     bool		 logOutput,
 			     bool		 ignoreErrCode )
@@ -94,7 +97,7 @@ QString SysUtil::runCommand( const QString &	 command,
 	logDebug() << command << " " << args.join( " " ) << endl;
 
     process.start();
-    bool success = process.waitForFinished( COMMAND_TIMEOUT_SEC * 1000 );
+    bool success = process.waitForFinished( timeout_sec * 1000 );
     QString output = QString::fromUtf8( process.readAll() );
 
     if ( success )
