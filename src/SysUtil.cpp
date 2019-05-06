@@ -15,7 +15,7 @@
 #include "Logger.h"
 #include "Exception.h"
 
-#define COMMAND_TIMEOUT_SEC	5
+#define COMMAND_TIMEOUT_SEC	15
 
 using namespace QDirStat;
 
