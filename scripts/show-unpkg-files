@@ -49,7 +49,7 @@ create_cache_file()
     create_tmpdir
     check_tmpdir_security
 
-    echo -n "Creating QDirStat cache file $ROOT_CACHE for / ... "
+    echo -n "Creating QDirStat cache file $ROOT_CACHE ... "
 
     # Create a normal QDirStat cache file in long format (-l; all paths complete)
     #
