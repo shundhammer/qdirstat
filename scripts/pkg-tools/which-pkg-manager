@@ -26,7 +26,7 @@ check_primary_dpkg()
 
 check_primary_pacman()
 {
-    test -x $PACMAN && $PACMAN -Qo $PACMAN | grep "is owned by pacman" | sed -e 's/^.*is owned by //'
+    test -x $PACMAN && $PACMAN -Qo $PACMAN | grep "is owned by pacman" | sed -e 's/^.*is owned by //' -e 's/ .*//'
 }
 
 
