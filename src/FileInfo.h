@@ -86,7 +86,7 @@ namespace QDirStat
 		  DirInfo	* parent = 0 );
 
 	/**
-	 * Constructor from the bare neccessary fields
+	 * Constructor from the bare necessary fields
 	 * for use from a cache file reader
 	 *
 	 * If 'blocks' is -1, it will be calculated from 'size'.

@@ -53,7 +53,7 @@ namespace QDirStat
 		 DirInfo       * parent = 0 );
 
 	/**
-	 * Constructor from the bare neccessary fields
+	 * Constructor from the bare necessary fields
 	 * for use from a cache file reader
 	 **/
 	DirInfo( DirTree *	 tree,
