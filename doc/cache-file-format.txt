@@ -140,7 +140,7 @@ with preceding "%":
 
 Take special care for blanks, tabs, newlines, and percent characters. It
 does not hurt to escape a few more characters than would strictly be
-neccessary.
+necessary.
 
 As for encoding, unfortunately this is one big mess. 7 bit ASCII works
 alright, but if there are any special characters, everything depends on the
