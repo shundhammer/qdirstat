@@ -707,10 +707,13 @@ void DirReadJobQueue::timeSlicedRead()
 
 void DirReadJobQueue::jobFinishedNotify( DirReadJob *job )
 {
-    // Get rid of the old (finished) job.
+    if ( job )
+    {
+        // Get rid of the old (finished) job.
 
-    _queue.removeOne( job );
-    delete job;
+        _queue.removeOne( job );
+        delete job;
+    }
 
     // The timer will start a new job when it fires.
 

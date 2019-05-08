@@ -352,12 +352,14 @@ void DirTree::sendStartingReading()
 
 void DirTree::sendFinished()
 {
+    _isBusy = false;
     emit finished();
 }
 
 
 void DirTree::sendAborted()
 {
+    _isBusy = false;
     emit aborted();
 }
 

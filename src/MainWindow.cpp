@@ -636,8 +636,9 @@ void MainWindow::openDir( const QString & url )
     }
     catch ( const SysCallFailedException & ex )
     {
-        updateWindowTitle( "" );
 	CAUGHT( ex );
+        updateWindowTitle( "" );
+        _dirTreeModel->tree()->sendFinished();
 
 	QMessageBox errorPopup( QMessageBox::Warning,	// icon
 				tr( "Error" ),		// title

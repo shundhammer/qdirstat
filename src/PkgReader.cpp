@@ -44,6 +44,7 @@ void PkgReader::read( const PkgFilter & filter )
 
     _pkgList = PkgQuery::installedPkg();
     filterPkgList( filter );
+
     handleMultiPkg();
     addPkgToTree();
     createReadJobs();
@@ -166,6 +167,12 @@ void PkgReader::addPkgToTree()
 
 void PkgReader::createReadJobs()
 {
+    if ( _pkgList.isEmpty() )
+    {
+        _tree->sendFinished();
+        return;
+    }
+
     ProcessStarter * processStarter = new ProcessStarter;
     CHECK_NEW( processStarter );
     processStarter->setAutoDelete( true );
