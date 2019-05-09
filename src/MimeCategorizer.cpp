@@ -443,7 +443,7 @@ void MimeCategorizer::addDefaultCategories()
     add( obj );
 
     obj->addSuffixes( QStringList()
-		      << "o" << "lo" << "Po" << "al" << "la" << "moc" << "elc" << "log" << "pyc"
+		      << "o" << "lo" << "ko" << "Po" << "al" << "la" << "moc" << "elc" << "log" << "pyc"
 		      , Qt::CaseSensitive );
 
     obj->addPatterns( QStringList()
