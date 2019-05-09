@@ -433,7 +433,7 @@ void MimeCategorizer::addDefaultCategories()
     add( src );
     src->addSuffixes( QStringList()
 		      << "c" << "cpp" << "cc" << "cxx" << "h" << "hpp" << "ui"
-		      << "pl" << "py" << "rb" << "el"
+		      << "pl" << "py" << "rb" << "el" << "js" << "php" << "java"
 		      << "pro" << "cmake"
 		      , Qt::CaseSensitive );
 
