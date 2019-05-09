@@ -59,39 +59,25 @@ clear_last_line()
 }
 
 
-add_filelist()
-{
-    pkg=$1
-    clear_last_line
-    echo "Reading file list for $pkg"
-    dpkg --listfiles $pkg >>$FILELIST_RAW
-}
-
-
 get_complete_filelist()
 {
     rm -f $FILELIST_RAW
     rm -f $FILELIST
 
     echo "Reading file lists..."
-
-    for pkg in $(sort $PKGLIST); do
-        add_filelist $pkg
-    done
-
+    xargs <$PKGLIST dpkg --listfiles >>$FILELIST_RAW
     clear_last_line
 }
 
 
 filter_filelist()
 {
-    echo -n "Filtering file list... "
+    echo "Filtering file list... "
     
     sed -e 's/^diverted by.*to: //' <$FILELIST_RAW  | \
-    grep -v '^/\.$'                                 | \
-    sort -u >$FILELIST
+    sort -u                                         | \
+    grep -v '^/\.$' >$FILELIST
     
-    echo " done"
     clear_last_line
     wc -l $FILELIST
 
