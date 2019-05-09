@@ -346,6 +346,10 @@ void FileDetailsView::showDirNodeInfo( DirInfo * dir )
 	_ui->dirUserLabel->setText( dir->userName() );
 	_ui->dirGroupLabel->setText( dir->groupName() );
 	_ui->dirPermissionsLabel->setText( formatPermissions( dir->mode() ) );
+
+
+        _ui->dirMTimeCaption->setVisible( dir->mtime() > 0 );
+        _ui->dirMTimeLabel->setVisible  ( dir->mtime() > 0);
 	_ui->dirMTimeLabel->setText( formatTime( dir->mtime() ) );
     }
 }
