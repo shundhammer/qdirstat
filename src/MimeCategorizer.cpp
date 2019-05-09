@@ -303,6 +303,7 @@ void MimeCategorizer::addDefaultCategories()
 			 << "jpeg"
 			 << "jpg"
 			 << "png"
+                         << "svg"
 			 << "tif"
 			 << "tiff"
 			 << "xcf.bz2"
