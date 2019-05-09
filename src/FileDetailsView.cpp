@@ -339,7 +339,10 @@ void FileDetailsView::showDirNodeInfo( DirInfo * dir )
 
     if ( ! dir->isDotEntry() )
     {
+        _ui->dirOwnSizeCaption->setVisible( dir->size() > 0 );
+        _ui->dirOwnSizeLabel->setVisible  ( dir->size() > 0 );
 	setLabel( _ui->dirOwnSizeLabel, dir->size() );
+
 	_ui->dirUserLabel->setText( dir->userName() );
 	_ui->dirGroupLabel->setText( dir->groupName() );
 	_ui->dirPermissionsLabel->setText( formatPermissions( dir->mode() ) );

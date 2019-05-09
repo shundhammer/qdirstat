@@ -214,11 +214,16 @@ namespace QDirStat
          *
          * If the underlying syscall fails, this throws a SysCallException if
          * 'doThrow' is 'true', and it just returns 0 if it is 'false'.
+         *
+         * If 'dirSizeOverride' is 'true', directory sizes are all set to 0.
+         * This is intended for cases where directory sizes are considered
+         * irrelevant or even distorting for the overall view.
 	 **/
 	static FileInfo * stat( const QString & url,
 				DirTree	      * tree,
 				DirInfo	      * parent  = 0,
-                                bool            doThrow = true);
+                                bool            doThrow = true,
+                                bool            dirSizeOverride = false );
 
         /**
          * Return 'true' if any exclude rules matching against any direct file

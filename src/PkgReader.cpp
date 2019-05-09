@@ -353,7 +353,8 @@ void PkgReadJob::addFile( const QString & fileListPath )
             QString path = QString( "/" ) + currentPath.join( "/" );
 
             newParent = LocalDirReadJob::stat( path, _tree, parent,
-                                               false ); // doThrow
+                                               false,   // doThrow
+                                               true );  // dirSizeOverride
 
             if ( ! newParent )
             {
