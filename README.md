@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-05-04
+Updated: 2019-05-10
 
 
 ## Overview
@@ -122,6 +122,30 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2019-05-09
+
+  Now no longer showing a directory's own size (the size of the directory node,
+  not of any file contained in the directory) in the packages view: This
+  distorted both the treemap and the total sums. Directories are typically
+  shared between a lot of packages, so it does not make very much sense to add
+  the size of a very common directory like /usr/bin or /usr/lib to the total
+  size of each package that owns a file in any of them, thus accounting for
+  those directories many times. On my system, /usr/bin is shared between 454
+  packages, so its 68 kB would be added up 454 times, thus adding up to 30 MB.
+
+  In the treemap that meant that packages that install only one or two very
+  small files (symlinks!) to a very common directory would show a lot of empty
+  space; the 56 byte (or so) symlink would be completely dwarfed by the
+  directory it is in, even if the directory only has 4 kB. A lot of such lone
+  small files each in a separate directory meant a whole lot of empty space in
+  the treemap, thus making packages very hard to compare against each other.
+
+  Of course this means that the size of the directory nodes is now completely
+  missing in the toplevel total sum (the Pkg:/ node in the tree), but that is
+  much less distorting than multiplying each of those directory node sizes by
+  the number of packages that have files in each of them.
+
 
 - 2019-05-04
 
