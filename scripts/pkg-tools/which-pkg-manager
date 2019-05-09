@@ -20,7 +20,7 @@ check_primary_rpm()
 
 check_primary_dpkg()
 {
-    test -x $DPKG && $DPKG -S $DPKG | grep '^dpkg:' | sed -e 's/:.*/'
+    test -x $DPKG && $DPKG -S $DPKG | grep '^dpkg:' | sed -e 's/:.*//'
 }
 
 
