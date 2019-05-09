@@ -459,5 +459,5 @@ void MimeCategorizer::addDefaultCategories()
     libs->addPattern( "lib*.so",   Qt::CaseSensitive );
     libs->addPattern( "lib*.a",	   Qt::CaseSensitive );
     libs->addSuffix ( "dll" );
-
+    libs->addSuffix ( "so" );
 }
