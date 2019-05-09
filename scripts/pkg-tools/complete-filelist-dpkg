@@ -73,11 +73,14 @@ get_complete_filelist()
 filter_filelist()
 {
     echo "Filtering file list... "
-    
+
     sed -e 's/^diverted by.*to: //' <$FILELIST_RAW  | \
-    sort -u                                         | \
+    sed -e 's/^package diverts others to: //'	    | \
+    grep -v 'does not contain any files'	    | \
+    sort -u					    | \
+    grep -v '^ *$'				    | \
     grep -v '^/\.$' >$FILELIST
-    
+
     clear_last_line
     wc -l $FILELIST
 
