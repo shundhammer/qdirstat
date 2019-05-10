@@ -111,7 +111,8 @@ int main( int argc, char *argv[] )
 
     if ( commandLineSwitch( "--slow-update", "-s", argList ) )
 	mainWin->dirTreeModel()->setSlowUpdate();
-    else if ( argList.isEmpty() )
+
+    if ( argList.isEmpty() )
     {
         if ( ! dont_ask )
             mainWin->askOpenDir();
