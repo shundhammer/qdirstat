@@ -124,6 +124,7 @@ namespace QDirStat
 	PkgInfoList			_pkgList;
 	QMultiMap<QString, PkgInfo *>	_multiPkg;
         int                             _maxParallelProcesses;
+        int                             _minCachePkgListSize;
 
     };	// class PkgReader
 
@@ -158,7 +159,7 @@ namespace QDirStat
 	/**
 	 * Destructor.
 	 **/
-	virtual ~PkgReadJob() {}
+	virtual ~PkgReadJob();
 
 	/**
 	 * Start reading the file list of the package.
@@ -215,10 +216,20 @@ namespace QDirStat
          **/
         void finalizeAll( DirInfo * subtree );
 
+        /**
+         * Clear the stat cache and statistics
+         **/
+        static void clearStatCache();
+
 
         // Data members
 
 	PkgInfo * _pkg;
+
+        static QMap<QString, struct stat> _statCache;
+        static int                        _activeJobs;
+        static int                        _cacheHits;
+        static int                        _lstatCalls;
 
     };	// class PkgReadJob
 

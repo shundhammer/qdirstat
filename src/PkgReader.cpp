@@ -20,15 +20,14 @@
 #include "Logger.h"
 #include "Exception.h"
 
-#define MIN_CACHE_PKG_LIST_SIZE 20
-
 
 using namespace QDirStat;
 
 
 PkgReader::PkgReader( DirTree * tree ):
     _tree( tree ),
-    _maxParallelProcesses( 6 )
+    _maxParallelProcesses( 6 ),
+    _minCachePkgListSize( 200 )
 {
     // logInfo() << endl;
     readSettings();
@@ -63,7 +62,7 @@ void PkgReader::read( const PkgFilter & filter )
     PkgManager * pkgManager = PkgQuery::primaryPkgManager();
 
     if ( pkgManager && pkgManager->supportsFileListCache() &&
-	 _pkgList.size() >= MIN_CACHE_PKG_LIST_SIZE )
+	 _pkgList.size() >= _minCachePkgListSize )
     {
 	createCachePkgReadJobs();
     }
@@ -274,7 +273,8 @@ void PkgReader::readSettings()
     Settings settings;
     settings.beginGroup( "Pkg" );
 
-    _maxParallelProcesses = settings.value( "MaxParallelProcesses", 6 ).toInt();
+    _maxParallelProcesses = settings.value( "MaxParallelProcesses",  6 ).toInt();
+    _minCachePkgListSize  = settings.value( "MinCachePkgListSize", 200 ).toInt();
 
     settings.endGroup();
 }
@@ -286,6 +286,7 @@ void PkgReader::writeSettings()
     settings.beginGroup( "Pkg" );
 
     settings.setValue( "MaxParallelProcesses", _maxParallelProcesses );
+    settings.setValue( "MinCachePkgListSize" , _minCachePkgListSize  );
 
     settings.endGroup();
 }
@@ -295,12 +296,40 @@ void PkgReader::writeSettings()
 
 
 
+QMap<QString, struct stat> PkgReadJob::_statCache;
+int PkgReadJob::_activeJobs = 0;
+int PkgReadJob::_cacheHits  = 0;
+int PkgReadJob::_lstatCalls = 0;
+
+
 PkgReadJob::PkgReadJob( DirTree * tree,
 			PkgInfo * pkg  ):
     ObjDirReadJob( tree, pkg ),
     _pkg( pkg )
 {
+    ++_activeJobs;
+}
 
+
+PkgReadJob::~PkgReadJob()
+{
+    if ( --_activeJobs < 1 )
+    {
+        // logDebug() << "The last PkgReadJob is done; clearing the stat cache." << endl;
+        clearStatCache();
+    }
+}
+
+
+void PkgReadJob::clearStatCache()
+{
+    logDebug() << _cacheHits << " stat cache hits" << endl;
+    logDebug() << _lstatCalls << " lstat() calls" << endl;
+
+    _statCache.clear();
+    _activeJobs = 0;
+    _cacheHits  = 0;
+    _lstatCalls = 0;
 }
 
 
@@ -440,10 +469,23 @@ struct stat * PkgReadJob::lstat( const QString & path )
 {
     static struct stat statInfo;
 
-    int result = ::lstat( path.toUtf8(), &statInfo );
+    if ( _statCache.contains( path ) )
+    {
+        ++_cacheHits;
+        // logDebug() << "stat cache hit for " << path << endl;
+        statInfo = _statCache.value( path );
+    }
+    else
+    {
+        int result = ::lstat( path.toUtf8(), &statInfo );
+        ++_lstatCalls;
 
-    if ( result != 0 )
-	return 0;	// lstat() failed
+        if ( result != 0 )
+            return 0;	// lstat() failed
+
+        _statCache.insert( path, statInfo );
+    }
+
 
     if ( S_ISDIR( statInfo.st_mode ) )	// directory?
     {
@@ -546,16 +588,20 @@ QStringList CachePkgReadJob::fileList()
 	 _fileListCache->pkgManager() == _pkg->pkgManager() )
     {
 	QString pkgName = _pkg->pkgManager()->queryName( _pkg );
+        QStringList fileList;
 
 	if ( _fileListCache->contains( pkgName ) )
 	{
-	    return _fileListCache->fileList( pkgName );
+            fileList = _fileListCache->fileList( pkgName );
+            _fileListCache->remove( pkgName );
+	}
+	else if ( _fileListCache->contains( _pkg->name() ) )
+	{
+	    fileList = _fileListCache->fileList( _pkg->name() );
+            _fileListCache->remove( _pkg->name() );
 	}
 
-	if ( _fileListCache->contains( _pkg->name() ) )
-	{
-	    return _fileListCache->fileList( _pkg->name() );
-	}
+        return fileList;
     }
 
     logDebug() << "Falling back to the simple PkgQuery::fileList() for " << _pkg << endl;

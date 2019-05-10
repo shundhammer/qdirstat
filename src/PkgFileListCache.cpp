@@ -41,6 +41,12 @@ bool PkgFileListCache::contains( const QString & pkgName ) const
 }
 
 
+void PkgFileListCache::remove( const QString & pkgName )
+{
+    _fileNames.remove( pkgName );
+}
+
+
 void PkgFileListCache::clear()
 {
     _fileNames.clear();

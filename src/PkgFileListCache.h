@@ -66,6 +66,11 @@ namespace QDirStat
         bool isEmpty() const { return _fileNames.isEmpty(); }
 
         /**
+         * Remove the entries for a package from the cache.
+         **/
+        void remove( const QString & pkgName );
+
+        /**
          * Clear the cache.
          **/
         void clear();
