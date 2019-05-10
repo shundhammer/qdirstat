@@ -43,7 +43,44 @@ QString DpkgPkgManager::owningPkg( const QString & path )
     if ( exitCode != 0 || output.contains( "no path found matching pattern" ) )
 	return "";
 
-    QString pkg = output.section( ":", 0, 0 );
+    // Normal output: One line
+    // dpkg -S /usr/bin/gdb  -->
+    //
+    // gdb: /usr/bin/gdb
+    //
+    //
+    // Pathological cases: File diversion (See man dpkg-divert).
+    //
+    // File diversion for the file that is diverted away from: 3 lines
+    // dpkg -S /bin/sh  -->
+    //
+    // diversion by dash from: /bin/sh
+    // diversion by dash to: /bin/sh.distrib
+    // dash: /bin/sh
+    //
+    // I.e. the last line still contains the package that owns the file.
+    //
+    // File diversion for a file that was the result of a diversion: 2 lines
+    // dpkg -S /bin/sh.distrib  -->
+    //
+    // diversion by dash from: /bin/sh
+    // diversion by dash to: /bin/sh.distrib
+    //
+    // I.e there is no hint WTF this file belongs to. Great job, guys.
+    // We are NOT going to reimplement that brain-dead diversion stuff here.
+
+    QStringList lines;
+
+    foreach ( const QString & line, output.trimmed().split( "\n" ) )
+    {
+        if ( ! line.startsWith( "diversion by" ) && ! line.isEmpty() )
+            lines << line;
+    }
+
+    QString pkg;
+
+    if ( ! lines.isEmpty() )
+        pkg = lines.last().split( ": " ).first();
 
     return pkg;
 }
@@ -113,8 +150,14 @@ QString DpkgPkgManager::fileListCommand( PkgInfo * pkg )
 
 QStringList DpkgPkgManager::parseFileList( const QString & output )
 {
-    QStringList fileList = output.split( "\n" );
-    fileList.removeAll( "/." );     // Remove cruft
+    QStringList fileList;
+    QStringList lines = output.split( "\n" );
+
+    foreach ( const QString & line, lines )
+    {
+        if ( line != "/." && ! line.startsWith( "package diverts" ) )
+            fileList << line;
+    }
 
     return fileList;
 }
