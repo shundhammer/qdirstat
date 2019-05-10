@@ -439,6 +439,7 @@ namespace QDirStat
 	QSet<DirInfo *>	 _pendingUpdates;
 	QTimer		 _updateTimer;
 	int		 _updateTimerMillisec;
+	int		 _pkgUpdateMillisec;
         int              _slowUpdateMillisec;
         bool             _slowUpdate;
 	DataColumn	 _sortCol;
