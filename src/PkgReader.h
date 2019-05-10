@@ -191,6 +191,25 @@ namespace QDirStat
          **/
         void addFile( const QString & path );
 
+	/**
+	 * Obtain information about the file or directory specified in
+         * 'pathComponents' and create a new FileInfo or a DirInfo (whatever is
+         * appropriate) from that information. Use FileInfo::isDirInfo() to
+         * find out which.
+         *
+         * If the underlying syscall fails, this returns 0.
+	 **/
+	FileInfo * createItem( const QStringList & pathComponents,
+                               DirTree	         * tree,
+                               DirInfo	         * parent );
+
+        /**
+         * Do an lstat() syscall for 'path' or fetch the result from a cache.
+         * Return 0 if lstat() fails. Ownership of the returned value is not
+         * transferred to the caller, so don't delete it!
+         **/
+        struct stat * lstat( const QString & path );
+
         /**
          * Recursively finalize all directories in the subtree.
          **/

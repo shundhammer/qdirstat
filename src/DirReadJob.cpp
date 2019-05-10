@@ -443,8 +443,7 @@ QString LocalDirReadJob::fullName( const QString & entryName ) const
 FileInfo * LocalDirReadJob::stat( const QString & url,
 				  DirTree	* tree,
 				  DirInfo	* parent,
-                                  bool            doThrow,
-                                  bool            dirOverride )
+                                  bool            doThrow )
 {
     struct stat statInfo;
     // logDebug() << "url: \"" << url << "\"" << endl;
@@ -461,13 +460,6 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
 
 	if ( S_ISDIR( statInfo.st_mode ) )	// directory?
 	{
-            if ( dirOverride )
-            {
-                statInfo.st_size   = 0;
-                statInfo.st_blocks = 0;
-                statInfo.st_mtime  = 0;
-            }
-
 	    DirInfo * dir = new DirInfo( name, &statInfo, tree, parent );
 	    CHECK_NEW( dir );
 
