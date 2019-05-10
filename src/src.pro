@@ -77,6 +77,7 @@ SOURCES	  = main.cpp			\
 	    OutputWindow.cpp		\
 	    PacManPkgManager.cpp	\
 	    PercentBar.cpp		\
+	    PkgFileListCache.cpp	\
 	    PkgFilter.cpp		\
 	    PkgInfo.cpp			\
 	    PkgManager.cpp		\
@@ -147,6 +148,7 @@ HEADERS	  =				\
 	    OpenPkgDialog.h		\
 	    PacManPkgManager.h		\
 	    PercentBar.h		\
+	    PkgFileListCache.h		\
 	    PkgFilter.h			\
 	    PkgInfo.h			\
 	    PkgManager.h		\

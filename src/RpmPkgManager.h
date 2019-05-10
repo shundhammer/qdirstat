@@ -115,6 +115,16 @@ namespace QDirStat
          **/
         virtual QStringList parseFileList( const QString & output ) Q_DECL_OVERRIDE;
 
+        /**
+         * Return a name suitable for a detailed queries for 'pkg'.
+         *
+         * This might include the architecture and the version if this is a
+         * multi-arch or multi-version package.
+         *
+	 * Reimplemented from PkgManager.
+         **/
+        virtual QString queryName( PkgInfo * pkg ) Q_DECL_OVERRIDE;
+
 
     protected:
 
@@ -122,14 +132,6 @@ namespace QDirStat
          * Parse a package list as output by "dpkg-query --show --showformat".
          **/
         PkgInfoList parsePkgList( const QString & output );
-
-        /**
-         * Return a name suitable for a detailed queries for 'pkg'.
-         *
-         * This might include the architecture and the version if this is a
-         * multi-arch or multi-version package.
-         **/
-        QString queryName( PkgInfo * pkg );
 
 
         // Data members

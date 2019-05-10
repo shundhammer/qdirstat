@@ -113,6 +113,13 @@ bool PkgQuery::foundSupportedPkgManager()
 }
 
 
+PkgManager * PkgQuery::primaryPkgManager()
+{
+    return instance()->_pkgManagers.isEmpty() ?
+        0 : instance()->_pkgManagers.first();
+}
+
+
 QString PkgQuery::owningPkg( const QString & path )
 {
     return instance()->getOwningPackage( path );

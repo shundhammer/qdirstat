@@ -8,6 +8,7 @@
 
 
 #include "DpkgPkgManager.h"
+#include "PkgFileListCache.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -169,11 +170,64 @@ QString DpkgPkgManager::queryName( PkgInfo * pkg )
 
     QString name = pkg->baseName();
 
+#if 0
     if ( pkg->isMultiVersion() )
         name += "_" + pkg->version();
 
     if ( pkg->isMultiArch() )
         name += ":" + pkg->arch();
+#endif
+
+    if ( pkg->arch() != "all" )
+        name += ":" + pkg->arch();
 
     return name;
+}
+
+
+PkgFileListCache * DpkgPkgManager::createFileListCache()
+{
+    int exitCode = -1;
+    QString output = runCommand( "/usr/bin/dpkg", QStringList() << "-S" << "*", &exitCode );
+
+    if ( exitCode != 0 )
+	return 0;
+
+    QStringList lines = output.split( "\n" );
+    output.clear(); // Free all that text ASAP
+    logDebug() << lines.size() << " output lines" << endl;
+
+    PkgFileListCache * cache = new PkgFileListCache( this );
+    CHECK_NEW( cache );
+
+    foreach ( const QString & line, lines )
+    {
+        if ( line.isEmpty() || line.startsWith( "diversion" ) )
+            continue;
+
+        QStringList fields = line.split( ": " );
+
+        if ( fields.size() != 2 )
+        {
+            logError() << "Unexpected file list line: \"" << line << "\"" << endl;
+        }
+        else
+        {
+            QString packages = fields.takeFirst();
+            QString path     = fields.takeFirst();
+
+            if ( path != "/." )
+            {
+                foreach ( const QString & pkgName, packages.split( ", " ) )
+                {
+                    if ( ! pkgName.isEmpty() )
+                        cache->add( pkgName, path );
+                }
+            }
+        }
+    }
+
+    logDebug() << "file list cache finished." << endl;
+
+    return cache;
 }

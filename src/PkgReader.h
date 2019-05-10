@@ -10,6 +10,7 @@
 #define PkgReader_h
 
 #include <QMap>
+#include <QSharedPointer>
 
 #include "DirReadJob.h"
 #include "PkgInfo.h"
@@ -21,6 +22,7 @@ namespace QDirStat
 {
     // Forward declarations
     class DirTree;
+    class PkgFileListCache;
 
 
     /**
@@ -98,10 +100,16 @@ namespace QDirStat
 	void addPkgToTree();
 
         /**
-         * Create a read job for each package to read its file list and add it
-         * to the read job queue.
+         * Create a read job for each package to read its file list from a file
+         * list cache and add it to the read job queue.
          **/
-        void createReadJobs();
+        void createCachePkgReadJobs();
+
+        /**
+         * Create a read job for each package with a background process to read
+         * its file list and add it as a blocked job to the read job queue.
+         **/
+        void createAsyncPkgReadJobs();
 
         /**
          * Create a process for reading the file list for 'pkg' with the
@@ -120,8 +128,15 @@ namespace QDirStat
     };	// class PkgReader
 
 
+
+
     /**
-     * A read job class for reading information about a package.
+     * Read job class for reading information about a package. This is the base
+     * class with a simplistic approach that just starts the external command
+     * used for getting the file list when needed and then waits for it to
+     * return a result.
+     *
+     * See also AsyncPkgReadJob and CachePkgReadJob.
      **/
     class PkgReadJob: public ObjDirReadJob
     {
@@ -133,19 +148,17 @@ namespace QDirStat
 	 * Constructor: Prepare to read the file list of existing PkgInfo node
 	 * 'pkg' and create a DirInfo or FileInfo node for each item in the
 	 * file list below 'pkg'.
-	 *
-	 * Create the job and add it to a DirReadJobQueue so it is picked up
-	 * when possible. Reading is then started from the outside with
-	 * startReading().
+
+         * process.  Reading is then started from the outside with
+         * startReading().
 	 **/
 	PkgReadJob( DirTree * tree,
-                    PkgInfo * pkg,
-                    Process * readFileListProcess );
+                    PkgInfo * pkg );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~PkgReadJob();
+	virtual ~PkgReadJob() {}
 
 	/**
 	 * Start reading the file list of the package.
@@ -160,16 +173,17 @@ namespace QDirStat
 	PkgInfo * pkg() const { return _pkg; }
 
 
-    protected slots:
+    protected:
 
         /**
-         * Notification that the attached read file list process is finished.
+         * Get the file list for this package.  This default implementation
+         * does a simple PkgQuery::fileList() call.
+         *
+         * Derived classes might want to do something more sophisticated like
+         * using a background process (AsyncPkgReader) or a file list cache
+         * (CachePkgReader).
          **/
-        void readFileListFinished( int                  exitCode,
-                                   QProcess::ExitStatus exitStatus );
-
-
-    protected:
+        virtual QStringList fileList();
 
         /**
          * Add all files belonging to 'path' to this package.
@@ -185,11 +199,126 @@ namespace QDirStat
 
         // Data members
 
-	PkgInfo *   _pkg;
+	PkgInfo * _pkg;
+
+    };	// class PkgReadJob
+
+
+
+
+    /**
+     * Read job class for reading information about a package that uses a
+     * number of background processes to parallelize all the external commands
+     * ("rpm -ql", "dpkg -L", "pacman -Qlp") to speed up getting all the file
+     * lists. This is considerably faster than doing that one by one and
+     * waiting for the result each time (which is what the more generic
+     * PkgReadJob does).
+     **/
+    class AsyncPkgReadJob: public PkgReadJob
+    {
+        Q_OBJECT
+
+    public:
+
+	/**
+	 * Constructor: Prepare to read the file list of existing PkgInfo node
+	 * 'pkg' and create a DirInfo or FileInfo node for each item in the
+	 * file list below 'pkg'. Operation starts when thes when the
+	 * 'readFileListProcess' has data to read, i.e. when it, i.e. it sends
+	 * the 'readFileListFinished' signal.
+         *
+         * Create the readFileListProcess, then this read job, add the read job
+         * to a DirReadJobQueue as a blocked job and then (!) start the
+         * readFileListprocess. The job will unblock itself when it receives
+         * file list data from the process so it will be put into the queue of
+         * jobs that are ready to run.
+         *
+         * Reading is then started from the outside with startReading() when
+         * the job is scheduled.
+	 **/
+	AsyncPkgReadJob( DirTree * tree,
+                         PkgInfo * pkg,
+                         Process * readFileListProcess );
+
+
+	/**
+	 * Destructor.
+	 **/
+	virtual ~AsyncPkgReadJob() {}
+
+
+    protected slots:
+
+        /**
+         * Notification that the attached read file list process is finished.
+         **/
+        void readFileListFinished( int                  exitCode,
+                                   QProcess::ExitStatus exitStatus );
+
+
+    protected:
+
+        /**
+         * Get the file list for this package.
+         *
+         * Reimplemented from PkgReadJob.
+         **/
+        virtual QStringList fileList() Q_DECL_OVERRIDE;
+
+
+        // Data members
+
         Process *   _readFileListProcess;
         QStringList _fileList;
 
-    };	// class PkgReadJob
+    };  // class AsyncPkgReadJob
+
+
+
+
+    class CachePkgReadJob: public PkgReadJob
+    {
+        Q_OBJECT
+
+    public:
+
+	/**
+	 * Constructor: Prepare to read the file list of existing PkgInfo node
+	 * 'pkg' and create a DirInfo or FileInfo node for each item in the
+	 * file list below 'pkg'. This uses 'fileListCache' to get the file
+	 * list.
+	 *
+         * Create this type of job and add it as a normal job (not blocked,
+         * unlike AsyncPkgReadJob) to the read queue.
+         *
+         * Reading is then started from the outside with startReading() when
+         * the job queue picks this job.
+	 **/
+	CachePkgReadJob( DirTree * tree,
+                         PkgInfo * pkg,
+                         QSharedPointer<PkgFileListCache> fileListCache );
+
+        /**
+         * Destructor.
+         **/
+        virtual ~CachePkgReadJob() {}
+
+
+    protected:
+
+        /**
+         * Get the file list for this package.
+         *
+         * Reimplemented from PkgReadJob.
+         **/
+        virtual QStringList fileList() Q_DECL_OVERRIDE;
+
+
+        // Data members
+
+        QSharedPointer<PkgFileListCache> _fileListCache;
+
+    };  // class CachePkgReadJob
 
 }	// namespace QDirStat
 

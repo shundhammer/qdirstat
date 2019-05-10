@@ -9,12 +9,15 @@
 #include "PkgReader.h"
 #include "PkgQuery.h"
 #include "PkgManager.h"
+#include "PkgFileListCache.h"
 #include "DirTree.h"
 #include "DirReadJob.h"         // LocalDirReadJob
 #include "ProcessStarter.h"
 #include "Settings.h"
 #include "Logger.h"
 #include "Exception.h"
+
+#define MIN_CACHE_PKG_LIST_SIZE 20
 
 
 using namespace QDirStat;
@@ -45,9 +48,26 @@ void PkgReader::read( const PkgFilter & filter )
     _pkgList = PkgQuery::installedPkg();
     filterPkgList( filter );
 
+    if ( _pkgList.isEmpty() )
+    {
+        _tree->sendFinished();
+        return;
+    }
+
     handleMultiPkg();
     addPkgToTree();
-    createReadJobs();
+
+    PkgManager * pkgManager = PkgQuery::primaryPkgManager();
+
+    if ( pkgManager && pkgManager->supportsFileListCache() &&
+         _pkgList.size() >= MIN_CACHE_PKG_LIST_SIZE )
+    {
+        createCachePkgReadJobs();
+    }
+    else
+    {
+        createAsyncPkgReadJobs();
+    }
 
     // Ownership of the PkgInfo * items in _pkgList was transferred to the
     // tree, so intentionally NOT calling qDeleteItems( _pkgList ) !
@@ -165,13 +185,33 @@ void PkgReader::addPkgToTree()
 }
 
 
-void PkgReader::createReadJobs()
+void PkgReader::createCachePkgReadJobs()
 {
-    if ( _pkgList.isEmpty() )
+    PkgManager * pkgManager = PkgQuery::primaryPkgManager();
+    CHECK_PTR( pkgManager );
+
+    QSharedPointer<PkgFileListCache> fileListCache( pkgManager->createFileListCache() );
+    // The shared pointer will take care of deleting the cache when the last
+    // job that uses it is destroyed.
+
+    if ( ! fileListCache )
     {
-        _tree->sendFinished();
+        logError() << "Creating the file list cache failed" << endl;
         return;
     }
+
+    foreach ( PkgInfo * pkg, _pkgList )
+    {
+        CachePkgReadJob * job = new CachePkgReadJob( _tree, pkg, fileListCache );
+        CHECK_NEW( job );
+        _tree->addJob( job );
+    }
+}
+
+
+void PkgReader::createAsyncPkgReadJobs()
+{
+    logDebug() << endl;
 
     ProcessStarter * processStarter = new ProcessStarter;
     CHECK_NEW( processStarter );
@@ -184,7 +224,7 @@ void PkgReader::createReadJobs()
 
         if ( process )
         {
-            PkgReadJob * job = new PkgReadJob( _tree, pkg, process );
+            AsyncPkgReadJob * job = new AsyncPkgReadJob( _tree, pkg, process );
             CHECK_NEW( job );
             _tree->addBlockedJob( job );
             processStarter->add( process );
@@ -253,78 +293,25 @@ void PkgReader::writeSettings()
 
 
 PkgReadJob::PkgReadJob( DirTree * tree,
-                        PkgInfo * pkg,
-                        Process * readFileListProcess ):
+                        PkgInfo * pkg  ):
     ObjDirReadJob( tree, pkg ),
-    _pkg( pkg ),
-    _readFileListProcess( readFileListProcess )
-{
-    if ( _readFileListProcess )
-    {
-        connect( _readFileListProcess, SIGNAL( finished	           ( int, QProcess::ExitStatus ) ),
-                 this,                 SLOT  ( readFileListFinished( int, QProcess::ExitStatus ) ) );
-    }
-}
-
-
-PkgReadJob::~PkgReadJob()
+    _pkg( pkg )
 {
 
-}
-
-
-void PkgReadJob::readFileListFinished( int                  exitCode,
-                                       QProcess::ExitStatus exitStatus )
-{
-    CHECK_PTR( _readFileListProcess );
-    CHECK_PTR( _pkg );
-    CHECK_PTR( _pkg->pkgManager() );
-
-    bool ok        = true;
-
-    if ( exitStatus != QProcess::NormalExit )
-    {
-        ok = false;
-        logError() << "Get file list command crashed for " << _pkg << endl;
-    }
-
-    if ( ok && exitCode != 0 )
-    {
-        ok = false;
-        logError() << "Get file list command exited with "
-                   << exitStatus << " for " << _pkg << endl;
-    }
-
-    if ( ok )
-    {
-        QString output = QString::fromUtf8( _readFileListProcess->readAll() );
-        _fileList      = _pkg->pkgManager()->parseFileList( output );
-        _tree->unblock( this ); // schedule this job
-        _readFileListProcess->deleteLater();
-    }
-    else
-    {
-        _pkg->setReadState( DirError );
-        _tree->sendReadJobFinished( _pkg );
-        delete _readFileListProcess;
-        _readFileListProcess = 0;
-        finished();
-        // Don't add anything after finished() since this deletes this job!
-    }
 }
 
 
 void PkgReadJob::startReading()
 {
     // logInfo() << "Reading " << _pkg << endl;
+
     CHECK_PTR( _pkg );
 
     _pkg->setReadState( DirReading );
 
-    foreach ( const QString & path, _fileList )
+    foreach ( const QString & path, fileList() )
     {
-        if ( ! path.isEmpty() )
-            addFile( path );
+        addFile( path );
     }
 
     finalizeAll( _pkg );
@@ -334,8 +321,19 @@ void PkgReadJob::startReading()
 }
 
 
+QStringList PkgReadJob::fileList()
+{
+    logDebug() << "Using default PkgQuery::fileList() for " << _pkg << endl;
+
+    return PkgQuery::fileList( _pkg );
+}
+
+
 void PkgReadJob::addFile( const QString & fileListPath )
 {
+    if ( fileListPath.isEmpty() )
+        return;
+
     // logDebug() << "Adding " << fileListPath << " to " << _pkg << endl;
 
     QStringList remaining = fileListPath.split( "/", QString::SkipEmptyParts );
@@ -346,6 +344,7 @@ void PkgReadJob::addFile( const QString & fileListPath )
     {
         QString currentName = remaining.takeFirst();
         currentPath << currentName;
+
         FileInfo * newParent = _pkg->locate( parent, QStringList() << currentName );
 
         if ( ! newParent )
@@ -398,3 +397,104 @@ void PkgReadJob::finalizeAll( DirInfo * subtree )
     subtree->finalizeLocal();
 }
 
+
+
+
+
+
+AsyncPkgReadJob::AsyncPkgReadJob( DirTree * tree,
+                                  PkgInfo * pkg,
+                                  Process * readFileListProcess ):
+    PkgReadJob( tree, pkg ),
+    _readFileListProcess( readFileListProcess )
+{
+    if ( _readFileListProcess )
+    {
+        connect( _readFileListProcess, SIGNAL( finished	           ( int, QProcess::ExitStatus ) ),
+                 this,                 SLOT  ( readFileListFinished( int, QProcess::ExitStatus ) ) );
+    }
+}
+
+
+void AsyncPkgReadJob::readFileListFinished( int                  exitCode,
+                                            QProcess::ExitStatus exitStatus )
+{
+    CHECK_PTR( _readFileListProcess );
+    CHECK_PTR( _pkg );
+    CHECK_PTR( _pkg->pkgManager() );
+
+    bool ok        = true;
+
+    if ( exitStatus != QProcess::NormalExit )
+    {
+        ok = false;
+        logError() << "Get file list command crashed for " << _pkg << endl;
+    }
+
+    if ( ok && exitCode != 0 )
+    {
+        ok = false;
+        logError() << "Get file list command exited with "
+                   << exitStatus << " for " << _pkg << endl;
+    }
+
+    if ( ok )
+    {
+        QString output = QString::fromUtf8( _readFileListProcess->readAll() );
+        _fileList      = _pkg->pkgManager()->parseFileList( output );
+        _tree->unblock( this ); // schedule this job
+        _readFileListProcess->deleteLater();
+    }
+    else
+    {
+        _pkg->setReadState( DirError );
+        _tree->sendReadJobFinished( _pkg );
+        delete _readFileListProcess;
+        _readFileListProcess = 0;
+        finished();
+        // Don't add anything after finished() since this deletes this job!
+    }
+}
+
+QStringList AsyncPkgReadJob::fileList()
+{
+    return _fileList;
+}
+
+
+
+
+
+
+CachePkgReadJob::CachePkgReadJob( DirTree * tree,
+                                  PkgInfo * pkg,
+                                  QSharedPointer<PkgFileListCache> fileListCache ):
+    PkgReadJob( tree, pkg ),
+    _fileListCache( fileListCache )
+{
+
+}
+
+
+QStringList CachePkgReadJob::fileList()
+{
+    if ( _fileListCache &&
+         _fileListCache->pkgManager() == _pkg->pkgManager() )
+    {
+        QString pkgName = _pkg->pkgManager()->queryName( _pkg );
+
+        if ( _fileListCache->contains( pkgName ) )
+        {
+            return _fileListCache->fileList( pkgName );
+        }
+
+        if ( _fileListCache->contains( _pkg->name() ) )
+        {
+            return _fileListCache->fileList( _pkg->name() );
+        }
+    }
+
+    logDebug() << "Falling back to the simple PkgQuery::fileList() for " << _pkg << endl;
+
+    return PkgQuery::fileList( _pkg );
+}

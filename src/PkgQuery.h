@@ -45,6 +45,12 @@ namespace QDirStat
         static bool foundSupportedPkgManager();
 
         /**
+         * Return the (first) primary package manager if there is one or 0 if
+         * not.
+         **/
+        static PkgManager * primaryPkgManager();
+
+        /**
          * Return 'true' if any of the package managers has support for getting
          * the list of installed packages.
          **/

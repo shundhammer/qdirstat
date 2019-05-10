@@ -1,6 +1,6 @@
 /*
  *   File name: PkgManager.h
- *   Summary:	Simple package manager support for QDirStat
+ *   Summary:	Package manager support for QDirStat
  *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
@@ -21,6 +21,8 @@
 
 namespace QDirStat
 {
+    class PkgFileListCache;
+
     using SysUtil::runCommand;
     using SysUtil::tryRunCommand;
     using SysUtil::haveCommand;
@@ -130,6 +132,8 @@ namespace QDirStat
         /**
          * Return 'true' if this package manager supports getting the file list
          * for a package.
+         *
+         ** See also supportsFileListCache().
          **/
         virtual bool supportsFileList() { return false; }
 
@@ -152,6 +156,32 @@ namespace QDirStat
          **/
         virtual QStringList parseFileList( const QString & output )
             { Q_UNUSED( output); return QStringList(); }
+
+        /**
+         * Return 'true' if this package manager supports building a file list
+         * cache for getting all file lists for all packages.
+         **/
+        virtual bool supportsFileListCache() { return false; }
+
+        /**
+         * Create a file list cache for all installed packages. This is an
+         * expensive operation.
+         *
+         * This is a best-effort approach; the cache might still not contain
+         * all desired packages. Check with PkgFileListCache::contains() and
+         * use PkgManager::fileList() as a fallback.
+         *
+         * Ownership of the cache is transferred to the caller; make sure to
+         * delete it when you are done with it.
+         **/
+        virtual PkgFileListCache * createFileListCache()
+            { return 0; }
+
+        /**
+         * Return a name suitable for a detailed queries for 'pkg'.
+         */
+        virtual QString queryName( PkgInfo * pkg )
+            { return pkg->name(); }
 
     }; // class PkgManager
 
