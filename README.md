@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-05-10
+Updated: 2019-05-11
 
 
 ## Overview
@@ -123,6 +123,49 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2019-05-10
+
+  Drastic performance improvements in the packages view:
+
+  - When reading many (configurable; right now 200) package lists, QDirStat no
+    longer fires off a separate background process (6 in parallel at any given
+    time) for each external command (`dpkg-query --listfiles` or `rpm -ql` or
+    `pacman -Qlp`) and collects their output.
+
+    Rather, it now tries to use a single external command that can return all
+    file lists for all packages at once. It builds a cache from that and uses
+    it to build the internal tree as it processes the read jobs for each
+    package one by one.
+
+    Right now this works for _dpkg_ (`dpkg -S "*"`). Experiments show that it
+    will also work for _rpm_ (that's on the _to do_ list).
+
+    But there does not seem to be an equivalent command for _pacman_; it looks
+    as if _pacman_ can only return a file list for a single package or a list
+    of all installed packages, but without any reference what package each file
+    in that list belongs to. _If anybody knows, please contact me._
+
+  - Now caching the result of `lstat()` syscalls for directories in the package
+    view since most packages share common system directories like `/usr`,
+    `/usr/bin`, `/usr/share` etc.; `lstat()` is an expensive affair, and even
+    just avoiding to switch from user space to kernel space and back that often
+    is a speed improvement.
+
+  - Reduced the display update inverval in the packages view. While reading
+    package information, there is not all that much to see anyway. Yet
+    constantly recalculating the column widths to make sure they fit their
+    content is expensive. This is now done just every 5 seconds, not 3 times a
+    second.
+
+    There is even a noticeable difference when using the L1 layout and a
+    smaller window size so there is less content to take care of.
+
+  The net effect of all this performance tuning is that on my machine (Xubuntu
+  18.04 LTS (i.e. _dpkg_) with ~2400 packages) reading all packages with all
+  their file lists is now down to under 30 seconds from formerly 90 to 120 (it
+  varied wildly).
+
+
 - 2019-05-09
 
   - Now no longer showing a directory's own size (the size of the directory
@@ -156,7 +199,7 @@ Download installable binary packages for various Linux distributions here:
     in package _foo_ which includes the /usr/bin/foo command, it is irrelevant
     if one hour ago you installed or updated some other package which also
     installed some other commands to /usr/bin; you don't want that latest mtime
-    of the /usr/bin directory affect the display of every package that has a
+    of the /usr/bin directory to affect the display of every package that has a
     file in /usr/bin.
 
 
