@@ -26,7 +26,6 @@ DirTreeModel::DirTreeModel( QObject * parent ):
     _selectionModel(0),
     _readJobsCol( PercentBarCol ),
     _updateTimerMillisec( 333 ),
-    _pkgUpdateMillisec( 5000 ),
     _slowUpdateMillisec( 3000 ),
     _slowUpdate( false ),
     _sortCol( NameCol ),
@@ -61,7 +60,6 @@ void DirTreeModel::readSettings()
     _treeIconDir	 = settings.value( "TreeIconDir" , ":/icons/tree-medium/" ).toString();
     _updateTimerMillisec = settings.value( "UpdateTimerMillisec", 333 ).toInt();
     _slowUpdateMillisec	 = settings.value( "SlowUpdateMillisec", 3000 ).toInt();
-    _pkgUpdateMillisec	 = settings.value( "PkgUpdateMillisec" , 5000 ).toInt();
 
     settings.endGroup();
 }
@@ -77,7 +75,6 @@ void DirTreeModel::writeSettings()
     settings.setDefaultValue( "CrossFileSystems",    _tree ? _tree->crossFileSystems() : false );
     settings.setDefaultValue( "TreeIconDir" ,	     _treeIconDir	  );
     settings.setDefaultValue( "UpdateTimerMillisec", _updateTimerMillisec );
-    settings.setDefaultValue( "PkgUpdateMillisec",   _pkgUpdateMillisec	  );
 
     settings.endGroup();
 }
@@ -149,7 +146,6 @@ void DirTreeModel::openUrl( const QString & url )
     if ( _tree->root() &&  _tree->root()->hasChildren() )
 	clear();
 
-    _updateTimer.setInterval( _slowUpdate ? _slowUpdateMillisec : _updateTimerMillisec );
     _updateTimer.start();
     _tree->startReading( url );
 }
@@ -163,7 +159,6 @@ void DirTreeModel::readPkg( const PkgFilter & pkgFilter )
     if ( _tree->root() &&  _tree->root()->hasChildren() )
 	clear();
 
-    _updateTimer.setInterval( _slowUpdateMillisec );
     _updateTimer.start();
     _tree->readPkg( pkgFilter );
 }
