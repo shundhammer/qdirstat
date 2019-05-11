@@ -204,14 +204,14 @@ As you can imagine, waiting for all those external commands to return
 information takes a while, in particular when all installed packages are
 selected to display.
 
-The first version of this took about 4 minutes to fetch all the information for
+The first version of this took about 3 minutes to fetch all the information for
 a quite normal Xubuntu 18.04 LTS installation -- much longer than just reading
 the complete root filesystem with cold kernel buffers.
 
 This is why now QDirStat starts a number of those external commands in
 parallel; the sweet spot turned out to be 6 of those processes at the same time
 (whenever one is finished, a new one is started so there are always 6 of them
-running). This improved the speed on the same machine to 65-85 seconds.
+running). This improved the speed on the same machine to 54 seconds.
 
 The number of background processes can be configured in
 `~/.config/QDirStat/QDirStat.conf`:
@@ -220,6 +220,38 @@ The number of background processes can be configured in
 [Pkg]
 MaxParallelProcesses=6
 ```
+
+For `dpkg` and `rpm` it now uses a single command that fetches the complete
+file list, i.e. all file lists for all installed packages at once. This reduced
+the time on the same machine to 38.5 seconds.
+
+However, this is a tradeoff since fetching that complete file list and parsing
+it takes some time, so this is useful only above a certain number of packages
+(about 200). This limit can be configured in
+
+`~/.config/QDirStat/QDirStat.conf`:
+
+```
+[Pkg]
+MinCachePkgListSize=200
+```
+
+Below that, it uses multiple parallel single calls to get individual file
+lists.
+
+Together with more performance tuning it's now down to 6.5 seconds.
+
+
+| sec   |  Version   | Description                                                         |
+|------:|------------|---------------------------------------------------------------------|
+| 180.0 | ce3e793298 | First pkg view; sequential separate `dpkg -L` calls                 |
+|  53.4 | 68038f0525 | Separate `dpkg -L` calls in multiple background processes           |
+|  38.5 | ce54879a48 | Single `dpkg -S "*"` call to get all file lists for all pkg at once |
+|  37.7 | 45b0a7a941 | Use cache for `lstat()` syscalls                                    |
+|  24.6 | c50e9a7686 | Use slower update timer for tree view while reading                 |
+|   6.5 | a1043a20fb | Keep tree collapsed during reading                                  |
+
+See also [GitHub Issue #101](https://github.com/shundhammer/qdirstat/issues/101).
 
 
 ## Limitations

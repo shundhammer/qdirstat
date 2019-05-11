@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-05-11
+Updated: 2019-05-12
 
 
 ## Overview
@@ -125,12 +125,28 @@ Download installable binary packages for various Linux distributions here:
 
 - 2019-05-11
 
-  Implemented the single-command call to get all file lists for all installed
-  packages for _rpm_ as well.
+  - Implemented the single-command call to get all file lists for all installed
+    packages for _rpm_ as well.
 
-  Now it's only _pacman_ that still needs a separate external command for each
-  package. If anybody knows how to do this for _pacman_ as well, please let me
-  know.
+    Now it's only _pacman_ that still needs a separate external command for
+    each package. If anybody knows how to do this for _pacman_ as well, please
+    let me know.
+
+  - Another drastic performance improvement in the packages view:
+
+    Now down to **6.5 seconds** on my system from initially 180 seconds for
+    getting all file lists for all 2400 installed packages.
+
+    | sec   |  Version   | Description                                                         |
+    |------:|------------|---------------------------------------------------------------------|
+    | 180.0 | ce3e793298 | First pkg view; sequential separate `dpkg -L` calls                 |
+    |  53.4 | 68038f0525 | Separate `dpkg -L` calls in multiple background processes           |
+    |  38.5 | ce54879a48 | Single `dpkg -S "*"` call to get all file lists for all pkg at once |
+    |  37.7 | 45b0a7a941 | Use cache for `lstat()` syscalls                                    |
+    |  24.6 | c50e9a7686 | Use slower update timer for tree view while reading                 |
+    |   6.5 | a1043a20fb | Keep tree collapsed during reading                                  |
+
+    (Much) more details at [GitHub Issue #101](https://github.com/shundhammer/qdirstat/issues/101).
 
 
 - 2019-05-10
