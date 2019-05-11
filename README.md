@@ -123,6 +123,16 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2019-05-11
+
+  Implemented the single-command call to get all file lists for all installed
+  packages for _rpm_ as well.
+
+  Now it's only _pacman_ that still needs a separate external command for each
+  package. If anybody knows how to do this for _pacman_ as well, please let me
+  know.
+
+
 - 2019-05-10
 
   Drastic performance improvements in the packages view:
