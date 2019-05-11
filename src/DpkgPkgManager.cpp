@@ -200,6 +200,12 @@ PkgFileListCache * DpkgPkgManager::createFileListCache()
     PkgFileListCache * cache = new PkgFileListCache( this );
     CHECK_NEW( cache );
 
+    // Sample output:
+    //
+    //     zip: /usr/bin/zip
+    //     zlib1g-dev:amd64: /usr/include/zlib.h
+    //     zlib1g:i386, zlib1g:amd64: /usr/share/doc/zlib1g
+
     foreach ( const QString & line, lines )
     {
         if ( line.isEmpty() || line.startsWith( "diversion" ) )
@@ -231,3 +237,4 @@ PkgFileListCache * DpkgPkgManager::createFileListCache()
 
     return cache;
 }
+
