@@ -116,6 +116,30 @@ namespace QDirStat
         virtual QStringList parseFileList( const QString & output ) Q_DECL_OVERRIDE;
 
         /**
+         * Return 'true' if this package manager supports building a file list
+         * cache for getting all file lists for all packages.
+         *
+	 * Reimplemented from PkgManager.
+         **/
+        virtual bool supportsFileListCache() Q_DECL_OVERRIDE
+            { return true; }
+
+        /**
+         * Create a file list cache for all installed packages. This is an
+         * expensive operation.
+         *
+         * This is a best-effort approach; the cache might still not contain
+         * all desired packages. Check with PkgFileListCache::contains() and
+         * use PkgManager::fileList() as a fallback.
+         *
+         * Ownership of the cache is transferred to the caller; make sure to
+         * delete it when you are done with it.
+         *
+	 * Reimplemented from PkgManager.
+         **/
+        virtual PkgFileListCache * createFileListCache() Q_DECL_OVERRIDE;
+
+        /**
          * Return a name suitable for a detailed queries for 'pkg'.
          *
          * This might include the architecture and the version if this is a

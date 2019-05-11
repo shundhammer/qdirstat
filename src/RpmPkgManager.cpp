@@ -8,10 +8,11 @@
 
 
 #include "RpmPkgManager.h"
+#include "PkgFileListCache.h"
 #include "Logger.h"
 #include "Exception.h"
 
-#define GET_PKGLIST_TIMEOUT_SEC         30
+#define GET_PKGLIST_TIMEOUT_SEC		30
 
 
 using namespace QDirStat;
@@ -68,17 +69,17 @@ PkgInfoList RpmPkgManager::installedPkg()
 {
     int exitCode = -1;
     QString output = runCommand( _rpmCommand,
-                                 QStringList()
-                                 << "-qa"
-                                 << "--queryformat"
-                                 << "%{name} | %{version}-%{release} | %{arch}\n",
-                                 &exitCode,
-                                 GET_PKGLIST_TIMEOUT_SEC );
+				 QStringList()
+				 << "-qa"
+				 << "--queryformat"
+				 << "%{name} | %{version}-%{release} | %{arch}\n",
+				 &exitCode,
+				 GET_PKGLIST_TIMEOUT_SEC );
 
     PkgInfoList pkgList;
 
     if ( exitCode == 0 )
-        pkgList = parsePkgList( output );
+	pkgList = parsePkgList( output );
 
     return pkgList;
 }
@@ -90,27 +91,27 @@ PkgInfoList RpmPkgManager::parsePkgList( const QString & output )
 
     foreach ( const QString & line, output.split( "\n" ) )
     {
-        if ( ! line.isEmpty() )
-        {
-            QStringList fields = line.split( " | ", QString::KeepEmptyParts );
+	if ( ! line.isEmpty() )
+	{
+	    QStringList fields = line.split( " | ", QString::KeepEmptyParts );
 
-            if ( fields.size() != 3 )
-                logError() << "Invalid rpm -qa output: " << line << "\n" << endl;
-            else
-            {
-                QString name    = fields.takeFirst();
-                QString version = fields.takeFirst(); // includes release
-                QString arch    = fields.takeFirst();
+	    if ( fields.size() != 3 )
+		logError() << "Invalid rpm -qa output: " << line << "\n" << endl;
+	    else
+	    {
+		QString name	= fields.takeFirst();
+		QString version = fields.takeFirst(); // includes release
+		QString arch	= fields.takeFirst();
 
-                if ( arch == "(none)" )
-                    arch = "";
+		if ( arch == "(none)" )
+		    arch = "";
 
-                PkgInfo * pkg = new PkgInfo( name, version, arch, this );
-                CHECK_NEW( pkg );
+		PkgInfo * pkg = new PkgInfo( name, version, arch, this );
+		CHECK_NEW( pkg );
 
-                pkgList << pkg;
-            }
-        }
+		pkgList << pkg;
+	    }
+	}
     }
 
     return pkgList;
@@ -120,8 +121,8 @@ PkgInfoList RpmPkgManager::parsePkgList( const QString & output )
 QString RpmPkgManager::fileListCommand( PkgInfo * pkg )
 {
     return QString( "%1 -ql %2" )
-        .arg( _rpmCommand )
-        .arg( queryName( pkg ) );
+	.arg( _rpmCommand )
+	.arg( queryName( pkg ) );
 }
 
 
@@ -143,10 +144,63 @@ QString RpmPkgManager::queryName( PkgInfo * pkg )
     QString name = pkg->baseName();
 
     if ( ! pkg->version().isEmpty() )
-        name += "-" + pkg->version();
+	name += "-" + pkg->version();
 
     if ( ! pkg->arch().isEmpty() )
-        name += "." + pkg->arch();
+	name += "." + pkg->arch();
 
     return name;
+}
+
+
+PkgFileListCache * RpmPkgManager::createFileListCache()
+{
+    int exitCode = -1;
+    QString queryFormat = "[%{=NAME}-%{=VERSION}-%{=RELEASE}.%{=ARCH} | %{FILENAMES} \n]";
+
+    QString output = runCommand( _rpmCommand,
+				 QStringList() << "-qa" << "--qf" << queryFormat,
+                                 &exitCode,
+                                 GET_PKGLIST_TIMEOUT_SEC );
+
+    if ( exitCode != 0 )
+	return 0;
+
+    QStringList lines = output.split( "\n" );
+    output.clear(); // Free all that text ASAP
+    logDebug() << lines.size() << " output lines" << endl;
+
+    PkgFileListCache * cache = new PkgFileListCache( this );
+    CHECK_NEW( cache );
+
+    // Sample output:
+    //
+    //     zsh-5.6-lp151.1.3.x86_64 | /bin/zsh
+    //	   zsh-5.6-lp151.1.3.x86_64 | /etc/zprofile
+    //	   zsh-5.6-lp151.1.3.x86_64 | /etc/zsh_completion.d
+
+    foreach ( const QString & line, lines )
+    {
+	if ( line.isEmpty() )
+	    continue;
+
+	QStringList fields = line.split( " | " );
+
+	if ( fields.size() != 2 )
+	{
+	    logError() << "Unexpected file list line: \"" << line << "\"" << endl;
+	}
+	else
+	{
+	    QString pkgName = fields.takeFirst();
+	    QString path    = fields.takeFirst();
+
+	    if ( ! pkgName.isEmpty() && ! path.isEmpty() )
+		cache->add( pkgName, path );
+	}
+    }
+
+    logDebug() << "file list cache finished." << endl;
+
+    return cache;
 }
