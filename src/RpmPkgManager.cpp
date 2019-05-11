@@ -156,7 +156,7 @@ QString RpmPkgManager::queryName( PkgInfo * pkg )
 PkgFileListCache * RpmPkgManager::createFileListCache()
 {
     int exitCode = -1;
-    QString queryFormat = "[%{=NAME}-%{=VERSION}-%{=RELEASE}.%{=ARCH} | %{FILENAMES} \n]";
+    QString queryFormat = "[%{=NAME}-%{=VERSION}-%{=RELEASE}.%{=ARCH} | %{FILENAMES}\n]";
 
     QString output = runCommand( _rpmCommand,
 				 QStringList() << "-qa" << "--qf" << queryFormat,
