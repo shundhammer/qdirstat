@@ -563,7 +563,7 @@ void MainWindow::busyDisplay()
     if ( ! _selectionModel->currentBranch() )
     {
 	// Wait until the toplevel entry has some children, then expand to level 1
-	QTimer::singleShot( 200, _ui->actionExpandTreeLevel1, SLOT( trigger() ) );
+	QTimer::singleShot( 200, this, SLOT( navigateToToplevel ) );
     }
 }
 
@@ -761,6 +761,7 @@ void MainWindow::readPkg( const PkgFilter & pkgFilter )
     // logInfo() << "URL: " << pkgFilter.url() << endl;
 
     updateWindowTitle( pkgFilter.url() );
+    expandTreeToLevel( 0 );   // Performance boost: Down from 25 to 6 sec.
     _dirTreeModel->readPkg( pkgFilter );
 }
 
