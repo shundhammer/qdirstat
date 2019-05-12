@@ -222,7 +222,7 @@ PkgFileListCache * DpkgPkgManager::createFileListCache()
             QString packages = fields.takeFirst();
             QString path     = fields.takeFirst();
 
-            if ( path != "/." )
+            if ( path != "/." && ! path.isEmpty() )
             {
                 foreach ( const QString & pkgName, packages.split( ", " ) )
                 {

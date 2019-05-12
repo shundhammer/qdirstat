@@ -21,6 +21,7 @@ CleanupList StdCleanup::stdCleanups( QObject * parent )
 
     cleanups << openFileManagerHere( parent )
 	     << openTerminalHere   ( parent )
+	     << checkFileType      ( parent )
 	     << compressSubtree	   ( parent )
 	     << makeClean	   ( parent )
 	     << gitClean	   ( parent )
@@ -72,6 +73,23 @@ Cleanup * StdCleanup::openTerminalHere( QObject * parent )
     cleanup->setIcon( ":/icons/terminal.png" );
     cleanup->setShortcut( Qt::CTRL + Qt::Key_T );
     cleanup->setOutputWindowPolicy( Cleanup::ShowNever ); // Make KDE konsole shut up
+
+    return cleanup;
+}
+
+
+Cleanup * StdCleanup::checkFileType( QObject * parent )
+{
+    Cleanup *cleanup = new Cleanup( "file %n | sed -e 's/[:,] /\\n  /g'",
+				    QObject::tr( "Check File T&ype" ),
+				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( false );
+    cleanup->setWorksForFile	( true  );
+    cleanup->setWorksForDotEntry( false );
+    cleanup->setRefreshPolicy( Cleanup::NoRefresh );
+    cleanup->setOutputWindowPolicy( Cleanup::ShowAlways );
+    cleanup->setShortcut( Qt::CTRL + Qt::Key_Y );
 
     return cleanup;
 }

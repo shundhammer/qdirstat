@@ -123,6 +123,17 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2019-05-12
+
+  - New standard cleanup: _Check File Type_. This uses the `file` command to
+    find out more detailed information what exactly a file is and displays it
+    in the normal cleanup output window (the orange text is the interesting
+    part).
+
+    More details and screenshots at [GitHub Issue #102](https://github.com/shundhammer/qdirstat/issues/102).
+    Notice that you can also add this to any older version of QDirStat.
+
+
 - 2019-05-11
 
   - Implemented the single-command call to get all file lists for all installed
