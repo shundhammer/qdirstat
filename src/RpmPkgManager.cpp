@@ -7,19 +7,29 @@
  */
 
 
+#include <iostream>	// cerr
+
+#include <QElapsedTimer>
+
 #include "RpmPkgManager.h"
 #include "PkgFileListCache.h"
+#include "Settings.h"
 #include "Logger.h"
 #include "Exception.h"
 
 #define LONG_CMD_TIMEOUT_SEC		30
 
 
+using std::cerr;
+using std::endl;
 using namespace QDirStat;
 
 
-RpmPkgManager::RpmPkgManager()
+RpmPkgManager::RpmPkgManager():
+    _getPkgListWarningSec( 7 )
 {
+    readSettings();
+
     if ( haveCommand( "/usr/bin/rpm" ) )
 	_rpmCommand = "/usr/bin/rpm";
     else
@@ -68,6 +78,9 @@ QString RpmPkgManager::owningPkg( const QString & path )
 PkgInfoList RpmPkgManager::installedPkg()
 {
     int exitCode = -1;
+    QElapsedTimer timer;
+    timer.start();
+
     QString output = runCommand( _rpmCommand,
 				 QStringList()
 				 << "-qa"
@@ -75,6 +88,9 @@ PkgInfoList RpmPkgManager::installedPkg()
 				 << "%{name} | %{version}-%{release} | %{arch}\n",
 				 &exitCode,
 				 LONG_CMD_TIMEOUT_SEC );
+
+    if ( timer.hasExpired( _getPkgListWarningSec * 1000 ) )
+        rebuildRpmDbWarning();
 
     PkgInfoList pkgList;
 
@@ -203,4 +219,26 @@ PkgFileListCache * RpmPkgManager::createFileListCache()
     logDebug() << "file list cache finished." << endl;
 
     return cache;
+}
+
+
+void RpmPkgManager::readSettings()
+{
+    Settings settings;
+    settings.beginGroup( "Pkg" );
+    _getPkgListWarningSec = settings.value( "GetRpmPkgListWarningSec", 7 ).toInt();
+
+    // Write the value right back to the settings if it isn't there already:
+    // Since package manager objects are never really destroyed, this can't
+    // reliably be done in the destructor.
+
+    settings.setDefaultValue( "GetRpmPkgListWarningSec", _getPkgListWarningSec );
+    settings.endGroup();
+}
+
+
+void RpmPkgManager::rebuildRpmDbWarning()
+{
+    cerr << "WARNING: rpm is very slow. Run   sudo rpm --rebuilddb\n" << endl;
+    logWarning()  << "rpm is very slow. Run   sudo rpm --rebuilddb"   << endl;
 }

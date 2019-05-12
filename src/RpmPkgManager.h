@@ -153,14 +153,26 @@ namespace QDirStat
     protected:
 
         /**
+         * Read parameters from the settings file.
+         **/
+        void readSettings();
+
+        /**
          * Parse a package list as output by "dpkg-query --show --showformat".
          **/
         PkgInfoList parsePkgList( const QString & output );
+
+        /**
+         * Show a warning that the RPM database should be rebuilt
+         * ("sudo rpm --rebuilddb").
+         **/
+        void rebuildRpmDbWarning();
 
 
         // Data members
 
 	QString _rpmCommand;
+        int     _getPkgListWarningSec;
 
     }; // class RpmPkgManager
 
