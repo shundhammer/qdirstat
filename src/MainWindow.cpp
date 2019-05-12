@@ -563,7 +563,7 @@ void MainWindow::busyDisplay()
     if ( ! _selectionModel->currentBranch() )
     {
 	// Wait until the toplevel entry has some children, then expand to level 1
-	QTimer::singleShot( 200, this, SLOT( navigateToToplevel ) );
+	QTimer::singleShot( 200, _ui->actionExpandTreeLevel0, SLOT( triggered() ) );
     }
 }
 
