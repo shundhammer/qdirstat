@@ -1,5 +1,5 @@
 /*
- *   File name: PkgManager.cpp
+ *   File name: DPkgPkgManager.cpp
  *   Summary:	Dpkg package manager support for QDirStat
  *   License:	GPL V2 - See file LICENSE for details.
  *

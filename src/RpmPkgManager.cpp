@@ -12,7 +12,7 @@
 #include "Logger.h"
 #include "Exception.h"
 
-#define GET_PKGLIST_TIMEOUT_SEC		30
+#define LONG_CMD_TIMEOUT_SEC		30
 
 
 using namespace QDirStat;
@@ -74,7 +74,7 @@ PkgInfoList RpmPkgManager::installedPkg()
 				 << "--queryformat"
 				 << "%{name} | %{version}-%{release} | %{arch}\n",
 				 &exitCode,
-				 GET_PKGLIST_TIMEOUT_SEC );
+				 LONG_CMD_TIMEOUT_SEC );
 
     PkgInfoList pkgList;
 
@@ -161,7 +161,7 @@ PkgFileListCache * RpmPkgManager::createFileListCache()
     QString output = runCommand( _rpmCommand,
 				 QStringList() << "-qa" << "--qf" << queryFormat,
                                  &exitCode,
-                                 GET_PKGLIST_TIMEOUT_SEC );
+                                 LONG_CMD_TIMEOUT_SEC );
 
     if ( exitCode != 0 )
 	return 0;
