@@ -107,6 +107,13 @@ show_filtered_cache()
 # main()
 #
 
+# Use -f to force re-reading all information
+
+if [ "$1"x == "-f"x ]; then
+    rm -f $ROOT_CACHE
+    rm -f $FILELIST
+fi
+
 test -f $ROOT_CACHE || create_cache_file
 test -f $FILELIST   || create_complete_filelist
 
