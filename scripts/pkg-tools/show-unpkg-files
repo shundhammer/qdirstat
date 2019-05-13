@@ -86,11 +86,12 @@ create_complete_filelist()
 
 filter_out_pkg_files_from_cache()
 {
-    zcat $ROOT_CACHE                            \
-        | cache-exclude $FILELIST               \
-        | egrep -v '^.\s+/(home|tmp|root|var)/' \
-        | cache-kill-empty-dirs                 \
-        | gzip                                  \
+    zcat $ROOT_CACHE                             \
+        | cache-exclude $FILELIST                \
+        | egrep -v '^.\s+/(home|tmp|root|var)/'  \
+        | egrep -v '^.\s+/usr/lib/sysimage/rpm/' \
+        | cache-kill-empty-dirs                  \
+        | gzip                                   \
         >$UNPKG_CACHE
 }
 
