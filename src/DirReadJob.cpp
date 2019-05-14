@@ -192,7 +192,11 @@ void LocalDirReadJob::startReading()
     {
 	_dir->setReadState( DirReading );
         int dirFd = dirfd( diskDir );
-        int flags = AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT;
+        int flags = AT_SYMLINK_NOFOLLOW;
+        
+#ifdef AT_NO_AUTOMOUNT
+        flags |= AT_NO_AUTOMOUNT;
+#endif
 
         QMultiMap<ino_t, QString> entryMap;
 
