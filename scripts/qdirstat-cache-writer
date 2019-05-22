@@ -135,15 +135,13 @@ sub write_cache_file()
     my ( $toplevel_dir, $cache_file_name ) = @_;
     my $start_time = time();
 
-    my $cache_file_name_part = $cache_file_name . ".part";
-
     my $open_type = ">";
-    my $open_name = $cache_file_name_part;
+    my $open_name = $cache_file_name;
 
     if ( $cache_file_name =~ /.*\.gz$/ )
     {
 	$open_type = "|-";
-	$open_name = "gzip > '$open_name'";
+	$open_name = "gzip > '$cache_file_name'";
     }
 
     open( CACHE,  $open_type , $open_name ) or die "Can't open $cache_file_name";
@@ -156,7 +154,6 @@ sub write_cache_file()
     printf CACHE "# Elapsed time: %d:%02d:%02d\n", $hours, $min, $sec;
 
     close( CACHE );
-    rename($cache_file_name_part, $cache_file_name);
 }
 
 
