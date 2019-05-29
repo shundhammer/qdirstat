@@ -109,7 +109,7 @@ show_filtered_cache()
 
 # Use -f to force re-reading all information
 
-if [ "$1"x == "-f"x ]; then
+if [ "$1"x = "-f"x ]; then
     rm -f $ROOT_CACHE
     rm -f $FILELIST
 fi
