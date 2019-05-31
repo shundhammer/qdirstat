@@ -590,12 +590,12 @@ QStringList CachePkgReadJob::fileList()
 	QString pkgName = _pkg->pkgManager()->queryName( _pkg );
         QStringList fileList;
 
-	if ( _fileListCache->contains( pkgName ) )
+	if ( _fileListCache->containsPkg( pkgName ) )
 	{
             fileList = _fileListCache->fileList( pkgName );
             _fileListCache->remove( pkgName );
 	}
-	else if ( _fileListCache->contains( _pkg->name() ) )
+	else if ( _fileListCache->containsPkg( _pkg->name() ) )
 	{
 	    fileList = _fileListCache->fileList( _pkg->name() );
             _fileListCache->remove( _pkg->name() );

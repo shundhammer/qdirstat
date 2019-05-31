@@ -53,7 +53,7 @@ namespace QDirStat
          * Return 'true' if the cache contains any information about a package,
          * 'false' if not.
          **/
-        bool contains( const QString & pkgName ) const;
+        bool containsPkg( const QString & pkgName ) const;
 
         /**
          * Return the number of key/value pairs in the cache.

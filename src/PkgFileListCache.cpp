@@ -35,7 +35,7 @@ QStringList PkgFileListCache::fileList( const QString & pkgName )
 }
 
 
-bool PkgFileListCache::contains( const QString & pkgName ) const
+bool PkgFileListCache::containsPkg( const QString & pkgName ) const
 {
     return _fileNames.contains( pkgName );
 }
