@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-05-12
+Updated: 2019-06-16
 
 
 ## Overview
@@ -122,6 +122,15 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2019-06-16
+
+  - Added [documentation for the _pkg-tools_ scripts](scripts/pkg-tools/README.md).
+
+    In short, they can be used to see unpackaged files on a system that uses
+    one of the supported package managers (dpkg, rpm, pacman), but it's a bit
+    of a klunky solution, so is meant for advanced users only.
+
 
 - 2019-05-12
 
