@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-06-16
+Updated: 2019-06-17
 
 
 ## Overview
@@ -128,8 +128,11 @@ Download installable binary packages for various Linux distributions here:
   - Added [documentation for the _pkg-tools_ scripts](scripts/pkg-tools/README.md).
 
     In short, they can be used to see unpackaged files on a system that uses
-    one of the supported package managers (dpkg, rpm, pacman), but it's a bit
-    of a klunky solution, so is meant for advanced users only.
+    one of the supported package managers (_dpkg_, _rpm_, _pacman_), but it's a
+    bit of a clunky solution, so this is meant for advanced users only.
+
+    With a little bit of luck, there _may_ be a better solution forthcoming
+    with real integration into QDirStat's GUI.
 
 
 - 2019-05-12
