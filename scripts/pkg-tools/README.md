@@ -20,20 +20,20 @@ your system, not the whole thing!**
 
 ### Use Cases
 
-- You regularly install software that you built manually with `make install`,
-  and now you'd like to find those files again after the system behaves
-  strangely.
+- You regularly manually build software and install it with `make install`, and
+  now you'd like to find those files again after the system behaves strangely.
 
 - You constantly upgrade your system from one distro release to the
   next. Sometimes, files are left behind because of packaging errors. For
   example, you may find very old libraries in `/usr/lib` that may get in the
-  way.
+  way (this happened to me).
 
 - You are a software packager, a QA engineer or a release manager working for a
-  Linux distributor, and you'd like to check if the packagers properly packaged
-  all files, our you want to find files left behind by package upgrades, or
-  files that a package leaves behind because of some slightly broken pre- or
-  post-uninstall script.
+  Linux distributor, and need to check if all the files belonging to a software
+  package are packaged properly, our you want to find files left behind by
+  package upgrades, or files that a package leaves behind because of some
+  slightly broken pre- or post-uninstall script (leftover Python *.pyc files,
+  anyone?).
 
 
 ## Caveat
@@ -48,8 +48,8 @@ Some of the scripts may feel a little clunky; they are less than perfect (but
 they do their job). See them more as an inspiration of what can be done with
 QDirStat and its tools rather than a production-ready solution.
 
-If you decide that you do want to use them in a production environment, more
-power to you, but please be very careful, and no complaints. ;-)
+If you decide that you do want to use them in a production environment, then
+more power to you, but please be very careful, and no complaints. ;-)
 
 
 
@@ -62,18 +62,18 @@ QDirStat is available on the system as a primary package manager:
 - dpkg
 - pacman
 
-If you use _rpm_ on top of _dpkg_ (or the other way round) this will still only
-report _dpkg_.
+If you use _rpm_ on top of _dpkg_ (or the other way round), this will still
+only report _dpkg_.
 
 
 
 ## complete-filelist-dpkg
 
-This creates a complete file list of all installed packages on a dpkg-based
-system. As a side bonus, it also creates a list of all installed packages.
+This creates a list of all installed packages and a complete file list of all
+those installed packages on a dpkg-based system.
 
 Both files are stored in the QDirStat tmp directory in /tmp/qdirstat-$USER/.
-The script writes the number of lines and the exact path of each to stdout:
+The script writes the number of lines and the exact path of each one to stdout:
 
 
 ```
@@ -105,7 +105,11 @@ installed packages, but for a pacman-based system.
 This excludes a list of files from an (uncompressed) QDirStat cache file.
 
 **The cache file needs to be created in long format**, i.e. with the full path
-for every entry. Use `qdirstat-cache-writer -l` for that.
+for every entry:
+
+```
+qdirstat-cache-writer -l / qdirstat-cache.gz
+```
 
 This script can be used to exclude a file list created by one of the
 complete-filelist-* scripts from a QDirStat cache file, i.e. it can create a
@@ -190,10 +194,11 @@ Creating a cache file manually:
 qdirstat-cache-writer -l / /tmp/qdirstat-$USER/root.cache.gz
 ```
 
-If you do this without root permissions, you will get some warnings. You can
-safely ignore them, but of course you will not see the complete system in the
-result; you may miss some unpackaged files (which may or may not be important
-to you).
+If you do this without root permissions, you will get some warnings because
+some directories are accessible only with root permissions. You can safely
+ignore those warnings, but of course you will not see the complete system in
+the result; you may miss some unpackaged files (which may or may not be
+important to you).
 
 
 ### Keeping Expensive Data
