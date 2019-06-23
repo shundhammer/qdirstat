@@ -130,8 +130,8 @@ namespace QDirStat
 
 
     /**
-     * Container for multiple exclude rules. This is a singleton class. Use the
-     * static methods or instance() to access the singleton.
+     * Container for multiple exclude rules. This can be used as a singleton
+     * class. Use the static methods or instance() to access the singleton.
      *
      * Normal usage:
      *
@@ -146,7 +146,7 @@ namespace QDirStat
     {
 	Q_OBJECT
 
-    protected:
+    public:
 	/**
 	 * Constructor.
 	 *
@@ -154,8 +154,6 @@ namespace QDirStat
 	 * and use a singleton object of this class.
 	 **/
 	ExcludeRules();
-
-    public:
 
 	/**
 	 * Destructor.

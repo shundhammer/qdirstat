@@ -12,16 +12,18 @@
 
 #include "DirTree.h"
 #include "FileInfoSet.h"
-#include "Exception.h"
+#include "ExcludeRules.h"
 #include "DirTreeCache.h"
 #include "PkgReader.h"
 #include "MountPoints.h"
+#include "Exception.h"
 
 using namespace QDirStat;
 
 
-DirTree::DirTree()
-    : QObject()
+DirTree::DirTree():
+    QObject(),
+    _excludeRules( 0 )
 {
     _isBusy	      = false;
     _crossFileSystems = false;
@@ -40,6 +42,9 @@ DirTree::~DirTree()
 {
     if ( _root )
 	delete _root;
+
+    if ( _excludeRules )
+        delete _excludeRules;
 }
 
 
@@ -420,6 +425,15 @@ void DirTree::readPkg( const PkgFilter & pkgFilter )
     // logDebug() << "Reading " << pkgFilter << endl;
     PkgReader reader( this );
     reader.read( pkgFilter );
+}
+
+
+void DirTree::setExcludeRules( ExcludeRules * newRules )
+{
+    if ( _excludeRules )
+        delete _excludeRules;
+
+    _excludeRules = newRules;
 }
 
 

@@ -26,6 +26,7 @@ namespace QDirStat
 {
     class DirReadJob;
     class FileInfoSet;
+    class ExcludeRules;
 
 
     /**
@@ -275,6 +276,25 @@ namespace QDirStat
          **/
         void readPkg( const PkgFilter & pkgFilter );
 
+        /**
+         * Return exclude rules specific to this tree (as opposed to the global
+         * ones stored in the ExcludeRules singleton) or 0 if there are none.
+         **/
+        ExcludeRules * excludeRules() const { return _excludeRules; }
+
+        /**
+         * Set exclude rules specific to this tree. They are additional rules
+         * to the ones in the ExcludeRules singleton. This can be used for
+         * temporary exclude rules that are not to be written to the config
+         * file.
+         *
+         * The DirTree takes over ownership of this object and will delete it
+         * when appropriate (i.e. in its destructor or when new ExcludeRules
+         * are set with this function). Call this with 0 to remove the existing
+         * exclude rules.
+         **/
+        void setExcludeRules( ExcludeRules * newRules );
+
 
     signals:
 
@@ -381,6 +401,7 @@ namespace QDirStat
 	bool		_isBusy;
         QString         _device;
         QString         _url;
+        ExcludeRules *  _excludeRules;
 
     };	// class DirTree
 

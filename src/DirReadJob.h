@@ -259,6 +259,12 @@ namespace QDirStat
 	void processSubDir( const QString & entryName,
 			    DirInfo	  * subDir    );
 
+        /**
+         * Return 'true' if 'entryName' matches an exclude rule of the
+         * ExcludeRule singleton or a temporary exclude rule of the DirTree.
+         **/
+        bool matchesExcludeRule( const QString & entryName ) const;
+
 	/**
 	 * Read a cache file that was picked up along the way:
 	 *

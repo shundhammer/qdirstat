@@ -279,6 +279,8 @@ void LocalDirReadJob::startReading()
         // are no such rules to begin with, the match function returns 'false'
         // immediately, so the performance impact is minimal.
         //
+        // Also intentionally not also checking the DirTree specific exclude
+        // rules here: They are meant strictly for directory exclude rules.
 
         if ( _applyFileChildExcludeRules &&
              ExcludeRules::instance()->matchDirectChildren( _dir ) )
@@ -344,6 +346,21 @@ void LocalDirReadJob::processSubDir( const QString & entryName, DirInfo * subDir
 	}
     }
 }
+
+
+bool LocalDirReadJob::matchesExcludeRule( const QString & entryName ) const
+{
+    QString full = fullName( entryName );
+
+    if ( ExcludeRules::instance()->match( full, entryName ) )
+        return true;
+
+    if ( ! _tree->excludeRules() )
+        return false;
+
+    return _tree->excludeRules()->match( full, entryName );
+}
+
 
 
 bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )

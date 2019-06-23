@@ -13,6 +13,7 @@
 #include "DirTree.h"
 #include "FileInfoIterator.h"
 #include "FileInfoSorter.h"
+#include "ExcludeRules.h"
 #include "Exception.h"
 #include "DebugHelpers.h"
 
