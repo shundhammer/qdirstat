@@ -116,6 +116,7 @@
     </property>
     <addaction name="actionOpenDir"/>
     <addaction name="actionOpenPkg"/>
+    <addaction name="actionShow_Unpackaged_Files"/>
     <addaction name="actionRefreshAll"/>
     <addaction name="actionRefreshSelected"/>
     <addaction name="separator"/>
@@ -804,6 +805,14 @@
    </property>
    <property name="toolTip">
     <string>Help about the Packages View (external browser)</string>
+   </property>
+  </action>
+  <action name="actionShow_Unpackaged_Files">
+   <property name="text">
+    <string>Show &amp;Unpackaged Files...</string>
+   </property>
+   <property name="toolTip">
+    <string>Show only files that do NOT belong to an installed software package</string>
    </property>
   </action>
  </widget>

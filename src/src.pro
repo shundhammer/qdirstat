@@ -184,7 +184,8 @@ FORMS	  = main-window.ui		   \
 	    file-size-stats-window.ui	   \
 	    file-type-stats-window.ui	   \
 	    locate-files-window.ui	   \
-	    open-pkg-dialog.ui		   \
+            open-pkg-dialog.ui		   \
+            show-unpkg-files-dialog.ui     \
 	    file-details-view.ui
 
 
