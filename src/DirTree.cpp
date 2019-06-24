@@ -11,14 +11,15 @@
 #include <QFileInfo>
 
 #include "DirTree.h"
+#include "DirTreeCache.h"
+#include "DirTreeFilter.h"
 #include "FileInfoSet.h"
 #include "ExcludeRules.h"
-#include "DirTreeCache.h"
 #include "PkgReader.h"
 #include "MountPoints.h"
 #include "Exception.h"
 
-#define VERBOSE_EXCLUDE_RULES   1
+#define VERBOSE_EXCLUDE_RULES	1
 
 using namespace QDirStat;
 
@@ -36,7 +37,7 @@ DirTree::DirTree():
 	     this,	  SLOT	( slotFinished() ) );
 
     connect( this,	  SIGNAL( deletingChild	     ( FileInfo * ) ),
-	     & _jobQueue, SLOT  ( deletingChildNotify( FileInfo * ) ) );
+	     & _jobQueue, SLOT	( deletingChildNotify( FileInfo * ) ) );
 }
 
 
@@ -46,7 +47,9 @@ DirTree::~DirTree()
 	delete _root;
 
     if ( _excludeRules )
-        delete _excludeRules;
+	delete _excludeRules;
+
+    clearFilters();
 }
 
 
@@ -96,6 +99,14 @@ void DirTree::clear()
 
     _isBusy = false;
     _device.clear();
+}
+
+
+void DirTree::reset()
+{
+    clear();
+    clearExcludeRules();
+    clearFilters();
 }
 
 
@@ -198,7 +209,7 @@ void DirTree::refresh( DirInfo * subtree )
     {
 	// logDebug() << "Refreshing subtree " << subtree << endl;
 
-        clearSubtree( subtree );
+	clearSubtree( subtree );
 
 	subtree->reset();
 	subtree->setExcluded( false );
@@ -320,9 +331,9 @@ void DirTree::clearSubtree( DirInfo * subtree )
 {
     if ( subtree->hasChildren() )
     {
-        emit clearingSubtree( subtree );
-        subtree->clear();
-        emit subtreeCleared( subtree );
+	emit clearingSubtree( subtree );
+	subtree->clear();
+	emit subtreeCleared( subtree );
     }
 }
 
@@ -387,15 +398,15 @@ void DirTree::sendReadJobFinished( DirInfo * dir )
 FileInfo * DirTree::locate( QString url, bool findDotEntries )
 {
     if ( ! _root )
-        return 0;
+	return 0;
 
     FileInfo * topItem = _root->firstChild();
 
-    if ( topItem              &&
-         topItem->isPkgInfo() &&
-         topItem->url() == url  )
+    if ( topItem	      &&
+	 topItem->isPkgInfo() &&
+	 topItem->url() == url	)
     {
-        return topItem;
+	return topItem;
     }
 
     return _root->locate( url, findDotEntries );
@@ -433,25 +444,50 @@ void DirTree::readPkg( const PkgFilter & pkgFilter )
 void DirTree::setExcludeRules( ExcludeRules * newRules )
 {
     if ( _excludeRules )
-        delete _excludeRules;
+	delete _excludeRules;
 
 #if VERBOSE_EXCLUDE_RULES
     if ( newRules )
     {
-        logDebug() << "New tmp exclude rules:" << endl;
+	logDebug() << "New tmp exclude rules:" << endl;
 
-        for ( ExcludeRuleListIterator it = newRules->begin(); it != newRules->end(); ++it )
-        {
-            logDebug() << *it << endl;
-        }
+	for ( ExcludeRuleListIterator it = newRules->begin(); it != newRules->end(); ++it )
+	{
+	    logDebug() << *it << endl;
+	}
     }
     else
     {
-        logDebug() << "Clearing tmp exclude rules" << endl;
+	logDebug() << "Clearing tmp exclude rules" << endl;
     }
 #endif
 
     _excludeRules = newRules;
+}
+
+
+void DirTree::addFilter( DirTreeFilter * filter )
+{
+    _filters << filter;
+}
+
+
+void DirTree::clearFilters()
+{
+    qDeleteAll( _filters );
+    _filters.clear();
+}
+
+
+bool DirTree::ignore( const QString & path )
+{
+    foreach ( DirTreeFilter * filter, _filters )
+    {
+	if ( filter->ignore( path ) )
+	    return true;
+    }
+
+    return false;
 }
 
 

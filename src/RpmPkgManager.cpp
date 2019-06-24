@@ -90,7 +90,7 @@ PkgInfoList RpmPkgManager::installedPkg()
 				 LONG_CMD_TIMEOUT_SEC );
 
     if ( timer.hasExpired( _getPkgListWarningSec * 1000 ) )
-        rebuildRpmDbWarning();
+	rebuildRpmDbWarning();
 
     PkgInfoList pkgList;
 
@@ -176,8 +176,8 @@ PkgFileListCache * RpmPkgManager::createFileListCache( PkgFileListCache::LookupT
 
     QString output = runCommand( _rpmCommand,
 				 QStringList() << "-qa" << "--qf" << queryFormat,
-                                 &exitCode,
-                                 LONG_CMD_TIMEOUT_SEC );
+				 &exitCode,
+				 LONG_CMD_TIMEOUT_SEC );
 
     if ( exitCode != 0 )
 	return 0;
@@ -191,7 +191,7 @@ PkgFileListCache * RpmPkgManager::createFileListCache( PkgFileListCache::LookupT
 
     // Sample output:
     //
-    //     zsh-5.6-lp151.1.3.x86_64 | /bin/zsh
+    //	   zsh-5.6-lp151.1.3.x86_64 | /bin/zsh
     //	   zsh-5.6-lp151.1.3.x86_64 | /etc/zprofile
     //	   zsh-5.6-lp151.1.3.x86_64 | /etc/zsh_completion.d
 

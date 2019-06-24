@@ -14,17 +14,17 @@
 using namespace QDirStat;
 
 
-#define CHECK_LOOKUP_TYPE(wanted)                                         \
-do {                                                                      \
-    if ( ( _lookupType & (wanted) ) != (wanted) )                        \
-        THROW( Exception( "Cache not set up for this type of lookup" ) ); \
+#define CHECK_LOOKUP_TYPE(wanted)					  \
+do {									  \
+    if ( ( _lookupType & (wanted) ) != (wanted) )			 \
+	THROW( Exception( "Cache not set up for this type of lookup" ) ); \
 } while ( false )
 
 
 
 
 PkgFileListCache::PkgFileListCache( PkgManager * pkgManager,
-                                    LookupType   lookupType ) :
+				    LookupType	 lookupType ) :
     _pkgManager( pkgManager ),
     _lookupType( lookupType )
 {
@@ -81,11 +81,11 @@ void PkgFileListCache::clear()
 
 
 void PkgFileListCache::add( const QString & pkgName,
-                            const QString & fileName )
+			    const QString & fileName )
 {
     if ( _lookupType & LookupByPkg )
-        _pkgFileNames.insert( pkgName, fileName );
+	_pkgFileNames.insert( pkgName, fileName );
 
     if ( _lookupType & LookupGlobal )
-        _fileNames.insert( fileName );
+	_fileNames.insert( fileName );
 }

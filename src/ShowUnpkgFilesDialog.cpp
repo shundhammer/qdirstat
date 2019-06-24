@@ -21,7 +21,6 @@ ShowUnpkgFilesDialog::ShowUnpkgFilesDialog( QWidget * parent ):
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this );
-    _ui->startingDirComboBox->setFocus();
 }
 
 

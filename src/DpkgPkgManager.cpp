@@ -53,7 +53,7 @@ QString DpkgPkgManager::owningPkg( const QString & path )
     // Pathological cases: File diversion (See man dpkg-divert).
     //
     // File diversion for the file that is diverted away from: 3 lines
-    // dpkg -S /bin/sh  -->
+    // dpkg -S /bin/sh	-->
     //
     // diversion by dash from: /bin/sh
     // diversion by dash to: /bin/sh.distrib
@@ -62,7 +62,7 @@ QString DpkgPkgManager::owningPkg( const QString & path )
     // I.e. the last line still contains the package that owns the file.
     //
     // File diversion for a file that was the result of a diversion: 2 lines
-    // dpkg -S /bin/sh.distrib  -->
+    // dpkg -S /bin/sh.distrib	-->
     //
     // diversion by dash from: /bin/sh
     // diversion by dash to: /bin/sh.distrib
@@ -74,14 +74,14 @@ QString DpkgPkgManager::owningPkg( const QString & path )
 
     foreach ( const QString & line, output.trimmed().split( "\n" ) )
     {
-        if ( ! line.startsWith( "diversion by" ) && ! line.isEmpty() )
-            lines << line;
+	if ( ! line.startsWith( "diversion by" ) && ! line.isEmpty() )
+	    lines << line;
     }
 
     QString pkg;
 
     if ( ! lines.isEmpty() )
-        pkg = lines.last().split( ": " ).first();
+	pkg = lines.last().split( ": " ).first();
 
     return pkg;
 }
@@ -91,15 +91,15 @@ PkgInfoList DpkgPkgManager::installedPkg()
 {
     int exitCode = -1;
     QString output = runCommand( "/usr/bin/dpkg-query",
-                                 QStringList()
-                                 << "--show"
-                                 << "--showformat=${Package} | ${Version} | ${Architecture} | ${Status}\n",
-                                 &exitCode );
+				 QStringList()
+				 << "--show"
+				 << "--showformat=${Package} | ${Version} | ${Architecture} | ${Status}\n",
+				 &exitCode );
 
     PkgInfoList pkgList;
 
     if ( exitCode == 0 )
-        pkgList = parsePkgList( output );
+	pkgList = parsePkgList( output );
 
     return pkgList;
 }
@@ -111,32 +111,32 @@ PkgInfoList DpkgPkgManager::parsePkgList( const QString & output )
 
     foreach ( const QString & line, output.split( "\n" ) )
     {
-        if ( ! line.isEmpty() )
-        {
-            QStringList fields = line.split( " | ", QString::KeepEmptyParts );
+	if ( ! line.isEmpty() )
+	{
+	    QStringList fields = line.split( " | ", QString::KeepEmptyParts );
 
-            if ( fields.size() != 4 )
-                logError() << "Invalid dpkg-query output: \"" << line << "\n" << endl;
-            else
-            {
-                QString name    = fields.takeFirst();
-                QString version = fields.takeFirst();
-                QString arch    = fields.takeFirst();
-                QString status  = fields.takeFirst();
+	    if ( fields.size() != 4 )
+		logError() << "Invalid dpkg-query output: \"" << line << "\n" << endl;
+	    else
+	    {
+		QString name	= fields.takeFirst();
+		QString version = fields.takeFirst();
+		QString arch	= fields.takeFirst();
+		QString status	= fields.takeFirst();
 
-                if ( status == "install ok installed" )
-                {
-                    PkgInfo * pkg = new PkgInfo( name, version, arch, this );
-                    CHECK_NEW( pkg );
+		if ( status == "install ok installed" )
+		{
+		    PkgInfo * pkg = new PkgInfo( name, version, arch, this );
+		    CHECK_NEW( pkg );
 
-                    pkgList << pkg;
-                }
-                else
-                {
-                    // logDebug() << "Ignoring " << line << endl;
-                }
-            }
-        }
+		    pkgList << pkg;
+		}
+		else
+		{
+		    // logDebug() << "Ignoring " << line << endl;
+		}
+	    }
+	}
     }
 
     return pkgList;
@@ -156,8 +156,8 @@ QStringList DpkgPkgManager::parseFileList( const QString & output )
 
     foreach ( const QString & line, lines )
     {
-        if ( line != "/." && ! line.startsWith( "package diverts" ) )
-            fileList << line;
+	if ( line != "/." && ! line.startsWith( "package diverts" ) )
+	    fileList << line;
     }
 
     return fileList;
@@ -172,14 +172,14 @@ QString DpkgPkgManager::queryName( PkgInfo * pkg )
 
 #if 0
     if ( pkg->isMultiVersion() )
-        name += "_" + pkg->version();
+	name += "_" + pkg->version();
 
     if ( pkg->isMultiArch() )
-        name += ":" + pkg->arch();
+	name += ":" + pkg->arch();
 #endif
 
     if ( pkg->arch() != "all" )
-        name += ":" + pkg->arch();
+	name += ":" + pkg->arch();
 
     return name;
 }
@@ -202,35 +202,35 @@ PkgFileListCache * DpkgPkgManager::createFileListCache( PkgFileListCache::Lookup
 
     // Sample output:
     //
-    //     zip: /usr/bin/zip
-    //     zlib1g-dev:amd64: /usr/include/zlib.h
-    //     zlib1g:i386, zlib1g:amd64: /usr/share/doc/zlib1g
+    //	   zip: /usr/bin/zip
+    //	   zlib1g-dev:amd64: /usr/include/zlib.h
+    //	   zlib1g:i386, zlib1g:amd64: /usr/share/doc/zlib1g
 
     foreach ( const QString & line, lines )
     {
-        if ( line.isEmpty() || line.startsWith( "diversion" ) )
-            continue;
+	if ( line.isEmpty() || line.startsWith( "diversion" ) )
+	    continue;
 
-        QStringList fields = line.split( ": " );
+	QStringList fields = line.split( ": " );
 
-        if ( fields.size() != 2 )
-        {
-            logError() << "Unexpected file list line: \"" << line << "\"" << endl;
-        }
-        else
-        {
-            QString packages = fields.takeFirst();
-            QString path     = fields.takeFirst();
+	if ( fields.size() != 2 )
+	{
+	    logError() << "Unexpected file list line: \"" << line << "\"" << endl;
+	}
+	else
+	{
+	    QString packages = fields.takeFirst();
+	    QString path     = fields.takeFirst();
 
-            if ( path != "/." && ! path.isEmpty() )
-            {
-                foreach ( const QString & pkgName, packages.split( ", " ) )
-                {
-                    if ( ! pkgName.isEmpty() )
-                        cache->add( pkgName, path );
-                }
-            }
-        }
+	    if ( path != "/." && ! path.isEmpty() )
+	    {
+		foreach ( const QString & pkgName, packages.split( ", " ) )
+		{
+		    if ( ! pkgName.isEmpty() )
+			cache->add( pkgName, path );
+		}
+	    }
+	}
     }
 
     logDebug() << "file list cache finished." << endl;

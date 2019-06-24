@@ -211,32 +211,32 @@ namespace QDirStat
 	 * Obtain information about the URL specified and create a new FileInfo
 	 * or a DirInfo (whatever is appropriate) from that information. Use
 	 * FileInfo::isDirInfo() to find out which.
-         *
-         * If the underlying syscall fails, this throws a SysCallException if
-         * 'doThrow' is 'true', and it just returns 0 if it is 'false'.
+	 *
+	 * If the underlying syscall fails, this throws a SysCallException if
+	 * 'doThrow' is 'true', and it just returns 0 if it is 'false'.
 	 **/
 	static FileInfo * stat( const QString & url,
 				DirTree	      * tree,
-				DirInfo	      * parent  = 0,
-                                bool            doThrow = true );
+				DirInfo	      * parent	= 0,
+				bool		doThrow = true );
 
-        /**
-         * Return 'true' if any exclude rules matching against any direct file
-         * child should be applied. This is generally useful only for
-         * second-level read jobs, not for the starting point of a directory
-         * scan, so it is easily possible to continue reading at an excluded
-         * directory.
-         *
-         * The default is 'false'.
-         **/
-        bool applyFileChildExcludeRules() const
-            { return _applyFileChildExcludeRules; }
+	/**
+	 * Return 'true' if any exclude rules matching against any direct file
+	 * child should be applied. This is generally useful only for
+	 * second-level read jobs, not for the starting point of a directory
+	 * scan, so it is easily possible to continue reading at an excluded
+	 * directory.
+	 *
+	 * The default is 'false'.
+	 **/
+	bool applyFileChildExcludeRules() const
+	    { return _applyFileChildExcludeRules; }
 
-        /**
-         * Set the applyFileChildExcludeRules flag.
-         **/
-        void setApplyFileChildExcludeRules( bool val )
-            { _applyFileChildExcludeRules = val; }
+	/**
+	 * Set the applyFileChildExcludeRules flag.
+	 **/
+	void setApplyFileChildExcludeRules( bool val )
+	    { _applyFileChildExcludeRules = val; }
 
     protected:
 
@@ -259,11 +259,16 @@ namespace QDirStat
 	void processSubDir( const QString & entryName,
 			    DirInfo	  * subDir    );
 
-        /**
-         * Return 'true' if 'entryName' matches an exclude rule of the
-         * ExcludeRule singleton or a temporary exclude rule of the DirTree.
-         **/
-        bool matchesExcludeRule( const QString & entryName ) const;
+	/**
+	 * Return 'true' if 'entryName' matches an exclude rule of the
+	 * ExcludeRule singleton or a temporary exclude rule of the DirTree.
+	 **/
+	bool matchesExcludeRule( const QString & entryName ) const;
+
+	/**
+	 * Return 'true' if 'entryName' should be ignored.
+	 **/
+	bool ignore( const QString & entryName ) const;
 
 	/**
 	 * Read a cache file that was picked up along the way:
@@ -287,15 +292,15 @@ namespace QDirStat
 	 **/
 	void handleLstatError( const QString & entryName );
 
-        /**
-         * Exclude the directory of this read job after it is almost completely
-         * read. This is used when checking for exclude rules matching direct
-         * file children of a directory.
-         *
-         * The main purpose of having this as a separate function is to have a
-         * clear backtrace if it segfaults.
-         **/
-        void excludeDirLate();
+	/**
+	 * Exclude the directory of this read job after it is almost completely
+	 * read. This is used when checking for exclude rules matching direct
+	 * file children of a directory.
+	 *
+	 * The main purpose of having this as a separate function is to have a
+	 * clear backtrace if it segfaults.
+	 **/
+	void excludeDirLate();
 
 	/**
 	 * Return the full name with path of an entry of this directory.
@@ -308,7 +313,7 @@ namespace QDirStat
 	//
 
 	QString _dirName;
-        bool    _applyFileChildExcludeRules;
+	bool	_applyFileChildExcludeRules;
 
     };	// LocalDirReadJob
 
@@ -423,19 +428,19 @@ namespace QDirStat
 	 **/
 	bool isEmpty() const { return _queue.isEmpty() && _blocked.isEmpty(); }
 
-        /**
-         * Add a job to the list of blocked jobs: Jobs that are not yet ready
-         * yet, e.g. because they are waiting for results from an external
-         * process.
-         **/
-        void addBlocked( DirReadJob * job );
+	/**
+	 * Add a job to the list of blocked jobs: Jobs that are not yet ready
+	 * yet, e.g. because they are waiting for results from an external
+	 * process.
+	 **/
+	void addBlocked( DirReadJob * job );
 
-        /**
-         * Notification that a job that was blocked is now ready to be
-         * scheduled, so it will be taken out of the list of blocked jobs and
-         * added to the end of the queue.
-         **/
-        void unblock( DirReadJob * job );
+	/**
+	 * Notification that a job that was blocked is now ready to be
+	 * scheduled, so it will be taken out of the list of blocked jobs and
+	 * added to the end of the queue.
+	 **/
+	void unblock( DirReadJob * job );
 
 	/**
 	 * Clear the queue: Remove all pending jobs from the queue and destroy
@@ -504,7 +509,7 @@ namespace QDirStat
     protected:
 
 	QList<DirReadJob *>  _queue;
-        QList<DirReadJob *>  _blocked;
+	QList<DirReadJob *>  _blocked;
 	QTimer		     _timer;
     };
 

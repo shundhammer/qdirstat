@@ -16,6 +16,8 @@
 #include <dirent.h>
 #include <stdlib.h>
 
+#include <QList>
+
 #include "Logger.h"
 #include "DirInfo.h"
 #include "DirReadJob.h"
@@ -27,6 +29,7 @@ namespace QDirStat
     class DirReadJob;
     class FileInfoSet;
     class ExcludeRules;
+    class DirTreeFilter;
 
 
     /**
@@ -102,10 +105,10 @@ namespace QDirStat
 	 **/
 	void deleteSubtree( FileInfo * subtree );
 
-        /**
-         * Delete all children of a subtree, but leave the subtree inself
-         * intact.
-         **/
+	/**
+	 * Delete all children of a subtree, but leave the subtree inself
+	 * intact.
+	 **/
 	void clearSubtree( DirInfo * subtree );
 
 
@@ -140,15 +143,20 @@ namespace QDirStat
 	 **/
 	bool isTopLevel( FileInfo *item ) const;
 
-        /**
-         * Return the device of this tree's root item ("/dev/sda3" etc.).
-         **/
-        QString device() const { return _device; }
+	/**
+	 * Return the device of this tree's root item ("/dev/sda3" etc.).
+	 **/
+	QString device() const { return _device; }
 
 	/**
 	 * Clear all items of this tree.
 	 **/
 	void clear();
+
+	/**
+	 * Clear all items, exclude rules and filters of this tree.
+	 **/
+	void reset();
 
 	/**
 	 * Locate a child somewhere in the tree whose URL (i.e. complete path)
@@ -167,18 +175,18 @@ namespace QDirStat
 	 **/
 	void addJob( DirReadJob * job );
 
-        /**
-         * Add a new directory read job to the list of blocked jobs. A job may
-         * be blocked because it may be waiting for an external process to
-         * finish.
-         **/
-        void addBlockedJob( DirReadJob * job );
+	/**
+	 * Add a new directory read job to the list of blocked jobs. A job may
+	 * be blocked because it may be waiting for an external process to
+	 * finish.
+	 **/
+	void addBlockedJob( DirReadJob * job );
 
-        /**
-         * Unblock a previously blocked read job so it is scheduled along with
-         * the other pending jobs.
-         **/
-        void unblock( DirReadJob * job );
+	/**
+	 * Unblock a previously blocked read job so it is scheduled along with
+	 * the other pending jobs.
+	 **/
+	void unblock( DirReadJob * job );
 
 	/**
 	 * Should directory scans cross file systems?
@@ -270,35 +278,60 @@ namespace QDirStat
 	 **/
 	void readCache( const QString & cacheFileName );
 
-        /**
-         * Read installed packages that match the specified PkgFilter and their
-         * file lists from the system's package manager(s).
-         **/
-        void readPkg( const PkgFilter & pkgFilter );
+	/**
+	 * Read installed packages that match the specified PkgFilter and their
+	 * file lists from the system's package manager(s).
+	 **/
+	void readPkg( const PkgFilter & pkgFilter );
 
-        /**
-         * Return exclude rules specific to this tree (as opposed to the global
-         * ones stored in the ExcludeRules singleton) or 0 if there are none.
-         **/
-        ExcludeRules * excludeRules() const { return _excludeRules; }
+	/**
+	 * Return exclude rules specific to this tree (as opposed to the global
+	 * ones stored in the ExcludeRules singleton) or 0 if there are none.
+	 **/
+	ExcludeRules * excludeRules() const { return _excludeRules; }
 
-        /**
-         * Set exclude rules specific to this tree. They are additional rules
-         * to the ones in the ExcludeRules singleton. This can be used for
-         * temporary exclude rules that are not to be written to the config
-         * file.
-         *
-         * The DirTree takes over ownership of this object and will delete it
-         * when appropriate (i.e. in its destructor or when new ExcludeRules
-         * are set with this function). Call this with 0 to remove the existing
-         * exclude rules.
-         **/
-        void setExcludeRules( ExcludeRules * newRules );
+	/**
+	 * Set exclude rules specific to this tree. They are additional rules
+	 * to the ones in the ExcludeRules singleton. This can be used for
+	 * temporary exclude rules that are not to be written to the config
+	 * file.
+	 *
+	 * The DirTree takes over ownership of this object and will delete it
+	 * when appropriate (i.e. in its destructor or when new ExcludeRules
+	 * are set with this function). Call this with 0 to remove the existing
+	 * exclude rules.
+	 **/
+	void setExcludeRules( ExcludeRules * newRules );
 
-        /**
-         * Clear all temporary exclude rules.
-         **/
-        void clearExcludeRules() { setExcludeRules( 0 ); }
+	/**
+	 * Clear all temporary exclude rules.
+	 **/
+	void clearExcludeRules() { setExcludeRules( 0 ); }
+
+	/**
+	 * Add a filter to ignore files during directory reading.
+	 *
+	 * The DirTree takes over ownership of the filter object and will
+	 * delete it when appropriate.
+	 **/
+	void addFilter( DirTreeFilter * filter );
+
+	/**
+	 * Clear all filters.
+	 **/
+	void clearFilters();
+
+	/**
+	 * Iterate over all filters and return 'true' if any of them wants a
+	 * file system object to be ignored during directory reading, 'false'
+	 * if not.
+	 **/
+	bool ignore( const QString & path );
+
+	/**
+	 * Return 'true' if there is any filter, 'false' if not.
+	 **/
+	bool hasFilters() const { return ! _filters.isEmpty(); }
 
 
     signals:
@@ -321,9 +354,9 @@ namespace QDirStat
 	/**
 	 * Emitted after a child is deleted. If you are interested which child
 	 * it was, better use the deletingChild() signal.
-         *
+	 *
 	 * childDeleted() is only useful to rebuild a view etc. completely.
-         * If possible, this signal is sent only once for multiple deletions -
+	 * If possible, this signal is sent only once for multiple deletions -
 	 * e.g., when entire subtrees are deleted.
 	 **/
 	void childDeleted();
@@ -400,13 +433,14 @@ namespace QDirStat
 
     protected:
 
-	DirInfo *	_root;
-	DirReadJobQueue _jobQueue;
-	bool		_crossFileSystems;
-	bool		_isBusy;
-        QString         _device;
-        QString         _url;
-        ExcludeRules *  _excludeRules;
+	DirInfo *		_root;
+	DirReadJobQueue		_jobQueue;
+	bool			_crossFileSystems;
+	bool			_isBusy;
+	QString			_device;
+	QString			_url;
+	ExcludeRules *		_excludeRules;
+	QList<DirTreeFilter *>	_filters;
 
     };	// class DirTree
 

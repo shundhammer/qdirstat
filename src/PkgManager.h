@@ -32,9 +32,9 @@ namespace QDirStat
      *
      * Concrete implementation classes:
      *
-     *   - DpkgPkgManager
-     *   - RpmPkgManager
-     *   - PacManPkgManager
+     *	 - DpkgPkgManager
+     *	 - RpmPkgManager
+     *	 - PacManPkgManager
      **/
     class PkgManager
     {
@@ -102,86 +102,86 @@ namespace QDirStat
 	virtual QString owningPkg( const QString & path ) = 0;
 
 
-        //-----------------------------------------------------------------
-        //                     Optional Features
-        //-----------------------------------------------------------------
+	//-----------------------------------------------------------------
+	//		       Optional Features
+	//-----------------------------------------------------------------
 
-        /**
-         * Return 'true' if this package manager supports getting the list of
-         * installed packages.
-         **/
-        virtual bool supportsGetInstalledPkg() { return false; }
+	/**
+	 * Return 'true' if this package manager supports getting the list of
+	 * installed packages.
+	 **/
+	virtual bool supportsGetInstalledPkg() { return false; }
 
-        /**
-         * Return the list of installed packages.
-         *
-         * Ownership of the list elements is transferred to the caller.
-         *
-         * This is an optional feature; a package manager that implements this
-         * should also return 'true' in supportsGetInstalledPkg().
-         *
-         * This default implementation returns nothing.
-         **/
-        virtual PkgInfoList installedPkg() { return PkgInfoList(); }
+	/**
+	 * Return the list of installed packages.
+	 *
+	 * Ownership of the list elements is transferred to the caller.
+	 *
+	 * This is an optional feature; a package manager that implements this
+	 * should also return 'true' in supportsGetInstalledPkg().
+	 *
+	 * This default implementation returns nothing.
+	 **/
+	virtual PkgInfoList installedPkg() { return PkgInfoList(); }
 
-        /**
-         * Return the list of files and directories owned by a package.
-         **/
-        virtual QStringList fileList( PkgInfo * pkg );
+	/**
+	 * Return the list of files and directories owned by a package.
+	 **/
+	virtual QStringList fileList( PkgInfo * pkg );
 
-        /**
-         * Return 'true' if this package manager supports getting the file list
-         * for a package.
-         *
-         ** See also supportsFileListCache().
-         **/
-        virtual bool supportsFileList() { return false; }
+	/**
+	 * Return 'true' if this package manager supports getting the file list
+	 * for a package.
+	 *
+	 ** See also supportsFileListCache().
+	 **/
+	virtual bool supportsFileList() { return false; }
 
-        /**
-         * Return the command for getting the list of files and directories
-         * owned by a package.
-         *
-         * This is an optional feature; a package manager that implements this
-         * should also return 'true' in supportsGetFileList().
-         *
-         * This default implementation returns nothing.
-         **/
-        virtual QString fileListCommand( PkgInfo * pkg )
-            { Q_UNUSED( pkg ); return ""; }
+	/**
+	 * Return the command for getting the list of files and directories
+	 * owned by a package.
+	 *
+	 * This is an optional feature; a package manager that implements this
+	 * should also return 'true' in supportsGetFileList().
+	 *
+	 * This default implementation returns nothing.
+	 **/
+	virtual QString fileListCommand( PkgInfo * pkg )
+	    { Q_UNUSED( pkg ); return ""; }
 
-        /**
-         * Parse the output of the file list command.
-         *
-         * This default implementation does nothing.
-         **/
-        virtual QStringList parseFileList( const QString & output )
-            { Q_UNUSED( output); return QStringList(); }
+	/**
+	 * Parse the output of the file list command.
+	 *
+	 * This default implementation does nothing.
+	 **/
+	virtual QStringList parseFileList( const QString & output )
+	    { Q_UNUSED( output); return QStringList(); }
 
-        /**
-         * Return 'true' if this package manager supports building a file list
-         * cache for getting all file lists for all packages.
-         **/
-        virtual bool supportsFileListCache() { return false; }
+	/**
+	 * Return 'true' if this package manager supports building a file list
+	 * cache for getting all file lists for all packages.
+	 **/
+	virtual bool supportsFileListCache() { return false; }
 
-        /**
-         * Create a file list cache with the specified lookup type for all
-         * installed packages. This is an expensive operation.
-         *
-         * This is a best-effort approach; the cache might still not contain
-         * all desired packages. Check with PkgFileListCache::contains() and
-         * use PkgManager::fileList() as a fallback.
-         *
-         * Ownership of the cache is transferred to the caller; make sure to
-         * delete it when you are done with it.
-         **/
-        virtual PkgFileListCache * createFileListCache( PkgFileListCache::LookupType lookupType = PkgFileListCache::LookupByPkg )
-            { Q_UNUSED( lookupType ); return 0; }
+	/**
+	 * Create a file list cache with the specified lookup type for all
+	 * installed packages. This is an expensive operation.
+	 *
+	 * This is a best-effort approach; the cache might still not contain
+	 * all desired packages. Check with PkgFileListCache::contains() and
+	 * use PkgManager::fileList() as a fallback.
+	 *
+	 * Ownership of the cache is transferred to the caller; make sure to
+	 * delete it when you are done with it.
+	 **/
+	virtual PkgFileListCache * createFileListCache( PkgFileListCache::LookupType lookupType = PkgFileListCache::LookupByPkg )
+	    { Q_UNUSED( lookupType ); return 0; }
 
-        /**
-         * Return a name suitable for a detailed queries for 'pkg'.
-         */
-        virtual QString queryName( PkgInfo * pkg )
-            { return pkg->name(); }
+	/**
+	 * Return a name suitable for a detailed queries for 'pkg'.
+	 */
+	virtual QString queryName( PkgInfo * pkg )
+	    { return pkg->name(); }
 
     }; // class PkgManager
 

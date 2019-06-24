@@ -9,7 +9,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>      // AT_ constants (fstatat() flags)
+#include <fcntl.h>	// AT_ constants (fstatat() flags)
 #include <unistd.h>
 #include <stdio.h>
 
@@ -191,14 +191,14 @@ void LocalDirReadJob::startReading()
     if ( ok )
     {
 	_dir->setReadState( DirReading );
-        int dirFd = dirfd( diskDir );
-        int flags = AT_SYMLINK_NOFOLLOW;
-        
+	int dirFd = dirfd( diskDir );
+	int flags = AT_SYMLINK_NOFOLLOW;
+
 #ifdef AT_NO_AUTOMOUNT
-        flags |= AT_NO_AUTOMOUNT;
+	flags |= AT_NO_AUTOMOUNT;
 #endif
 
-        QMultiMap<ino_t, QString> entryMap;
+	QMultiMap<ino_t, QString> entryMap;
 
 	while ( ( entry = readdir( diskDir ) ) )
 	{
@@ -207,89 +207,92 @@ void LocalDirReadJob::startReading()
 	    if ( entryName != "."  &&
 		 entryName != ".."   )
 	    {
-                entryMap.insert( entry->d_ino, entryName );
-            }
-        }
+		entryMap.insert( entry->d_ino, entryName );
+	    }
+	}
 
-        // QMultiMap (just like QMap) guarantees sort order by keys, so we are
-        // now iterating over the directory entries by i-number order. Most
-        // filesystems will benefit from that since they store i-nodes sorted
-        // by i-number on disk, so (at least with rotational disks) seek times
-        // are minimized by this strategy.
-        //
-        // Notice that we need a QMultiMap, not just a map: If a file has
-        // multiple hard links in the same directory, a QMap would store only
-        // one of them, all others would go missing in the DirTree.
+	// QMultiMap (just like QMap) guarantees sort order by keys, so we are
+	// now iterating over the directory entries by i-number order. Most
+	// filesystems will benefit from that since they store i-nodes sorted
+	// by i-number on disk, so (at least with rotational disks) seek times
+	// are minimized by this strategy.
+	//
+	// Notice that we need a QMultiMap, not just a map: If a file has
+	// multiple hard links in the same directory, a QMap would store only
+	// one of them, all others would go missing in the DirTree.
 
-        foreach ( QString entryName, entryMap )
-        {
-            if ( fstatat( dirFd, entryName.toUtf8(), &statInfo, flags ) == 0 )	// OK?
-            {
-                if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
-                {
-                    DirInfo *subDir = new DirInfo( entryName, &statInfo, _tree, _dir );
-                    CHECK_NEW( subDir );
+	foreach ( QString entryName, entryMap )
+	{
+	    if ( fstatat( dirFd, entryName.toUtf8(), &statInfo, flags ) == 0 )	// OK?
+	    {
+		if ( S_ISDIR( statInfo.st_mode ) )	// directory child?
+		{
+		    DirInfo *subDir = new DirInfo( entryName, &statInfo, _tree, _dir );
+		    CHECK_NEW( subDir );
 
-                    processSubDir( entryName, subDir );
+		    processSubDir( entryName, subDir );
 
-                }
-                else  // non-directory child
-                {
-                    if ( entryName == defaultCacheName )	// .qdirstat.cache.gz found?
-                    {
-                        logDebug() << "Found cache file " << defaultCacheName << endl;
+		}
+		else  // non-directory child
+		{
+		    if ( entryName == defaultCacheName )	// .qdirstat.cache.gz found?
+		    {
+			logDebug() << "Found cache file " << defaultCacheName << endl;
 
-                        // Try to read the cache file. If that was successful and the toplevel
-                        // path in that cache file matches the path of the directory we are
-                        // reading right now, the directory is finished reading, the read job
-                        // (this object) was just deleted, and we may no longer access any
-                        // member variables; just return.
+			// Try to read the cache file. If that was successful and the toplevel
+			// path in that cache file matches the path of the directory we are
+			// reading right now, the directory is finished reading, the read job
+			// (this object) was just deleted, and we may no longer access any
+			// member variables; just return.
 
-                        if ( readCacheFile( entryName ) )
-                            return;
-                    }
+			if ( readCacheFile( entryName ) )
+			    return;
+		    }
 
-                    FileInfo *child = new FileInfo( entryName, &statInfo, _tree, _dir );
-                    CHECK_NEW( child );
-                    _dir->insertChild( child );
-                    childAdded( child );
-                }
-            }
-            else  // lstat() error
-            {
-                handleLstatError( entryName );
-            }
+		    if ( ! ignore( entryName ) ) // FIXME
+		    {
+			FileInfo *child = new FileInfo( entryName, &statInfo, _tree, _dir );
+			CHECK_NEW( child );
+			_dir->insertChild( child );
+			childAdded( child );
+		    }
+		}
+	    }
+	    else  // lstat() error
+	    {
+		handleLstatError( entryName );
+	    }
 	}
 
 	closedir( diskDir );
-        DirReadState readState = DirFinished;
+	DirReadState readState = DirFinished;
 
-        //
-        // Check all entries against exclude rules that match against any
-        // direct non-directory entry.
-        //
-        // Doing this now is a performance optimization: This could also be
-        // done immediately after each entry is read, but that would mean
-        // iterating over all exclude rules for every single directory entry,
-        // even if there are no exclude rules that match against any
-        // files, so it would be a general performance penalty.
-        //
-        // Doing this after all entries are read means more cleanup if any
-        // exclude rule does match, but that is the exceptional case; if there
-        // are no such rules to begin with, the match function returns 'false'
-        // immediately, so the performance impact is minimal.
-        //
-        // Also intentionally not also checking the DirTree specific exclude
-        // rules here: They are meant strictly for directory exclude rules.
+	//
+	// Check all entries against exclude rules that match against any
+	// direct non-directory entry.
+	//
+	// Doing this now is a performance optimization: This could also be
+	// done immediately after each entry is read, but that would mean
+	// iterating over all exclude rules for every single directory entry,
+	// even if there are no exclude rules that match against any
+	// files, so it would be a general performance penalty.
+	//
+	// Doing this after all entries are read means more cleanup if any
+	// exclude rule does match, but that is the exceptional case; if there
+	// are no such rules to begin with, the match function returns 'false'
+	// immediately, so the performance impact is minimal.
+	//
+	// Also intentionally not also checking the DirTree specific exclude
+	// rules here: They are meant strictly for directory exclude rules.
 
-        if ( _applyFileChildExcludeRules &&
-             ExcludeRules::instance()->matchDirectChildren( _dir ) )
-        {
-            excludeDirLate();
-            readState = DirOnRequestOnly;
-        }
+	if ( _applyFileChildExcludeRules &&
+	     ExcludeRules::instance()->matchDirectChildren( _dir ) )
+	{
+	    excludeDirLate();
+	    readState = DirOnRequestOnly;
+	}
 
-        finishReading( _dir, readState );
+	finishReading( _dir, readState );
     }
 
     finished();
@@ -325,7 +328,7 @@ void LocalDirReadJob::processSubDir( const QString & entryName, DirInfo * subDir
 	{
 	    LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
 	    CHECK_NEW( job );
-            job->setApplyFileChildExcludeRules( true );
+	    job->setApplyFileChildExcludeRules( true );
 	    _tree->addJob( job );
 	}
 	else	    // The subdirectory we just found is a mount point.
@@ -336,7 +339,7 @@ void LocalDirReadJob::processSubDir( const QString & entryName, DirInfo * subDir
 	    {
 		LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
 		CHECK_NEW( job );
-                job->setApplyFileChildExcludeRules( true );
+		job->setApplyFileChildExcludeRules( true );
 		_tree->addJob( job );
 	    }
 	    else
@@ -353,14 +356,22 @@ bool LocalDirReadJob::matchesExcludeRule( const QString & entryName ) const
     QString full = fullName( entryName );
 
     if ( ExcludeRules::instance()->match( full, entryName ) )
-        return true;
+	return true;
 
     if ( ! _tree->excludeRules() )
-        return false;
+	return false;
 
     return _tree->excludeRules()->match( full, entryName );
 }
 
+
+bool LocalDirReadJob::ignore( const QString & entryName ) const
+{
+    if ( ! _tree->hasFilters() )
+	return false;
+
+    return _tree->ignore( fullName( entryName ) );
+}
 
 
 bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
@@ -464,20 +475,20 @@ QString LocalDirReadJob::fullName( const QString & entryName ) const
 FileInfo * LocalDirReadJob::stat( const QString & url,
 				  DirTree	* tree,
 				  DirInfo	* parent,
-                                  bool            doThrow )
+				  bool		  doThrow )
 {
     struct stat statInfo;
     // logDebug() << "url: \"" << url << "\"" << endl;
 
     if ( lstat( url.toUtf8(), &statInfo ) == 0 ) // lstat() OK
     {
-        QString name = url;
+	QString name = url;
 
-        if ( parent && parent != tree->root() )
-        {
-            QStringList components = url.split( "/", QString::SkipEmptyParts );
-            name = components.last();
-        }
+	if ( parent && parent != tree->root() )
+	{
+	    QStringList components = url.split( "/", QString::SkipEmptyParts );
+	    name = components.last();
+	}
 
 	if ( S_ISDIR( statInfo.st_mode ) )	// directory?
 	{
@@ -489,7 +500,7 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
 
 	    if ( dir && parent &&
 		 ! tree->isTopLevel( dir ) &&
-                 ! parent->isPkgInfo() &&
+		 ! parent->isPkgInfo() &&
 		 dir->device() != parent->device() )
 	    {
 		logDebug() << dir << " is a mount point" << endl;
@@ -511,8 +522,8 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
     }
     else // lstat() failed
     {
-        if ( doThrow )
-            THROW( SysCallFailedException( "lstat", url ) );
+	if ( doThrow )
+	    THROW( SysCallFailedException( "lstat", url ) );
 
 	return 0;
     }
@@ -730,10 +741,10 @@ void DirReadJobQueue::jobFinishedNotify( DirReadJob *job )
 {
     if ( job )
     {
-        // Get rid of the old (finished) job.
+	// Get rid of the old (finished) job.
 
-        _queue.removeOne( job );
-        delete job;
+	_queue.removeOne( job );
+	delete job;
     }
 
     // The timer will start a new job when it fires.
@@ -743,8 +754,8 @@ void DirReadJobQueue::jobFinishedNotify( DirReadJob *job )
 	_timer.stop();
 	// logDebug() << "No more jobs - finishing" << endl;
 
-        if ( _blocked.isEmpty() )
-            emit finished();
+	if ( _blocked.isEmpty() )
+	    emit finished();
     }
 }
 
@@ -771,5 +782,5 @@ void DirReadJobQueue::unblock( DirReadJob * job )
     enqueue( job );
 
     if ( _blocked.isEmpty() )
-        logDebug() << "No more jobs waiting for external processes" << endl;
+	logDebug() << "No more jobs waiting for external processes" << endl;
 }

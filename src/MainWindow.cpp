@@ -25,6 +25,7 @@
 #include "DirTree.h"
 #include "DirTreeCache.h"
 #include "DirTreeModel.h"
+#include "DirTreePkgFilter.h"
 #include "Exception.h"
 #include "ExcludeRules.h"
 #include "FileDetailsView.h"
@@ -124,24 +125,24 @@ MainWindow::MainWindow():
     connectActions();
 
     if ( ! PkgQuery::haveGetInstalledPkgSupport() ||
-         ! PkgQuery::haveFileListSupport()          )
+	 ! PkgQuery::haveFileListSupport()	    )
     {
-        logInfo() << "No package manager support "
-                  << "for getting installed packages or file lists"
-                  << endl;
+	logInfo() << "No package manager support "
+		  << "for getting installed packages or file lists"
+		  << endl;
 
-        _ui->actionOpenPkg->setEnabled( false );
+	_ui->actionOpenPkg->setEnabled( false );
     }
 
     PkgManager * pkgManager = PkgQuery::primaryPkgManager();
 
     if ( ! pkgManager || ! pkgManager->supportsFileListCache() )
     {
-        logInfo() << "No package manager support "
-                  << "for getting a file lists cache"
-                  << endl;
+	logInfo() << "No package manager support "
+		  << "for getting a file lists cache"
+		  << endl;
 
-        _ui->actionShowUnpkgFiles->setEnabled( false );
+	_ui->actionShowUnpkgFiles->setEnabled( false );
     }
 
     if ( ! _ui->actionShowTreemap->isChecked() )
@@ -298,7 +299,7 @@ void MainWindow::connectActions()
     // "Edit" menu
 
     CONNECT_ACTION( _ui->actionCopyPathToClipboard, this, copyCurrentPathToClipboard() );
-    CONNECT_ACTION( _ui->actionMoveToTrash,         this, moveToTrash() );
+    CONNECT_ACTION( _ui->actionMoveToTrash,	    this, moveToTrash() );
 
 
     // "Go To" menu
@@ -356,10 +357,10 @@ void MainWindow::mapTreeExpandAction( QAction * action, int level )
 
 void MainWindow::updateActions()
 {
-    bool reading             = _dirTreeModel->tree()->isBusy();
+    bool reading	     = _dirTreeModel->tree()->isBusy();
     FileInfo * currentItem   = _selectionModel->currentItem();
     FileInfo * firstToplevel = _dirTreeModel->tree()->firstToplevel();
-    bool pkgView             = firstToplevel && firstToplevel->isPkgInfo();
+    bool pkgView	     = firstToplevel && firstToplevel->isPkgInfo();
 
     _ui->actionStopReading->setEnabled( reading );
     _ui->actionRefreshAll->setEnabled	( ! reading );
@@ -371,12 +372,12 @@ void MainWindow::updateActions()
     _ui->actionGoToToplevel->setEnabled( firstToplevel && ( ! currentItem || currentItem->treeLevel() > 1 ));
 
     FileInfoSet selectedItems = _selectionModel->selectedItems();
-    FileInfo * sel            = selectedItems.first();
-    int selSize               = selectedItems.size();
+    FileInfo * sel	      = selectedItems.first();
+    int selSize		      = selectedItems.size();
 
-    bool oneDirSelected   = selSize == 1 && sel && sel->isDir() && ! sel->isPkgInfo();
+    bool oneDirSelected	  = selSize == 1 && sel && sel->isDir() && ! sel->isPkgInfo();
     bool dotEntrySelected = selectedItems.containsDotEntry();
-    bool pkgSelected      = selectedItems.containsPkg();
+    bool pkgSelected	  = selectedItems.containsPkg();
 
     _ui->actionMoveToTrash->setEnabled( sel && ! dotEntrySelected && ! pkgSelected && ! reading );
     _ui->actionRefreshSelected->setEnabled( oneDirSelected && ! sel->isExcluded() && ! sel->isMountPoint() && ! pkgView );
@@ -635,9 +636,9 @@ void MainWindow::readingAborted()
 void MainWindow::openUrl( const QString & url )
 {
     if ( PkgFilter::isPkgUrl( url ) )
-        readPkg( url );
+	readPkg( url );
     else
-        openDir( url );
+	openDir( url );
 }
 
 
@@ -646,13 +647,13 @@ void MainWindow::openDir( const QString & url )
     try
     {
 	_dirTreeModel->openUrl( url );
-        updateWindowTitle( _dirTreeModel->tree()->url() );
+	updateWindowTitle( _dirTreeModel->tree()->url() );
     }
     catch ( const SysCallFailedException & ex )
     {
 	CAUGHT( ex );
-        updateWindowTitle( "" );
-        _dirTreeModel->tree()->sendFinished();
+	updateWindowTitle( "" );
+	_dirTreeModel->tree()->sendFinished();
 
 	QMessageBox errorPopup( QMessageBox::Warning,	// icon
 				tr( "Error" ),		// title
@@ -675,7 +676,7 @@ void MainWindow::askOpenDir()
 						     tr("Select directory to scan") );
     if ( ! url.isEmpty() )
     {
-        _dirTreeModel->tree()->clearExcludeRules();
+	_dirTreeModel->tree()->reset();
 	openUrl( url );
     }
 }
@@ -688,29 +689,56 @@ void MainWindow::askOpenPkg()
 
     if ( ! canceled )
     {
-        _dirTreeModel->tree()->clearExcludeRules();
-        readPkg( pkgFilter );
+	_dirTreeModel->tree()->reset();
+	readPkg( pkgFilter );
     }
 }
 
 
 void MainWindow::askShowUnpkgFiles()
 {
+    PkgManager * pkgManager = PkgQuery::primaryPkgManager();
+
+    if ( ! pkgManager )
+    {
+	logError() << "No supported primary package manager" << endl;
+	return;
+    }
+
     ShowUnpkgFilesDialog dialog( this );
 
     if ( dialog.exec() == QDialog::Accepted )
     {
-        QString        dir          = dialog.startingDir();
-        QStringList    excludeDirs  = dialog.excludeDirs();
+	// Fetch the data the user entered from the dialog
 
-        logDebug() << "starting dir: " << dir << endl;
-        logDebug() << "exclude dirs: " << excludeDirs << endl;
+	QString	    dir		= dialog.startingDir();
+	QStringList excludeDirs = dialog.excludeDirs();
 
-        ExcludeRules * excludeRules = new ExcludeRules( excludeDirs );
-        CHECK_NEW( excludeRules );
+	logDebug() << "starting dir: " << dir << endl;
+	logDebug() << "exclude dirs: " << excludeDirs << endl;
 
-        _dirTreeModel->tree()->setExcludeRules( excludeRules );
-        _dirTreeModel->openUrl( dir );
+
+	// Set up the exclude rules accordingly
+
+	ExcludeRules * excludeRules = new ExcludeRules( excludeDirs );
+	CHECK_NEW( excludeRules );
+
+	DirTree * tree = _dirTreeModel->tree();
+	tree->setExcludeRules( excludeRules );
+
+
+	// Prepare the filters with the complete file list of all installed packages
+
+	DirTreeFilter * filter = new DirTreePkgFilter( pkgManager );
+	CHECK_NEW( filter );
+
+	tree->clearFilters();
+	tree->addFilter( filter );
+
+
+	// Start reading the directory
+
+	_dirTreeModel->openUrl( dir );
     }
 }
 
@@ -723,10 +751,10 @@ void MainWindow::refreshAll()
     {
 	logDebug() << "Refreshing " << url << endl;
 
-        if ( PkgFilter::isPkgUrl( url ) )
-            _dirTreeModel->readPkg( url );
-        else
-            _dirTreeModel->openUrl( url );
+	if ( PkgFilter::isPkgUrl( url ) )
+	    _dirTreeModel->readPkg( url );
+	else
+	    _dirTreeModel->openUrl( url );
 
 	updateActions();
     }
@@ -815,7 +843,7 @@ void MainWindow::updateWindowTitle( const QString & url )
 	windowTitle += tr( " [root]" );
 
     if ( _urlInWindowTitle )
-        windowTitle += " " + url;
+	windowTitle += " " + url;
 
     setWindowTitle( windowTitle );
 }
@@ -1227,8 +1255,8 @@ void MainWindow::showDonateDialog()
     QString text = "<h2>Donate</h2>";
     text += "<p>";
     text += tr( "QDirStat is Free Open Source Software. "
-                "You are not required to pay anything. "
-                "Donations are most welcome, of course." );
+		"You are not required to pay anything. "
+		"Donations are most welcome, of course." );
     text += "</p><p>";
     text += tr( "You can donate any amount of your choice:" );
     text += "</p><p>";

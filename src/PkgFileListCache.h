@@ -36,81 +36,81 @@ namespace QDirStat
     {
     public:
 
-        enum LookupType
-        {
-            LookupByPkg   = 1,          // Will use only containsPkg()
-            LookupGlobal  = 2,          // Will use only containsFile()
-            LookupAll     = 0xFFFF      // Will use all
-        };
+	enum LookupType
+	{
+	    LookupByPkg	  = 1,		// Will use only containsPkg()
+	    LookupGlobal  = 2,		// Will use only containsFile()
+	    LookupAll	  = 0xFFFF	// Will use all
+	};
 
-        /**
-         * Constructor. 'lookupType' indicates what type of lookup to prepare
-         * for. This has significant impact on the memory footprint.
-         **/
-        PkgFileListCache( PkgManager * pkgManager,
-                          LookupType   lookupType = LookupByPkg );
+	/**
+	 * Constructor. 'lookupType' indicates what type of lookup to prepare
+	 * for. This has significant impact on the memory footprint.
+	 **/
+	PkgFileListCache( PkgManager * pkgManager,
+			  LookupType   lookupType = LookupByPkg );
 
-        /**
-         * Destructor.
-         **/
-        virtual ~PkgFileListCache();
+	/**
+	 * Destructor.
+	 **/
+	virtual ~PkgFileListCache();
 
-        /**
-         * Return the sorted file list for a package.
-         **/
-        QStringList fileList( const QString & pkgName );
+	/**
+	 * Return the sorted file list for a package.
+	 **/
+	QStringList fileList( const QString & pkgName );
 
-        /**
-         * Return 'true' if the cache contains any information about a package,
-         * 'false' if not.
-         **/
-        bool containsPkg( const QString & pkgName ) const;
+	/**
+	 * Return 'true' if the cache contains any information about a package,
+	 * 'false' if not.
+	 **/
+	bool containsPkg( const QString & pkgName ) const;
 
-        /**
-         * Return 'true' if the cache contains any information about a file,
-         * 'false' if not.
-         **/
-        bool containsFile( const QString & fileName ) const;
+	/**
+	 * Return 'true' if the cache contains any information about a file,
+	 * 'false' if not.
+	 **/
+	bool containsFile( const QString & fileName ) const;
 
-        /**
-         * Return 'true' if the cache is empty, 'false' if not.
-         **/
-        bool isEmpty() const
-            { return _pkgFileNames.isEmpty() && _fileNames.isEmpty(); }
+	/**
+	 * Return 'true' if the cache is empty, 'false' if not.
+	 **/
+	bool isEmpty() const
+	    { return _pkgFileNames.isEmpty() && _fileNames.isEmpty(); }
 
-        /**
-         * Remove the entries for a package from the cache.
-         **/
-        void remove( const QString & pkgName );
+	/**
+	 * Remove the entries for a package from the cache.
+	 **/
+	void remove( const QString & pkgName );
 
-        /**
-         * Clear the cache.
-         **/
-        void clear();
+	/**
+	 * Clear the cache.
+	 **/
+	void clear();
 
-        /**
-         * Add one file for one package.
-         **/
-        void add( const QString & pkgName, const QString & fileName );
+	/**
+	 * Add one file for one package.
+	 **/
+	void add( const QString & pkgName, const QString & fileName );
 
-        /**
-         * Return the package manager parent of this cache.
-         **/
-        PkgManager * pkgManager() const { return _pkgManager; }
+	/**
+	 * Return the package manager parent of this cache.
+	 **/
+	PkgManager * pkgManager() const { return _pkgManager; }
 
-        /**
-         * Return the type of lookup this cache is set up for.
-         **/
-        LookupType lookupType() const { return _lookupType; }
+	/**
+	 * Return the type of lookup this cache is set up for.
+	 **/
+	LookupType lookupType() const { return _lookupType; }
 
 
     protected:
 
-        PkgManager *                _pkgManager;
-        LookupType                  _lookupType;
-        QMultiMap<QString, QString> _pkgFileNames;
-        QSet<QString>               _fileNames;
+	PkgManager *		    _pkgManager;
+	LookupType		    _lookupType;
+	QMultiMap<QString, QString> _pkgFileNames;
+	QSet<QString>		    _fileNames;
     };
-}       // namespace QDirStat
+}	// namespace QDirStat
 
-#endif  // PkgFileListCache_h
+#endif	// PkgFileListCache_h

@@ -163,8 +163,8 @@ void DirInfo::reset()
     {
 	_dotEntry = new DirInfo( _tree, this, true );
 
-        if ( _tree )
-            _tree->childAddedNotify( _dotEntry );
+	if ( _tree )
+	    _tree->childAddedNotify( _dotEntry );
     }
 
     recalc();
@@ -569,7 +569,7 @@ void DirInfo::finalizeAll()
     // would need to be processed in the loop, too.
 
     if ( _tree )
-        _tree->sendFinalizeLocal( this ); // Must be sent _before_ finalizeLocal()!
+	_tree->sendFinalizeLocal( this ); // Must be sent _before_ finalizeLocal()!
     finalizeLocal();
 }
 

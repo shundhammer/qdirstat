@@ -27,9 +27,9 @@ public:
      * Constructor.
      */
     Exception( const QString &msg = QString() ):
-        _what( msg ),
-        _srcLine(0)
-        {}
+	_what( msg ),
+	_srcLine(0)
+	{}
 
     /**
      * Destructor.
@@ -206,20 +206,20 @@ public:
      * 'invalidIndex' is the offending index value. It should be between
      *'validMin' and 'validMax':
      *
-     *     validMin <= index <= validMax
+     *	   validMin <= index <= validMax
      **/
     IndexOutOfRangeException( int invalidIndex,
-                              int validMin,
-                              int validMax,
-                              const QString & msg = "" )
-        : Exception( errMsg( invalidIndex, validMin, validMax, msg ) )
-        , _invalidIndex( invalidIndex )
-        , _validMin( validMin )
-        , _validMax( validMax )
-        {}
+			      int validMin,
+			      int validMax,
+			      const QString & msg = "" )
+	: Exception( errMsg( invalidIndex, validMin, validMax, msg ) )
+	, _invalidIndex( invalidIndex )
+	, _validMin( validMin )
+	, _validMax( validMax )
+	{}
 
     virtual ~IndexOutOfRangeException() throw()
-        {}
+	{}
 
     /**
      * Return the offending index value.
@@ -238,9 +238,9 @@ public:
 
 protected:
     QString errMsg( int	invalidIndex,
-                    int	validMin,
-                    int	validMax,
-                    const QString & msg = "" ) const;
+		    int	validMin,
+		    int	validMax,
+		    const QString & msg = "" ) const;
 
 private:
 
@@ -356,7 +356,7 @@ private:
 	{							\
 	    THROW( NullPointerException() );			\
 	}							\
-                                                                \
+								\
 	if ( ! PTR->checkMagicNumber() )			\
 	{							\
 	    THROW( BadMagicNumberException( PTR ) );		\

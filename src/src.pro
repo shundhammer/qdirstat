@@ -43,6 +43,7 @@ SOURCES	  = main.cpp			\
 	    DirReadJob.cpp		\
 	    DirSaver.cpp		\
 	    DirTree.cpp			\
+	    DirTreePkgFilter.cpp	\
 	    DirTreeCache.cpp		\
 	    DirTreeModel.cpp		\
 	    DirTreeView.cpp		\
@@ -89,8 +90,8 @@ SOURCES	  = main.cpp			\
 	    RpmPkgManager.cpp		\
 	    SelectionModel.cpp		\
 	    Settings.cpp		\
-            SettingsHelpers.cpp		\
-            ShowUnpkgFilesDialog.cpp    \
+	    SettingsHelpers.cpp		\
+	    ShowUnpkgFilesDialog.cpp	\
 	    StdCleanup.cpp		\
 	    Subtree.cpp			\
 	    SystemFileChecker.cpp	\
@@ -116,6 +117,8 @@ HEADERS	  =				\
 	    DirReadJob.h		\
 	    DirSaver.h			\
 	    DirTree.h			\
+	    DirTreeFilter.h		\
+	    DirTreePkgFilter.h		\
 	    DirTreeCache.h		\
 	    DirTreeModel.h		\
 	    DirTreeView.h		\
@@ -163,7 +166,7 @@ HEADERS	  =				\
 	    SelectionModel.h		\
 	    Settings.h			\
 	    SettingsHelpers.h		\
-            ShowUnpkgFilesDialog.h      \
+	    ShowUnpkgFilesDialog.h	\
 	    SignalBlocker.h		\
 	    StdCleanup.h		\
 	    Subtree.h			\
@@ -186,8 +189,8 @@ FORMS	  = main-window.ui		   \
 	    file-size-stats-window.ui	   \
 	    file-type-stats-window.ui	   \
 	    locate-files-window.ui	   \
-            open-pkg-dialog.ui		   \
-            show-unpkg-files-dialog.ui     \
+	    open-pkg-dialog.ui		   \
+	    show-unpkg-files-dialog.ui	   \
 	    file-details-view.ui
 
 
