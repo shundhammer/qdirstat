@@ -11,6 +11,7 @@
 
 #include <QString>
 #include <QMultiMap>
+#include <QSet>
 
 
 namespace QDirStat
@@ -34,10 +35,20 @@ namespace QDirStat
     class PkgFileListCache
     {
     public:
+
+        enum LookupType
+        {
+            LookupByPkg   = 1,          // Will use only containsPkg()
+            LookupGlobal  = 2,          // Will use only containsFile()
+            LookupAll     = 0xFFFF      // Will use all
+        };
+
         /**
-         * Constructor.
+         * Constructor. 'lookupType' indicates what type of lookup to prepare
+         * for. This has significant impact on the memory footprint.
          **/
-        PkgFileListCache( PkgManager * pkgManager );
+        PkgFileListCache( PkgManager * pkgManager,
+                          LookupType   lookupType = LookupByPkg );
 
         /**
          * Destructor.
@@ -56,14 +67,16 @@ namespace QDirStat
         bool containsPkg( const QString & pkgName ) const;
 
         /**
-         * Return the number of key/value pairs in the cache.
+         * Return 'true' if the cache contains any information about a file,
+         * 'false' if not.
          **/
-        bool size() const { return _fileNames.size(); }
+        bool containsFile( const QString & fileName ) const;
 
         /**
          * Return 'true' if the cache is empty, 'false' if not.
          **/
-        bool isEmpty() const { return _fileNames.isEmpty(); }
+        bool isEmpty() const
+            { return _pkgFileNames.isEmpty() && _fileNames.isEmpty(); }
 
         /**
          * Remove the entries for a package from the cache.
@@ -85,11 +98,18 @@ namespace QDirStat
          **/
         PkgManager * pkgManager() const { return _pkgManager; }
 
+        /**
+         * Return the type of lookup this cache is set up for.
+         **/
+        LookupType lookupType() const { return _lookupType; }
+
 
     protected:
 
         PkgManager *                _pkgManager;
-        QMultiMap<QString, QString> _fileNames;
+        LookupType                  _lookupType;
+        QMultiMap<QString, QString> _pkgFileNames;
+        QSet<QString>               _fileNames;
     };
 }       // namespace QDirStat
 

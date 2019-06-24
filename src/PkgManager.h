@@ -13,6 +13,8 @@
 #include <QString>
 
 #include "PkgInfo.h"
+#include "PkgFileListCache.h"
+
 
 #define LOG_COMMANDS	true
 #define LOG_OUTPUT	false
@@ -21,8 +23,6 @@
 
 namespace QDirStat
 {
-    class PkgFileListCache;
-
     using SysUtil::runCommand;
     using SysUtil::tryRunCommand;
     using SysUtil::haveCommand;
@@ -164,8 +164,8 @@ namespace QDirStat
         virtual bool supportsFileListCache() { return false; }
 
         /**
-         * Create a file list cache for all installed packages. This is an
-         * expensive operation.
+         * Create a file list cache with the specified lookup type for all
+         * installed packages. This is an expensive operation.
          *
          * This is a best-effort approach; the cache might still not contain
          * all desired packages. Check with PkgFileListCache::contains() and
@@ -174,8 +174,8 @@ namespace QDirStat
          * Ownership of the cache is transferred to the caller; make sure to
          * delete it when you are done with it.
          **/
-        virtual PkgFileListCache * createFileListCache()
-            { return 0; }
+        virtual PkgFileListCache * createFileListCache( PkgFileListCache::LookupType lookupType = PkgFileListCache::LookupByPkg )
+            { Q_UNUSED( lookupType ); return 0; }
 
         /**
          * Return a name suitable for a detailed queries for 'pkg'.

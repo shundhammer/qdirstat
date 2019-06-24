@@ -121,8 +121,8 @@ namespace QDirStat
             { return true; }
 
         /**
-         * Create a file list cache for all installed packages. This is an
-         * expensive operation.
+         * Create a file list cache with the specified lookup type for all
+         * installed packages. This is an expensive operation.
          *
          * This is a best-effort approach; the cache might still not contain
          * all desired packages. Check with PkgFileListCache::contains() and
@@ -133,7 +133,7 @@ namespace QDirStat
          *
 	 * Reimplemented from PkgManager.
          **/
-        virtual PkgFileListCache * createFileListCache() Q_DECL_OVERRIDE;
+        virtual PkgFileListCache * createFileListCache( PkgFileListCache::LookupType lookupType = PkgFileListCache::LookupByPkg ) Q_DECL_OVERRIDE;
 
         /**
          * Return a name suitable for a detailed queries for 'pkg'.

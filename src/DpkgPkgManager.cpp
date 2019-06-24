@@ -185,7 +185,7 @@ QString DpkgPkgManager::queryName( PkgInfo * pkg )
 }
 
 
-PkgFileListCache * DpkgPkgManager::createFileListCache()
+PkgFileListCache * DpkgPkgManager::createFileListCache( PkgFileListCache::LookupType lookupType )
 {
     int exitCode = -1;
     QString output = runCommand( "/usr/bin/dpkg", QStringList() << "-S" << "*", &exitCode );
@@ -197,7 +197,7 @@ PkgFileListCache * DpkgPkgManager::createFileListCache()
     output.clear(); // Free all that text ASAP
     logDebug() << lines.size() << " output lines" << endl;
 
-    PkgFileListCache * cache = new PkgFileListCache( this );
+    PkgFileListCache * cache = new PkgFileListCache( this, lookupType );
     CHECK_NEW( cache );
 
     // Sample output:

@@ -169,7 +169,7 @@ QString RpmPkgManager::queryName( PkgInfo * pkg )
 }
 
 
-PkgFileListCache * RpmPkgManager::createFileListCache()
+PkgFileListCache * RpmPkgManager::createFileListCache( PkgFileListCache::LookupType lookupType )
 {
     int exitCode = -1;
     QString queryFormat = "[%{=NAME}-%{=VERSION}-%{=RELEASE}.%{=ARCH} | %{FILENAMES}\n]";
@@ -186,7 +186,7 @@ PkgFileListCache * RpmPkgManager::createFileListCache()
     output.clear(); // Free all that text ASAP
     logDebug() << lines.size() << " output lines" << endl;
 
-    PkgFileListCache * cache = new PkgFileListCache( this );
+    PkgFileListCache * cache = new PkgFileListCache( this, lookupType );
     CHECK_NEW( cache );
 
     // Sample output:
