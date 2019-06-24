@@ -105,6 +105,24 @@ ExcludeRules::ExcludeRules():
 }
 
 
+ExcludeRules::ExcludeRules( const QStringList & paths ):
+    QObject(),
+    _listMover( _rules )
+{
+    _lastMatchingRule  = 0;
+    _defaultRulesAdded = false;
+
+    foreach ( const QString & path, paths )
+    {
+        ExcludeRule * rule = new ExcludeRule( path,
+                                              true,    // useFullPath
+                                              false ); // checkAnyFileChild
+        CHECK_NEW( rule );
+        _rules << rule;
+    }
+}
+
+
 ExcludeRules::~ExcludeRules()
 {
     clear();

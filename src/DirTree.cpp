@@ -18,6 +18,8 @@
 #include "MountPoints.h"
 #include "Exception.h"
 
+#define VERBOSE_EXCLUDE_RULES   1
+
 using namespace QDirStat;
 
 
@@ -432,6 +434,22 @@ void DirTree::setExcludeRules( ExcludeRules * newRules )
 {
     if ( _excludeRules )
         delete _excludeRules;
+
+#if VERBOSE_EXCLUDE_RULES
+    if ( newRules )
+    {
+        logDebug() << "New tmp exclude rules:" << endl;
+
+        for ( ExcludeRuleListIterator it = newRules->begin(); it != newRules->end(); ++it )
+        {
+            logDebug() << *it << endl;
+        }
+    }
+    else
+    {
+        logDebug() << "Clearing tmp exclude rules" << endl;
+    }
+#endif
 
     _excludeRules = newRules;
 }

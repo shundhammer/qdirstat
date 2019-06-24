@@ -295,6 +295,11 @@ namespace QDirStat
          **/
         void setExcludeRules( ExcludeRules * newRules );
 
+        /**
+         * Clear all temporary exclude rules.
+         **/
+        void clearExcludeRules() { setExcludeRules( 0 ); }
+
 
     signals:
 

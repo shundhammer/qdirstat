@@ -566,7 +566,7 @@ void MainWindow::busyDisplay()
     if ( ! _selectionModel->currentBranch() )
     {
 	// Wait until the toplevel entry has some children, then expand to level 1
-	QTimer::singleShot( 200, _ui->actionExpandTreeLevel0, SLOT( triggered() ) );
+	QTimer::singleShot( 200, _ui->actionExpandTreeLevel0, SLOT( trigger() ) );
     }
 }
 
@@ -663,7 +663,10 @@ void MainWindow::askOpenDir()
     QString url = QFileDialog::getExistingDirectory( this, // parent
 						     tr("Select directory to scan") );
     if ( ! url.isEmpty() )
+    {
+        _dirTreeModel->tree()->clearExcludeRules();
 	openUrl( url );
+    }
 }
 
 
@@ -673,7 +676,10 @@ void MainWindow::askOpenPkg()
     PkgFilter pkgFilter = OpenPkgDialog::askPkgFilter( canceled );
 
     if ( ! canceled )
+    {
+        _dirTreeModel->tree()->clearExcludeRules();
         readPkg( pkgFilter );
+    }
 }
 
 
@@ -683,13 +689,17 @@ void MainWindow::askShowUnpkgFiles()
 
     if ( dialog.exec() == QDialog::Accepted )
     {
-        QString dir = dialog.startingDir();
-        QStringList excludeDirs = dialog.excludeDirs();
+        QString        dir          = dialog.startingDir();
+        QStringList    excludeDirs  = dialog.excludeDirs();
 
         logDebug() << "starting dir: " << dir << endl;
         logDebug() << "exclude dirs: " << excludeDirs << endl;
 
-        // FIXME: TO DO
+        ExcludeRules * excludeRules = new ExcludeRules( excludeDirs );
+        CHECK_NEW( excludeRules );
+
+        _dirTreeModel->tree()->setExcludeRules( excludeRules );
+        _dirTreeModel->openUrl( dir );
     }
 }
 

@@ -155,6 +155,12 @@ namespace QDirStat
 	 **/
 	ExcludeRules();
 
+        /**
+         * Constructor from a QStringList: Create and add an exclude rule
+         * matching a full path for each path in the list.
+         **/
+        ExcludeRules( const QStringList & paths );
+
 	/**
 	 * Destructor.
 	 **/
@@ -301,7 +307,9 @@ namespace QDirStat
     inline QTextStream & operator<< ( QTextStream & stream, const ExcludeRule * rule )
     {
 	if ( rule )
-	    stream << "<ExcludeRule \"" << rule->regexp().pattern() << "\">";
+	    stream << "<ExcludeRule \"" << rule->regexp().pattern() << "\""
+                   << ( rule->useFullPath() ? " (full path)" : "" )
+                   << ">";
 	else
 	    stream << "<NULL ExcludeRule *>";
 

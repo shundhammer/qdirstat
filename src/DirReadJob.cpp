@@ -314,7 +314,7 @@ void LocalDirReadJob::processSubDir( const QString & entryName, DirInfo * subDir
     _dir->insertChild( subDir );
     childAdded( subDir );
 
-    if ( ExcludeRules::instance()->match( fullName( entryName ), entryName ) )
+    if ( matchesExcludeRule( entryName ) )
     {
 	subDir->setExcluded();
 	finishReading( subDir, DirOnRequestOnly );
