@@ -36,6 +36,7 @@
 #include "MimeCategoryConfigPage.h"
 #include "OpenPkgDialog.h"
 #include "OutputWindow.h"
+#include "PkgManager.h"
 #include "PkgQuery.h"
 #include "Refresher.h"
 #include "SelectionModel.h"
@@ -130,6 +131,16 @@ MainWindow::MainWindow():
                   << endl;
 
         _ui->actionOpenPkg->setEnabled( false );
+    }
+
+    PkgManager * pkgManager = PkgQuery::primaryPkgManager();
+
+    if ( ! pkgManager || ! pkgManager->supportsFileListCache() )
+    {
+        logInfo() << "No package manager support "
+                  << "for getting a file lists cache"
+                  << endl;
+
         _ui->actionShowUnpkgFiles->setEnabled( false );
     }
 
