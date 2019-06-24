@@ -41,6 +41,7 @@
 #include "SelectionModel.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
+#include "ShowUnpkgFilesDialog.h"
 #include "SysUtil.h"
 #include "Trash.h"
 #include "Version.h"
@@ -129,6 +130,7 @@ MainWindow::MainWindow():
                   << endl;
 
         _ui->actionOpenPkg->setEnabled( false );
+        _ui->actionShowUnpkgFiles->setEnabled( false );
     }
 
     if ( ! _ui->actionShowTreemap->isChecked() )
@@ -231,16 +233,17 @@ void MainWindow::connectActions()
 {
     // "File" menu
 
-    CONNECT_ACTION( _ui->actionOpenDir,			    this, askOpenDir()	    );
-    CONNECT_ACTION( _ui->actionOpenPkg,			    this, askOpenPkg()	    );
-    CONNECT_ACTION( _ui->actionRefreshAll,		    this, refreshAll()	    );
-    CONNECT_ACTION( _ui->actionRefreshSelected,		    this, refreshSelected() );
-    CONNECT_ACTION( _ui->actionReadExcludedDirectory,	    this, refreshSelected() );
-    CONNECT_ACTION( _ui->actionContinueReadingAtMountPoint, this, refreshSelected() );
-    CONNECT_ACTION( _ui->actionStopReading,		    this, stopReading()	    );
-    CONNECT_ACTION( _ui->actionAskWriteCache,		    this, askWriteCache()   );
-    CONNECT_ACTION( _ui->actionAskReadCache,		    this, askReadCache()    );
-    CONNECT_ACTION( _ui->actionQuit,			    qApp, quit()	    );
+    CONNECT_ACTION( _ui->actionOpenDir,			    this, askOpenDir()	      );
+    CONNECT_ACTION( _ui->actionOpenPkg,			    this, askOpenPkg()	      );
+    CONNECT_ACTION( _ui->actionShowUnpkgFiles,		    this, askShowUnpkgFiles() );
+    CONNECT_ACTION( _ui->actionRefreshAll,		    this, refreshAll()	      );
+    CONNECT_ACTION( _ui->actionRefreshSelected,		    this, refreshSelected()   );
+    CONNECT_ACTION( _ui->actionReadExcludedDirectory,	    this, refreshSelected()   );
+    CONNECT_ACTION( _ui->actionContinueReadingAtMountPoint, this, refreshSelected()   );
+    CONNECT_ACTION( _ui->actionStopReading,		    this, stopReading()	      );
+    CONNECT_ACTION( _ui->actionAskWriteCache,		    this, askWriteCache()     );
+    CONNECT_ACTION( _ui->actionAskReadCache,		    this, askReadCache()      );
+    CONNECT_ACTION( _ui->actionQuit,			    qApp, quit()	      );
 
 
 
@@ -671,6 +674,23 @@ void MainWindow::askOpenPkg()
 
     if ( ! canceled )
         readPkg( pkgFilter );
+}
+
+
+void MainWindow::askShowUnpkgFiles()
+{
+    ShowUnpkgFilesDialog dialog( this );
+
+    if ( dialog.exec() == QDialog::Accepted )
+    {
+        QString dir = dialog.startingDir();
+        QStringList excludeDirs = dialog.excludeDirs();
+
+        logDebug() << "starting dir: " << dir << endl;
+        logDebug() << "exclude dirs: " << excludeDirs << endl;
+
+        // FIXME: TO DO
+    }
 }
 
 

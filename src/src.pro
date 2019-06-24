@@ -89,7 +89,8 @@ SOURCES	  = main.cpp			\
 	    RpmPkgManager.cpp		\
 	    SelectionModel.cpp		\
 	    Settings.cpp		\
-	    SettingsHelpers.cpp		\
+            SettingsHelpers.cpp		\
+            ShowUnpkgFilesDialog.cpp    \
 	    StdCleanup.cpp		\
 	    Subtree.cpp			\
 	    SystemFileChecker.cpp	\
@@ -162,6 +163,7 @@ HEADERS	  =				\
 	    SelectionModel.h		\
 	    Settings.h			\
 	    SettingsHelpers.h		\
+            ShowUnpkgFilesDialog.h      \
 	    SignalBlocker.h		\
 	    StdCleanup.h		\
 	    Subtree.h			\

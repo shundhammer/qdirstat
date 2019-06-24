@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>370</width>
-    <height>337</height>
+    <width>345</width>
+    <height>279</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,7 +36,7 @@
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Preferred</enum>
+      <enum>QSizePolicy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -74,37 +74,37 @@
        </property>
        <item>
         <property name="text">
-         <string>/</string>
+         <string notr="true">/</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>/usr</string>
+         <string notr="true">/usr</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>/usr/lib</string>
+         <string notr="true">/usr/lib</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>/usr/share</string>
+         <string notr="true">/usr/share</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>/lib</string>
+         <string notr="true">/lib</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>/etc</string>
+         <string notr="true">/etc</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>/opt</string>
+         <string notr="true">/opt</string>
         </property>
        </item>
       </widget>
@@ -127,14 +127,20 @@
          <verstretch>1</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>160</width>
+         <height>73</height>
+        </size>
+       </property>
        <property name="lineWrapMode">
         <enum>QPlainTextEdit::NoWrap</enum>
        </property>
        <property name="plainText">
-        <string notr="true">/tmp
-/var
-/home
+        <string notr="true">/home
 /root
+/tmp
+/var
 /usr/lib/sysimage/rpm
 </string>
        </property>
@@ -151,7 +157,7 @@
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Preferred</enum>
+      <enum>QSizePolicy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>

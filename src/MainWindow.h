@@ -78,6 +78,12 @@ public slots:
     void askOpenPkg();
 
     /**
+     * Open a "show unpackaged files" dialog and start reading the selected
+     * starting dir with the selected exclude dirs.
+     **/
+    void askShowUnpkgFiles();
+
+    /**
      * Re-read the complete directory tree.
      **/
     void refreshAll();

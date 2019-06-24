@@ -116,7 +116,7 @@
     </property>
     <addaction name="actionOpenDir"/>
     <addaction name="actionOpenPkg"/>
-    <addaction name="actionShow_Unpackaged_Files"/>
+    <addaction name="actionShowUnpkgFiles"/>
     <addaction name="actionRefreshAll"/>
     <addaction name="actionRefreshSelected"/>
     <addaction name="separator"/>
@@ -807,7 +807,7 @@
     <string>Help about the Packages View (external browser)</string>
    </property>
   </action>
-  <action name="actionShow_Unpackaged_Files">
+  <action name="actionShowUnpkgFiles">
    <property name="text">
     <string>Show &amp;Unpackaged Files...</string>
    </property>
