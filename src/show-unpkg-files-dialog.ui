@@ -110,7 +110,7 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="excludeDirCaption">
+      <widget class="QLabel" name="excludeDirsCaption">
        <property name="text">
         <string>E&amp;xclude Directories:</string>
        </property>
