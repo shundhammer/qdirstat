@@ -11,6 +11,7 @@
 
 #include "DirInfo.h"
 #include "DirTree.h"
+#include "DotEntry.h"
 #include "FileInfoIterator.h"
 #include "FileInfoSorter.h"
 #include "ExcludeRules.h"
@@ -23,30 +24,11 @@ using namespace QDirStat;
 
 
 DirInfo::DirInfo( DirTree * tree,
-		  DirInfo * parent,
-		  bool	    asDotEntry )
+		  DirInfo * parent )
     : FileInfo( tree, parent )
 {
     init();
-
-    if ( asDotEntry )
-    {
-	_isDotEntry = true;
-	_name	    = dotEntryName();
-
-	if ( parent )
-	{
-	    _device = parent->device();
-	    _mode   = parent->mode();
-	    _uid    = parent->uid();
-	    _gid    = parent->gid();
-	    _mtime  = parent->mtime();
-	}
-    }
-    else
-    {
-	_readState  = DirFinished;
-    }
+    _readState = DirFinished;
 }
 
 
@@ -60,7 +42,7 @@ DirInfo::DirInfo( const QString & filenameWithoutPath,
 		parent )
 {
     init();
-    _dotEntry = new DirInfo( tree, this, true );
+    _dotEntry = new DotEntry( tree, this );
     _directChildrenCount++;
 }
 
@@ -79,14 +61,13 @@ DirInfo::DirInfo( DirTree *	  tree,
 		mtime )
 {
     init();
-    _dotEntry = new DirInfo( tree, this, true );
+    _dotEntry = new DotEntry( tree, this );
     _directChildrenCount++;
 }
 
 
 void DirInfo::init()
 {
-    _isDotEntry		 = false;
     _isMountPoint	 = false;
     _isExcluded		 = false;
     _summaryDirty	 = false;
@@ -149,9 +130,6 @@ void DirInfo::clear()
 
 void DirInfo::reset()
 {
-    if ( _isDotEntry )
-	return;
-
     if ( _firstChild || _dotEntry )
 	clear();
 
@@ -161,7 +139,7 @@ void DirInfo::reset()
 
     if ( ! _dotEntry )
     {
-	_dotEntry = new DirInfo( _tree, this, true );
+	_dotEntry = new DotEntry( _tree, this );
 
 	if ( _tree )
 	    _tree->childAddedNotify( _dotEntry );
@@ -333,7 +311,7 @@ bool DirInfo::isBusy()
 }
 
 
-void DirInfo::setDotEntry( FileInfo *newDotEntry )
+void DirInfo::setDotEntry( DotEntry * newDotEntry )
 {
     if ( newDotEntry )
 	_dotEntry = newDotEntry->toDirInfo();
@@ -344,11 +322,11 @@ void DirInfo::setDotEntry( FileInfo *newDotEntry )
 }
 
 
-void DirInfo::insertChild( FileInfo *newChild )
+void DirInfo::insertChild( FileInfo * newChild )
 {
     CHECK_PTR( newChild );
 
-    if ( newChild->isDir() || _dotEntry == 0 || _isDotEntry )
+    if ( newChild->isDir() || _dotEntry == 0 )
     {
 	/**
 	 * Only directories are stored directly in pure directory nodes -
@@ -382,7 +360,7 @@ void DirInfo::insertChild( FileInfo *newChild )
 }
 
 
-void DirInfo::childAdded( FileInfo *newChild )
+void DirInfo::childAdded( FileInfo * newChild )
 {
     if ( ! _summaryDirty )
     {
@@ -464,7 +442,7 @@ void DirInfo::deletingChild( FileInfo * child )
 }
 
 
-void DirInfo::unlinkChild( FileInfo *deletedChild )
+void DirInfo::unlinkChild( FileInfo * deletedChild )
 {
     if ( deletedChild->parent() != this )
     {
@@ -482,7 +460,7 @@ void DirInfo::unlinkChild( FileInfo *deletedChild )
 	return;
     }
 
-    FileInfo *child = firstChild();
+    FileInfo * child = firstChild();
 
     while ( child )
     {
@@ -544,10 +522,7 @@ void DirInfo::finalizeLocal()
 
 void DirInfo::finalizeAll()
 {
-    if ( _isDotEntry )
-	return;
-
-    FileInfo *child = firstChild();
+    FileInfo * child = firstChild();
 
     while ( child )
     {
@@ -576,23 +551,20 @@ void DirInfo::finalizeAll()
 
 DirReadState DirInfo::readState() const
 {
-    if ( _isDotEntry && _parent )
-	return _parent->readState();
-    else
-	return _readState;
+    return _readState;
 }
 
 
 void DirInfo::cleanupDotEntries()
 {
-    if ( ! _dotEntry || _isDotEntry )
+    if ( ! _dotEntry )
 	return;
 
     // Reparent dot entry children if there are no subdirectories on this level
 
     if ( ! _firstChild )
     {
-	FileInfo *child = _dotEntry->firstChild();
+	FileInfo * child = _dotEntry->firstChild();
 
 	if ( child )
 	{
@@ -634,7 +606,7 @@ void DirInfo::clearTouched( bool recursive )
 {
     _touched = false;
 
-    if ( recursive && ! _isDotEntry )
+    if ( recursive && ! isDotEntry() )
     {
 	FileInfo * child = _firstChild;
 
@@ -744,7 +716,7 @@ void DirInfo::dropSortCache( bool recursive )
 	// any in the subtree, either. And dot entries don't have dir children
 	// that could have a sort cache.
 
-	if ( recursive && ! _isDotEntry )
+	if ( recursive && ! isDotEntry() )
 	{
 	    FileInfo * child = _firstChild;
 

@@ -20,6 +20,7 @@ namespace QDirStat
 {
     // Forward declarations
     class DirTree;
+    class DotEntry;
 
     /**
      * A more specialized version of FileInfo: This class can actually manage
@@ -34,15 +35,9 @@ namespace QDirStat
     public:
 	/**
 	 * Default constructor.
-	 *
-	 * If "asDotEntry" is set, this will be used as the parent's "dot
-	 * entry", i.e. the pseudo directory that holds all the parent's
-	 * non-directory children. This is the only way to create a "dot
-	 * entry"!
 	 **/
 	DirInfo( DirTree * tree,
-		 DirInfo * parent     = 0,
-		 bool	   asDotEntry = false );
+		 DirInfo * parent     = 0 );
 
 	/**
 	 * Constructor from a stat buffer (i.e. based on an lstat() call).
@@ -108,14 +103,14 @@ namespace QDirStat
 
 	/**
 	 * Returns the total number of direct children of this directory.
-         *
-         * If this directory has a dot entry, the dot entry itself is counted,
-         * but not the file children of the dot entry.
-         *
-         * This method uses a cached value whenever possible, so it is
-         * considerably faster than the unconditional countDirectChildren()
-         * method.
-         *
+	 *
+	 * If this directory has a dot entry, the dot entry itself is counted,
+	 * but not the file children of the dot entry.
+	 *
+	 * This method uses a cached value whenever possible, so it is
+	 * considerably faster than the unconditional countDirectChildren()
+	 * method.
+	 *
 	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual int directChildrenCount() Q_DECL_OVERRIDE;
@@ -158,11 +153,11 @@ namespace QDirStat
 	 **/
 	virtual void setMountPoint( bool isMountPoint = true ) Q_DECL_OVERRIDE;
 
-        /**
-         * Find the nearest parent that is a mount point or 0 if there is
-         * none. This may return this DirInfo itself.
-         **/
-        const DirInfo * findNearestMountPoint() const;
+	/**
+	 * Find the nearest parent that is a mount point or 0 if there is
+	 * none. This may return this DirInfo itself.
+	 **/
+	const DirInfo * findNearestMountPoint() const;
 
 	/**
 	 * Returns true if this subtree is finished reading.
@@ -201,7 +196,7 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from FileInfo.
 	 **/
-	virtual void setFirstChild( FileInfo *newfirstChild ) Q_DECL_OVERRIDE
+	virtual void setFirstChild( FileInfo * newfirstChild ) Q_DECL_OVERRIDE
 	    { _firstChild = newfirstChild; }
 
 	/**
@@ -210,7 +205,7 @@ namespace QDirStat
 	 * The order of children in this list is absolutely undefined;
 	 * don't rely on any implementation-specific order.
 	 **/
-	virtual void insertChild( FileInfo *newChild ) Q_DECL_OVERRIDE;
+	virtual void insertChild( FileInfo * newChild ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Get the "Dot Entry" for this node if there is one (or 0 otherwise):
@@ -225,23 +220,14 @@ namespace QDirStat
 	/**
 	 * Set a "Dot Entry". This makes sense for directories only.
 	 **/
-	virtual void setDotEntry( FileInfo *newDotEntry ) Q_DECL_OVERRIDE;
-
-	/**
-	 * Returns true if this is a "Dot Entry". See dotEntry() for
-	 * details.
-	 *
-	 * Reimplemented - inherited from FileInfo.
-	 **/
-	virtual bool isDotEntry() const Q_DECL_OVERRIDE
-	    { return _isDotEntry; }
+	virtual void setDotEntry( DotEntry * newDotEntry );
 
 	/**
 	 * Notification that a child has been added somewhere in the subtree.
 	 *
 	 * Reimplemented - inherited from FileInfo.
 	 **/
-	virtual void childAdded( FileInfo *newChild ) Q_DECL_OVERRIDE;
+	virtual void childAdded( FileInfo * newChild ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Remove a child from the children list.
@@ -253,7 +239,7 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from FileInfo.
 	 **/
-	virtual void unlinkChild( FileInfo *deletedChild ) Q_DECL_OVERRIDE;
+	virtual void unlinkChild( FileInfo * deletedChild ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Notification that a child is about to be deleted somewhere in the
@@ -261,7 +247,7 @@ namespace QDirStat
 	 *
 	 * Reimplemented - inherited from FileInfo.
 	 **/
-	virtual void deletingChild( FileInfo *deletedChild ) Q_DECL_OVERRIDE;
+	virtual void deletingChild( FileInfo * deletedChild ) Q_DECL_OVERRIDE;
 
 	/**
 	 * Notification of a new directory read job somewhere in the subtree.
@@ -281,9 +267,9 @@ namespace QDirStat
 	void readJobAborted();
 
 	/**
-	 * Finalize this directory level after reading it is completed.
-	 * This does _not_ mean reading reading all subdirectories is completed
-	 * as well!
+	 * Finalize this directory level after reading it is completed. This
+	 * does _not_ mean that reading all subdirectories is completed as
+	 * well!
 	 *
 	 * Clean up unneeded dot entries.
 	 **/
@@ -293,7 +279,7 @@ namespace QDirStat
 	 * Recursively finalize all directories from here on -
 	 * call finalizeLocal() recursively.
 	 **/
-	void finalizeAll();
+	virtual void finalizeAll();
 
 	/**
 	 * Get the current state of the directory reading process:
@@ -360,7 +346,7 @@ namespace QDirStat
 	 * children if there are any, restore the dot entry if it was removed
 	 * (e.g. in finalizeLocal()), set the read state to DirQueued.
 	 **/
-	void reset();
+	virtual void reset();
 
 	/**
 	 * Mark this directory as 'touched'. Item models can use this to keep
@@ -388,6 +374,9 @@ namespace QDirStat
 	 * disk directory! Both should return the same, but you'll never know -
 	 * better be safe than sorry!
 	 *
+	 * Notice that DotEntry inherits DirInfo, so a DotEntry is also
+	 * implicitly a DirInfo.
+	 *
 	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual bool isDirInfo() const Q_DECL_OVERRIDE
@@ -396,10 +385,11 @@ namespace QDirStat
 
     protected:
 
-        /**
-         * Count the direct children unconditionally and update _directChildrenCount.
-         **/
-        int countDirectChildren();
+	/**
+	 * Count the direct children unconditionally and update
+	 * _directChildrenCount.
+	 **/
+	int countDirectChildren();
 
 	/**
 	 * Recursively recalculate the summary fields when they are dirty.
@@ -415,14 +405,13 @@ namespace QDirStat
 	 * reparent dot entry children to the "real" (parent) directory if
 	 * there are not subdirectory siblings at the level of the dot entry.
 	 **/
-	void cleanupDotEntries();
+	virtual void cleanupDotEntries();
 
 
 	//
 	// Data members
 	//
 
-	bool		_isDotEntry:1;		// Flag: is this entry a "dot entry"?
 	bool		_isMountPoint:1;	// Flag: is this a mount point?
 	bool		_isExcluded:1;		// Flag: was this directory excluded?
 	bool		_summaryDirty:1;	// dirty flag for the cached values
@@ -443,7 +432,7 @@ namespace QDirStat
 	int		_totalItems;
 	int		_totalSubDirs;
 	int		_totalFiles;
-        int             _directChildrenCount;
+	int		_directChildrenCount;
 	time_t		_latestMtime;
 
 	FileInfoList *	_sortedChildren;

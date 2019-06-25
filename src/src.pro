@@ -46,7 +46,8 @@ SOURCES	  = main.cpp			\
 	    DirTreePkgFilter.cpp	\
 	    DirTreeCache.cpp		\
 	    DirTreeModel.cpp		\
-	    DirTreeView.cpp		\
+            DirTreeView.cpp		\
+            DotEntry.cpp                \
 	    DpkgPkgManager.cpp		\
 	    Exception.cpp		\
 	    ExcludeRulesConfigPage.cpp	\
@@ -122,6 +123,7 @@ HEADERS	  =				\
 	    DirTreeCache.h		\
 	    DirTreeModel.h		\
 	    DirTreeView.h		\
+            DotEntry.h                  \
 	    DpkgPkgManager.h		\
 	    Exception.h			\
 	    ExcludeRules.h		\
