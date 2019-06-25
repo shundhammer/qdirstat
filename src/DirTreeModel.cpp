@@ -667,7 +667,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	case OctalPermissionsCol: return limitedInfo ? QVariant() : item->octalPermissions();
     }
 
-    if ( item->isDirInfo() || item->isDotEntry() )
+    if ( item->isDirInfo() )
     {
 	QString prefix = item->readState() == DirAborted ? ">" : "";
 
@@ -692,7 +692,7 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
     if ( item->isDevice() )
 	return QVariant();
 
-    if ( item->isDirInfo() || item->isDotEntry() )
+    if ( item->isDirInfo() )
     {
 	QString prefix = item->readState() == DirAborted ? ">" : "";
 	return prefix + formatSize( item->totalSize() );
