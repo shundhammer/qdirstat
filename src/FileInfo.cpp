@@ -17,6 +17,8 @@
 
 #include "FileInfo.h"
 #include "DirInfo.h"
+#include "DotEntry.h"
+#include "Attic.h"
 #include "DirTree.h"
 #include "PkgInfo.h"
 #include "Logger.h"
@@ -241,6 +243,8 @@ QString FileInfo::debugUrl() const
 
     if ( isDotEntry() )
 	return url() + "/" + dotEntryName();
+    else if ( isAttic() )
+	return url() + "/" + atticName();
 
     return url() ;
 }
@@ -368,6 +372,12 @@ QString FileInfo::dotEntryName()
 }
 
 
+QString FileInfo::atticName()
+{
+    return QObject::tr( "<Ignored>" );
+}
+
+
 bool FileInfo::isCached() const
 {
     if ( isDirInfo() && ! isDotEntry() )
@@ -487,6 +497,22 @@ DirInfo * FileInfo::toDirInfo()
     DirInfo * dirInfo = dynamic_cast<DirInfo *>( this );
 
     return dirInfo;
+}
+
+
+DotEntry * FileInfo::toDotEntry()
+{
+    DotEntry * dotEntry = dynamic_cast<DotEntry *>( this );
+
+    return dotEntry;
+}
+
+
+Attic * FileInfo::toAttic()
+{
+    Attic * attic = dynamic_cast<Attic *>( this );
+
+    return attic;
 }
 
 

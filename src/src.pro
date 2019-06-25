@@ -30,6 +30,7 @@ INSTALLS	+= TARGET desktop icons
 SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
 	    AdaptiveTimer.cpp		\
+	    Attic.cpp			\
 	    BucketsTableModel.cpp	\
 	    BreadcrumbNavigator.cpp	\
 	    Cleanup.cpp			\
@@ -46,8 +47,8 @@ SOURCES	  = main.cpp			\
 	    DirTreePkgFilter.cpp	\
 	    DirTreeCache.cpp		\
 	    DirTreeModel.cpp		\
-            DirTreeView.cpp		\
-            DotEntry.cpp                \
+	    DirTreeView.cpp		\
+	    DotEntry.cpp		\
 	    DpkgPkgManager.cpp		\
 	    Exception.cpp		\
 	    ExcludeRulesConfigPage.cpp	\
@@ -105,6 +106,7 @@ SOURCES	  = main.cpp			\
 HEADERS	  =				\
 	    ActionManager.h		\
 	    AdaptiveTimer.h		\
+	    Attic.h			\
 	    BucketsTableModel.h		\
 	    BreadcrumbNavigator.h	\
 	    Cleanup.h			\
@@ -123,7 +125,7 @@ HEADERS	  =				\
 	    DirTreeCache.h		\
 	    DirTreeModel.h		\
 	    DirTreeView.h		\
-            DotEntry.h                  \
+	    DotEntry.h			\
 	    DpkgPkgManager.h		\
 	    Exception.h			\
 	    ExcludeRules.h		\

@@ -10,10 +10,11 @@
 #include <ctype.h>
 #include <QUrl>
 
-#include "Logger.h"
 #include "DirTreeCache.h"
 #include "DirTree.h"
+#include "DotEntry.h"
 #include "ExcludeRules.h"
+#include "Logger.h"
 #include "Exception.h"
 
 #define KB 1024LL

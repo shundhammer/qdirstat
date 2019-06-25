@@ -11,6 +11,7 @@
 
 #include "LocateFilesWindow.h"
 #include "DirTree.h"
+#include "DotEntry.h"
 #include "SelectionModel.h"
 #include "SettingsHelpers.h"
 #include "HeaderTweaker.h"

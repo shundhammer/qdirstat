@@ -16,9 +16,10 @@
 #include <QMutableListIterator>
 #include <QMultiMap>
 
-#include "DirTree.h"
 #include "DirReadJob.h"
+#include "DirTree.h"
 #include "DirTreeCache.h"
+#include "Attic.h"
 #include "ExcludeRules.h"
 #include "MountPoints.h"
 #include "Exception.h"
@@ -249,13 +250,34 @@ void LocalDirReadJob::startReading()
 			    return;
 		    }
 
-		    if ( ! ignore( entryName ) ) // FIXME
-		    {
-			FileInfo *child = new FileInfo( entryName, &statInfo, _tree, _dir );
-			CHECK_NEW( child );
-			_dir->insertChild( child );
-			childAdded( child );
-		    }
+                    DirInfo * parent = _dir;
+
+                    if ( ignore( entryName ) )
+                    {
+                        // DEBUG
+                        // DEBUG
+                        logDebug() << "Ignoring " << _dirName << "/" << entryName << endl;
+                        // DEBUG
+                        // DEBUG
+
+                        parent = _dir->ensureAttic();
+                    }
+
+                    if ( parent )
+                    {
+                        FileInfo *child = new FileInfo( entryName, &statInfo, _tree, parent );
+                        CHECK_NEW( child );
+                        parent->insertChild( child );
+                        childAdded( child );
+                    }
+                    else
+                    {
+                        // DEBUG
+                        // DEBUG
+                        logError() << "No parent for " << _dirName << "/" << entryName << endl;
+                        // DEBUG
+                        // DEBUG
+                    }
 		}
 	    }
 	    else  // lstat() error

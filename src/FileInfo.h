@@ -32,6 +32,8 @@ namespace QDirStat
 
     // Forward declarations
     class DirInfo;
+    class DotEntry;
+    class Attic;
     class PkgInfo;
     class DirTree;
 
@@ -512,7 +514,7 @@ namespace QDirStat
 	 *
 	 * This default implementation always returns 0.
 	 **/
-	virtual FileInfo *dotEntry()	const { return 0; }
+	virtual DotEntry * dotEntry() const { return 0; }
 
 	/**
 	 * Set a "Dot Entry". This makes sense for directories only.
@@ -531,9 +533,32 @@ namespace QDirStat
 	virtual bool isDotEntry() const { return false; }
 
 	/**
+	 * Return the "Attic" entry for this node if there is one (or 0
+	 * otherwise): This is a pseudo entry that directory nodes use to store
+	 * ignored files and directories separately from the normal tree
+	 * hierarchy.
+	 *
+	 * This default implementation always returns 0.
+	 **/
+	virtual Attic * attic() const { return 0; }
+
+	/**
+	 * Check if this is an attic entry where ignored files and directories
+	 * are stored.
+	 *
+	 * This default implementation always returns false.
+	 **/
+	virtual bool isAttic() const { return false; }
+
+	/**
 	 * (Translated) user-visible string for a "Dot Entry" ("<Files>").
 	 **/
 	static QString dotEntryName();
+
+	/**
+	 * (Translated) user-visible string for the "Attic" ("<Ignored>").
+	 **/
+        static QString atticName();
 
 	/**
 	 * Returns the tree level (depth) of this item.
@@ -603,6 +628,18 @@ namespace QDirStat
 	 * is not a DirInfo.
 	 **/
 	DirInfo * toDirInfo();
+
+	/**
+	 * Try to convert this to a DirInfo pointer. This returns null if this
+	 * is not a DirInfo.
+	 **/
+	DotEntry * toDotEntry();
+
+	/**
+	 * Try to convert this to a DirInfo pointer. This returns null if this
+	 * is not a DirInfo.
+	 **/
+	Attic * toAttic();
 
 	/**
 	 * Try to convert this to a PkgInfo pointer. This returns null if this

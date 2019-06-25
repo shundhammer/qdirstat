@@ -13,6 +13,7 @@
 #include "DirTree.h"
 #include "DirTreeCache.h"
 #include "DirTreeFilter.h"
+#include "DotEntry.h"
 #include "FileInfoSet.h"
 #include "ExcludeRules.h"
 #include "PkgReader.h"

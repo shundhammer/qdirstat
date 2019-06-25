@@ -11,7 +11,6 @@
 #define DirInfo_h
 
 
-#include "Logger.h"
 #include "FileInfo.h"
 #include "DataColumns.h"
 
@@ -33,11 +32,6 @@ namespace QDirStat
     class DirInfo: public FileInfo
     {
     public:
-	/**
-	 * Default constructor.
-	 **/
-	DirInfo( DirTree * tree,
-		 DirInfo * parent     = 0 );
 
 	/**
 	 * Constructor from a stat buffer (i.e. based on an lstat() call).
@@ -57,6 +51,12 @@ namespace QDirStat
 		 mode_t		 mode,
 		 FileSize	 size,
 		 time_t		 mtime );
+
+	/**
+	 * Default constructor
+	 **/
+	DirInfo( DirTree * tree,
+		 DirInfo * parent = 0 );
 
 	/**
 	 * Destructor.
@@ -214,13 +214,30 @@ namespace QDirStat
 	 * user can easily tell which summary fields belong to the directory
 	 * itself and which are the accumulated values of the entire subtree.
 	 **/
-	virtual DirInfo * dotEntry() const Q_DECL_OVERRIDE
+	virtual DotEntry * dotEntry() const Q_DECL_OVERRIDE
 	    { return _dotEntry; }
 
 	/**
 	 * Set a "Dot Entry". This makes sense for directories only.
 	 **/
 	virtual void setDotEntry( DotEntry * newDotEntry );
+
+	/**
+	 * Return the "Attic" entry for this node if there is one (or 0
+	 * otherwise): This is a pseudo entry that directory nodes use to store
+	 * ignored files and directories separately from the normal tree
+	 * hierarchy.
+	 *
+	 * Reimplemented - inherited from FileInfo.
+	 **/
+	virtual Attic * attic() const Q_DECL_OVERRIDE
+            { return _attic; }
+
+        /**
+         * Return the attic for this node. If it doesn't have one yet, create
+         * it first.
+         **/
+        virtual Attic * ensureAttic();
 
 	/**
 	 * Notification that a child has been added somewhere in the subtree.
@@ -423,7 +440,8 @@ namespace QDirStat
 	// Children management
 
 	FileInfo *	_firstChild;		// pointer to the first child
-	DirInfo	 *	_dotEntry;		// pseudo entry to hold non-dir children
+	DotEntry *	_dotEntry;		// pseudo entry to hold non-dir children
+        Attic    *      _attic;                 // pseudo entry to hold ignored children
 
 	// Some cached values
 

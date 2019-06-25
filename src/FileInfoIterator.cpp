@@ -11,6 +11,7 @@
 
 #include "FileInfoIterator.h"
 #include "FileInfoSorter.h"
+#include "DotEntry.h"
 #include "Exception.h"
 
 using namespace QDirStat;

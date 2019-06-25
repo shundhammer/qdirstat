@@ -12,6 +12,7 @@
 #include "DirInfo.h"
 #include "DirTree.h"
 #include "DotEntry.h"
+#include "Attic.h"
 #include "FileInfoIterator.h"
 #include "FileInfoSorter.h"
 #include "ExcludeRules.h"
@@ -43,6 +44,8 @@ DirInfo::DirInfo( const QString & filenameWithoutPath,
 {
     init();
     _dotEntry = new DotEntry( tree, this );
+    CHECK_NEW( _dotEntry );
+
     _directChildrenCount++;
 }
 
@@ -62,12 +65,16 @@ DirInfo::DirInfo( DirTree *	  tree,
 {
     init();
     _dotEntry = new DotEntry( tree, this );
+    CHECK_NEW( _dotEntry );
+
     _directChildrenCount++;
 }
 
 
 void DirInfo::init()
 {
+    _dotEntry		 = 0;
+    _attic		 = 0;
     _isMountPoint	 = false;
     _isExcluded		 = false;
     _summaryDirty	 = false;
@@ -123,6 +130,12 @@ void DirInfo::clear()
 	_dotEntry = 0;
     }
 
+    if ( _attic )
+    {
+	delete _attic;
+	_attic = 0;
+    }
+
     _summaryDirty = true;
     dropSortCache();
 }
@@ -130,23 +143,35 @@ void DirInfo::clear()
 
 void DirInfo::reset()
 {
-    if ( _firstChild || _dotEntry )
+    if ( _firstChild || _dotEntry || _attic )
 	clear();
 
     _readState	     = DirQueued;
     _pendingReadJobs = 0;
     _summaryDirty    = true;
 
-    if ( ! _dotEntry )
-    {
-	_dotEntry = new DotEntry( _tree, this );
+    _dotEntry = new DotEntry( _tree, this );
+    CHECK_NEW( _dotEntry );
 
-	if ( _tree )
-	    _tree->childAddedNotify( _dotEntry );
-    }
+    if ( _tree )
+	_tree->childAddedNotify( _dotEntry );
 
     recalc();
     dropSortCache();
+}
+
+
+Attic * DirInfo::ensureAttic()
+{
+    if ( ! _attic )
+    {
+	logDebug() << "Creating attic for " << this << endl;
+
+	_attic = new Attic( _tree, this );
+	CHECK_NEW( _attic );
+    }
+
+    return _attic;
 }
 
 
@@ -314,7 +339,7 @@ bool DirInfo::isBusy()
 void DirInfo::setDotEntry( DotEntry * newDotEntry )
 {
     if ( newDotEntry )
-	_dotEntry = newDotEntry->toDirInfo();
+	_dotEntry = newDotEntry;
     else
 	_dotEntry = 0;
 

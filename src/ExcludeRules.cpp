@@ -9,6 +9,7 @@
 
 #include "ExcludeRules.h"
 #include "DirInfo.h"
+#include "DotEntry.h"
 #include "FileInfoIterator.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
