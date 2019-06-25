@@ -250,31 +250,19 @@ void LocalDirReadJob::startReading()
 			    return;
 		    }
 
-                    DirInfo * parent = _dir;
-                    bool ignored = ignore( entryName );
+                    FileInfo * child = new FileInfo( entryName, &statInfo, _tree, _dir );
+                    CHECK_NEW( child );
 
-                    if ( ignored )
+                    if ( ignore( entryName ) )
                     {
-                        // logDebug() << "Ignoring " << _dirName << "/" << entryName << endl;
-                        parent = _dir->ensureAttic();
-                    }
-
-                    if ( parent )
-                    {
-                        FileInfo *child = new FileInfo( entryName, &statInfo, _tree, parent );
-                        CHECK_NEW( child );
-                        child->setIgnored( ignored );
-                        parent->insertChild( child );
-                        childAdded( child );
+                        // logDebug() << "Ignoring " << child << endl;
+                        child->setIgnored( true );
+                        _dir->moveToAttic( child );
                     }
                     else
-                    {
-                        // DEBUG
-                        // DEBUG
-                        logError() << "No parent for " << _dirName << "/" << entryName << endl;
-                        // DEBUG
-                        // DEBUG
-                    }
+                        _dir->insertChild( child );
+
+                    childAdded( child );
 		}
 	    }
 	    else  // lstat() error

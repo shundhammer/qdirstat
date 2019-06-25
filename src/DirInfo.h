@@ -208,6 +208,14 @@ namespace QDirStat
 	virtual void insertChild( FileInfo * newChild ) Q_DECL_OVERRIDE;
 
 	/**
+	 * Move a child to the attic. This is very much like insertChild(), but
+	 * it inserts the child into the appropriate attic instead: The dot
+	 * entry' attic if there is a dot entry and the new child is not a
+	 * directory, and the directory's attic instead.
+	 **/
+	void moveToAttic( FileInfo * newChild );
+
+	/**
 	 * Get the "Dot Entry" for this node if there is one (or 0 otherwise):
 	 * This is a pseudo entry that directory nodes use to store
 	 * non-directory children separately from directories. This way the end
@@ -238,6 +246,11 @@ namespace QDirStat
 	 * it first.
 	 **/
 	virtual Attic * ensureAttic();
+
+	/**
+	 * Return 'true' if there is an attic and it has any children.
+	 **/
+	bool hasAtticChildren() const;
 
 	/**
 	 * Notification that a child has been added somewhere in the subtree.
@@ -403,13 +416,13 @@ namespace QDirStat
 	    { return true; }
 
 
-    protected:
-
 	/**
 	 * Count the direct children unconditionally and update
 	 * _directChildrenCount.
 	 **/
 	int countDirectChildren();
+
+    protected:
 
 	/**
 	 * Recursively recalculate the summary fields when they are dirty.

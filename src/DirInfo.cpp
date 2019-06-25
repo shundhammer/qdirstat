@@ -175,6 +175,12 @@ Attic * DirInfo::ensureAttic()
 }
 
 
+bool DirInfo::hasAtticChildren() const
+{
+    return _attic && _attic->hasChildren();
+}
+
+
 void DirInfo::recalc()
 {
     // logDebug() << this << endl;
@@ -351,7 +357,7 @@ void DirInfo::insertChild( FileInfo * newChild )
 {
     CHECK_PTR( newChild );
 
-    if ( newChild->isDir() || _dotEntry == 0 )
+    if ( newChild->isDir() || ! _dotEntry )
     {
 	/**
 	 * Only directories are stored directly in pure directory nodes -
@@ -382,6 +388,23 @@ void DirInfo::insertChild( FileInfo * newChild )
 	 */
 	_dotEntry->insertChild( newChild );
     }
+}
+
+
+void DirInfo::moveToAttic( FileInfo * newChild )
+{
+    CHECK_PTR( newChild );
+
+    Attic * attic = 0;
+
+    if ( ! newChild->isDir() && _dotEntry )
+	attic = _dotEntry->ensureAttic();
+
+    if ( ! attic )
+	attic = ensureAttic();
+
+    CHECK_PTR( attic );
+    attic->insertChild( newChild );
 }
 
 
@@ -544,6 +567,7 @@ void DirInfo::readJobAborted()
 void DirInfo::finalizeLocal()
 {
     // logDebug() << this << endl;
+
     cleanupDotEntries();
     cleanupAttics();
 }
@@ -591,7 +615,7 @@ void DirInfo::cleanupDotEntries()
 
     // Reparent dot entry children if there are no subdirectories on this level
 
-    if ( ! _firstChild )
+    if ( ! _firstChild && ! hasAtticChildren() )
     {
 	FileInfo * child = _dotEntry->firstChild();
 
@@ -609,6 +633,26 @@ void DirInfo::cleanupDotEntries()
 		child = child->next();
 	    }
 	}
+
+
+        // Reparent the dot entry's attic's children to this item's attic
+
+        if ( _dotEntry->hasAtticChildren() )
+        {
+            ensureAttic();
+
+            child = _dotEntry->attic()->firstChild();
+            _dotEntry->attic()->setFirstChild( 0 );
+            _attic->setFirstChild( child );
+
+            while ( child )
+            {
+                child->setParent( _attic );
+                child = child->next();
+            }
+
+            _attic->countDirectChildren();
+        }
     }
 
 
@@ -617,7 +661,7 @@ void DirInfo::cleanupDotEntries()
     // This also affects dot entries that were just disowned because they had
     // no siblings (i.e., there are no subdirectories on this level).
 
-    if ( ! _dotEntry->firstChild() )
+    if ( ! _dotEntry->hasChildren() && ! _dotEntry->hasAtticChildren() )
     {
 	// logDebug() << "Removing empty dot entry " << this << endl;
 
