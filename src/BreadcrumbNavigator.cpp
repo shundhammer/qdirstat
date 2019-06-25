@@ -50,6 +50,8 @@ void BreadcrumbNavigator::setPath( FileInfo * item )
 
             if ( item->isDotEntry() )
                 name = FileInfo::dotEntryName();
+            else if ( item->isAttic() )
+                name = FileInfo::atticName();
             else
                 splitBasePath( item->name(), basePath, name );
 

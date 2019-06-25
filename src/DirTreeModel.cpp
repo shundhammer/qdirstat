@@ -206,7 +206,8 @@ FileInfo * DirTreeModel::findChild( DirInfo * parent, int childNo ) const
     CHECK_PTR( parent );
 
     const FileInfoList & childrenList =
-	parent->sortedChildren( _sortCol, _sortOrder );
+	parent->sortedChildren( _sortCol, _sortOrder,
+				true );	    // includeAttic
 
     if ( childNo < 0 || childNo >= childrenList.size() )
     {
@@ -230,7 +231,8 @@ int DirTreeModel::rowNumber( FileInfo * child ) const
 	return 0;
 
     const FileInfoList & childrenList =
-	child->parent()->sortedChildren( _sortCol, _sortOrder );
+	child->parent()->sortedChildren( _sortCol, _sortOrder,
+					 true ); // includeAttic
 
     int row = childrenList.indexOf( child );
 
@@ -312,14 +314,14 @@ int DirTreeModel::rowCount( const QModelIndex & parentIndex ) const
 	    if ( _tree->isBusy() )
 		count = 0;
 	    else
-		count = item->directChildrenCount();
+		count = directChildrenCount( item );
 	    break;
 
 	case DirFinished:
 	case DirOnRequestOnly:
 	case DirCached:
 	case DirAborted:
-	    count = item->directChildrenCount();
+	    count = directChildrenCount( item );
 	    break;
 
 	// intentionally omitting 'default' case so the compiler can report
@@ -418,7 +420,8 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 		    case PercentBarCol:
 			{
 			    if ( ( item->parent() && item->parent()->isBusy() ) ||
-				 item == _tree->firstToplevel() )
+				 item == _tree->firstToplevel() ||
+                                 item->isAttic() )
 			    {
 				return -1.0;
 			    }
@@ -654,6 +657,9 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
     bool limitedInfo = item->isDotEntry() || item->readState() == DirCached || item->isPkgInfo();
 
+    if ( item->isAttic() && col == PercentNumCol )
+        return QVariant();
+
     switch ( col )
     {
 	case NameCol:		  return item->name();
@@ -684,6 +690,20 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     }
 
     return QVariant();
+}
+
+
+int DirTreeModel::directChildrenCount( FileInfo * subtree ) const
+{
+    if ( ! subtree )
+	return 0;
+
+    int count = subtree->directChildrenCount();
+
+    if ( subtree->attic() )
+	++count;
+
+    return count;
 }
 
 
@@ -816,7 +836,7 @@ void DirTreeModel::newChildrenNotify( DirInfo * dir )
     }
 
     QModelIndex index = modelIndex( dir );
-    int count = dir->directChildrenCount();
+    int count = directChildrenCount( dir );
     // Debug::dumpDirectChildren( dir );
 
     if ( count > 0 )
@@ -1022,7 +1042,7 @@ void DirTreeModel::clearingSubtree( DirInfo * subtree )
     if ( subtree == _tree->root() || subtree->isTouched() )
     {
 	QModelIndex subtreeIndex = modelIndex( subtree, 0 );
-	int count = subtree->directChildrenCount();
+	int count = directChildrenCount( subtree );
 
 	if ( count > 0 )
 	{

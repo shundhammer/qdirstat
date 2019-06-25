@@ -201,7 +201,7 @@ QString FileInfo::url() const
     {
 	QString parentUrl = _parent->url();
 
-	if ( isDotEntry() )	// don't append "/." for dot entries
+	if ( isDotEntry() || isAttic() ) // don't append "/." for dot entries and attics
 	    return parentUrl;
 
 	if ( ! parentUrl.endsWith( "/" ) && ! _name.startsWith( "/" ) )
@@ -243,7 +243,8 @@ QString FileInfo::debugUrl() const
 
     if ( isDotEntry() )
 	return url() + "/" + dotEntryName();
-    else if ( isAttic() )
+
+    if ( isAttic() )
 	return url() + "/" + atticName();
 
     return url() ;

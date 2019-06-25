@@ -251,15 +251,11 @@ void LocalDirReadJob::startReading()
 		    }
 
                     DirInfo * parent = _dir;
+                    bool ignored = ignore( entryName );
 
-                    if ( ignore( entryName ) )
+                    if ( ignored )
                     {
-                        // DEBUG
-                        // DEBUG
-                        logDebug() << "Ignoring " << _dirName << "/" << entryName << endl;
-                        // DEBUG
-                        // DEBUG
-
+                        // logDebug() << "Ignoring " << _dirName << "/" << entryName << endl;
                         parent = _dir->ensureAttic();
                     }
 
@@ -267,6 +263,7 @@ void LocalDirReadJob::startReading()
                     {
                         FileInfo *child = new FileInfo( entryName, &statInfo, _tree, parent );
                         CHECK_NEW( child );
+                        child->setIgnored( ignored );
                         parent->insertChild( child );
                         childAdded( child );
                     }

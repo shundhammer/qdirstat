@@ -399,6 +399,12 @@ namespace QDirStat
 	QVariant columnIcon( FileInfo * item, int col ) const;
 
         /**
+         * Return the number of direct children (plus the attic if there is
+         * one) of a subtree.
+         **/
+        int directChildrenCount( FileInfo * subtree ) const;
+
+        /**
          * Return the text for the size for 'item'
          **/
         QVariant sizeColText( FileInfo * item ) const;

@@ -231,13 +231,13 @@ namespace QDirStat
 	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual Attic * attic() const Q_DECL_OVERRIDE
-            { return _attic; }
+	    { return _attic; }
 
-        /**
-         * Return the attic for this node. If it doesn't have one yet, create
-         * it first.
-         **/
-        virtual Attic * ensureAttic();
+	/**
+	 * Return the attic for this node. If it doesn't have one yet, create
+	 * it first.
+	 **/
+	virtual Attic * ensureAttic();
 
 	/**
 	 * Notification that a child has been added somewhere in the subtree.
@@ -319,14 +319,17 @@ namespace QDirStat
 
 	/**
 	 * Return a list of (direct) children sorted by 'sortCol' and
-	 * 'sortOrder' (Qt::AscendingOrder or Qt::DescendingOrder).
+	 * 'sortOrder' (Qt::AscendingOrder or Qt::DescendingOrder).  If
+	 * 'includeAttic' is 'true', the attic (if there is one) is added to
+	 * the list.
 	 *
-	 * This might return cached information if the sort column and order
-	 * are the same as for the last call to this function, and there were
-	 * no children added or removed in the meantime.
+	 * This might return cached information if all parameters are the same
+	 * as for the last call to this function, and there were no children
+	 * added or removed in the meantime.
 	 **/
 	const FileInfoList & sortedChildren( DataColumn	   sortCol,
-					     Qt::SortOrder sortOrder );
+					     Qt::SortOrder sortOrder,
+					     bool	   includeAttic = false );
 
 	/**
 	 * Drop all cached information about children sorting.
@@ -424,6 +427,12 @@ namespace QDirStat
 	 **/
 	virtual void cleanupDotEntries();
 
+	/**
+	 * Clean up unneeded attics: Delete attic entries that don't have any
+	 * children.
+	 **/
+	virtual void cleanupAttics();
+
 
 	//
 	// Data members
@@ -441,7 +450,7 @@ namespace QDirStat
 
 	FileInfo *	_firstChild;		// pointer to the first child
 	DotEntry *	_dotEntry;		// pseudo entry to hold non-dir children
-        Attic    *      _attic;                 // pseudo entry to hold ignored children
+	Attic	 *	_attic;			// pseudo entry to hold ignored children
 
 	// Some cached values
 
@@ -456,6 +465,7 @@ namespace QDirStat
 	FileInfoList *	_sortedChildren;
 	DataColumn	_lastSortCol;
 	Qt::SortOrder	_lastSortOrder;
+	bool		_lastIncludeAttic;
 
 	DirReadState	_readState;
 

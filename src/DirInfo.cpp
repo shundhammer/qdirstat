@@ -19,7 +19,7 @@
 #include "Exception.h"
 #include "DebugHelpers.h"
 
-#define DIRECT_CHILDREN_COUNT_SANITY_CHECK 1
+#define DIRECT_CHILDREN_COUNT_SANITY_CHECK 0
 
 using namespace QDirStat;
 
@@ -165,7 +165,7 @@ Attic * DirInfo::ensureAttic()
 {
     if ( ! _attic )
     {
-	logDebug() << "Creating attic for " << this << endl;
+	// logDebug() << "Creating attic for " << this << endl;
 
 	_attic = new Attic( _tree, this );
 	CHECK_NEW( _attic );
@@ -387,6 +387,9 @@ void DirInfo::insertChild( FileInfo * newChild )
 
 void DirInfo::childAdded( FileInfo * newChild )
 {
+    if ( newChild->isIgnored() && ! isIgnored() && ! isAttic() )
+	return;
+
     if ( ! _summaryDirty )
     {
 	_totalSize   += newChild->size();
@@ -542,6 +545,7 @@ void DirInfo::finalizeLocal()
 {
     // logDebug() << this << endl;
     cleanupDotEntries();
+    cleanupAttics();
 }
 
 
@@ -627,6 +631,24 @@ void DirInfo::cleanupDotEntries()
 }
 
 
+void DirInfo::cleanupAttics()
+{
+    if ( ! _attic )
+	return;
+
+    _attic->finalizeLocal();
+
+    if ( ! _attic->firstChild() && ! _attic->dotEntry() )
+    {
+	delete _attic;
+	_attic = 0;
+
+	if ( _lastIncludeAttic )
+	    dropSortCache();
+    }
+}
+
+
 void DirInfo::clearTouched( bool recursive )
 {
     _touched = false;
@@ -650,10 +672,16 @@ void DirInfo::clearTouched( bool recursive )
 
 
 const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
-					      Qt::SortOrder sortOrder )
+					      Qt::SortOrder sortOrder,
+					      bool	    includeAttic )
 {
-    if ( _sortedChildren && sortCol == _lastSortCol && sortOrder == _lastSortOrder )
+    if ( _sortedChildren &&
+	 sortCol      == _lastSortCol	   &&
+	 sortOrder    == _lastSortOrder	   &&
+	 includeAttic == _lastIncludeAttic    )
+    {
 	return *_sortedChildren;
+    }
 
 
     // Clean old sorted children list and create a new one
@@ -697,8 +725,12 @@ const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
 		      _sortedChildren->end(),
 		      FileInfoSorter( sortCol, sortOrder ) );
 
-    _lastSortCol   = sortCol;
-    _lastSortOrder = sortOrder;
+    if ( includeAttic && _attic )
+	_sortedChildren->append( _attic );
+
+    _lastSortCol      = sortCol;
+    _lastSortOrder    = sortOrder;
+    _lastIncludeAttic = includeAttic;
 
 
 #if DIRECT_CHILDREN_COUNT_SANITY_CHECK
