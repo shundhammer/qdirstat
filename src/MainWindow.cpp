@@ -575,10 +575,11 @@ void MainWindow::busyDisplay()
     int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::NameCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::AscendingOrder );
 
-    if ( ! _selectionModel->currentBranch() )
+    if ( ! PkgFilter::isPkgUrl( _dirTreeModel->tree()->url() ) &&
+	 ! _selectionModel->currentBranch() )
     {
 	// Wait until the toplevel entry has some children, then expand to level 1
-	QTimer::singleShot( 200, _ui->actionExpandTreeLevel0, SLOT( trigger() ) );
+	QTimer::singleShot( 200, _ui->actionExpandTreeLevel1, SLOT( trigger() ) );
     }
 }
 
