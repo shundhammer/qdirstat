@@ -629,6 +629,18 @@ namespace QDirStat
         bool isCached() const;
 
         /**
+         * Returns true if this FileInfo was ignored by some rule (e.g. in the
+         * "unpackaged files" view).
+         **/
+        bool isIgnored() const { return _isIgnored; }
+
+        /**
+         * Set the "ignored" flag. Notice that this only sets the flag; it does
+         * not reparent the FileInfo or anything like that.
+         **/
+        void setIgnored( bool ignored ) { _isIgnored = ignored; }
+
+        /**
          * Return the nearest PkgInfo parent or 0 if there is none.
          **/
         PkgInfo * pkgInfoParent() const;
@@ -702,6 +714,7 @@ namespace QDirStat
 	QString		_name;			// the file name (without path!)
 	bool		_isLocalFile  :1;	// flag: local or remote file?
 	bool		_isSparseFile :1;	// (cache) flag: sparse file (file with "holes")?
+        bool            _isIgnored    :1;       // flag: ignored by rule?
 	dev_t		_device;		// device this object resides on
 	mode_t		_mode;			// file permissions + object type
 	nlink_t		_links;			// number of links
