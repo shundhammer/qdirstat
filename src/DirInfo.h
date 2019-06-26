@@ -426,7 +426,7 @@ namespace QDirStat
 	 * Check the 'ignored' state of this item and set the '_isIgnored' flag
 	 * accordingly.
 	 **/
-	void checkIgnored();
+	virtual void checkIgnored();
 
 	/**
 	 * Check if this item or its dot entry have any non-directory children

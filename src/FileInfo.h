@@ -524,6 +524,13 @@ namespace QDirStat
 	virtual void setDotEntry( FileInfo *newDotEntry )
 	    { Q_UNUSED( newDotEntry ); }
 
+        /**
+         * Return 'true' if this is a pseudo directory: A "dot entry" or an
+         * "attic".
+         **/
+        virtual bool isPseudoDir() const
+            { return isDotEntry() || isAttic(); }
+
 	/**
 	 * Returns true if this is a "Dot Entry".
 	 * See dotEntry() for details.

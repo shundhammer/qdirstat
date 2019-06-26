@@ -20,7 +20,8 @@ Attic::Attic( DirTree * tree,
               DirInfo * parent )
     : DirInfo( tree, parent )
 {
-    _name = atticName();
+    _name      = atticName();
+    _isIgnored = true;
 
     delete _dotEntry;
     _dotEntry = 0;
@@ -45,4 +46,10 @@ DirReadState Attic::readState() const
 bool Attic::hasChildren() const
 {
     return firstChild();
+}
+
+
+void Attic::checkIgnored()
+{
+
 }

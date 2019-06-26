@@ -275,8 +275,8 @@ void FileDetailsView::showDetails( DirInfo * dir )
 
     setCurrentPage( _ui->dirDetailsPage );
 
-    QString name = dir->isDotEntry() ? FileInfo::dotEntryName() : ( dir->baseName() + "/" );
-    QString dirType = dir->isDotEntry() ? tr( "Pseudo Directory" ) : tr( "Directory" );
+    QString name = dir->isPseudoDir() ? dir->name() : ( dir->baseName() + "/" );
+    QString dirType = dir->isPseudoDir() ? tr( "Pseudo Directory" ) : tr( "Directory" );
 
     setLabelLimited(_ui->dirNameLabel, name );
     _ui->dirTypeLabel->setText( dirType );
@@ -335,9 +335,9 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
 void FileDetailsView::showDirNodeInfo( DirInfo * dir )
 {
     CHECK_PTR( dir );
-    setDirBlockVisibility( ! dir->isDotEntry() );
+    setDirBlockVisibility( ! dir->isPseudoDir() );
 
-    if ( ! dir->isDotEntry() )
+    if ( ! dir->isPseudoDir() )
     {
         _ui->dirOwnSizeCaption->setVisible( dir->size() > 0 );
         _ui->dirOwnSizeLabel->setVisible  ( dir->size() > 0 );

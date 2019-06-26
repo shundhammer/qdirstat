@@ -410,8 +410,11 @@ void DirInfo::moveToAttic( FileInfo * newChild )
 
 void DirInfo::childAdded( FileInfo * newChild )
 {
-    if ( newChild->isIgnored() && ! isIgnored() && ! isAttic() )
+    if ( ! isAttic() )
+    {
+        if ( newChild->isIgnored() && ! isIgnored() )
 	return;
+    }
 
     if ( ! _summaryDirty )
     {
@@ -652,7 +655,7 @@ void DirInfo::cleanupDotEntries()
                 child = child->next();
             }
 
-            _attic->countDirectChildren();
+            _attic->recalc();
         }
     }
 
@@ -678,18 +681,21 @@ void DirInfo::cleanupDotEntries()
 
 void DirInfo::cleanupAttics()
 {
-    if ( ! _attic )
-	return;
+    if ( _dotEntry )
+        _dotEntry->cleanupAttics();
 
-    _attic->finalizeLocal();
-
-    if ( ! _attic->firstChild() && ! _attic->dotEntry() )
+    if ( _attic )
     {
-	delete _attic;
-	_attic = 0;
+        _attic->finalizeLocal();
 
-	if ( _lastIncludeAttic )
-	    dropSortCache();
+        if ( ! _attic->firstChild() && ! _attic->dotEntry() )
+        {
+            delete _attic;
+            _attic = 0;
+
+            if ( _lastIncludeAttic )
+                dropSortCache();
+        }
     }
 }
 
@@ -699,7 +705,7 @@ void DirInfo::checkIgnored()
     logDebug() << "Checking " << this << endl;
 
     if ( _dotEntry )
-        _dotEntry->checkIgnored();        
+        _dotEntry->checkIgnored();
 
     if ( hasUnignoredDirectChildren() )
     {
@@ -707,7 +713,7 @@ void DirInfo::checkIgnored()
         _isIgnored = false;
         return;
     }
-    
+
     _isIgnored = hasIgnoredDirectChildren();
 
     if ( _isIgnored )
@@ -721,8 +727,8 @@ void DirInfo::checkIgnored()
     {
         if ( child->isDirInfo() )
             child->toDirInfo()->checkIgnored();
-        
-        if ( ! child->isIgnored() )
+
+        if ( ! child->isIgnored() && child->hasChildren() )
         {
             logDebug() << "Child is not ignored: " << child << endl;
             _isIgnored = false;
@@ -740,7 +746,7 @@ bool DirInfo::hasIgnoredDirectChildren()
 {
     if ( _attic && _attic->hasChildren() )
         return true;
-    
+
     if ( _dotEntry && _dotEntry->attic() && _dotEntry->attic()->hasChildren() )
         return true;
 
@@ -750,13 +756,13 @@ bool DirInfo::hasIgnoredDirectChildren()
     {
         if ( ! child->isDirInfo() && child->isIgnored() )
             return true;
-        
+
         child = child->next();
     }
 
     if ( _dotEntry )
         return _dotEntry->hasIgnoredDirectChildren();
-    
+
     return false;
 }
 
@@ -769,13 +775,13 @@ bool DirInfo::hasUnignoredDirectChildren()
     {
         if ( ! child->isDirInfo() && ! child->isIgnored() )
             return true;
-        
+
         child = child->next();
     }
 
     if ( _dotEntry )
         return _dotEntry->hasUnignoredDirectChildren();
-    
+
     return false;
 }
 

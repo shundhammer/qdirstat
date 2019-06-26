@@ -77,6 +77,13 @@ namespace QDirStat
 	 **/
 	virtual bool hasChildren() const Q_DECL_OVERRIDE;
 
+	/**
+	 * Check the 'ignored' state of this item and set the '_isIgnored' flag
+	 * accordingly.
+	 *
+	 * Reimplemented - inherited from DirInfo.
+	 **/
+	virtual void checkIgnored() Q_DECL_OVERRIDE;
 
     };	// class Attic
 
