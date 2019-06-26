@@ -8,6 +8,7 @@
 
 
 #include "Attic.h"
+#include "DotEntry.h"
 #include "Exception.h"
 #include "Logger.h"
 
@@ -20,6 +21,9 @@ Attic::Attic( DirTree * tree,
     : DirInfo( tree, parent )
 {
     _name = atticName();
+
+    delete _dotEntry;
+    _dotEntry = 0;
 }
 
 
@@ -37,3 +41,8 @@ DirReadState Attic::readState() const
 	return _readState;
 }
 
+
+bool Attic::hasChildren() const
+{
+    return firstChild();
+}

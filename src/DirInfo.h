@@ -422,6 +422,25 @@ namespace QDirStat
 	 **/
 	int countDirectChildren();
 
+	/**
+	 * Check the 'ignored' state of this item and set the '_isIgnored' flag
+	 * accordingly.
+	 **/
+	void checkIgnored();
+
+	/**
+	 * Check if this item or its dot entry have any non-directory children
+	 * that are ignored.
+	 **/
+	bool hasIgnoredDirectChildren();
+
+	/**
+	 * Check if this item or its dot entry have any non-directory children
+	 * that are not ignored.
+	 **/
+	bool hasUnignoredDirectChildren();
+
+
     protected:
 
 	/**

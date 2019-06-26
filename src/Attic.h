@@ -70,6 +70,13 @@ namespace QDirStat
 	 **/
 	virtual DirReadState readState() const Q_DECL_OVERRIDE;
 
+	/**
+	 * Returns true if this entry has any children.
+	 *
+	 * Reimplemented - inherited from FileInfo.
+	 **/
+	virtual bool hasChildren() const Q_DECL_OVERRIDE;
+
 
     };	// class Attic
 
