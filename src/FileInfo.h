@@ -358,8 +358,8 @@ namespace QDirStat
 	/**
 	 * Returns the total number of not ignored (non-directory!) items in
 	 * this subtree, excluding this item.
-         *
-         * Derived classes that have children should overwrite this.
+	 *
+	 * Derived classes that have children should overwrite this.
 	 **/
 	virtual int totalUnignoredItems() { return 0; }
 

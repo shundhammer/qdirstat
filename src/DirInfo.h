@@ -233,9 +233,10 @@ namespace QDirStat
 
 	/**
 	 * Move a child to the attic. This is very much like insertChild(), but
-	 * it inserts the child into the appropriate attic instead: The dot
-	 * entry' attic if there is a dot entry and the new child is not a
-	 * directory, and the directory's attic instead.
+	 * it inserts the child into the appropriate attic instead (and sets
+	 * its 'ignored' flag: The dot entry's attic if there is a dot entry
+	 * and the new child is not a directory, and the directory's attic
+	 * otherwise.
 	 **/
 	void moveToAttic( FileInfo * newChild );
 

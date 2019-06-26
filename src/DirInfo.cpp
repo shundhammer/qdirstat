@@ -216,11 +216,13 @@ void DirInfo::recalc()
 	if ( (*it)->isFile() )
 	    _totalFiles++;
 
-	if ( (*it)->isIgnored() && ! (*it)->isDirInfo() )
-	    _totalIgnoredItems++;
-
-	if ( ! (*it)->isIgnored() && ! (*it)->isDirInfo() )
-	    _totalUnignoredItems++;
+	if ( ! (*it)->isDir() )
+	{
+	    if ( (*it)->isIgnored() )
+		_totalIgnoredItems++;
+	    else
+		_totalUnignoredItems++;
+	}
 
 	time_t childLatestMtime = (*it)->latestMtime();
 
@@ -446,12 +448,15 @@ void DirInfo::moveToAttic( FileInfo * newChild )
 	attic = ensureAttic();
 
     CHECK_PTR( attic );
+    newChild->setIgnored( true );
     attic->insertChild( newChild );
 }
 
 
 void DirInfo::childAdded( FileInfo * newChild )
 {
+    bool addToTotal = true;
+
     if ( newChild->isIgnored() )
     {
 	if ( ! newChild->isDir() )
@@ -461,7 +466,7 @@ void DirInfo::childAdded( FileInfo * newChild )
 	// ignored or if this is the attic.
 
 	if ( ! _isIgnored &&  ! isAttic() )
-	    return;
+	    addToTotal = false;
     }
     else
     {
@@ -469,35 +474,38 @@ void DirInfo::childAdded( FileInfo * newChild )
 	    _totalUnignoredItems++;
     }
 
-    if ( ! _summaryDirty )
+    if ( addToTotal )
     {
-	_totalSize   += newChild->size();
-	_totalBlocks += newChild->blocks();
-	_totalItems++;
+	if ( ! _summaryDirty )
+	{
+	    _totalSize	 += newChild->size();
+	    _totalBlocks += newChild->blocks();
+	    _totalItems++;
 
-	if ( newChild->parent() == this )
-	    _directChildrenCount++;
+	    if ( newChild->parent() == this )
+		_directChildrenCount++;
 
-	if ( newChild->isDir() )
-	    _totalSubDirs++;
+	    if ( newChild->isDir() )
+		_totalSubDirs++;
 
-	if ( newChild->isFile() )
-	    _totalFiles++;
+	    if ( newChild->isFile() )
+		_totalFiles++;
 
-	if ( newChild->mtime() > _latestMtime )
-	    _latestMtime = newChild->mtime();
-    }
-    else
-    {
-	// NOP
+	    if ( newChild->mtime() > _latestMtime )
+		_latestMtime = newChild->mtime();
+	}
+	else
+	{
+	    // NOP
 
-	/*
-	 * Don't bother updating the summary fields if the summary is dirty
-	 * (i.e. outdated) anyway: As soon as anybody wants to know some exact
-	 * value a complete recalculation of the entire subtree will be
-	 * triggered. On the other hand, if nobody wants to know (which is very
-	 * likely) we can save this effort.
-	 */
+	    /*
+	     * Don't bother updating the summary fields if the summary is dirty
+	     * (i.e. outdated) anyway: As soon as anybody wants to know some
+	     * exact value a complete recalculation of the entire subtree will
+	     * be triggered. On the other hand, if nobody wants to know (which
+	     * is very likely) we can save this effort.
+	     */
+	}
     }
 
     if ( _lastSortCol != ReadJobsCol )
@@ -709,6 +717,7 @@ void DirInfo::cleanupDotEntries()
 	    }
 
 	    _attic->recalc();
+	    _dotEntry->attic()->recalc();
 	}
     }
 
@@ -748,6 +757,8 @@ void DirInfo::cleanupAttics()
 
 	    if ( _lastIncludeAttic )
 		dropSortCache();
+
+	    recalc();
 	}
     }
 }
@@ -760,18 +771,15 @@ void DirInfo::checkIgnored()
 
     recalc();
 
-    logDebug() << this
-	       << " : totalIgnoredItems: " << totalIgnoredItems()
-	       << " totalUnignoredItems: " << totalUnignoredItems()
-	       << endl;
-
     // Cascade the 'ignored' status up the tree:
     //
     // Display all directories as ignored that have any ignored items, but no
     // items that are not ignored.
 
-    if ( totalIgnoredItems() > 0 && totalUnignoredItems() == 0 )
-	_isIgnored = true;
+    _isIgnored = ( totalIgnoredItems() > 0 && totalUnignoredItems() == 0 );
+
+    if ( ! isPseudoDir() && _parent )
+	_parent->checkIgnored();
 }
 
 

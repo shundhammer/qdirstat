@@ -250,19 +250,18 @@ void LocalDirReadJob::startReading()
 			    return;
 		    }
 
-                    FileInfo * child = new FileInfo( entryName, &statInfo, _tree, _dir );
-                    CHECK_NEW( child );
+		    FileInfo * child = new FileInfo( entryName, &statInfo, _tree, _dir );
+		    CHECK_NEW( child );
 
-                    if ( ignore( entryName ) )
-                    {
-                        // logDebug() << "Ignoring " << child << endl;
-                        child->setIgnored( true );
-                        _dir->moveToAttic( child );
-                    }
-                    else
-                        _dir->insertChild( child );
+		    if ( ignore( entryName ) )
+		    {
+			// logDebug() << "Ignoring " << child << endl;
+			_dir->moveToAttic( child );
+		    }
+		    else
+			_dir->insertChild( child );
 
-                    childAdded( child );
+		    childAdded( child );
 		}
 	    }
 	    else  // lstat() error
