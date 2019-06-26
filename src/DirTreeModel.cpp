@@ -7,6 +7,9 @@
  */
 
 
+#include <QPalette>
+#include <QGuiApplication>
+
 #include "DirTreeModel.h"
 #include "DirTree.h"
 #include "FileInfoIterator.h"
@@ -352,8 +355,7 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
     {
 	case Qt::DisplayRole:
 	    {
-		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-		CHECK_PTR( item );
+                FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
 		CHECK_MAGIC( item );
 
 		QVariant result = columnText( item, col );
@@ -366,6 +368,18 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 
 		return result;
 	    }
+
+
+        case Qt::ForegroundRole:
+            {
+                FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+		CHECK_MAGIC( item );
+
+                if ( item->isIgnored() || item->isAttic() )
+                    return QGuiApplication::palette().brush( QPalette::Disabled, QPalette::Foreground );
+                else
+                    return QVariant();
+            }
 
 	case Qt::DecorationRole:
 	    {
@@ -508,7 +522,6 @@ Qt::ItemFlags DirTreeModel::flags( const QModelIndex & index ) const
 
 
     FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-    CHECK_PTR( item );
     CHECK_MAGIC( item );
 
     Qt::ItemFlags baseFlags = Qt::ItemIsEnabled;
@@ -566,7 +579,6 @@ QModelIndex DirTreeModel::parent( const QModelIndex & index ) const
 	return QModelIndex();
 
     FileInfo * child = static_cast<FileInfo*>( index.internalPointer() );
-    CHECK_PTR( child );
     CHECK_MAGIC( child );
 
     FileInfo * parent = child->parent();
