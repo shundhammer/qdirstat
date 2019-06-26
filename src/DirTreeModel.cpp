@@ -349,15 +349,14 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
     if ( ! index.isValid() )
 	return QVariant();
 
-    DataColumn col = DataColumns::fromViewCol( index.column() );
+    DataColumn col  = DataColumns::fromViewCol( index.column() );
+    FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+    CHECK_MAGIC( item );
 
     switch ( role )
     {
 	case Qt::DisplayRole:
 	    {
-                FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-		CHECK_MAGIC( item );
-
 		QVariant result = columnText( item, col );
 
 		if ( item && item->isDirInfo() )
@@ -369,12 +368,8 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 		return result;
 	    }
 
-
         case Qt::ForegroundRole:
             {
-                FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-		CHECK_MAGIC( item );
-
                 if ( item->isIgnored() || item->isAttic() )
                     return QGuiApplication::palette().brush( QPalette::Disabled, QPalette::Foreground );
                 else
@@ -383,9 +378,6 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 
 	case Qt::DecorationRole:
 	    {
-		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-		CHECK_MAGIC( item );
-
 		QVariant result = columnIcon( item, col );
 		return result;
 	    }
@@ -424,10 +416,6 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 
 	case RawDataRole: // Send raw data to our item delegate (the PercentBarDelegate)
 	    {
-		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-		CHECK_PTR( item );
-		CHECK_MAGIC( item );
-
 		switch ( col )
 		{
 		    case NameCol:	      return item->name();
