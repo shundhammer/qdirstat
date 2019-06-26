@@ -102,6 +102,30 @@ namespace QDirStat
 	virtual int totalFiles() Q_DECL_OVERRIDE;
 
 	/**
+	 * Returns the total number of non-directory items in this subtree,
+	 * excluding this item.
+	 *
+	 * Reimplemented - inherited from FileInfo.
+	 **/
+	virtual int totalNonDirItems() Q_DECL_OVERRIDE;
+
+	/**
+	 * Returns the total number of ignored (non-directory!) items in this
+	 * subtree, excluding this item.
+	 *
+	 * Reimplemented - inherited from FileInfo.
+	 **/
+	virtual int totalIgnoredItems() Q_DECL_OVERRIDE;
+
+	/**
+	 * Returns the total number of not ignored (non-directory!) items in
+	 * this subtree, excluding this item.
+	 *
+	 * Reimplemented - inherited from FileInfo.
+	 **/
+	virtual int totalUnignoredItems() Q_DECL_OVERRIDE;
+
+	/**
 	 * Returns the total number of direct children of this directory.
 	 *
 	 * If this directory has a dot entry, the dot entry itself is counted,
@@ -428,18 +452,6 @@ namespace QDirStat
 	 **/
 	virtual void checkIgnored();
 
-	/**
-	 * Check if this item or its dot entry have any non-directory children
-	 * that are ignored.
-	 **/
-	bool hasIgnoredDirectChildren();
-
-	/**
-	 * Check if this item or its dot entry have any non-directory children
-	 * that are not ignored.
-	 **/
-	bool hasUnignoredDirectChildren();
-
 
     protected:
 
@@ -491,6 +503,8 @@ namespace QDirStat
 	int		_totalItems;
 	int		_totalSubDirs;
 	int		_totalFiles;
+	int		_totalIgnoredItems;
+	int		_totalUnignoredItems;
 	int		_directChildrenCount;
 	time_t		_latestMtime;
 

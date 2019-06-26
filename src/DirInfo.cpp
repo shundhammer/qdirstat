@@ -89,6 +89,8 @@ void DirInfo::init()
     _totalItems		 = 0;
     _totalSubDirs	 = 0;
     _totalFiles		 = 0;
+    _totalIgnoredItems	 = 0;
+    _totalUnignoredItems = 0;
     _directChildrenCount = 0;
     _latestMtime	 = _mtime;
     _readState		 = DirQueued;
@@ -190,6 +192,8 @@ void DirInfo::recalc()
     _totalItems		 = 0;
     _totalSubDirs	 = 0;
     _totalFiles		 = 0;
+    _totalIgnoredItems	 = 0;
+    _totalUnignoredItems = 0;
     _directChildrenCount = 0;
     _latestMtime	 = _mtime;
 
@@ -198,17 +202,25 @@ void DirInfo::recalc()
     while ( *it )
     {
 	_directChildrenCount++;
-	_totalSize    += (*it)->totalSize();
-	_totalBlocks  += (*it)->totalBlocks();
-	_totalItems   += (*it)->totalItems() + 1;
-	_totalSubDirs += (*it)->totalSubDirs();
-	_totalFiles   += (*it)->totalFiles();
+	_totalSize	     += (*it)->totalSize();
+	_totalBlocks	     += (*it)->totalBlocks();
+	_totalItems	     += (*it)->totalItems() + 1;
+	_totalSubDirs	     += (*it)->totalSubDirs();
+	_totalFiles	     += (*it)->totalFiles();
+	_totalIgnoredItems   += (*it)->totalIgnoredItems();
+	_totalUnignoredItems += (*it)->totalUnignoredItems();
 
 	if ( (*it)->isDir() )
 	    _totalSubDirs++;
 
 	if ( (*it)->isFile() )
 	    _totalFiles++;
+
+	if ( (*it)->isIgnored() && ! (*it)->isDirInfo() )
+	    _totalIgnoredItems++;
+
+	if ( ! (*it)->isIgnored() && ! (*it)->isDirInfo() )
+	    _totalUnignoredItems++;
 
 	time_t childLatestMtime = (*it)->latestMtime();
 
@@ -217,6 +229,9 @@ void DirInfo::recalc()
 
 	++it;
     }
+
+    if ( _attic )
+	_totalIgnoredItems += _attic->totalIgnoredItems();
 
     _summaryDirty = false;
 }
@@ -270,6 +285,33 @@ int DirInfo::totalFiles()
 	recalc();
 
     return _totalFiles;
+}
+
+
+int DirInfo::totalNonDirItems()
+{
+    if ( _summaryDirty )
+	recalc();
+
+    return _totalItems - _totalSubDirs;
+}
+
+
+int DirInfo::totalIgnoredItems()
+{
+    if ( _summaryDirty )
+	recalc();
+
+    return _totalIgnoredItems;
+}
+
+
+int DirInfo::totalUnignoredItems()
+{
+    if ( _summaryDirty )
+	recalc();
+
+    return _totalUnignoredItems;
 }
 
 
@@ -410,10 +452,21 @@ void DirInfo::moveToAttic( FileInfo * newChild )
 
 void DirInfo::childAdded( FileInfo * newChild )
 {
-    if ( ! isAttic() )
+    if ( newChild->isIgnored() )
     {
-        if ( newChild->isIgnored() && ! isIgnored() )
-	return;
+	if ( ! newChild->isDir() )
+	_totalIgnoredItems++;
+
+	// Add ignored items only to all the totals if this directory is also
+	// ignored or if this is the attic.
+
+	if ( ! _isIgnored &&  ! isAttic() )
+	    return;
+    }
+    else
+    {
+	if ( ! newChild->isDir() )
+	    _totalUnignoredItems++;
     }
 
     if ( ! _summaryDirty )
@@ -639,24 +692,24 @@ void DirInfo::cleanupDotEntries()
 	}
 
 
-        // Reparent the dot entry's attic's children to this item's attic
+	// Reparent the dot entry's attic's children to this item's attic
 
-        if ( _dotEntry->hasAtticChildren() )
-        {
-            ensureAttic();
+	if ( _dotEntry->hasAtticChildren() )
+	{
+	    ensureAttic();
 
-            child = _dotEntry->attic()->firstChild();
-            _dotEntry->attic()->setFirstChild( 0 );
-            _attic->setFirstChild( child );
+	    child = _dotEntry->attic()->firstChild();
+	    _dotEntry->attic()->setFirstChild( 0 );
+	    _attic->setFirstChild( child );
 
-            while ( child )
-            {
-                child->setParent( _attic );
-                child = child->next();
-            }
+	    while ( child )
+	    {
+		child->setParent( _attic );
+		child = child->next();
+	    }
 
-            _attic->recalc();
-        }
+	    _attic->recalc();
+	}
     }
 
 
@@ -682,107 +735,43 @@ void DirInfo::cleanupDotEntries()
 void DirInfo::cleanupAttics()
 {
     if ( _dotEntry )
-        _dotEntry->cleanupAttics();
+	_dotEntry->cleanupAttics();
 
     if ( _attic )
     {
-        _attic->finalizeLocal();
+	_attic->finalizeLocal();
 
-        if ( ! _attic->firstChild() && ! _attic->dotEntry() )
-        {
-            delete _attic;
-            _attic = 0;
+	if ( ! _attic->firstChild() && ! _attic->dotEntry() )
+	{
+	    delete _attic;
+	    _attic = 0;
 
-            if ( _lastIncludeAttic )
-                dropSortCache();
-        }
+	    if ( _lastIncludeAttic )
+		dropSortCache();
+	}
     }
 }
 
 
 void DirInfo::checkIgnored()
 {
-    logDebug() << "Checking " << this << endl;
-
     if ( _dotEntry )
-        _dotEntry->checkIgnored();
+	_dotEntry->checkIgnored();
 
-    if ( hasUnignoredDirectChildren() )
-    {
-        logDebug() << "Found unignored direct children in " << this << endl;
-        _isIgnored = false;
-        return;
-    }
+    recalc();
 
-    _isIgnored = hasIgnoredDirectChildren();
+    logDebug() << this
+	       << " : totalIgnoredItems: " << totalIgnoredItems()
+	       << " totalUnignoredItems: " << totalUnignoredItems()
+	       << endl;
 
-    if ( _isIgnored )
-        logDebug() << "Have populated attic " << this << endl;
-    else
-        logDebug() << "No or empty attic " << this << endl;
+    // Cascade the 'ignored' status up the tree:
+    //
+    // Display all directories as ignored that have any ignored items, but no
+    // items that are not ignored.
 
-    FileInfo * child = firstChild();
-
-    while ( child )
-    {
-        if ( child->isDirInfo() )
-            child->toDirInfo()->checkIgnored();
-
-        if ( ! child->isIgnored() && child->hasChildren() )
-        {
-            logDebug() << "Child is not ignored: " << child << endl;
-            _isIgnored = false;
-            return;
-        }
-
-        child = child->next();
-    }
-
-    return;
-}
-
-
-bool DirInfo::hasIgnoredDirectChildren()
-{
-    if ( _attic && _attic->hasChildren() )
-        return true;
-
-    if ( _dotEntry && _dotEntry->attic() && _dotEntry->attic()->hasChildren() )
-        return true;
-
-    FileInfo * child = firstChild();
-
-    while ( child )
-    {
-        if ( ! child->isDirInfo() && child->isIgnored() )
-            return true;
-
-        child = child->next();
-    }
-
-    if ( _dotEntry )
-        return _dotEntry->hasIgnoredDirectChildren();
-
-    return false;
-}
-
-
-bool DirInfo::hasUnignoredDirectChildren()
-{
-    FileInfo * child = firstChild();
-
-    while ( child )
-    {
-        if ( ! child->isDirInfo() && ! child->isIgnored() )
-            return true;
-
-        child = child->next();
-    }
-
-    if ( _dotEntry )
-        return _dotEntry->hasUnignoredDirectChildren();
-
-    return false;
+    if ( totalIgnoredItems() > 0 && totalUnignoredItems() == 0 )
+	_isIgnored = true;
 }
 
 

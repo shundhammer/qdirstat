@@ -655,7 +655,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     if ( col == _readJobsCol && item->isBusy() )
 	return tr( "[%1 Read Jobs]" ).arg( item->pendingReadJobs() );
 
-    bool limitedInfo = item->isDotEntry() || item->readState() == DirCached || item->isPkgInfo();
+    bool limitedInfo = item->isPseudoDir() || item->readState() == DirCached || item->isPkgInfo();
 
     if ( item->isAttic() && col == PercentNumCol )
         return QVariant();
@@ -682,7 +682,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	    case TotalItemsCol:	  return prefix + QString( "%1" ).arg( item->totalItems() );
 	    case TotalFilesCol:	  return prefix + QString( "%1" ).arg( item->totalFiles() );
 	    case TotalSubDirsCol:
-		if ( item->isDotEntry() )
+		if ( item->isPseudoDir() )
 		    return QVariant();
 		else
 		    return prefix + QString( "%1" ).arg( item->totalSubDirs() );

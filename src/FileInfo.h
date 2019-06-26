@@ -137,11 +137,11 @@ namespace QDirStat
 	 **/
 	QString name() const { return _name; }
 
-        /**
-         * Returns the base name of this object, i.e. the last path component,
-         * even if this is a toplevel item.
-         **/
-        QString baseName() const;
+	/**
+	 * Returns the base name of this object, i.e. the last path component,
+	 * even if this is a toplevel item.
+	 **/
+	QString baseName() const;
 
 	/**
 	 * Returns the full URL of this object with full path.
@@ -151,25 +151,25 @@ namespace QDirStat
 	 **/
 	virtual QString url() const;
 
-        /**
-         * Returns the full path of this object. Unlike url(), this never has a
-         * protocol prefix or a part that identifies the package this belongs
-         * to. This is the path that can be used to find this object in the
-         * filesystem.
-         *
-         * url()  might return  "Pkg:/chromium-browser/usr/lib/chromium/foo.z"
-         * path() returns just  "/usr/lib/chromium/foo.z"
-         *
-         * Like url(), this is somewhat expensive since it recurses up the
-         * tree, but it stops when a PkgInfo node is found there.
-         **/
-        virtual QString path() const;
+	/**
+	 * Returns the full path of this object. Unlike url(), this never has a
+	 * protocol prefix or a part that identifies the package this belongs
+	 * to. This is the path that can be used to find this object in the
+	 * filesystem.
+	 *
+	 * url()  might return	"Pkg:/chromium-browser/usr/lib/chromium/foo.z"
+	 * path() returns just	"/usr/lib/chromium/foo.z"
+	 *
+	 * Like url(), this is somewhat expensive since it recurses up the
+	 * tree, but it stops when a PkgInfo node is found there.
+	 **/
+	virtual QString path() const;
 
 	/**
 	 * Very much like FileInfo::url(), but with "/<Files>" appended if this
 	 * is a dot entry. Useful for debugging.
-         *
-         * Notice: You can simply use the QTextStream operator<< to output
+	 *
+	 * Notice: You can simply use the QTextStream operator<< to output
 	 * exactly this:
 	 *
 	 * logDebug() << "Found fileInfo " << info << endl;
@@ -186,8 +186,8 @@ namespace QDirStat
 	 * The file permissions and object type as returned by lstat().
 	 * You might want to use the repective convenience methods instead:
 	 * isDir(), isFile(), ...
-         *
-         * See also symbolicPermissions(), octalPermissions()
+	 *
+	 * See also symbolicPermissions(), octalPermissions()
 	 **/
 	mode_t mode() const { return _mode;   }
 
@@ -213,13 +213,13 @@ namespace QDirStat
 	 **/
 	QString userName() const;
 
-        /**
-         * Return 'true' if this FileInfo has a UID (user ID).
-         *
-         * It might not have that information e.g. if it was read from a cache
-         * file.
-         **/
-        bool hasUid() const;
+	/**
+	 * Return 'true' if this FileInfo has a UID (user ID).
+	 *
+	 * It might not have that information e.g. if it was read from a cache
+	 * file.
+	 **/
+	bool hasUid() const;
 
 	/**
 	 * Group ID of the owner.
@@ -237,25 +237,25 @@ namespace QDirStat
 	 **/
 	QString groupName() const;
 
-        /**
-         * Return 'true' if this FileInfo has a GID (group ID).
-         *
-         * It might not have that information e.g. if it was read from a cache
-         * file.
-         **/
-        bool hasGid() const;
+	/**
+	 * Return 'true' if this FileInfo has a GID (group ID).
+	 *
+	 * It might not have that information e.g. if it was read from a cache
+	 * file.
+	 **/
+	bool hasGid() const;
 
-        /**
-         * File permissions formatted like in "ls -l", i.e. "-rwxrwxrwx",
-         * "drwxrwxrwx"
-         **/
-        QString symbolicPermissions() const;
+	/**
+	 * File permissions formatted like in "ls -l", i.e. "-rwxrwxrwx",
+	 * "drwxrwxrwx"
+	 **/
+	QString symbolicPermissions() const;
 
-        /**
-         * File permissions formatted as octal number (like used by the "chmod"
-         * command, i.e. "0644"
-         **/
-        QString octalPermissions() const;
+	/**
+	 * File permissions formatted as octal number (like used by the "chmod"
+	 * command, i.e. "0644"
+	 **/
+	QString octalPermissions() const;
 
 	/**
 	 * The file size in bytes. This does not take unused space in the last
@@ -342,8 +342,30 @@ namespace QDirStat
 	virtual int totalFiles() { return 0; }
 
 	/**
-	 * Returns the total number of direct children of this item.
+	 * Returns the total number of non-directory items in this subtree,
+	 * excluding this item.
+	 * Derived classes that have children should overwrite this.
+	 **/
+	virtual int totalNonDirItems() { return 0; }
+
+	/**
+	 * Returns the total number of ignored (non-directory!) items in this
+	 * subtree, excluding this item.
+	 * Derived classes that have children should overwrite this.
+	 **/
+	virtual int totalIgnoredItems() { return 0; }
+
+	/**
+	 * Returns the total number of not ignored (non-directory!) items in
+	 * this subtree, excluding this item.
          *
+         * Derived classes that have children should overwrite this.
+	 **/
+	virtual int totalUnignoredItems() { return 0; }
+
+	/**
+	 * Returns the total number of direct children of this item.
+	 *
 	 * Derived classes that have children should overwrite this.
 	 **/
 	virtual int directChildrenCount() { return 0; }
@@ -524,12 +546,12 @@ namespace QDirStat
 	virtual void setDotEntry( FileInfo *newDotEntry )
 	    { Q_UNUSED( newDotEntry ); }
 
-        /**
-         * Return 'true' if this is a pseudo directory: A "dot entry" or an
-         * "attic".
-         **/
-        virtual bool isPseudoDir() const
-            { return isDotEntry() || isAttic(); }
+	/**
+	 * Return 'true' if this is a pseudo directory: A "dot entry" or an
+	 * "attic".
+	 **/
+	virtual bool isPseudoDir() const
+	    { return isDotEntry() || isAttic(); }
 
 	/**
 	 * Returns true if this is a "Dot Entry".
@@ -565,7 +587,7 @@ namespace QDirStat
 	/**
 	 * (Translated) user-visible string for the "Attic" ("<Ignored>").
 	 **/
-        static QString atticName();
+	static QString atticName();
 
 	/**
 	 * Returns the tree level (depth) of this item.
@@ -622,13 +644,13 @@ namespace QDirStat
 	 **/
 	virtual bool isDirInfo() const { return false; }
 
-        /**
-         * Returns true if this is a PkgInfo object.
-         *
+	/**
+	 * Returns true if this is a PkgInfo object.
+	 *
 	 * This default implementation always returns 'false'. Derived classes
 	 * (in particular, those derived from PkgInfo) should overwrite this.
-         **/
-        virtual bool isPkgInfo() const { return false; }
+	 **/
+	virtual bool isPkgInfo() const { return false; }
 
 	/**
 	 * Try to convert this to a DirInfo pointer. This returns null if this
@@ -652,7 +674,7 @@ namespace QDirStat
 	 * Try to convert this to a PkgInfo pointer. This returns null if this
 	 * is not a DirInfo.
 	 **/
-        PkgInfo * toPkgInfo();
+	PkgInfo * toPkgInfo();
 
 	/**
 	 * Returns true if this is a sparse file, i.e. if this file has
@@ -667,27 +689,27 @@ namespace QDirStat
 	 **/
 	bool isSparseFile() const { return _isSparseFile; }
 
-        /**
-         * Returns true if this FileInfo was read from a cache file.
-         **/
-        bool isCached() const;
+	/**
+	 * Returns true if this FileInfo was read from a cache file.
+	 **/
+	bool isCached() const;
 
-        /**
-         * Returns true if this FileInfo was ignored by some rule (e.g. in the
-         * "unpackaged files" view).
-         **/
-        bool isIgnored() const { return _isIgnored; }
+	/**
+	 * Returns true if this FileInfo was ignored by some rule (e.g. in the
+	 * "unpackaged files" view).
+	 **/
+	bool isIgnored() const { return _isIgnored; }
 
-        /**
-         * Set the "ignored" flag. Notice that this only sets the flag; it does
-         * not reparent the FileInfo or anything like that.
-         **/
-        void setIgnored( bool ignored ) { _isIgnored = ignored; }
+	/**
+	 * Set the "ignored" flag. Notice that this only sets the flag; it does
+	 * not reparent the FileInfo or anything like that.
+	 **/
+	void setIgnored( bool ignored ) { _isIgnored = ignored; }
 
-        /**
-         * Return the nearest PkgInfo parent or 0 if there is none.
-         **/
-        PkgInfo * pkgInfoParent() const;
+	/**
+	 * Return the nearest PkgInfo parent or 0 if there is none.
+	 **/
+	PkgInfo * pkgInfoParent() const;
 
 
 	//
@@ -758,7 +780,7 @@ namespace QDirStat
 	QString		_name;			// the file name (without path!)
 	bool		_isLocalFile  :1;	// flag: local or remote file?
 	bool		_isSparseFile :1;	// (cache) flag: sparse file (file with "holes")?
-        bool            _isIgnored    :1;       // flag: ignored by rule?
+	bool		_isIgnored    :1;	// flag: ignored by rule?
 	dev_t		_device;		// device this object resides on
 	mode_t		_mode;			// file permissions + object type
 	nlink_t		_links;			// number of links
@@ -817,7 +839,7 @@ namespace QDirStat
     /**
      * Format the mode (the permissions bits) returned from the stat() system
      * call in the commonly used formats, both symbolic and octal, e.g.
-     *     drwxr-xr-x  0755
+     *	   drwxr-xr-x  0755
      **/
     QString formatPermissions( mode_t mode );
 
@@ -830,7 +852,7 @@ namespace QDirStat
      * Return the mode (the permission bits) returned from stat() like the
      * "ls -l" shell command does, e.g.
      *
-     *     drwxr-xr-x
+     *	   drwxr-xr-x
      *
      * 'omitTypeForRegularFiles' specifies if the leading "-" should be omitted.
      **/
