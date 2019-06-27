@@ -43,8 +43,7 @@ DirInfo::DirInfo( const QString & filenameWithoutPath,
 		parent )
 {
     init();
-    _dotEntry = new DotEntry( tree, this );
-    CHECK_NEW( _dotEntry );
+    ensureDotEntry();
 
     _directChildrenCount++;
 }
@@ -64,8 +63,7 @@ DirInfo::DirInfo( DirTree *	  tree,
 		mtime )
 {
     init();
-    _dotEntry = new DotEntry( tree, this );
-    CHECK_NEW( _dotEntry );
+    ensureDotEntry();
 
     _directChildrenCount++;
 }
@@ -152,14 +150,39 @@ void DirInfo::reset()
     _pendingReadJobs = 0;
     _summaryDirty    = true;
 
-    _dotEntry = new DotEntry( _tree, this );
-    CHECK_NEW( _dotEntry );
+    ensureDotEntry();
 
     if ( _tree )
 	_tree->childAddedNotify( _dotEntry );
 
     recalc();
     dropSortCache();
+}
+
+
+DotEntry * DirInfo::ensureDotEntry()
+{
+    if ( ! _dotEntry )
+    {
+	// logDebug() << "Creating dot entry for " << this << endl;
+
+	_dotEntry = new DotEntry( _tree, this );
+	CHECK_NEW( _dotEntry );
+    }
+
+    return _dotEntry;
+}
+
+
+void DirInfo::deleteEmptyDotEntry()
+{
+    if ( ! _dotEntry->firstChild() && ! _dotEntry->hasAtticChildren() )
+    {
+	delete _dotEntry;
+	_dotEntry = 0;
+
+	countDirectChildren();
+    }
 }
 
 
@@ -383,17 +406,6 @@ bool DirInfo::isBusy()
 	return true;
 
     return false;
-}
-
-
-void DirInfo::setDotEntry( DotEntry * newDotEntry )
-{
-    if ( newDotEntry )
-	_dotEntry = newDotEntry;
-    else
-	_dotEntry = 0;
-
-    countDirectChildren();
 }
 
 
@@ -693,22 +705,15 @@ void DirInfo::cleanupDotEntries()
 	}
     }
 
-    // Delete dot entries without any children.
+    // Delete the dot entry if it is now empty.
     //
     // This also affects dot entries that were just disowned because they had
     // no siblings (i.e., there are no subdirectories on this level).
+    //
+    // Notice that this also checks if the dot entry's attic (if it has one) is
+    // empty, and that its attic is deleted along with the dot entry.
 
-    if ( ! _dotEntry->hasChildren() && ! _dotEntry->hasAtticChildren() )
-    {
-	// logDebug() << "Removing empty dot entry " << this << endl;
-
-	delete _dotEntry;
-	_dotEntry = 0;
-	_directChildrenCount = -1;
-    }
-
-    if ( _directChildrenCount < 0 )
-	countDirectChildren();
+    deleteEmptyDotEntry();
 }
 
 

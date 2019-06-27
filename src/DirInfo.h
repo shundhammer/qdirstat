@@ -238,7 +238,7 @@ namespace QDirStat
 	 * and the new child is not a directory, and the directory's attic
 	 * otherwise.
 	 **/
-	void moveToAttic( FileInfo * newChild );
+	virtual void moveToAttic( FileInfo * newChild );
 
 	/**
 	 * Get the "Dot Entry" for this node if there is one (or 0 otherwise):
@@ -251,9 +251,17 @@ namespace QDirStat
 	    { return _dotEntry; }
 
 	/**
-	 * Set a "Dot Entry". This makes sense for directories only.
+	 * Return the dot entry for this node. If it doesn't have one yet,
+	 * create it first.
 	 **/
-	virtual void setDotEntry( DotEntry * newDotEntry );
+	virtual DotEntry * ensureDotEntry();
+
+	/**
+	 * Delete the dot entry if it is empty, i.e. it does not have any
+	 * children or its attic (if it has one) is also empty. The dot entry's
+	 * attic is implicitly deleted along with it.
+	 **/
+	virtual void deleteEmptyDotEntry();
 
 	/**
 	 * Return the "Attic" entry for this node if there is one (or 0

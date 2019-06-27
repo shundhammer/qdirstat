@@ -289,7 +289,7 @@ void DirTree::deleteSubtree( FileInfo *subtree )
 		    // logDebug() << "Removing empty dot entry " << parent << endl;
 
 		    deletingChildNotify( parent );
-		    parent->parent()->setDotEntry( 0 );
+		    parent->parent()->deleteEmptyDotEntry();
 
 		    delete parent;
 		    parent = 0;

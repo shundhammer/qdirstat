@@ -49,14 +49,6 @@ namespace QDirStat
 	    { return 0; }
 
 	/**
-	 * Set a "Dot Entry". This reimplementation refuses to change the dot
-	 * entry pointer since a dot entry cannot have a dot entry itself.
-	 *
-	 * Reimplemented - inherited from DirInfo.
-	 **/
-	virtual void setDotEntry( DotEntry * newDotEntry ) Q_DECL_OVERRIDE;
-
-	/**
 	 * Check if this is a dot entry.
 	 *
 	 * Reimplemented - inherited from FileInfo.

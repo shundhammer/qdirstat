@@ -46,12 +46,6 @@ void DotEntry::reset()
 }
 
 
-void DotEntry::setDotEntry( DotEntry * newDotEntry )
-{
-    Q_UNUSED( newDotEntry );
-}
-
-
 void DotEntry::insertChild( FileInfo * newChild )
 {
     CHECK_PTR( newChild );
