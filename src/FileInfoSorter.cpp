@@ -24,6 +24,9 @@ bool FileInfoSorter::operator() ( FileInfo * a, FileInfo * b )
     {
 	case NameCol:
 	    {
+		// Sort ignored items last
+		if ( a->isIgnored() != b->isIgnored() ) return b->isIgnored();
+
 		// The dot entry (there can only be one) should always come last
 		if ( a->isDotEntry() ) return false;
 		if ( b->isDotEntry() ) return true;
@@ -32,7 +35,7 @@ bool FileInfoSorter::operator() ( FileInfo * a, FileInfo * b )
 
 	case PercentBarCol:	  return a->subtreePercent()  < b->subtreePercent();
 	case PercentNumCol:	  return a->subtreePercent()  < b->subtreePercent();
-	case SizeCol:             return a->totalSize()	      < b->totalSize();
+	case SizeCol:		  return a->totalSize()	      < b->totalSize();
 	case TotalItemsCol:	  return a->totalItems()      < b->totalItems();
 	case TotalFilesCol:	  return a->totalFiles()      < b->totalFiles();
 	case TotalSubDirsCol:	  return a->totalSubDirs()    < b->totalSubDirs();
