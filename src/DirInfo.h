@@ -453,6 +453,11 @@ namespace QDirStat
 	 **/
 	virtual void checkIgnored();
 
+	/**
+	 * Take all children from 'oldParent' and move them to this DirInfo.
+	 **/
+	virtual void takeAllChildren( DirInfo * oldParent );
+
 
     protected:
 

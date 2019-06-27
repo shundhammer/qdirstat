@@ -682,45 +682,16 @@ void DirInfo::cleanupDotEntries()
 
     if ( ! _firstChild && ! hasAtticChildren() )
     {
-	FileInfo * child = _dotEntry->firstChild();
-
-	if ( child )
-	{
-	    // logDebug() << "Reparenting children of solo dot entry " << this << endl;
-
-	    _firstChild = child;	    // Move the entire children chain here.
-	    _dotEntry->setFirstChild( 0 );  // _dotEntry will be deleted below.
-	    _directChildrenCount = -1;
-
-	    while ( child )
-	    {
-		child->setParent( this );
-		child = child->next();
-	    }
-	}
-
+	takeAllChildren( _dotEntry );
 
 	// Reparent the dot entry's attic's children to this item's attic
 
 	if ( _dotEntry->hasAtticChildren() )
 	{
 	    ensureAttic();
-
-	    child = _dotEntry->attic()->firstChild();
-	    _dotEntry->attic()->setFirstChild( 0 );
-	    _attic->setFirstChild( child );
-
-	    while ( child )
-	    {
-		child->setParent( _attic );
-		child = child->next();
-	    }
-
-	    _attic->recalc();
-	    _dotEntry->attic()->recalc();
+	    _attic->takeAllChildren( _dotEntry->attic() );
 	}
     }
-
 
     // Delete dot entries without any children.
     //
@@ -934,4 +905,34 @@ const DirInfo * DirInfo::findNearestMountPoint() const
 	dir = dir->parent();
 
     return dir;
+}
+
+
+void DirInfo::takeAllChildren( DirInfo * oldParent )
+{
+    FileInfo * child = oldParent->firstChild();
+
+    if ( child )
+    {
+	logDebug() << "Reparenting all children of " << oldParent << " to " << this << endl;
+
+	FileInfo * oldFirstChild = _firstChild;
+	_firstChild = child;
+	FileInfo * lastChild = child;
+
+	oldParent->setFirstChild( 0 );
+	oldParent->recalc();
+
+	_directChildrenCount = -1;
+	_summaryDirty	     = true;
+
+	while ( child )
+	{
+	    child->setParent( this );
+	    lastChild = child;
+	    child = child->next();
+	}
+
+	lastChild->setNext( oldFirstChild );
+    }
 }
