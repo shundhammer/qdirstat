@@ -19,6 +19,8 @@
 
 namespace QDirStat
 {
+    class ExistingDirCompleter;
+    
     /**
      * Dialog to let the user select parameters for showing unpackaged
      * files. This is very much like a "get existing directory" dialog with
@@ -67,6 +69,7 @@ namespace QDirStat
     protected:
 
         Ui::ShowUnpkgFilesDialog * _ui;
+        QPushButton *              _okButton;
 
     };  // class ShowUnpkgFilesDialog
 

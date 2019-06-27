@@ -31,8 +31,8 @@ SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
 	    AdaptiveTimer.cpp		\
 	    Attic.cpp			\
-	    BucketsTableModel.cpp	\
 	    BreadcrumbNavigator.cpp	\
+	    BucketsTableModel.cpp	\
 	    Cleanup.cpp			\
 	    CleanupCollection.cpp	\
 	    CleanupConfigPage.cpp	\
@@ -44,15 +44,17 @@ SOURCES	  = main.cpp			\
 	    DirReadJob.cpp		\
 	    DirSaver.cpp		\
 	    DirTree.cpp			\
-	    DirTreePkgFilter.cpp	\
 	    DirTreeCache.cpp		\
 	    DirTreeModel.cpp		\
+	    DirTreePkgFilter.cpp	\
 	    DirTreeView.cpp		\
 	    DotEntry.cpp		\
 	    DpkgPkgManager.cpp		\
 	    Exception.cpp		\
-	    ExcludeRulesConfigPage.cpp	\
 	    ExcludeRules.cpp		\
+	    ExcludeRulesConfigPage.cpp	\
+	    ExistingDirCompleter.cpp	\
+	    ExistingDirValidator.cpp	\
 	    FileDetailsView.cpp		\
 	    FileInfo.cpp		\
 	    FileInfoIterator.cpp	\
@@ -64,10 +66,10 @@ SOURCES	  = main.cpp			\
 	    FileTypeStatsWindow.cpp	\
 	    GeneralConfigPage.cpp	\
 	    HeaderTweaker.cpp		\
-	    HistogramView.cpp		\
 	    HistogramDraw.cpp		\
 	    HistogramItems.cpp		\
 	    HistogramOverflowPanel.cpp	\
+	    HistogramView.cpp		\
 	    ListEditor.cpp		\
 	    LocateFilesWindow.cpp	\
 	    Logger.cpp			\
@@ -96,8 +98,8 @@ SOURCES	  = main.cpp			\
 	    ShowUnpkgFilesDialog.cpp	\
 	    StdCleanup.cpp		\
 	    Subtree.cpp			\
-	    SystemFileChecker.cpp	\
 	    SysUtil.cpp			\
+	    SystemFileChecker.cpp	\
 	    Trash.cpp			\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
@@ -107,8 +109,8 @@ HEADERS	  =				\
 	    ActionManager.h		\
 	    AdaptiveTimer.h		\
 	    Attic.h			\
-	    BucketsTableModel.h		\
 	    BreadcrumbNavigator.h	\
+	    BucketsTableModel.h		\
 	    Cleanup.h			\
 	    CleanupCollection.h		\
 	    CleanupConfigPage.h		\
@@ -120,16 +122,18 @@ HEADERS	  =				\
 	    DirReadJob.h		\
 	    DirSaver.h			\
 	    DirTree.h			\
-	    DirTreeFilter.h		\
-	    DirTreePkgFilter.h		\
 	    DirTreeCache.h		\
+	    DirTreeFilter.h		\
 	    DirTreeModel.h		\
+	    DirTreePkgFilter.h		\
 	    DirTreeView.h		\
 	    DotEntry.h			\
 	    DpkgPkgManager.h		\
 	    Exception.h			\
 	    ExcludeRules.h		\
 	    ExcludeRulesConfigPage.h	\
+	    ExistingDirCompleter.h	\
+	    ExistingDirValidator.h	\
 	    FileDetailsView.h		\
 	    FileInfo.h			\
 	    FileInfoIterator.h		\
@@ -141,8 +145,8 @@ HEADERS	  =				\
 	    FileTypeStatsWindow.h	\
 	    GeneralConfigPage.h		\
 	    HeaderTweaker.h		\
-	    HistogramView.h		\
 	    HistogramItems.h		\
+	    HistogramView.h		\
 	    ListEditor.h		\
 	    ListMover.h			\
 	    LocateFilesWindow.h		\
@@ -152,8 +156,8 @@ HEADERS	  =				\
 	    MimeCategory.h		\
 	    MimeCategoryConfigPage.h	\
 	    MountPoints.h		\
-	    OutputWindow.h		\
 	    OpenPkgDialog.h		\
+	    OutputWindow.h		\
 	    PacManPkgManager.h		\
 	    PercentBar.h		\
 	    PkgFileListCache.h		\
@@ -174,8 +178,8 @@ HEADERS	  =				\
 	    SignalBlocker.h		\
 	    StdCleanup.h		\
 	    Subtree.h			\
-	    SystemFileChecker.h		\
 	    SysUtil.h			\
+	    SystemFileChecker.h		\
 	    Trash.h			\
 	    TreemapTile.h		\
 	    TreemapView.h		\

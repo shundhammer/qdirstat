@@ -7,7 +7,11 @@
  */
 
 
+#include <QPushButton>
+
 #include "ShowUnpkgFilesDialog.h"
+#include "ExistingDirCompleter.h"
+#include "ExistingDirValidator.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -21,6 +25,23 @@ ShowUnpkgFilesDialog::ShowUnpkgFilesDialog( QWidget * parent ):
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this );
+    
+    _okButton = _ui->buttonBox->button( QDialogButtonBox::Ok );
+    CHECK_PTR( _okButton );
+
+    QCompleter * completer = new ExistingDirCompleter( this );
+    CHECK_NEW( completer );
+
+    _ui->startingDirComboBox->setCompleter( completer );
+    
+    QValidator * validator = new ExistingDirValidator( this );
+    CHECK_NEW( validator );
+
+    _ui->startingDirComboBox->setValidator( validator );
+
+    connect( validator, SIGNAL( isOk      ( bool ) ),
+             _okButton, SLOT  ( setEnabled( bool ) ) );
+                                
 }
 
 
