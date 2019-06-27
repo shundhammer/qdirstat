@@ -236,11 +236,17 @@ namespace QDirStat
 	virtual void insertChild( FileInfo * newChild ) Q_DECL_OVERRIDE;
 
 	/**
-	 * Move a child to the attic. This is very much like insertChild(), but
+	 * Add a child to the attic. This is very much like insertChild(), but
 	 * it inserts the child into the appropriate attic instead (and sets
 	 * its 'ignored' flag: The dot entry's attic if there is a dot entry
 	 * and the new child is not a directory, and the directory's attic
 	 * otherwise.
+	 **/
+	virtual void addToAttic( FileInfo * newChild );
+
+	/**
+	 * Move a child to the attic, i.e. remove it from the normal children
+	 * and move it to the attic instead.
 	 **/
 	virtual void moveToAttic( FileInfo * newChild );
 
@@ -457,7 +463,6 @@ namespace QDirStat
 	virtual bool isDirInfo() const Q_DECL_OVERRIDE
 	    { return true; }
 
-
 	/**
 	 * Count the direct children unconditionally and update
 	 * _directChildrenCount.
@@ -481,9 +486,6 @@ namespace QDirStat
 	 **/
 	virtual void takeAllChildren( DirInfo * oldParent );
 
-
-    protected:
-
 	/**
 	 * Recursively recalculate the summary fields when they are dirty.
 	 *
@@ -491,6 +493,9 @@ namespace QDirStat
 	 * recursively be traversed.
 	 **/
 	void recalc();
+
+
+    protected:
 
 	/**
 	 * Clean up unneeded / undesired dot entries:

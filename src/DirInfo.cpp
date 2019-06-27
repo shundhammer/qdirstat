@@ -457,7 +457,14 @@ void DirInfo::insertChild( FileInfo * newChild )
 }
 
 
-void DirInfo::moveToAttic( FileInfo * newChild )
+void DirInfo::moveToAttic( FileInfo * child )
+{
+    unlinkChild( child );
+    addToAttic( child );
+}
+
+
+void DirInfo::addToAttic( FileInfo * newChild )
 {
     CHECK_PTR( newChild );
 
@@ -782,7 +789,7 @@ void DirInfo::ignoreEmptySubDirs()
 	{
 	    if ( (*it)->totalUnignoredItems() == 0 )
 	    {
-		logDebug() << "Ignoring empty subdir " << (*it) << endl;
+		// logDebug() << "Ignoring empty subdir " << (*it) << endl;
 		(*it)->setIgnored( true );
 	    }
 	}

@@ -253,10 +253,10 @@ void LocalDirReadJob::startReading()
 		    FileInfo * child = new FileInfo( entryName, &statInfo, _tree, _dir );
 		    CHECK_NEW( child );
 
-		    if ( ignore( entryName ) )
+		    if ( checkIgnoreFilters( entryName ) )
 		    {
 			// logDebug() << "Ignoring " << child << endl;
-			_dir->moveToAttic( child );
+			_dir->addToAttic( child );
 		    }
 		    else
 			_dir->insertChild( child );
@@ -371,12 +371,12 @@ bool LocalDirReadJob::matchesExcludeRule( const QString & entryName ) const
 }
 
 
-bool LocalDirReadJob::ignore( const QString & entryName ) const
+bool LocalDirReadJob::checkIgnoreFilters( const QString & entryName ) const
 {
     if ( ! _tree->hasFilters() )
 	return false;
 
-    return _tree->ignore( fullName( entryName ) );
+    return _tree->checkIgnoreFilters( fullName( entryName ) );
 }
 
 

@@ -14,6 +14,8 @@
 #include "DirTreeCache.h"
 #include "DirTreeFilter.h"
 #include "DotEntry.h"
+#include "Attic.h"
+#include "FileInfoIterator.h"
 #include "FileInfoSet.h"
 #include "ExcludeRules.h"
 #include "PkgReader.h"
@@ -141,6 +143,7 @@ void DirTree::startReading( const QString & rawUrl )
 	}
 	else
 	{
+	    finalizeTree();
 	    _isBusy = false;
 	    emit readJobFinished( _root );
 	    emit finished();
@@ -235,8 +238,15 @@ void DirTree::abortReading()
 }
 
 
+void DirTree::finalizeTree()
+{
+    moveIgnoredToAttic();
+}
+
+
 void DirTree::slotFinished()
 {
+    finalizeTree();
     _isBusy = false;
     emit finished();
 }
@@ -371,6 +381,7 @@ void DirTree::sendStartingReading()
 
 void DirTree::sendFinished()
 {
+    finalizeTree();
     _isBusy = false;
     emit finished();
 }
@@ -480,7 +491,7 @@ void DirTree::clearFilters()
 }
 
 
-bool DirTree::ignore( const QString & path )
+bool DirTree::checkIgnoreFilters( const QString & path )
 {
     foreach ( DirTreeFilter * filter, _filters )
     {
@@ -489,6 +500,76 @@ bool DirTree::ignore( const QString & path )
     }
 
     return false;
+}
+
+
+void DirTree::moveIgnoredToAttic()
+{
+    moveIgnoredToAttic( _root );
+}
+
+
+void DirTree::moveIgnoredToAttic( DirInfo * dir )
+{
+    if ( dir->totalIgnoredItems() == 0 )
+	return;
+
+    logDebug() << dir << endl;
+
+    // Not using FileInfoIterator because we don't want to iterate over the dot
+    // entry as well, just the normal children.
+
+    FileInfo * child = dir->firstChild();
+    FileInfoList ignoredChildren;
+
+    while ( child )
+    {
+	if ( child->isIgnored() )
+	{
+            // Don't move the child right here, otherwise the iteration breaks
+            ignoredChildren << child;
+	}
+	else
+	{
+	    if ( dir->isDirInfo() )
+		moveIgnoredToAttic( child->toDirInfo() );
+	}
+
+	child = child->next();
+    }
+
+
+    foreach ( FileInfo * child, ignoredChildren )
+    {
+        logDebug() << "Moving ignored " << child << " to attic" << endl;
+        dir->moveToAttic( child );
+
+        if ( child->isDirInfo() )
+            unatticAll( child->toDirInfo() );
+    }
+
+    if ( ! ignoredChildren.isEmpty() )
+	dir->recalc();
+}
+
+
+void DirTree::unatticAll( DirInfo * dir )
+{
+    if ( dir->attic() )
+    {
+	// logDebug() << "Moving all attic children to the normal children list for " << dir << endl;
+	dir->takeAllChildren( dir->attic() );
+    }
+
+    FileInfoIterator it( dir );
+
+    while ( *it )
+    {
+	if ( (*it)->isDirInfo() )
+	    unatticAll( (*it)->toDirInfo() );
+
+	++it;
+    }
 }
 
 

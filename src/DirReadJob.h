@@ -268,7 +268,7 @@ namespace QDirStat
 	/**
 	 * Return 'true' if 'entryName' should be ignored.
 	 **/
-	bool ignore( const QString & entryName ) const;
+	bool checkIgnoreFilters( const QString & entryName ) const;
 
 	/**
 	 * Read a cache file that was picked up along the way:

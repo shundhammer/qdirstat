@@ -111,6 +111,11 @@ namespace QDirStat
 	 **/
 	void clearSubtree( DirInfo * subtree );
 
+	/**
+	 * Finalize the complete tree after all read jobs are done.
+	 **/
+	void finalizeTree();
+
 
     public:
 
@@ -122,7 +127,7 @@ namespace QDirStat
 
 	/**
 	 * Return the root item of this tree. Notice that this is a pseudo root
-	 * that doesn not really correspond to a filesystem object.
+	 * that does not really correspond to a filesystem object.
 	 **/
 	DirInfo * root() const { return _root; }
 
@@ -326,12 +331,18 @@ namespace QDirStat
 	 * file system object to be ignored during directory reading, 'false'
 	 * if not.
 	 **/
-	bool ignore( const QString & path );
+	bool checkIgnoreFilters( const QString & path );
 
 	/**
 	 * Return 'true' if there is any filter, 'false' if not.
 	 **/
 	bool hasFilters() const { return ! _filters.isEmpty(); }
+
+	/**
+	 * Recurse through the complete tree and move any ignored subtrees
+	 * to the attic on the same level.
+	 **/
+	void moveIgnoredToAttic();
 
 
     signals:
@@ -432,6 +443,21 @@ namespace QDirStat
 
 
     protected:
+
+	/**
+	 * Recurse through the tree from 'dir' on and move any ignored items to
+	 * the attic on the same level.
+	 **/
+	void moveIgnoredToAttic( DirInfo * dir );
+
+	/**
+	 * Move all items from the attic to the normal children list.
+	 **/
+	void unatticAll( DirInfo * dir );
+
+
+
+	// Data members
 
 	DirInfo *		_root;
 	DirReadJobQueue		_jobQueue;
