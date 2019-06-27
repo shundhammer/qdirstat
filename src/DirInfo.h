@@ -54,8 +54,8 @@ namespace QDirStat
 
 	/**
 	 * Default constructor.
-         *
-         * This is the only constructor that will not create a dot entry
+	 *
+	 * This is the only constructor that will not create a dot entry
 	 * immediately. If that is desired, you can always use ensureDotEntry()
 	 * later.
 	 **/
@@ -285,6 +285,11 @@ namespace QDirStat
 	virtual Attic * ensureAttic();
 
 	/**
+	 * Delete the attic if it is empty.
+	 **/
+	virtual void deleteEmptyAttic();
+
+	/**
 	 * Return 'true' if there is an attic and it has any children.
 	 **/
 	bool hasAtticChildren() const;
@@ -464,6 +469,12 @@ namespace QDirStat
 	 * accordingly.
 	 **/
 	virtual void checkIgnored();
+
+	/**
+	 * Set any empty subdir children to ignored. This affects only direct
+	 * children.
+	 **/
+	virtual void ignoreEmptySubDirs();
 
 	/**
 	 * Take all children from 'oldParent' and move them to this DirInfo.

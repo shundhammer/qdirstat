@@ -200,6 +200,16 @@ Attic * DirInfo::ensureAttic()
 }
 
 
+void DirInfo::deleteEmptyAttic()
+{
+    if ( _attic && ! _attic->firstChild() )
+    {
+	delete _attic;
+	_attic = 0;
+    }
+}
+
+
 bool DirInfo::hasAtticChildren() const
 {
     return _attic && _attic->hasChildren();
@@ -754,8 +764,31 @@ void DirInfo::checkIgnored()
 
     _isIgnored = ( totalIgnoredItems() > 0 && totalUnignoredItems() == 0 );
 
+    if ( _isIgnored )
+	ignoreEmptySubDirs();
+
     if ( ! isPseudoDir() && _parent )
 	_parent->checkIgnored();
+}
+
+
+void DirInfo::ignoreEmptySubDirs()
+{
+    FileInfoIterator it( this );
+
+    while ( *it )
+    {
+	if ( ! (*it)->isIgnored() && (*it)->isDirInfo() )
+	{
+	    if ( (*it)->totalUnignoredItems() == 0 )
+	    {
+		logDebug() << "Ignoring empty subdir " << (*it) << endl;
+		(*it)->setIgnored( true );
+	    }
+	}
+
+	++it;
+    }
 }
 
 
