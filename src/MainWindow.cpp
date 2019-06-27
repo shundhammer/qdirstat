@@ -739,7 +739,27 @@ void MainWindow::askShowUnpkgFiles()
 
 	// Start reading the directory
 
-	_dirTreeModel->openUrl( dir );
+        try
+        {
+            _dirTreeModel->openUrl( dir );
+            updateWindowTitle( _dirTreeModel->tree()->url() );
+        }
+        catch ( const SysCallFailedException & ex )
+        {
+            CAUGHT( ex );
+            updateWindowTitle( "" );
+            _dirTreeModel->tree()->sendFinished();
+
+            QMessageBox errorPopup( QMessageBox::Warning,	// icon
+                                    tr( "Error" ),		// title
+                                    tr( "Could not open directory %1" ).arg( ex.resourceName() ), // text
+                                    QMessageBox::Ok,	// buttons
+                                    this );			// parent
+            errorPopup.setDetailedText( ex.what() );
+            errorPopup.exec();
+        }
+
+        updateActions();
     }
 }
 

@@ -41,7 +41,6 @@ ShowUnpkgFilesDialog::ShowUnpkgFilesDialog( QWidget * parent ):
 
     connect( validator, SIGNAL( isOk      ( bool ) ),
              _okButton, SLOT  ( setEnabled( bool ) ) );
-                                
 }
 
 
