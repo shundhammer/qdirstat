@@ -563,6 +563,7 @@ void DirTree::unatticAll( DirInfo * dir )
 	// logDebug() << "Moving all attic children to the normal children list for " << dir << endl;
 	dir->takeAllChildren( dir->attic() );
 	dir->deleteEmptyAttic();
+        dir->recalc();
     }
 
     FileInfoIterator it( dir );
