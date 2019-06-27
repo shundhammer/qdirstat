@@ -65,7 +65,24 @@ namespace QDirStat
          **/
         QStringList excludeDirs() const;
 
+        /**
+         * Return the standard exclude directories.
+         **/
+        static QStringList defaultExcludeDirs();
 
+    public slots:
+
+        /**
+         * Read settings from the config file
+         **/
+        void readSettings();
+        
+        /**
+         * Write settings to the config file
+         **/
+        void writeSettings();
+
+        
     protected:
 
         Ui::ShowUnpkgFilesDialog * _ui;

@@ -12,6 +12,7 @@
 #include "ShowUnpkgFilesDialog.h"
 #include "ExistingDirCompleter.h"
 #include "ExistingDirValidator.h"
+#include "Settings.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -41,6 +42,11 @@ ShowUnpkgFilesDialog::ShowUnpkgFilesDialog( QWidget * parent ):
 
     connect( validator, SIGNAL( isOk      ( bool ) ),
              _okButton, SLOT  ( setEnabled( bool ) ) );
+
+    connect( this, SIGNAL( accepted()      ),
+             this, SLOT  ( writeSettings() ) );
+
+    readSettings();
 }
 
 
@@ -76,3 +82,41 @@ QStringList ShowUnpkgFilesDialog::excludeDirs() const
     return dirs;
 }
 
+
+QStringList ShowUnpkgFilesDialog::defaultExcludeDirs()
+{
+    return QStringList()
+        << "/home"
+        << "/root"
+        << "/tmp"
+        << "/var"
+        << "/usr/lib/sysimage/rpm";
+}
+
+
+void ShowUnpkgFilesDialog::readSettings()
+{
+    logDebug() << endl;
+
+    QDirStat::Settings settings;
+    settings.beginGroup( "ShowUnkpgFilesDialog" );
+
+    QStringList excludeDirs =
+        settings.value( "ExcludeDirs", defaultExcludeDirs() ).toStringList();
+    
+    settings.endGroup();
+    
+    _ui->excludeDirsTextEdit->setPlainText( excludeDirs.join( "\n" ) );
+}
+
+
+void ShowUnpkgFilesDialog::writeSettings()
+{
+    logDebug() << endl;
+
+    QDirStat::Settings settings;
+    
+    settings.beginGroup( "ShowUnkpgFilesDialog" );
+    settings.setValue( "ExcludeDirs", excludeDirs() );
+    settings.endGroup();
+}

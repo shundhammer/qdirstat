@@ -31,7 +31,6 @@ void usage( const QStringList & argList )
 	 << "\n"
 	 << "  " << progName << " [--slow-update|-s] [<directory-name>]\n"
 	 << "  " << progName << " pkg:/pkgpattern\n"
-	 << "  " << progName << " unpkg:/dir\n"
 	 << "  " << progName << " --dont-ask|-d\n"
 	 << "  " << progName << " --cache|-c <cache-file-name>\n"
 	 << "  " << progName << " --help|-h\n"
