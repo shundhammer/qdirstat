@@ -42,8 +42,8 @@ namespace QDirStat
 		 DirInfo       * parent = 0 );
 
 	/**
-	 * Constructor from the bare necessary fields
-	 * for use from a cache file reader
+	 * Constructor from the bare necessary fields for use from a cache file
+	 * reader.
 	 **/
 	DirInfo( DirTree *	 tree,
 		 DirInfo *	 parent,
@@ -53,7 +53,11 @@ namespace QDirStat
 		 time_t		 mtime );
 
 	/**
-	 * Default constructor
+	 * Default constructor.
+         *
+         * This is the only constructor that will not create a dot entry
+	 * immediately. If that is desired, you can always use ensureDotEntry()
+	 * later.
 	 **/
 	DirInfo( DirTree * tree,
 		 DirInfo * parent = 0 );

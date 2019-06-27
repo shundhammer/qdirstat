@@ -22,15 +22,12 @@ Attic::Attic( DirTree * tree,
 {
     _name      = atticName();
     _isIgnored = true;
-
-    delete _dotEntry;
-    _dotEntry = 0;
 }
 
 
 Attic::~Attic()
 {
-
+    // NOP
 }
 
 
@@ -51,5 +48,5 @@ bool Attic::hasChildren() const
 
 void Attic::checkIgnored()
 {
-
+    // NOP
 }
