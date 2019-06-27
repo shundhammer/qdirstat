@@ -919,7 +919,7 @@ void DirInfo::takeAllChildren( DirInfo * oldParent )
 
     if ( child )
     {
-	logDebug() << "Reparenting all children of " << oldParent << " to " << this << endl;
+	// logDebug() << "Reparenting all children of " << oldParent << " to " << this << endl;
 
 	FileInfo * oldFirstChild = _firstChild;
 	_firstChild = child;
