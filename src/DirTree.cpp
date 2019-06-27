@@ -514,8 +514,6 @@ void DirTree::moveIgnoredToAttic( DirInfo * dir )
     if ( dir->totalIgnoredItems() == 0 )
 	return;
 
-    logDebug() << dir << endl;
-
     // Not using FileInfoIterator because we don't want to iterate over the dot
     // entry as well, just the normal children.
 
@@ -526,12 +524,12 @@ void DirTree::moveIgnoredToAttic( DirInfo * dir )
     {
 	if ( child->isIgnored() )
 	{
-            // Don't move the child right here, otherwise the iteration breaks
-            ignoredChildren << child;
+	    // Don't move the child right here, otherwise the iteration breaks
+	    ignoredChildren << child;
 	}
 	else
 	{
-	    if ( dir->isDirInfo() )
+	    if ( child->isDirInfo() )
 		moveIgnoredToAttic( child->toDirInfo() );
 	}
 
@@ -541,15 +539,20 @@ void DirTree::moveIgnoredToAttic( DirInfo * dir )
 
     foreach ( FileInfo * child, ignoredChildren )
     {
-        logDebug() << "Moving ignored " << child << " to attic" << endl;
-        dir->moveToAttic( child );
+	// logDebug() << "Moving ignored " << child << " to attic" << endl;
+	dir->moveToAttic( child );
 
-        if ( child->isDirInfo() )
-            unatticAll( child->toDirInfo() );
+	if ( child->isDirInfo() )
+	    unatticAll( child->toDirInfo() );
     }
 
     if ( ! ignoredChildren.isEmpty() )
+    {
 	dir->recalc();
+
+	if ( dir->attic() )
+	    dir->attic()->recalc();
+    }
 }
 
 
@@ -559,6 +562,7 @@ void DirTree::unatticAll( DirInfo * dir )
     {
 	// logDebug() << "Moving all attic children to the normal children list for " << dir << endl;
 	dir->takeAllChildren( dir->attic() );
+	dir->deleteEmptyAttic();
     }
 
     FileInfoIterator it( dir );

@@ -599,7 +599,7 @@ void DirInfo::unlinkChild( FileInfo * deletedChild )
 
     if ( deletedChild == _firstChild )
     {
-	logDebug() << "Unlinking first child " << deletedChild << endl;
+	// logDebug() << "Unlinking first child " << deletedChild << endl;
 	_firstChild = deletedChild->next();
 	return;
     }
@@ -610,7 +610,7 @@ void DirInfo::unlinkChild( FileInfo * deletedChild )
     {
 	if ( child->next() == deletedChild )
 	{
-	    logDebug() << "Unlinking " << deletedChild << endl;
+	    // logDebug() << "Unlinking " << deletedChild << endl;
 	    child->setNext( deletedChild->next() );
 
 	    return;
