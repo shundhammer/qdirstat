@@ -128,7 +128,14 @@ QString SysUtil::runCommand( const QString &	 command,
     }
 
     if ( logOutput || ( process.exitCode() != 0 && ! ignoreErrCode ) )
-	logDebug() << "Output: \n" << output << endl;
+    {
+        QString logOutput = output.trimmed();
+
+        if ( logOutput.contains( '\n' ) )
+            logDebug() << "Output: \n" << output << endl;
+        else
+            logDebug() << "Output: \"" << logOutput << "\"" << endl;
+    }
 
     return output;
 }
