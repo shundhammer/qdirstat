@@ -240,7 +240,11 @@ void DirTree::abortReading()
 
 void DirTree::finalizeTree()
 {
-    moveIgnoredToAttic();
+    if ( _root && _root->totalIgnoredItems() > 0 )
+    {
+	ignoreEmptyDirs( _root );
+	moveIgnoredToAttic( _root );
+    }
 }
 
 
@@ -503,15 +507,11 @@ bool DirTree::checkIgnoreFilters( const QString & path )
 }
 
 
-void DirTree::moveIgnoredToAttic()
-{
-    moveIgnoredToAttic( _root );
-}
-
-
 void DirTree::moveIgnoredToAttic( DirInfo * dir )
 {
-    if ( dir->totalIgnoredItems() == 0 )
+    CHECK_PTR( dir );
+
+    if ( dir->totalIgnoredItems() == 0 && dir->totalUnignoredItems() > 0 )
 	return;
 
     // Not using FileInfoIterator because we don't want to iterate over the dot
@@ -556,14 +556,46 @@ void DirTree::moveIgnoredToAttic( DirInfo * dir )
 }
 
 
+void DirTree::ignoreEmptyDirs( DirInfo * dir )
+{
+    CHECK_PTR( dir );
+
+    FileInfo * child = dir->firstChild();
+    FileInfoList ignoredChildren;
+
+    while ( child )
+    {
+	if ( ! child->isIgnored() && child->isDirInfo() )
+	{
+	    DirInfo * subDir = child->toDirInfo();
+
+	    if ( subDir->totalUnignoredItems() == 0 )
+		// && ! subDir->isMountPoint()
+	    {
+		logDebug() << "Ignoring empty subdir " << subDir << endl;
+		subDir->setIgnored( true );
+	    }
+	    else
+	    {
+		ignoreEmptyDirs( subDir );
+	    }
+	}
+
+	child = child->next();
+    }
+}
+
+
 void DirTree::unatticAll( DirInfo * dir )
 {
+    CHECK_PTR( dir );
+
     if ( dir->attic() )
     {
 	// logDebug() << "Moving all attic children to the normal children list for " << dir << endl;
 	dir->takeAllChildren( dir->attic() );
 	dir->deleteEmptyAttic();
-        dir->recalc();
+	dir->recalc();
     }
 
     FileInfoIterator it( dir );
@@ -576,7 +608,6 @@ void DirTree::unatticAll( DirInfo * dir )
 	++it;
     }
 }
-
 
 
 // EOF

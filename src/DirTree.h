@@ -338,12 +338,6 @@ namespace QDirStat
 	 **/
 	bool hasFilters() const { return ! _filters.isEmpty(); }
 
-	/**
-	 * Recurse through the complete tree and move any ignored subtrees
-	 * to the attic on the same level.
-	 **/
-	void moveIgnoredToAttic();
-
 
     signals:
 
@@ -448,7 +442,15 @@ namespace QDirStat
 	 * Recurse through the tree from 'dir' on and move any ignored items to
 	 * the attic on the same level.
 	 **/
+
 	void moveIgnoredToAttic( DirInfo * dir );
+
+	/**
+	 * Recurse through the tree from 'dir' on and ignore any empty dirs
+	 * (i.e. dirs without any unignored non-directory child) that are not
+	 * ignored yet.
+	 **/
+	void ignoreEmptyDirs( DirInfo * dir );
 
 	/**
 	 * Move all items from the attic to the normal children list.
