@@ -157,7 +157,8 @@ namespace QDirStat
 
         /**
          * Constructor from a QStringList: Create and add an exclude rule
-         * matching a full path for each path in the list.
+         * matching a full path for each path in the list with match mode
+         * "wildcard".
          **/
         ExcludeRules( const QStringList & paths );
 

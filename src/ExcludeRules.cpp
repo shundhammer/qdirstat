@@ -115,7 +115,9 @@ ExcludeRules::ExcludeRules( const QStringList & paths ):
 
     foreach ( const QString & path, paths )
     {
-        ExcludeRule * rule = new ExcludeRule( path,
+        QRegExp regexp( path );
+        regexp.setPatternSyntax( QRegExp::Wildcard );
+        ExcludeRule * rule = new ExcludeRule( regexp,
                                               true,    // useFullPath
                                               false ); // checkAnyFileChild
         CHECK_NEW( rule );
