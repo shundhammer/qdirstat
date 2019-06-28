@@ -84,6 +84,25 @@ public slots:
     void askShowUnpkgFiles();
 
     /**
+     * Show unpackaged files: Start reading the specified URL with the
+     * specified exclude dirs.
+     *
+     * The URL may start with "unpkg:".
+     **/
+    void showUnpkgFiles( const QString	   & url,
+			 const QStringList & excludeDirs );
+
+    /**
+     * Show unpackaged files with the default exclude dirs.
+     **/
+    void showUnpkgFiles( const QString & url );
+
+    /**
+     * Return 'true' if the URL starts with "unpkg:/".
+     **/
+    static bool isUnpkgUrl( const QString & url );
+
+    /**
      * Re-read the complete directory tree.
      **/
     void refreshAll();
@@ -402,7 +421,7 @@ private:
     QDirStat::ConfigDialog	* _configDialog;
     QActionGroup		* _layoutActionGroup;
     QPointer<FileTypeStatsWindow> _fileTypeStatsWindow;
-    QString                       _dUrl;
+    QString			  _dUrl;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
     bool			  _verboseSelection;

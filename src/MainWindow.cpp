@@ -638,6 +638,8 @@ void MainWindow::openUrl( const QString & url )
 {
     if ( PkgFilter::isPkgUrl( url ) )
 	readPkg( url );
+    else if ( isUnpkgUrl( url ) )
+        showUnpkgFiles( url );
     else
 	openDir( url );
 }
@@ -710,57 +712,82 @@ void MainWindow::askShowUnpkgFiles()
 
     if ( dialog.exec() == QDialog::Accepted )
     {
-	// Fetch the data the user entered from the dialog
-
-	QString	    dir		= dialog.startingDir();
-	QStringList excludeDirs = dialog.excludeDirs();
-
-	logDebug() << "starting dir: " << dir << endl;
-	logDebug() << "exclude dirs: " << excludeDirs << endl;
-
-
-	// Set up the exclude rules accordingly
-
-	ExcludeRules * excludeRules = new ExcludeRules( excludeDirs );
-	CHECK_NEW( excludeRules );
-
-	DirTree * tree = _dirTreeModel->tree();
-	tree->setExcludeRules( excludeRules );
-
-
-	// Prepare the filters with the complete file list of all installed packages
-
-	DirTreeFilter * filter = new DirTreePkgFilter( pkgManager );
-	CHECK_NEW( filter );
-
-	tree->clearFilters();
-	tree->addFilter( filter );
-
-
-	// Start reading the directory
-
-        try
-        {
-            _dirTreeModel->openUrl( dir );
-            updateWindowTitle( _dirTreeModel->tree()->url() );
-        }
-        catch ( const SysCallFailedException & ex )
-        {
-            CAUGHT( ex );
-            updateWindowTitle( "" );
-            _dirTreeModel->tree()->sendFinished();
-
-            QMessageBox errorPopup( QMessageBox::Warning,	// icon
-                                    tr( "Error" ),		// title
-                                    tr( "Could not open directory %1" ).arg( ex.resourceName() ), // text
-                                    QMessageBox::Ok,	// buttons
-                                    this );			// parent
-            errorPopup.setDetailedText( ex.what() );
-            errorPopup.exec();
-        }
-
-        updateActions();
+	showUnpkgFiles( dialog.startingDir(),
+			dialog.excludeDirs() );
     }
+}
+
+
+void MainWindow::showUnpkgFiles( const QString & url )
+{
+    showUnpkgFiles( url, ShowUnpkgFilesDialog::defaultExcludeDirs() );
+}
+
+
+void MainWindow::showUnpkgFiles( const QString	   & url,
+				 const QStringList & excludeDirs )
+{
+    PkgManager * pkgManager = PkgQuery::primaryPkgManager();
+
+    if ( ! pkgManager )
+    {
+	logError() << "No supported primary package manager" << endl;
+	return;
+    }
+
+    QString dir = url;
+    dir.replace( QRegExp( "^unpkg:" ), "" );
+
+    logDebug() << "starting dir: " << dir << endl;
+    logDebug() << "exclude dirs: " << excludeDirs << endl;
+
+    // Set up the exclude rules
+
+    ExcludeRules * excludeRules = new ExcludeRules( excludeDirs );
+    CHECK_NEW( excludeRules );
+
+    DirTree * tree = _dirTreeModel->tree();
+    tree->setExcludeRules( excludeRules );
+
+
+    // Prepare the filters with the complete file list of all installed packages
+
+    DirTreeFilter * filter = new DirTreePkgFilter( pkgManager );
+    CHECK_NEW( filter );
+
+    tree->clearFilters();
+    tree->addFilter( filter );
+
+
+    // Start reading the directory
+
+    try
+    {
+	_dirTreeModel->openUrl( dir );
+	updateWindowTitle( _dirTreeModel->tree()->url() );
+    }
+    catch ( const SysCallFailedException & ex )
+    {
+	CAUGHT( ex );
+	updateWindowTitle( "" );
+	_dirTreeModel->tree()->sendFinished();
+
+	QMessageBox errorPopup( QMessageBox::Warning,	// icon
+				tr( "Error" ),		// title
+				tr( "Could not open directory %1" ).arg( ex.resourceName() ), // text
+				QMessageBox::Ok,	// buttons
+				this );			// parent
+	errorPopup.setDetailedText( ex.what() );
+	errorPopup.exec();
+    }
+
+    updateActions();
+}
+
+
+bool MainWindow::isUnpkgUrl( const QString & url )
+{
+    return url.startsWith( "unpkg:/" );
 }
 
 
