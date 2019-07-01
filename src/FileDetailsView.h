@@ -16,7 +16,6 @@
 
 namespace QDirStat
 {
-    class MimeCategorizer;
     class AdaptiveTimer;
 
     /**
@@ -153,7 +152,6 @@ namespace QDirStat
         Ui::FileDetailsView * _ui;
         AdaptiveTimer *       _pkgUpdateTimer;
         int                   _labelLimit;
-        MimeCategorizer *     _mimeCategorizer;
 
     };  // class FileDetailsView
 }	// namespace QDirStat

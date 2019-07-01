@@ -21,8 +21,8 @@ FileTypeStats::FileTypeStats( QObject  * parent ):
     QObject( parent ),
     _totalSize( 0LL )
 {
-    _mimeCategorizer = new MimeCategorizer( this );
-    CHECK_NEW( _mimeCategorizer );
+    _mimeCategorizer = MimeCategorizer::instance();
+    CHECK_PTR( _mimeCategorizer );
 
     _otherCategory = new MimeCategory( tr( "Other" ) );
     CHECK_NEW( _otherCategory );
