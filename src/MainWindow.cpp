@@ -109,10 +109,6 @@ MainWindow::MainWindow():
     _ui->dirTreeView->setCleanupCollection( _cleanupCollection );
     _ui->treemapView->setCleanupCollection( _cleanupCollection );
 
-    _mimeCategorizer = new MimeCategorizer();
-    CHECK_NEW( _mimeCategorizer );
-
-    _ui->treemapView->setMimeCategorizer( _mimeCategorizer );
     _ui->breadcrumbNavigator->clear();
 
 #ifdef Q_OS_MACX
@@ -160,6 +156,7 @@ MainWindow::~MainWindow()
 
     writeSettings();
     ExcludeRules::instance()->writeSettings();
+    MimeCategorizer::instance()->writeSettings();
 
     // Relying on the QObject hierarchy to properly clean this up resulted in a
     //	segfault; there was probably a problem in the deletion order.
@@ -169,7 +166,6 @@ MainWindow::~MainWindow()
 
     delete _ui->dirTreeView;
     delete _cleanupCollection;
-    delete _mimeCategorizer;
     delete _selectionModel;
     delete _dirTreeModel;
 
@@ -1089,7 +1085,6 @@ void MainWindow::openConfigDialog()
     _configDialog = new ConfigDialog( this );
     CHECK_PTR( _configDialog );
     _configDialog->cleanupConfigPage()->setCleanupCollection( _cleanupCollection );
-    _configDialog->mimeCategoryConfigPage()->setMimeCategorizer( _mimeCategorizer );
 
     if ( ! _configDialog->isVisible() )
     {

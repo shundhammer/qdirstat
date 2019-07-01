@@ -30,18 +30,6 @@ namespace QDirStat
 	MimeCategoryConfigPage( QWidget * parent = 0 );
 	virtual ~MimeCategoryConfigPage();
 
-	/**
-	 * Set the MimeCategorizer to work on.
-	 **/
-	void setMimeCategorizer( MimeCategorizer * categorizer )
-	    { _categorizer = categorizer; }
-
-	/**
-	 * Return the internal MimeCategorizer.
-	 **/
-	MimeCategorizer * mimeCategorizer() const
-	    { return _categorizer; }
-
     public slots:
 
 	/**

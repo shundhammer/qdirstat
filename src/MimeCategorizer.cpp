@@ -17,10 +17,26 @@
 using namespace QDirStat;
 
 
-MimeCategorizer::MimeCategorizer( QObject * parent ):
-    QObject( parent ),
+MimeCategorizer * MimeCategorizer::_instance = 0;
+
+
+MimeCategorizer * MimeCategorizer::instance()
+{
+    if ( ! _instance )
+    {
+	_instance = new MimeCategorizer();
+	CHECK_NEW( _instance );
+    }
+
+    return _instance;
+}
+
+
+MimeCategorizer::MimeCategorizer():
+    QObject( 0 ),
     _mapsDirty( true )
 {
+    // logDebug() << "Creating MimeCategorizer" << endl;
     readSettings();
 }
 
@@ -212,6 +228,7 @@ void MimeCategorizer::readSettings()
 
 void MimeCategorizer::writeSettings()
 {
+    // logDebug() << endl;
     MimeCategorySettings settings;
 
     // Remove all leftover cleanup descriptions
@@ -226,6 +243,7 @@ void MimeCategorizer::writeSettings()
 	MimeCategory * category = _categories.at(i);
 
 	settings.setValue( "Name", category->name() );
+	// logDebug() << "Adding " << groupName << ": " << category->name() << endl;
 	writeColorEntry( settings, "Color", category->color() );
 
 	QStringList patterns = category->humanReadablePatternList( Qt::CaseInsensitive );
@@ -303,7 +321,7 @@ void MimeCategorizer::addDefaultCategories()
 			 << "jpeg"
 			 << "jpg"
 			 << "png"
-                         << "svg"
+			 << "svg"
 			 << "tif"
 			 << "tiff"
 			 << "xcf.bz2"

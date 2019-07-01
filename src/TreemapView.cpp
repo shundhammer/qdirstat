@@ -34,7 +34,6 @@ TreemapView::TreemapView( QWidget * parent ):
     _selectionModel(0),
     _selectionModelProxy(0),
     _cleanupCollection(0),
-    _mimeCategorizer(0),
     _rebuilder(0),
     _rootTile(0),
     _currentItem(0),
@@ -632,15 +631,6 @@ QSize TreemapView::visibleSize()
 }
 
 
-void TreemapView::setMimeCategorizer( MimeCategorizer * newCategorizer )
-{
-    if ( _mimeCategorizer )
-	delete _mimeCategorizer;
-
-    _mimeCategorizer = newCategorizer;
-}
-
-
 void TreemapView::setFixedColor( const QColor & color )
 {
     _fixedColor	   = color;
@@ -657,13 +647,7 @@ QColor TreemapView::tileColor( FileInfo * file )
     {
 	if ( file->isFile() )
 	{
-	    if ( ! _mimeCategorizer )
-	    {
-		_mimeCategorizer = new MimeCategorizer( this );
-		CHECK_NEW( _mimeCategorizer );
-	    }
-
-	    MimeCategory * category = _mimeCategorizer->category( file );
+	    MimeCategory * category = MimeCategorizer::instance()->category( file );
 
 	    if ( category )
 		return category->color();

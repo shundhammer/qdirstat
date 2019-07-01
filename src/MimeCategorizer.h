@@ -25,21 +25,36 @@ namespace QDirStat
      * This class is optimized for performance since the names of all files in
      * QDirStat's DirTree need to be checked (something in the order of 200,000
      * in a typical Linux root file system).
+     *
+     * This is a singleton class. Use instance() to get the instance. Remember
+     * to call instance()->writeSettings() in an appropriate destructor in the
+     * application to write the settings to disk.
      **/
     class MimeCategorizer: public QObject
     {
 	Q_OBJECT
 
-    public:
+    protected:
+
 	/**
 	 * Constructor.
+	 * This is a singleton class; use instance() instead.
 	 **/
-	MimeCategorizer( QObject * parent = 0 );
+	MimeCategorizer();
 
 	/**
 	 * Destructor.
 	 **/
 	virtual ~MimeCategorizer();
+
+
+    public:
+
+	/**
+	 * Get the singleton for this class. The first call to this will create
+	 * it.
+	 **/
+	static MimeCategorizer * instance();
 
 	/**
 	 * Return the MimeCategory for a FileInfo item or 0 if it doesn't fit
@@ -50,11 +65,11 @@ namespace QDirStat
 	/**
 	 * Return the MimeCategory for a filename or 0 if it doesn't fit into
 	 * any of the available categories.
-         *
-         * If 'suffix_ret' is non-null, it returns the suffix used if the
-         * category was found by a suffix rule. If the category was not found
-         * or if a regexp (rather than a suffix rule) matched, this returns an
-         * empty string.
+	 *
+	 * If 'suffix_ret' is non-null, it returns the suffix used if the
+	 * category was found by a suffix rule. If the category was not found
+	 * or if a regexp (rather than a suffix rule) matched, this returns an
+	 * empty string.
 	 **/
 	MimeCategory * category( const QString & filename, QString * suffix_ret = 0 );
 
@@ -96,6 +111,7 @@ namespace QDirStat
 	 **/
 	void writeSettings();
 
+
     protected:
 
 	/**
@@ -128,11 +144,13 @@ namespace QDirStat
 	// Data members
 	//
 
-	bool		 _mapsDirty;
-	MimeCategoryList _categories;
+	static MimeCategorizer *	_instance;
 
-	QMap<QString, MimeCategory *> _caseInsensitiveSuffixMap;
-	QMap<QString, MimeCategory *> _caseSensitiveSuffixMap;
+	bool				_mapsDirty;
+	MimeCategoryList		_categories;
+
+	QMap<QString, MimeCategory *>	_caseInsensitiveSuffixMap;
+	QMap<QString, MimeCategory *>	_caseSensitiveSuffixMap;
 
     };	// class MimeCategorizer
 

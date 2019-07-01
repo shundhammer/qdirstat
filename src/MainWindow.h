@@ -33,7 +33,6 @@ namespace QDirStat
     class ConfigDialog;
     class DirTreeModel;
     class FileInfo;
-    class MimeCategorizer;
     class SelectionModel;
 }
 
@@ -417,7 +416,6 @@ private:
     QDirStat::DirTreeModel	* _dirTreeModel;
     QDirStat::SelectionModel	* _selectionModel;
     QDirStat::CleanupCollection * _cleanupCollection;
-    QDirStat::MimeCategorizer	* _mimeCategorizer;
     QDirStat::ConfigDialog	* _configDialog;
     QActionGroup		* _layoutActionGroup;
     QPointer<FileTypeStatsWindow> _fileTypeStatsWindow;

@@ -43,7 +43,6 @@ namespace QDirStat
     class SelectionModelProxy;
     class CleanupCollection;
     class FileInfoSet;
-    class MimeCategorizer;
     class DelayedRebuilder;
 
 
@@ -131,19 +130,6 @@ namespace QDirStat
 	 * (according to filename extension, MIME type or permissions).
 	 **/
 	QColor tileColor( FileInfo * file );
-
-	/**
-	 * Return the MimeCategorizer (the class that maps filenames to treemap
-	 * colors) or 0 if it is not created yet. The MimeCategorizer is
-	 * created lazily when needed.
-	 **/
-	MimeCategorizer * mimeCategorizer() const { return _mimeCategorizer; }
-
-	/**
-	 * Set the MimeCategorizer (the class that maps filenames to treemap
-	 * colors).
-	 **/
-	void setMimeCategorizer( MimeCategorizer * categorizer );
 
 	/**
 	 * Use a fixed color for all tiles. To undo this, set an invalid QColor
@@ -493,7 +479,6 @@ namespace QDirStat
 	SelectionModel	    * _selectionModel;
 	SelectionModelProxy * _selectionModelProxy;
 	CleanupCollection   * _cleanupCollection;
-	MimeCategorizer	    * _mimeCategorizer;
         DelayedRebuilder    * _rebuilder;
 	TreemapTile	    * _rootTile;
 	TreemapTile	    * _currentItem;

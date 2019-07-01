@@ -23,8 +23,7 @@ FileDetailsView::FileDetailsView( QWidget * parent ):
     QStackedWidget( parent ),
     _ui( new Ui::FileDetailsView ),
     _pkgUpdateTimer( new AdaptiveTimer( this ) ),
-    _labelLimit( 40 ),
-    _mimeCategorizer( 0 )
+    _labelLimit( 40 )
 {
     CHECK_NEW( _ui );
     CHECK_NEW( _pkgUpdateTimer );
@@ -559,13 +558,7 @@ QString FileDetailsView::limitText( const QString & longText )
 
 QString FileDetailsView::mimeCategory( FileInfo * file )
 {
-    if ( ! _mimeCategorizer )
-    {
-        _mimeCategorizer = new MimeCategorizer( this );
-        CHECK_NEW( _mimeCategorizer );
-    }
-
-    MimeCategory * category = _mimeCategorizer->category( file );
+    MimeCategory * category = MimeCategorizer::instance()->category( file );
 
     return category ? category->name() : "";
 }
