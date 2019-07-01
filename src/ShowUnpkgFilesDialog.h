@@ -69,9 +69,21 @@ namespace QDirStat
 	QStringList excludeDirs() const;
 
 	/**
-	 * Return the standard exclude directories.
+	 * Get the wildcard patterns of files to ignore from the dialog's
+	 * widgets.
+	 **/
+	QStringList ignorePatterns() const;
+
+	/**
+	 * Return the default exclude directories.
 	 **/
 	static QStringList defaultExcludeDirs();
+
+	/**
+	 * Return the default ignore patterns.
+	 **/
+	static QStringList defaultIgnorePatterns();
+
 
     public slots:
 
@@ -96,6 +108,16 @@ namespace QDirStat
 
 
     protected:
+
+	/**
+	 * Get the content of a QPlainTextEdit widget as QStringList with
+	 * leading and trailing whitespace removed from each line and without
+	 * empty lines.
+	 **/
+	QStringList cleanedLines( QPlainTextEdit * widget ) const;
+
+
+	// Data members
 
 	Ui::ShowUnpkgFilesDialog * _ui;
 	QPushButton *		   _okButton;

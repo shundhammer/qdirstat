@@ -84,12 +84,13 @@ public slots:
 
     /**
      * Show unpackaged files: Start reading the specified URL with the
-     * specified exclude dirs.
+     * specified exclude dirs and ignore patterns.
      *
      * The URL may start with "unpkg:".
      **/
     void showUnpkgFiles( const QString	   & url,
-			 const QStringList & excludeDirs );
+			 const QStringList & excludeDirs,
+			 const QStringList & ignorePatterns );
 
     /**
      * Show unpackaged files with the default exclude dirs.

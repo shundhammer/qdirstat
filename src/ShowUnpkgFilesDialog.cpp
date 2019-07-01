@@ -14,6 +14,7 @@
 #include "ExistingDirCompleter.h"
 #include "ExistingDirValidator.h"
 #include "Settings.h"
+#include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -74,19 +75,31 @@ QString ShowUnpkgFilesDialog::startingDir() const
 
 QStringList ShowUnpkgFilesDialog::excludeDirs() const
 {
-    QString	text  = _ui->excludeDirsTextEdit->toPlainText();
+    return cleanedLines( _ui->excludeDirsTextEdit );
+}
+
+
+QStringList ShowUnpkgFilesDialog::ignorePatterns() const
+{
+    return cleanedLines( _ui->ignorePatternsTextEdit );
+}
+
+
+QStringList ShowUnpkgFilesDialog::cleanedLines( QPlainTextEdit *widget ) const
+{
+    QString	text  = widget->toPlainText();
     QStringList lines = text.split( '\n', QString::SkipEmptyParts );
-    QStringList dirs;
+    QStringList result;
 
     foreach ( QString line, lines )
     {
 	line = line.trimmed();
 
 	if ( ! line.isEmpty() )
-	    dirs << line;
+	    result << line;
     }
 
-    return dirs;
+    return result;
 }
 
 
@@ -97,7 +110,14 @@ QStringList ShowUnpkgFilesDialog::defaultExcludeDirs()
 	<< "/root"
 	<< "/tmp"
 	<< "/var"
-	<< "/usr/lib/sysimage/rpm";
+	<< "/usr/lib/sysimage/rpm"
+	<< "/usr/local";
+}
+
+
+QStringList ShowUnpkgFilesDialog::defaultIgnorePatterns()
+{
+    return QStringList() << "*.pyc";
 }
 
 
@@ -113,6 +133,7 @@ void ShowUnpkgFilesDialog::restoreDefaults()
     {
 	_ui->startingDirComboBox->setCurrentIndex( 0 );
 	_ui->excludeDirsTextEdit->setPlainText( defaultExcludeDirs().join( "\n" ) );
+	_ui->ignorePatternsTextEdit->setPlainText( defaultIgnorePatterns().join( "\n" ) );
     }
 }
 
@@ -122,16 +143,20 @@ void ShowUnpkgFilesDialog::readSettings()
     logDebug() << endl;
 
     QDirStat::Settings settings;
+
+    readWindowSettings( this, "ShowUnkpgFilesDialog" );
+
     settings.beginGroup( "ShowUnkpgFilesDialog" );
 
-    QString startingDir = settings.value( "StartingDir", "/" ).toString();
-    QStringList excludeDirs =
-	settings.value( "ExcludeDirs", defaultExcludeDirs() ).toStringList();
+    QString	startingDir    = settings.value( "StartingDir", "/" ).toString();
+    QStringList excludeDirs    = settings.value( "ExcludeDirs",	   defaultExcludeDirs()	   ).toStringList();
+    QStringList ignorePatterns = settings.value( "IgnorePatterns", defaultIgnorePatterns() ).toStringList();
 
     settings.endGroup();
 
     _ui->startingDirComboBox->setCurrentText( startingDir );
     _ui->excludeDirsTextEdit->setPlainText( excludeDirs.join( "\n" ) );
+    _ui->ignorePatternsTextEdit->setPlainText( ignorePatterns.join( "\n" ) );
 }
 
 
@@ -142,7 +167,12 @@ void ShowUnpkgFilesDialog::writeSettings()
     QDirStat::Settings settings;
 
     settings.beginGroup( "ShowUnkpgFilesDialog" );
-    settings.setValue( "StartingDir", startingDir() );
-    settings.setValue( "ExcludeDirs", excludeDirs() );
+
+    settings.setValue( "StartingDir",	 startingDir() );
+    settings.setValue( "ExcludeDirs",	 excludeDirs() );
+    settings.setValue( "IgnorePatterns", ignorePatterns() );
+
     settings.endGroup();
+
+    writeWindowSettings( this, "ShowUnkpgFilesDialog" );
 }

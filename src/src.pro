@@ -46,6 +46,7 @@ SOURCES	  = main.cpp			\
 	    DirTree.cpp			\
 	    DirTreeCache.cpp		\
 	    DirTreeModel.cpp		\
+	    DirTreePatternFilter.cpp    \
 	    DirTreePkgFilter.cpp	\
 	    DirTreeView.cpp		\
 	    DotEntry.cpp		\
@@ -125,6 +126,7 @@ HEADERS	  =				\
 	    DirTreeCache.h		\
 	    DirTreeFilter.h		\
 	    DirTreeModel.h		\
+	    DirTreePatternFilter.h      \
 	    DirTreePkgFilter.h		\
 	    DirTreeView.h		\
 	    DotEntry.h			\

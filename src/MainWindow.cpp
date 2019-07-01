@@ -25,6 +25,7 @@
 #include "DirTree.h"
 #include "DirTreeCache.h"
 #include "DirTreeModel.h"
+#include "DirTreePatternFilter.h"
 #include "DirTreePkgFilter.h"
 #include "Exception.h"
 #include "ExcludeRules.h"
@@ -635,7 +636,7 @@ void MainWindow::openUrl( const QString & url )
     if ( PkgFilter::isPkgUrl( url ) )
 	readPkg( url );
     else if ( isUnpkgUrl( url ) )
-        showUnpkgFiles( url );
+	showUnpkgFiles( url );
     else
 	openDir( url );
 }
@@ -709,19 +710,23 @@ void MainWindow::askShowUnpkgFiles()
     if ( dialog.exec() == QDialog::Accepted )
     {
 	showUnpkgFiles( dialog.startingDir(),
-			dialog.excludeDirs() );
+			dialog.excludeDirs(),
+			dialog.ignorePatterns() );
     }
 }
 
 
 void MainWindow::showUnpkgFiles( const QString & url )
 {
-    showUnpkgFiles( url, ShowUnpkgFilesDialog::defaultExcludeDirs() );
+    showUnpkgFiles( url,
+		    ShowUnpkgFilesDialog::defaultExcludeDirs(),
+		    ShowUnpkgFilesDialog::defaultIgnorePatterns() );
 }
 
 
 void MainWindow::showUnpkgFiles( const QString	   & url,
-				 const QStringList & excludeDirs )
+				 const QStringList & excludeDirs,
+				 const QStringList & ignorePatterns )
 {
     PkgManager * pkgManager = PkgQuery::primaryPkgManager();
 
@@ -753,6 +758,11 @@ void MainWindow::showUnpkgFiles( const QString	   & url,
 
     tree->clearFilters();
     tree->addFilter( filter );
+
+    foreach ( const QString & pattern, ignorePatterns )
+    {
+	tree->addFilter( DirTreePatternFilter::create( pattern ) );
+    }
 
 
     // Start reading the directory

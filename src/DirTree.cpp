@@ -484,7 +484,8 @@ void DirTree::setExcludeRules( ExcludeRules * newRules )
 
 void DirTree::addFilter( DirTreeFilter * filter )
 {
-    _filters << filter;
+    if ( filter )
+        _filters << filter;
 }
 
 
