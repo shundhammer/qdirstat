@@ -17,10 +17,13 @@
 #include "ui_show-unpkg-files-dialog.h"
 
 
+class QContextMenuEvent;
+
+
 namespace QDirStat
 {
     class ExistingDirCompleter;
-    
+
     /**
      * Dialog to let the user select parameters for showing unpackaged
      * files. This is very much like a "get existing directory" dialog with
@@ -28,15 +31,15 @@ namespace QDirStat
      *
      * Usage:
      *
-     *     ShowUnpkgFilesDialog dialog( this );
+     *	   ShowUnpkgFilesDialog dialog( this );
      *
-     *     if ( dialog.exec() == QDialog::Accepted )
-     *     {
-     *         QString dir = dialog.startingDir();
-     *         QStringList excludeDirs = dialog.excludeDirs();
+     *	   if ( dialog.exec() == QDialog::Accepted )
+     *	   {
+     *	       QString dir = dialog.startingDir();
+     *	       QStringList excludeDirs = dialog.excludeDirs();
      *
-     *         readUnpkgFiles( dir, excludeDirs );
-     *     }
+     *	       readUnpkgFiles( dir, excludeDirs );
+     *	   }
      **/
     class ShowUnpkgFilesDialog: public QDialog
     {
@@ -47,49 +50,58 @@ namespace QDirStat
 	/**
 	 * Constructor.
 	 **/
-        ShowUnpkgFilesDialog( QWidget * parent = 0 );
+	ShowUnpkgFilesDialog( QWidget * parent = 0 );
 
-        /**
-         * Destructor.
-         **/
-        virtual ~ShowUnpkgFilesDialog();
+	/**
+	 * Destructor.
+	 **/
+	virtual ~ShowUnpkgFilesDialog();
 
-        /**
-         * Get the starting directory from the dialog's widgets or an empty
-         * string if the dialog was cancelled.
-         **/
-        QString startingDir() const;
+	/**
+	 * Get the starting directory from the dialog's widgets or an empty
+	 * string if the dialog was cancelled.
+	 **/
+	QString startingDir() const;
 
-        /**
-         * Get the directories to exclude from the dialog's widgets.
-         **/
-        QStringList excludeDirs() const;
+	/**
+	 * Get the directories to exclude from the dialog's widgets.
+	 **/
+	QStringList excludeDirs() const;
 
-        /**
-         * Return the standard exclude directories.
-         **/
-        static QStringList defaultExcludeDirs();
+	/**
+	 * Return the standard exclude directories.
+	 **/
+	static QStringList defaultExcludeDirs();
 
     public slots:
 
-        /**
-         * Read settings from the config file
-         **/
-        void readSettings();
-        
-        /**
-         * Write settings to the config file
-         **/
-        void writeSettings();
+	/**
+	 * Read settings from the config file
+	 **/
+	void readSettings();
 
-        
+	/**
+	 * Write settings to the config file
+	 **/
+	void writeSettings();
+
+
+    protected slots:
+
+	/**
+	 * Reset the exclude directories etc. to the default values after a
+	 * confirmation.
+	 **/
+	void restoreDefaults();
+
+
     protected:
 
-        Ui::ShowUnpkgFilesDialog * _ui;
-        QPushButton *              _okButton;
+	Ui::ShowUnpkgFilesDialog * _ui;
+	QPushButton *		   _okButton;
 
-    };  // class ShowUnpkgFilesDialog
+    };	// class ShowUnpkgFilesDialog
 
-}       // namespace QDirStat
+}	// namespace QDirStat
 
-#endif  // ShowUnpkgFilesDialog_h
+#endif	// ShowUnpkgFilesDialog_h
