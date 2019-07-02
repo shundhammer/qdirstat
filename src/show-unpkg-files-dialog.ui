@@ -63,8 +63,8 @@
        <property name="editable">
         <bool>true</bool>
        </property>
-       <property name="currentText">
-        <string notr="true">/</string>
+       <property name="currentIndex">
+        <number>0</number>
        </property>
        <item>
         <property name="text">
@@ -139,9 +139,6 @@
 /usr/local
 </string>
        </property>
-       <property name="placeholderText">
-        <string>One path per line</string>
-       </property>
       </widget>
      </item>
      <item row="2" column="0">
@@ -174,9 +171,6 @@
        <property name="plainText">
         <string notr="true">*.pyc
 </string>
-       </property>
-       <property name="placeholderText">
-        <string>One wildcard pattern per line</string>
        </property>
       </widget>
      </item>

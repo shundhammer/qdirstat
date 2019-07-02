@@ -10,6 +10,8 @@
 #include <QPushButton>
 #include <QMessageBox>
 
+#include "Qt4Compat.h"
+
 #include "ShowUnpkgFilesDialog.h"
 #include "ExistingDirCompleter.h"
 #include "ExistingDirValidator.h"
@@ -154,7 +156,7 @@ void ShowUnpkgFilesDialog::readSettings()
 
     settings.endGroup();
 
-    _ui->startingDirComboBox->setCurrentText( startingDir );
+    qSetComboBoxText( _ui->startingDirComboBox, startingDir );
     _ui->excludeDirsTextEdit->setPlainText( excludeDirs.join( "\n" ) );
     _ui->ignorePatternsTextEdit->setPlainText( ignorePatterns.join( "\n" ) );
 }

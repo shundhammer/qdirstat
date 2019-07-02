@@ -10,6 +10,7 @@
 #include <QPalette>
 #include <QGuiApplication>
 
+#include "Qt4Compat.h"
 #include "DirTreeModel.h"
 #include "DirTree.h"
 #include "FileInfoIterator.h"
@@ -371,7 +372,7 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
         case Qt::ForegroundRole:
             {
                 if ( item->isIgnored() || item->isAttic() )
-                    return QGuiApplication::palette().brush( QPalette::Disabled, QPalette::Foreground );
+                    return qAppPalette().brush( QPalette::Disabled, QPalette::Foreground );
                 else
                     return QVariant();
             }
