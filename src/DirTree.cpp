@@ -573,7 +573,7 @@ void DirTree::ignoreEmptyDirs( DirInfo * dir )
 	    if ( subDir->totalUnignoredItems() == 0 )
 		// && ! subDir->isMountPoint()
 	    {
-		logDebug() << "Ignoring empty subdir " << subDir << endl;
+		// logDebug() << "Ignoring empty subdir " << subDir << endl;
 		subDir->setIgnored( true );
 	    }
 	    else

@@ -33,6 +33,7 @@ SOURCES	  = main.cpp			\
 	    Attic.cpp			\
 	    BreadcrumbNavigator.cpp	\
 	    BucketsTableModel.cpp	\
+	    BusyPopup.cpp		\
 	    Cleanup.cpp			\
 	    CleanupCollection.cpp	\
 	    CleanupConfigPage.cpp	\
@@ -46,7 +47,7 @@ SOURCES	  = main.cpp			\
 	    DirTree.cpp			\
 	    DirTreeCache.cpp		\
 	    DirTreeModel.cpp		\
-	    DirTreePatternFilter.cpp    \
+	    DirTreePatternFilter.cpp	\
 	    DirTreePkgFilter.cpp	\
 	    DirTreeView.cpp		\
 	    DotEntry.cpp		\
@@ -112,6 +113,7 @@ HEADERS	  =				\
 	    Attic.h			\
 	    BreadcrumbNavigator.h	\
 	    BucketsTableModel.h		\
+	    BusyPopup.h			\
 	    Cleanup.h			\
 	    CleanupCollection.h		\
 	    CleanupConfigPage.h		\
@@ -126,7 +128,7 @@ HEADERS	  =				\
 	    DirTreeCache.h		\
 	    DirTreeFilter.h		\
 	    DirTreeModel.h		\
-	    DirTreePatternFilter.h      \
+	    DirTreePatternFilter.h	\
 	    DirTreePkgFilter.h		\
 	    DirTreeView.h		\
 	    DotEntry.h			\

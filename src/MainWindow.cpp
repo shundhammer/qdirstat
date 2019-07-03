@@ -16,6 +16,7 @@
 
 #include "MainWindow.h"
 #include "ActionManager.h"
+#include "BusyPopup.h"
 #include "CleanupCollection.h"
 #include "CleanupConfigPage.h"
 #include "ConfigDialog.h"
@@ -736,15 +737,7 @@ void MainWindow::showUnpkgFiles( const QString	   & url,
     }
 
     _dirTreeModel->clear(); // For instant feedback
-
-    QLabel progressDialog( tr( "Reading file lists..." ), this, Qt::Dialog );
-    progressDialog.setMargin( 15 );
-    progressDialog.setWindowTitle( " " );
-    progressDialog.show();
-
-    QEventLoop eventLoop;
-    eventLoop.processEvents( QEventLoop::ExcludeUserInputEvents,
-                             500 ); // MaxTimeMillisec
+    BusyPopup msg( tr( "Reading file lists..." ), this );
 
     QString dir = url;
     dir.replace( QRegExp( "^unpkg:" ), "" );
