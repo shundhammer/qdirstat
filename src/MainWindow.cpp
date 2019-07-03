@@ -10,7 +10,6 @@
 #include <QApplication>
 #include <QCloseEvent>
 #include <QMessageBox>
-#include <QProcess>
 #include <QFileDialog>
 #include <QSignalMapper>
 #include <QClipboard>
@@ -735,6 +734,17 @@ void MainWindow::showUnpkgFiles( const QString	   & url,
 	logError() << "No supported primary package manager" << endl;
 	return;
     }
+
+    _dirTreeModel->clear(); // For instant feedback
+
+    QLabel progressDialog( tr( "Reading file lists..." ), this, Qt::Dialog );
+    progressDialog.setMargin( 15 );
+    progressDialog.setWindowTitle( " " );
+    progressDialog.show();
+
+    QEventLoop eventLoop;
+    eventLoop.processEvents( QEventLoop::ExcludeUserInputEvents,
+                             500 ); // MaxTimeMillisec
 
     QString dir = url;
     dir.replace( QRegExp( "^unpkg:" ), "" );
