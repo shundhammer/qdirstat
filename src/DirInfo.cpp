@@ -596,6 +596,7 @@ void DirInfo::unlinkChild( FileInfo * deletedChild )
     }
 
     dropSortCache();
+    _summaryDirty = true;
 
     if ( deletedChild == _firstChild )
     {
