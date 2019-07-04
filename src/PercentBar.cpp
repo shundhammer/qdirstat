@@ -229,12 +229,12 @@ namespace QDirStat
 	    painter->drawLine( x, y, x+w, y );
 	    painter->drawLine( x, y, x, y+h );
 
-	    pen.setColor( contrastingColor( barBackground.dark(), background ) );
+	    pen.setColor( contrastingColor( barBackground.darker(), background ) );
 	    painter->setPen( pen );
 	    painter->drawLine( x+1, y+1, x+w-1, y+1 );
 	    painter->drawLine( x+1, y+1, x+1, y+h-1 );
 
-	    pen.setColor( contrastingColor( barBackground.light(), background ) );
+	    pen.setColor( contrastingColor( barBackground.lighter(), background ) );
 	    painter->setPen( pen );
 	    painter->drawLine( x+1, y+h, x+w, y+h );
 	    painter->drawLine( x+w, y, x+w, y+h );

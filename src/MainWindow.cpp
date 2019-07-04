@@ -49,8 +49,15 @@
 #include "Trash.h"
 #include "Version.h"
 
-#define LONG_MESSAGE	25*1000
-#define UPDATE_MILLISEC 200
+#define LONG_MESSAGE		25*1000
+#define UPDATE_MILLISEC		200
+
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 13, 0 ))
+#  define HAVE_SIGNAL_MAPPER	  1
+#else
+// QSignalMapper is deprecated from Qt 5.13 on
+#  define HAVE_SIGNAL_MAPPER	  0
+#endif
 
 using namespace QDirStat;
 
@@ -258,6 +265,8 @@ void MainWindow::connectActions()
 
     // "View" menu
 
+#if HAVE_SIGNAL_MAPPER
+
     _treeLevelMapper = new QSignalMapper( this );
 
     connect( _treeLevelMapper, SIGNAL( mapped		( int ) ),
@@ -275,6 +284,23 @@ void MainWindow::connectActions()
     mapTreeExpandAction( _ui->actionExpandTreeLevel9, 9 );
 
     mapTreeExpandAction( _ui->actionCloseAllTreeLevels, 0 );
+
+#else
+
+    connect( _ui->actionExpandTreeLevel0,   &QAction::triggered, [=]() { expandTreeToLevel( 0 ); } );
+    connect( _ui->actionExpandTreeLevel1,   &QAction::triggered, [=]() { expandTreeToLevel( 1 ); } );
+    connect( _ui->actionExpandTreeLevel2,   &QAction::triggered, [=]() { expandTreeToLevel( 2 ); } );
+    connect( _ui->actionExpandTreeLevel3,   &QAction::triggered, [=]() { expandTreeToLevel( 3 ); } );
+    connect( _ui->actionExpandTreeLevel4,   &QAction::triggered, [=]() { expandTreeToLevel( 4 ); } );
+    connect( _ui->actionExpandTreeLevel5,   &QAction::triggered, [=]() { expandTreeToLevel( 5 ); } );
+    connect( _ui->actionExpandTreeLevel6,   &QAction::triggered, [=]() { expandTreeToLevel( 6 ); } );
+    connect( _ui->actionExpandTreeLevel7,   &QAction::triggered, [=]() { expandTreeToLevel( 7 ); } );
+    connect( _ui->actionExpandTreeLevel8,   &QAction::triggered, [=]() { expandTreeToLevel( 8 ); } );
+    connect( _ui->actionExpandTreeLevel9,   &QAction::triggered, [=]() { expandTreeToLevel( 9 ); } );
+
+    connect( _ui->actionCloseAllTreeLevels, &QAction::triggered, [=]() { expandTreeToLevel( 0 ); } );
+
+#endif
 
     connect( _ui->actionShowCurrentPath,  SIGNAL( toggled   ( bool ) ),
 	     _ui->breadcrumbNavigator,	  SLOT	( setVisible( bool ) ) );
@@ -347,8 +373,11 @@ void MainWindow::connectActions()
 
 void MainWindow::mapTreeExpandAction( QAction * action, int level )
 {
-    CONNECT_ACTION( action, _treeLevelMapper, map() );
-    _treeLevelMapper->setMapping( action, level );
+    if ( _treeLevelMapper )
+    {
+	CONNECT_ACTION( action, _treeLevelMapper, map() );
+	_treeLevelMapper->setMapping( action, level );
+    }
 }
 
 
