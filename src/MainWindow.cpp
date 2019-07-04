@@ -103,7 +103,6 @@ MainWindow::MainWindow():
     _ui->treemapView->setSelectionModel( _selectionModel );
 
     _dirTreeModel->setSelectionModel( _selectionModel );
-    changeLayout( _layoutName );
 
     _cleanupCollection = new CleanupCollection( _selectionModel );
     CHECK_NEW( _cleanupCollection );
@@ -127,6 +126,7 @@ MainWindow::MainWindow():
 
     connectSignals();
     connectActions();
+    changeLayout( _layoutName );
 
     if ( ! PkgQuery::haveGetInstalledPkgSupport() ||
 	 ! PkgQuery::haveFileListSupport()	    )
