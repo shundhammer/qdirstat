@@ -434,6 +434,11 @@ namespace QDirStat
 	 **/
 	void unatticAll( DirInfo * dir );
 
+        /**
+         * Recursively force a complete recalculation of all sums.
+         **/
+        void recalc( DirInfo * dir );
+
 
 
 	// Data members

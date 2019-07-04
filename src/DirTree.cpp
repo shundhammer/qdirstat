@@ -239,10 +239,13 @@ void DirTree::abortReading()
 
 void DirTree::finalizeTree()
 {
-    if ( _root && _root->totalIgnoredItems() > 0 )
+    if ( _root && hasFilters() )
     {
+        recalc( _root );
 	ignoreEmptyDirs( _root );
+        recalc( _root );
 	moveIgnoredToAttic( _root );
+        recalc( _root );
     }
 }
 
@@ -602,6 +605,31 @@ void DirTree::unatticAll( DirInfo * dir )
 	++it;
     }
 }
+
+
+void DirTree::recalc( DirInfo * dir )
+{
+    CHECK_PTR( dir );
+
+    FileInfo * child = dir->firstChild();
+
+    while ( child )
+    {
+        if ( child->isDirInfo() )
+            recalc( child->toDirInfo() );
+
+	child = child->next();
+    }
+
+    if ( dir->dotEntry() )
+        recalc( dir->dotEntry() );
+
+    if ( dir->attic() )
+        recalc( dir->attic() );
+
+    dir->recalc();
+}
+
 
 
 // EOF

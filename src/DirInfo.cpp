@@ -476,8 +476,12 @@ void DirInfo::addToAttic( FileInfo * newChild )
     if ( ! attic )
 	attic = ensureAttic();
 
-    CHECK_PTR( attic );
     newChild->setIgnored( true );
+
+    if ( ! newChild->isDir() )
+        _totalIgnoredItems++;
+
+    CHECK_PTR( attic );
     attic->insertChild( newChild );
 }
 
@@ -750,7 +754,7 @@ void DirInfo::cleanupAttics()
 	    if ( _lastIncludeAttic )
 		dropSortCache();
 
-	    recalc();
+	    _summaryDirty = true;
 	}
     }
 }
@@ -760,8 +764,6 @@ void DirInfo::checkIgnored()
 {
     if ( _dotEntry )
 	_dotEntry->checkIgnored();
-
-    recalc();
 
     // Cascade the 'ignored' status up the tree:
     //
@@ -790,6 +792,7 @@ void DirInfo::ignoreEmptySubDirs()
 	    {
 		// logDebug() << "Ignoring empty subdir " << (*it) << endl;
 		(*it)->setIgnored( true );
+                _summaryDirty = true;
 	    }
 	}
 
