@@ -154,7 +154,6 @@ void DirTree::startReading( const QString & rawUrl )
 	logWarning() << "stat(" << _url << ") failed" << endl;
 	_isBusy = false;
 	emit finished();
-	emit finalizeLocal( 0 );
     }
 }
 
@@ -368,12 +367,6 @@ void DirTree::addBlockedJob( DirReadJob * job )
 void DirTree::unblock( DirReadJob * job )
 {
     _jobQueue.unblock( job );
-}
-
-
-void DirTree::sendFinalizeLocal( DirInfo *dir )
-{
-    emit finalizeLocal( dir );
 }
 
 

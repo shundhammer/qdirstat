@@ -260,13 +260,6 @@ namespace QDirStat
 	void sendReadJobFinished( DirInfo * dir );
 
 	/**
-	 * Send a finalizeLocal() signal to give views a chance to finalize the
-	 * display of this directory level - e.g. clean up dot entries, set the
-	 * final "expandable" state etc.
-	 **/
-	void sendFinalizeLocal( DirInfo *dir );
-
-	/**
 	 * Returns 'true' if directory reading is in progress in this tree.
 	 **/
 	bool isBusy() { return _isBusy; }
@@ -402,22 +395,6 @@ namespace QDirStat
 	 * This is sent AFTER finalizeLocal( DirInfo * dir ).
 	 **/
 	void readJobFinished( DirInfo * dir );
-
-	/**
-	 * Emitted when reading a directory is finished.
-	 * This does _not_ mean reading all subdirectories is finished, too -
-	 * only this directory level is complete!
-	 *
-	 * WARNING: 'dir' may be 0 if the the tree's root could not be read.
-	 *
-	 * Use this signal to do similar cleanups like
-	 * DirInfo::finalizeLocal(), e.g. cleaning up unused / undesired dot
-	 * entries like in DirInfo::cleanupDotEntries().
-	 *
-	 * Notice that the dot entry might be removed and its children
-	 * reparented after this signal.
-	 **/
-	void finalizeLocal( DirInfo * dir );
 
 	/**
 	 * Single line progress information, emitted when the read status

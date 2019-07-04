@@ -182,7 +182,6 @@ void PkgReader::addPkgToTree()
     }
 
     top->setReadState( DirFinished );
-    _tree->sendFinalizeLocal( top );
     top->finalizeLocal();
 }
 
@@ -421,7 +420,6 @@ void PkgReadJob::finalizeAll( DirInfo * subtree )
     if ( subtree->readState() != DirError )
 	subtree->setReadState( DirFinished );
 
-    _tree->sendFinalizeLocal( subtree );
     subtree->finalizeLocal();
 }
 

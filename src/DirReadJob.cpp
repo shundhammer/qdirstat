@@ -312,7 +312,6 @@ void LocalDirReadJob::finishReading( DirInfo * dir, DirReadState readState )
     CHECK_PTR( dir );
 
     dir->setReadState( readState );
-    _tree->sendFinalizeLocal( dir );
     dir->finalizeLocal();
     _tree->sendReadJobFinished( dir );
 }

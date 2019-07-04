@@ -486,7 +486,6 @@ void CacheReader::addItem()
 		logDebug() << "Excluding " << name << endl;
 		dir->setExcluded();
 		dir->setReadState( DirOnRequestOnly );
-		_tree->sendFinalizeLocal( dir );
 		dir->finalizeLocal();
 		_tree->sendReadJobFinished( dir );
 
@@ -777,7 +776,6 @@ void CacheReader::finalizeRecursive( DirInfo * dir )
 	if ( dir->readState() != DirError )
 	    dir->setReadState( DirCached );
 
-	_tree->sendFinalizeLocal( dir );
 	dir->finalizeLocal();
 	_tree->sendReadJobFinished( dir );
     }
