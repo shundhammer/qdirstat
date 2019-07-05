@@ -245,7 +245,15 @@ QString FileInfo::debugUrl() const
 	return url() + "/" + dotEntryName();
 
     if ( isAttic() )
-	return url() + "/" + atticName();
+    {
+        if ( _parent )
+        {
+            if ( _tree && _parent != _tree->root() )
+                return _parent->debugUrl() + "/" + atticName();
+        }
+
+        return url() + "/" + atticName();
+    }
 
     return url() ;
 }
@@ -306,7 +314,7 @@ FileInfo * FileInfo::locate( QString url, bool findPseudoDirs )
 	    if ( url.length() == 0 )		// Nothing left?
 		return this;			// Hey! That's us!
 
-	    if ( url.startsWith( "/" ) )	// If the next thing a path delimiter,
+	    if ( url.startsWith( "/" ) )	// If the next thing is a path delimiter,
 		url.remove( 0, 1 );		// remove that leading delimiter.
 	    else				// No path delimiter at the beginning
 	    {
@@ -334,7 +342,7 @@ FileInfo * FileInfo::locate( QString url, bool findPseudoDirs )
 	}
 
 
-	// Special case: The dot entry is requested.
+	// Special case: One of the pseudo directories is requested.
 
 	if ( findPseudoDirs )
 	{
@@ -343,6 +351,12 @@ FileInfo * FileInfo::locate( QString url, bool findPseudoDirs )
 
 	    if ( attic() && url == atticName() )
 		return attic();
+
+            if ( url == dotEntryName() + "/" + atticName() &&
+                 dotEntry() && dotEntry()->attic() )
+            {
+                return dotEntry()->attic();
+            }
 	}
 
 	// Search the dot entry if there is one - but only if there is no more

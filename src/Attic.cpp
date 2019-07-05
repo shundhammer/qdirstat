@@ -52,7 +52,6 @@ void Attic::checkIgnored()
 }
 
 
-
 FileInfo * Attic::locate( QString url, bool findPseudoDirs )
 {
     if ( ! _tree || ! _parent )
