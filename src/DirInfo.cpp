@@ -478,7 +478,9 @@ void DirInfo::addToAttic( FileInfo * newChild )
 
     newChild->setIgnored( true );
 
-    if ( ! newChild->isDir() )
+    if ( newChild->isDir() )
+        _totalIgnoredItems += newChild->totalIgnoredItems();
+    else
         _totalIgnoredItems++;
 
     CHECK_PTR( attic );
@@ -492,8 +494,10 @@ void DirInfo::childAdded( FileInfo * newChild )
 
     if ( newChild->isIgnored() )
     {
-	if ( ! newChild->isDir() )
-	_totalIgnoredItems++;
+        if ( newChild->isDir() )
+            _totalIgnoredItems += newChild->totalIgnoredItems();
+        else
+            _totalIgnoredItems++;
 
 	// Add ignored items only to all the totals if this directory is also
 	// ignored or if this is the attic.
