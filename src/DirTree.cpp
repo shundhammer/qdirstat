@@ -241,11 +241,11 @@ void DirTree::finalizeTree()
 {
     if ( _root && hasFilters() )
     {
-        recalc( _root );
+	recalc( _root );
 	ignoreEmptyDirs( _root );
-        recalc( _root );
+	recalc( _root );
 	moveIgnoredToAttic( _root );
-        recalc( _root );
+	recalc( _root );
     }
 }
 
@@ -407,7 +407,7 @@ void DirTree::sendReadJobFinished( DirInfo * dir )
 }
 
 
-FileInfo * DirTree::locate( QString url, bool findDotEntries )
+FileInfo * DirTree::locate( QString url, bool findPseudoDirs )
 {
     if ( ! _root )
 	return 0;
@@ -421,7 +421,7 @@ FileInfo * DirTree::locate( QString url, bool findDotEntries )
 	return topItem;
     }
 
-    return _root->locate( url, findDotEntries );
+    return _root->locate( url, findPseudoDirs );
 }
 
 
@@ -481,7 +481,7 @@ void DirTree::setExcludeRules( ExcludeRules * newRules )
 void DirTree::addFilter( DirTreeFilter * filter )
 {
     if ( filter )
-        _filters << filter;
+	_filters << filter;
 }
 
 
@@ -615,17 +615,17 @@ void DirTree::recalc( DirInfo * dir )
 
     while ( child )
     {
-        if ( child->isDirInfo() )
-            recalc( child->toDirInfo() );
+	if ( child->isDirInfo() )
+	    recalc( child->toDirInfo() );
 
 	child = child->next();
     }
 
     if ( dir->dotEntry() )
-        recalc( dir->dotEntry() );
+	recalc( dir->dotEntry() );
 
     if ( dir->attic() )
-        recalc( dir->attic() );
+	recalc( dir->attic() );
 
     dir->recalc();
 }

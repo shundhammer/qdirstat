@@ -17,7 +17,7 @@ FileInfo * Subtree::subtree()
     FileInfo * dir = locate();
 
     if ( ! dir && _useRootFallback && _tree )
-        dir = _tree->root();
+	dir = _tree->root();
 
     return dir;
 }
@@ -26,9 +26,9 @@ FileInfo * Subtree::subtree()
 QString Subtree::url() const
 {
     if ( _url == "<root>" && _tree )
-        return _tree->url();
+	return _tree->url();
     else
-        return _url;
+	return _url;
 }
 
 
@@ -36,12 +36,12 @@ void Subtree::set( FileInfo * subtree )
 {
     if ( subtree )
     {
-        _tree = subtree->tree();
-        _url  = subtree->debugUrl();
+	_tree = subtree->tree();
+	_url  = subtree->debugUrl();
     }
     else
     {
-        _url.clear();
+	_url.clear();
     }
 }
 
@@ -49,17 +49,17 @@ void Subtree::set( FileInfo * subtree )
 FileInfo * Subtree::locate()
 {
     if ( ! _tree || _url.isEmpty() )
-        return 0;
+	return 0;
 
     return _tree->locate( _url,
-                          true ); // findDotEntries;
+			  true ); // findPseudoDirs
 }
 
 
 void Subtree::clone( const Subtree & other )
 {
     if ( &other == this )
-        return;
+	return;
 
     _tree = other.tree();
     _url  = other.url();

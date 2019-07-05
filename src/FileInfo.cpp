@@ -43,7 +43,7 @@ FileInfo::FileInfo( DirTree    * tree,
 {
     _isLocalFile  = true;
     _isSparseFile = false;
-    _isIgnored    = false;
+    _isIgnored	  = false;
     _name	  = name ? name : "";
     _device	  = 0;
     _mode	  = 0;
@@ -68,7 +68,7 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
     CHECK_PTR( statInfo );
 
     _isLocalFile = true;
-    _isIgnored    = false;
+    _isIgnored	  = false;
     _name	 = filenameWithoutPath;
 
     _device	 = statInfo->st_dev;
@@ -127,7 +127,7 @@ FileInfo::FileInfo( DirTree *	    tree,
 {
     _name	 = filenameWithoutPath;
     _isLocalFile = true;
-    _isIgnored   = false;
+    _isIgnored	 = false;
     _device	 = 0;
     _mode	 = mode;
     _size	 = size;
@@ -217,7 +217,7 @@ QString FileInfo::url() const
 QString FileInfo::path() const
 {
     if ( isPkgInfo() )
-        return "";
+	return "";
 
     if ( _parent )
     {
@@ -288,10 +288,12 @@ bool FileInfo::isInSubtree( const FileInfo *subtree ) const
 }
 
 
-FileInfo * FileInfo::locate( QString url, bool findDotEntries )
+FileInfo * FileInfo::locate( QString url, bool findPseudoDirs )
 {
     if ( ! _tree )
-        return 0;
+	return 0;
+
+    FileInfo * result = 0;
 
     if ( ! url.startsWith( _name ) && this != _tree->root() )
 	return 0;
@@ -310,18 +312,20 @@ FileInfo * FileInfo::locate( QString url, bool findDotEntries )
 	    {
 		if ( _name.right(1) != "/" &&	// and this is not the root directory
 		     ! isDotEntry() )		// or a dot entry:
+		{
 		    return 0;			// This can't be any of our children.
+		}
 	    }
 	}
 
 
 	// Search all children
 
-	FileInfo *child = firstChild();
+	FileInfo * child = firstChild();
 
 	while ( child )
 	{
-	    FileInfo *foundChild = child->locate( url, findDotEntries );
+	    FileInfo * foundChild = child->locate( url, findPseudoDirs );
 
 	    if ( foundChild )
 		return foundChild;
@@ -332,8 +336,14 @@ FileInfo * FileInfo::locate( QString url, bool findDotEntries )
 
 	// Special case: The dot entry is requested.
 
-	if ( findDotEntries && dotEntry() && url == dotEntryName() )
-	    return dotEntry();
+	if ( findPseudoDirs )
+	{
+	    if ( dotEntry() && url == dotEntryName() )
+		return dotEntry();
+
+	    if ( attic() && url == atticName() )
+		return attic();
+	}
 
 	// Search the dot entry if there is one - but only if there is no more
 	// path delimiter left in the URL. The dot entry contains files only,
@@ -345,11 +355,14 @@ FileInfo * FileInfo::locate( QString url, bool findDotEntries )
 	if ( dotEntry() &&
 	     ! url.contains( "/" ) )	   // No (more) "/" in this URL
 	{
-	    return dotEntry()->locate( url, findDotEntries );
+	    result = dotEntry()->locate( url, findPseudoDirs );
 	}
+
+	if ( ! result && attic() )
+	    result = attic()->locate( url, findPseudoDirs );
     }
 
-    return 0;
+    return result;
 }
 
 
@@ -382,9 +395,9 @@ QString FileInfo::atticName()
 bool FileInfo::isCached() const
 {
     if ( isDirInfo() && ! isDotEntry() )
-        return readState() == DirCached;
+	return readState() == DirCached;
     else
-        return _parent && _parent->readState() == DirCached;
+	return _parent && _parent->readState() == DirCached;
 }
 
 
@@ -531,10 +544,10 @@ PkgInfo * FileInfo::pkgInfoParent() const
 
     while ( pkg )
     {
-        if ( pkg->isPkgInfo() )
-            return pkg->toPkgInfo();
+	if ( pkg->isPkgInfo() )
+	    return pkg->toPkgInfo();
 
-        pkg = pkg->parent();
+	pkg = pkg->parent();
     }
 
     return 0;

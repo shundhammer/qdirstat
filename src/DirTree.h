@@ -170,10 +170,10 @@ namespace QDirStat
 	 * Notice: This is a very expensive operation since the entire tree is
 	 * searched recursively.
 	 *
-	 * 'findDotEntries' specifies if locating "dot entries" (".../<Files>")
-	 * is desired.
+	 * 'findPseudoDirs' specifies if locating pseudo directories like "dot
+	 * entries" (".../<Files>") or "attics" (".../<Ignored>") is desired.
 	 **/
-	FileInfo * locate( QString url, bool findDotEntries = false );
+	FileInfo * locate( QString url, bool findPseudoDirs = false );
 
 	/**
 	 * Add a new directory read job to the queue.
@@ -434,10 +434,10 @@ namespace QDirStat
 	 **/
 	void unatticAll( DirInfo * dir );
 
-        /**
-         * Recursively force a complete recalculation of all sums.
-         **/
-        void recalc( DirInfo * dir );
+	/**
+	 * Recursively force a complete recalculation of all sums.
+	 **/
+	void recalc( DirInfo * dir );
 
 
 

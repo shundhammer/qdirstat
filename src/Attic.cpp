@@ -17,7 +17,7 @@ using namespace QDirStat;
 
 
 Attic::Attic( DirTree * tree,
-              DirInfo * parent )
+	      DirInfo * parent )
     : DirInfo( tree, parent )
 {
     _name      = atticName();
@@ -50,3 +50,31 @@ void Attic::checkIgnored()
 {
     // NOP
 }
+
+
+
+FileInfo * Attic::locate( QString url, bool findPseudoDirs )
+{
+    if ( ! _tree || ! _parent )
+	return 0;
+
+    // Search all children
+
+    FileInfo * child = firstChild();
+
+    while ( child )
+    {
+	FileInfo * foundChild = child->locate( url, findPseudoDirs );
+
+	if ( foundChild )
+	    return foundChild;
+	else
+	    child = child->next();
+    }
+
+    // An attic can have neither an attic nor a dot entry, so there is no need
+    // to search in either of those.
+
+    return 0;
+}
+

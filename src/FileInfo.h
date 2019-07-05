@@ -512,10 +512,10 @@ namespace QDirStat
 	 * it's only advisable to do so if a derived class comes up with a
 	 * different method than brute-force searching all children.
 	 *
-	 * 'findDotEntries' specifies if locating "dot entries" (".../<Files>")
-	 * is desired.
+	 * 'findPseudoDirs' specifies if locating pseudo directories like "dot
+	 * entries" (".../<Files>") or "attics" (".../<Ignored>") is desired.
 	 **/
-	virtual FileInfo * locate( QString url, bool findDotEntries = false );
+	virtual FileInfo * locate( QString url, bool findPseudoDirs = false );
 
 	/**
 	 * Insert a child into the children list.

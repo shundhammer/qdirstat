@@ -211,7 +211,7 @@ void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 void SelectionModel::setCurrentItem( const QString & path )
 {
     FileInfo * item = _dirTreeModel->tree()->locate( path,
-                                                     true ); // findDotEntries
+						     true ); // findPseudoDirs
     if ( item )
 	setCurrentItem( item, true );
     else

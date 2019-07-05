@@ -60,7 +60,7 @@ TreemapView::TreemapView( QWidget * parent ):
     CHECK_NEW( _rebuilder );
 
     connect( _rebuilder, SIGNAL( rebuild() ),
-             this,       SLOT  ( rebuildTreemapDelayed() ) );
+	     this,	 SLOT  ( rebuildTreemapDelayed() ) );
 }
 
 
@@ -137,7 +137,7 @@ void TreemapView::setSelectionModel( SelectionModel * selectionModel )
 	     _selectionModel, SLOT  ( setCurrentItem	( FileInfo * ) ) );
 
     connect( this,	      SIGNAL( currentItemChanged( FileInfo * ) ),
-	     _selectionModel, SLOT  ( setCurrentBranch  ( FileInfo * ) ) );
+	     _selectionModel, SLOT  ( setCurrentBranch	( FileInfo * ) ) );
 
 
     // Use the proxy for all receiving signals!
@@ -161,7 +161,7 @@ void TreemapView::readSettings()
     _doCushionShading	= settings.value( "CushionShading"   , true  ).toBool();
     _ensureContrast	= settings.value( "EnsureContrast"   , true  ).toBool();
     _forceCushionGrid	= settings.value( "ForceCushionGrid" , false ).toBool();
-    _useDirGradient     = settings.value( "UseDirGradient"   , true  ).toBool();
+    _useDirGradient	= settings.value( "UseDirGradient"   , true  ).toBool();
     _minTileSize	= settings.value( "MinTileSize"	     , DefaultMinTileSize ).toInt();
 
     _currentItemColor	= readColorEntry( settings, "CurrentItemColor"	, Qt::red		     );
@@ -170,8 +170,8 @@ void TreemapView::readSettings()
     _outlineColor	= readColorEntry( settings, "OutlineColor"	, Qt::black		     );
     _fileFillColor	= readColorEntry( settings, "FileFillColor"	, QColor( 0xde, 0x8d, 0x53 ) );
     _dirFillColor	= readColorEntry( settings, "DirFillColor"	, QColor( 0x10, 0x7d, 0xb4 ) );
-    _dirGradientStart   = readColorEntry( settings, "DirGradientStart"	, QColor( 0x60, 0x60, 0x70 ) );
-    _dirGradientEnd     = readColorEntry( settings, "DirGradientEnd"	, QColor( 0x70, 0x70, 0x80 ) );
+    _dirGradientStart	= readColorEntry( settings, "DirGradientStart"	, QColor( 0x60, 0x60, 0x70 ) );
+    _dirGradientEnd	= readColorEntry( settings, "DirGradientEnd"	, QColor( 0x70, 0x70, 0x80 ) );
 
     settings.endGroup();
 }
@@ -190,7 +190,7 @@ void TreemapView::writeSettings()
     settings.setValue( "CushionShading"	   , _doCushionShading	 );
     settings.setValue( "EnsureContrast"	   , _ensureContrast	 );
     settings.setValue( "ForceCushionGrid"  , _forceCushionGrid	 );
-    settings.setValue( "UseDirGradient"    , _useDirGradient     );
+    settings.setValue( "UseDirGradient"	   , _useDirGradient	 );
     settings.setValue( "MinTileSize"	   , _minTileSize	 );
 
     writeColorEntry( settings, "CurrentItemColor"  , _currentItemColor	 );
@@ -199,8 +199,8 @@ void TreemapView::writeSettings()
     writeColorEntry( settings, "OutlineColor"	   , _outlineColor	 );
     writeColorEntry( settings, "FileFillColor"	   , _fileFillColor	 );
     writeColorEntry( settings, "DirFillColor"	   , _dirFillColor	 );
-    writeColorEntry( settings, "DirGradientStart"  , _dirGradientStart   );
-    writeColorEntry( settings, "DirGradientEnd"    , _dirGradientEnd     );
+    writeColorEntry( settings, "DirGradientStart"  , _dirGradientStart	 );
+    writeColorEntry( settings, "DirGradientEnd"	   , _dirGradientEnd	 );
 
     settings.endGroup();
 }
@@ -214,7 +214,7 @@ void TreemapView::zoomIn()
     TreemapTile * newRootTile = _currentItem;
 
     while ( newRootTile &&
-            newRootTile->parentTile() != _rootTile &&
+	    newRootTile->parentTile() != _rootTile &&
 	    newRootTile->parentTile() ) // This should never happen, but who knows?
     {
 	newRootTile = newRootTile->parentTile();
@@ -296,7 +296,7 @@ void TreemapView::rebuildTreemap()
     {
 	// logDebug() << "Restoring old treemap with root " << _savedRootUrl << endl;
 
-	root = _tree->locate( _savedRootUrl, true );	// node, findDotEntries
+	root = _tree->locate( _savedRootUrl, true );	// node, findPseudoDirs
     }
 
     if ( ! root )

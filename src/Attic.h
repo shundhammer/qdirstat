@@ -38,7 +38,7 @@ namespace QDirStat
 	 * Constructor.
 	 **/
 	Attic( DirTree * tree,
-               DirInfo * parent = 0 );
+	       DirInfo * parent = 0 );
 
 	/**
 	 * Destructor.
@@ -54,13 +54,13 @@ namespace QDirStat
 	virtual bool isAttic() const Q_DECL_OVERRIDE
 	    { return true; }
 
-        /**
-         * Return the attic of this tree node. Since this already is an attic,
-         * this always returns 0.
-         *
-         * Reimplemented from DirInfo.
-         **/
-        virtual Attic * attic() const Q_DECL_OVERRIDE { return 0; }
+	/**
+	 * Return the attic of this tree node. Since this already is an attic,
+	 * this always returns 0.
+	 *
+	 * Reimplemented from DirInfo.
+	 **/
+	virtual Attic * attic() const Q_DECL_OVERRIDE { return 0; }
 
 	/**
 	 * Get the current state of the directory reading process.
@@ -84,6 +84,15 @@ namespace QDirStat
 	 * Reimplemented - inherited from DirInfo.
 	 **/
 	virtual void checkIgnored() Q_DECL_OVERRIDE;
+
+	/**
+	 * Locate a child somewhere in this subtree whose URL (i.e. complete
+	 * path) matches the URL passed. Returns 0 if there is no such child.
+	 *
+	 * Reimplemented - inherited from FileInfo.
+	 **/
+	virtual FileInfo * locate( QString url,
+				   bool	   findPseudoDirs = false ) Q_DECL_OVERRIDE;
 
     };	// class Attic
 
