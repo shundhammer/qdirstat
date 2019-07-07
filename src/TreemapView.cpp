@@ -179,7 +179,7 @@ void TreemapView::readSettings()
 
 void TreemapView::writeSettings()
 {
-    logDebug() << endl;
+    // logDebug() << endl;
 
     Settings settings;
     settings.beginGroup( "Treemaps" );
