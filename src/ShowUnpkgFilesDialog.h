@@ -15,6 +15,7 @@
 #include <QStringList>
 
 #include "ui_show-unpkg-files-dialog.h"
+#include "UnpkgSettings.h"
 
 
 class QContextMenuEvent;
@@ -23,6 +24,7 @@ class QContextMenuEvent;
 namespace QDirStat
 {
     class ExistingDirCompleter;
+    class UnpkgSettings;
 
     /**
      * Dialog to let the user select parameters for showing unpackaged
@@ -57,6 +59,11 @@ namespace QDirStat
 	 **/
 	virtual ~ShowUnpkgFilesDialog();
 
+        /**
+         * Get all values from the widgets at once.
+         **/
+        UnpkgSettings values() const;
+
 	/**
 	 * Get the starting directory from the dialog's widgets or an empty
 	 * string if the dialog was cancelled.
@@ -73,16 +80,6 @@ namespace QDirStat
 	 * widgets.
 	 **/
 	QStringList ignorePatterns() const;
-
-	/**
-	 * Return the default exclude directories.
-	 **/
-	static QStringList defaultExcludeDirs();
-
-	/**
-	 * Return the default ignore patterns.
-	 **/
-	static QStringList defaultIgnorePatterns();
 
 
     public slots:
@@ -108,6 +105,11 @@ namespace QDirStat
 
 
     protected:
+
+        /**
+         * Set all values at once.
+         **/
+        void setValues( const UnpkgSettings & settings );
 
 	/**
 	 * Get the content of a QPlainTextEdit widget as QStringList with

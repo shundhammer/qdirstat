@@ -34,6 +34,7 @@ namespace QDirStat
     class DirTreeModel;
     class FileInfo;
     class SelectionModel;
+    class UnpkgSettings;
 }
 
 using QDirStat::FileInfo;
@@ -83,17 +84,16 @@ public slots:
     void askShowUnpkgFiles();
 
     /**
-     * Show unpackaged files: Start reading the specified URL with the
-     * specified exclude dirs and ignore patterns.
+     * Show unpackaged files with the specified 'unpkgSettings' parameters
+     * (startingDir, excludeDirs, ignorePatterns).
      *
      * The URL may start with "unpkg:".
      **/
-    void showUnpkgFiles( const QString	   & url,
-			 const QStringList & excludeDirs,
-			 const QStringList & ignorePatterns );
+    void showUnpkgFiles( const QDirStat::UnpkgSettings & unpkgSettings );
 
     /**
-     * Show unpackaged files with the default exclude dirs.
+     * Show unpackaged files with the UnpkgSettings parameters from the config
+     * file or default values if no config was written yet.
      **/
     void showUnpkgFiles( const QString & url );
 

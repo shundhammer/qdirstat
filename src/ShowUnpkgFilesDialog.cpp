@@ -105,24 +105,6 @@ QStringList ShowUnpkgFilesDialog::cleanedLines( QPlainTextEdit *widget ) const
 }
 
 
-QStringList ShowUnpkgFilesDialog::defaultExcludeDirs()
-{
-    return QStringList()
-	<< "/home"
-	<< "/root"
-	<< "/tmp"
-	<< "/var"
-	<< "/usr/lib/sysimage/rpm"
-	<< "/usr/local";
-}
-
-
-QStringList ShowUnpkgFilesDialog::defaultIgnorePatterns()
-{
-    return QStringList() << "*.pyc";
-}
-
-
 void ShowUnpkgFilesDialog::restoreDefaults()
 {
     QString msg = tr( "Really reset all values to default?" );
@@ -132,49 +114,47 @@ void ShowUnpkgFilesDialog::restoreDefaults()
 				     QMessageBox::Yes | QMessageBox::No );
 
     if ( ret == QMessageBox::Yes )
-    {
-	_ui->startingDirComboBox->setCurrentIndex( 0 );
-	_ui->excludeDirsTextEdit->setPlainText( defaultExcludeDirs().join( "\n" ) );
-	_ui->ignorePatternsTextEdit->setPlainText( defaultIgnorePatterns().join( "\n" ) );
-    }
+        setValues( UnpkgSettings( UnpkgSettings::DefaultValues ) );
+}
+
+
+UnpkgSettings ShowUnpkgFilesDialog::values() const
+{
+    UnpkgSettings settings( UnpkgSettings::Empty );
+
+    settings.startingDir    = startingDir();
+    settings.excludeDirs    = excludeDirs();
+    settings.ignorePatterns = ignorePatterns();
+    // settings.dump();
+
+    return settings;
+}
+
+
+void ShowUnpkgFilesDialog::setValues( const UnpkgSettings & settings )
+{
+    // settings.dump();
+    qSetComboBoxText( _ui->startingDirComboBox, settings.startingDir );
+    _ui->excludeDirsTextEdit->setPlainText( settings.excludeDirs.join( "\n" ) );
+    _ui->ignorePatternsTextEdit->setPlainText( settings.ignorePatterns.join( "\n" ) );
 }
 
 
 void ShowUnpkgFilesDialog::readSettings()
 {
-    logDebug() << endl;
+    // logDebug() << endl;
 
-    QDirStat::Settings settings;
-
+    setValues( UnpkgSettings( UnpkgSettings::ReadFromConfig ) );;
     readWindowSettings( this, "ShowUnkpgFilesDialog" );
-
-    settings.beginGroup( "ShowUnkpgFilesDialog" );
-
-    QString	startingDir    = settings.value( "StartingDir", "/" ).toString();
-    QStringList excludeDirs    = settings.value( "ExcludeDirs",	   defaultExcludeDirs()	   ).toStringList();
-    QStringList ignorePatterns = settings.value( "IgnorePatterns", defaultIgnorePatterns() ).toStringList();
-
-    settings.endGroup();
-
-    qSetComboBoxText( _ui->startingDirComboBox, startingDir );
-    _ui->excludeDirsTextEdit->setPlainText( excludeDirs.join( "\n" ) );
-    _ui->ignorePatternsTextEdit->setPlainText( ignorePatterns.join( "\n" ) );
 }
 
 
 void ShowUnpkgFilesDialog::writeSettings()
 {
-    logDebug() << endl;
+    // logDebug() << endl;
 
-    QDirStat::Settings settings;
-
-    settings.beginGroup( "ShowUnkpgFilesDialog" );
-
-    settings.setValue( "StartingDir",	 startingDir() );
-    settings.setValue( "ExcludeDirs",	 excludeDirs() );
-    settings.setValue( "IgnorePatterns", ignorePatterns() );
-
-    settings.endGroup();
+    UnpkgSettings settings = values();
+    settings.write();
 
     writeWindowSettings( this, "ShowUnkpgFilesDialog" );
 }

@@ -13,6 +13,7 @@
 
 #include <QString>
 #include <QStringList>
+#include <QTextStream>
 
 
 namespace QDirStat
@@ -47,12 +48,17 @@ namespace QDirStat
 	/**
 	 * Read settings from the config file
 	 **/
-	void readSettings();
+	void read();
 
 	/**
 	 * Write settings to the config file
 	 **/
-	void writeSettings();
+	void write();
+
+        /**
+         * Dump the values to the log
+         **/
+        void dump() const;
 
         /**
          * Return the default starting directory.
@@ -70,7 +76,7 @@ namespace QDirStat
 	static QStringList defaultIgnorePatterns();
 
     };  // UnpkgSettings
-    
+
 }       // namespace QDirStat
 
 #endif  // UnpkgSettings_h

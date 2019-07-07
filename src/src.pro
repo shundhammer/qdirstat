@@ -105,6 +105,7 @@ SOURCES	  = main.cpp			\
 	    Trash.cpp			\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
+	    UnpkgSettings.cpp		\
 
 
 HEADERS	  =				\
@@ -187,6 +188,7 @@ HEADERS	  =				\
 	    Trash.h			\
 	    TreemapTile.h		\
 	    TreemapView.h		\
+	    UnpkgSettings.cpp           \
 	    Version.h			\
 
 

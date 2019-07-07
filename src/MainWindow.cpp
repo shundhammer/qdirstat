@@ -737,26 +737,24 @@ void MainWindow::askShowUnpkgFiles()
     ShowUnpkgFilesDialog dialog( this );
 
     if ( dialog.exec() == QDialog::Accepted )
-    {
-	showUnpkgFiles( dialog.startingDir(),
-			dialog.excludeDirs(),
-			dialog.ignorePatterns() );
-    }
+	showUnpkgFiles( dialog.values() );
 }
 
 
 void MainWindow::showUnpkgFiles( const QString & url )
 {
-    showUnpkgFiles( url,
-		    ShowUnpkgFilesDialog::defaultExcludeDirs(),
-		    ShowUnpkgFilesDialog::defaultIgnorePatterns() );
+    UnpkgSettings unpkgSettings( UnpkgSettings::ReadFromConfig );
+    unpkgSettings.startingDir = url;
+
+    showUnpkgFiles( unpkgSettings );
 }
 
 
-void MainWindow::showUnpkgFiles( const QString	   & url,
-				 const QStringList & excludeDirs,
-				 const QStringList & ignorePatterns )
+void MainWindow::showUnpkgFiles( const UnpkgSettings & unpkgSettings )
 {
+    logDebug() << "Settings:" << endl;
+    unpkgSettings.dump();
+
     PkgManager * pkgManager = PkgQuery::primaryPkgManager();
 
     if ( ! pkgManager )
@@ -768,15 +766,16 @@ void MainWindow::showUnpkgFiles( const QString	   & url,
     _dirTreeModel->clear(); // For instant feedback
     BusyPopup msg( tr( "Reading file lists..." ), this );
 
-    QString dir = url;
+    QString dir = unpkgSettings.startingDir;
     dir.replace( QRegExp( "^unpkg:" ), "" );
 
-    logDebug() << "starting dir: " << dir << endl;
-    logDebug() << "exclude dirs: " << excludeDirs << endl;
+    if ( dir != unpkgSettings.startingDir )
+	logInfo() << "Parsed starting dir: " << dir << endl;
+
 
     // Set up the exclude rules
 
-    ExcludeRules * excludeRules = new ExcludeRules( excludeDirs );
+    ExcludeRules * excludeRules = new ExcludeRules( unpkgSettings.excludeDirs );
     CHECK_NEW( excludeRules );
 
     DirTree * tree = _dirTreeModel->tree();
@@ -791,7 +790,7 @@ void MainWindow::showUnpkgFiles( const QString	   & url,
     tree->clearFilters();
     tree->addFilter( filter );
 
-    foreach ( const QString & pattern, ignorePatterns )
+    foreach ( const QString & pattern, unpkgSettings.ignorePatterns )
     {
 	tree->addFilter( DirTreePatternFilter::create( pattern ) );
     }
