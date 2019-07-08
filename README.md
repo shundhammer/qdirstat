@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-06-17
+Updated: 2019-07-08
 
 
 ## Overview
@@ -123,6 +123,47 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2019-07-08
+
+  New **unpackaged files view**:
+
+  QDirStat can now visualize the files in system directories that are not
+  packaged, i.e. that are not part of any file list of any installed software
+  package.
+
+  This reads the complete file lists first (i.e. all file lists from all
+  installed packages), then reads the requested directory as usual and puts the
+  files that are packaged in a special branch `<Ignored>` in the tree view.
+
+  Those files are _not_ displayed in the treemap, i.e. the treemap now only
+  contains unpackaged files.
+
+  [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unpkg-usr-share-qt5.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-unpkg-usr-share-qt5.png)
+
+  **What is this Good For?**
+
+  - Recovering a wrecked system after botched upgrades
+
+  - Recovering from too much `sudo make install`
+
+  - Fixing packaging problems, e.g. find leftover shared libs that tend to get in
+    the way
+
+  - QA for distro release managers, QA engineers, PMs
+
+  - Satisfying user curiosity
+
+  - _Because we can!_  ;-)
+
+  More details at [Unpkg-View.md](doc/Unpkg-View.md).
+
+  Comments and questions are welcome at [GitHub Issue #110](https://github.com/shundhammer/qdirstat/issues/110).
+
+  If you have a genuine problem with the new feature, please open a separate
+  issue so it can be tracked properly.
+
+
+
 - 2019-06-16
 
   - Added [documentation for the _pkg-tools_ scripts](scripts/pkg-tools/README.md).
@@ -131,8 +172,10 @@ Download installable binary packages for various Linux distributions here:
     one of the supported package managers (_dpkg_, _rpm_, _pacman_), but it's a
     bit of a clunky solution, so this is meant for advanced users only.
 
-    With a little bit of luck, there _may_ be a better solution forthcoming
-    with real integration into QDirStat's GUI.
+    ~~With a little bit of luck, there _may_ be a better solution forthcoming
+    with real integration into QDirStat's GUI.~~
+
+    _Update 2019-07-08: This real integration into the GUI is now available._
 
 
 - 2019-05-12
