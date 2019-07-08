@@ -6,6 +6,10 @@ This directory contains scripts that may be useful to find out information
 about unpackaged files in your system, i.e. files that do not belong to any
 software package under the control of your system's package manager.
 
+_This is the script version. This feature is also available with full GUI
+integration in the QDirStat main program at "File" -> "Show Unpackaged Files"._
+
+
 ### tl;dr
 
 Make sure you have `sudo` permissions for your user account and call
@@ -229,11 +233,15 @@ You can modify this list in the `filter_out_pkg_files_from_cache()` function in
 `show_unpkg_files`; it's just some `egrep -v` calls.
 
 
-## The Future
+## GUI vs. Scripting
 
-This functionality will probably make it into the QDirStat application itself
-for better integration.
+This functionality is now also available with full GUI integration and also
+visualizing the packaged files in the tree. Start QDirStat and then use "File"
+-> "Show Unpackaged Files".
 
-But the scripts (albeit a bit clunky) are there, and they work quite
-well. Also, they may be useful for automated tests, e.g. in distro QA
-workflows.
+Still, the scripts (albeit a bit clunky) are also there, they work quite well,
+and they may be more suitable than the GUI version for automated tests, e.g. in
+QA workflows for Linux distributions.
+
+You can also simply comment out the final step that starts the QDirStat GUI
+with the resulting cache file and analyze that file with other tools.
