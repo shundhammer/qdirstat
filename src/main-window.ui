@@ -195,6 +195,7 @@
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
     <addaction name="actionPkgViewHelp"/>
+    <addaction name="actionUnpkgViewHelp"/>
     <addaction name="actionWhatsNew"/>
     <addaction name="actionDonate"/>
    </widget>
@@ -801,7 +802,7 @@
   </action>
   <action name="actionPkgViewHelp">
    <property name="text">
-    <string>The Packages View...</string>
+    <string>The &amp;Packages View...</string>
    </property>
    <property name="toolTip">
     <string>Help about the Packages View (external browser)</string>
@@ -813,6 +814,14 @@
    </property>
    <property name="toolTip">
     <string>Show only files that do NOT belong to an installed software package</string>
+   </property>
+  </action>
+  <action name="actionUnpkgViewHelp">
+   <property name="text">
+    <string>The &amp;Unpackaged Files View...</string>
+   </property>
+   <property name="toolTip">
+    <string>Help about the Unpackaged Files view (external browser)</string>
    </property>
   </action>
  </widget>

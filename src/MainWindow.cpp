@@ -351,12 +351,13 @@ void MainWindow::connectActions()
 
     // "Help" menu
 
-    CONNECT_ACTION( _ui->actionHelp,	    this, showHelp() );
-    CONNECT_ACTION( _ui->actionPkgViewHelp, this, showPkgViewHelp() );
-    CONNECT_ACTION( _ui->actionAbout,	    this, showAboutDialog() );
-    CONNECT_ACTION( _ui->actionAboutQt,	    qApp, aboutQt() );
-    CONNECT_ACTION( _ui->actionWhatsNew,    this, showWhatsNew() );
-    CONNECT_ACTION( _ui->actionDonate,	    this, showDonateDialog() );
+    CONNECT_ACTION( _ui->actionHelp,		this, showHelp()          );
+    CONNECT_ACTION( _ui->actionPkgViewHelp,	this, showPkgViewHelp()   );
+    CONNECT_ACTION( _ui->actionUnpkgViewHelp,	this, showUnpkgViewHelp() );
+    CONNECT_ACTION( _ui->actionAbout,		this, showAboutDialog()   );
+    CONNECT_ACTION( _ui->actionAboutQt,		qApp, aboutQt()           );
+    CONNECT_ACTION( _ui->actionWhatsNew,	this, showWhatsNew()      );
+    CONNECT_ACTION( _ui->actionDonate,		this, showDonateDialog()  );
 
 
     // Invisible debug actions
@@ -1292,6 +1293,12 @@ void MainWindow::showHelp()
 void MainWindow::showPkgViewHelp()
 {
     SysUtil::openInBrowser( "https://github.com/shundhammer/qdirstat/blob/master/doc/Pkg-View.md" );
+}
+
+
+void MainWindow::showUnpkgViewHelp()
+{
+    SysUtil::openInBrowser( "https://github.com/shundhammer/qdirstat/blob/master/doc/Unpkg-View.md" );
 }
 
 
