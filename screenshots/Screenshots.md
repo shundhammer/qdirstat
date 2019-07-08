@@ -78,7 +78,7 @@ in the tree view in the main window, and all matching files in that directory ar
 
 ![Packages View Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-pkg-details.png)
 
-_Packages View: All packages of a Xubuntu 18.04 LTS installation. Notice that
+_Packages view: All packages of a Xubuntu 18.04 LTS installation. Notice that
 each directory contains only the files that belong to that package: /usr/bin
 only contains the chromium-browser binary in this view._
 
@@ -101,6 +101,36 @@ Installed Packages"._
 _To avoid the initial "Choose Directory" dialog, start QDirStat with the "-d"
 or "--dont-ask" command line parameter (or simply click "Cancel" in the "Choose
 Directory" dialog)._
+
+
+## Unpackaged Files View
+
+![Unpackaged Files Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unpkg-usr-share-qt5.png)
+
+_Unpackaged files view: Some files that obviously belong to Qt 5 on openSUSE
+Tumbleweed, but that are not in the file list of any package. It is still
+possible that some post-uninstall script removes them, but it is also possible
+that they will be left behind when the packages are uninstalled._
+
+_Notice the greyed-out ignored directories which only contain files that are
+properly packaged._
+
+
+![Unpackaged Files Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unpkg-boot-grub2.png)
+
+_Unpackaged files view: I created my own font for Grub2 which clearly stands out as an unpackaged file._
+
+
+!["Show Unpackaged Files" Dialog Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-show-unpkg-dialog.png)
+
+_Dialog to start the "unpackaged files" view (Menu "File" -> "Show Unpackaged
+Files"). Some directories are excluded by default because they are expected to
+contain a lot of unpackaged files. You can add more directories or remove
+predefined ones._
+
+_Since Python tends to leave behind so many unpackaged files, all `*.pyc` files
+are ignored by default. You can add more wildcard patterns to ignore or remove
+the predefined one._
 
 
 
