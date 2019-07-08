@@ -24,7 +24,6 @@ class QContextMenuEvent;
 namespace QDirStat
 {
     class ExistingDirCompleter;
-    class UnpkgSettings;
 
     /**
      * Dialog to let the user select parameters for showing unpackaged
