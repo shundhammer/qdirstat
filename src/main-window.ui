@@ -815,6 +815,9 @@
    <property name="toolTip">
     <string>Show only files that do NOT belong to an installed software package</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
   </action>
   <action name="actionUnpkgViewHelp">
    <property name="text">
