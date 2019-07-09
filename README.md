@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-07-08
+Updated: 2019-07-09
 
 
 ## Overview
@@ -1101,6 +1101,13 @@ old code base that had been long overdue.
   for all Linux distributions using any of _dpkg_, _rpm_, _pacman_ as their
   low-level package manager or any higher-level package manager like _apt_,
   _zypper_ etc.; more details at [Pkg-View.md](doc/Pkg-View.md).
+
+- Unpackaged files view: Show a directory tree, but ignore all files that
+  belong to an installed software package. Those ignored files are displayed in
+  a special branch _<Ignored>_ in the tree view, and they are not displayed at
+  all in the treemap. This may be useful to find files that were manually
+  installed by a `sudo make install` command. More details at
+  [Unpkg-View.md](doc/Unpkg-View.md).
 
 - New macros to use in cleanup actions:
 
