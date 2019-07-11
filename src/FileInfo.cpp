@@ -223,7 +223,7 @@ QString FileInfo::path() const
     {
 	QString parentPath = _parent->isPkgInfo() ? "/" : _parent->path();
 
-	if ( isDotEntry() )	// don't append "/." for dot entries
+	if ( isPseudoDir() )
 	    return parentPath;
 
 	if ( ! parentPath.endsWith( "/" ) && ! _name.startsWith( "/" ) )
