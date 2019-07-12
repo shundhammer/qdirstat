@@ -69,7 +69,7 @@ bool Cleanup::worksFor( FileInfo *item ) const
     if ( ! _active || ! item )
 	return false;
 
-    if	( item->isDotEntry() )	return worksForDotEntry();
+    if	( item->isPseudoDir() )	return worksForDotEntry();
     if	( item->isDir() )	return worksForDir();
 
     return worksForFile();
@@ -150,7 +150,7 @@ const QString Cleanup::itemDir( const FileInfo *item ) const
 {
     QString dir = item->path();
 
-    if ( ! item->isDir() && ! item->isDotEntry() )
+    if ( ! item->isDir() && ! item->isPseudoDir() )
     {
 	dir.replace ( QRegExp ( "/[^/]*$" ), "" );
     }
