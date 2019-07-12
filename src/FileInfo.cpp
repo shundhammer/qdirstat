@@ -201,7 +201,7 @@ QString FileInfo::url() const
     {
 	QString parentUrl = _parent->url();
 
-	if ( isDotEntry() || isAttic() ) // don't append "/." for dot entries and attics
+	if ( isPseudoDir() ) // don't append "/." for dot entries and attics
 	    return parentUrl;
 
 	if ( ! parentUrl.endsWith( "/" ) && ! _name.startsWith( "/" ) )
@@ -408,7 +408,7 @@ QString FileInfo::atticName()
 
 bool FileInfo::isCached() const
 {
-    if ( isDirInfo() && ! isDotEntry() )
+    if ( isDirInfo() && ! isPseudoDir() )
 	return readState() == DirCached;
     else
 	return _parent && _parent->readState() == DirCached;

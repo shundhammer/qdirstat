@@ -21,7 +21,7 @@ bool SystemFileChecker::isSystemFile( FileInfo * file )
     if ( ! file )
         return false;
 
-    if ( file->isDotEntry() && file->parent() )
+    if ( file->isPseudoDir() && file->parent() )
         file = file->parent();
 
     QString path = file->url();

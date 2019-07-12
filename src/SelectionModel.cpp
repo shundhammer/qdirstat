@@ -238,7 +238,7 @@ void SelectionModel::prepareRefresh( const FileInfoSet & refreshSet )
     {
 	dir = current->isDirInfo() ? current->toDirInfo() : current->parent();
 
-	if ( dir && dir->isDotEntry() )
+	if ( dir && dir->isPseudoDir() )
 	    dir = dir->parent();
 
 	// Go one directory up from the current item as long as there is an

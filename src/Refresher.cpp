@@ -59,7 +59,7 @@ FileInfoSet Refresher::parents( const FileInfoSet children )
         {
             FileInfo * parent = child->parent();
 
-            if ( parent->isDotEntry() )
+            if ( parent->isPseudoDir() )
                 parent = parent->parent();
 
             if ( parent )

@@ -316,7 +316,7 @@ bool CleanupCollection::confirmation( Cleanup * cleanup, const FileInfoSet & ite
     {
 	FileInfo * item = items.first();
 
-	if ( item->isDir() || item->isDotEntry() )
+	if ( item->isDir() || item->isPseudoDir() )
 	    msg += tr( "<h3>%1</h3>for <b>directory</b> %2" ).arg( title ).arg( item->url() );
 	else
 	    msg += tr( "<h3>%1</h3>for file %2" ).arg( title ).arg( item->url() );
