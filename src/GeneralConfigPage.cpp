@@ -75,9 +75,9 @@ void GeneralConfigPage::readSettings()
 
     _ui->crossFileSystemsCheckBox->setChecked( settings.value( "CrossFileSystems"    , false ).toBool() );
     _ui->treeUpdateIntervalSpinBox->setValue ( settings.value( "UpdateTimerMillisec" ,   333 ).toInt()  );
-    QString treeIconDir = settings.value( "TreeIconDir", ":/icons/tree-medium" ).toString();
+    QString treeIconDir = settings.value( "TreeIconDir", ":/icons/tree-medium/" ).toString();
 
-    int index = treeIconDir.endsWith( "medium" ) ? 0 : 1;
+    int index = treeIconDir.contains( "/tree-small" ) ? 1 : 0;
     _ui->treeIconThemeComboBox->setCurrentIndex( index );
 
     settings.endGroup();
@@ -106,8 +106,8 @@ void GeneralConfigPage::writeSettings()
     switch ( _ui->treeIconThemeComboBox->currentIndex() )
     {
         default:
-        case 0:  settings.setValue( "TreeIconDir", ":/icons/tree-medium" ); break;
-        case 1:  settings.setValue( "TreeIconDir", ":/icons/tree-small"  ); break;
+        case 0:  settings.setValue( "TreeIconDir", ":/icons/tree-medium/" ); break;
+        case 1:  settings.setValue( "TreeIconDir", ":/icons/tree-small/"  ); break;
     }
 
     settings.endGroup();
