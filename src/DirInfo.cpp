@@ -809,20 +809,26 @@ void DirInfo::clearTouched( bool recursive )
 {
     _touched = false;
 
-    if ( recursive && ! isDotEntry() )
+    if ( recursive )
     {
-	FileInfo * child = _firstChild;
+        if ( ! isDotEntry() )
+        {
+            FileInfo * child = _firstChild;
 
-	while ( child )
-	{
-	    if ( child->isDirInfo() )
-		child->toDirInfo()->clearTouched();
+            while ( child )
+            {
+                if ( child->isDirInfo() )
+                    child->toDirInfo()->clearTouched();
 
-	    child = child->next();
-	}
+                child = child->next();
+            }
 
-	if ( _dotEntry )
-	    _dotEntry->clearTouched();
+            if ( _dotEntry )
+                _dotEntry->clearTouched();
+        }
+
+        if ( _attic )
+            _attic->clearTouched();
     }
 }
 
@@ -929,21 +935,27 @@ void DirInfo::dropSortCache( bool recursive )
 	// any in the subtree, either. And dot entries don't have dir children
 	// that could have a sort cache.
 
-	if ( recursive && ! isDotEntry() )
-	{
-	    FileInfo * child = _firstChild;
+	if ( recursive )
+        {
+            if ( ! isDotEntry() )
+            {
+                FileInfo * child = _firstChild;
 
-	    while ( child )
-	    {
-		if ( child->isDirInfo() )
-		    child->toDirInfo()->dropSortCache( recursive );
+                while ( child )
+                {
+                    if ( child->isDirInfo() )
+                        child->toDirInfo()->dropSortCache( recursive );
 
-		child = child->next();
-	    }
+                    child = child->next();
+                }
 
-	    if ( _dotEntry )
-		_dotEntry->dropSortCache( recursive );
-	}
+                if ( _dotEntry )
+                    _dotEntry->dropSortCache( recursive );
+            }
+
+            if ( _attic )
+                _attic->dropSortCache( recursive );
+        }
     }
 }
 

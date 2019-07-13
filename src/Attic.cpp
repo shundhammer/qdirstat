@@ -22,6 +22,15 @@ Attic::Attic( DirTree * tree,
 {
     _name      = atticName();
     _isIgnored = true;
+
+    if ( parent )
+    {
+	_device = parent->device();
+	_mode	= parent->mode();
+	_uid	= parent->uid();
+	_gid	= parent->gid();
+	_mtime	= 0;
+    }
 }
 
 

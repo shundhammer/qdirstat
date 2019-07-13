@@ -37,11 +37,6 @@ namespace QDirStat
 	FileInfo * first() const;
 
 	/**
-	 * Return 'true' if the set contains any dot entry.
-	 **/
-	bool containsDotEntry() const;
-
-	/**
 	 * Return 'true' if the set contains any directory item.
 	 **/
 	bool containsDir() const;
@@ -57,10 +52,26 @@ namespace QDirStat
 	 **/
 	bool containsSpecial() const;
 
-        /**
-         * Return 'true' if the set contains any PkgInfo item.
-         **/
-        bool containsPkg() const;
+	/**
+	 * Return 'true' if the set contains any PkgInfo item.
+	 **/
+	bool containsPkg() const;
+
+	/**
+	 * Return 'true' if the set contains any pseudo directory, i.e. any dot
+	 * entry ("<Files>") or attic ("<Ignored>).
+	 **/
+	bool containsPseudoDir() const;
+
+	/**
+	 * Return 'true' if the set contains any dot entry ("<Files">).
+	 **/
+	bool containsDotEntry() const;
+
+	/**
+	 * Return 'true' if the set contains any attic ("<Ignored>").
+	 **/
+	bool containsAttic() const;
 
 	/**
 	 * Return the sum of all total sizes in the set.
@@ -87,17 +98,17 @@ namespace QDirStat
 	 **/
 	bool treeIsBusy() const;
 
-        /**
-         * Return a set with all the invalid items removed, i.e. without items
-         * where checkMagicNumber() returns 'false'.
-         *
-         * If there is reason to believe that any items of the set might have
-         * become invalid, call this first before any other operations.
-         *
-         * Notice that this does not modify the existing set, but you can
-         * of course assign the result of this to the set.
-         **/
-        FileInfoSet invalidRemoved() const;
+	/**
+	 * Return a set with all the invalid items removed, i.e. without items
+	 * where checkMagicNumber() returns 'false'.
+	 *
+	 * If there is reason to believe that any items of the set might have
+	 * become invalid, call this first before any other operations.
+	 *
+	 * Notice that this does not modify the existing set, but you can
+	 * of course assign the result of this to the set.
+	 **/
+	FileInfoSet invalidRemoved() const;
 
 	/**
 	 * Return a 'normalized' set, i.e. with all items removed that have

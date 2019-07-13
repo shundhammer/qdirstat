@@ -55,15 +55,15 @@ FileInfoSet FileInfoSet::invalidRemoved() const
 
     foreach ( FileInfo * item, *this )
     {
-        if ( item->checkMagicNumber() )
-        {
-            logDebug() << "Keeping " << item << endl;
-            result << item;
-        }
-        else
-        {
-            logDebug() << "Removing invalid item" << endl;
-        }
+	if ( item->checkMagicNumber() )
+	{
+	    logDebug() << "Keeping " << item << endl;
+	    result << item;
+	}
+	else
+	{
+	    logDebug() << "Removing invalid item" << endl;
+	}
     }
 
     return result;
@@ -79,11 +79,35 @@ FileInfo * FileInfoSet::first() const
 }
 
 
+bool FileInfoSet::containsPseudoDir() const
+{
+    foreach ( FileInfo * item, *this )
+    {
+	if ( item  && item->isPseudoDir() )
+	    return true;
+    }
+
+    return false;
+}
+
+
 bool FileInfoSet::containsDotEntry() const
 {
     foreach ( FileInfo * item, *this )
     {
 	if ( item  && item->isDotEntry() )
+	    return true;
+    }
+
+    return false;
+}
+
+
+bool FileInfoSet::containsAttic() const
+{
+    foreach ( FileInfo * item, *this )
+    {
+	if ( item  && item->isAttic() )
 	    return true;
     }
 

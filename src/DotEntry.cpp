@@ -29,7 +29,7 @@ DotEntry::DotEntry( DirTree * tree,
 	_mode	= parent->mode();
 	_uid	= parent->uid();
 	_gid	= parent->gid();
-	_mtime	= parent->mtime();
+	_mtime	= 0;
     }
 }
 

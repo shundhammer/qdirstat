@@ -274,7 +274,7 @@ void FileDetailsView::showDetails( DirInfo * dir )
 
     setCurrentPage( _ui->dirDetailsPage );
 
-    QString name = dir->isPseudoDir() ? dir->name() : ( dir->baseName() + "/" );
+    QString name    = dir->isPseudoDir() ? dir->name() : ( dir->baseName() + "/" );
     QString dirType = dir->isPseudoDir() ? tr( "Pseudo Directory" ) : tr( "Directory" );
 
     setLabelLimited(_ui->dirNameLabel, name );

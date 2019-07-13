@@ -402,11 +402,11 @@ void MainWindow::updateActions()
     FileInfo * sel	      = selectedItems.first();
     int selSize		      = selectedItems.size();
 
-    bool oneDirSelected	  = selSize == 1 && sel && sel->isDir() && ! sel->isPkgInfo();
-    bool dotEntrySelected = selectedItems.containsDotEntry();
-    bool pkgSelected	  = selectedItems.containsPkg();
+    bool oneDirSelected	   = selSize == 1 && sel && sel->isDir() && ! sel->isPkgInfo();
+    bool pseudoDirSelected = selectedItems.containsPseudoDir();
+    bool pkgSelected	   = selectedItems.containsPkg();
 
-    _ui->actionMoveToTrash->setEnabled( sel && ! dotEntrySelected && ! pkgSelected && ! reading );
+    _ui->actionMoveToTrash->setEnabled( sel && ! pseudoDirSelected && ! pkgSelected && ! reading );
     _ui->actionRefreshSelected->setEnabled( oneDirSelected && ! sel->isExcluded() && ! sel->isMountPoint() && ! pkgView );
     _ui->actionContinueReadingAtMountPoint->setEnabled( oneDirSelected && sel->isMountPoint() );
     _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
