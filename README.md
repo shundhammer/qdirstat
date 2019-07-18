@@ -1534,7 +1534,7 @@ If you also have a Qt4 development environment installed, select the desired
 one via _qtchooser_:
 
     sudo apt-get install qtchooser
-    export QT_SELECT="qt5"
+    export QT_SELECT="qt5"  # Necessary for plain Ubuntu 16.04
 
 
 #### SUSE
