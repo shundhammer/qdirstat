@@ -397,8 +397,14 @@ bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
 	{
 	    logDebug() << "Clearing complete tree" << endl;
 
-	    _tree->clear();
 	    _tree->readCache( cacheFullName );
+
+            // DirTree::readCache() implicitly clears the tree and thus the job
+            // queue and thus deletes this read job, so it is important not to
+            // do anything after this point that might access any member
+            // variables or even just uses any virtual method.
+
+            return true;
 	}
 	else
 	{
