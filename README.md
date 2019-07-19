@@ -138,8 +138,8 @@ Download installable binary packages for various Linux distributions here:
     That initial man page was very concise, and as QDirStat keeps evolving, not
     only was there an increasing number of command line options that was not
     documented in the man page (but of course when invoking the program with
-    the `--help` command line option), and it didn't explain much beyond the
-    command line arguments.
+    the `--help` command line option), but it also didn't explain much beyond
+    the command line arguments.
 
     Now it contains not only the latest set of command line arguments including
     syntax and meaning of `pkg:/` and `unpkg:/` URLs, but also some general
