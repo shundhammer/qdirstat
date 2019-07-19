@@ -9,7 +9,7 @@
 #ifndef Version_h
 #define Version_h
 
-#define QDIRSTAT_VERSION "1.5.91-git"
+#define QDIRSTAT_VERSION "1.5.92-git"
 
 #define RELEASE_VERSION  "1.5"
 #define RELEASE_BASE_URL "https://github.com/shundhammer/qdirstat/releases/tag/"
