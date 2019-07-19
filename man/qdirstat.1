@@ -1,19 +1,253 @@
-.TH "QDIRSTAT" "1" "July 2017"
+.TH "QDirStat" "1" "July 2019"
 .SH NAME
-qdirstat \- Qt\-based directory statistics
+QDirStat \- Qt\-based directory statistics
+
 .SH DESCRIPTION
 QDirStat is a graphical application to show where your disk space has gone and
 to help you to clean it up.
+
+.SH USAGE
+.B qdirstat
+[OPTION]...
+[\fI<directory\-name>\fR]
+
+.B qdirstat
+\-\-cache|\-c \fI<cache\-file\-name>\fR
+
+.B qdirstat
+pkg:/\fI<pkg-spec>\fR
+
+.B qdirstat
+unpkg:/\fI<dir>\fR
+
+.SH OPTIONS
+
 .PP
-Usage:
+.B \-h|\-\-help
 .IP
-qdirstat [\-\-slow\-update|\-s] [<directory\-name>]
-qdirstat \fB\-\-cache\fR|\-c <cache\-file\-name>
-qdirstat \fB\-\-help\fR|\-h
+Show a summary of command line options on stdout.
+.B That information might be more up-to-date than this man page.
+
+
 .PP
-.SH "AUTHOR"
-This manual page was written by Patrick Matth\[:a]i <pmatthaei@debian.org>
-for qdirstat.
+.B \-s|\-\-slow\-update
+.IP
+Slow down display updates during directory reading. This is useful when running
+QDirStat over a remote X11 connection.
+
+The exact update interval is specified in the \fBSlowUpdateMillisec\fR
+parameter in the \fB[DirectoryTree]\fR section of the configuration file. The
+default is 3000 milliseconds (3 seconds).
+
+
+.PP
+.B \-d|\-\-dont-ask
+.IP
+Don't prompt for a directory to read upon program start even if no directory
+was specified on the command line.
+
+
+.PP
+.B \-c|\-\-cache \fI<cache\-file\-name>\fR
+.IP
+Read the content of a directory tree from a \fIcache file\fR that was generated
+by QDirStat's "Write to Cache File" option or by the \fBqdirstat-cache-write\fR
+script.
+
+A file \fB.qdirstat.cache.gz\fR in the directory that it describes is
+automatically picked up and used: A cache file
+/data/archive/foo/.qdirstat.cache.gz with the content of /data/archive/foo is
+used automatically when found while reading a directory tree containing it.
+
+.SH NORMAL OPERATION
+
+.PP
+You start the program without any parameters; then it will open a directory
+selection box to let you choose an existing directory. Alternatively, you can
+specify the path of an existing directory as a command line parameter.
+
+The program will then start reading that directory tree, i.e. it will
+recursively traverse that directory tree and read information for each
+directory and its subdirectories.
+
+The result is displayed in a tree view where you can open and close
+branches. The tree view displays information such as the accumulated size of
+each subtree, the number of items, the number of files, the latest modification
+time ("mtime") in that subtree, and some more. You can sort the tree by each of
+those columns.
+
+You can select one or more items in the tree view to get more detailed
+information or to start "cleanup actions": Move to trash, remove immediately
+(caution!), create a gzipped tarball from a directory, "make clean", open a
+file manager window with that directory or start a shell there - and more. Use
+the context menu (right mouse button) or the "Clean Up" menu in the menu bar
+(you can "tear off" that menu so it remains open).
+
+There are three predefined column layouts L1, L2, L3 where you can switch what
+columns are displayed and whether or not to display the details panel at the
+right.
+
+Right-click on a column header to show or hide individual columns or to switch
+between automatic column width and a user-defined width (drag the column
+divider in the header). You can rearrange the order of columns with drag and
+drop (but the "Name" column will always remain fixed at the very left side).
+
+
+.SH THE TREEMAP
+
+As a secondary view, there is a "treemap" with colored rectangles
+("tiles"). The area of each of those tiles corresponds to its size; the larger
+a tile, the larger the item. So you can spot a large file buried deep down in a
+directory hierarchy easily.
+
+The color of each tile corresponds to its type ("MIME category"). There are
+number of predefined categories such as images (photos etc.), videos, music
+etc.; they can be configured in the configuration dialog (menu "Settings" ->
+"Configure QDirStat").
+
+
+.SH PKG URLS / PACKAGES VIEW
+
+.PP
+Specifying a \fBpkg:/\fR URL at the command line starts the packages view.
+
+The package specification is case insensitive.
+
+Some heuristics are used to determine what mode to use: The default is "starts
+with", but if the search pattern contains typical regexp special characters, it
+interprets the pattern as a regular expression.
+
+If it detects just "*" (not ".*") or "?", it uses wildcard mode.
+
+If the first character is "=", it uses exact matching.
+
+.PP
+\fBqdirstat pkg:/chrom\fR
+.IP
+This shows all packages starting with "chrom" or "Chrom" or "CHROM".
+
+.PP
+\fBqdirstat pkg:/=emacs\fR
+.IP
+This shows only package "emacs", not "emacs25" or any other one starting with
+"emacs".
+
+.PP
+\fBqdirstat "pkg:/*gtk*"\fR
+.IP
+This shows all packages that have "gtk" somewhere in their name.
+
+Notice that you have to protect the "*" wildcards from the shell by escaping
+them with quotes.
+
+.PP
+\fBqdirstat "pkg:/.*qt[45].*"\fR
+.IP
+This shows all Qt4 or Qt5 packages.
+
+.PP
+\fBqdirstat "pkg:/(firefox|mozilla|chrome|chromium|opera)"\fR
+.IP
+This shows all the well-known browsers on the system. Notice that regular
+expressions use a partial match, so use the "^" and "$" anchors when appropriate.
+
+
+.SH UNPKG URLS / UNPACKAGED FILES VIEW
+
+.PP
+Specifying an \fBunpkg:/\fR URL at the command line starts the "unpackaged
+files" view: This reads the specified directory and ignores files that are
+owned by an installed software package.
+.PP
+Some well-known directories that are known to contain only unpackaged files are
+excluded by default, and some file types are ignored by default:
+
+.IP
+.TS
+tab(@);
+l l .
+/home@user home directories
+/root@home directory of the root user
+/tmp@directory for temporary files
+/var@variable data for all kinds of software
+/usr/lib/sysimage/rpm@RPM database
+/usr/local@locally installed software
+
+*.pyc@compiled Python files
+.TE
+
+.PP
+This ist can be modified when starting the unpackaged files view from the
+menu. Starting the view from the command line uses the same settings that were
+used last time when using the menu.
+
+.PP
+\fBqdirstat unpkg:/\fR
+.IP
+This shows the unpackaged files of the complete root filesystem.
+
+.PP
+\fBqdirstat unpkg:/usr/share\fR
+.IP
+This shows the unpackaged files of /usr/share.
+
+
+.SH FILES
+
+.TS
+tab(@);
+l l .
+~/.config/QDirStat/QDirStat-cleanup.conf@cleanup actions configuration
+~/.config/QDirStat/QDirStat-exclude.conf@exclude rules configuration
+~/.config/QDirStat/QDirStat-mime.conf@MIME categories configuration
+~/.config/QDirStat/QDirStat.conf@general configuration
+
+/tmp/qdirstat-$USER/qdirstat.log@current / last log file
+/tmp/qdirstat-$USER/qdirstat-*.old@previous log files
+
+**/.qdirstat.cache.gz@auto-used cache file
+.TE
+
+
+It is safe to delete any or all of the configuration files; the next program
+start will restore them with default settings.
+
+The configuration files can safely be edited while QDirStat is not
+running. Many parameters can be accessed via GUI, but some (the more arcane
+ones) can only be changed by editing a configuration file manually.
+
+.SH PROJECT HOME PAGE
+
+.UR
+https://github.com/shundhammer/qdirstat
+
+.SH SEE ALSO
+
+.UR
+https://github.com/shundhammer/qdirstat/tree/master/doc
+
+and don't forget the "Help" menu!
+
+
+.SH BUGS
+See the issue tracker at the project repository:
+
+.UR
+https://github.com/shundhammer/qdirstat/issues
+
+
+.PP
+.SH AUTHORS
+
+QDirStat was written by Stefan Hundhammer <Stefan.Hundhammer@gmx.de> based on
+the original KDE 3 KDirStat (also by Stefan Hundhammer). While a number of
+people contributed small patches and fixes, the project is largely a
+one-man-show.
+
+This manual page was written by Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+based on the initial one written for QDirStat by Patrick Matth\[:a]i
+<pmatthaei@debian.org>.
+
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU General Public License, Version 2 any
 later version published by the Free Software Foundation.
