@@ -19,7 +19,7 @@ die()
 
 create_tmpdir()
 {
-    test -d $TMPDIR || mkdir -p $TMPDIR
+    test -d $TMPDIR || mkdir -p -m 700 $TMPDIR
     test -d $TMPDIR || die "Can't create tmp dir $TMPDIR"
 }
 
