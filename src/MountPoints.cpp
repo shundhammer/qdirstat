@@ -118,7 +118,7 @@ const MountPoint * MountPoints::findNearestMountPoint( const QString & startPath
     {
         QStringList pathComponents = startPath.split( "/", QString::SkipEmptyParts );
 
-        while ( ! mountPoint && !pathComponents.isEmpty() )
+        while ( ! mountPoint && ! pathComponents.isEmpty() )
         {
             // Try one level upwards
             pathComponents.removeLast();
