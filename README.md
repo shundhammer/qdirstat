@@ -125,8 +125,79 @@ Download installable binary packages for various Linux distributions here:
 
 - 2019-07-22 **New stable release: V1.6**
 
+  - Performance improvement while reading directories: On average 25% faster on
+    normal (non-SSD) disks
+
+    See also this article: [Linux Disk Usage Tools Compared: QDirStat
+    vs. K4DirStat vs. Baobab vs. Filelight vs. ncdu including
+    benchmarks](https://github.com/shundhammer/qdirstat/issues/97)
 
 
+  - Vast performance improvement for huge directories (with 100.000 entries or
+    more in a single directory) in the tree view: There is now instant response
+    for jumping from the first to the last item, dragging the scroll bar or
+    using the mouse wheel.
+
+  - New **packages view**:
+    QDirStat can now visualize the file lists of installed packages:
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-pkg-details.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-pkg-details.png)
+
+    I.e. files are now grouped by the package they belong to, and in each
+    subtree only the files that belong to the package are displayed: In this
+    example, in `/usr/bin` only the `chromium-browser` binary is displayed, not
+    all the other files in `/usr/bin`. This is intentional.
+
+    You can display all installed packages with their file lists (but that
+    takes a while), or you can select just a subset. Use Menu _File_ -> _Show
+    Installed Packages_ or start QDirStat with a `pkg:/` command line argument.
+
+    As with the other package manager related features, this is supported for
+    all Linux distributions that use one of _dpkg_, _rpm_ or _pacman_ (or any
+    higher-level package manager based on any of those like _apt_, _zypper_
+    etc.).
+
+    More details at [Pkg-View.md](doc/Pkg-View.md).
+
+
+  - New **unpackaged files view**:
+
+    QDirStat can now visualize the files in system directories that are not
+    packaged, i.e. that are not part of any file list of any installed software
+    package.
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unpkg-usr-share-qt5.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-unpkg-usr-share-qt5.png)
+
+    This can be useful to track down problems after package upgrades or after
+    manually installing software with `sudo make install`.
+
+    This is supported for all Linux distributions that use _dpkg_ or _rpm_ (or
+    any higher-level package manager based on any of those like _apt_, _zypper_
+    etc.).
+
+    More details at [Unpkg-View.md](doc/Unpkg-View.md).
+
+
+  - New standard cleanup: _Check File Type_. This uses the `file` command to
+    find out more detailed information what exactly a file is and displays it
+    in the cleanup output window.
+
+    More details, screenshots and how to get it if you already have an existing
+    QDirStat cleanup configuration file (i.e. if you used QDirStat before):
+    [GitHub Issue #102](https://github.com/shundhammer/qdirstat/issues/102).
+
+  - Implemented [GitHub Issue #90](https://github.com/shundhammer/qdirstat/issues/90):
+    Support excluding directories containing a file with a specific name or pattern.
+
+    Similar to some backup tools, you can now specify an exclude rule that lets
+    you exclude a directory that contains a file like `.nobackup` or
+    `.qdirstatexclude`.
+
+  - Greatly improved the man page; see `man 1 qdirstat`.
+
+  - Some bug fixes.
+
+  See also the [release announcement](https://github.com/shundhammer/qdirstat/releases/tag/1.6).
 
 --------------------------------------------------
 
