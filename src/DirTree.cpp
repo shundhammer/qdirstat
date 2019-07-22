@@ -440,6 +440,13 @@ void DirTree::readCache( const QString & cacheFileName )
 }
 
 
+void DirTree::clearAndReadCache( const QString & cacheFileName )
+{
+    clear();
+    readCache( cacheFileName );
+}
+
+
 void DirTree::readPkg( const PkgFilter & pkgFilter )
 {
     clear();

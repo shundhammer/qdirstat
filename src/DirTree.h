@@ -276,6 +276,11 @@ namespace QDirStat
 	 **/
 	void readCache( const QString & cacheFileName );
 
+        /**
+         * Clear the tree and read a cache file.
+         **/
+	void clearAndReadCache( const QString & cacheFileName );
+
 	/**
 	 * Read installed packages that match the specified PkgFilter and their
 	 * file lists from the system's package manager(s).
