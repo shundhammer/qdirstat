@@ -98,7 +98,20 @@ bool DirReadJob::crossingFileSystems( DirInfo * parent, DirInfo * child )
 	return false;
 
     QString childDevice	 = device( child );
-    QString parentDevice = device( parent->findNearestMountPoint() );;
+    QString parentDevice = device( parent->findNearestMountPoint() );
+
+    if ( childDevice.isEmpty() && parent->readState() == DirCached )
+    {
+        // A DirInfo from a cache file always has device number 0, so the
+        // initial check failed because of that. The child might still be a
+        // mount point, but since that path was not found in the list of known
+        // mount points from /proc/mounts or /etc/mtab, we assume that this was
+        // not the case.
+        //
+        // See also https://github.com/shundhammer/qdirstat/issues/114
+
+        return false;
+    }
 
     if ( parentDevice.isEmpty() )
 	parentDevice = _tree->device();
