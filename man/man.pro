@@ -5,14 +5,20 @@ isEmpty(INSTALL_PREFIX):INSTALL_PREFIX = /usr
 TEMPLATE     = app
 TARGET       = $(nothing)
 
-MAN_SRC      = $$files( *.1 )
-MAN_TARGET   = $$MAN_SRC
-MAN_TARGET  ~= s/.1$/.1.gz/g
+MAN_SRC      = qdirstat.1                 \
+               qdirstat-cache-writer.1
 
+MAN_TARGET   = qdirstat.1.gz              \
+               qdirstat-cache-writer.1.gz
+
+# This does not work reliably (qmake problem?):
+#
+# MAN_SRC     = $$files( *.1 )
+# MAN_TARGET  = $$MAN_SRC
+# MAN_TARGET ~= s/.1$/.1.gz/g
+#
 # message(src:    $$MAN_SRC)
-# For completely obscure reasons, qmake will not install the man pages
-# if the following line is commented out (?!?)
-message(target: $$MAN_TARGET)
+# message(target: $$MAN_TARGET)
 
 man.files    = $$MAN_TARGET
 man.commands = gzip --keep --force $$MAN_SRC
