@@ -75,7 +75,7 @@ void DirTreeView::contextMenu( const QPoint & pos )
     QMenu menu;
     QStringList actions;
     actions << "actionGoUp"
-	    << "actionCopyUrlToClipboard"
+	    << "actionCopyPathToClipboard"
 	    << "---"
 	    << "actionRefreshSelected"
 	    << "actionReadExcludedDirectory"
