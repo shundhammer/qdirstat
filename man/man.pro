@@ -10,7 +10,9 @@ MAN_TARGET   = $$MAN_SRC
 MAN_TARGET  ~= s/.1$/.1.gz/g
 
 # message(src:    $$MAN_SRC)
-# message(target: $$MAN_TARGET)
+# For completely obscure reasons, qmake will not install the man pages
+# if the following line is commented out (?!?)
+message(target: $$MAN_TARGET)
 
 man.files    = $$MAN_TARGET
 man.commands = gzip --keep --force $$MAN_SRC
