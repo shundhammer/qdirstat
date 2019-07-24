@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-07-22
+Updated: 2019-07-24
 
 
 ## Overview
@@ -1287,6 +1287,10 @@ Repology: QDirStat versions in Linux / BSD distributions:
 [![Repology](https://repology.org/badge/tiny-repos/qdirstat.svg)](https://repology.org/metapackage/qdirstat/versions)
 
 (click for details)
+
+_It might take a while for the latest QDirStat to appear in openSUSE Tumbleweed:_
+https://github.com/openSUSE/open-build-service/issues/7973
+
 
 
 ## Donate
