@@ -51,7 +51,7 @@ was specified on the command line.
 .B \-c|\-\-cache \fI<cache\-file\-name>\fR
 .IP
 Read the content of a directory tree from a \fIcache file\fR that was generated
-by QDirStat's "Write to Cache File" option or by the \fBqdirstat-cache-write\fR
+by QDirStat's "Write to Cache File" option or by the \fBqdirstat-cache-writer\fR
 script.
 
 A file \fB.qdirstat.cache.gz\fR in the directory that it describes is
@@ -97,8 +97,8 @@ drop (but the "Name" column will always remain fixed at the very left side).
 
 As a secondary view, there is a "treemap" with colored rectangles
 ("tiles"). The area of each of those tiles corresponds to its size; the larger
-a tile, the larger the item. So you can spot a large file buried deep down in a
-directory hierarchy easily.
+a tile, the larger the item. So you can spot a large file buried deep down in
+the directory hierarchy easily.
 
 The color of each tile corresponds to its type ("MIME category"). There are
 number of predefined categories such as images (photos etc.), videos, music
@@ -109,9 +109,10 @@ etc.; they can be configured in the configuration dialog (menu "Settings" ->
 .SH PKG URLS / PACKAGES VIEW
 
 .PP
-Specifying a \fBpkg:/\fR URL at the command line starts the packages view.
+Specifying a \fBpkg:/\fR URL at the command line starts the packages view that
+groups files by the software package they belong to.
 
-The package specification is case insensitive.
+The package specification in the pkg:/ URL is case insensitive.
 
 Some heuristics are used to determine what mode to use: The default is "starts
 with", but if the search pattern contains typical regexp special characters, it
