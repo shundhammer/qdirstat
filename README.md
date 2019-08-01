@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-07-25
+Updated: 2019-08-01
 
 
 ## Overview
@@ -122,6 +122,25 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2019-08-01
+
+  - Added a column "Oldest File" that shows the timestamp (the mtime) of the
+    oldest file in a subtree.  This is strictly about files; directories,
+    symlinks and special files (block or character devices, FIFOs etc.) are
+    ignored for this.
+
+    This is the first simple approach for
+    [GitHub Issue #118](https://github.com/shundhammer/qdirstat/issues/118).
+    (Click for screenshot)
+
+    This already helped me to spot some old cruft in my home directory; some
+    dot directories from ancient versions of flashplayer and whatnot. This
+    is more helpful than I initially thought.
+
+  - Added an entry "Oldest File" that does the same in the details panel for
+    directories and packages.
+
 
 - 2019-07-22 **New stable release: V1.6**
 
