@@ -377,6 +377,14 @@ namespace QDirStat
 	virtual time_t latestMtime() { return _mtime; }
 
 	/**
+	 * Returns the oldest modification time of any file in this subtree or
+	 * 0 if there is no file.
+         *
+         * Derived classes that have children should overwrite this.
+	 **/
+        virtual time_t oldestFileMtime() { return isFile() ? _mtime : 0; }
+
+	/**
 	 * Return the percentage of this subtree in regard to its parent
 	 * (0.0..100.0). Return a negative value if for any reason this cannot
 	 * be calculated or it would not make any sense.

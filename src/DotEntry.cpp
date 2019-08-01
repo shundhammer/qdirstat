@@ -22,6 +22,7 @@ DotEntry::DotEntry( DirTree * tree,
 {
     _name	= dotEntryName();
     _dotEntry	= 0;
+    _mtime	= 0;
 
     if ( parent )
     {
@@ -29,7 +30,6 @@ DotEntry::DotEntry( DirTree * tree,
 	_mode	= parent->mode();
 	_uid	= parent->uid();
 	_gid	= parent->gid();
-	_mtime	= 0;
     }
 }
 

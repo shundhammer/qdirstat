@@ -65,6 +65,7 @@ const DataColumnList DataColumns::defaultColumns() const
 	    << TotalFilesCol
 	    << TotalSubDirsCol
 	    << LatestMTimeCol
+            << OldestFileMTimeCol
 	    << UserCol
 	    << GroupCol
 	    << PermissionsCol
@@ -139,6 +140,7 @@ QString DataColumns::toString( DataColumn col )
 	case TotalFilesCol:		return "TotalFilesCol";
 	case TotalSubDirsCol:		return "TotalSubDirsCol";
 	case LatestMTimeCol:		return "LatestMTimeCol";
+        case OldestFileMTimeCol:        return "OldestFileMTimeCol";
 	case UserCol:			return "UserCol";
 	case GroupCol:			return "GroupCol";
 	case PermissionsCol:		return "PermissionsCol";

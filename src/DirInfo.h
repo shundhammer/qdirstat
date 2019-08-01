@@ -151,6 +151,13 @@ namespace QDirStat
 	virtual time_t latestMtime() Q_DECL_OVERRIDE;
 
 	/**
+	 * Returns the oldest modification time of any file in this subtree.
+         *
+	 * Reimplemented - inherited from FileInfo.
+	 **/
+        virtual time_t oldestFileMtime() Q_DECL_OVERRIDE;
+
+	/**
 	 * Returns 'true' if this had been excluded while reading.
 	 **/
 	virtual bool isExcluded() const Q_DECL_OVERRIDE
@@ -541,6 +548,7 @@ namespace QDirStat
 	int		_totalUnignoredItems;
 	int		_directChildrenCount;
 	time_t		_latestMtime;
+        time_t          _oldestFileMtime;
 
 	FileInfoList *	_sortedChildren;
 	DataColumn	_lastSortCol;

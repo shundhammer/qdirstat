@@ -401,6 +401,7 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 
 		    case NameCol:
 		    case LatestMTimeCol:
+                    case OldestFileMTimeCol:
 		    case UserCol:
 		    case GroupCol:
 		    default:
@@ -439,6 +440,7 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 		    case TotalFilesCol:	      return item->totalFiles();
 		    case TotalSubDirsCol:     return item->totalSubDirs();
 		    case LatestMTimeCol:      return (qulonglong) item->latestMtime();
+		    case OldestFileMTimeCol:  return (qulonglong) item->oldestFileMtime();
 		    case UserCol:	      return item->uid();
 		    case GroupCol:	      return item->gid();
 		    case PermissionsCol:      return item->mode();
@@ -476,6 +478,7 @@ QVariant DirTreeModel::headerData( int		   section,
 		case TotalFilesCol:	  return tr( "Files"		  );
 		case TotalSubDirsCol:	  return tr( "Subdirs"		  );
 		case LatestMTimeCol:	  return tr( "Last Modified"	  );
+		case OldestFileMTimeCol:  return tr( "Oldest File"	  );
 		case UserCol:		  return tr( "User"		  );
 		case GroupCol:		  return tr( "Group"		  );
 		case PermissionsCol:	  return tr( "Permissions"	  );
@@ -493,6 +496,7 @@ QVariant DirTreeModel::headerData( int		   section,
 		case TotalFilesCol:
 		case TotalSubDirsCol:
 		case LatestMTimeCol:
+		case OldestFileMTimeCol:
 		case PermissionsCol:
 		case OctalPermissionsCol: return Qt::AlignHCenter;
 		default:		  return Qt::AlignLeft;
@@ -687,6 +691,8 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 		    return QVariant();
 		else
 		    return prefix + QString( "%1" ).arg( item->totalSubDirs() );
+
+            case OldestFileMTimeCol:  return QString( "  " ) + formatTime( item->oldestFileMtime() );
 	}
     }
 

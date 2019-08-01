@@ -40,6 +40,17 @@ bool FileInfoSorter::operator() ( FileInfo * a, FileInfo * b )
 	case TotalFilesCol:	  return a->totalFiles()      < b->totalFiles();
 	case TotalSubDirsCol:	  return a->totalSubDirs()    < b->totalSubDirs();
 	case LatestMTimeCol:	  return a->latestMtime()     < b->latestMtime();
+	case OldestFileMTimeCol:
+            {
+                time_t a_time = a->oldestFileMtime();
+                time_t b_time = b->oldestFileMtime();
+
+                if ( a_time == 0 ) return false;
+                if ( b_time == 0 ) return true;
+
+                return a_time < b_time;
+            }
+
 	case UserCol:		  return a->uid()	      < b->uid();
 	case GroupCol:		  return a->gid()	      < b->gid();
 	case PermissionsCol:	  return a->mode()	      < b->mode();

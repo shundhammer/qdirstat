@@ -32,6 +32,7 @@ namespace QDirStat
 	TotalFilesCol,		// Total number of files    in subtree
 	TotalSubDirsCol,	// Total number of subdirs  in subtree
 	LatestMTimeCol,		// Latest modification time in subtree
+        OldestFileMTimeCol,     // mtime of the oldest file in subtree
         UserCol,                // User (owner)
         GroupCol,               // Group
         PermissionsCol,         // Permissions (symbolic; -rwxrxxrwx)

@@ -91,6 +91,7 @@ void DirInfo::init()
     _totalUnignoredItems = 0;
     _directChildrenCount = 0;
     _latestMtime	 = _mtime;
+    _oldestFileMtime     = 0;
     _readState		 = DirQueued;
     _sortedChildren	 = 0;
     _lastSortCol	 = UndefinedCol;
@@ -229,6 +230,7 @@ void DirInfo::recalc()
     _totalUnignoredItems = 0;
     _directChildrenCount = 0;
     _latestMtime	 = _mtime;
+    _oldestFileMtime     = 0;
 
     FileInfoIterator it( this );
 
@@ -261,6 +263,17 @@ void DirInfo::recalc()
 
 	if ( childLatestMtime > _latestMtime )
 	    _latestMtime = childLatestMtime;
+
+        time_t childOldestFileMTime = (*it)->oldestFileMtime();
+
+        if ( childOldestFileMTime > 0 )
+        {
+            if ( _oldestFileMtime == 0 ||
+                 childOldestFileMTime < _oldestFileMtime )
+            {
+                _oldestFileMtime = childOldestFileMTime;
+            }
+        }
 
 	++it;
     }
@@ -356,6 +369,15 @@ time_t DirInfo::latestMtime()
 	recalc();
 
     return _latestMtime;
+}
+
+
+time_t DirInfo::oldestFileMtime()
+{
+    if ( _summaryDirty )
+	recalc();
+
+    return _oldestFileMtime;
 }
 
 
@@ -530,6 +552,17 @@ void DirInfo::childAdded( FileInfo * newChild )
 
 	    if ( newChild->mtime() > _latestMtime )
 		_latestMtime = newChild->mtime();
+
+            time_t childOldestFileMTime = newChild->oldestFileMtime();
+
+            if ( childOldestFileMTime > 0 && newChild->isFile() )
+            {
+                if ( _oldestFileMtime == 0 ||
+                     childOldestFileMTime < _oldestFileMtime )
+                {
+                    _oldestFileMtime = childOldestFileMTime;
+                }
+            }
 	}
 	else
 	{
