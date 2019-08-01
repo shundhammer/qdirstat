@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>256</width>
-    <height>399</height>
+    <height>437</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Details</string>
   </property>
   <property name="currentIndex">
-   <number>5</number>
+   <number>1</number>
   </property>
   <widget class="QWidget" name="fileDetailsPage">
    <layout class="QHBoxLayout" name="fileDetailsHBox">
@@ -365,7 +365,7 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="1">
+        <item row="9" column="1">
          <widget class="QLabel" name="dirOwnSizeLabel">
           <property name="text">
            <string>4.0 kiB</string>
@@ -443,14 +443,14 @@
           </property>
          </widget>
         </item>
-        <item row="9" column="1">
+        <item row="10" column="1">
          <widget class="QLabel" name="dirUserLabel">
           <property name="text">
            <string>kilroy</string>
           </property>
          </widget>
         </item>
-        <item row="10" column="0">
+        <item row="11" column="0">
          <widget class="QLabel" name="dirGroupCaption">
           <property name="font">
            <font>
@@ -462,14 +462,14 @@
           </property>
          </widget>
         </item>
-        <item row="10" column="1">
+        <item row="11" column="1">
          <widget class="QLabel" name="dirGroupLabel">
           <property name="text">
            <string>users</string>
           </property>
          </widget>
         </item>
-        <item row="11" column="0">
+        <item row="12" column="0">
          <widget class="QLabel" name="dirPermissionsCaption">
           <property name="font">
            <font>
@@ -481,14 +481,14 @@
           </property>
          </widget>
         </item>
-        <item row="11" column="1">
+        <item row="12" column="1">
          <widget class="QLabel" name="dirPermissionsLabel">
           <property name="text">
            <string>rwxr-xr-x  0755</string>
           </property>
          </widget>
         </item>
-        <item row="12" column="0">
+        <item row="13" column="0">
          <widget class="QLabel" name="dirMTimeCaption">
           <property name="font">
            <font>
@@ -500,14 +500,14 @@
           </property>
          </widget>
         </item>
-        <item row="12" column="1">
+        <item row="13" column="1">
          <widget class="QLabel" name="dirMTimeLabel">
           <property name="text">
            <string>31.06.2018 09:18</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
+        <item row="8" column="0">
          <widget class="QLabel" name="dirDirectoryHeading">
           <property name="font">
            <font>
@@ -522,7 +522,7 @@ Directory</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
+        <item row="9" column="0">
          <widget class="QLabel" name="dirOwnSizeCaption">
           <property name="font">
            <font>
@@ -534,7 +534,7 @@ Directory</string>
           </property>
          </widget>
         </item>
-        <item row="9" column="0">
+        <item row="10" column="0">
          <widget class="QLabel" name="dirUserCaption">
           <property name="font">
            <font>
@@ -589,6 +589,25 @@ Subtree</string>
           </property>
           <property name="text">
            <string>Items:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="dirOldestFileCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Oldest File:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1">
+         <widget class="QLabel" name="dirOldestFileLabel">
+          <property name="text">
+           <string>01.02.2012 13:04</string>
           </property>
          </widget>
         </item>
@@ -849,6 +868,25 @@ Installed Files</string>
           </property>
          </widget>
         </item>
+        <item row="9" column="0">
+         <widget class="QLabel" name="pkgOldestFileCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Oldest File:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="1">
+         <widget class="QLabel" name="pkgOldestFileLabel">
+          <property name="text">
+           <string>01.02.2012 13:04</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -1043,6 +1081,25 @@ Installed Files</string>
          <widget class="QLabel" name="pkgSummaryLatestMTimeLabel">
           <property name="text">
            <string>2019-04-28 16:02</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="pkgSummaryOldestFileCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Oldest File:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1">
+         <widget class="QLabel" name="pkgSummaryOldestFileLabel">
+          <property name="text">
+           <string>01.02.2012 13:04</string>
           </property>
          </widget>
         </item>

@@ -327,6 +327,11 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
         _ui->dirSubDirCountLabel->clear();
     }
 
+    if ( dir->oldestFileMtime() > 0 )
+        _ui->dirOldestFileLabel->setText( formatTime( dir->oldestFileMtime() ) );
+    else
+        _ui->dirOldestFileLabel->clear();
+
     _ui->dirLatestMTimeLabel->setText( formatTime( dir->latestMtime() ) );
 }
 
@@ -425,6 +430,11 @@ void FileDetailsView::showDetails( PkgInfo * pkg )
         _ui->pkgSubDirCountLabel->clear();
     }
 
+    if ( pkg->oldestFileMtime() > 0 )
+        _ui->pkgOldestFileLabel->setText( formatTime( pkg->oldestFileMtime() ) );
+    else
+        _ui->pkgOldestFileLabel->clear();
+
     _ui->pkgLatestMTimeLabel->setText( formatTime( pkg->latestMtime() ) );
 }
 
@@ -475,6 +485,11 @@ void FileDetailsView::showPkgSummary( PkgInfo * pkg )
         _ui->pkgSummaryFileCountLabel->clear();
         _ui->pkgSummarySubDirCountLabel->clear();
     }
+
+    if ( pkg->oldestFileMtime() > 0 )
+        _ui->pkgSummaryOldestFileLabel->setText( formatTime( pkg->oldestFileMtime() ) );
+    else
+        _ui->pkgSummaryOldestFileLabel->clear();
 
     _ui->pkgSummaryLatestMTimeLabel->setText( formatTime( pkg->latestMtime() ) );
 }
