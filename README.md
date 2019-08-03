@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-08-01
+Updated: 2019-08-03
 
 
 ## Overview
@@ -122,6 +122,11 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2019-08-03
+
+  - Fixed text color in histogram in dark widget themes
+    [(GitHub Issue #117)](https://github.com/shundhammer/qdirstat/issues/117).
 
 - 2019-08-01
 
