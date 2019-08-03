@@ -31,7 +31,7 @@ void FileSizeStats::clear()
     // Just _data.clear() does not free any memory; we need to assign an empty
     // list to _data.
 
-    _data = FileSizeList();
+    _data = QRealList();
 }
 
 
@@ -133,7 +133,7 @@ void FileSizeStats::sort()
 }
 
 
-FileSize FileSizeStats::median()
+qreal FileSizeStats::median()
 {
     if ( _data.isEmpty() )
         return 0;
@@ -149,7 +149,7 @@ FileSize FileSizeStats::median()
     // _data.size() is 5, we get _data[2] which is the center of
     // [0, 1, 2, 3, 4].
 
-    FileSize result = _data.at( centerPos );
+    qreal result = _data.at( centerPos );
 
     if ( _data.size() % 2 == 0 ) // Even number of data
     {
@@ -158,25 +158,21 @@ FileSize FileSizeStats::median()
         // account for the lower one: If _data.size() is 6, we already got
         // _data[3], and now we need to average this with _data[2] of
         // [0, 1, 2, 3, 4, 5].
-        //
-        // Since our value type FileSize is also an integer type, it is
-        // arbitrary if we round this average up or down, so let's keep the
-        // default "round down" result.
 
-        result = ( result + _data.at( centerPos - 1 ) ) / 2;
+        result = ( result + _data.at( centerPos - 1 ) ) / 2.0;
     }
 
     return result;
 }
 
 
-FileSize FileSizeStats::average()
+qreal FileSizeStats::average()
 {
     if ( _data.isEmpty() )
-        return 0;
+        return 0.0;
 
-    int count    = _data.size();
-    FileSize sum = 0;
+    int count = _data.size();
+    qreal sum = 0.0;
 
     for ( int i=0; i < count; ++i )
         sum += _data.at(i);
@@ -185,10 +181,10 @@ FileSize FileSizeStats::average()
 }
 
 
-FileSize FileSizeStats::min()
+qreal FileSizeStats::min()
 {
     if ( _data.isEmpty() )
-        return 0;
+        return 0.0;
 
     if ( ! _sorted )
         sort();
@@ -198,10 +194,10 @@ FileSize FileSizeStats::min()
 
 
 
-FileSize FileSizeStats::max()
+qreal FileSizeStats::max()
 {
     if ( _data.isEmpty() )
-        return 0;
+        return 0.0;
 
     if ( ! _sorted )
         sort();
@@ -210,10 +206,10 @@ FileSize FileSizeStats::max()
 }
 
 
-FileSize FileSizeStats::quantile( int order, int number )
+qreal FileSizeStats::quantile( int order, int number )
 {
     if ( _data.isEmpty() )
-        return 0;
+        return 0.0;
 
     if ( number > order )
     {
@@ -243,14 +239,14 @@ FileSize FileSizeStats::quantile( int order, int number )
     // decimal place, so don't subtract 1 to compensate for starting _data with
     // index 0.
 
-    FileSize result = _data.at( pos );
+    qreal result = _data.at( pos );
 
     if ( ( _data.size() * number ) % order == 0 )
     {
         // Same as in median: We hit between two elements, so use the average
         // between them.
 
-        result = ( result + _data.at( pos - 1 ) ) / 2;
+        result = ( result + _data.at( pos - 1 ) ) / 2.0;
     }
 
     return result;
@@ -274,7 +270,7 @@ QRealList FileSizeStats::fillBuckets( int bucketCount,
     buckets.reserve( bucketCount );
 
     for ( int i=0; i < bucketCount; ++i )
-        buckets << 0;
+        buckets << 0.0;
 
     if ( _data.isEmpty() )
         return buckets;
