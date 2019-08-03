@@ -10,6 +10,7 @@
 #ifndef FileSizeStats_h
 #define FileSizeStats_h
 
+#include "PercentileStats.h"
 #include "FileInfo.h"
 #include "HistogramView.h"
 
@@ -17,7 +18,6 @@
 namespace QDirStat
 {
     class DirTree;
-    typedef QList<qreal> QRealList;
 
     /**
      * Helper class for extended file size statistics.
@@ -31,7 +31,7 @@ namespace QDirStat
      * sorted for those calculations and sorting has at least logarithmic cost
      * O( n * log(n) ), this also has heavy performance impact.
      **/
-    class FileSizeStats
+    class FileSizeStats: public PercentileStats
     {
     public:
 
@@ -40,10 +40,13 @@ namespace QDirStat
 	 **/
 	FileSizeStats();
 
-	/**
-	 * Clear the collected data and shrink the list.
-	 **/
-	void clear();
+        /**
+         * Populate the internal 'data' list.
+         *
+         * Implemented from PercentileStats.
+         * This overloaded version does not do anything.
+         **/
+        virtual void collect() Q_DECL_OVERRIDE;
 
 	/**
 	 * Recurse through all file elements in the tree and append the own
@@ -77,72 +80,6 @@ namespace QDirStat
 	 **/
 	void collect( FileInfo * subtree, const QString & suffix );
 
-	/**
-	 * Sort the collected data in ascending order.
-	 * This is necessary after all collect() calls.
-	 * The
-	 **/
-	void sort();
-
-        /**
-         * Return the size of the collected data, i.e. the number of data
-         * points.
-         **/
-        int dataSize() const { return _data.size(); }
-
-	/**
-	 * Return a reference to the collected data.
-	 **/
-	QRealList & data() { return _data; }
-
-
-	// All calculation functions below will sort the internal data first if
-	// they are not sorted yet. This is why they are not const.
-
-	/**
-	 * Calculate the median.
-	 **/
-	qreal median();
-
-        /**
-         * Calculate the arithmetic average based on the collected data.
-         *
-         * Notice that this is probably the most expensive way of doing this:
-         * The FileInfo class already collected sums and counts during
-         * directory reading that might also be used.
-         **/
-        qreal average();
-
-	/**
-	 * Find the minimum value.
-	 **/
-	qreal min();
-
-	/**
-	 * Find the maximum value.
-	 **/
-	qreal max();
-
-	/**
-	 * Calculate a quantile: Find the quantile no. 'number' of order
-	 * 'order'.
-	 *
-	 * The median is quantile( 2, 1 ), the minimum is quantile( 2, 0 ), the
-	 * maximum is quantile( 2, 2 ). The first quartile is quantile( 4, 1 ),
-	 * the first percentile is quantile( 100, 1 ).
-	 **/
-	qreal quantile( int order, int number );
-
-        /**
-         * Calculate a percentile.
-         **/
-        qreal percentile( int number ) { return quantile( 100, number ); }
-
-        /**
-         * Calculate a quartile.
-         **/
-        qreal quartile( int number ) { return quantile( 4, number ); }
-
         /**
          * Fill buckets for a histogram from 'startPercentile' to
          * 'endPercentile'.
@@ -150,23 +87,6 @@ namespace QDirStat
         QRealList fillBuckets( int bucketCount,
                                int startPercentile,
                                int endPercentile );
-
-        /**
-         * Return a list of all percentiles from 0 to 100.
-         **/
-        QRealList percentileList();
-
-        /**
-         * Return a list (0..100) of all accumulated sizes between one
-         * percentile and the previous one.
-         **/
-        QRealList percentileSums();
-
-
-    protected:
-
-	QRealList _data;
-	bool	  _sorted;
     };
 
 }	// namespace QDirStat
