@@ -321,6 +321,7 @@ QPointF HistogramView::addText( const QPointF & pos, const QStringList & lines )
 {
     QGraphicsTextItem * textItem = scene()->addText( lines.join( "\n" ) );
     textItem->setPos( pos );
+    textItem->setDefaultTextColor( Qt::black );
 
     return QPoint( pos.x(), pos.y() + textItem->boundingRect().height() );
 }
@@ -334,6 +335,7 @@ QPointF HistogramView::addBoldText( const QPointF & pos, const QString & text )
     QFont boldFont( textItem->font() );
     boldFont.setBold( true );
     textItem->setFont( boldFont );
+    textItem->setDefaultTextColor( Qt::black );
 
     return QPoint( pos.x(), pos.y() + textItem->boundingRect().height() );
 }

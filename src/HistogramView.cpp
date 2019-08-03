@@ -91,7 +91,6 @@ void HistogramView::init()
     _pieDiameter	  = 60.0;
     _pieSliceOffset	  = 10.0;
 
-
     _panelBackground	  = QBrush( QColor( 0xF0, 0xF0, 0xF0 ) );
     _barBrush		  = QBrush( QColor( 0xB0, 0xB0, 0xD0 ) );
     _barPen		  = QPen( QColor( 0x40, 0x40, 0x50 ), 1 );
@@ -518,6 +517,7 @@ void HistogramView::rebuild()
     QGraphicsScene * newScene = new QGraphicsScene( this );
     CHECK_NEW( newScene);
     setScene( newScene );
+    scene()->setBackgroundBrush( Qt::white );
 
     if ( _buckets.size() < 1 || _percentiles.size() != 101 )
     {
