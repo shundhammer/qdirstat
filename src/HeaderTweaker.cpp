@@ -95,8 +95,7 @@ void HeaderTweaker::createColumnLayouts()
                     << TotalItemsCol
                     << TotalFilesCol
                     << TotalSubDirsCol
-                    << LatestMTimeCol
-                    << OldestFileMTimeCol;
+                    << LatestMTimeCol;
 
     // L3: Full
 
