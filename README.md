@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-08-03
+Updated: 2019-08-12
 
 
 ## Overview
@@ -122,6 +122,25 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2019-08-12
+
+  - Toned down over-information to reduce clutter:
+
+    - No longer showing column "Oldest File" in layout L2 by default.
+
+      Of course, you can always re-enable this if you like:
+      Just switch to layout L2, right-click on the column header to open the
+      column context menu, then "Hidden Columns" -> "Show Column 'Oldest File'".
+
+    - Removed "Oldest File" from the details panel for directories:
+
+      I found that this does not contribute any useful information here, yet it
+      adds to the screen clutter. Information about the oldest file in a
+      subtree is useful to drill down deeper into the subtree to find it, so
+      the tree view is much better suited for that; having that information in
+      the details panel as well does not add any value for that procedure.
+
 
 - 2019-08-03
 
