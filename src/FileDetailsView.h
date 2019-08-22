@@ -126,14 +126,14 @@ namespace QDirStat
         QString parentPath( FileInfo * fileInfo );
 
         /**
-         * Set a label with a number.
+         * Set a label with a number and an optional prefix.
          **/
-        void setLabel( QLabel * label, int number );
+        void setLabel( QLabel * label, int number, const QString & prefix = "" );
 
         /**
-         * Set a label with a file size.
+         * Set a label with a file size and an optional prefix.
          **/
-        void setLabel( QLabel * label, FileSize size );
+        void setLabel( QLabel * label, FileSize size, const QString & prefix = "" );
 
         /**
          * Set a label with a text of limited size.

@@ -295,10 +295,12 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
          ( dir->readState() == DirFinished ||
            dir->readState() == DirCached     ) )
     {
-        setLabel( _ui->dirTotalSizeLabel,   dir->totalSize()    );
-        setLabel( _ui->dirItemCountLabel,   dir->totalItems()   );
-        setLabel( _ui->dirFileCountLabel,   dir->totalFiles()   );
-        setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs() );
+        QString prefix = dir->errSubDirCount() > 0 ? ">" : "";
+
+        setLabel( _ui->dirTotalSizeLabel,   dir->totalSize(),    prefix );
+        setLabel( _ui->dirItemCountLabel,   dir->totalItems(),   prefix );
+        setLabel( _ui->dirFileCountLabel,   dir->totalFiles(),   prefix );
+        setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs(), prefix );
     }
     else
     {
@@ -519,17 +521,21 @@ void FileDetailsView::showSelectionSummary( const FileInfoSet & selectedItems )
 }
 
 
-void FileDetailsView::setLabel( QLabel * label, int number )
+void FileDetailsView::setLabel( QLabel *        label,
+                                int             number,
+                                const QString & prefix )
 {
     CHECK_PTR( label );
-    label->setText( QString::number( number ) );
+    label->setText( prefix + QString::number( number ) );
 }
 
 
-void FileDetailsView::setLabel( QLabel * label, FileSize size )
+void FileDetailsView::setLabel( QLabel *        label,
+                                FileSize        size,
+                                const QString & prefix )
 {
     CHECK_PTR( label );
-    label->setText( formatSize( size ) );
+    label->setText( prefix + formatSize( size ) );
 }
 
 
