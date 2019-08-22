@@ -66,10 +66,26 @@ void DirTreeModel::readSettings()
     _updateTimerMillisec = settings.value( "UpdateTimerMillisec", 333 ).toInt();
     _slowUpdateMillisec	 = settings.value( "SlowUpdateMillisec", 3000 ).toInt();
 
-    _dirReadErrColor     = readColorEntry( settings, "DirReadErrColor",     QColor( Qt::red          ) );
-    _subtreeReadErrColor = readColorEntry( settings, "SubtreeReadErrColor", QColor( 0xa0, 0x00, 0x00 ) );
-
     settings.endGroup();
+
+    if ( usingLightTheme() )
+    {
+        settings.beginGroup( "TreeTheme-light" );
+
+        _dirReadErrColor     = readColorEntry( settings, "DirReadErrColor",     QColor( Qt::red          ) );
+        _subtreeReadErrColor = readColorEntry( settings, "SubtreeReadErrColor", QColor( 0xa0, 0x00, 0x00 ) );
+
+        settings.endGroup();
+    }
+    else // dark theme
+    {
+        settings.beginGroup( "TreeTheme-dark" );
+
+        _dirReadErrColor     = readColorEntry( settings, "DirReadErrColor",     QColor( Qt::red          ) );
+        _subtreeReadErrColor = readColorEntry( settings, "SubtreeReadErrColor", QColor( Qt::yellow       ) );
+
+        settings.endGroup();
+    }
 }
 
 
@@ -84,10 +100,23 @@ void DirTreeModel::writeSettings()
     settings.setDefaultValue( "TreeIconDir",	     _treeIconDir	  );
     settings.setDefaultValue( "UpdateTimerMillisec", _updateTimerMillisec );
 
+    settings.endGroup();
+
+
+    settings.beginGroup( usingLightTheme() ? "TreeTheme-light" : "TreeTheme-dark" );
+
     writeColorEntry( settings, "DirReadErrColor",     _dirReadErrColor     );
     writeColorEntry( settings, "SubtreeReadErrColor", _subtreeReadErrColor );
 
     settings.endGroup();
+}
+
+
+bool DirTreeModel::usingDarkTheme()
+{
+    QColor background = qAppPalette().color( QPalette::Active, QPalette::Base );
+
+    return background.lightness() < 128; // 0 (black) .. 255 (white)
 }
 
 

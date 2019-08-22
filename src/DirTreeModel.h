@@ -120,6 +120,16 @@ namespace QDirStat
 	QModelIndexList persistentIndexList() const
 	    { return QAbstractItemModel::persistentIndexList(); }
 
+        /**
+         * Return 'true' if the application uses a dark widget theme.
+         **/
+        static bool usingDarkTheme();
+
+        /**
+         * Return 'true' if the application uses a light widget theme.
+         **/
+        static bool usingLightTheme() { return ! usingDarkTheme(); }
+
 
     public slots:
 	/**
