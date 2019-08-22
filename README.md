@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-08-12
+Updated: 2019-08-23
 
 
 ## Overview
@@ -122,6 +122,34 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2019-08-22
+
+  - Improved handling for directories that could not be read.
+
+    When you run QDirStat as a normal (non-root) user on system directories, it
+    is very common that you get a "permission denied" error for directories
+    that contain sensitive information. Such a directory gets a folder icon
+    with a little lock to indicate that it's locked for you; there is no way to
+    find out how much disk space it consumes.
+
+    Now, such directories are also displayed in a special color (for now bright
+    red) in the tree. All their parents are now displayed in another (slightly
+    less obtrusive) color to indicate that you probably don't see the complete
+    disk space information for that subdirectory.
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-err-dirs-light.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-err-dirs-light.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-err-dirs-dark.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-err-dirs-dark.png)
+
+    In those examples, The `/etc/ssl/private` directory does not have read
+    permissions for non-root users; note the icon with the lock and the red
+    text color.
+
+    When you don't open that branch in the tree, you might not realize this;
+    it's also in the log file, but most users don't read that. So its parent
+    directories `/etc/ssl` and `/etc` are also displayed in a different color:
+    Dark red in the light widget theme and yellow in the dark widget theme.
+
 
 - 2019-08-12
 
