@@ -370,6 +370,17 @@ namespace QDirStat
 	 **/
 	virtual int directChildrenCount() { return 0; }
 
+        /**
+         * Returns the number of subdirectories below this item that could not
+         * be read (typically due to insufficient permissions).
+         *
+         * Notice that this does NOT include this item if it is a directory
+         * that could not be read.
+	 *
+	 * Derived classes that have children should overwrite this.
+         **/
+        virtual int errSubDirCount() { return 0; }
+
 	/**
 	 * Returns the latest modification time of this subtree.
 	 * Derived classes that have children should overwrite this.

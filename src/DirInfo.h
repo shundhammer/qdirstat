@@ -143,6 +143,17 @@ namespace QDirStat
 	 **/
 	virtual int directChildrenCount() Q_DECL_OVERRIDE;
 
+        /**
+         * Returns the number of subdirectories below this item that could not
+         * be read (typically due to insufficient permissions).
+         *
+         * Notice that this does NOT include this item if it is a directory
+         * that could not be read.
+	 *
+	 * Reimplemented - inherited from FileInfo.
+         **/
+        virtual int errSubDirCount() Q_DECL_OVERRIDE;
+
 	/**
 	 * Returns the latest modification time of this subtree.
 	 *
@@ -340,16 +351,15 @@ namespace QDirStat
 	void readJobAdded();
 
 	/**
-	 * Notification of a finished directory read job somewhere in the
-	 * subtree.
+	 * Notification of a finished directory read job for 'dir'.
+         * This is cascaded upward in the tree.
 	 **/
-	void readJobFinished();
+	void readJobFinished( DirInfo * dir );
 
 	/**
-	 * Notification of an aborted directory read job somewhere in the
-	 * subtree.
+	 * Notification of an aborted directory read job for 'dir'.
 	 **/
-	void readJobAborted();
+	void readJobAborted( DirInfo * dir );
 
 	/**
 	 * Finalize this directory level after reading it is completed. This
@@ -547,6 +557,7 @@ namespace QDirStat
 	int		_totalIgnoredItems;
 	int		_totalUnignoredItems;
 	int		_directChildrenCount;
+        int             _errSubDirCount;
 	time_t		_latestMtime;
         time_t          _oldestFileMtime;
 

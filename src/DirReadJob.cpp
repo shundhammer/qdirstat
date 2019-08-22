@@ -43,7 +43,7 @@ DirReadJob::DirReadJob( DirTree * tree,
 DirReadJob::~DirReadJob()
 {
     if ( _dir )
-	_dir->readJobFinished();
+	_dir->readJobFinished( _dir );
 }
 
 
@@ -689,13 +689,13 @@ void DirReadJobQueue::abort()
     foreach ( DirReadJob * job, _queue )
     {
 	if ( job->dir() )
-	    job->dir()->readJobAborted();
+	    job->dir()->readJobAborted( job->dir() );
     }
 
     foreach ( DirReadJob * job, _blocked )
     {
 	if ( job->dir() )
-	    job->dir()->readJobAborted();
+	    job->dir()->readJobAborted( job->dir() );
     }
 
     clear();

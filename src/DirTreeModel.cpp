@@ -17,6 +17,7 @@
 #include "DataColumns.h"
 #include "SelectionModel.h"
 #include "Settings.h"
+#include "SettingsHelpers.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "DebugHelpers.h"
@@ -65,6 +66,9 @@ void DirTreeModel::readSettings()
     _updateTimerMillisec = settings.value( "UpdateTimerMillisec", 333 ).toInt();
     _slowUpdateMillisec	 = settings.value( "SlowUpdateMillisec", 3000 ).toInt();
 
+    _dirReadErrColor     = readColorEntry( settings, "DirReadErrColor",     QColor( Qt::red          ) );
+    _subtreeReadErrColor = readColorEntry( settings, "SubtreeReadErrColor", QColor( 0xa0, 0x00, 0x00 ) );
+
     settings.endGroup();
 }
 
@@ -77,8 +81,11 @@ void DirTreeModel::writeSettings()
     settings.setValue( "SlowUpdateMillisec", _slowUpdateMillisec  );
 
     settings.setDefaultValue( "CrossFileSystems",    _tree ? _tree->crossFileSystems() : false );
-    settings.setDefaultValue( "TreeIconDir" ,	     _treeIconDir	  );
+    settings.setDefaultValue( "TreeIconDir",	     _treeIconDir	  );
     settings.setDefaultValue( "UpdateTimerMillisec", _updateTimerMillisec );
+
+    writeColorEntry( settings, "DirReadErrColor",     _dirReadErrColor     );
+    writeColorEntry( settings, "SubtreeReadErrColor", _subtreeReadErrColor );
 
     settings.endGroup();
 }
@@ -373,8 +380,17 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
             {
                 if ( item->isIgnored() || item->isAttic() )
                     return qAppPalette().brush( QPalette::Disabled, QPalette::Foreground );
-                else
-                    return QVariant();
+
+                if ( item->isDir() )
+                {
+                    if ( item->readState() == DirError )
+                        return _dirReadErrColor;
+
+                    if ( item->errSubDirCount() > 0 )
+                        return _subtreeReadErrColor;
+                }
+
+                return QVariant();
             }
 
 	case Qt::DecorationRole:

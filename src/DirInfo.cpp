@@ -45,7 +45,7 @@ DirInfo::DirInfo( const QString & filenameWithoutPath,
     init();
     ensureDotEntry();
 
-    _directChildrenCount++;
+    _directChildrenCount++;     // One for the newly created dot entry
 }
 
 
@@ -65,7 +65,7 @@ DirInfo::DirInfo( DirTree *	  tree,
     init();
     ensureDotEntry();
 
-    _directChildrenCount++;
+    _directChildrenCount++;     // One for the newly created dot entry
 }
 
 
@@ -90,6 +90,7 @@ void DirInfo::init()
     _totalIgnoredItems	 = 0;
     _totalUnignoredItems = 0;
     _directChildrenCount = 0;
+    _errSubDirCount      = 0;
     _latestMtime	 = _mtime;
     _oldestFileMtime     = 0;
     _readState		 = DirQueued;
@@ -229,6 +230,7 @@ void DirInfo::recalc()
     _totalIgnoredItems	 = 0;
     _totalUnignoredItems = 0;
     _directChildrenCount = 0;
+    _errSubDirCount      = 0;
     _latestMtime	 = _mtime;
     _oldestFileMtime     = 0;
 
@@ -241,12 +243,18 @@ void DirInfo::recalc()
 	_totalBlocks	     += (*it)->totalBlocks();
 	_totalItems	     += (*it)->totalItems() + 1;
 	_totalSubDirs	     += (*it)->totalSubDirs();
+        _errSubDirCount      += (*it)->errSubDirCount();
 	_totalFiles	     += (*it)->totalFiles();
 	_totalIgnoredItems   += (*it)->totalIgnoredItems();
 	_totalUnignoredItems += (*it)->totalUnignoredItems();
 
 	if ( (*it)->isDir() )
+        {
 	    _totalSubDirs++;
+
+            if ( (*it)->readState() == DirError )
+                _errSubDirCount++;
+        }
 
 	if ( (*it)->isFile() )
 	    _totalFiles++;
@@ -408,6 +416,15 @@ int DirInfo::countDirectChildren()
 	++_directChildrenCount;
 
     return _directChildrenCount;
+}
+
+
+int DirInfo::errSubDirCount()
+{
+    if ( _summaryDirty )
+	recalc();
+
+    return _errSubDirCount;
 }
 
 
@@ -678,24 +695,27 @@ void DirInfo::readJobAdded()
 }
 
 
-void DirInfo::readJobFinished()
+void DirInfo::readJobFinished( DirInfo * dir )
 {
     _pendingReadJobs--;
 
     if ( _lastSortCol == ReadJobsCol )
 	dropSortCache();
 
+    if ( dir && dir != this && dir->readState() == DirError )
+        _errSubDirCount++;
+
     if ( _parent )
-	_parent->readJobFinished();
+	_parent->readJobFinished( dir );
 }
 
 
-void DirInfo::readJobAborted()
+void DirInfo::readJobAborted( DirInfo * dir )
 {
     _readState = DirAborted;
 
     if ( _parent )
-	_parent->readJobAborted();
+	_parent->readJobAborted( dir );
 }
 
 

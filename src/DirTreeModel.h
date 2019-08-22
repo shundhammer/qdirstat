@@ -11,6 +11,7 @@
 
 
 #include <QAbstractItemModel>
+#include <QColor>
 #include <QPixmap>
 #include <QSet>
 #include <QTimer>
@@ -450,6 +451,11 @@ namespace QDirStat
 	DataColumn	 _sortCol;
 	Qt::SortOrder	 _sortOrder;
         bool             _removingRows;
+
+        // Colors
+
+        QColor _dirReadErrColor;
+        QColor _subtreeReadErrColor;
 
 
 	// The various icons
