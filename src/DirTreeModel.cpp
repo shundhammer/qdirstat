@@ -70,21 +70,21 @@ void DirTreeModel::readSettings()
 
     if ( usingLightTheme() )
     {
-        settings.beginGroup( "TreeTheme-light" );
+	settings.beginGroup( "TreeTheme-light" );
 
-        _dirReadErrColor     = readColorEntry( settings, "DirReadErrColor",     QColor( Qt::red          ) );
-        _subtreeReadErrColor = readColorEntry( settings, "SubtreeReadErrColor", QColor( 0xa0, 0x00, 0x00 ) );
+	_dirReadErrColor     = readColorEntry( settings, "DirReadErrColor",	QColor( Qt::red		 ) );
+	_subtreeReadErrColor = readColorEntry( settings, "SubtreeReadErrColor", QColor( 0xa0, 0x00, 0x00 ) );
 
-        settings.endGroup();
+	settings.endGroup();
     }
     else // dark theme
     {
-        settings.beginGroup( "TreeTheme-dark" );
+	settings.beginGroup( "TreeTheme-dark" );
 
-        _dirReadErrColor     = readColorEntry( settings, "DirReadErrColor",     QColor( Qt::red          ) );
-        _subtreeReadErrColor = readColorEntry( settings, "SubtreeReadErrColor", QColor( Qt::yellow       ) );
+	_dirReadErrColor     = readColorEntry( settings, "DirReadErrColor",	QColor( Qt::red		 ) );
+	_subtreeReadErrColor = readColorEntry( settings, "SubtreeReadErrColor", QColor( Qt::yellow	 ) );
 
-        settings.endGroup();
+	settings.endGroup();
     }
 }
 
@@ -105,7 +105,7 @@ void DirTreeModel::writeSettings()
 
     settings.beginGroup( usingLightTheme() ? "TreeTheme-light" : "TreeTheme-dark" );
 
-    writeColorEntry( settings, "DirReadErrColor",     _dirReadErrColor     );
+    writeColorEntry( settings, "DirReadErrColor",     _dirReadErrColor	   );
     writeColorEntry( settings, "SubtreeReadErrColor", _subtreeReadErrColor );
 
     settings.endGroup();
@@ -405,22 +405,22 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 		return result;
 	    }
 
-        case Qt::ForegroundRole:
-            {
-                if ( item->isIgnored() || item->isAttic() )
-                    return qAppPalette().brush( QPalette::Disabled, QPalette::Foreground );
+	case Qt::ForegroundRole:
+	    {
+		if ( item->isIgnored() || item->isAttic() )
+		    return qAppPalette().brush( QPalette::Disabled, QPalette::Foreground );
 
-                if ( item->isDir() )
-                {
-                    if ( item->readState() == DirError )
-                        return _dirReadErrColor;
+		if ( item->isDir() )
+		{
+		    if ( item->readState() == DirError )
+			return _dirReadErrColor;
 
-                    if ( item->errSubDirCount() > 0 )
-                        return _subtreeReadErrColor;
-                }
+		    if ( item->errSubDirCount() > 0 )
+			return _subtreeReadErrColor;
+		}
 
-                return QVariant();
-            }
+		return QVariant();
+	    }
 
 	case Qt::DecorationRole:
 	    {
@@ -446,7 +446,7 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 
 		    case NameCol:
 		    case LatestMTimeCol:
-                    case OldestFileMTimeCol:
+		    case OldestFileMTimeCol:
 		    case UserCol:
 		    case GroupCol:
 		    default:
@@ -470,7 +470,7 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 			{
 			    if ( ( item->parent() && item->parent()->isBusy() ) ||
 				 item == _tree->firstToplevel() ||
-                                 item->isAttic() )
+				 item->isAttic() )
 			    {
 				return -1.0;
 			    }
@@ -708,7 +708,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     bool limitedInfo = item->isPseudoDir() || item->readState() == DirCached || item->isPkgInfo();
 
     if ( item->isAttic() && col == PercentNumCol )
-        return QVariant();
+	return QVariant();
 
     switch ( col )
     {
@@ -725,7 +725,28 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
     if ( item->isDirInfo() )
     {
-	QString prefix = item->readState() == DirAborted ? ">" : "";
+	if ( item->readState() == DirError )
+	{
+            switch ( col )
+            {
+                case TotalItemsCol:
+                case TotalFilesCol:
+                case TotalSubDirsCol:
+                    return "?";
+
+                default:
+                    break;
+            }
+	}
+
+	QString prefix = "";
+
+	if ( item->readState() == DirAborted ||
+	     item->readState() == DirError   ||
+	     item->errSubDirCount() > 0 )
+	{
+	    prefix = ">";
+	}
 
 	switch ( col )
 	{
@@ -737,7 +758,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 		else
 		    return prefix + QString( "%1" ).arg( item->totalSubDirs() );
 
-            case OldestFileMTimeCol:  return QString( "  " ) + formatTime( item->oldestFileMtime() );
+	    case OldestFileMTimeCol:  return QString( "	 " ) + formatTime( item->oldestFileMtime() );
 	}
     }
 
@@ -766,7 +787,15 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 
     if ( item->isDirInfo() )
     {
-	QString prefix = item->readState() == DirAborted ? ">" : "";
+	QString prefix = "";
+
+	if ( item->readState() == DirAborted ||
+	     item->readState() == DirError   ||
+	     item->errSubDirCount() > 0 )
+	{
+	    prefix = ">";
+	}
+
 	return prefix + formatSize( item->totalSize() );
     }
 
