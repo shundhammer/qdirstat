@@ -956,9 +956,16 @@ void MainWindow::showCurrent( FileInfo * item )
 {
     if ( item )
     {
-	_ui->statusBar->showMessage( QString( "%1  (%2)" )
-				     .arg( item->debugUrl() )
-				     .arg( formatSize( item->totalSize() ) ) );
+        QString prefix = item->errSubDirCount() > 0 ? ">" : "";
+        QString msg = QString( "%1  (%2%3)" )
+            .arg( item->debugUrl() )
+            .arg( prefix )
+            .arg( formatSize( item->totalSize() ) );
+
+        if ( item->readState() == DirError )
+            msg += tr( "  [Read Error]" );
+
+	_ui->statusBar->showMessage( msg );
     }
     else
     {
