@@ -150,6 +150,11 @@ Download installable binary packages for various Linux distributions here:
     directories `/etc/ssl` and `/etc` are also displayed in a different color:
     Dark red in the light widget theme and yellow in the dark widget theme.
 
+    In addition to that, the parent directories now show a `>` prefix for the
+    size, number of items, number of files, number of subdirs fields to
+    indicate that there may be more. This is a hint (not only, but also) for
+    color blind users.
+
 
 - 2019-08-12
 
