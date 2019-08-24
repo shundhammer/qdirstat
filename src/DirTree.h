@@ -69,9 +69,9 @@ namespace QDirStat
 	/**
 	 * Actually start reading.
 	 *
-	 * It's not very pretty this is required as an extra method, but this
-	 * cannot simply be done in the constructor: We need to give the caller
-	 * a chance to set up Qt signal connections, and for this the
+	 * It's not very pretty that this is required as a separate method, but
+	 * this cannot simply be done in the constructor: We need to give the
+	 * caller a chance to set up Qt signal connections, and for this the
 	 * constructor must return before any signals are sent, i.e. before
 	 * anything is read.
 	 **/
