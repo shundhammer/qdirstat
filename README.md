@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-08-23
+Updated: 2019-08-24
 
 
 ## Overview
@@ -122,6 +122,25 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2019-08-24
+
+  - If directories could not be read (typically because of insufficient
+    permissions), now also posting a warning message in a new message panel.
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-err-dirs-light.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-err-dirs-light.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-err-dirs-dark.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-err-dirs-dark.png)
+
+    You can close the message with the `[x]` close button on its right side,
+    but you can also simply leave it open. This is a lot less obtrusive than a
+    pop-up dialog, yet less temporary than a message in the bottom status line
+    that will disappear in a few seconds or when anything else is reported.
+
+    The infrastructure for this enables multiple such messages that can be
+    closed in any order (or not at all) as the user likes. Each message can
+    have a "Details..." link (not used in these examples) to provide more
+    information.
+
 
 - 2019-08-22
 
