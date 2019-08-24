@@ -38,6 +38,7 @@
 #include "MimeCategoryConfigPage.h"
 #include "OpenPkgDialog.h"
 #include "OutputWindow.h"
+#include "PanelMessage.h"
 #include "PkgManager.h"
 #include "PkgQuery.h"
 #include "Refresher.h"
@@ -645,6 +646,12 @@ void MainWindow::readingFinished()
     QString elapsedTime = formatTime( _stopWatch.elapsed() );
     _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );
     logInfo() << "Reading finished after " << elapsedTime << endl;
+
+    if ( _dirTreeModel->tree()->firstToplevel() &&
+         _dirTreeModel->tree()->firstToplevel()->errSubDirCount() > 0 )
+    {
+        showDirPermissionsWarning();
+    }
 
     // Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );
 }
@@ -1274,6 +1281,27 @@ FileInfo * MainWindow::selectedDirOrRoot() const
 	sel = _dirTreeModel->tree()->firstToplevel();
 
     return sel;
+}
+
+
+void MainWindow::showDirPermissionsWarning()
+{
+    if ( _dirPermissionsWarning )
+        return;
+
+    PanelMessage * msg = new PanelMessage( _ui->messagePanel );
+    CHECK_NEW( msg );
+
+    msg->setHeading( tr( "Some directories could not be read." ) );
+    msg->setText( tr( "You might not have sufficient permissions." ) );
+    msg->setIcon( QPixmap( ":/icons/lock-closed.png" ) );
+
+#if 0
+    msg->connectDetailsLink( this, SLOT( notImplemented() ) );
+#endif
+
+    _ui->messagePanel->add( msg );
+    _dirPermissionsWarning = msg;
 }
 
 

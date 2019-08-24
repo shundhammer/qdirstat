@@ -18,6 +18,7 @@
 
 #include "ui_main-window.h"
 #include "FileTypeStatsWindow.h"
+#include "PanelMessage.h"
 #include "PkgFilter.h"
 
 
@@ -39,6 +40,7 @@ namespace QDirStat
 
 using QDirStat::FileInfo;
 using QDirStat::FileTypeStatsWindow;
+using QDirStat::PanelMessage;
 
 
 class MainWindow: public QMainWindow
@@ -322,6 +324,12 @@ protected slots:
     void showElapsedTime();
 
     /**
+     * Show a warning (as a panel message) about insufficient permissions when
+     * reading directories.
+     **/
+    void showDirPermissionsWarning();
+
+    /**
      * Switch verbose logging for selection changes on or off.
      *
      * This is normally done by the invisible checkable action
@@ -425,6 +433,7 @@ private:
     QDirStat::ConfigDialog	* _configDialog;
     QActionGroup		* _layoutActionGroup;
     QPointer<FileTypeStatsWindow> _fileTypeStatsWindow;
+    QPointer<PanelMessage>        _dirPermissionsWarning;
     QString			  _dUrl;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
