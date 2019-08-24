@@ -83,8 +83,8 @@ SOURCES	  = main.cpp			\
 	    OpenPkgDialog.cpp		\
 	    OutputWindow.cpp		\
 	    PacManPkgManager.cpp	\
-            PercentBar.cpp		\
-            PercentileStats.cpp         \
+	    PercentBar.cpp		\
+	    PercentileStats.cpp		\
 	    PkgFileListCache.cpp	\
 	    PkgFilter.cpp		\
 	    PkgInfo.cpp			\
@@ -166,7 +166,7 @@ HEADERS	  =				\
 	    OutputWindow.h		\
 	    PacManPkgManager.h		\
 	    PercentBar.h		\
-            PercentileStats.h           \
+	    PercentileStats.h		\
 	    PkgFileListCache.h		\
 	    PkgFilter.h			\
 	    PkgInfo.h			\
@@ -190,7 +190,7 @@ HEADERS	  =				\
 	    Trash.h			\
 	    TreemapTile.h		\
 	    TreemapView.h		\
-	    UnpkgSettings.cpp           \
+	    UnpkgSettings.cpp		\
 	    Version.h			\
 
 
@@ -207,7 +207,8 @@ FORMS	  = main-window.ui		   \
 	    locate-files-window.ui	   \
 	    open-pkg-dialog.ui		   \
 	    show-unpkg-files-dialog.ui	   \
-	    file-details-view.ui
+	    file-details-view.ui	   \
+	    panel-message.ui
 
 
 
