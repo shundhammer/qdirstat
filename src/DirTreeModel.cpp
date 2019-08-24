@@ -758,7 +758,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 		else
 		    return prefix + QString( "%1" ).arg( item->totalSubDirs() );
 
-	    case OldestFileMTimeCol:  return QString( "	 " ) + formatTime( item->oldestFileMtime() );
+	    case OldestFileMTimeCol:  return QString( "  " ) + formatTime( item->oldestFileMtime() );
 	}
     }
 
