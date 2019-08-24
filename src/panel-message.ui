@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>panelMessage</class>
- <widget class="QWidget" name="panelMessage">
+ <class>PanelMessage</class>
+ <widget class="QWidget" name="PanelMessage">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -32,7 +32,7 @@
    <item>
     <widget class="QFrame" name="frame">
      <property name="frameShape">
-      <enum>QFrame::Panel</enum>
+      <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -213,7 +213,7 @@
   <connection>
    <sender>closeButton</sender>
    <signal>clicked()</signal>
-   <receiver>panelMessage</receiver>
+   <receiver>PanelMessage</receiver>
    <slot>deleteLater()</slot>
    <hints>
     <hint type="sourcelabel">

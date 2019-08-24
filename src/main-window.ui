@@ -43,6 +43,9 @@
          </sizepolicy>
         </property>
         <layout class="QVBoxLayout" name="treeViewLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
          <property name="leftMargin">
           <number>0</number>
          </property>
@@ -66,11 +69,37 @@
           </widget>
          </item>
          <item>
+          <spacer name="breadcrumbVSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>6</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QDirStat::DirTreeView" name="dirTreeView">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>1</horstretch>
              <verstretch>1</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDirStat::MessagePanel" name="messagePanel" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
             </sizepolicy>
            </property>
           </widget>
@@ -90,7 +119,7 @@
            <x>0</x>
            <y>0</y>
            <width>68</width>
-           <height>282</height>
+           <height>288</height>
           </rect>
          </property>
         </widget>
@@ -848,6 +877,12 @@
    <class>QDirStat::FileDetailsView</class>
    <extends>QWidget</extends>
    <header>FileDetailsView.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QDirStat::MessagePanel</class>
+   <extends>QWidget</extends>
+   <header>MessagePanel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

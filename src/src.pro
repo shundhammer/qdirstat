@@ -76,6 +76,7 @@ SOURCES	  = main.cpp			\
 	    LocateFilesWindow.cpp	\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
+            MessagePanel.cpp		\
 	    MimeCategorizer.cpp		\
 	    MimeCategory.cpp		\
 	    MimeCategoryConfigPage.cpp	\
@@ -83,6 +84,7 @@ SOURCES	  = main.cpp			\
 	    OpenPkgDialog.cpp		\
 	    OutputWindow.cpp		\
 	    PacManPkgManager.cpp	\
+            PanelMessage.cpp            \
 	    PercentBar.cpp		\
 	    PercentileStats.cpp		\
 	    PkgFileListCache.cpp	\
@@ -158,6 +160,7 @@ HEADERS	  =				\
 	    LocateFilesWindow.h		\
 	    Logger.h			\
 	    MainWindow.h		\
+	    MessagePanel.h		\
 	    MimeCategorizer.h		\
 	    MimeCategory.h		\
 	    MimeCategoryConfigPage.h	\
@@ -165,6 +168,7 @@ HEADERS	  =				\
 	    OpenPkgDialog.h		\
 	    OutputWindow.h		\
 	    PacManPkgManager.h		\
+            PanelMessage.h              \
 	    PercentBar.h		\
 	    PercentileStats.h		\
 	    PkgFileListCache.h		\
@@ -208,6 +212,7 @@ FORMS	  = main-window.ui		   \
 	    open-pkg-dialog.ui		   \
 	    show-unpkg-files-dialog.ui	   \
 	    file-details-view.ui	   \
+	    message-panel.ui		   \
 	    panel-message.ui
 
 
