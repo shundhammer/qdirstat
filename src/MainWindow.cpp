@@ -74,6 +74,7 @@ MainWindow::MainWindow():
     _ui( new Ui::MainWindow ),
     _configDialog(0),
     _modified( false ),
+    _enableDirPermissionsWarning( false ),
     _verboseSelection( false ),
     _urlInWindowTitle( false ),
     _useTreemapHover( false ),
@@ -352,12 +353,12 @@ void MainWindow::connectActions()
 
     // "Help" menu
 
-    CONNECT_ACTION( _ui->actionHelp,		this, showHelp()          );
-    CONNECT_ACTION( _ui->actionPkgViewHelp,	this, showPkgViewHelp()   );
+    CONNECT_ACTION( _ui->actionHelp,		this, showHelp()	  );
+    CONNECT_ACTION( _ui->actionPkgViewHelp,	this, showPkgViewHelp()	  );
     CONNECT_ACTION( _ui->actionUnpkgViewHelp,	this, showUnpkgViewHelp() );
-    CONNECT_ACTION( _ui->actionAbout,		this, showAboutDialog()   );
-    CONNECT_ACTION( _ui->actionAboutQt,		qApp, aboutQt()           );
-    CONNECT_ACTION( _ui->actionWhatsNew,	this, showWhatsNew()      );
+    CONNECT_ACTION( _ui->actionAbout,		this, showAboutDialog()	  );
+    CONNECT_ACTION( _ui->actionAboutQt,		qApp, aboutQt()		  );
+    CONNECT_ACTION( _ui->actionWhatsNew,	this, showWhatsNew()	  );
     CONNECT_ACTION( _ui->actionDonate,		this, showDonateDialog()  );
 
 
@@ -648,9 +649,9 @@ void MainWindow::readingFinished()
     logInfo() << "Reading finished after " << elapsedTime << endl;
 
     if ( _dirTreeModel->tree()->firstToplevel() &&
-         _dirTreeModel->tree()->firstToplevel()->errSubDirCount() > 0 )
+	 _dirTreeModel->tree()->firstToplevel()->errSubDirCount() > 0 )
     {
-        showDirPermissionsWarning();
+	showDirPermissionsWarning();
     }
 
     // Debug::dumpModelTree( _dirTreeModel, QModelIndex(), "" );
@@ -670,6 +671,8 @@ void MainWindow::readingAborted()
 
 void MainWindow::openUrl( const QString & url )
 {
+    _enableDirPermissionsWarning = true;
+
     if ( PkgFilter::isPkgUrl( url ) )
 	readPkg( url );
     else if ( isUnpkgUrl( url ) )
@@ -838,6 +841,7 @@ bool MainWindow::isUnpkgUrl( const QString & url )
 
 void MainWindow::refreshAll()
 {
+    _enableDirPermissionsWarning = true;
     QString url = _dirTreeModel->tree()->url();
 
     if ( ! url.isEmpty() )
@@ -963,14 +967,14 @@ void MainWindow::showCurrent( FileInfo * item )
 {
     if ( item )
     {
-        QString prefix = item->errSubDirCount() > 0 ? ">" : "";
-        QString msg = QString( "%1  (%2%3)" )
-            .arg( item->debugUrl() )
-            .arg( prefix )
-            .arg( formatSize( item->totalSize() ) );
+	QString prefix = item->errSubDirCount() > 0 ? ">" : "";
+	QString msg = QString( "%1  (%2%3)" )
+	    .arg( item->debugUrl() )
+	    .arg( prefix )
+	    .arg( formatSize( item->totalSize() ) );
 
-        if ( item->readState() == DirError )
-            msg += tr( "  [Read Error]" );
+	if ( item->readState() == DirError )
+	    msg += tr( "  [Read Error]" );
 
 	_ui->statusBar->showMessage( msg );
     }
@@ -1286,8 +1290,8 @@ FileInfo * MainWindow::selectedDirOrRoot() const
 
 void MainWindow::showDirPermissionsWarning()
 {
-    if ( _dirPermissionsWarning )
-        return;
+    if ( _dirPermissionsWarning || ! _enableDirPermissionsWarning )
+	return;
 
     PanelMessage * msg = new PanelMessage( _ui->messagePanel );
     CHECK_NEW( msg );
@@ -1302,6 +1306,7 @@ void MainWindow::showDirPermissionsWarning()
 
     _ui->messagePanel->add( msg );
     _dirPermissionsWarning = msg;
+    _enableDirPermissionsWarning = false;
 }
 
 

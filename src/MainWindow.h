@@ -433,10 +433,11 @@ private:
     QDirStat::ConfigDialog	* _configDialog;
     QActionGroup		* _layoutActionGroup;
     QPointer<FileTypeStatsWindow> _fileTypeStatsWindow;
-    QPointer<PanelMessage>        _dirPermissionsWarning;
+    QPointer<PanelMessage>	  _dirPermissionsWarning;
     QString			  _dUrl;
     QElapsedTimer		  _stopWatch;
     bool			  _modified;
+    bool			  _enableDirPermissionsWarning;
     bool			  _verboseSelection;
     bool			  _urlInWindowTitle;
     bool			  _useTreemapHover;
