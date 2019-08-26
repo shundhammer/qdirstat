@@ -14,6 +14,8 @@
 
 using namespace QDirStat;
 
+QList<MessagePanel *> MessagePanel::_instances;
+
 
 MessagePanel::MessagePanel( QWidget * parent ):
     QWidget( parent ),
@@ -26,12 +28,14 @@ MessagePanel::MessagePanel( QWidget * parent ):
     // The dummy placeholder is only needed for handling in Qt designer.
     delete _ui->dummy;
     _ui->dummy = 0;
+
+    _instances << this;
 }
 
 
 MessagePanel::~MessagePanel()
 {
-
+    _instances.removeAll( this );
 }
 
 
@@ -51,4 +55,16 @@ void MessagePanel::clear()
 {
     foreach ( PanelMessage * msg, findChildren<PanelMessage *>() )
 	delete msg;
+}
+
+
+MessagePanel * MessagePanel::firstInstance()
+{
+    return _instances.isEmpty() ? 0 : _instances.first();
+}
+
+
+MessagePanel * MessagePanel::lastInstance()
+{
+    return _instances.isEmpty() ? 0 : _instances.last();
 }

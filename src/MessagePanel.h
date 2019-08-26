@@ -10,6 +10,7 @@
 #define MessagePanel_h
 
 #include <QWidget>
+#include <QList>
 #include "ui_message-panel.h"
 
 
@@ -46,9 +47,29 @@ namespace QDirStat
 	 **/
 	void clear();
 
+	/**
+	 * Return the first instance of this class that still exists or 0 if
+	 * there is none.
+	 **/
+	static MessagePanel * firstInstance();
+
+	/**
+	 * Return the last instance of this class that still exists or 0 if
+	 * there is none.
+	 **/
+	static MessagePanel * lastInstance();
+
+	/**
+	 * Return 'true' if there is an active instance of this class, 'false'
+	 * if not.
+	 **/
+	static bool haveInstance() { return ! _instances.isEmpty(); }
+
     protected:
 
 	Ui::MessagePanel * _ui;
+
+	static QList<MessagePanel *> _instances;
 
     };	// class MessagePanel
 
