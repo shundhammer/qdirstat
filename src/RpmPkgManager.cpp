@@ -266,8 +266,8 @@ void RpmPkgManager::rebuildRpmDbWarning()
 	CHECK_NEW( panelMessage );
 
 	panelMessage->setHeading( QObject::tr( "RPM is very slow." ) );
-	panelMessage->setText( QObject::tr( "Open a shell window and run:<br>"
-					    "<tt>sudo rpm --rebuilddb</tt>" ) );
+	panelMessage->setText( QObject::tr( "Open a shell window and run:<br>%1" )
+                               .arg( "<tt>sudo rpm --rebuilddb</tt>" ) );
 	panelMessage->setIcon( QPixmap( ":/icons/dialog-warning.png" ) );
 
 	MessagePanel::firstInstance()->add( panelMessage );
