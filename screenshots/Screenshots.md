@@ -55,6 +55,24 @@ _Multi-selection_
 _Screenshot of output during cleanup actions. Of course this window is purely optional._
 
 
+## Error Reporting
+
+![Reporting Directory Read Errors Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-err-dirs-light.png)
+
+_Reporting errors during directory reading. Typically this is because of
+missing permissions, so it may or may not be important to the user. Those
+errors are reported in small panels at the bottom of the directory tree
+widget. The user can leave them open or close them._
+
+![Details about Directory Read Errors](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unreadable-dirs-window.png)
+
+_Clicking on the "Details..." link opens a separate window that lists all the
+directories that could not be read. This window is non-modal, i.e. the user can
+interact with the main window while it is open. A click on any directory in
+that list locates that directory in the main window, i.e. opens all parent
+branches and scrolls to ensure that directory is visible._
+
+
 ## File Type Statistics
 
 ![File Type Statistics Window Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png)
