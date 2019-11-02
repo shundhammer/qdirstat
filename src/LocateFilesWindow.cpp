@@ -114,7 +114,7 @@ void LocateFilesWindow::populate( const QString & suffix, FileInfo * newSubtree 
     // For better Performance: Disable sorting while inserting many items
     _ui->treeWidget->setSortingEnabled( false );
 
-    locate( newSubtree ? newSubtree : _subtree() );
+    populateRecursive( newSubtree ? newSubtree : _subtree() );
 
     _ui->treeWidget->setSortingEnabled( true );
     _ui->treeWidget->sortByColumn( SSR_PathCol, Qt::AscendingOrder );
@@ -142,7 +142,7 @@ void LocateFilesWindow::populate( const QString & suffix, FileInfo * newSubtree 
 }
 
 
-void LocateFilesWindow::locate( FileInfo * dir )
+void LocateFilesWindow::populateRecursive( FileInfo * dir )
 {
     if ( ! dir )
 	return;
@@ -168,12 +168,12 @@ void LocateFilesWindow::locate( FileInfo * dir )
 
     // Recurse through any subdirectories
 
-    FileInfo* child = dir->firstChild();
+    FileInfo * child = dir->firstChild();
 
     while ( child )
     {
 	if ( child->isDir() )
-	    locate( child );
+	    populateRecursive( child );
 
 	child = child->next();
     }
@@ -256,7 +256,7 @@ SuffixSearchResultItem::SuffixSearchResultItem( const QString & path,
 }
 
 
-bool SuffixSearchResultItem::operator<(const QTreeWidgetItem & rawOther) const
+bool SuffixSearchResultItem::operator<( const QTreeWidgetItem & rawOther ) const
 {
     // Since this is a reference, the dynamic_cast will throw a std::bad_cast
     // exception if it fails. Not catching this here since this is a genuine

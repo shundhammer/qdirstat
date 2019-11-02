@@ -595,6 +595,20 @@ void MainWindow::busyDisplay()
 {
     _ui->treemapView->disable();
     updateActions();
+
+    if ( _unreadableDirsWindow )
+    {
+	// Close the window that lists unreadable directories: With the next
+	// directory read, things might have changed; the user may have fixed
+	// permissions or ownership of those directories.
+	//
+	// Closing this window also deletes it (because it has the
+	// DeleteOnClose flag set). The QPointer we use will take care of
+	// resetting itself to 0 when the underlying QObject is deleted.
+
+	_unreadableDirsWindow->close();
+    }
+
     _updateTimer.start();
 
     // It would be nice to sort by read jobs during reading, but this confuses
@@ -1168,8 +1182,7 @@ void MainWindow::showFileTypeStats()
 	// This deletes itself when the user closes it. The associated QPointer
 	// keeps track of that and sets the pointer to 0 when it happens.
 
-	_fileTypeStatsWindow = new QDirStat::FileTypeStatsWindow( _selectionModel,
-								  this );
+	_fileTypeStatsWindow = new FileTypeStatsWindow( _selectionModel, this );
     }
 
     _fileTypeStatsWindow->populate( selectedDirOrRoot() );
@@ -1300,13 +1313,26 @@ void MainWindow::showDirPermissionsWarning()
     msg->setText( tr( "You might not have sufficient permissions." ) );
     msg->setIcon( QPixmap( ":/icons/lock-closed.png" ) );
 
-#if 0
-    msg->connectDetailsLink( this, SLOT( notImplemented() ) );
-#endif
+    msg->connectDetailsLink( this, SLOT( showUnreadableDirs() ) );
 
     _ui->messagePanel->add( msg );
     _dirPermissionsWarning = msg;
     _enableDirPermissionsWarning = false;
+}
+
+
+void MainWindow::showUnreadableDirs()
+{
+    if ( ! _unreadableDirsWindow )
+    {
+	// This deletes itself when the user closes it. The associated QPointer
+	// keeps track of that and sets the pointer to 0 when it happens.
+
+	_unreadableDirsWindow = new UnreadableDirsWindow( _selectionModel, this );
+    }
+
+    _unreadableDirsWindow->populate( _dirTreeModel->tree()->root() );
+    _unreadableDirsWindow->show();
 }
 
 

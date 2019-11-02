@@ -76,7 +76,7 @@ SOURCES	  = main.cpp			\
 	    LocateFilesWindow.cpp	\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
-            MessagePanel.cpp		\
+	    MessagePanel.cpp		\
 	    MimeCategorizer.cpp		\
 	    MimeCategory.cpp		\
 	    MimeCategoryConfigPage.cpp	\
@@ -84,7 +84,7 @@ SOURCES	  = main.cpp			\
 	    OpenPkgDialog.cpp		\
 	    OutputWindow.cpp		\
 	    PacManPkgManager.cpp	\
-            PanelMessage.cpp            \
+	    PanelMessage.cpp		\
 	    PercentBar.cpp		\
 	    PercentileStats.cpp		\
 	    PkgFileListCache.cpp	\
@@ -109,6 +109,7 @@ SOURCES	  = main.cpp			\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
 	    UnpkgSettings.cpp		\
+	    UnreadableDirsWindow.cpp
 
 
 HEADERS	  =				\
@@ -168,7 +169,7 @@ HEADERS	  =				\
 	    OpenPkgDialog.h		\
 	    OutputWindow.h		\
 	    PacManPkgManager.h		\
-            PanelMessage.h              \
+	    PanelMessage.h		\
 	    PercentBar.h		\
 	    PercentileStats.h		\
 	    PkgFileListCache.h		\
@@ -195,7 +196,8 @@ HEADERS	  =				\
 	    TreemapTile.h		\
 	    TreemapView.h		\
 	    UnpkgSettings.cpp		\
-	    Version.h			\
+	    UnreadableDirsWindow.h	\
+	    Version.h
 
 
 
@@ -213,7 +215,8 @@ FORMS	  = main-window.ui		   \
 	    show-unpkg-files-dialog.ui	   \
 	    file-details-view.ui	   \
 	    message-panel.ui		   \
-	    panel-message.ui
+	    panel-message.ui		   \
+	    unreadable-dirs-window.ui
 
 
 

@@ -19,6 +19,7 @@
 #include "ui_main-window.h"
 #include "FileTypeStatsWindow.h"
 #include "PanelMessage.h"
+#include "UnreadableDirsWindow.h"
 #include "PkgFilter.h"
 
 
@@ -41,6 +42,7 @@ namespace QDirStat
 using QDirStat::FileInfo;
 using QDirStat::FileTypeStatsWindow;
 using QDirStat::PanelMessage;
+using QDirStat::UnreadableDirsWindow;
 
 
 class MainWindow: public QMainWindow
@@ -330,6 +332,12 @@ protected slots:
     void showDirPermissionsWarning();
 
     /**
+     * Show the directories that could not be read in a separate non-modal
+     * window.
+     **/
+    void showUnreadableDirs();
+
+    /**
      * Switch verbose logging for selection changes on or off.
      *
      * This is normally done by the invisible checkable action
@@ -426,27 +434,28 @@ protected:
 
 private:
 
-    Ui::MainWindow		* _ui;
-    QDirStat::DirTreeModel	* _dirTreeModel;
-    QDirStat::SelectionModel	* _selectionModel;
-    QDirStat::CleanupCollection * _cleanupCollection;
-    QDirStat::ConfigDialog	* _configDialog;
-    QActionGroup		* _layoutActionGroup;
-    QPointer<FileTypeStatsWindow> _fileTypeStatsWindow;
-    QPointer<PanelMessage>	  _dirPermissionsWarning;
-    QString			  _dUrl;
-    QElapsedTimer		  _stopWatch;
-    bool			  _modified;
-    bool			  _enableDirPermissionsWarning;
-    bool			  _verboseSelection;
-    bool			  _urlInWindowTitle;
-    bool			  _useTreemapHover;
-    QString			  _layoutName;
-    int				  _statusBarTimeout; // millisec
-    QSignalMapper	       *  _treeLevelMapper;
-    QMap<QString, TreeLayout *>	  _layouts;
-    TreeLayout *		  _currentLayout;
-    QTimer			  _updateTimer;
+    Ui::MainWindow		*  _ui;
+    QDirStat::DirTreeModel	*  _dirTreeModel;
+    QDirStat::SelectionModel	*  _selectionModel;
+    QDirStat::CleanupCollection *  _cleanupCollection;
+    QDirStat::ConfigDialog	*  _configDialog;
+    QActionGroup		*  _layoutActionGroup;
+    QPointer<FileTypeStatsWindow>  _fileTypeStatsWindow;
+    QPointer<PanelMessage>	   _dirPermissionsWarning;
+    QPointer<UnreadableDirsWindow> _unreadableDirsWindow;
+    QString			   _dUrl;
+    QElapsedTimer		   _stopWatch;
+    bool			   _modified;
+    bool			   _enableDirPermissionsWarning;
+    bool			   _verboseSelection;
+    bool			   _urlInWindowTitle;
+    bool			   _useTreemapHover;
+    QString			   _layoutName;
+    int				   _statusBarTimeout; // millisec
+    QSignalMapper	       *   _treeLevelMapper;
+    QMap<QString, TreeLayout *>	   _layouts;
+    TreeLayout *		   _currentLayout;
+    QTimer			   _updateTimer;
 
 }; // class MainWindow
 

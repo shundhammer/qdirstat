@@ -125,7 +125,7 @@ namespace QDirStat
 	 * Recursively locate directories that contain files matching the
 	 * search suffix and create a search result item for each one.
 	 **/
-	void locate( FileInfo * dir );
+	void populateRecursive( FileInfo * dir );
 
 	/**
 	 * Return all direct file children matching the current search suffix.
@@ -195,7 +195,7 @@ namespace QDirStat
 	/**
 	 * Less-than operator for sorting.
 	 **/
-	virtual bool operator<(const QTreeWidgetItem & other) const Q_DECL_OVERRIDE;
+	virtual bool operator<( const QTreeWidgetItem & other ) const Q_DECL_OVERRIDE;
 
     protected:
 
