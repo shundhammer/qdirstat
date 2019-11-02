@@ -287,7 +287,10 @@ void DirInfo::recalc()
     }
 
     if ( _attic )
+    {
 	_totalIgnoredItems += _attic->totalIgnoredItems();
+        _errSubDirCount    += _attic->errSubDirCount();
+    }
 
     _summaryDirty = false;
 }
