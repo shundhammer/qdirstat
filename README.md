@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-08-24
+Updated: 2019-11-02
 
 
 ## Overview
@@ -122,6 +122,26 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2019-11-02
+
+  - Added a separate window to report all directories that could not be read
+    (typically because of insufficient permissions). This window is opened only
+    on request: When the user clicks on the "Details..." link in the panel
+    message that reports that some directories could not be read.
+
+    This window is non-modal, i.e. you can still interact with the main window
+    when it is open. Click on any directory that it lists to locate it in the
+    main window.
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unreadable-dirs-window.png" height="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-unreadable-dirs-window.png)
+  
+  - Directories that could not be read are now also correctly reported in the
+    unpackaged files view. Since they are empty when they could not be read,
+    they will always end up in an `<Ignored>` branch which was previously not
+    taken into account when reporting directories with read errors. This is now
+    fixed.
+
 
 - 2019-08-24
 
