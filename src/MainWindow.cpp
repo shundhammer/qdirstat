@@ -1506,17 +1506,24 @@ QString MainWindow::formatTime( qint64 millisec, bool showMillisec )
 
     if ( hours < 1 && min < 1 && sec < 60 )
     {
-	if ( showMillisec )
-	    formattedTime.sprintf ( "%2d.%03lld ", sec, millisec );
-	else
-	    formattedTime.sprintf ( "%2d ", sec );
-	    // formattedTime.sprintf ( "%2d.%1lld ", sec, millisec / 100 );
+	formattedTime.setNum( sec );
 
-	formattedTime += tr( "sec" );
+	if ( showMillisec )
+	{
+	    formattedTime += QString( ".%1" ).arg( millisec,
+						   3,	// fieldWidth
+						   10,	// base
+						   QChar( '0' ) ); // fillChar
+	}
+
+	formattedTime += " " + tr( "sec" );
     }
     else
     {
-	formattedTime.sprintf ( "%02d:%02d:%02d", hours, min, sec );
+	formattedTime = QString( "%1:%2:%3" )
+	    .arg( hours, 2, 10, QChar( '0' ) )
+	    .arg( min,	 2, 10, QChar( '0' ) )
+	    .arg( sec,	 2, 10, QChar( '0' ) );
     }
 
     return formattedTime;
