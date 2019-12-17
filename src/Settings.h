@@ -55,12 +55,27 @@ namespace QDirStat
 	 **/
 	const QString & groupPrefix() const { return _groupPrefix; }
 
-        /**
-         * Set a value, but only if that key is not already in the settings.
-         **/
-        void setDefaultValue( const QString & key, bool            newValue );
-        void setDefaultValue( const QString & key, int             newValue );
-        void setDefaultValue( const QString & key, const QString & newValue );
+	/**
+	 * Overwritten version of beginGroup( const QString & groupName ):
+	 *
+	 * Begin a settings group with a name with a prefix and a numeric part,
+	 * e.g. "Cleanup_01". This also sets the group prefix.
+	 * End this with endGroup().
+	 **/
+	void beginGroup( const QString & groupPrefix, int no );
+
+	/**
+	 * Original inherited version of beginGroup
+	 **/
+	void beginGroup( const QString & groupName )
+	    { QSettings::beginGroup( groupName ); }
+
+	/**
+	 * Set a value, but only if that key is not already in the settings.
+	 **/
+	void setDefaultValue( const QString & key, bool		   newValue );
+	void setDefaultValue( const QString & key, int		   newValue );
+	void setDefaultValue( const QString & key, const QString & newValue );
 
 	/**
 	 * Find all settings groups that start with 'groupPrefix'.
@@ -83,20 +98,20 @@ namespace QDirStat
 	 **/
 	void ensureToplevel();
 
-        /**
-         * Set the owner of all used config files to the correct one if this
-         * program was started with 'sudo'.
-         **/
-        static void fixFileOwners();
+	/**
+	 * Set the owner of all used config files to the correct one if this
+	 * program was started with 'sudo'.
+	 **/
+	static void fixFileOwners();
 
 
     protected:
 
-        /**
-         * Change the owner of the config file to the user in the $SUDO_UID /
-         * $SUDO_GID environment variables (if set).
-         **/
-        static void fixFileOwner( const QString & filename );
+	/**
+	 * Change the owner of the config file to the user in the $SUDO_UID /
+	 * $SUDO_GID environment variables (if set).
+	 **/
+	static void fixFileOwner( const QString & filename );
 
 	/**
 	 * Move all settings groups starting with 'groupPrefix' from settings
@@ -110,7 +125,7 @@ namespace QDirStat
 	QString _name;
 	QString _groupPrefix;
 
-        static QSet<QString> _usedConfigFiles;
+	static QSet<QString> _usedConfigFiles;
     };
 
 

@@ -236,9 +236,7 @@ void MimeCategorizer::writeSettings()
 
     for ( int i=0; i < _categories.size(); ++i )
     {
-	QString groupName;
-	groupName.sprintf( "MimeCategory_%02d", i+1 );
-	settings.beginGroup( groupName );
+	settings.beginGroup( "MimeCategory", i+1 );
 
 	MimeCategory * category = _categories.at(i);
 

@@ -357,9 +357,7 @@ void ExcludeRules::writeSettings()
 
 	if ( ! regexp.pattern().isEmpty() )
 	{
-	    QString groupName;
-	    groupName.sprintf( "ExcludeRule_%02d", i+1 );
-	    settings.beginGroup( groupName );
+	    settings.beginGroup( "ExcludeRule", i+1 );
 
 	    settings.setValue( "Pattern",	    regexp.pattern() );
 	    settings.setValue( "CaseSensitive",     regexp.caseSensitivity() == Qt::CaseSensitive );

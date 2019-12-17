@@ -44,6 +44,21 @@ Settings::~Settings()
 }
 
 
+void Settings::beginGroup( const QString & prefix, int no )
+{
+    _groupPrefix = prefix;
+
+    QString groupName = QString( "%1_%2" )
+	.arg( prefix )
+	.arg( no,
+	      2,		// fieldWidth
+	      10,		// base
+	      QChar( '0' ) );	// fillChar
+
+    QSettings::beginGroup( groupName );
+}
+
+
 void Settings::fixFileOwners()
 {
     if ( SysUtil::runningWithSudo() )
