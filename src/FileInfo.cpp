@@ -499,8 +499,8 @@ QString QDirStat::formatSize( FileSize lSize )
 
     if ( lSize < 1024 )
     {
-	sizeString.sprintf( "%lld ", lSize );
-	sizeString += units.at( unitIndex );
+	sizeString.setNum( lSize );
+	sizeString += " " + units.at( unitIndex );
     }
     else
     {
@@ -512,8 +512,8 @@ QString QDirStat::formatSize( FileSize lSize )
 	    ++unitIndex;
 	}
 
-	sizeString.sprintf( "%.1f ", size );
-	sizeString += units.at( unitIndex );
+	sizeString.setNum( size, 'f', 1 );
+	sizeString += " " + units.at( unitIndex );
     }
 
     return sizeString;
