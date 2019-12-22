@@ -133,7 +133,7 @@ Download installable binary packages for various Linux distributions here:
     confusion between those people who know what a Megabyte or Gigabyte is and
     those who introduced the confusion with 1000-based units vs. the good old
     1024-based units that everybody in IT uses (including Microsoft everywhere
-    in all versions of Windows.
+    in all versions of Windows).
 
     _Back in the early days of computing, everything was easy: a Kilobyte was
     1024 bytes, a Megabyte was 1024 Kilobytes, and Gigabytes were Science
