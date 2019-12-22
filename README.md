@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2019-11-02
+Updated: 2019-12-22
 
 
 ## Overview
@@ -123,6 +123,29 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2019-12-22
+
+  - Brought back the exact byte size as the context menu for the "Size" column in the tree:
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-byte-size.png" height="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-byte-size.png)
+
+    I.e. a right click on the size now shows the exact number of bytes to avoid
+    confusion between those people who know what a Megabyte or Gigabyte is and
+    those who introduced the confusion with 1000-based units vs. the good old
+    1024-based units that everybody in IT uses (including Microsoft everywhere
+    in all versions of Windows.
+
+    _Back in the early days of computing, everything was easy: a Kilobyte was
+    1024 bytes, a Megabyte was 1024 Kilobytes, and Gigabytes were Science
+    Fiction. Then some morons came along who insisted on 1000-based units like
+    everywhere in Physics. And they and the Real Engineers introduced a foul
+    compromise: Rename 1024-based units to Kibibytes, Mibibytes etc. and
+    redefine Kilobytes to be 1000 bytes, Megabytes to become 1000 Kilobytes
+    etc.; since that day there is confusion what is what._
+
+    **QDirStat always used and always will use 1024-based units.**
+
+
 - 2019-11-02
 
   - Added a separate window to report all directories that could not be read
@@ -135,7 +158,7 @@ Download installable binary packages for various Linux distributions here:
     main window.
 
     [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unreadable-dirs-window.png" height="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-unreadable-dirs-window.png)
-  
+
   - Directories that could not be read are now also correctly reported in the
     unpackaged files view. Since they are empty when they could not be read,
     they will always end up in an `<Ignored>` branch which was previously not
@@ -1023,6 +1046,9 @@ Features ported from the old KDirStat:
 
 - All numbers displayed human readable -- e.g., 34.4 MB instead of 36116381
   Bytes.
+
+- In the tree, also displaying the exact byte size as the context menu (right
+  click).
 
 - Each tree level uses another color for that percent bar so you can easily
   compare subdirectories even if some of them are opened in the tree.
