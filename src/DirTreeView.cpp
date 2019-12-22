@@ -72,6 +72,17 @@ void DirTreeView::contextMenu( const QPoint & pos )
 	return;
     }
 
+    DataColumn col  = DataColumns::fromViewCol( index.column() );
+
+    if ( col == SizeCol )
+	sizeContextMenu( pos, index );
+    else
+	actionContextMenu( pos );
+}
+
+
+void DirTreeView::actionContextMenu( const QPoint & pos )
+{
     QMenu menu;
     QStringList actions;
     actions << "actionGoUp"
@@ -81,8 +92,8 @@ void DirTreeView::contextMenu( const QPoint & pos )
 	    << "actionReadExcludedDirectory"
 	    << "actionContinueReadingAtMountPoint"
 	    << "---"
-            << "actionFileSizeStats"
-            << "actionFileTypeStats"
+	    << "actionFileSizeStats"
+	    << "actionFileTypeStats"
 	    << "---"
 	    << "actionMoveToTrash"
 	;
@@ -95,6 +106,17 @@ void DirTreeView::contextMenu( const QPoint & pos )
 	_cleanupCollection->addToMenu( &menu );
     }
 
+    menu.exec( mapToGlobal( pos ) );
+}
+
+
+void DirTreeView::sizeContextMenu( const QPoint & pos, const QModelIndex & index )
+{
+    FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+    CHECK_MAGIC( item );
+
+    QMenu menu;
+    menu.addAction( formatByteSize( item->totalSize() ) );
     menu.exec( mapToGlobal( pos ) );
 }
 

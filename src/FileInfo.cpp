@@ -246,13 +246,13 @@ QString FileInfo::debugUrl() const
 
     if ( isAttic() )
     {
-        if ( _parent )
-        {
-            if ( _tree && _parent != _tree->root() )
-                return _parent->debugUrl() + "/" + atticName();
-        }
+	if ( _parent )
+	{
+	    if ( _tree && _parent != _tree->root() )
+		return _parent->debugUrl() + "/" + atticName();
+	}
 
-        return url() + "/" + atticName();
+	return url() + "/" + atticName();
     }
 
     return url() ;
@@ -352,11 +352,11 @@ FileInfo * FileInfo::locate( QString url, bool findPseudoDirs )
 	    if ( attic() && url == atticName() )
 		return attic();
 
-            if ( url == dotEntryName() + "/" + atticName() &&
-                 dotEntry() && dotEntry()->attic() )
-            {
-                return dotEntry()->attic();
-            }
+	    if ( url == dotEntryName() + "/" + atticName() &&
+		 dotEntry() && dotEntry()->attic() )
+	    {
+		return dotEntry()->attic();
+	    }
 	}
 
 	// Search the dot entry if there is one - but only if there is no more
@@ -515,6 +515,31 @@ QString QDirStat::formatSize( FileSize lSize )
 	sizeString.setNum( size, 'f', 1 );
 	sizeString += " " + units.at( unitIndex );
     }
+
+    return sizeString;
+}
+
+
+QString QDirStat::formatByteSize( FileSize size )
+{
+
+    QString bytesString;
+    bytesString.setNum( size );
+
+    QString sizeString;
+
+    while ( ! bytesString.isEmpty() )
+    {
+	QString digits = bytesString.right( 3 );
+	bytesString.chop( 3 );
+
+	if ( ! sizeString.isEmpty() )
+	    sizeString.prepend( " " ); // thousands separator
+
+	sizeString.prepend( digits );
+    }
+
+    sizeString = QObject::tr( "%1 Bytes" ).arg( sizeString );
 
     return sizeString;
 }

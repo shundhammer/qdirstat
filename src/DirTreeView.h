@@ -77,10 +77,10 @@ namespace QDirStat
 	 **/
 	QModelIndexList expandedIndexes() const;
 
-        /**
-         * Return this view's header tweaker.
-         **/
-        HeaderTweaker * headerTweaker() const { return _headerTweaker; }
+	/**
+	 * Return this view's header tweaker.
+	 **/
+	HeaderTweaker * headerTweaker() const { return _headerTweaker; }
 
 
     public slots:
@@ -102,6 +102,18 @@ namespace QDirStat
     protected:
 
 	/**
+	 * Post the common context menu with actions (cleanup and other) for an item.
+	 **/
+	void actionContextMenu( const QPoint & pos );
+
+	/**
+	 * Post the context menu for the size column for the item with model
+	 * index 'index'.
+	 **/
+	void sizeContextMenu( const QPoint & pos, const QModelIndex & index );
+
+
+	/**
 	 * Change the current item. Overwritten from QTreeView to make sure
 	 * the branch of the new current item is expanded and scrolled to
 	 * the visible area.
@@ -112,7 +124,7 @@ namespace QDirStat
 	// Data members
 
 	PercentBarDelegate * _percentBarDelegate;
-        HeaderTweaker      * _headerTweaker;
+	HeaderTweaker	   * _headerTweaker;
 	CleanupCollection  * _cleanupCollection;
 
     };	// class DirTreeView

@@ -834,7 +834,20 @@ namespace QDirStat
      *
      *	   logDebug() << "Size: " << x->totalSize() << endl;
      **/
-    QString formatSize ( FileSize lSize );
+    QString formatSize ( FileSize size );
+
+    /**
+     * Format a file / subtree size as bytes, but still human readable with a
+     * space as a thousands separator, i.e. "12 345 678 Bytes".
+     *
+     * Intentionally NOT using the locale's thousands separator since this
+     * causes confusion to no end when it's only one of them, and it's unclear
+     * what locale is used: German uses "," as the decimal separator and "." as
+     * the thousands separator, exactly the other way round as English. So it's
+     * never clear if 12.345 is a little more than twelve or twelve thousand.
+     * A space character avoids this confusion.
+     **/
+    QString formatByteSize( FileSize size );
 
     /**
      * Format a timestamp (like the latestMTime()) human-readable.
