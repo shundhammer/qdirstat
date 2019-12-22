@@ -227,9 +227,6 @@ void DirTreeModel::loadIcons()
     _charDeviceIcon    = QPixmap( _treeIconDir + "char-device.png"    );
     _specialIcon       = QPixmap( _treeIconDir + "special.png"	      );
     _pkgIcon	       = QPixmap( _treeIconDir + "folder-pkg.png"     );
-#if 0
-    _pkgIcon	       = QPixmap( _treeIconDir + "package.png"	      );
-#endif
 }
 
 
