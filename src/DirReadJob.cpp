@@ -123,9 +123,9 @@ bool DirReadJob::crossingFileSystems( DirInfo * parent, DirInfo * child )
 
     if ( crossing )
     {
-	    logInfo() << "File system boundary at mount point " << child
-		      << " on device " << ( childDevice.isEmpty() ? "<unknown>" : childDevice )
-		      << endl;
+	logInfo() << "File system boundary at mount point " << child
+		  << " on device " << ( childDevice.isEmpty() ? "<unknown>" : childDevice )
+		  << endl;
     }
     else
     {
