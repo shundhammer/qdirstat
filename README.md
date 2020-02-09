@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-02-08
+Updated: 2020-02-09
 
 
 ## Overview
@@ -1392,11 +1392,6 @@ icon used in that `.desktop` file.
 
 See file [Contributing.md](doc/Contributing.md)
 and [GitHub-Workflow.md](doc/GitHub-Workflow.md)
-
-
-## To Do
-
-See file [TODO.md](doc/TODO.md)
 
 
 ## Troubleshooting
