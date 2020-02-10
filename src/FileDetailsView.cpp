@@ -184,7 +184,7 @@ void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
 	{
 	    text = tr( "%1 / %2 Links (allocated: %3)" )
 		.arg( formatSize( file->byteSize() ) )
-		.arg( formatSize( file->links() ) )
+		.arg( file->links() )
 		.arg( formatSize( file->allocatedSize() ) );
 	}
 	else

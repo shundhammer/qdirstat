@@ -804,7 +804,7 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 	{
 	    text = tr( "%1 / %2 Links (allocated: %3)" )
 		.arg( formatSize( item->byteSize() ) )
-		.arg( formatSize( item->links() ) )
+		.arg( item->links() )
 		.arg( formatSize( item->allocatedSize() ) );
 	}
 	else
