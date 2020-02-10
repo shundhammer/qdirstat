@@ -315,6 +315,7 @@ PkgReadJob::~PkgReadJob()
     if ( --_activeJobs < 1 )
     {
         // logDebug() << "The last PkgReadJob is done; clearing the stat cache." << endl;
+        reportCacheStats();
         clearStatCache();
     }
 }
@@ -322,13 +323,23 @@ PkgReadJob::~PkgReadJob()
 
 void PkgReadJob::clearStatCache()
 {
-    logDebug() << _cacheHits << " stat cache hits" << endl;
-    logDebug() << _lstatCalls << " lstat() calls" << endl;
-
     _statCache.clear();
     _activeJobs = 0;
     _cacheHits  = 0;
     _lstatCalls = 0;
+}
+
+
+void PkgReadJob::reportCacheStats()
+{
+    float hitPercent = 0.0;
+
+    if ( _lstatCalls > 0 )
+        hitPercent = ( 100.0 * _cacheHits ) /_lstatCalls;
+
+    logDebug() << _lstatCalls << " lstat() calls" << endl;
+    logDebug() << _cacheHits << " stat cache hits ("
+               << qRound( hitPercent ) << "%)" << endl;
 }
 
 

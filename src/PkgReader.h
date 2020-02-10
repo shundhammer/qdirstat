@@ -221,6 +221,11 @@ namespace QDirStat
          **/
         static void clearStatCache();
 
+        /**
+         * Write statistics about the stat cache to the log.
+         **/
+        static void reportCacheStats();
+
 
         // Data members
 
