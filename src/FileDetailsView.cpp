@@ -300,39 +300,35 @@ void FileDetailsView::showDetails( DirInfo * dir )
 void FileDetailsView::showSubtreeInfo( DirInfo * dir )
 {
     CHECK_PTR( dir );
+    QString msg;
 
-    if ( ! dir->isBusy() &&
-         ( dir->readState() == DirFinished ||
-           dir->readState() == DirCached     ) )
+    switch ( dir->readState() )
     {
-        QString prefix = dir->errSubDirCount() > 0 ? ">" : "";
+	case DirQueued:
+	case DirReading:        msg = tr( "[Reading]"    ); break;
+
+        case DirOnRequestOnly:  msg = tr( "[Not Read]"   ); break;
+        case DirError:          msg = tr( "[Read Error]" ); break;
+
+	case DirFinished:
+	case DirCached:
+        case DirAborted:
+            break;
+    }
+
+    if ( msg.isEmpty() )
+    {
+        // No special msg -> show summary fields
+
+        QString prefix = dir->sizePrefix();
 
         setLabel( _ui->dirTotalSizeLabel,   dir->totalSize(),    prefix );
         setLabel( _ui->dirItemCountLabel,   dir->totalItems(),   prefix );
         setLabel( _ui->dirFileCountLabel,   dir->totalFiles(),   prefix );
         setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs(), prefix );
     }
-    else
+    else  // Special msg -> show it and clear all summary fields
     {
-        QString msg;
-
-        if ( dir->isBusy() )
-        {
-            msg = tr( "[Reading]" );
-        }
-        else
-        {
-            switch ( dir->readState() )
-            {
-                case DirOnRequestOnly: msg = tr( "[Not Read]"   ); break;
-                case DirAborted:       msg = tr( "[Aborted]"    ); break;
-                case DirError:         msg = tr( "[Read Error]" ); break;
-
-                default:
-                    break;
-            }
-        }
-
         _ui->dirTotalSizeLabel->setText( msg );
         _ui->dirItemCountLabel->clear();
         _ui->dirFileCountLabel->clear();
@@ -410,27 +406,38 @@ void FileDetailsView::showDetails( PkgInfo * pkg )
     _ui->pkgVersionLabel->setText( pkg->version() );
     _ui->pkgArchLabel->setText( pkg->arch() );
 
-    if ( ! pkg->isBusy() && pkg->readState() == DirFinished )
+    QString msg;
+
+    switch ( pkg->readState() )
     {
+	case DirQueued:
+	case DirReading:        msg = tr( "[Reading]"    ); break;
+
+        case DirError:          msg = tr( "[Read Error]" ); break;
+        case DirAborted:        msg = tr( "[Aborted]"    ); break;
+
+	case DirFinished:
+            break;
+
+	case DirCached:
+        case DirOnRequestOnly:
+            logError() << "Invalid readState for a Pkg" << endl;
+            break;
+    }
+
+    if ( msg.isEmpty() )
+    {
+        // No special msg -> show summary fields
+
+        QString prefix = pkg->sizePrefix();
+
         setLabel( _ui->pkgTotalSizeLabel,   pkg->totalSize()    );
         setLabel( _ui->pkgItemCountLabel,   pkg->totalItems()   );
         setLabel( _ui->pkgFileCountLabel,   pkg->totalFiles()   );
         setLabel( _ui->pkgSubDirCountLabel, pkg->totalSubDirs() );
     }
-    else
+    else  // Special msg -> show it and clear all summary fields
     {
-        QString msg;
-
-        if ( pkg->isBusy() )
-        {
-            msg = tr( "[Reading]" );
-        }
-        else
-        {
-            if ( pkg->readState() == DirError )
-                msg = tr( "[Read Error]" );
-        }
-
         _ui->pkgTotalSizeLabel->setText( msg );
         _ui->pkgItemCountLabel->clear();
         _ui->pkgFileCountLabel->clear();

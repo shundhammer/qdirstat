@@ -707,6 +707,14 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     if ( item->isAttic() && col == PercentNumCol )
 	return QVariant();
 
+    if ( item->isPkgInfo() &&
+         item->readState() == DirAborted &&
+         ! item->firstChild() &&
+         col != NameCol )
+    {
+        return "?";
+    }
+
     switch ( col )
     {
 	case NameCol:		  return item->name();
@@ -736,14 +744,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
             }
 	}
 
-	QString prefix = "";
-
-	if ( item->readState() == DirAborted ||
-	     item->readState() == DirError   ||
-	     item->errSubDirCount() > 0 )
-	{
-	    prefix = ">";
-	}
+	QString prefix = item->sizePrefix();
 
 	switch ( col )
 	{
@@ -783,18 +784,7 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 	return QVariant();
 
     if ( item->isDirInfo() )
-    {
-	QString prefix = "";
-
-	if ( item->readState() == DirAborted ||
-	     item->readState() == DirError   ||
-	     item->errSubDirCount() > 0 )
-	{
-	    prefix = ">";
-	}
-
-	return prefix + formatSize( item->totalSize() );
-    }
+	return item->sizePrefix() + formatSize( item->totalSize() );
 
     QString text;
 

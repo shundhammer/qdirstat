@@ -86,7 +86,7 @@ namespace QDirStat
          *
          * Reimplemented from QLabel / QWidget.
          **/
-        virtual void contextMenuEvent( QContextMenuEvent * event );
+        virtual void contextMenuEvent( QContextMenuEvent * event ) Q_DECL_OVERRIDE;
 
 
         // Data members

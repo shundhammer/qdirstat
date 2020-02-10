@@ -981,10 +981,9 @@ void MainWindow::showCurrent( FileInfo * item )
 {
     if ( item )
     {
-	QString prefix = item->errSubDirCount() > 0 ? ">" : "";
 	QString msg = QString( "%1  (%2%3)" )
 	    .arg( item->debugUrl() )
-	    .arg( prefix )
+	    .arg( item->sizePrefix() )
 	    .arg( formatSize( item->totalSize() ) );
 
 	if ( item->readState() == DirError )

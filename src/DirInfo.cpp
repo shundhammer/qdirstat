@@ -728,6 +728,28 @@ DirReadState DirInfo::readState() const
 }
 
 
+QString DirInfo::sizePrefix() const
+{
+    switch ( _readState )
+    {
+	case DirQueued:
+	case DirReading:
+	case DirOnRequestOnly:
+            return "";
+
+        case DirError:
+        case DirAborted:
+            return ">";
+
+	case DirFinished:
+	case DirCached:
+            return _errSubDirCount > 0 ? ">" : "";
+    }
+
+    return "";
+}
+
+
 void DirInfo::finalizeLocal()
 {
     // logDebug() << this << endl;

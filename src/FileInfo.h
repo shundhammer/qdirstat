@@ -651,6 +651,17 @@ namespace QDirStat
 	 **/
 	virtual DirReadState readState() const { return DirFinished; }
 
+        /**
+         * Return a prefix for the total size (and similar accumulated fields)
+         * of this item: ">" if there might be more, i.e. if a subdirectory
+         * could not be read or if reading was aborted, an empty string
+         * otherwise.
+         *
+         * This default implementation returns an empty string. Derived classes
+         * that can handle child items should reimplement this.
+         **/
+        virtual QString sizePrefix() const { return ""; }
+
 	/**
 	 * Returns true if this is a DirInfo object.
 	 *

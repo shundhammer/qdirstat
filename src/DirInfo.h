@@ -389,6 +389,21 @@ namespace QDirStat
 	 **/
 	virtual DirReadState readState() const Q_DECL_OVERRIDE;
 
+        /**
+         * Return a prefix for the total size (and similar accumulated fields)
+         * of this item: ">" if there might be more, i.e. if a subdirectory
+         * could not be read or if reading was aborted, an empty string
+         * otherwise.
+         *
+         * Notice that this implementation also returns an empty string as long
+         * as this subtree is busy, i.e. reading is not finished: The ">"
+         * prefix should be something special to catch the user's attention,
+         * not something omnipresent that is commonly ignored.
+         *
+         * Reimplemented from FileInfo.
+         **/
+        virtual QString sizePrefix() const Q_DECL_OVERRIDE;
+
 	/**
 	 * Set the state of the directory reading process.
 	 * See readState() for details.
