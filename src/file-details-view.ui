@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>256</width>
-    <height>399</height>
+    <height>404</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -125,7 +125,7 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLabel" name="fileSizeLabel">
+         <widget class="QDirStat::FileSizeLabel" name="fileSizeLabel">
           <property name="text">
            <string>42.0 kB</string>
           </property>
@@ -366,7 +366,7 @@
          </widget>
         </item>
         <item row="8" column="1">
-         <widget class="QLabel" name="dirOwnSizeLabel">
+         <widget class="QDirStat::FileSizeLabel" name="dirOwnSizeLabel">
           <property name="text">
            <string>4.0 kiB</string>
           </property>
@@ -574,7 +574,7 @@ Subtree</string>
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLabel" name="dirTotalSizeLabel">
+         <widget class="QDirStat::FileSizeLabel" name="dirTotalSizeLabel">
           <property name="text">
            <string>512.0 MiB</string>
           </property>
@@ -767,7 +767,7 @@ Installed Files</string>
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QLabel" name="pkgTotalSizeLabel">
+         <widget class="QDirStat::FileSizeLabel" name="pkgTotalSizeLabel">
           <property name="text">
            <string>240 MB</string>
           </property>
@@ -964,7 +964,7 @@ Installed Files</string>
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLabel" name="pkgSummaryTotalSizeLabel">
+         <widget class="QDirStat::FileSizeLabel" name="pkgSummaryTotalSizeLabel">
           <property name="text">
            <string>240 MB</string>
           </property>
@@ -1178,7 +1178,7 @@ Installed Files</string>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLabel" name="selTotalSizeLabel">
+         <widget class="QDirStat::FileSizeLabel" name="selTotalSizeLabel">
           <property name="text">
            <string>512.0 MB</string>
           </property>
@@ -1277,6 +1277,13 @@ Installed Files</string>
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QDirStat::FileSizeLabel</class>
+   <extends>QLabel</extends>
+   <header>FileSizeLabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="icons.qrc"/>
  </resources>

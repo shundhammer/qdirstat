@@ -160,7 +160,7 @@ void FileDetailsView::showFileInfo( FileInfo * file )
     _ui->fileMimeCategoryLabel->setEnabled( ! category.isEmpty() );
     _ui->fileMimeCategoryLabel->setText( category );
 
-    _ui->fileSizeLabel->setText( fileSizeText( file ) );
+    setFileSizeLabel( _ui->fileSizeLabel, file );
     _ui->fileUserLabel->setText( file->userName() );
     _ui->fileGroupLabel->setText( file->groupName() );
     _ui->filePermissionsLabel->setText( formatPermissions( file->mode() ) );
@@ -169,7 +169,8 @@ void FileDetailsView::showFileInfo( FileInfo * file )
 }
 
 
-QString FileDetailsView::fileSizeText( FileInfo * file ) const
+void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
+                                        FileInfo *      file )
 {
     CHECK_PTR( file );
 
@@ -201,13 +202,22 @@ QString FileDetailsView::fileSizeText( FileInfo * file ) const
 		.arg( formatSize( file->byteSize() ) )
 		.arg( formatSize( file->allocatedSize() ) );
 	}
-	else
-	{
-	    text = formatSize( file->size() );
-	}
     }
 
-    return text;
+    if ( text.isEmpty() )  // The normal case: No hard links, not a sparse file
+    {
+        label->setValue( file->size() );
+    }
+    else  // The exotic case: Multiple hard links or sparse file or both
+    {
+        label->setText( text );
+
+        // Intentionally not setting a byte size value since it would be
+        // unclear which of the many involved values that is. Since this is the
+        // exotic case that doesn't happen very often, it's better to simply
+        // omit the value and thus the context menu rather than overengineering
+        // the exotic case.
+    }
 }
 
 
@@ -530,12 +540,12 @@ void FileDetailsView::setLabel( QLabel *        label,
 }
 
 
-void FileDetailsView::setLabel( QLabel *        label,
+void FileDetailsView::setLabel( FileSizeLabel * label,
                                 FileSize        size,
                                 const QString & prefix )
 {
     CHECK_PTR( label );
-    label->setText( prefix + formatSize( size ) );
+    label->setValue( size, prefix );
 }
 
 

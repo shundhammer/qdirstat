@@ -45,9 +45,13 @@ namespace QDirStat
          * Set the value. This will also format the value and display it in
          * human-readable format, i.e. something like "123.4 MB".
          *
+         * 'prefix' is an optional text prefix like "> " to indicate that the
+         * exact value is unknown (e.g. because of insuficcient permissions in
+         * a directory tree). The prefix is also displayed in the context menu.
+         *
          * The initial value is -1 which will be formatted as an empty string.
          **/
-        void setValue( FileSize val );
+        void setValue( FileSize val, const QString & prefix = "" );
 
         /**
          * Return the value.
@@ -55,10 +59,24 @@ namespace QDirStat
         FileSize value() const { return _value; }
 
         /**
-         * Set the text if something else than a file size is to be
-         * displayed. This also sets the value to -1.
+         * Return the last used prefix.
+         *
+         * Notice that the prefix cannot be set separately, only together with
+         * the value in setValue().
          **/
-        void setText( const QString & newText );
+        QString prefix() const { return _prefix; }
+
+        /**
+         * Set a custom text. This text may or may not contain the value.
+         *
+         * The context menu is only displayed if the value is non-negative.
+         *
+         * The prefix is only used in the context menu. It is the caller's
+         * responsibility to also add it to the custom text if that is desired.
+         **/
+        void setText( const QString &   newText,
+                      FileSize          newValue = -1,
+                      const QString &   prefix   = "" );
 
 
     protected:
@@ -74,6 +92,7 @@ namespace QDirStat
         // Data members
 
         FileSize _value;
+        QString  _prefix;
     };
 
 } // namespace QDirStat

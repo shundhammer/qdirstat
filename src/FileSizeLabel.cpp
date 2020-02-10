@@ -30,20 +30,24 @@ FileSizeLabel::~FileSizeLabel()
 }
 
 
-void FileSizeLabel::setValue( FileSize val )
+void FileSizeLabel::setValue( FileSize val, const QString & prefix )
 {
-    _value = val;
+    _value  = val;
+    _prefix = prefix;
 
     if ( _value < 0 )
         QLabel::setText( "" );
     else
-        QLabel::setText( formatSize( _value ) );
+        QLabel::setText( _prefix + formatSize( _value ) );
 }
 
 
-void FileSizeLabel::setText( const QString & newText )
+void FileSizeLabel::setText( const QString & newText,
+                             FileSize        newValue,
+                             const QString & newPrefix )
 {
-    _value = -1;
+    _value  = newValue;
+    _prefix = newPrefix;
     QLabel::setText( newText );
 }
 
@@ -54,7 +58,7 @@ void FileSizeLabel::contextMenuEvent( QContextMenuEvent * event )
         return;
     
     QMenu menu;
-    menu.addAction( formatByteSize( _value ) );
+    menu.addAction( _prefix + formatByteSize( _value ) );
     menu.exec( event->globalPos() );
 }
 

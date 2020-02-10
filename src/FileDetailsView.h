@@ -131,22 +131,31 @@ namespace QDirStat
         void setLabel( QLabel * label, int number, const QString & prefix = "" );
 
         /**
-         * Set a label with a file size and an optional prefix.
+         * Set a file size label with a file size and an optional prefix.
          **/
-        void setLabel( QLabel * label, FileSize size, const QString & prefix = "" );
+        void setLabel( FileSizeLabel *  label,
+                       FileSize         size,
+                       const QString &  prefix = "" );
 
         /**
          * Set a label with a text of limited size.
          **/
         void setLabelLimited( QLabel * label, const QString & text );
 
+        /**
+         * Return 'longText' limited to a predefined maximum size.
+         **/
         QString limitText( const QString & longText );
 
         /**
-         * Format a file size suitable for this view, including handling sparse
-         * files and files with multiple hard links.
+         * Set the text of a file size label including special handling for
+         * sparse files and files with multiple hard links.
+         *
+         * Notice that this is only useful for plain files, not for
+         * directories, packages or multiple selected files.
          **/
-        QString fileSizeText( FileInfo * file ) const;
+        void setFileSizeLabel( FileSizeLabel * label,
+                               FileInfo      * file );
 
         // Boilerplate widget setting methods
 
