@@ -14,7 +14,7 @@
 
 #include "FileInfo.h"   // FileSize
 
-class QContextMenuEvent;
+class QMouseEvent;
 
 
 namespace QDirStat
@@ -78,21 +78,45 @@ namespace QDirStat
                       FileSize          newValue = -1,
                       const QString &   prefix   = "" );
 
+        /**
+         * Directly set the text for the context menu. This overrides value().
+         **/
+
+        void setContextText( const QString text ) { _contextText = text; }
+
+        /**
+         * Return the text for the context menu (that was set by
+         * setContextText().
+         **/
+        QString contextText() const { return _contextText; }
+
+        /**
+         * Clear everything, including the visible text, the numeric value and
+         * the context menu text.
+         **/
+        void clear();
+
 
     protected:
 
         /**
-         * Event handler for the context menu event.
-         *
-         * Reimplemented from QLabel / QWidget.
+         * Return 'true' if there is anything that can be displayed in a
+         * context menu.
          **/
-        virtual void contextMenuEvent( QContextMenuEvent * event ) Q_DECL_OVERRIDE;
+        bool haveContextMenu() const;
+
+        // Event handlers (all inherited from QWidget)
+
+        virtual void mousePressEvent( QMouseEvent * event ) Q_DECL_OVERRIDE;
+        virtual void enterEvent( QEvent * event ) Q_DECL_OVERRIDE;
+        virtual void leaveEvent( QEvent * event ) Q_DECL_OVERRIDE;
 
 
         // Data members
 
         FileSize _value;
         QString  _prefix;
+        QString  _contextText;
     };
 
 } // namespace QDirStat

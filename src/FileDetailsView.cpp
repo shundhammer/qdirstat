@@ -185,11 +185,8 @@ void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
     {
         label->setText( text );
 
-        // Intentionally not setting a byte size value since it would be
-        // unclear which of the many involved values that is. Since this is the
-        // exotic case that doesn't happen very often, it's better to simply
-        // omit the value and thus the context menu rather than overengineering
-        // the exotic case.
+        if ( file->byteSize() >= 1024 ) // Not useful below 1 kB
+            label->setContextText( DirTreeModel::sizeText( file, formatByteSize ) );
     }
 }
 
