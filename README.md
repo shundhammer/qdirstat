@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-02-09
+Updated: 2020-02-11
 
 
 ## Overview
@@ -122,6 +122,25 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2019-02-11
+
+  - It's SUSE hack week again! This is a week when all developers of my
+    employer SUSE (including QA engineers and supporters) are encouraged to
+    work on any Open Source project (or even any remotely technical project) of
+    their choice to improve that project and also their technical skills.
+
+    Needless to say, my personal hack week project for the last few years was
+    primarily QDirStat; there is always something that can be improved.
+
+  - Now also showing the exact byte size of all size fields (of 1 kB and above)
+    upon click in the "Details" panel.  All clickable fields there are now
+    underlined just like a hyperlink when the mouse hovers above them.
+
+    I thought long and hard about using tool tips for that, but tool tips have
+    a nasty habit of getting in the way and obscuring other information that
+    the user might want to read; so I decided to use explicit mouse clicks.
+
 
 - 2019-12-22
 
