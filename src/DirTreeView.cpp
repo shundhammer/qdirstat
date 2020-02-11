@@ -116,7 +116,7 @@ void DirTreeView::sizeContextMenu( const QPoint & pos, const QModelIndex & index
     CHECK_MAGIC( item );
 
     QMenu menu;
-    menu.addAction( formatByteSize( item->totalSize() ) );
+    menu.addAction( item->sizePrefix() + formatByteSize( item->totalSize() ) );
     menu.exec( mapToGlobal( pos ) );
 }
 
