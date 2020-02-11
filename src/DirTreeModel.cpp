@@ -7,7 +7,6 @@
  */
 
 
-#include <functional>   // std::function
 #include <QPalette>
 #include <QGuiApplication>
 
@@ -779,13 +778,10 @@ int DirTreeModel::directChildrenCount( FileInfo * subtree ) const
 }
 
 
-QString DirTreeModel::sizeText( FileInfo * item, bool useExactByteSize )
+QString DirTreeModel::sizeText( FileInfo * item, QString (*fmtSz)(FileSize) )
 {
     if ( ! item->isFile() )
         return "";
-
-    std::function<QString(FileSize)> fmtSz =
-        useExactByteSize ? formatByteSize : formatSize;
 
     QString text;
 

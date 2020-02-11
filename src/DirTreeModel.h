@@ -299,10 +299,11 @@ namespace QDirStat
          * return a text describing the size: "20.0 MB / 4 Links", "1 GB (allocated: 2 kB)".
          * For everything else, return an empty string.
          *
-         * 'useExactByteSize' will format all sizes with full precision if
-         * 'true', human-readable (but with less precision) as GB / MB / kB if 'false'.
+         * 'fmtSz' is a pointer to a formatting function that takes a FileSize
+         * argument and returns a QString.
          **/
-        static QString sizeText( FileInfo * item, bool useExactByteSize = false );
+        static QString sizeText( FileInfo * item,
+                                 QString (*fmtSz)(FileSize) = formatSize );
 
 
     protected slots:

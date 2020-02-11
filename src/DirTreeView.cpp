@@ -115,7 +115,7 @@ void DirTreeView::sizeContextMenu( const QPoint & pos, const QModelIndex & index
     FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
     CHECK_MAGIC( item );
 
-    QString text = DirTreeModel::sizeText( item, true );
+    QString text = DirTreeModel::sizeText( item, formatByteSize );
 
     if ( text.isEmpty() )
         text = item->sizePrefix() + formatByteSize( item->totalSize() );
