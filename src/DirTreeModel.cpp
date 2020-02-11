@@ -7,6 +7,7 @@
  */
 
 
+#include <functional>   // std::function
 #include <QPalette>
 #include <QGuiApplication>
 
@@ -778,6 +779,46 @@ int DirTreeModel::directChildrenCount( FileInfo * subtree ) const
 }
 
 
+QString DirTreeModel::sizeText( FileInfo * item, bool useExactByteSize )
+{
+    if ( ! item->isFile() )
+        return "";
+
+    std::function<QString(FileSize)> fmtSz =
+        useExactByteSize ? formatByteSize : formatSize;
+
+    QString text;
+
+    if ( item->links() > 1 )  // Multiple hard links
+    {
+        if ( item->isSparseFile() )
+        {
+            text = tr( "%1 / %2 Links (allocated: %3)" )
+                .arg( fmtSz( item->byteSize() ) )
+                .arg( item->links() )
+                .arg( fmtSz( item->allocatedSize() ) );
+        }
+        else
+        {
+            text = tr( "%1 / %2 Links" )
+                .arg( fmtSz( item->byteSize() ) )
+                .arg( item->links() );
+        }
+    }
+    else // No multiple hard links
+    {
+        if ( item->isSparseFile() )
+        {
+            text = tr( "%1 (allocated: %2)" )
+                .arg( fmtSz( item->byteSize() ) )
+                .arg( fmtSz( item->allocatedSize() ) );
+        }
+    }
+
+    return text;
+}
+
+
 QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 {
     if ( item->isDevice() )
@@ -786,37 +827,10 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
     if ( item->isDirInfo() )
 	return item->sizePrefix() + formatSize( item->totalSize() );
 
-    QString text;
+    QString text = sizeText( item );
 
-    if ( item->isFile() && ( item->links() > 1 ) ) // Regular file with multiple links
-    {
-	if ( item->isSparseFile() )
-	{
-	    text = tr( "%1 / %2 Links (allocated: %3)" )
-		.arg( formatSize( item->byteSize() ) )
-		.arg( item->links() )
-		.arg( formatSize( item->allocatedSize() ) );
-	}
-	else
-	{
-	    text = tr( "%1 / %2 Links" )
-		.arg( formatSize( item->byteSize() ) )
-		.arg( item->links() );
-	}
-    }
-    else // No multiple links or no regular file
-    {
-	if ( item->isSparseFile() )
-	{
-	    text = tr( "%1 (allocated: %2)" )
-		.arg( formatSize( item->byteSize() ) )
-		.arg( formatSize( item->allocatedSize() ) );
-	}
-	else
-	{
-	    text = formatSize( item->size() );
-	}
-    }
+    if ( text.isEmpty() )
+        text = formatSize( item->size() );
 
     return text;
 }

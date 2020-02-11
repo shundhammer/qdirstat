@@ -9,6 +9,7 @@
 #include "FileDetailsView.h"
 #include "AdaptiveTimer.h"
 #include "DirInfo.h"
+#include "DirTreeModel.h"
 #include "FileInfoSet.h"
 #include "MimeCategorizer.h"
 #include "PkgQuery.h"
@@ -174,35 +175,7 @@ void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
 {
     CHECK_PTR( file );
 
-    // Taken from DirTreeModel::sizeColText()
-
-    QString text;
-
-    if ( file->isFile() && ( file->links() > 1 ) ) // Regular file with multiple links
-    {
-	if ( file->isSparseFile() )
-	{
-	    text = tr( "%1 / %2 Links (allocated: %3)" )
-		.arg( formatSize( file->byteSize() ) )
-		.arg( file->links() )
-		.arg( formatSize( file->allocatedSize() ) );
-	}
-	else
-	{
-	    text = tr( "%1 / %2 Links" )
-		.arg( formatSize( file->byteSize() ) )
-		.arg( file->links() );
-	}
-    }
-    else // No multiple links or no regular file
-    {
-	if ( file->isSparseFile() )
-	{
-	    text = tr( "%1 (allocated: %2)" )
-		.arg( formatSize( file->byteSize() ) )
-		.arg( formatSize( file->allocatedSize() ) );
-	}
-    }
+    QString text = DirTreeModel::sizeText( file );
 
     if ( text.isEmpty() )  // The normal case: No hard links, not a sparse file
     {

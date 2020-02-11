@@ -294,6 +294,16 @@ namespace QDirStat
 	virtual void sort( int column,
 			   Qt::SortOrder order = Qt::AscendingOrder ) Q_DECL_OVERRIDE;
 
+        /**
+         * For plain files that have multiple hard links or that are sparse files or both,
+         * return a text describing the size: "20.0 MB / 4 Links", "1 GB (allocated: 2 kB)".
+         * For everything else, return an empty string.
+         *
+         * 'useExactByteSize' will format all sizes with full precision if
+         * 'true', human-readable (but with less precision) as GB / MB / kB if 'false'.
+         **/
+        static QString sizeText( FileInfo * item, bool useExactByteSize = false );
+
 
     protected slots:
 
