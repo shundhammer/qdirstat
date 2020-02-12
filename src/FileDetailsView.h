@@ -109,6 +109,16 @@ namespace QDirStat
          **/
         QString mimeCategory( FileInfo * fileInfo );
 
+	/**
+	 * Read parameters from settings file.
+	 **/
+	void readSettings();
+
+	/**
+	 * Write parameters to settings file.
+	 **/
+	void writeSettings();
+
 
     protected slots:
 
@@ -157,6 +167,12 @@ namespace QDirStat
         void setFileSizeLabel( FileSizeLabel * label,
                                FileInfo      * file );
 
+        /**
+         * Set the text color for a label.
+         **/
+        void setLabelColor( QLabel * label, const QColor & color );
+
+
         // Boilerplate widget setting methods
 
         void showFileInfo( FileInfo * file );
@@ -174,6 +190,8 @@ namespace QDirStat
         Ui::FileDetailsView * _ui;
         AdaptiveTimer *       _pkgUpdateTimer;
         int                   _labelLimit;
+        QColor                _dirReadErrColor;
+        QColor                _normalTextColor;
 
     };  // class FileDetailsView
 }	// namespace QDirStat

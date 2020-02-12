@@ -14,6 +14,9 @@
 #include "MimeCategorizer.h"
 #include "PkgQuery.h"
 #include "SystemFileChecker.h"
+#include "Settings.h"
+#include "SettingsHelpers.h"
+#include "Qt4Compat.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -31,7 +34,9 @@ FileDetailsView::FileDetailsView( QWidget * parent ):
 
     _ui->setupUi( this );
     clear();
+    readSettings();
 
+    _normalTextColor = qAppPalette().color( QPalette::Active, QPalette::WindowText );
     _labelLimit = 0; // Unlimited
     // TO DO: Read _labelLimit from the config file
 
@@ -51,7 +56,7 @@ FileDetailsView::FileDetailsView( QWidget * parent ):
 
 FileDetailsView::~FileDetailsView()
 {
-
+    writeSettings();
 }
 
 
@@ -292,6 +297,12 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
 	    break;
     }
 
+#if 0
+    // Also displaying the error message in read seems a bit over the top.
+    setLabelColor( _ui->dirTotalSizeLabel,
+                   dir->readError() ? _dirReadErrColor : _normalTextColor );
+#endif
+
     if ( msg.isEmpty() )
     {
 	// No special msg -> show summary fields
@@ -330,10 +341,17 @@ void FileDetailsView::showDirNodeInfo( DirInfo * dir )
 	_ui->dirGroupLabel->setText( dir->groupName() );
 	_ui->dirPermissionsLabel->setText( formatPermissions( dir->mode() ) );
 
-
 	_ui->dirMTimeCaption->setVisible( dir->mtime() > 0 );
 	_ui->dirMTimeLabel->setVisible	( dir->mtime() > 0);
 	_ui->dirMTimeLabel->setText( formatTime( dir->mtime() ) );
+
+
+        // Show permissions in read if there was a "permission denied" error
+        // while reading this directory
+
+        setLabelColor( _ui->dirPermissionsLabel,
+                       dir->readState() == DirPermissionDenied ?
+                       _dirReadErrColor : _normalTextColor );
     }
 }
 
@@ -562,3 +580,36 @@ QString FileDetailsView::mimeCategory( FileInfo * file )
 
     return category ? category->name() : "";
 }
+
+
+void FileDetailsView::setLabelColor( QLabel * label, const QColor & color )
+{
+    CHECK_PTR( label );
+
+    QPalette pal = label->palette();
+    pal.setColor( QPalette::WindowText, color );
+    label->setPalette( pal );
+}
+
+
+void FileDetailsView::readSettings()
+{
+    Settings settings;
+    settings.beginGroup( "DetailsPanel" );
+
+    _dirReadErrColor = readColorEntry( settings, "DirReadErrColor", QColor( Qt::red ) );
+
+    settings.endGroup();
+}
+
+
+void FileDetailsView::writeSettings()
+{
+    Settings settings;
+    settings.beginGroup( "DetailsPanel" );
+
+    writeColorEntry( settings, "DirReadErrColor", _dirReadErrColor );
+
+    settings.endGroup();
+}
+
