@@ -1087,6 +1087,9 @@ Features ported from the old KDirStat:
 - All numbers displayed human readable -- e.g., 34.4 MB instead of 36116381
   Bytes.
 
+- All units are 1024-based, i.e. 1 kB = 1024 Bytes; 1 MB = 1024 kB, 1 GB = 1024
+  MB.
+
 - In the tree, also displaying the exact byte size as the context menu (right
   click).
 
