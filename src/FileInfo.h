@@ -49,6 +49,7 @@ namespace QDirStat
 	DirOnRequestOnly,	// Will be read upon explicit request only (mount points)
 	DirCached,		// Content was read from a cache
 	DirAborted,		// Reading aborted upon user request
+        DirPermissionDenied,    // Insufficient permissions for reading
 	DirError		// Error while reading
     };
 
@@ -650,6 +651,15 @@ namespace QDirStat
 	 * Derived classes should overwrite this.
 	 **/
 	virtual DirReadState readState() const { return DirFinished; }
+
+        /**
+         * Check if readState() is anything that indicates an error reading the
+         * directory, i.e. DirError or DirPermissionDenied.
+         *
+         * This default implementation always returns 'false'.
+	 * Derived classes should overwrite this.
+         **/
+        virtual bool readError() const { return false; }
 
         /**
          * Return a prefix for the total size (and similar accumulated fields)

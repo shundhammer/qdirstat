@@ -986,7 +986,9 @@ void MainWindow::showCurrent( FileInfo * item )
 	    .arg( item->sizePrefix() )
 	    .arg( formatSize( item->totalSize() ) );
 
-	if ( item->readState() == DirError )
+	if ( item->readState() == DirPermissionDenied )
+	    msg += tr( "  [Permission Denied]" );
+        else if ( item->readState() == DirError )
 	    msg += tr( "  [Read Error]" );
 
 	_ui->statusBar->showMessage( msg );

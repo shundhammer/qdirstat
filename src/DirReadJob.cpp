@@ -186,7 +186,7 @@ void LocalDirReadJob::startReading()
     {
 	ok = false;
 	logWarning() << "No permission to read directory " << _dirName << endl;
-	finishReading( _dir, DirError );
+	finishReading( _dir, DirPermissionDenied );
     }
 
     if ( ok )

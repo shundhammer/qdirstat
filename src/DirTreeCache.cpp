@@ -758,7 +758,7 @@ void CacheReader::finalizeRecursive( DirInfo * dir )
 {
     if ( dir->readState() != DirOnRequestOnly )
     {
-	if ( dir->readState() != DirError )
+	if ( ! dir->readError() )
 	    dir->setReadState( DirCached );
 
 	dir->finalizeLocal();

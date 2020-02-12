@@ -252,7 +252,7 @@ void DirInfo::recalc()
         {
 	    _totalSubDirs++;
 
-            if ( (*it)->readState() == DirError )
+            if ( (*it)->readError() )
                 _errSubDirCount++;
         }
 
@@ -705,7 +705,7 @@ void DirInfo::readJobFinished( DirInfo * dir )
     if ( _lastSortCol == ReadJobsCol )
 	dropSortCache();
 
-    if ( dir && dir != this && dir->readState() == DirError )
+    if ( dir && dir != this && dir->readError() )
         _errSubDirCount++;
 
     if ( _parent )
@@ -728,6 +728,29 @@ DirReadState DirInfo::readState() const
 }
 
 
+bool DirInfo::readError() const
+{
+    switch ( _readState )
+    {
+        case DirError:
+        case DirPermissionDenied:
+            return true;
+
+	case DirQueued:
+	case DirReading:
+	case DirFinished:
+	case DirOnRequestOnly:
+	case DirCached:
+        case DirAborted:
+            return false;
+
+        // No 'default' branch so the compiler can catch unhandled enum values
+    }
+
+    return false;
+}
+
+
 QString DirInfo::sizePrefix() const
 {
     switch ( _readState )
@@ -739,11 +762,14 @@ QString DirInfo::sizePrefix() const
 
         case DirError:
         case DirAborted:
+        case DirPermissionDenied:
             return ">";
 
 	case DirFinished:
 	case DirCached:
             return _errSubDirCount > 0 ? ">" : "";
+
+        // No 'default' branch so the compiler can catch unhandled enum values
     }
 
     return "";

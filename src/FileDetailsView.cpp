@@ -40,12 +40,12 @@ FileDetailsView::FileDetailsView( QWidget * parent ):
     _pkgUpdateTimer->addDelayStage(  800 ); // millisec
     _pkgUpdateTimer->addDelayStage( 1200 ); // millisec
 
-    _pkgUpdateTimer->addCoolDownPeriod(  500 ); // millisec
+    _pkgUpdateTimer->addCoolDownPeriod(	 500 ); // millisec
     _pkgUpdateTimer->addCoolDownPeriod( 1500 ); // millisec
     _pkgUpdateTimer->addCoolDownPeriod( 3000 ); // millisec
 
     connect( _pkgUpdateTimer, SIGNAL( deliverRequest( QVariant ) ),
-             this,            SLOT  ( updatePkgInfo ( QVariant ) ) );
+	     this,	      SLOT  ( updatePkgInfo ( QVariant ) ) );
 }
 
 
@@ -69,7 +69,7 @@ void FileDetailsView::setCurrentPage( QWidget *page )
     // the QStackedWidget, but no longer in the layout.
 
     while ( count() > 0 )
-        removeWidget( widget( 0 ) );
+	removeWidget( widget( 0 ) );
 
     addWidget( page );
     setCurrentWidget( page );
@@ -110,7 +110,7 @@ void FileDetailsView::showDetails( FileInfo * file )
 
     if ( file->isPkgInfo() )
     {
-        showDetails( file->toPkgInfo() );
+	showDetails( file->toPkgInfo() );
     }
     else if ( file->isDirInfo() )
     {
@@ -123,27 +123,27 @@ void FileDetailsView::showDetails( FileInfo * file )
 	setCurrentPage( _ui->fileDetailsPage );
 	showFileInfo( file );
 
-        PkgInfo * pkg = file->pkgInfoParent();
+	PkgInfo * pkg = file->pkgInfoParent();
 
-        if ( pkg )
-        {
-            // The simple case: We are in package view mode, and this file has
-            // a PkgInfo ancestor. So we know that this belongs to a package,
-            // also to which one, and that this is inherently a system file
-            // since it belongs to a package.
+	if ( pkg )
+	{
+	    // The simple case: We are in package view mode, and this file has
+	    // a PkgInfo ancestor. So we know that this belongs to a package,
+	    // also to which one, and that this is inherently a system file
+	    // since it belongs to a package.
 
-            setSystemFileWarningVisibility( true );
-            _ui->filePackageLabel->setEnabled( true );
-            _ui->filePackageLabel->setText( pkg->name() );
-        }
-        else
-        {
-            // The not-so-simple case: Use heuristics to check if this file is
-            // in a system directory and then query the package manager after a
-            // timeout what (if any) package this file belongs to.
+	    setSystemFileWarningVisibility( true );
+	    _ui->filePackageLabel->setEnabled( true );
+	    _ui->filePackageLabel->setText( pkg->name() );
+	}
+	else
+	{
+	    // The not-so-simple case: Use heuristics to check if this file is
+	    // in a system directory and then query the package manager after a
+	    // timeout what (if any) package this file belongs to.
 
-            showFilePkgInfo( file );
-        }
+	    showFilePkgInfo( file );
+	}
     }
 }
 
@@ -171,7 +171,7 @@ void FileDetailsView::showFileInfo( FileInfo * file )
 
 
 void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
-                                        FileInfo *      file )
+					FileInfo *	file )
 {
     CHECK_PTR( file );
 
@@ -179,14 +179,14 @@ void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
 
     if ( text.isEmpty() )  // The normal case: No hard links, not a sparse file
     {
-        label->setValue( file->size() );
+	label->setValue( file->size() );
     }
     else  // The exotic case: Multiple hard links or sparse file or both
     {
-        label->setText( text );
+	label->setText( text );
 
-        if ( file->byteSize() >= 1024 ) // Not useful below 1 kB
-            label->setContextText( DirTreeModel::sizeText( file, formatByteSize ) );
+	if ( file->byteSize() >= 1024 ) // Not useful below 1 kB
+	    label->setContextText( DirTreeModel::sizeText( file, formatByteSize ) );
     }
 }
 
@@ -200,20 +200,20 @@ void FileDetailsView::showFilePkgInfo( FileInfo * file )
 
     if ( PkgQuery::foundSupportedPkgManager() )
     {
-        setFilePkgBlockVisibility( isSystemFile );
+	setFilePkgBlockVisibility( isSystemFile );
 
-            if ( isSystemFile )
-            {
-                QString delayHint = QString( _pkgUpdateTimer->delayStage(), '.' );
-                _ui->filePackageLabel->setText( delayHint );
+	    if ( isSystemFile )
+	    {
+		QString delayHint = QString( _pkgUpdateTimer->delayStage(), '.' );
+		_ui->filePackageLabel->setText( delayHint );
 
-                _ui->filePackageCaption->setEnabled( true );
-                _pkgUpdateTimer->delayedRequest( file->url() );
-            }
+		_ui->filePackageCaption->setEnabled( true );
+		_pkgUpdateTimer->delayedRequest( file->url() );
+	    }
     }
     else // No supported package manager found
     {
-        setFilePkgBlockVisibility( false );
+	setFilePkgBlockVisibility( false );
     }
 }
 
@@ -275,34 +275,35 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
     switch ( dir->readState() )
     {
 	case DirQueued:
-	case DirReading:        msg = tr( "[Reading]"    ); break;
+	case DirReading:		msg = tr( "[Reading]"		); break;
 
-        case DirOnRequestOnly:  msg = tr( "[Not Read]"   ); break;
-        case DirError:          msg = tr( "[Read Error]" ); break;
+	case DirOnRequestOnly:		msg = tr( "[Not Read]"		); break;
+	case DirPermissionDenied:	msg = tr( "[Permission Denied]" ); break;
+	case DirError:			msg = tr( "[Read Error]"	); break;
 
 	case DirFinished:
 	case DirCached:
-        case DirAborted:
-            break;
+	case DirAborted:
+	    break;
     }
 
     if ( msg.isEmpty() )
     {
-        // No special msg -> show summary fields
+	// No special msg -> show summary fields
 
-        QString prefix = dir->sizePrefix();
+	QString prefix = dir->sizePrefix();
 
-        setLabel( _ui->dirTotalSizeLabel,   dir->totalSize(),    prefix );
-        setLabel( _ui->dirItemCountLabel,   dir->totalItems(),   prefix );
-        setLabel( _ui->dirFileCountLabel,   dir->totalFiles(),   prefix );
-        setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs(), prefix );
+	setLabel( _ui->dirTotalSizeLabel,   dir->totalSize(),	 prefix );
+	setLabel( _ui->dirItemCountLabel,   dir->totalItems(),	 prefix );
+	setLabel( _ui->dirFileCountLabel,   dir->totalFiles(),	 prefix );
+	setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs(), prefix );
     }
     else  // Special msg -> show it and clear all summary fields
     {
-        _ui->dirTotalSizeLabel->setText( msg );
-        _ui->dirItemCountLabel->clear();
-        _ui->dirFileCountLabel->clear();
-        _ui->dirSubDirCountLabel->clear();
+	_ui->dirTotalSizeLabel->setText( msg );
+	_ui->dirItemCountLabel->clear();
+	_ui->dirFileCountLabel->clear();
+	_ui->dirSubDirCountLabel->clear();
     }
 
     _ui->dirLatestMTimeLabel->setText( formatTime( dir->latestMtime() ) );
@@ -316,8 +317,8 @@ void FileDetailsView::showDirNodeInfo( DirInfo * dir )
 
     if ( ! dir->isPseudoDir() )
     {
-        _ui->dirOwnSizeCaption->setVisible( dir->size() > 0 );
-        _ui->dirOwnSizeLabel->setVisible  ( dir->size() > 0 );
+	_ui->dirOwnSizeCaption->setVisible( dir->size() > 0 );
+	_ui->dirOwnSizeLabel->setVisible  ( dir->size() > 0 );
 	setLabel( _ui->dirOwnSizeLabel, dir->size() );
 
 	_ui->dirUserLabel->setText( dir->userName() );
@@ -325,8 +326,8 @@ void FileDetailsView::showDirNodeInfo( DirInfo * dir )
 	_ui->dirPermissionsLabel->setText( formatPermissions( dir->mode() ) );
 
 
-        _ui->dirMTimeCaption->setVisible( dir->mtime() > 0 );
-        _ui->dirMTimeLabel->setVisible  ( dir->mtime() > 0);
+	_ui->dirMTimeCaption->setVisible( dir->mtime() > 0 );
+	_ui->dirMTimeLabel->setVisible	( dir->mtime() > 0);
 	_ui->dirMTimeLabel->setText( formatTime( dir->mtime() ) );
     }
 }
@@ -366,8 +367,8 @@ void FileDetailsView::showDetails( PkgInfo * pkg )
 
     if ( pkg->url() == "Pkg:/" )
     {
-        showPkgSummary( pkg );
-        return;
+	showPkgSummary( pkg );
+	return;
     }
 
     setCurrentPage( _ui->pkgDetailsPage );
@@ -381,37 +382,38 @@ void FileDetailsView::showDetails( PkgInfo * pkg )
     switch ( pkg->readState() )
     {
 	case DirQueued:
-	case DirReading:        msg = tr( "[Reading]"    ); break;
+	case DirReading:	   msg = tr( "[Reading]"	   ); break;
 
-        case DirError:          msg = tr( "[Read Error]" ); break;
-        case DirAborted:        msg = tr( "[Aborted]"    ); break;
+	case DirPermissionDenied:  msg = tr( "[Permission Denied]" ); break;
+	case DirError:		   msg = tr( "[Read Error]"	   ); break;
+	case DirAborted:	   msg = tr( "[Aborted]"	   ); break;
 
 	case DirFinished:
-            break;
+	    break;
 
 	case DirCached:
-        case DirOnRequestOnly:
-            logError() << "Invalid readState for a Pkg" << endl;
-            break;
+	case DirOnRequestOnly:
+	    logError() << "Invalid readState for a Pkg" << endl;
+	    break;
     }
 
     if ( msg.isEmpty() )
     {
-        // No special msg -> show summary fields
+	// No special msg -> show summary fields
 
-        QString prefix = pkg->sizePrefix();
+	QString prefix = pkg->sizePrefix();
 
-        setLabel( _ui->pkgTotalSizeLabel,   pkg->totalSize()    );
-        setLabel( _ui->pkgItemCountLabel,   pkg->totalItems()   );
-        setLabel( _ui->pkgFileCountLabel,   pkg->totalFiles()   );
-        setLabel( _ui->pkgSubDirCountLabel, pkg->totalSubDirs() );
+	setLabel( _ui->pkgTotalSizeLabel,   pkg->totalSize()	);
+	setLabel( _ui->pkgItemCountLabel,   pkg->totalItems()	);
+	setLabel( _ui->pkgFileCountLabel,   pkg->totalFiles()	);
+	setLabel( _ui->pkgSubDirCountLabel, pkg->totalSubDirs() );
     }
     else  // Special msg -> show it and clear all summary fields
     {
-        _ui->pkgTotalSizeLabel->setText( msg );
-        _ui->pkgItemCountLabel->clear();
-        _ui->pkgFileCountLabel->clear();
-        _ui->pkgSubDirCountLabel->clear();
+	_ui->pkgTotalSizeLabel->setText( msg );
+	_ui->pkgItemCountLabel->clear();
+	_ui->pkgFileCountLabel->clear();
+	_ui->pkgSubDirCountLabel->clear();
     }
 
     _ui->pkgLatestMTimeLabel->setText( formatTime( pkg->latestMtime() ) );
@@ -430,8 +432,8 @@ void FileDetailsView::showPkgSummary( PkgInfo * pkg )
 
     if ( pkg->url() != "Pkg:/" )
     {
-        showDetails( pkg );
-        return;
+	showDetails( pkg );
+	return;
     }
 
     setCurrentPage( _ui->pkgSummaryPage );
@@ -440,29 +442,29 @@ void FileDetailsView::showPkgSummary( PkgInfo * pkg )
 
     if ( ! pkg->isBusy() && pkg->readState() == DirFinished )
     {
-        setLabel( _ui->pkgSummaryTotalSizeLabel,   pkg->totalSize()    );
-        setLabel( _ui->pkgSummaryItemCountLabel,   pkg->totalItems()   );
-        setLabel( _ui->pkgSummaryFileCountLabel,   pkg->totalFiles()   );
-        setLabel( _ui->pkgSummarySubDirCountLabel, pkg->totalSubDirs() );
+	setLabel( _ui->pkgSummaryTotalSizeLabel,   pkg->totalSize()    );
+	setLabel( _ui->pkgSummaryItemCountLabel,   pkg->totalItems()   );
+	setLabel( _ui->pkgSummaryFileCountLabel,   pkg->totalFiles()   );
+	setLabel( _ui->pkgSummarySubDirCountLabel, pkg->totalSubDirs() );
     }
     else
     {
-        QString msg;
+	QString msg;
 
-        if ( pkg->isBusy() )
-        {
-            msg = tr( "[Reading]" );
-        }
-        else
-        {
-            if ( pkg->readState() == DirError )
-                msg = tr( "[Read Error]" );
-        }
+	if ( pkg->isBusy() )
+	{
+	    msg = tr( "[Reading]" );
+	}
+	else
+	{
+            if ( pkg->readError() )
+		msg = tr( "[Read Error]" );
+	}
 
-        _ui->pkgSummaryTotalSizeLabel->setText( msg );
-        _ui->pkgSummaryItemCountLabel->clear();
-        _ui->pkgSummaryFileCountLabel->clear();
-        _ui->pkgSummarySubDirCountLabel->clear();
+	_ui->pkgSummaryTotalSizeLabel->setText( msg );
+	_ui->pkgSummaryItemCountLabel->clear();
+	_ui->pkgSummaryFileCountLabel->clear();
+	_ui->pkgSummarySubDirCountLabel->clear();
     }
 
     _ui->pkgSummaryLatestMTimeLabel->setText( formatTime( pkg->latestMtime() ) );
@@ -508,9 +510,9 @@ void FileDetailsView::showSelectionSummary( const FileInfoSet & selectedItems )
 }
 
 
-void FileDetailsView::setLabel( QLabel *        label,
-                                int             number,
-                                const QString & prefix )
+void FileDetailsView::setLabel( QLabel *	label,
+				int		number,
+				const QString & prefix )
 {
     CHECK_PTR( label );
     label->setText( prefix + QString::number( number ) );
@@ -518,8 +520,8 @@ void FileDetailsView::setLabel( QLabel *        label,
 
 
 void FileDetailsView::setLabel( FileSizeLabel * label,
-                                FileSize        size,
-                                const QString & prefix )
+				FileSize	size,
+				const QString & prefix )
 {
     CHECK_PTR( label );
     label->setValue( size, prefix );

@@ -379,15 +379,25 @@ namespace QDirStat
 	/**
 	 * Get the current state of the directory reading process:
 	 *
-	 *    DirQueued	   waiting in the directory read queue
-	 *    DirReading   reading in progress
-	 *    DirFinished  reading finished and OK
-	 *    DirAborted   reading aborted upon user request
-	 *    DirError	   error while reading
+	 *    DirQueued	            waiting in the directory read queue
+	 *    DirReading            reading in progress
+	 *    DirFinished           reading finished and OK
+	 *    DirAborted            reading aborted upon user request
+	 *    DirError	            error while reading
+         *    DirPermissionDenied   insufficient permissions
 	 *
 	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual DirReadState readState() const Q_DECL_OVERRIDE;
+
+        /**
+         * Check if readState() is anything that indicates an error reading the
+         * directory. This returns 'true' for DirError or DirPermissionDenied,
+         * 'false' otherwise.
+         *
+	 * Reimplemented - inherited from FileInfo.
+         **/
+        virtual bool readError() const Q_DECL_OVERRIDE;
 
         /**
          * Return a prefix for the total size (and similar accumulated fields)

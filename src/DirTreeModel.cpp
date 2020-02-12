@@ -343,6 +343,7 @@ int DirTreeModel::rowCount( const QModelIndex & parentIndex ) const
 	    break;
 
 	case DirError:
+        case DirPermissionDenied:
 
 	    // This is a hybrid case: Depending on the dir reader, the dir may
 	    // or may not be finished at this time. For a local dir, it most
@@ -409,7 +410,7 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 
 		if ( item->isDir() )
 		{
-		    if ( item->readState() == DirError )
+		    if ( item->readError() )
 			return _dirReadErrColor;
 
 		    if ( item->errSubDirCount() > 0 )
@@ -730,7 +731,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 
     if ( item->isDirInfo() )
     {
-	if ( item->readState() == DirError )
+	if ( item->readError() )
 	{
             switch ( col )
             {
@@ -845,13 +846,13 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
     else if ( item->isDir()	 )
     {
 	if	( item->readState() == DirAborted )   icon = _stopIcon;
-	else if ( item->readState() == DirError	  )   icon = _unreadableDirIcon;
+	else if ( item->readError()       	  )   icon = _unreadableDirIcon;
 	else if ( item->isMountPoint()		  )   icon = _mountPointIcon;
 	else					      icon = _dirIcon;
     }
     else // ! item->isDir()
     {
-	if	( item->readState() == DirError	  )   icon = _unreadableDirIcon;
+	if	( item->readError()     	  )   icon = _unreadableDirIcon;
 	else if ( item->isFile()		  )   icon = _fileIcon;
 	else if ( item->isSymLink()		  )   icon = _symlinkIcon;
 	else if ( item->isBlockDevice()		  )   icon = _blockDeviceIcon;

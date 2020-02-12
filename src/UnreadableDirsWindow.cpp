@@ -123,7 +123,7 @@ void UnreadableDirsWindow::populateRecursive( FileInfo * subtree )
 
     DirInfo * dir = subtree->toDirInfo();
 
-    if ( dir->readState() == DirError )
+    if ( dir->readError() )
     {
 	UnreadableDirListItem * searchResultItem =
 	    new UnreadableDirListItem( dir->url(),

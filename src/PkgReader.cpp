@@ -428,7 +428,7 @@ void PkgReadJob::finalizeAll( DirInfo * subtree )
 	child = child->next();
     }
 
-    if ( subtree->readState() != DirError )
+    if ( ! subtree->readError() )
 	subtree->setReadState( DirFinished );
 
     subtree->finalizeLocal();
