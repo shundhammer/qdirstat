@@ -115,14 +115,17 @@ void DirTreeView::sizeContextMenu( const QPoint & pos, const QModelIndex & index
     FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
     CHECK_MAGIC( item );
 
-    QString text = DirTreeModel::sizeText( item, formatByteSize );
+    if ( item->byteSize() >= 1024 )  // Not useful below 1 kB
+    {
+        QString text = DirTreeModel::sizeText( item, formatByteSize );
 
-    if ( text.isEmpty() )
-        text = item->sizePrefix() + formatByteSize( item->totalSize() );
+        if ( text.isEmpty() )
+            text = item->sizePrefix() + formatByteSize( item->totalSize() );
 
-    QMenu menu;
-    menu.addAction( text );
-    menu.exec( mapToGlobal( pos ) );
+        QMenu menu;
+        menu.addAction( text );
+        menu.exec( mapToGlobal( pos ) );
+    }
 }
 
 
