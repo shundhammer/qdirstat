@@ -134,6 +134,8 @@ Download installable binary packages for various Linux distributions here:
     now also showing an additional "locked" icon in the details panel, and
     coloring the permissions field in red to point to the cause of the problem.
 
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unreadable-dirs-window.png" height="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-unreadable-dirs-window.png)
+
     This color can be configured in `~/.config/QDirStat/QDirStat.conf`:
 
         [DetailsPanel]
