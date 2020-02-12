@@ -22,7 +22,7 @@ using namespace QDirStat;
 
 
 UnreadableDirsWindow::UnreadableDirsWindow( SelectionModel * selectionModel,
-					    QWidget *	       parent ):
+					    QWidget *	     parent ):
     QDialog( parent ),
     _ui( new Ui::UnreadableDirsWindow ),
     _selectionModel( selectionModel )
@@ -188,9 +188,13 @@ UnreadableDirListItem::UnreadableDirListItem( const QString & path,
     QTreeWidgetItem( QTreeWidgetItem::UserType ),
     _path( path )
 {
+    static QIcon lockedDirIcon( QPixmap( ":/icons/tree-medium/unreadable-dir.png" ) );
+
     int col = -1;
 
     setText( ++col, path + "    "	);  setTextAlignment( col, Qt::AlignLeft    );
+    setIcon( col, lockedDirIcon );
+
     setText( ++col, userName		);  setTextAlignment( col, Qt::AlignLeft    );
     setText( ++col, groupName		);  setTextAlignment( col, Qt::AlignLeft    );
     setText( ++col, symbolicPermissions );  setTextAlignment( col, Qt::AlignHCenter );

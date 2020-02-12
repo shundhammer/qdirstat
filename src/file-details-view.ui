@@ -312,6 +312,22 @@
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="dirUnreadableIcon">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="icons.qrc">:/icons/tree-medium/unreadable-dir.png</pixmap>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="dirNameLabel">
           <property name="font">
            <font>
@@ -589,6 +605,25 @@ Subtree</string>
           </property>
           <property name="text">
            <string>Items:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" alignment="Qt::AlignLeft|Qt::AlignBottom">
+         <widget class="QLabel" name="dirLockedIcon">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="icons.qrc">:/icons/lock-closed.png</pixmap>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
           </property>
          </widget>
         </item>

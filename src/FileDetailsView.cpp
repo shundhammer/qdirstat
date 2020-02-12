@@ -260,6 +260,9 @@ void FileDetailsView::showDetails( DirInfo * dir )
     setLabelLimited(_ui->dirNameLabel, name );
     _ui->dirTypeLabel->setText( dirType );
 
+    _ui->dirIcon->setVisible( ! dir->readError() );
+    _ui->dirUnreadableIcon->setVisible( dir->readError() );
+
     // Subtree information
 
     showSubtreeInfo( dir );
@@ -271,6 +274,8 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
 {
     CHECK_PTR( dir );
     QString msg;
+
+    _ui->dirLockedIcon->setVisible( dir->readError() );
 
     switch ( dir->readState() )
     {
@@ -297,6 +302,7 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
 	setLabel( _ui->dirItemCountLabel,   dir->totalItems(),	 prefix );
 	setLabel( _ui->dirFileCountLabel,   dir->totalFiles(),	 prefix );
 	setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs(), prefix );
+        _ui->dirLatestMTimeLabel->setText( formatTime( dir->latestMtime() ) );
     }
     else  // Special msg -> show it and clear all summary fields
     {
@@ -304,9 +310,8 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
 	_ui->dirItemCountLabel->clear();
 	_ui->dirFileCountLabel->clear();
 	_ui->dirSubDirCountLabel->clear();
+        _ui->dirLatestMTimeLabel->clear();
     }
-
-    _ui->dirLatestMTimeLabel->setText( formatTime( dir->latestMtime() ) );
 }
 
 
