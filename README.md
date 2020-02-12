@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-02-11
+Updated: 2020-02-12
 
 
 ## Overview
@@ -123,15 +123,23 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2019-02-12
+
+  - Fine-tuned error handling: If there is a "permission denied" error while
+    reading a directory, this will now be shown much more clearly: There is now
+    a clear distinction between "permission denied" any other generic "read
+    error".
+
+  - For directories that could not be read because of insufficient permissions,
+    now also showing an additional "locked" icon in the details panel, and
+    coloring the permissions field in red to point to the cause of the problem.
+
+    This color can be configured in `~/.config/QDirStat/QDirStat.conf`:
+
+        [DetailsPanel]
+        DirReadErrColor=#ff0000
+
 - 2019-02-11
-
-  - It's SUSE hack week again! This is a week when all developers of my
-    employer SUSE (including QA engineers and supporters) are encouraged to
-    work on any Open Source project (or even any remotely technical project) of
-    their choice to improve that project and also their technical skills.
-
-    Needless to say, my personal hack week project for the last few years was
-    primarily QDirStat; there is always something that can be improved.
 
   - Now also showing the exact byte size of all size fields (of 1 kB and above)
     upon click in the "Details" panel.  All clickable fields there are now
