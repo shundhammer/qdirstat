@@ -151,6 +151,17 @@ Download installable binary packages for various Linux distributions here:
     a nasty habit of getting in the way and obscuring other information that
     the user might want to read; so I decided to use explicit mouse clicks.
 
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-byte-size-2a.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-byte-size-2a.png)
+
+    _Hovering over fields that can be clicked shows them underlined, very much
+    like a hyperlink._
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-byte-size-2b.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-byte-size-2b.png)
+
+   _Clicking (left or right mouse button) shows more details: In this case, the
+   exact byte size._
+
+
 
 - 2019-12-22
 
