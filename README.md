@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-02-12
+Updated: 2020-02-13
 
 
 ## Overview
@@ -113,7 +113,7 @@ Donate via PayPal (freely select the amount to donate):
 
 ## Latest Stable Release
 
-**QDirStat V1.6**
+**QDirStat V1.6.1**
 
 See the [release announcement](https://github.com/shundhammer/qdirstat/releases).
 
@@ -123,587 +123,129 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
-- 2019-02-12
+- 2020-02-13 **New stable release: 1.6.1**
 
-  - Fine-tuned error handling: If there is a "permission denied" error while
-    reading a directory, this will now be shown much more clearly: There is now
-    a clear distinction between "permission denied" any other generic "read
-    error".
+  **Summary:**
 
-  - For directories that could not be read because of insufficient permissions,
-    now also showing an additional "locked" icon in the details panel, and
-    coloring the permissions field in red to point to the cause of the problem.
+  - Much better handling for "permission denied" errors while reading directories
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unreadable-dirs-window.png" height="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-unreadable-dirs-window.png)
+  - Now showing the exact byte size (134 495 994 Bytes instead of 128.3 MB)
+    upon mouse click in the tree (right click) and in the details panel (left
+    or right click)
 
-    This color can be configured in `~/.config/QDirStat/QDirStat.conf`:
+  - New optional tree column "Oldest File" (not enabled by default)
 
-        [DetailsPanel]
-        DirReadErrColor=#ff0000
-
-- 2019-02-11
-
-  - Now also showing the exact byte size of all size fields (of 1 kB and above)
-    upon click in the "Details" panel.  All clickable fields there are now
-    underlined just like a hyperlink when the mouse hovers above them.
-
-    I thought long and hard about using tool tips for that, but tool tips have
-    a nasty habit of getting in the way and obscuring other information that
-    the user might want to read; so I decided to use explicit mouse clicks.
-
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-byte-size-2a.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-byte-size-2a.png)
-
-    _Hovering over fields that can be clicked shows them underlined, very much
-    like a hyperlink._
-
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-byte-size-2b.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-byte-size-2b.png)
-
-   _Clicking (left or right mouse button) shows more details: In this case, the
-   exact byte size._
+  - Bug fix: Support for dark widget themes in file size histogram window
 
 
+  **Details:**
 
-- 2019-12-22
+  - If you start QDirStat with insufficient permissions, you could easily
+    overlook large subtrees in the filesystem that consume disk space, but were
+    not visible to you. They did get a special icon, but you would have to open
+    the parent directory in the tree view to see that.
 
-  - Brought back the exact byte size as the context menu for the "Size" column in the tree:
+    Now, QDirStat notifies you in several ways:
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-byte-size.png" height="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-byte-size.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-err-dirs-light.png" height="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-err-dirs-light.png)
 
-    I.e. a right click on the size now shows the exact number of bytes to avoid
-    confusion between those people who know what a Megabyte or Gigabyte is and
-    those who introduced the confusion with 1000-based units vs. the good old
-    1024-based units that everybody in IT uses (including Microsoft everywhere
-    in all versions of Windows).
+    - All parent directories that contain a subtree that could not be read are
+      now displayed in dark red in the tree view.
 
-    _Back in the early days of computing, everything was easy: a Kilobyte was
-    1024 bytes, a Megabyte was 1024 Kilobytes, and Gigabytes were Science
-    Fiction. Then some morons came along who insisted on 1000-based units like
-    everywhere in Physics. And they and the Real Engineers introduced a foul
-    compromise: Rename 1024-based units to Kibibytes, Mibibytes etc. and
-    redefine Kilobytes to be 1000 bytes, Megabytes to become 1000 Kilobytes
-    etc.; since that day there is confusion what is what._
+    - The _Size_ field of those directories as well as other accumulated values
+      (_Items_, _Files_, _Subdirs_) are now preceded with a "greater" sign to
+      indicate that there is most likely more, but that information could not
+      be retrieved: ">7.2 MB" indicating that it's at least 7.2 MB and most
+      likely more than that, but we don't know because one or more
+      subdirectories could not be read.
 
-    **QDirStat always used and always will use 1024-based units.**
+    - A message panel in the main window between the tree view and the treemap
+      with a message that some directories could not be read.
 
+      You can close the message with the `[x]` close button on its right side,
+      but you can also simply leave it open. This is a lot less obtrusive than
+      a pop-up dialog, yet less temporary than a message in the bottom status
+      line that will disappear in a few seconds or when anything else is
+      reported.
 
-- 2019-11-02
+    - Clicking on the "Details..." link in that message opens a separate window
+      to report all directories that could not be read (typically because of
+      insufficient permissions).
 
-  - Added a separate window to report all directories that could not be read
-    (typically because of insufficient permissions). This window is opened only
-    on request: When the user clicks on the "Details..." link in the panel
-    message that reports that some directories could not be read.
+      This window is non-modal, i.e. you can still interact with the main
+      window when it is open. Click on any directory that it lists to locate it
+      in the main window: The tree view will open that branch and scroll to
+      make it visible.
 
-    This window is non-modal, i.e. you can still interact with the main window
-    when it is open. Click on any directory that it lists to locate it in the
-    main window.
+      [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unreadable-dirs-window.png" height="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-unreadable-dirs-window.png)
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unreadable-dirs-window.png" height="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-unreadable-dirs-window.png)
+    - In addition to the "locked folder" icon, unreadable directories are shown
+      in bright red in the tree view.
 
-  - Directories that could not be read are now also correctly reported in the
-    unpackaged files view. Since they are empty when they could not be read,
-    they will always end up in an `<Ignored>` branch which was previously not
-    taken into account when reporting directories with read errors. This is now
-    fixed.
+    - When an unreadable directory is selected in the tree view, the details
+      panel now shows a large padlock icon and a message "[Permission Denied]",
+      and the permissions are highlighted in red.
 
+  - You can now see the exact size in bytes both in the tree view and in the
+    details panel: 134 495 994 Bytes instead of 128.3 MB. The field is still
+    (somewhat) human readable with thousands separators (using blanks to avoid
+    confusion with different decimal / thousands separators in different
+    languages).
 
-- 2019-08-24
+    This can make it easier to compare sizes with other tools that report them
+    in bytes or that insist in using 1000-based units (QDirStat uses 1024-based
+    size units: 1 kB = 1024 Bytes; 1 MB = 1024 kB; 1 GB = 1024 MB; etc.).
 
-  - If directories could not be read (typically because of insufficient
-    permissions), now also posting a warning message in a new message panel.
+    Not using tool tips that appear automatically was a conscious decision:
+    This level of detailed information is not needed that often, and tool tips
+    get in the way whenever the mouse cursor lingers too long at an active
+    spot. More often than not a tool tip obscurs other content that the user
+    might want to read at that very moment. This is why in QDirStat in the rare
+    cases that you are interested in those exact numbers, you have to click:
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-err-dirs-light.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-err-dirs-light.png)
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-err-dirs-dark.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-err-dirs-dark.png)
+    - In the tree view, right-click a size field (a left click is used for
+      selecting an item in tree views, so the context menu is pressed into
+      service for that purpose (only for the size column)).
 
-    You can close the message with the `[x]` close button on its right side,
-    but you can also simply leave it open. This is a lot less obtrusive than a
-    pop-up dialog, yet less temporary than a message in the bottom status line
-    that will disappear in a few seconds or when anything else is reported.
+      [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-byte-size.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-byte-size.png)
 
-    The infrastructure for this enables multiple such messages that can be
-    closed in any order (or not at all) as the user likes. Each message can
-    have a "Details..." link (not used in these examples) to provide more
-    information.
+    - In the details panel, use left or right click. To indicate what fields
+      can be clicked, they are now underlined when the mouse hovers over them.
 
+      [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-byte-size-2a.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-byte-size-2a.png)
 
-- 2019-08-22
+      _Hovering over fields that can be clicked shows them underlined, very
+      much like a hyperlink._
 
-  - Improved handling for directories that could not be read.
+      [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-byte-size-2b.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-byte-size-2b.png)
 
-    When you run QDirStat as a normal (non-root) user on system directories, it
-    is very common that you get a "permission denied" error for directories
-    that contain sensitive information. Such a directory gets a folder icon
-    with a little lock to indicate that it's locked for you; there is no way to
-    find out how much disk space it consumes.
+      _Clicking (left or right mouse button) shows more details: In this case,
+      the exact byte size._
 
-    Now, such directories are also displayed in a special color (for now bright
-    red) in the tree. All their parents are now displayed in another (slightly
-    less obtrusive) color to indicate that you probably don't see the complete
-    disk space information for that subdirectory.
+  - There is now an optional new column "Oldest File" that shows the timestamp
+    (the mtime) of the oldest file in a subtree.  This is strictly about files;
+    directories, symlinks and special files (block or character devices, FIFOs
+    etc.) are ignored for this.
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-err-dirs-light.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-err-dirs-light.png)
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-err-dirs-dark.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-err-dirs-dark.png)
+    This may be useful to spot some old cruft, for example leftover dot files
+    in your home directory. Many programs generate such files when you start
+    them for the first time, and they are rarely cleaned up when they fall out
+    of use.
 
-    In those examples, The `/etc/ssl/private` directory does not have read
-    permissions for non-root users; note the icon with the lock and the red
-    text color.
+    Notice that this column is not enabled by default. If you would like to use
+    it, switch to layout L2 or L3, right-click the tree header to open the
+    columns context menu, select _Hidden Columns_, then _Show Column "Oldest
+    File"_.
 
-    When you don't open that branch in the tree, you might not realize this;
-    it's also in the log file, but most users don't read that. So its parent
-    directories `/etc/ssl` and `/etc` are also displayed in a different color:
-    Dark red in the light widget theme and yellow in the dark widget theme.
-
-    In addition to that, the parent directories now show a `>` prefix for the
-    size, number of items, number of files, number of subdirs fields to
-    indicate that there may be more. This is a hint (not only, but also) for
-    color blind users.
-
-
-- 2019-08-12
-
-  - Toned down over-information to reduce clutter:
-
-    - No longer showing column "Oldest File" in layout L2 by default.
-
-      Of course, you can always re-enable this if you like:
-      Just switch to layout L2, right-click on the column header to open the
-      column context menu, then "Hidden Columns" -> "Show Column 'Oldest File'".
-
-    - Removed "Oldest File" from the details panel for directories:
-
-      I found that this does not contribute any useful information here, yet it
-      adds to the screen clutter. Information about the oldest file in a
-      subtree is useful to drill down deeper into the subtree to find it, so
-      the tree view is much better suited for that; having that information in
-      the details panel as well does not add any value for that procedure.
-
-
-- 2019-08-03
+    Of course you can also sort by this column to see the oldest files first
+    (or last).
 
   - Fixed text color in histogram in dark widget themes
     [(GitHub Issue #117)](https://github.com/shundhammer/qdirstat/issues/117).
 
-- 2019-08-01
 
-  - Added a column "Oldest File" that shows the timestamp (the mtime) of the
-    oldest file in a subtree.  This is strictly about files; directories,
-    symlinks and special files (block or character devices, FIFOs etc.) are
-    ignored for this.
+--------
 
-    This is the first simple approach for
-    [GitHub Issue #118](https://github.com/shundhammer/qdirstat/issues/118).
-    (Click for screenshot)
-
-    This already helped me to spot some old cruft in my home directory; some
-    dot directories from ancient versions of flashplayer and whatnot. This
-    is more helpful than I initially thought.
-
-  - Added an entry "Oldest File" that does the same in the details panel for
-    directories and packages.
-
-
-- 2019-07-22 **New stable release: V1.6**
-
-  - Performance improvement while reading directories: On average 25% faster on
-    normal (non-SSD) disks
-
-    See also this article: [Linux Disk Usage Tools Compared: QDirStat
-    vs. K4DirStat vs. Baobab vs. Filelight vs. ncdu including
-    benchmarks](https://github.com/shundhammer/qdirstat/issues/97)
-
-
-  - Vast performance improvement for huge directories (with 100.000 entries or
-    more in a single directory) in the tree view: There is now instant response
-    for jumping from the first to the last item, dragging the scroll bar or
-    using the mouse wheel.
-
-  - New **packages view**:
-    QDirStat can now visualize the file lists of installed packages:
-
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-pkg-details.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-pkg-details.png)
-
-    I.e. files are now grouped by the package they belong to, and in each
-    subtree only the files that belong to the package are displayed: In this
-    example, in `/usr/bin` only the `chromium-browser` binary is displayed, not
-    all the other files in `/usr/bin`. This is intentional.
-
-    You can display all installed packages with their file lists (but that
-    takes a while), or you can select just a subset. Use Menu _File_ -> _Show
-    Installed Packages_ or start QDirStat with a `pkg:/` command line argument.
-
-    As with the other package manager related features, this is supported for
-    all Linux distributions that use one of _dpkg_, _rpm_ or _pacman_ (or any
-    higher-level package manager based on any of those like _apt_, _zypper_
-    etc.).
-
-    More details at [Pkg-View.md](doc/Pkg-View.md).
-
-
-  - New **unpackaged files view**:
-
-    QDirStat can now visualize the files in system directories that are not
-    packaged, i.e. that are not part of any file list of any installed software
-    package.
-
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unpkg-usr-share-qt5.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-unpkg-usr-share-qt5.png)
-
-    This can be useful to track down problems after package upgrades or after
-    manually installing software with `sudo make install`.
-
-    This is supported for all Linux distributions that use _dpkg_ or _rpm_ (or
-    any higher-level package manager based on any of those like _apt_, _zypper_
-    etc.).
-
-    More details at [Unpkg-View.md](doc/Unpkg-View.md).
-
-
-  - New standard cleanup: _Check File Type_. This uses the `file` command to
-    find out more detailed information what exactly a file is and displays it
-    in the cleanup output window.
-
-    More details, screenshots and how to get it if you already have an existing
-    QDirStat cleanup configuration file (i.e. if you used QDirStat before):
-    [GitHub Issue #102](https://github.com/shundhammer/qdirstat/issues/102).
-
-  - Implemented [GitHub Issue #90](https://github.com/shundhammer/qdirstat/issues/90):
-    Support excluding directories containing a file with a specific name or pattern.
-
-    Similar to some backup tools, you can now specify an exclude rule that lets
-    you exclude a directory that contains a file like `.nobackup` or
-    `.qdirstatexclude`.
-
-  - Greatly improved the man page; see `man 1 qdirstat`.
-
-  - Some bug fixes.
-
-  See also the [release announcement](https://github.com/shundhammer/qdirstat/releases/tag/1.6).
-
---------------------------------------------------
-
-
-- 2019-07-18
-
-  - Greatly improved the man page; see `man 1 qdirstat`.
-
-    It started with the Debian maintainer of QDirStat asking for a man page
-    because that's a standard requirement for Debian packages, and he even
-    wrote the initial one; thanks again, Patrick!.
-
-    That initial man page was very concise, and as QDirStat keeps evolving, not
-    only was there an increasing number of command line options that was not
-    documented in the man page (but of course when invoking the program with
-    the `--help` command line option), but it also didn't explain much beyond
-    the command line arguments.
-
-    Now it contains not only the latest set of command line arguments including
-    syntax and meaning of `pkg:/` and `unpkg:/` URLs, but also some general
-    information what the program is (including what the treemap is) and how to
-    use it.
-
-
-- 2019-07-08
-
-  New **unpackaged files view**:
-
-  QDirStat can now visualize the files in system directories that are not
-  packaged, i.e. that are not part of any file list of any installed software
-  package.
-
-  This reads the complete file lists first (i.e. all file lists from all
-  installed packages), then reads the requested directory as usual and puts the
-  files that are packaged in a special branch `<Ignored>` in the tree view.
-
-  Those files are _not_ displayed in the treemap, i.e. the treemap now only
-  contains unpackaged files.
-
-  [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unpkg-usr-share-qt5.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-unpkg-usr-share-qt5.png)
-
-  **What is this Good For?**
-
-  - Recovering a wrecked system after botched upgrades
-
-  - Recovering from too much `sudo make install`
-
-  - Fixing packaging problems, e.g. find leftover shared libs that tend to get in
-    the way
-
-  - QA for distro release managers, QA engineers, PMs
-
-  - Satisfying user curiosity
-
-  - _Because we can!_  ;-)
-
-  More details at [Unpkg-View.md](doc/Unpkg-View.md).
-
-  Comments and questions are welcome at [GitHub Issue #110](https://github.com/shundhammer/qdirstat/issues/110).
-
-  If you have a genuine problem with the new feature, please open a separate
-  issue so it can be tracked properly.
-
-
-
-- 2019-06-16
-
-  - Added [documentation for the _pkg-tools_ scripts](scripts/pkg-tools/README.md).
-
-    In short, they can be used to see unpackaged files on a system that uses
-    one of the supported package managers (_dpkg_, _rpm_, _pacman_), but it's a
-    bit of a clunky solution, so this is meant for advanced users only.
-
-    ~~With a little bit of luck, there _may_ be a better solution forthcoming
-    with real integration into QDirStat's GUI.~~
-
-    _Update 2019-07-08: This real integration into the GUI is now available._
-
-
-- 2019-05-12
-
-  - New standard cleanup: _Check File Type_. This uses the `file` command to
-    find out more detailed information what exactly a file is and displays it
-    in the normal cleanup output window (the orange text is the interesting
-    part).
-
-    More details and screenshots at [GitHub Issue #102](https://github.com/shundhammer/qdirstat/issues/102).
-    Notice that you can also add this to any older version of QDirStat.
-
-
-- 2019-05-11
-
-  - Implemented the single-command call to get all file lists for all installed
-    packages for _rpm_ as well.
-
-    Now it's only _pacman_ that still needs a separate external command for
-    each package. If anybody knows how to do this for _pacman_ as well, please
-    let me know.
-
-  - Another drastic performance improvement in the packages view:
-
-    Now down to **6.5 seconds** on my system from initially 180 seconds for
-    getting all file lists for all 2400 installed packages.
-
-    | sec   |  Version   | Description                                                         |
-    |------:|------------|---------------------------------------------------------------------|
-    | 180.0 | ce3e793298 | First pkg view; sequential separate `dpkg -L` calls                 |
-    |  53.4 | 68038f0525 | Separate `dpkg -L` calls in multiple background processes           |
-    |  38.5 | ce54879a48 | Single `dpkg -S "*"` call to get all file lists for all pkg at once |
-    |  37.7 | 45b0a7a941 | Use cache for `lstat()` syscalls                                    |
-    |  24.6 | c50e9a7686 | Use slower update timer for tree view while reading                 |
-    |   6.5 | a1043a20fb | Keep tree collapsed during reading                                  |
-
-    (Much) more details at [GitHub Issue #101](https://github.com/shundhammer/qdirstat/issues/101).
-
-
-- 2019-05-10
-
-  Drastic performance improvements in the packages view:
-
-  - When reading many (configurable; right now 200) package lists, QDirStat no
-    longer fires off a separate background process (6 in parallel at any given
-    time) for each external command (`dpkg-query --listfiles` or `rpm -ql` or
-    `pacman -Qlp`) and collects their output.
-
-    Rather, it now tries to use a single external command that can return all
-    file lists for all packages at once. It builds a cache from that and uses
-    it to build the internal tree as it processes the read jobs for each
-    package one by one.
-
-    Right now this works for _dpkg_ (`dpkg -S "*"`). Experiments show that it
-    will also work for _rpm_ (that's on the _to do_ list).
-
-    But there does not seem to be an equivalent command for _pacman_; it looks
-    as if _pacman_ can only return a file list for a single package or a list
-    of all installed packages, but without any reference what package each file
-    in that list belongs to. _If anybody knows, please contact me._
-
-  - Now caching the result of `lstat()` syscalls for directories in the package
-    view since most packages share common system directories like `/usr`,
-    `/usr/bin`, `/usr/share` etc.; `lstat()` is an expensive affair, and even
-    just avoiding to switch from user space to kernel space and back that often
-    is a speed improvement.
-
-  - Reduced the display update inverval in the packages view. While reading
-    package information, there is not all that much to see anyway. Yet
-    constantly recalculating the column widths to make sure they fit their
-    content is expensive. This is now done just every 5 seconds, not 3 times a
-    second.
-
-    There is even a noticeable difference when using the L1 layout and a
-    smaller window size so there is less content to take care of.
-
-  The net effect of all this performance tuning is that on my machine (Xubuntu
-  18.04 LTS (i.e. _dpkg_) with ~2400 packages) reading all packages with all
-  their file lists is now down to under 30 seconds from formerly 90 to 120 (it
-  varied wildly).
-
-
-- 2019-05-09
-
-  - Now no longer showing a directory's own size (the size of the directory
-    node, not of any file contained in the directory) in the packages view:
-    This distorted both the treemap and the total sums. Directories are
-    typically shared between a lot of packages, so it does not make very much
-    sense to add the size of a very common directory like /usr/bin or /usr/lib
-    to the total size of each package that owns a file in any of them, thus
-    accounting for those directories many times. On my system, /usr/bin is
-    shared between 454 packages, so its 68 kB would be added up 454 times, thus
-    adding up to 30 MB.
-
-    In the treemap that meant that packages that install only one or two very
-    small files (symlinks!) to a very common directory would show a lot of
-    empty space; the 56 byte (or so) symlink would be completely dwarfed by the
-    directory it is in, even if the directory only has 4 kB. A lot of such lone
-    small files each in a separate directory meant a whole lot of empty space
-    in the treemap, thus making packages very hard to compare against each
-    other.
-
-    Of course this means that the size of the directory nodes is now completely
-    missing in the toplevel total sum (the Pkg:/ node in the tree), but that is
-    much less distorting than multiplying each of those directory node sizes by
-    the number of packages that have files in each of them.
-
-  - No longer regarding the directory's own mtime (modification time) in the
-    packages view: The latest overall mtime in a subtree cascades upward, so
-    any change in any subtree would affect the latest mtime in the higher tree
-    levels. But if that change was caused by something outside of the current
-    view, this is irrelevant. So if you want to know the latest mtime anywhere
-    in package _foo_ which includes the /usr/bin/foo command, it is irrelevant
-    if one hour ago you installed or updated some other package which also
-    installed some other commands to /usr/bin; you don't want that latest mtime
-    of the /usr/bin directory to affect the display of every package that has a
-    file in /usr/bin.
-
-
-- 2019-05-04
-
-  New **packages view**:
-  QDirStat can now visualize the file lists of installed packages:
-
-  [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-pkg-details.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-pkg-details.png)
-
-  I.e. files are now grouped by the package they belong to, and in each subtree
-  only the files that belong to the package are displayed: In this example, in
-  `/usr/bin` only the `chromium-browser` binary is displayed, not all the other
-  files in `/usr/bin`. This is intentional.
-
-  You can display all installed packages with their file lists (but that takes
-  a while), or you can select just a subset. Use Menu _File_ -> _Show Installed
-  Packages_ or start QDirStat with a `pkg:/` command line argument.
-
-  As with the other package manager related features, this is supported for all
-  Linux distributions that use one of _dpkg_, _rpm_ or _pacman_ (or any
-  higher-level package manager based on any of those like _apt_, _zypper_ etc.).
-
-  More details at [Pkg-View.md](doc/Pkg-View.md).
-
-  Comments and questions are welcome at [GitHub Issue #100](https://github.com/shundhammer/qdirstat/issues/100).
-
-  If you have a genuine problem with the new feature, please open a separate
-  issue so it can be tracked properly.
-
-
-- 2019-04-12
-
-  - **Performance improvement** while reading directories: **25% faster** on my
-    /work directory with an ext4 filesystem with 230 GB / 216k items on a
-    rotational (non-SSD) disk; with cleared caches now 24.5 sec average
-    compared to previously 32.5 sec average (with filled caches down to 1.5
-    from previously 2.0 sec).
-
-    It now uses `fstatat()` (instead of `lstat()`) which accepts the file
-    descriptor of an open directory, so glibc and the kernel save the time
-    previously needed for parsing the path and locating the directory; that
-    part will also bring some speed improvement for SSDs.
-
-    In addition to that, the entries for each directory are now sorted by i-no
-    before calling `fstatat()` so the kernel can now read the i-nodes on disk
-    in sequential order, thus saving disk seek times. SSD users will not
-    benefit from that since there are no disk seek times on an SSD.
-
-  - Now using the name as the secondary sort field in the tree view if the
-    primary sort field (usually the size) is equal for two items.
-
-  - Vast performance improvement for huge directories (with 100.000 entries or
-    more in a single directory) in the tree view: There is now instant response
-    for jumping from the first to the last item, dragging the scroll bar or
-    using the mouse wheel.
-
-    It had turned out that by default the underlying QTreeView widget queries
-    each item in turn how tall it wants to become (using the `sizeHint()`)
-    which in turn had to query the font for each one for its metrics.
-
-    QDirStat now sets the QTreeView's `uniformRowHeights` flag to indicate that
-    all rows have the same height, so this only needs to be done for the first
-    one, and the result is simply multiplied by the number of items.
-
-    Amazingly enough it was not sorting the items (which is what comes to mind
-    when there is such a performance bottleneck), no, it was someting as
-    mundane as the widget having to figure out the proportions of its scroll
-    bar slider vs. the scroll bar overall length. And for that, it needs to
-    know the number of items (which is simple) and the height of each one
-    (which was not).
-
-    The reason why the widget does that is because each item might have a
-    different font or a different icon, and then each item might have a
-    different height. That `uniformRowHeights` flag tells it that this is not
-    the case.
-
-
-- 2019-04-06
-
-  - New article _Linux Disk Usage Tools Compared: QDirStat vs. K4DirStat
-    vs. Baobab vs. Filelight vs. ncdu_ including benchmarks:
-    [GitHub Issue #97](https://github.com/shundhammer/qdirstat/issues/97)
-
-    (written in the GitHub issue tracker so users can join the discussion)
-
-
-- 2019-04-05
-
-  - Performance boost for huge directories (with 100.000 entries or more in a single
-    directory):
-
-    A routine that counts the direct children of a directory now uses a cached
-    value for each directory so it does not have to be recalculated over and
-    over again even if nothing changed. Amazingly enough, this little thing had
-    turned out to be the performance bottleneck that had made QDirStat
-    prohibitively slow for such directories. It was not the sorting of the
-    entries (the sort order was always cached), no, the problem was something
-    as trivial as counting the children on the current level of the tree view.
-
-    Of course, a directory that contains 100.000 entries in a single level
-    still has quite some performance impact, but at least now it's
-    tolerable. This was tested with up to 500.000 entries in a single directory
-    (there is now a script that can create such a directory in the test/util
-    directory of the source tree).
-
-    Hint: Avoid dragging the vertical scroll bar of the tree view in such a
-    directory; better use keyboard commands such as the _Home_ or the _End_
-    key. The scroll bar will make the underlying Qt widget go through every
-    single entry in turn, and that will take a while (it will eventually become
-    responsive again, though).
-
-    _Update 2019-04-12: This is now no longer an issue; using
-    `uniformRowHeights` fixed that._
-
-
-  - Implemented [GitHub Issue #90](https://github.com/shundhammer/qdirstat/issues/90):
-    Support excluding directories containing a file with a specific name or pattern.
-
-    Similar to some backup tools, you can now specify an exclude rule that lets
-    you exclude a directory that contains a file like `.nobackup` or
-    `.qdirstatexclude`. The exclude rule configuration now has a new option for
-    that:
-
-    [<img width="300" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-exclude.png" >](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-exclude.png)
-
-    This makes it possible to reuse such files that are there anyway for some
-    other tool and get a good idea how large the resulting backup will become.
-
-    Since this change required some refactoring in a quite sensitive part
-    (reading the directories), please watch out for possible bugs that this might
-    have introduced and report it if you find something.
-
-
-- 2018-11-07 **New stable release: V1.5**
 
 
 _See [DevHistory.md](doc/DevHistory.md)
@@ -713,17 +255,56 @@ for older entries._
 ## History
 
 
-This is just a rough summary. For more details, see [DevHistory.md](doc/DevHistory.md)
+This is just a rough summary. For more details, see [DevHistory.md](doc/DevHistory.md).
+
+- 2019-07-22 New stable release: V1.6
+
+  - New _packages_ view
+
+  - New _unpackaged files_ view
+
+  - Performance improvements while reading directories
+
+  - Vast Performance improvement for huge directories
+    (100.000+ entries in a single directory)
+
 
 - 2018-11-07 New stable release: V1.5
 
+  - New _details_ panel
+
+  - Package manager support to show what software package a file belongs to
+
+  - New _breadcrumbs_ navigation
+
+  - Switchable tree layouts L1 / L2 / L3
+
+
 - 2017-06-04 New stable release: V1.4
+
+  - New _file size statistics_ with histogram
+
+  - Shading for empty space in the treemap for lots of very small files
+
 
 - 2017-03-05 New stable release: V1.3
 
+  - New _file type_ view
+
+  - Locate files of a certain type (filename extension) in the tree
+
+
 - 2017-01-03 New stable release: V1.2
 
+  - Improved Btrfs subvolumes support
+
+
 - 2016-10-31 New stable release: V1.1-Pumpkin
+
+  - Bug fixes
+
+  - Split up the config file into several ones
+
 
 - 2016-05-16 First stable release: V1.0
 
@@ -1075,9 +656,9 @@ Features ported from the old KDirStat:
   from the "File" menu -- or configure QDirStat to always read across file
   systems.
 
-- Efficent memory usage. A modern Linux root file system has well over 500,000
-  objects (files, directories, symlinks, ...) and well over 40,000
-  directories. This calls for minimalistic C++ objects to represent each one of
+- Efficent memory usage. A modern Linux root file system has well over 800,000
+  objects (files, directories, symlinks, ...) and about 100,000 directories.
+  This calls for minimalistic C++ objects to represent each one of
   them. QDirStat / KDirStat do their best to minimize that memory footprint.
 
 - Hierarchical tree view that displays accumulated sums in each branch,
@@ -1087,8 +668,8 @@ Features ported from the old KDirStat:
 - All numbers displayed human readable -- e.g., 34.4 MB instead of 36116381
   Bytes.
 
-- All units are 1024-based, i.e. 1 kB = 1024 Bytes; 1 MB = 1024 kB, 1 GB = 1024
-  MB.
+- All size units are 1024-based, i.e. 1 kB = 1024 Bytes; 1 MB = 1024 kB; 1 GB =
+  1024 MB.
 
 - In the tree, also displaying the exact byte size as the context menu (right
   click).
