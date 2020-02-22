@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-02-13
+Updated: 2020-02-22
 
 
 ## Overview
@@ -153,9 +153,9 @@ Download installable binary packages for various Linux distributions here:
       now displayed in dark red in the tree view.
 
     - The _Size_ field of those directories as well as other accumulated values
-      (_Items_, _Files_, _Subdirs_) are now preceded with a "greater" sign to
-      indicate that there is most likely more, but that information could not
-      be retrieved: ">7.2 MB" indicating that it's at least 7.2 MB and most
+      (_Items_, _Files_, _Subdirs_) are now preceded with a "greater than" sign
+      to indicate that there is most likely more, but that information could
+      not be retrieved: ">7.2 MB" indicating that it's at least 7.2 MB and most
       likely more than that, but we don't know because one or more
       subdirectories could not be read.
 
