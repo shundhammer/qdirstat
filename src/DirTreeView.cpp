@@ -115,7 +115,7 @@ void DirTreeView::sizeContextMenu( const QPoint & pos, const QModelIndex & index
     FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
     CHECK_MAGIC( item );
 
-    if ( item->byteSize() >= 1024 )  // Not useful below 1 kB
+    if ( item->totalSize() >= 1024 )  // Not useful below 1 kB
     {
         QString text = DirTreeModel::sizeText( item, formatByteSize );
 
