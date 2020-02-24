@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-02-22
+Updated: 2020-02-24
 
 
 ## Overview
@@ -122,6 +122,12 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2020-02-24
+
+  - Fixed crash when terminating with Ctrl-Q while reading directories
+    [(GitHub Issue #122)](https://github.com/shundhammer/qdirstat/issues/122).
+
 
 - 2020-02-13 **New stable release: 1.6.1**
 
