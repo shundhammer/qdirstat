@@ -29,7 +29,8 @@ using namespace QDirStat;
 
 DirTree::DirTree():
     QObject(),
-    _excludeRules( 0 )
+    _excludeRules( 0 ),
+    _beingDestroyed( false )
 {
     _isBusy	      = false;
     _crossFileSystems = false;
@@ -46,6 +47,8 @@ DirTree::DirTree():
 
 DirTree::~DirTree()
 {
+    _beingDestroyed = true;
+
     if ( _root )
 	delete _root;
 

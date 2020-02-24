@@ -276,9 +276,9 @@ namespace QDirStat
 	 **/
 	void readCache( const QString & cacheFileName );
 
-        /**
-         * Clear the tree and read a cache file.
-         **/
+	/**
+	 * Clear the tree and read a cache file.
+	 **/
 	void clearAndReadCache( const QString & cacheFileName );
 
 	/**
@@ -335,6 +335,13 @@ namespace QDirStat
 	 * Return 'true' if there is any filter, 'false' if not.
 	 **/
 	bool hasFilters() const { return ! _filters.isEmpty(); }
+
+	/**
+	 * Return 'true' if this DirTree is in the process of being destroyed,
+	 * so any FileInfo / DirInfo pointers stored outside the tree might
+	 * have become invalid.
+	 **/
+	bool beingDestroyed() const { return _beingDestroyed; }
 
 
     signals:
@@ -456,6 +463,7 @@ namespace QDirStat
 	QString			_url;
 	ExcludeRules *		_excludeRules;
 	QList<DirTreeFilter *>	_filters;
+	bool			_beingDestroyed;
 
     };	// class DirTree
 

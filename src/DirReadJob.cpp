@@ -42,8 +42,19 @@ DirReadJob::DirReadJob( DirTree * tree,
 
 DirReadJob::~DirReadJob()
 {
-    if ( _dir )
-	_dir->readJobFinished( _dir );
+    if ( ! _tree->beingDestroyed() )
+    {
+	// Only do this if the tree is not in the process of being destroyed;
+	// otherwise all FileInfo / DirInfo pointers pointing into that tree
+	// may already be invalid. And even if they are not, it is now
+	// pointless to do all the housekeeping stuff to finalize the read job:
+	// We'd be beautifying the tree content that is now being destroyed.
+	//
+	// https://github.com/shundhammer/qdirstat/issues/122
+
+	if ( _dir )
+	    _dir->readJobFinished( _dir );
+    }
 }
 
 
@@ -102,15 +113,15 @@ bool DirReadJob::crossingFileSystems( DirInfo * parent, DirInfo * child )
 
     if ( childDevice.isEmpty() && parent->readState() == DirCached )
     {
-        // A DirInfo from a cache file always has device number 0, so the
-        // initial check failed because of that. The child might still be a
-        // mount point, but since that path was not found in the list of known
-        // mount points from /proc/mounts or /etc/mtab, we assume that this was
-        // not the case.
-        //
-        // See also https://github.com/shundhammer/qdirstat/issues/114
+	// A DirInfo from a cache file always has device number 0, so the
+	// initial check failed because of that. The child might still be a
+	// mount point, but since that path was not found in the list of known
+	// mount points from /proc/mounts or /etc/mtab, we assume that this was
+	// not the case.
+	//
+	// See also https://github.com/shundhammer/qdirstat/issues/114
 
-        return false;
+	return false;
     }
 
     if ( parentDevice.isEmpty() )
@@ -412,12 +423,12 @@ bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
 
 	    _tree->clearAndReadCache( cacheFullName );
 
-            // Since this clears the tree and thus the job queue and thus
-            // deletes this read job, it is important not to do anything after
-            // this point that might access any member variables or even just
-            // uses any virtual method.
+	    // Since this clears the tree and thus the job queue and thus
+	    // deletes this read job, it is important not to do anything after
+	    // this point that might access any member variables or even just
+	    // uses any virtual method.
 
-            return true;
+	    return true;
 	}
 	else
 	{
