@@ -34,6 +34,9 @@
 using namespace QDirStat;
 
 
+bool FileInfo::_ignore_hard_links = false;
+
+
 FileInfo::FileInfo( DirTree    * tree,
 		    DirInfo    * parent,
 		    const char * name )
@@ -188,7 +191,7 @@ FileSize FileInfo::size() const
 {
     FileSize sz = _isSparseFile ? allocatedSize() : _size;
 
-    if ( _links > 1 && ! isDir() )
+    if ( _links > 1 && ! _ignore_hard_links && ! isDir() )
 	sz /= _links;
 
     return sz;
@@ -471,6 +474,15 @@ QString FileInfo::octalPermissions() const
 QString FileInfo::baseName() const
 {
     return QDirStat::baseName( _name );
+}
+
+
+void FileInfo::setIgnoreHardLinks( bool ignore )
+{
+    if ( ignore )
+        logInfo() << "Ignoring hard links" << endl;
+
+    _ignore_hard_links = ignore;
 }
 
 

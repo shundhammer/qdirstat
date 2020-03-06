@@ -54,7 +54,7 @@
        <item>
         <widget class="QCheckBox" name="useTreemapHoverCheckBox">
          <property name="text">
-          <string>Use &amp;hover effect in treemap</string>
+          <string>Use ho&amp;ver effect in treemap</string>
          </property>
         </widget>
        </item>
@@ -62,6 +62,13 @@
         <widget class="QCheckBox" name="crossFileSystemsCheckBox">
          <property name="text">
           <string>&amp;Cross file system boundaries while reading</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="ignoreHardLinksCheckBox">
+         <property name="text">
+          <string>Ignore &amp;hard links</string>
          </property>
         </widget>
        </item>

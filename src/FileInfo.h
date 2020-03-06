@@ -809,6 +809,34 @@ namespace QDirStat
 						 S_ISFIFO( _mode ) ||
 						 S_ISSOCK( _mode )   ) ? true : false; }
 
+        /**
+         * Set the policy how hard links are handled: By default, for files
+         * with multiple hard links, the size is distributed among each
+         * individual hard link for that file. So a file with a size of 4 kB
+         * and 4 hard links reports 1 kB to its parent directory.
+         *
+         * When this flag is set to 'true', it will report the full 4 kB each
+         * time, so all 4 hard links together will now add up to 16 kB. While
+         * this is probably a very bad idea if those links are all in the same
+         * directory (or subtree), it might even be useful if there are several
+         * separate subtrees that all share hard links between each other, but
+         * not within the same subtree. Some backup systems use this strategy
+         * to save disk space.
+         *
+         * Use this with caution.
+         *
+         * This flag will be read from the config file from the outside
+         * (DirTree) and set from there using this function.
+         **/
+        static void setIgnoreHardLinks( bool ignore );
+
+        /**
+         * Return the current hard links accounting policy.
+         * See setIgnoreHardLinks() for details.
+         **/
+        static bool ignoreHardLinks() { return _ignore_hard_links; }
+
+
     protected:
 
 	// Data members.
@@ -833,6 +861,8 @@ namespace QDirStat
 	DirInfo	 *	_parent;		// pointer to the parent entry
 	FileInfo *	_next;			// pointer to the next entry
 	DirTree	 *	_tree;			// pointer to the parent tree
+
+        static bool     _ignore_hard_links;     // don't distribute size for multiple hard links
 
     };	// class FileInfo
 
