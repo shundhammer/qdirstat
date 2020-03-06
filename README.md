@@ -123,6 +123,15 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2020-03-06
+
+  - Fixed the internal cache writer (the one called from the _File_ menu, not
+    the _qdirstat-cache-writer_ Perl script): For files with multiple hard
+    links, it wrote the wrong size to the cache file: The result of _size /
+    links_, not _size_.
+
+    This was part of [(GitHub Issue #124)](https://github.com/shundhammer/qdirstat/issues/124).
+
 - 2020-02-24
 
   - Fixed crash when terminating with Ctrl-Q while reading directories
