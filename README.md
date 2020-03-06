@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-02-24
+Updated: 2020-03-06
 
 
 ## Overview
@@ -1039,9 +1039,6 @@ See file [Troubleshooting.md](doc/Troubleshooting.md)
 - [Disk Usage Tools Compared: QDirStat vs. K4DirStat vs. Baobab vs. Filelight vs. ncdu](https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared) (including benchmarks)
 - [XDG Trash Spec](http://standards.freedesktop.org/trash-spec/trashspec-1.0.html)
 - [Spatry's QDirStat Review on YouTube](https://www.youtube.com/watch?v=ysm4-x_5ftI)
-- Articles by Harry Mangalam (University of California, Irvine)
-  - [QDirStat](http://moo.nac.uci.edu/~hjm/HOWTO_move_data.html#qdirstat)
-  - [KDirStat for Clusters](http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html)
 
 Of course, don't forget to check out the [doc directory](doc/).
 
