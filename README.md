@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-03-06
+Updated: 2020-03-19
 
 
 ## Overview
@@ -122,6 +122,55 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+
+- 2020-03-19
+
+  - Added a config option to ignore hard links.
+
+    This is useful for a very small number of use cases. Hard links are not
+    very common anymore in today's Linux / BSD / Unix-like systems, so most
+    users won't have to bother with this at all.
+
+    By default, QDirStat sums up the disk space for a file with multiple hard
+    links for each hard link's share of the overall size: If a file with 1 MB
+    has 4 hard links, for each of those 4 links QDirStat adds 1/4 of the size
+    (i.e., 256 kB) to the parent directory. If all those 4 links are in the
+    same directory, that's very simple: They add up to 4 * 256 kB = 1 MB, so
+    the sum is correct.
+
+    If those hard links are all in different directories, each directory only
+    gets part of that disk space allocated, because in fact they share the disk
+    space among each other; the total disk space sum taking all those
+    directories into account is still correct, of course.
+
+    The trouble starts when you want to make a backup of only one of those
+    directories: Even though the disk space is still shared with other
+    directories, on the backup medium, you still need the disk space for that
+    complete file, i.e. the full 1 MB, not only that directory's share (256
+    MB). With a lot of hard-linked files, that can add up to a lot of
+    difference between what QDirStat displays and what disk space you actually
+    need for the backup.
+
+    There was a user who makes heavy use of that, and for that kind of use case
+    there is now the option to ignore hard links: In that case, QDirStat sums
+    up the complete size (the full 1 MB) for each hard link of the file.
+
+    While that is useful for this special case, and you can now see the total
+    size that you will need for your backup medium for that one directory, the
+    total size higher up in the directory tree where more than one of those
+    directories that share hard linked files with each other is off: That file
+    now appears 4 times with 1 MB each, so it will add up to 4 MB.
+
+    So please use that config option only when you are aware of the
+    consequences; this is a specialized option for rare, specialized use
+    cases. It basically makes sense only if the other hard links are all
+    outside the subtree that QDirStat displays.
+
+    If in doubt, leave this option off (which is the default).
+
+    More details at [(GitHub Issue #125)](https://github.com/shundhammer/qdirstat/issues/125).
+
 
 - 2020-03-06
 
