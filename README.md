@@ -169,7 +169,7 @@ Download installable binary packages for various Linux distributions here:
 
     If in doubt, leave this option off (which is the default).
 
-    More details at [(GitHub Issue #125)](https://github.com/shundhammer/qdirstat/issues/125).
+    More details at [GitHub Issue #125](https://github.com/shundhammer/qdirstat/issues/125).
 
 
 - 2020-03-06
