@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-03-19
+Updated: 2020-03-25
 
 
 ## Overview
@@ -148,7 +148,7 @@ Download installable binary packages for various Linux distributions here:
     directories: Even though the disk space is still shared with other
     directories, on the backup medium, you still need the disk space for that
     complete file, i.e. the full 1 MB, not only that directory's share (256
-    MB). With a lot of hard-linked files, that can add up to a lot of
+    kB). With a lot of hard-linked files, that can add up to a lot of
     difference between what QDirStat displays and what disk space you actually
     need for the backup.
 
