@@ -24,6 +24,7 @@ CleanupList StdCleanup::stdCleanups( QObject * parent )
 	     << checkFileType      ( parent )
 	     << compressSubtree	   ( parent )
 	     << makeClean	   ( parent )
+	     << ninjaClean	   ( parent )
 	     << gitClean	   ( parent )
 	     << deleteJunk	   ( parent )
 	     << hardDelete	   ( parent )
@@ -115,6 +116,21 @@ Cleanup * StdCleanup::makeClean( QObject * parent )
     Cleanup *cleanup = new Cleanup( "make clean",
 				    QObject::tr( "&make clean" ),
 				    parent );
+    CHECK_NEW( cleanup );
+    cleanup->setWorksForDir	( true	);
+    cleanup->setWorksForFile	( false );
+    cleanup->setWorksForDotEntry( true	);
+    cleanup->setRefreshPolicy( Cleanup::RefreshThis );
+
+    return cleanup;
+}
+
+
+Cleanup * StdCleanup::ninjaClean(QObject *parent)
+{
+    Cleanup *cleanup = new Cleanup( "ninja clean",
+		    QObject::tr( "&ninja clean"),
+		    parent );
     CHECK_NEW( cleanup );
     cleanup->setWorksForDir	( true	);
     cleanup->setWorksForFile	( false );
