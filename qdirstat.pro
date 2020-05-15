@@ -21,5 +21,13 @@ CONFIG  += ordered
 SUBDIRS  = src scripts doc doc/stats man
 
 macx {
-    SUBDIRS  -= scripts doc doc/stats man
+    # FIXME: Prevent build failure because of missing main() (issue #131)
+    # This is a pretty radical approach, and you won't get any of the scripts
+    # or any of the documentation on MacOS X; but it works.
+    #
+    # If anybody with good MacOS X know-how has a better idea that is still
+    # robust enough to prevent that same build failure to reappear, please open
+    # a pull request.
+
+    SUBDIRS = src
 }
