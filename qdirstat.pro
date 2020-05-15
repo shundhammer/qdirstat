@@ -19,3 +19,7 @@ TEMPLATE = subdirs
 CONFIG  += ordered
 
 SUBDIRS  = src scripts doc doc/stats man
+
+macx {
+    SUBDIRS  -= scripts doc doc/stats man
+}
