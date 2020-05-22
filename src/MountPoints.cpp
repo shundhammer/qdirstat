@@ -45,11 +45,14 @@ bool MountPoint::isBtrfs() const
 
 bool MountPoint::isSystemMount() const
 {
-    // All normal block devices start with /dev/something or on some systems
-    // maybe /devices/something; filter out system devices like "cgroup",
-    // "tmpfs", "sysfs" and all those other kernel-table devices.
+    // All normal block have a path with a slash like "/dev/something" or on some
+    // systems maybe "/devices/something". NFS mounts have "hostname:/some/path",
+    // Samba mounts have "//hostname/some/path".
+    //
+    // This check filters out system devices like "cgroup", "tmpfs", "sysfs"
+    // and all those other kernel-table devices.
 
-    if ( ! _device.startsWith( "/" ) )  return true;
+    if ( ! _device.contains( "/" ) )    return true;
 
     if ( _path.startsWith( "/dev"  ) )  return true;
     if ( _path.startsWith( "/proc" ) )  return true;
