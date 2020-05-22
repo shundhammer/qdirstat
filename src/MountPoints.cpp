@@ -24,7 +24,8 @@ MountPoint::MountPoint( const QString & device,
                         const QString & mountOptions ) :
     _device( device ),
     _path( path ),
-    _filesystemType( filesystemType )
+    _filesystemType( filesystemType ),
+    _isDuplicate( false )
 {
     _mountOptions = mountOptions.split( "," );
 }
@@ -39,6 +40,22 @@ QString MountPoint::mountOptionsStr() const
 bool MountPoint::isBtrfs() const
 {
     return _filesystemType.toLower() == "btrfs";
+}
+
+
+bool MountPoint::isSystemMount() const
+{
+    // All normal block devices start with /dev/something or on some systems
+    // maybe /devices/something; filter out system devices like "cgroup",
+    // "tmpfs", "sysfs" and all those other kernel-table devices.
+
+    if ( ! _device.startsWith( "/" ) )  return true;
+
+    if ( _path.startsWith( "/dev"  ) )  return true;
+    if ( _path.startsWith( "/proc" ) )  return true;
+    if ( _path.startsWith( "/sys"  ) )  return true;
+
+    return false;
 }
 
 
@@ -134,6 +151,21 @@ const MountPoint * MountPoints::findNearestMountPoint( const QString & startPath
 }
 
 
+bool MountPoints::isDeviceMounted( const QString & device )
+{
+    // Do NOT call ensurePopulated() here: This would cause a recursion in the
+    // populating process!
+
+    foreach ( const MountPoint * mountPoint, instance()->_mountPointMap )
+    {
+        if ( mountPoint->device() == device )
+            return true;
+    }
+
+    return false;
+}
+
+
 bool MountPoints::hasBtrfs()
 {
     instance()->ensurePopulated();
@@ -206,6 +238,12 @@ bool MountPoints::read( const QString & filename )
         MountPoint * mountPoint = new MountPoint( device, path, fsType, mountOpts );
         CHECK_NEW( mountPoint );
 
+        if ( ( ! mountPoint->isSystemMount() ) && isDeviceMounted( device ) )
+        {
+            mountPoint->setDuplicate();
+            logInfo() << "Found duplicate mount of " << device << " at " << path << endl;
+        }
+
         _mountPointMap[ path ] = mountPoint;
         ++count;
 
@@ -213,11 +251,15 @@ bool MountPoints::read( const QString & filename )
     }
 
     if ( count < 1 )
+    {
         logWarning() << "Not a single mount point in " << filename << endl;
+        return false;
+    }
     else
+    {
         _isPopulated = true;
-
-    return _isPopulated;
+        return true;
+    }
 }
 
 

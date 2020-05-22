@@ -64,11 +64,32 @@ namespace QDirStat
          **/
         bool isBtrfs() const;
 
+        /**
+         * Return 'true' if this is a system mount, i.e. one of the known
+         * system mount points like /dev, /proc, /sys, or if the device name
+         * does not start with a slash (e.g. cgroup, tmpfs, sysfs, ...)
+         **/
+        bool isSystemMount() const;
+
+        /**
+         * Return 'true' if this is a duplicate mount, i.e. either a bind mount
+         * or a filesystem that was mounted multiple times.
+         **/
+        bool isDuplicate() const { return _isDuplicate; }
+
+        /**
+         * Set the 'duplicate' flag. This should only be set while /proc/mounts
+         * or /etc/mtab is being read.
+         **/
+        void setDuplicate( bool dup = true ) { _isDuplicate = dup; }
+
+
     protected:
         QString     _device;
         QString     _path;
         QString     _filesystemType;
         QStringList _mountOptions;
+        bool        _isDuplicate;
 
     }; // class MountPoint
 
@@ -167,6 +188,11 @@ namespace QDirStat
          * Check if any of the mount points has filesystem type "btrfs".
          **/
         bool checkForBtrfs();
+
+        /**
+         * Return 'true' if 'device' is mounted.
+         **/
+        bool isDeviceMounted( const QString & device );
 
         //
         // Data members
