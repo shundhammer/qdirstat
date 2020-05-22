@@ -191,6 +191,7 @@ void MountPoints::ensurePopulated()
         logError() << "Could not read either /proc/mounts or /etc/mtab" << endl;
 
     _isPopulated = true;
+    // dumpNormalMountPoints();
 }
 
 
@@ -274,6 +275,27 @@ bool MountPoints::checkForBtrfs()
     }
 
     return false;
+}
+
+
+QList<const MountPoint *> MountPoints::normalMountPoints()
+{
+    QList<const MountPoint *> result;
+
+    foreach ( const MountPoint * mountPoint, instance()->_mountPointMap )
+    {
+        if ( ! mountPoint->isSystemMount() && ! mountPoint->isDuplicate() )
+            result << mountPoint;
+    }
+
+    return result;
+}
+
+
+void MountPoints::dumpNormalMountPoints()
+{
+    foreach ( const MountPoint * mountPoint, normalMountPoints() )
+        logDebug() << mountPoint << endl;
 }
 
 

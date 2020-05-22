@@ -153,10 +153,22 @@ namespace QDirStat
         void ensurePopulated();
 
         /**
+         * Return a list of "normal" mount points, i.e. those that are not
+         * system mounts, bind mounts or duplicate mounts.
+         **/
+        static QList<const MountPoint *> normalMountPoints();
+
+        /**
          * Dump all current mount points to the log. This does not call
          * ensurePopulated() first.
          **/
         static void dump();
+
+        /**
+         * Dump all normal mount points to the log, i.e. those that are not
+         * system, bind or duplicate mount points.
+         **/
+        static void dumpNormalMountPoints();
 
 
     protected:
@@ -170,7 +182,6 @@ namespace QDirStat
          * Destructor.
          **/
         virtual ~MountPoints();
-
 
         /**
          * Clear the content of this class.
