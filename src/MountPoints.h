@@ -60,9 +60,20 @@ namespace QDirStat
         QString mountOptionsStr() const;
 
         /**
+         * Return 'true' if the filesystem is mounted read-only.
+         **/
+        bool isReadOnly() const;
+
+        /**
          * Return 'true' if the filesystem type of this mount point is "btrfs".
          **/
         bool isBtrfs() const;
+
+        /**
+         * Return 'true' if this is a network filesystem like NFS or Samba
+         * (cifs).
+         **/
+        bool isNetworkMount() const;
 
         /**
          * Return 'true' if this is a system mount, i.e. one of the known
@@ -155,6 +166,9 @@ namespace QDirStat
         /**
          * Return a list of "normal" mount points, i.e. those that are not
          * system mounts, bind mounts or duplicate mounts.
+         *
+         * The result is sorted by the order in which the filesystems were
+         * mounted (the same as in /proc/mounts or in /etc/mtab).
          **/
         static QList<const MountPoint *> normalMountPoints();
 
@@ -211,6 +225,7 @@ namespace QDirStat
 
         static MountPoints * _instance;
 
+        QList<MountPoint *>         _mountPointList;
         QMap<QString, MountPoint *> _mountPointMap;
         bool                        _isPopulated;
         bool                        _hasBtrfs;

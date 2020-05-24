@@ -37,9 +37,26 @@ QString MountPoint::mountOptionsStr() const
 }
 
 
+bool MountPoint::isReadOnly() const
+{
+    return _mountOptions.contains( "ro" );
+}
+
+
 bool MountPoint::isBtrfs() const
 {
     return _filesystemType.toLower() == "btrfs";
+}
+
+
+bool MountPoint::isNetworkMount() const
+{
+    QString fsType = _filesystemType.toLower();
+
+    if ( fsType.startsWith( "nfs"  ) ) return true;
+    if ( fsType.startsWith( "cifs" ) ) return true;
+
+    return false;
 }
 
 
@@ -93,7 +110,8 @@ MountPoints::~MountPoints()
 
 void MountPoints::init()
 {
-    qDeleteAll( _mountPointMap );
+    qDeleteAll( _mountPointList );
+    _mountPointList.clear();
     _mountPointMap.clear();
     _isPopulated     = false;
     _hasBtrfs        = false;
@@ -112,7 +130,7 @@ bool MountPoints::isEmpty()
 {
     instance()->ensurePopulated();
 
-    return instance()->_mountPointMap.isEmpty();
+    return instance()->_mountPointList.isEmpty();
 }
 
 
@@ -159,7 +177,7 @@ bool MountPoints::isDeviceMounted( const QString & device )
     // Do NOT call ensurePopulated() here: This would cause a recursion in the
     // populating process!
 
-    foreach ( const MountPoint * mountPoint, instance()->_mountPointMap )
+    foreach ( const MountPoint * mountPoint, instance()->_mountPointList )
     {
         if ( mountPoint->device() == device )
             return true;
@@ -248,6 +266,7 @@ bool MountPoints::read( const QString & filename )
             logInfo() << "Found duplicate mount of " << device << " at " << path << endl;
         }
 
+        _mountPointList << mountPoint;
         _mountPointMap[ path ] = mountPoint;
         ++count;
 
@@ -285,7 +304,7 @@ QList<const MountPoint *> MountPoints::normalMountPoints()
 {
     QList<const MountPoint *> result;
 
-    foreach ( const MountPoint * mountPoint, instance()->_mountPointMap )
+    foreach ( const MountPoint * mountPoint, instance()->_mountPointList )
     {
         if ( ! mountPoint->isSystemMount() && ! mountPoint->isDuplicate() )
             result << mountPoint;
@@ -304,7 +323,7 @@ void MountPoints::dumpNormalMountPoints()
 
 void MountPoints::dump()
 {
-    foreach ( const MountPoint * mountPoint, instance()->_mountPointMap )
+    foreach ( const MountPoint * mountPoint, instance()->_mountPointList )
     {
         logDebug() << mountPoint << endl;
     }
