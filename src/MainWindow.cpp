@@ -36,6 +36,7 @@
 #include "Logger.h"
 #include "MimeCategorizer.h"
 #include "MimeCategoryConfigPage.h"
+#include "OpenDirDialog.h"
 #include "OpenPkgDialog.h"
 #include "OutputWindow.h"
 #include "PanelMessage.h"
@@ -59,6 +60,8 @@
 // QSignalMapper is deprecated from Qt 5.13 on
 #  define HAVE_SIGNAL_MAPPER	  0
 #endif
+
+#define USE_CUSTOM_OPEN_DIR_DIALOG 1
 
 using namespace QDirStat;
 
@@ -726,12 +729,22 @@ void MainWindow::openDir( const QString & url )
 
 void MainWindow::askOpenDir()
 {
-    QString url = QFileDialog::getExistingDirectory( this, // parent
-						     tr("Select directory to scan") );
-    if ( ! url.isEmpty() )
+    QString path;
+    DirTree * tree = _dirTreeModel->tree();
+    bool crossFilesystems = tree->crossFileSystems();
+    
+#if USE_CUSTOM_OPEN_DIR_DIALOG
+    path = QDirStat::OpenDirDialog::askOpenDir( &crossFilesystems, this );
+#else
+    path = QFileDialog::getExistingDirectory( this, // parent
+                                              tr("Select directory to scan") );
+#endif
+    
+    if ( ! path.isEmpty() )
     {
-	_dirTreeModel->tree()->reset();
-	openUrl( url );
+	tree->reset();
+	tree->setCrossFileSystems( crossFilesystems );
+	openUrl( path );
     }
 }
 

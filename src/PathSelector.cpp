@@ -63,7 +63,7 @@ void PathSelector::addPath( const QString & path,
 }
 
 
-void PathSelector::addHomeDirectory()
+void PathSelector::addHomeDir()
 {
     addPath( QDir::homePath(), "folder-home" );
 }
@@ -108,7 +108,7 @@ void PathSelector::slotItemSelected( QListWidgetItem * origItem )
 
     if ( item )
     {
-	logVerbose() << "Selected path " << item->path() << endl;
+	// logVerbose() << "Selected path " << item->path() << endl;
 	emit pathSelected( item->path() );
     }
 }

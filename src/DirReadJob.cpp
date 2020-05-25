@@ -164,6 +164,22 @@ QString DirReadJob::device( const DirInfo * dir ) const
 }
 
 
+bool DirReadJob::shouldCrossIntoFileSystem( const DirInfo * dir ) const
+{
+    const MountPoint * mountPoint = MountPoints::findByPath( dir->url() );
+
+    bool doCross =
+        ! mountPoint->isSystemMount()  &&       //  /dev, /proc, /sys, ...
+        ! mountPoint->isDuplicate()    &&       //  bind mount or multiple mounted
+        ! mountPoint->isNetworkMount();         //  NFS or CIFS (Samba)
+
+    logDebug() << ( doCross ? "Reading" : "Not reading" )
+               << " mounted filesystem " << mountPoint->path() << endl;
+
+    return doCross;
+}
+
+
 
 
 
@@ -364,7 +380,7 @@ void LocalDirReadJob::processSubDir( const QString & entryName, DirInfo * subDir
 	{
 	    subDir->setMountPoint();
 
-	    if ( _tree->crossFileSystems() )
+	    if ( _tree->crossFileSystems() && shouldCrossIntoFileSystem( subDir ) )
 	    {
 		LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
 		CHECK_NEW( job );

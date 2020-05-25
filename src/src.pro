@@ -61,8 +61,8 @@ SOURCES	  = main.cpp			\
 	    FileInfo.cpp		\
 	    FileInfoIterator.cpp	\
 	    FileInfoSet.cpp		\
-            FileInfoSorter.cpp		\
-            FileSizeLabel.cpp           \
+	    FileInfoSorter.cpp		\
+	    FileSizeLabel.cpp		\
 	    FileSizeStats.cpp		\
 	    FileSizeStatsWindow.cpp	\
 	    FileTypeStats.cpp		\
@@ -82,11 +82,12 @@ SOURCES	  = main.cpp			\
 	    MimeCategory.cpp		\
 	    MimeCategoryConfigPage.cpp	\
 	    MountPoints.cpp		\
+	    OpenDirDialog.cpp		\
 	    OpenPkgDialog.cpp		\
 	    OutputWindow.cpp		\
 	    PacManPkgManager.cpp	\
-            PanelMessage.cpp		\
-            PathSelector.cpp            \
+	    PanelMessage.cpp		\
+	    PathSelector.cpp		\
 	    PercentBar.cpp		\
 	    PercentileStats.cpp		\
 	    PkgFileListCache.cpp	\
@@ -150,7 +151,7 @@ HEADERS	  =				\
 	    FileInfoIterator.h		\
 	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
-            FileSizeLabel.h             \
+	    FileSizeLabel.h		\
 	    FileSizeStats.h		\
 	    FileSizeStatsWindow.h	\
 	    FileTypeStats.h		\
@@ -169,11 +170,12 @@ HEADERS	  =				\
 	    MimeCategory.h		\
 	    MimeCategoryConfigPage.h	\
 	    MountPoints.h		\
+	    OpenDirDialog.h             \
 	    OpenPkgDialog.h		\
 	    OutputWindow.h		\
 	    PacManPkgManager.h		\
 	    PanelMessage.h		\
-            PathSelector.h              \
+	    PathSelector.h		\
 	    PercentBar.h		\
 	    PercentileStats.h		\
 	    PkgFileListCache.h		\
@@ -215,6 +217,7 @@ FORMS	  = main-window.ui		   \
 	    file-size-stats-window.ui	   \
 	    file-type-stats-window.ui	   \
 	    locate-files-window.ui	   \
+	    open-dir-dialog.ui		   \
 	    open-pkg-dialog.ui		   \
 	    show-unpkg-files-dialog.ui	   \
 	    file-details-view.ui	   \

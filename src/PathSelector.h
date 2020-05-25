@@ -57,7 +57,7 @@ namespace QDirStat
 	/**
 	 * Convenience function: Add the current user's home directory.
 	 **/
-	void addHomeDirectory();
+	void addHomeDir();
 
 	/**
 	 * Add a mount point with an appropriate icon.
@@ -91,7 +91,7 @@ namespace QDirStat
 	 **/
 	void pathSelected( const QString & path );
 
-    protected:
+    protected slots:
 
 	/**
 	 * Signal forwarder to translate a selected item into a path.
