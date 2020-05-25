@@ -302,6 +302,7 @@ bool MountPoints::checkForBtrfs()
 
 QList<const MountPoint *> MountPoints::normalMountPoints()
 {
+    instance()->ensurePopulated();
     QList<const MountPoint *> result;
 
     foreach ( const MountPoint * mountPoint, instance()->_mountPointList )
