@@ -85,7 +85,8 @@ SOURCES	  = main.cpp			\
 	    OpenPkgDialog.cpp		\
 	    OutputWindow.cpp		\
 	    PacManPkgManager.cpp	\
-	    PanelMessage.cpp		\
+            PanelMessage.cpp		\
+            PathSelector.cpp            \
 	    PercentBar.cpp		\
 	    PercentileStats.cpp		\
 	    PkgFileListCache.cpp	\
@@ -172,6 +173,7 @@ HEADERS	  =				\
 	    OutputWindow.h		\
 	    PacManPkgManager.h		\
 	    PanelMessage.h		\
+            PathSelector.h              \
 	    PercentBar.h		\
 	    PercentileStats.h		\
 	    PkgFileListCache.h		\

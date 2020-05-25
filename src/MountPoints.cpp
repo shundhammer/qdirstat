@@ -19,15 +19,19 @@ using namespace QDirStat;
 
 
 MountPoint::MountPoint( const QString & device,
-                        const QString & path,
-                        const QString & filesystemType,
-                        const QString & mountOptions ) :
+			const QString & path,
+			const QString & filesystemType,
+			const QString & mountOptions ) :
     _device( device ),
     _path( path ),
     _filesystemType( filesystemType ),
     _isDuplicate( false )
 {
     _mountOptions = mountOptions.split( "," );
+
+#if HAVE_Q_STORAGE_INFO
+    _storageInfo = QStorageInfo( path );
+#endif
 }
 
 
@@ -69,14 +73,59 @@ bool MountPoint::isSystemMount() const
     // This check filters out system devices like "cgroup", "tmpfs", "sysfs"
     // and all those other kernel-table devices.
 
-    if ( ! _device.contains( "/" ) )    return true;
+    if ( ! _device.contains( "/" ) )	return true;
 
-    if ( _path.startsWith( "/dev"  ) )  return true;
-    if ( _path.startsWith( "/proc" ) )  return true;
-    if ( _path.startsWith( "/sys"  ) )  return true;
+    if ( _path.startsWith( "/dev"  ) )	return true;
+    if ( _path.startsWith( "/proc" ) )	return true;
+    if ( _path.startsWith( "/sys"  ) )	return true;
 
     return false;
 }
+
+
+#if HAVE_Q_STORAGE_INFO
+
+bool MountPoint::hasSizeInfo() const
+{
+    return true;
+}
+
+
+FileSize MountPoint::totalSize() const
+{
+    return _storageInfo.bytesTotal();
+}
+
+
+FileSize MountPoint::usedSize() const
+{
+    return _storageInfo.bytesTotal() - _storageInfo.bytesFree();
+}
+
+
+FileSize MountPoint::freeSizeForUser() const
+{
+    return _storageInfo.bytesAvailable();
+}
+
+
+FileSize MountPoint::freeSizeForRoot() const
+{
+    return _storageInfo.bytesFree();
+}
+
+#else  // ! HAVE_Q_STORAGE_INFO
+
+// Qt before 5.4 does not have QStorageInfo,
+// and statfs() is Linux-specific (not POSIX).
+
+bool	 MountPoint::hasSizeInfo()	const	{ return false; }
+FileSize MountPoint::totalSize()	const	{ return -1; }
+FileSize MountPoint::usedSize()		const	{ return -1; }
+FileSize MountPoint::freeSizeForUser()	const	{ return -1; }
+FileSize MountPoint::freeSizeForRoot()	const	{ return -1; }
+
+#endif // ! HAVE_Q_STORAGE_INFO
 
 
 
@@ -88,8 +137,8 @@ MountPoints * MountPoints::instance()
 {
     if ( ! _instance )
     {
-        _instance = new MountPoints();
-        CHECK_NEW( _instance );
+	_instance = new MountPoints();
+	CHECK_NEW( _instance );
     }
 
     return _instance;
@@ -114,7 +163,7 @@ void MountPoints::init()
     _mountPointList.clear();
     _mountPointMap.clear();
     _isPopulated     = false;
-    _hasBtrfs        = false;
+    _hasBtrfs	     = false;
     _checkedForBtrfs = false;
 }
 
@@ -122,7 +171,7 @@ void MountPoints::init()
 void MountPoints::clear()
 {
     if ( _instance )
-        _instance->init();
+	_instance->init();
 }
 
 
@@ -148,22 +197,22 @@ const MountPoint * MountPoints::findNearestMountPoint( const QString & startPath
     QString path = fileInfo.canonicalFilePath(); // absolute path without symlinks or ..
 
     if ( path != startPath )
-        logDebug() << startPath << " canonicalized is " << path << endl;
+	logDebug() << startPath << " canonicalized is " << path << endl;
 
     const MountPoint * mountPoint = findByPath( path );
 
     if ( ! mountPoint )
     {
-        QStringList pathComponents = startPath.split( "/", QString::SkipEmptyParts );
+	QStringList pathComponents = startPath.split( "/", QString::SkipEmptyParts );
 
-        while ( ! mountPoint && ! pathComponents.isEmpty() )
-        {
-            // Try one level upwards
-            pathComponents.removeLast();
-            path = QString( "/" ) + pathComponents.join( "/" );
+	while ( ! mountPoint && ! pathComponents.isEmpty() )
+	{
+	    // Try one level upwards
+	    pathComponents.removeLast();
+	    path = QString( "/" ) + pathComponents.join( "/" );
 
-            mountPoint = instance()->_mountPointMap.value( path, 0 );
-        }
+	    mountPoint = instance()->_mountPointMap.value( path, 0 );
+	}
     }
 
     // logDebug() << "Nearest mount point for " << startPath << " is " << mountPoint << endl;
@@ -179,8 +228,8 @@ bool MountPoints::isDeviceMounted( const QString & device )
 
     foreach ( const MountPoint * mountPoint, instance()->_mountPointList )
     {
-        if ( mountPoint->device() == device )
-            return true;
+	if ( mountPoint->device() == device )
+	    return true;
     }
 
     return false;
@@ -193,8 +242,8 @@ bool MountPoints::hasBtrfs()
 
     if ( ! _instance->_checkedForBtrfs )
     {
-        _instance->_hasBtrfs = _instance->checkForBtrfs();
-        _instance->_checkedForBtrfs = true;
+	_instance->_hasBtrfs = _instance->checkForBtrfs();
+	_instance->_checkedForBtrfs = true;
     }
 
     return _instance->_hasBtrfs;
@@ -204,12 +253,12 @@ bool MountPoints::hasBtrfs()
 void MountPoints::ensurePopulated()
 {
     if ( _isPopulated )
-        return;
+	return;
 
     read( "/proc/mounts" ) || read( "/etc/mtab" );
 
     if ( ! _isPopulated )
-        logError() << "Could not read either /proc/mounts or /etc/mtab" << endl;
+	logError() << "Could not read either /proc/mounts or /etc/mtab" << endl;
 
     _isPopulated = true;
     // dumpNormalMountPoints();
@@ -222,8 +271,8 @@ bool MountPoints::read( const QString & filename )
 
     if ( ! file.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
-        logWarning() << "Can't open " << filename << endl;
-        return false;
+	logWarning() << "Can't open " << filename << endl;
+	return false;
     }
 
     QTextStream in( &file );
@@ -233,55 +282,55 @@ bool MountPoints::read( const QString & filename )
 
     while ( ! line.isNull() ) // in.atEnd() always returns true for /proc/*
     {
-        ++lineNo;
-        QStringList fields = line.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+	++lineNo;
+	QStringList fields = line.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
 
-        if ( fields.isEmpty() ) // allow empty lines
-            continue;
+	if ( fields.isEmpty() ) // allow empty lines
+	    continue;
 
-        if ( fields.size() < 4 )
-        {
-            logError() << "Bad line " << filename << ":" << lineNo << ": " << line << endl;
-            continue;
-        }
+	if ( fields.size() < 4 )
+	{
+	    logError() << "Bad line " << filename << ":" << lineNo << ": " << line << endl;
+	    continue;
+	}
 
-        // File format (/proc/mounts or /etc/mtab):
-        //
-        //   /dev/sda6 / ext4 rw,relatime,errors=remount-ro,data=ordered 0 0
-        //   /dev/sda7 /work ext4 rw,relatime,data=ordered 0 0
-        //   nas:/share/work /nas/work nfs rw,local_lock=none 0 0
+	// File format (/proc/mounts or /etc/mtab):
+	//
+	//   /dev/sda6 / ext4 rw,relatime,errors=remount-ro,data=ordered 0 0
+	//   /dev/sda7 /work ext4 rw,relatime,data=ordered 0 0
+	//   nas:/share/work /nas/work nfs rw,local_lock=none 0 0
 
-        QString device    = fields[0];
-        QString path      = fields[1];
-        QString fsType    = fields[2];
-        QString mountOpts = fields[3];
-        // ignoring fsck and dump order (0 0)
+	QString device	  = fields[0];
+	QString path	  = fields[1];
+	QString fsType	  = fields[2];
+	QString mountOpts = fields[3];
+	// ignoring fsck and dump order (0 0)
 
-        MountPoint * mountPoint = new MountPoint( device, path, fsType, mountOpts );
-        CHECK_NEW( mountPoint );
+	MountPoint * mountPoint = new MountPoint( device, path, fsType, mountOpts );
+	CHECK_NEW( mountPoint );
 
-        if ( ( ! mountPoint->isSystemMount() ) && isDeviceMounted( device ) )
-        {
-            mountPoint->setDuplicate();
-            logInfo() << "Found duplicate mount of " << device << " at " << path << endl;
-        }
+	if ( ( ! mountPoint->isSystemMount() ) && isDeviceMounted( device ) )
+	{
+	    mountPoint->setDuplicate();
+	    logInfo() << "Found duplicate mount of " << device << " at " << path << endl;
+	}
 
-        _mountPointList << mountPoint;
-        _mountPointMap[ path ] = mountPoint;
-        ++count;
+	_mountPointList << mountPoint;
+	_mountPointMap[ path ] = mountPoint;
+	++count;
 
-        line = in.readLine();
+	line = in.readLine();
     }
 
     if ( count < 1 )
     {
-        logWarning() << "Not a single mount point in " << filename << endl;
-        return false;
+	logWarning() << "Not a single mount point in " << filename << endl;
+	return false;
     }
     else
     {
-        _isPopulated = true;
-        return true;
+	_isPopulated = true;
+	return true;
     }
 }
 
@@ -292,8 +341,8 @@ bool MountPoints::checkForBtrfs()
 
     foreach ( const MountPoint * mountPoint, _mountPointMap )
     {
-        if ( mountPoint && mountPoint->isBtrfs() )
-            return true;
+	if ( mountPoint && mountPoint->isBtrfs() )
+	    return true;
     }
 
     return false;
@@ -307,8 +356,8 @@ QList<const MountPoint *> MountPoints::normalMountPoints()
 
     foreach ( const MountPoint * mountPoint, instance()->_mountPointList )
     {
-        if ( ! mountPoint->isSystemMount() && ! mountPoint->isDuplicate() )
-            result << mountPoint;
+	if ( ! mountPoint->isSystemMount() && ! mountPoint->isDuplicate() )
+	    result << mountPoint;
     }
 
     return result;
@@ -318,7 +367,7 @@ QList<const MountPoint *> MountPoints::normalMountPoints()
 void MountPoints::dumpNormalMountPoints()
 {
     foreach ( const MountPoint * mountPoint, normalMountPoints() )
-        logDebug() << mountPoint << endl;
+	logDebug() << mountPoint << endl;
 }
 
 
@@ -326,6 +375,6 @@ void MountPoints::dump()
 {
     foreach ( const MountPoint * mountPoint, instance()->_mountPointList )
     {
-        logDebug() << mountPoint << endl;
+	logDebug() << mountPoint << endl;
     }
 }
