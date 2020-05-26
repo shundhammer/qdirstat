@@ -136,7 +136,7 @@ void PathSelector::slotItemDoubleClicked( QListWidgetItem * origItem )
 
     if ( item )
     {
-	logVerbose() << "Double-clicked path " << item->path() << endl;
+	// logVerbose() << "Double-clicked path " << item->path() << endl;
 	emit pathDoubleClicked( item->path() );
     }
 }
