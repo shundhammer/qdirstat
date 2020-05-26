@@ -110,7 +110,8 @@ void OpenDirDialog::setPath( const QString & path )
 void OpenDirDialog::browseDirs()
 {
     QString path = QFileDialog::getExistingDirectory( this, // parent
-						      tr("Select directory") );
+						      tr("Select directory"),
+                                                      selectedPath() );
 
     if ( ! path.isEmpty() )
         setPath( path );
