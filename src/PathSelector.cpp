@@ -23,8 +23,8 @@ PathSelector::PathSelector( QWidget * parent ):
 {
     setSpacing( 3 );
 
-    connect( this, SIGNAL( itemClicked	   ( QListWidgetItem * ) ),
-	     this, SLOT	 ( slotItemSelected( QListWidgetItem * ) ) );
+    connect( this, SIGNAL( currentItemChanged( QListWidgetItem *, QListWidgetItem * ) ),
+	     this, SLOT	 ( slotItemSelected  ( QListWidgetItem * ) ) );
 }
 
 
