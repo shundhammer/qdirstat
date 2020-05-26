@@ -92,12 +92,23 @@ namespace QDirStat
 	 **/
 	void pathSelected( const QString & path );
 
+        /**
+         * Emitted when the user double-clicks a path.
+         **/
+	void pathDoubleClicked( const QString & path );
+
+
     protected slots:
 
 	/**
 	 * Signal forwarder to translate a selected item into a path.
 	 **/
 	void slotItemSelected( QListWidgetItem * item );
+
+	/**
+	 * Signal forwarder to translate a selected item into a path.
+	 **/
+	void slotItemDoubleClicked( QListWidgetItem * item );
 
     };	// class PathSelector
 

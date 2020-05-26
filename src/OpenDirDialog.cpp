@@ -78,6 +78,9 @@ OpenDirDialog::OpenDirDialog( QWidget * parent ):
     connect( _ui->pathSelector, SIGNAL( pathSelected( QString ) ),
              this,              SLOT  ( setPath     ( QString ) ) );
 
+    connect( _ui->pathSelector, SIGNAL( pathDoubleClicked( QString ) ),
+             this,              SLOT  ( browsePath       ( QString ) ) );
+
     readSettings();
     _ui->pathComboBox->setFocus();
 }
@@ -112,6 +115,19 @@ void OpenDirDialog::browseDirs()
     QString path = QFileDialog::getExistingDirectory( this, // parent
 						      tr("Select directory"),
                                                       selectedPath() );
+
+    if ( ! path.isEmpty() )
+        setPath( path );
+}
+
+
+void OpenDirDialog::browsePath( const QString & startPath )
+{
+    setPath( startPath );
+
+    QString path = QFileDialog::getExistingDirectory( this, // parent
+						      tr("Select directory"),
+                                                      startPath );
 
     if ( ! path.isEmpty() )
         setPath( path );

@@ -27,6 +27,9 @@ PathSelector::PathSelector( QWidget * parent ):
 
     connect( this, SIGNAL( currentItemChanged( QListWidgetItem *, QListWidgetItem * ) ),
 	     this, SLOT	 ( slotItemSelected  ( QListWidgetItem * ) ) );
+
+    connect( this, SIGNAL( itemActivated        ( QListWidgetItem * ) ),
+	     this, SLOT	 ( slotItemDoubleClicked( QListWidgetItem * ) ) );
 }
 
 
@@ -127,6 +130,18 @@ void PathSelector::slotItemSelected( QListWidgetItem * origItem )
 }
 
 
+void PathSelector::slotItemDoubleClicked( QListWidgetItem * origItem )
+{
+    PathSelectorItem * item = dynamic_cast<PathSelectorItem *>( origItem );
+
+    if ( item )
+    {
+	logVerbose() << "Double-clicked path " << item->path() << endl;
+	emit pathDoubleClicked( item->path() );
+    }
+}
+
+
 
 
 PathSelectorItem::PathSelectorItem( const QString & path,
@@ -160,9 +175,14 @@ PathSelectorItem::PathSelectorItem( const MountPoint * mountPoint,
     if ( _mountPoint->hasSizeInfo() )
     {
         tooltip += "\n";
-        tooltip += "\n" + QObject::tr( "Used: %1"           ).arg( formatSize( _mountPoint->usedSize()        ) );
-        tooltip += "\n" + QObject::tr( "Free for users: %1" ).arg( formatSize( _mountPoint->freeSizeForUser() ) );
-        tooltip += "\n" + QObject::tr( "Free for root: %1"  ).arg( formatSize( _mountPoint->freeSizeForRoot() ) );
+        tooltip += "\n" + QObject::tr( "Used: %1" )
+            .arg( formatSize( _mountPoint->usedSize() ) );
+
+        tooltip += "\n" + QObject::tr( "Free for users: %1" )
+            .arg( formatSize( _mountPoint->freeSizeForUser() ) );
+
+        tooltip += "\n" + QObject::tr( "Free for root: %1" )
+            .arg( formatSize( _mountPoint->freeSizeForRoot() ) );
     }
 #endif
 

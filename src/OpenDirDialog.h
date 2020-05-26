@@ -92,6 +92,11 @@ namespace QDirStat
          **/
         void browseDirs();
 
+        /**
+         * Open a normal directory selection box when the user double-clicks
+         * any of the places / mounted filesystems.
+         **/
+        void browsePath( const QString & path );
 
     protected:
 
