@@ -8,7 +8,6 @@
 
 
 #include <QPalette>
-#include <QGuiApplication>
 
 #include "Qt4Compat.h"
 #include "DirTreeModel.h"

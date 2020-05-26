@@ -68,6 +68,11 @@ namespace QDirStat
 
     public slots:
 
+        /**
+         * Set a path in the path combo box.
+         **/
+        void setPath( const QString & path );
+
 	/**
 	 * Read settings from the config file
 	 **/

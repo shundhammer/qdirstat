@@ -16,6 +16,7 @@
 #include "ExistingDirValidator.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
+#include "Qt4Compat.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -47,7 +48,7 @@ OpenDirDialog::OpenDirDialog( QWidget * parent ):
         _ui->pathComboBox->addItem( currentFS->path() );
 
     _ui->pathComboBox->addItem( cwd );
-    _ui->pathComboBox->setCurrentText( cwd );
+    setPath( cwd );
 
 
     _ui->crossFilesystemsCheckBox->setChecked( _crossFilesystems );
@@ -74,8 +75,8 @@ OpenDirDialog::OpenDirDialog( QWidget * parent ):
     connect( _ui->browseButton, SIGNAL( clicked() ),
 	     this,		SLOT  ( browseDirs() ) );
 
-    connect( _ui->pathSelector, SIGNAL( pathSelected  ( QString ) ),
-             _ui->pathComboBox, SLOT  ( setCurrentText( QString ) ) );
+    connect( _ui->pathSelector, SIGNAL( pathSelected( QString ) ),
+             this,              SLOT  ( setPath     ( QString ) ) );
 
     readSettings();
     _ui->pathComboBox->setFocus();
@@ -100,13 +101,19 @@ bool OpenDirDialog::crossFilesystems() const
 }
 
 
+void OpenDirDialog::setPath( const QString & path )
+{
+    qSetComboBoxText( _ui->pathComboBox, path );
+}
+
+
 void OpenDirDialog::browseDirs()
 {
     QString path = QFileDialog::getExistingDirectory( this, // parent
 						      tr("Select directory") );
 
     if ( ! path.isEmpty() )
-	_ui->pathComboBox->setCurrentText( path );
+        setPath( path );
 }
 
 
