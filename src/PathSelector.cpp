@@ -14,6 +14,8 @@
 #include "Logger.h"
 #include "Exception.h"
 
+#define SHOW_SIZES_IN_TOOLTIP   0
+
 using namespace QDirStat;
 
 
@@ -34,19 +36,21 @@ PathSelector::~PathSelector()
 }
 
 
-void PathSelector::addPath( const QString & path,
-			    const QIcon &   icon )
+PathSelectorItem * PathSelector::addPath( const QString & path,
+                                          const QIcon &   icon )
 {
     PathSelectorItem * item = new PathSelectorItem( path, this );
     CHECK_NEW( item );
 
     if ( ! icon.isNull() )
 	item->setIcon( icon );
+
+    return item;
 }
 
 
-void PathSelector::addPath( const QString & path,
-			    const QString & iconName )
+PathSelectorItem * PathSelector::addPath( const QString & path,
+                                          const QString & iconName )
 {
     PathSelectorItem * item = new PathSelectorItem( path, this );
     CHECK_NEW( item );
@@ -60,16 +64,21 @@ void PathSelector::addPath( const QString & path,
 	else
 	    item->setIcon( icon );
     }
+
+    return item;
 }
 
 
-void PathSelector::addHomeDir()
+PathSelectorItem * PathSelector::addHomeDir()
 {
-    addPath( QDir::homePath(), "folder-home" );
+    PathSelectorItem * item = addPath( QDir::homePath(), "folder-home" );
+    item->setToolTip( tr( "Your home directory" ) );
+
+    return item;
 }
 
 
-void PathSelector::addMountPoint( const MountPoint * mountPoint )
+PathSelectorItem * PathSelector::addMountPoint( const MountPoint * mountPoint )
 {
     PathSelectorItem * item = new PathSelectorItem( mountPoint, this );
     CHECK_NEW( item );
@@ -81,17 +90,21 @@ void PathSelector::addMountPoint( const MountPoint * mountPoint )
 	logError() << "No theme icon with name \"" << iconName << "\"" << endl;
     else
 	item->setIcon( icon );
+
+    return item;
 }
 
 
-void PathSelector::addMountPoint( const MountPoint * mountPoint,
-				  const QIcon &	     icon )
+PathSelectorItem * PathSelector::addMountPoint( const MountPoint * mountPoint,
+                                                const QIcon &	   icon )
 {
     PathSelectorItem * item = new PathSelectorItem( mountPoint, this );
     CHECK_NEW( item );
 
     if ( ! icon.isNull() )
 	item->setIcon( icon );
+
+    return item;
 }
 
 
@@ -139,6 +152,21 @@ PathSelectorItem::PathSelectorItem( const MountPoint * mountPoint,
 
     text += _mountPoint->filesystemType();
     setText( text );
+
+    QString tooltip = _mountPoint->device();
+
+#if SHOW_SIZES_IN_TOOLTIP
+
+    if ( _mountPoint->hasSizeInfo() )
+    {
+        tooltip += "\n";
+        tooltip += "\n" + QObject::tr( "Used: %1"           ).arg( formatSize( _mountPoint->usedSize()        ) );
+        tooltip += "\n" + QObject::tr( "Free for users: %1" ).arg( formatSize( _mountPoint->freeSizeForUser() ) );
+        tooltip += "\n" + QObject::tr( "Free for root: %1"  ).arg( formatSize( _mountPoint->freeSizeForRoot() ) );
+    }
+#endif
+
+    setToolTip( tooltip );
 }
 
 

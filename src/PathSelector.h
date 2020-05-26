@@ -16,6 +16,7 @@
 namespace QDirStat
 {
     class MountPoint;
+    class PathSelectorItem;
 
     /**
      * List widget for selecting a path, very much like the common "places"
@@ -45,19 +46,19 @@ namespace QDirStat
 	 * Don't use this for mount points; use addMountPoint() instead which
 	 * displays more information.
 	 **/
-	void addPath( const QString & path,
-		      const QIcon &   icon = QIcon() );
+	PathSelectorItem * addPath( const QString & path,
+                                    const QIcon &   icon = QIcon() );
 
 	/**
 	 * Add a path with the specified icon from the current icon theme.
 	 **/
-	void addPath( const QString & path,
-		      const QString & iconName = QString() );
+	PathSelectorItem * addPath( const QString & path,
+                                    const QString & iconName = QString() );
 
 	/**
 	 * Convenience function: Add the current user's home directory.
 	 **/
-	void addHomeDir();
+	PathSelectorItem * addHomeDir();
 
 	/**
 	 * Add a mount point with an appropriate icon.
@@ -66,14 +67,14 @@ namespace QDirStat
 	 * additional information like the filesystem type and, if available,
 	 * the size of the partition / filesystem.
 	 **/
-	void addMountPoint( const MountPoint * mountPoint );
+	PathSelectorItem * addMountPoint( const MountPoint * mountPoint );
 
 	/**
 	 * Add a mount point with the specified icon.
 	 * Notice that you can also specify QIcon() to suppress any icon.
 	 **/
-	void addMountPoint( const MountPoint * mountPoint,
-			    const QIcon &      icon );
+	PathSelectorItem * addMountPoint( const MountPoint * mountPoint,
+                                          const QIcon &      icon );
 
 	/**
 	 * Add a list of mount points with the appropriate icons.
