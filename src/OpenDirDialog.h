@@ -103,10 +103,10 @@ namespace QDirStat
                             const QModelIndex & oldCurrentItem );
 
         /**
-         * Notification that the user edited a path in the combo box, and the
-         * validator found that this path is ok.
+         * Notification that the user edited a path in the combo box.
+         * 'ok' is the result of the validator's check.
          **/
-        void pathEdited();
+        void pathEdited( bool ok );
 
     protected:
 
@@ -121,6 +121,7 @@ namespace QDirStat
         QFileSystemModel *      _filesystemModel;
 	QPushButton *           _okButton;
         ExistingDirValidator *  _validator;
+        bool                    _settingPath;
 
         static bool             _crossFilesystems;
 

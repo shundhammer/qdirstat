@@ -33,10 +33,9 @@ bool OpenDirDialog::_crossFilesystems = false;
 OpenDirDialog::OpenDirDialog( QWidget * parent ):
     QDialog( parent ),
     _ui( new Ui::OpenDirDialog ),
-    _filesystemModel( new QFileSystemModel( this ) )
+    _filesystemModel( new QFileSystemModel( this ) ),
+    _settingPath( false )
 {
-    // logDebug() << "init" << endl;
-
     CHECK_NEW( _ui );
     CHECK_NEW( _filesystemModel );
     _ui->setupUi( this );
@@ -59,7 +58,7 @@ OpenDirDialog::OpenDirDialog( QWidget * parent ):
 
 OpenDirDialog::~OpenDirDialog()
 {
-
+    // NOP
 }
 
 
@@ -102,7 +101,7 @@ void OpenDirDialog::initConnections()
 	     _okButton,		SLOT  ( setEnabled( bool ) ) );
 
     connect( _validator,	SIGNAL( isOk	  ( bool ) ),
-	     this,		SLOT  ( pathEdited()       ) );
+	     this,		SLOT  ( pathEdited( bool ) ) );
 
     connect( this,		SIGNAL( accepted()	),
 	     this,		SLOT  ( writeSettings() ) );
@@ -134,24 +133,39 @@ bool OpenDirDialog::crossFilesystems() const
 
 void OpenDirDialog::setPath( const QString & path )
 {
-    logDebug() << "Selecting " << path << endl;
+    if ( _settingPath )
+        return;
+
+    _settingPath = true;
+    // logDebug() << "Selecting " << path << endl;
+
+    SignalBlocker sigBlockerPathSelector( _ui->pathSelector );
+    // Can't block signals of the dirTreeView's selection model:
+    // This would mean that the dirTreeView also isn't notified,
+    // so any change would not become visible in the tree.
 
     populatePathComboBox( path );
     qSetComboBoxText( _ui->pathComboBox, path );
     _ui->dirTreeView->setCurrentIndex( _filesystemModel->index( path ) );
-
-    SignalBlocker sigBlocker( _ui->pathSelector );
     _ui->pathSelector->selectParentMountPoint( path );
+
+    _settingPath = false;
 }
 
 
-void OpenDirDialog::pathEdited()
+void OpenDirDialog::pathEdited( bool ok )
 {
-    SignalBlocker sigBlocker1( _ui->pathComboBox );
-    SignalBlocker sigBlocker2( _validator );
+    if ( _settingPath )
+        return;
+
+    if ( ! ok )
+        return;
+
+    SignalBlocker sigBlockerComboBox ( _ui->pathComboBox );
+    SignalBlocker sigBlockerValidator( _validator );
 
     QString path = _ui->pathComboBox->currentText();
-    logDebug() << "New path:" << path << endl;
+    // logDebug() << "New path:" << path << endl;
     setPath( path );
 }
 
@@ -161,8 +175,11 @@ void OpenDirDialog::treeSelection( const QModelIndex & newCurrentItem,
 {
     Q_UNUSED( oldCurrentItem );
 
+    if ( _settingPath )
+        return;
+
     QString path = _filesystemModel->filePath( newCurrentItem );
-    logDebug() << "Selecting " << path << endl;
+    // logDebug() << "Selecting " << path << endl;
     setPath( path );
 }
 
