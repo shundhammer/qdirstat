@@ -24,6 +24,15 @@
 #include "Exception.h"
 
 
+// The ExistingDirCompleter is useful if there is are no other navigation tools
+// that compete for widget focus and user attention, but here it's only
+// confusing: The dirTreeView, the pathCompleter and the pathComboBox fire off
+// a cascade of signals for every tiny change, and that makes the completer
+// behave very erratic.
+
+#define USE_COMPLETER   0
+
+
 using namespace QDirStat;
 
 
@@ -66,10 +75,12 @@ void OpenDirDialog::initPathComboBox()
 {
     qEnableClearButton( _ui->pathComboBox );
 
+#if USE_COMPLETER
     QCompleter * completer = new ExistingDirCompleter( this );
     CHECK_NEW( completer );
 
     _ui->pathComboBox->setCompleter( completer );
+#endif
 
     _validator = new ExistingDirValidator( this );
     CHECK_NEW( _validator );
