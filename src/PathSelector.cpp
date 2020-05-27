@@ -162,8 +162,10 @@ PathSelectorItem::PathSelectorItem( const MountPoint * mountPoint,
 {
     QString text = _path + "\n";
 
-    if ( _mountPoint->hasSizeInfo() )
+    if ( _mountPoint->hasSizeInfo() && _mountPoint->totalSize() > 0 )
+    {
 	text += formatSize( _mountPoint->totalSize() ) + "  ";
+    }
 
     text += _mountPoint->filesystemType();
     setText( text );
