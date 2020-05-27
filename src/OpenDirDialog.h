@@ -108,6 +108,13 @@ namespace QDirStat
          **/
         void pathEdited( bool ok );
 
+        /**
+         * Select a directory once everything is initialized and the first
+         * signals are processed.
+         **/
+        void initialSelection();
+
+
     protected:
 
         void initPathComboBox();
@@ -122,6 +129,7 @@ namespace QDirStat
 	QPushButton *           _okButton;
         ExistingDirValidator *  _validator;
         bool                    _settingPath;
+        QString                 _lastPath;
 
         static bool             _crossFilesystems;
 
