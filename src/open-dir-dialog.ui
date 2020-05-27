@@ -72,7 +72,7 @@
      <property name="childrenCollapsible">
       <bool>false</bool>
      </property>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="leftPane">
       <layout class="QVBoxLayout" name="leftColVBox" stretch="0,1">
        <item>
         <widget class="QLabel" name="pathSelectorCaption">
@@ -93,7 +93,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="rightPane">
       <layout class="QVBoxLayout" name="rightColVBox">
        <property name="leftMargin">
         <number>9</number>
