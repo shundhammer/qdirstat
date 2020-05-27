@@ -20,7 +20,7 @@ there are large directory trees that hardly ever change.
 
 Or you may be a system administrator with a NFS server that houses home
 directories, and every now and then you have to check exactly who of your users
-again managed to fill up that file system to 95%. One thing you cannot do (or
+again managed to fill up that filesystem to 95%. One thing you cannot do (or
 your users will hate you for it) is start QDirStat during working hours to scan
 all those home directories. So do that with the qdirstat-cache-writer Perl
 script in a cron job running in the middle of the night and view the result

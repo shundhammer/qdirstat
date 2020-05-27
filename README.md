@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-03-25
+Updated: 2020-05-27
 
 
 ## Overview
@@ -713,14 +713,14 @@ Features ported from the old KDirStat:
 
 - Fast and efficient directory reading.
 
-- Not crossing file system boundaries by default so you can see what eats up
-  all the disk space on your root file system without getting distorted numbers
-  due to all the other file systems that are mounted there. If you absolutely
+- Not crossing filesystem boundaries by default so you can see what eats up
+  all the disk space on your root filesystem without getting distorted numbers
+  due to all the other filesystems that are mounted there. If you absolutely
   wish, you can use "Continue reading at mount point" from the context menu or
   from the "File" menu -- or configure QDirStat to always read across file
   systems.
 
-- Efficent memory usage. A modern Linux root file system has well over 800,000
+- Efficent memory usage. A modern Linux root filesystem has well over 800,000
   objects (files, directories, symlinks, ...) and about 100,000 directories.
   This calls for minimalistic C++ objects to represent each one of
   them. QDirStat / KDirStat do their best to minimize that memory footprint.

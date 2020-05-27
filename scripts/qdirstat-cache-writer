@@ -27,7 +27,7 @@
 #	qdirstat can read gzipped and plain text cache files.
 #
 #	-l	long format - always add full path, even for plain files
-#	-m	scan mounted file systems (cross file system boundaries)
+#	-m	scan mounted filesystems (cross filesystem boundaries)
 #	-v	verbose
 #	-d	debug
 #	-h	help (usage message)
@@ -273,7 +273,7 @@ sub write_cache_tree($)
 # Write a cache entry for a directory.
 #
 # If the device of this directory is not the same as the toplevel device
-# (i.e., if this is a mount point and thus file system boundaries would be
+# (i.e., if this is a mount point and thus filesystem boundaries would be
 # crossed) only a comment line is written and an error value '0' is returned
 # unless the "-m" command line option was used.
 #
@@ -282,7 +282,7 @@ sub write_cache_tree($)
 #
 # Return value:
 #	1	OK to continue
-#	0	don't continue, file system boundary would be crossed
+#	0	don't continue, filesystem boundary would be crossed
 
 sub write_dir_entry()
 {
@@ -340,7 +340,7 @@ sub write_dir_entry()
 
     if ( $fs_boundary )
     {
-	$msg = "File system boundary at mount point $dir on device $dev_name";
+	$msg = "Filesystem boundary at mount point $dir on device $dev_name";
     }
     else
     {
@@ -572,7 +572,7 @@ Usage:
 	qdirstat can read gzipped and plain text cache files.
 
 	-l	long format - always add full path, even for plain files
-	-m	scan mounted file systems (cross file system boundaries)
+	-m	scan mounted filesystems (cross filesystem boundaries)
 	-v	verbose
 	-d	debug
 	-h	help (this usage message)

@@ -8,7 +8,7 @@ home directory. It tries its best to copy single files there, but for anything
 larger, it strictly sticks to the XDG trash specification. So, if you have a
 separate /home partition (which is strongly recommended for a lot of reasons),
 you cannot move a directory from /tmp to trash because that would mean to move
-a directory across file systems -- from /tmp/somewhere to your
+a directory across filesystems -- from /tmp/somewhere to your
 ~/.local/share/Trash .
 
 But there is an easy workaround. It's described in the XDG trash spec, but here

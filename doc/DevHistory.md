@@ -1383,7 +1383,7 @@ correctly when built with Qt 4.x
   proof) to check if a potential mount point is still on the same device. That
   means that it will no longer treat a Btrfs subvolume as an ordinary mount
   point where it stops reading by default, but it just continues. On the other
-  hand, another Btrfs mounted into the current file system is of course treated
+  hand, another Btrfs mounted into the current filesystem is of course treated
   as a normal mount point. See also the corresponding
   [GitHub issue](https://github.com/shundhammer/qdirstat/issues/39)
   for details.
@@ -1506,7 +1506,7 @@ correctly when built with Qt 4.x
 
   - Fixed [GitHub issue #22](https://github.com/shundhammer/qdirstat/issues/22):
 
-    Cache files containing the root file system would not display correctly or
+    Cache files containing the root filesystem would not display correctly or
     segfault under certain conditions. This is now fixed.
 
   - Added "Refresh All" action to the main window tool bar. I had consciously
