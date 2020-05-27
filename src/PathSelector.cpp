@@ -52,29 +52,10 @@ PathSelectorItem * PathSelector::addPath( const QString & path,
 }
 
 
-PathSelectorItem * PathSelector::addPath( const QString & path,
-                                          const QString & iconName )
-{
-    PathSelectorItem * item = new PathSelectorItem( path, this );
-    CHECK_NEW( item );
-
-    if ( ! iconName.isEmpty() )
-    {
-	QIcon icon = QIcon::fromTheme( iconName );
-
-	if ( icon.isNull() )
-	    logError() << "No theme icon with name \"" << iconName << "\"" << endl;
-	else
-	    item->setIcon( icon );
-    }
-
-    return item;
-}
-
-
 PathSelectorItem * PathSelector::addHomeDir()
 {
-    PathSelectorItem * item = addPath( QDir::homePath(), "folder-home" );
+    QIcon icon = _iconProvider.icon( QFileIconProvider::Folder );
+    PathSelectorItem * item = addPath( QDir::homePath(), icon );
     item->setToolTip( tr( "Your home directory" ) );
 
     return item;
@@ -83,16 +64,15 @@ PathSelectorItem * PathSelector::addHomeDir()
 
 PathSelectorItem * PathSelector::addMountPoint( const MountPoint * mountPoint )
 {
+    CHECK_PTR( mountPoint );
+
     PathSelectorItem * item = new PathSelectorItem( mountPoint, this );
     CHECK_NEW( item );
 
-    QString iconName = "drive-harddisk";
-    QIcon icon = QIcon::fromTheme( iconName );
-
-    if ( icon.isNull() )
-	logError() << "No theme icon with name \"" << iconName << "\"" << endl;
-    else
-	item->setIcon( icon );
+    QIcon icon = _iconProvider.icon( mountPoint->isNetworkMount() ?
+                                     QFileIconProvider::Network :
+                                     QFileIconProvider::Drive      );
+    item->setIcon( icon );
 
     return item;
 }
@@ -101,6 +81,8 @@ PathSelectorItem * PathSelector::addMountPoint( const MountPoint * mountPoint )
 PathSelectorItem * PathSelector::addMountPoint( const MountPoint * mountPoint,
                                                 const QIcon &	   icon )
 {
+    CHECK_PTR( mountPoint );
+
     PathSelectorItem * item = new PathSelectorItem( mountPoint, this );
     CHECK_NEW( item );
 

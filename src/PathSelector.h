@@ -11,6 +11,7 @@
 
 
 #include <QListWidget>
+#include <QFileIconProvider>
 
 
 namespace QDirStat
@@ -48,12 +49,6 @@ namespace QDirStat
 	 **/
 	PathSelectorItem * addPath( const QString & path,
                                     const QIcon &   icon = QIcon() );
-
-	/**
-	 * Add a path with the specified icon from the current icon theme.
-	 **/
-	PathSelectorItem * addPath( const QString & path,
-                                    const QString & iconName = QString() );
 
 	/**
 	 * Convenience function: Add the current user's home directory.
@@ -109,6 +104,11 @@ namespace QDirStat
 	 * Signal forwarder to translate a selected item into a path.
 	 **/
 	void slotItemDoubleClicked( QListWidgetItem * item );
+
+
+    protected:
+
+        QFileIconProvider _iconProvider;
 
     };	// class PathSelector
 
