@@ -124,6 +124,33 @@ void PathSelector::slotItemDoubleClicked( QListWidgetItem * origItem )
 }
 
 
+void PathSelector::selectParentMountPoint( const QString & wantedPath )
+{
+    PathSelectorItem * bestMatch = 0;
+
+    for ( int i=0; i < count(); ++i )
+    {
+        PathSelectorItem * current = dynamic_cast<PathSelectorItem *>( this->item( i ) );
+
+        if ( current && wantedPath.startsWith( current->path() ) )
+        {
+            if ( ! bestMatch ||
+                 current->path().length() > bestMatch->path().length() )
+            {
+                bestMatch = current;
+            }
+        }
+    }
+
+    if ( bestMatch )
+    {
+        // logDebug() << "Best match: " << bestMatch->path() << endl;;
+        setCurrentItem( bestMatch );
+    }
+}
+
+
+
 
 
 PathSelectorItem::PathSelectorItem( const QString & path,

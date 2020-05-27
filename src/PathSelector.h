@@ -76,6 +76,7 @@ namespace QDirStat
 	 **/
 	void addMountPoints( const QList<const MountPoint *> & mountPoints );
 
+
     signals:
 
 	/**
@@ -91,6 +92,14 @@ namespace QDirStat
          * Emitted when the user double-clicks a path.
          **/
 	void pathDoubleClicked( const QString & path );
+
+
+    public slots:
+
+        /**
+         * Select the item representing the parent mount point of 'path'.
+         **/
+        void selectParentMountPoint( const QString & path );
 
 
     protected slots:
@@ -150,6 +159,7 @@ namespace QDirStat
 	 * point.
 	 **/
 	const MountPoint * mountPoint() { return _mountPoint; }
+
 
     protected:
 

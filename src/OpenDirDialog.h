@@ -11,6 +11,7 @@
 #define OpenDirDialog_h
 
 #include <QDialog>
+#include <QModelIndex>
 
 #include "ui_open-dir-dialog.h"
 
@@ -19,6 +20,8 @@ class QFileSystemModel;
 
 namespace QDirStat
 {
+    class ExistingDirValidator;
+
     /**
      * Dialog to let the user select installed packages to open, very much like
      * a "get existing directory" dialog, but returning a PkgFilter instead.
@@ -75,6 +78,11 @@ namespace QDirStat
          **/
         void setPath( const QString & path );
 
+        /**
+         * Go up one directory level.
+         **/
+        void goUp();
+
 	/**
 	 * Read settings from the config file
 	 **/
@@ -89,23 +97,32 @@ namespace QDirStat
     protected slots:
 
         /**
-         * Open a normal directory selection box when the user clicks the
-         * "Browse..." button and store the selected value in the pathComboBox.
+         * Notification that the user selected a directory in the tree
          **/
-        void browseDirs();
+        void treeSelection( const QModelIndex & newCurrentItem,
+                            const QModelIndex & oldCurrentItem );
 
         /**
-         * Open a normal directory selection box when the user double-clicks
-         * any of the places / mounted filesystems.
+         * Notification that the user edited a path in the combo box, and the
+         * validator found that this path is ok.
          **/
-        void browsePath( const QString & path );
+        void pathEdited();
 
     protected:
 
-	Ui::OpenDirDialog * _ui;
-        QFileSystemModel *  _filesystemModel;
-	QPushButton *	    _okButton;
-        static bool         _crossFilesystems;
+        void initPathComboBox();
+        void initDirTree();
+        void initConnections();
+
+        void populatePathComboBox( const QString & path );
+
+
+	Ui::OpenDirDialog *     _ui;
+        QFileSystemModel *      _filesystemModel;
+	QPushButton *           _okButton;
+        ExistingDirValidator *  _validator;
+
+        static bool             _crossFilesystems;
 
     };	// class OpenDirDialog
 

@@ -7,8 +7,8 @@
  */
 
 
+#include <QPushButton>
 #include <QDir>
-#include <QFileDialog>
 #include <QFileSystemModel>
 
 #include "Qt4Compat.h"
@@ -19,6 +19,7 @@
 #include "ExistingDirValidator.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
+#include "SignalBlocker.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -31,47 +32,55 @@ bool OpenDirDialog::_crossFilesystems = false;
 
 OpenDirDialog::OpenDirDialog( QWidget * parent ):
     QDialog( parent ),
-    _ui( new Ui::OpenDirDialog )
+    _ui( new Ui::OpenDirDialog ),
+    _filesystemModel( new QFileSystemModel( this ) )
 {
     // logDebug() << "init" << endl;
 
     CHECK_NEW( _ui );
+    CHECK_NEW( _filesystemModel );
     _ui->setupUi( this );
 
-    // Populate pathComboBox
-
-    QString cwd = QDir::currentPath();
-    const MountPoint * currentFS = MountPoints::findNearestMountPoint( cwd );
-
-    qEnableClearButton( _ui->pathComboBox );
-    _ui->pathComboBox->clear();
-    _ui->pathComboBox->addItem( "/" );
-
-    if ( currentFS )
-        _ui->pathComboBox->addItem( currentFS->path() );
-
-    _ui->pathComboBox->addItem( cwd );
-    setPath( cwd );
-
+    initPathComboBox();
+    initDirTree();
 
     _ui->crossFilesystemsCheckBox->setChecked( _crossFilesystems );
 
     _okButton = _ui->buttonBox->button( QDialogButtonBox::Ok );
     CHECK_PTR( _okButton );
 
+    initConnections();
+    readSettings();
+
+    setPath( QDir::currentPath() );
+    _ui->pathComboBox->setFocus();
+}
+
+
+OpenDirDialog::~OpenDirDialog()
+{
+
+}
+
+
+void OpenDirDialog::initPathComboBox()
+{
+    qEnableClearButton( _ui->pathComboBox );
+
     QCompleter * completer = new ExistingDirCompleter( this );
     CHECK_NEW( completer );
 
     _ui->pathComboBox->setCompleter( completer );
 
-    QValidator * validator = new ExistingDirValidator( this );
-    CHECK_NEW( validator );
+    _validator = new ExistingDirValidator( this );
+    CHECK_NEW( _validator );
 
-    _ui->pathComboBox->setValidator( validator );
+    _ui->pathComboBox->setValidator( _validator );
+}
 
-    _filesystemModel = new QFileSystemModel( this );
-    CHECK_NEW( _filesystemModel );
 
+void OpenDirDialog::initDirTree()
+{
     _filesystemModel->setRootPath( "/" );
     _filesystemModel->setFilter( QDir::Dirs       |
                                  QDir::NoDot      |
@@ -83,31 +92,31 @@ OpenDirDialog::OpenDirDialog( QWidget * parent ):
     _ui->dirTreeView->hideColumn( 3 );  // Date Modified
     _ui->dirTreeView->hideColumn( 2 );  // Type
     _ui->dirTreeView->hideColumn( 1 );  // Size
+    _ui->dirTreeView->setHeaderHidden( true );
+}
 
 
-    connect( validator,		SIGNAL( isOk	  ( bool ) ),
+void OpenDirDialog::initConnections()
+{
+    connect( _validator,	SIGNAL( isOk	  ( bool ) ),
 	     _okButton,		SLOT  ( setEnabled( bool ) ) );
+
+    connect( _validator,	SIGNAL( isOk	  ( bool ) ),
+	     this,		SLOT  ( pathEdited()       ) );
 
     connect( this,		SIGNAL( accepted()	),
 	     this,		SLOT  ( writeSettings() ) );
 
-    connect( _ui->browseButton, SIGNAL( clicked() ),
-	     this,		SLOT  ( browseDirs() ) );
-
     connect( _ui->pathSelector, SIGNAL( pathSelected( QString ) ),
              this,              SLOT  ( setPath     ( QString ) ) );
 
-    connect( _ui->pathSelector, SIGNAL( pathDoubleClicked( QString ) ),
-             this,              SLOT  ( browsePath       ( QString ) ) );
+    QItemSelectionModel * selModel = _ui->dirTreeView->selectionModel();
 
-    readSettings();
-    _ui->pathComboBox->setFocus();
-}
+    connect( selModel,  SIGNAL( currentChanged( QModelIndex, QModelIndex ) ),
+             this,      SLOT  ( treeSelection ( QModelIndex, QModelIndex ) ) );
 
-
-OpenDirDialog::~OpenDirDialog()
-{
-
+    connect( _ui->upButton, SIGNAL( clicked() ),
+             this,          SLOT  ( goUp()    ) );
 }
 
 
@@ -125,31 +134,66 @@ bool OpenDirDialog::crossFilesystems() const
 
 void OpenDirDialog::setPath( const QString & path )
 {
+    logDebug() << "Selecting " << path << endl;
+
+    populatePathComboBox( path );
     qSetComboBoxText( _ui->pathComboBox, path );
+    _ui->dirTreeView->setCurrentIndex( _filesystemModel->index( path ) );
+
+    SignalBlocker sigBlocker( _ui->pathSelector );
+    _ui->pathSelector->selectParentMountPoint( path );
 }
 
 
-void OpenDirDialog::browseDirs()
+void OpenDirDialog::pathEdited()
 {
-    QString path = QFileDialog::getExistingDirectory( this, // parent
-						      tr("Select directory"),
-                                                      selectedPath() );
+    SignalBlocker sigBlocker1( _ui->pathComboBox );
+    SignalBlocker sigBlocker2( _validator );
 
-    if ( ! path.isEmpty() )
-        setPath( path );
+    QString path = _ui->pathComboBox->currentText();
+    logDebug() << "New path:" << path << endl;
+    setPath( path );
 }
 
 
-void OpenDirDialog::browsePath( const QString & startPath )
+void OpenDirDialog::treeSelection( const QModelIndex & newCurrentItem,
+                                   const QModelIndex & oldCurrentItem )
 {
-    setPath( startPath );
+    Q_UNUSED( oldCurrentItem );
 
-    QString path = QFileDialog::getExistingDirectory( this, // parent
-						      tr("Select directory"),
-                                                      startPath );
+    QString path = _filesystemModel->filePath( newCurrentItem );
+    logDebug() << "Selecting " << path << endl;
+    setPath( path );
+}
 
-    if ( ! path.isEmpty() )
-        setPath( path );
+
+void OpenDirDialog::populatePathComboBox( const QString & fullPath )
+{
+    QStringList pathComponents = fullPath.split( "/", QString::SkipEmptyParts );
+
+    _ui->pathComboBox->clear();
+    _ui->pathComboBox->addItem( "/" );
+    QString path;
+
+    foreach ( const QString & component, pathComponents )
+    {
+        path += "/" + component;
+        _ui->pathComboBox->addItem( path );
+    }
+}
+
+
+void OpenDirDialog::goUp()
+{
+    QStringList pathComponents = selectedPath().split( "/", QString::SkipEmptyParts );
+
+    if ( ! pathComponents.isEmpty() )
+        pathComponents.removeLast();
+
+    QString path = "/" + pathComponents.join( "/" );
+    logDebug() << "Navigating up to " << path << endl;
+
+    setPath( path );
 }
 
 
