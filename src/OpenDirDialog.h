@@ -14,6 +14,8 @@
 
 #include "ui_open-dir-dialog.h"
 
+class QFileSystemModel;
+
 
 namespace QDirStat
 {
@@ -101,6 +103,7 @@ namespace QDirStat
     protected:
 
 	Ui::OpenDirDialog * _ui;
+        QFileSystemModel *  _filesystemModel;
 	QPushButton *	    _okButton;
         static bool         _crossFilesystems;
 

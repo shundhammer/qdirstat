@@ -9,6 +9,7 @@
 
 #include <QDir>
 #include <QFileDialog>
+#include <QFileSystemModel>
 
 #include "Qt4Compat.h"
 
@@ -67,6 +68,22 @@ OpenDirDialog::OpenDirDialog( QWidget * parent ):
     CHECK_NEW( validator );
 
     _ui->pathComboBox->setValidator( validator );
+
+    _filesystemModel = new QFileSystemModel( this );
+    CHECK_NEW( _filesystemModel );
+
+    _filesystemModel->setRootPath( "/" );
+    _filesystemModel->setFilter( QDir::Dirs       |
+                                 QDir::NoDot      |
+                                 QDir::NoDotDot   |
+                                 QDir::NoSymLinks |
+                                 QDir::Drives      );
+
+    _ui->dirTreeView->setModel( _filesystemModel );
+    _ui->dirTreeView->hideColumn( 3 );  // Date Modified
+    _ui->dirTreeView->hideColumn( 2 );  // Type
+    _ui->dirTreeView->hideColumn( 1 );  // Size
+
 
     connect( validator,		SIGNAL( isOk	  ( bool ) ),
 	     _okButton,		SLOT  ( setEnabled( bool ) ) );
