@@ -24,7 +24,7 @@ namespace QDirStat
      *
      * This class is optimized for performance since the names of all files in
      * QDirStat's DirTree need to be checked (something in the order of 200,000
-     * in a typical Linux root file system).
+     * in a typical Linux root filesystem).
      *
      * This is a singleton class. Use instance() to get the instance. Remember
      * to call instance()->writeSettings() in an appropriate destructor in the

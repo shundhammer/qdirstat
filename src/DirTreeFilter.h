@@ -16,7 +16,7 @@
 namespace QDirStat
 {
     /**
-     * Abstract base class to check if a file system object should be ignored
+     * Abstract base class to check if a filesystem object should be ignored
      * during directory reading.
      **/
     class DirTreeFilter
@@ -36,7 +36,7 @@ namespace QDirStat
 	    {}
 
 	/**
-	 * Return 'true' if the file system object specified by 'path' should
+	 * Return 'true' if the filesystem object specified by 'path' should
 	 * be ignored, 'false' if not.
 	 *
 	 * Derived classes are required to implement this.

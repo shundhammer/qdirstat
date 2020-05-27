@@ -24,7 +24,7 @@
 #include "Logger.h"
 #include "Exception.h"
 
-// Some file systems (NTFS seems to be among them) may handle block fragments
+// Some filesystems (NTFS seems to be among them) may handle block fragments
 // well. Don't report files as "sparse" files if the block size is only a few
 // bytes less than the byte size - it may be due to intelligent fragment
 // handling.
@@ -93,7 +93,7 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
 	_size		= statInfo->st_size;
 	_blocks		= statInfo->st_blocks;
 	_isSparseFile	= isFile()
-	    && _blocks >= 0				// if file system can report blocks
+	    && _blocks >= 0				// if filesystem can report blocks
 	    && allocatedSize() + FRAGMENT_SIZE < _size; // allow for intelligent fragment handling
 
 	if ( _isSparseFile )
@@ -684,7 +684,7 @@ QString QDirStat::symbolicMode( mode_t mode, bool omitTypeForRegularFiles )
 }
 
 
-QString QDirStat::formatFileSystemObjectType( mode_t mode )
+QString QDirStat::formatFilesystemObjectType( mode_t mode )
 {
     if	    ( S_ISDIR ( mode ) ) return QObject::tr( "Directory"	);
     else if ( S_ISCHR ( mode ) ) return QObject::tr( "Character Device" );

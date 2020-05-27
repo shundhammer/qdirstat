@@ -59,9 +59,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="crossFileSystemsCheckBox">
+        <widget class="QCheckBox" name="crossFilesystemsCheckBox">
          <property name="text">
-          <string>&amp;Cross file system boundaries while reading</string>
+          <string>&amp;Cross filesystem boundaries while reading</string>
          </property>
         </widget>
        </item>

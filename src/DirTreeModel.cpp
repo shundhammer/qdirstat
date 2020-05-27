@@ -61,7 +61,7 @@ void DirTreeModel::readSettings()
     Settings settings;
     settings.beginGroup( "DirectoryTree" );
 
-    _tree->setCrossFileSystems  ( settings.value( "CrossFileSystems", false ).toBool() );
+    _tree->setCrossFilesystems  ( settings.value( "CrossFilesystems", false ).toBool() );
     FileInfo::setIgnoreHardLinks( settings.value( "IgnoreHardLinks",  false ).toBool() );
     _treeIconDir	 = settings.value( "TreeIconDir" , ":/icons/tree-medium/" ).toString();
     _updateTimerMillisec = settings.value( "UpdateTimerMillisec", 333 ).toInt();
@@ -97,7 +97,7 @@ void DirTreeModel::writeSettings()
 
     settings.setValue( "SlowUpdateMillisec", _slowUpdateMillisec  );
 
-    settings.setDefaultValue( "CrossFileSystems",    _tree ? _tree->crossFileSystems() : false );
+    settings.setDefaultValue( "CrossFilesystems",    _tree ? _tree->crossFilesystems() : false );
     settings.setDefaultValue( "IgnoreHardLinks",     FileInfo::ignoreHardLinks() );
     settings.setDefaultValue( "TreeIconDir",	     _treeIconDir	         );
     settings.setDefaultValue( "UpdateTimerMillisec", _updateTimerMillisec        );

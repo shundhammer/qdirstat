@@ -731,7 +731,7 @@ void MainWindow::askOpenDir()
 {
     QString path;
     DirTree * tree = _dirTreeModel->tree();
-    bool crossFilesystems = tree->crossFileSystems();
+    bool crossFilesystems = tree->crossFilesystems();
     
 #if USE_CUSTOM_OPEN_DIR_DIALOG
     path = QDirStat::OpenDirDialog::askOpenDir( &crossFilesystems, this );
@@ -743,7 +743,7 @@ void MainWindow::askOpenDir()
     if ( ! path.isEmpty() )
     {
 	tree->reset();
-	tree->setCrossFileSystems( crossFilesystems );
+	tree->setCrossFilesystems( crossFilesystems );
 	openUrl( path );
     }
 }

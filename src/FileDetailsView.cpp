@@ -160,7 +160,7 @@ void FileDetailsView::showFileInfo( FileInfo * file )
     CHECK_PTR( file );
 
     setLabelLimited(_ui->fileNameLabel, file->baseName() );
-    _ui->fileTypeLabel->setText( formatFileSystemObjectType( file->mode() ) );
+    _ui->fileTypeLabel->setText( formatFilesystemObjectType( file->mode() ) );
 
     QString category = mimeCategory( file );
 
@@ -238,7 +238,7 @@ void FileDetailsView::updatePkgInfo( const QVariant & pathVariant )
 
 void FileDetailsView::setSystemFileWarningVisibility( bool visible )
 {
-    _ui->fileSystemFileWarning->setVisible( visible );
+    _ui->filesystemFileWarning->setVisible( visible );
     _ui->fileSpacerCaption2->setVisible( visible );
 }
 

@@ -103,7 +103,7 @@ void DirReadJob::deletingChild( FileInfo *deletedChild )
 }
 
 
-bool DirReadJob::crossingFileSystems( DirInfo * parent, DirInfo * child )
+bool DirReadJob::crossingFilesystems( DirInfo * parent, DirInfo * child )
 {
     if ( parent->device() == child->device() )
 	return false;
@@ -134,7 +134,7 @@ bool DirReadJob::crossingFileSystems( DirInfo * parent, DirInfo * child )
 
     if ( crossing )
     {
-	logInfo() << "File system boundary at mount point " << child
+	logInfo() << "Filesystem boundary at mount point " << child
 		  << " on device " << ( childDevice.isEmpty() ? "<unknown>" : childDevice )
 		  << endl;
     }
@@ -164,7 +164,7 @@ QString DirReadJob::device( const DirInfo * dir ) const
 }
 
 
-bool DirReadJob::shouldCrossIntoFileSystem( const DirInfo * dir ) const
+bool DirReadJob::shouldCrossIntoFilesystem( const DirInfo * dir ) const
 {
     const MountPoint * mountPoint = MountPoints::findByPath( dir->url() );
 
@@ -369,7 +369,7 @@ void LocalDirReadJob::processSubDir( const QString & entryName, DirInfo * subDir
     }
     else // No exclude rule matched
     {
-	if ( ! crossingFileSystems(_dir, subDir ) ) // normal case
+	if ( ! crossingFilesystems(_dir, subDir ) ) // normal case
 	{
 	    LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
 	    CHECK_NEW( job );
@@ -380,7 +380,7 @@ void LocalDirReadJob::processSubDir( const QString & entryName, DirInfo * subDir
 	{
 	    subDir->setMountPoint();
 
-	    if ( _tree->crossFileSystems() && shouldCrossIntoFileSystem( subDir ) )
+	    if ( _tree->crossFilesystems() && shouldCrossIntoFilesystem( subDir ) )
 	    {
 		LocalDirReadJob * job = new LocalDirReadJob( _tree, subDir );
 		CHECK_NEW( job );

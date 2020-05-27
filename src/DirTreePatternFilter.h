@@ -48,7 +48,7 @@ namespace QDirStat
 	virtual ~DirTreePatternFilter();
 
 	/**
-	 * Return 'true' if the file system object specified by 'path' should
+	 * Return 'true' if the filesystem object specified by 'path' should
 	 * be ignored, 'false' if not.
 	 *
 	 * Implemented from DirTreeFilter.
@@ -91,7 +91,7 @@ namespace QDirStat
 	virtual ~DirTreeSuffixFilter();
 
 	/**
-	 * Return 'true' if the file system object specified by 'path' should
+	 * Return 'true' if the filesystem object specified by 'path' should
 	 * be ignored, 'false' if not.
 	 *
 	 * Implemented from DirTreeFilter.

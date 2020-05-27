@@ -145,7 +145,7 @@ void OpenDirDialog::readSettings()
     // setting from the config dialog
 
     settings.beginGroup( "DirectoryTree" );
-    _crossFilesystems = settings.value( "CrossFileSystems", false ).toBool();
+    _crossFilesystems = settings.value( "CrossFilesystems", false ).toBool();
     settings.endGroup();
 
     readWindowSettings( this, "OpenDirDialog" );

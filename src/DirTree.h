@@ -36,7 +36,7 @@ namespace QDirStat
      * This class provides some infrastructure as well as global data for a
      * directory tree. It acts as the glue that holds things together: The root
      * item from which to descend into the subtrees, the read queue and some
-     * global policies (like whether or not to cross file systems while reading
+     * global policies (like whether or not to cross filesystems while reading
      * directories).
      *
      * Notice that this class uses a "pseudo root" to better conform with Qt's
@@ -194,19 +194,19 @@ namespace QDirStat
 	void unblock( DirReadJob * job );
 
 	/**
-	 * Should directory scans cross file systems?
+	 * Should directory scans cross filesystems?
 	 *
 	 * Notice: This can only be avoided with local directories where the
 	 * device number a file resides on can be obtained.
 	 * Remember, that's what this QDirStat business is all about.  ;-)
 	 **/
-	bool crossFileSystems() const { return _crossFileSystems; }
+	bool crossFilesystems() const { return _crossFilesystems; }
 
 	/**
-	 * Set or unset the "cross file systems" flag.
+	 * Set or unset the "cross filesystems" flag.
 	 **/
-	void setCrossFileSystems( bool doCross )
-	    { _crossFileSystems = doCross; }
+	void setCrossFilesystems( bool doCross )
+	    { _crossFilesystems = doCross; }
 
 	/**
 	 * Notification that a child has been added.
@@ -326,7 +326,7 @@ namespace QDirStat
 
 	/**
 	 * Iterate over all filters and return 'true' if any of them wants a
-	 * file system object to be ignored during directory reading, 'false'
+	 * filesystem object to be ignored during directory reading, 'false'
 	 * if not.
 	 **/
 	bool checkIgnoreFilters( const QString & path );
@@ -457,7 +457,7 @@ namespace QDirStat
 
 	DirInfo *		_root;
 	DirReadJobQueue		_jobQueue;
-	bool			_crossFileSystems;
+	bool			_crossFilesystems;
 	bool			_isBusy;
 	QString			_device;
 	QString			_url;

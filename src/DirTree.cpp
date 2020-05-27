@@ -33,7 +33,7 @@ DirTree::DirTree():
     _beingDestroyed( false )
 {
     _isBusy	      = false;
-    _crossFileSystems = false;
+    _crossFilesystems = false;
     _root = new DirInfo( this );
     CHECK_NEW( _root );
 

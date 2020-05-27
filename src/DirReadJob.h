@@ -137,10 +137,10 @@ namespace QDirStat
 	void finished();
 
 	/**
-	 * Check if going from 'parent' to 'child' would cross a file system
+	 * Check if going from 'parent' to 'child' would cross a filesystem
 	 * boundary. This take Btrfs subvolumes into account.
 	 **/
-	bool crossingFileSystems( DirInfo * parent, DirInfo * child );
+	bool crossingFilesystems( DirInfo * parent, DirInfo * child );
 
 	/**
 	 * Return the device name where 'dir' is on if it's a mount point.
@@ -153,7 +153,7 @@ namespace QDirStat
          * it if this is a system mount, a bind mount, a filesystem mounted
          * multiple times, or a network mount (NFS / Samba).
          **/
-        bool shouldCrossIntoFileSystem( const DirInfo * dir ) const;
+        bool shouldCrossIntoFilesystem( const DirInfo * dir ) const;
 
 
 	DirTree *	   _tree;
@@ -194,9 +194,9 @@ namespace QDirStat
      *
      * This will use lstat() system calls rather than KDE's network transparent
      * directory services since lstat() unlike the KDE services can obtain
-     * information about the device (i.e. file system) a file or directory
+     * information about the device (i.e. filesystem) a file or directory
      * resides on. This is important if you wish to limit directory scans to
-     * one file system - which is most desirable when that one file system runs
+     * one filesystem - which is most desirable when that one filesystem runs
      * out of space.
      *
      * @short Directory reader that reads one local directory.

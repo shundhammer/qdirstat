@@ -117,7 +117,7 @@ protected:
  * - One in the user's home directory in $XDG_DATA_HOME/Trash
  *   or ~/.local/share/Trash if $XDG_DATA_HOME is not set or empty
  *
- * - One in the toplevel directory (the mount point) of each file system:
+ * - One in the toplevel directory (the mount point) of each filesystem:
  *   $TOPLEVEL/.Trash/$UID
  *
  * - If $TOPLEVEL/.Trash does not exist or does not pass some checks, one in

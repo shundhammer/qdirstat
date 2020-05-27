@@ -61,7 +61,7 @@ namespace QDirStat
      * typically obtained by stat() / lstat() or similar calls.
      *
      * This class is tuned for size rather than speed: A typical Linux system
-     * easily has 150,000+ file system objects, and at least one entry of this
+     * easily has 150,000+ filesystem objects, and at least one entry of this
      * sort is required for each of them.
      *
      * This class provides stubs for children management, yet those stubs all
@@ -261,25 +261,25 @@ namespace QDirStat
 	/**
 	 * The file size in bytes. This does not take unused space in the last
 	 * disk block (cluster) into account, yet it is the only size all kinds
-	 * of info functions can obtain. This is also what most file system
+	 * of info functions can obtain. This is also what most filesystem
 	 * utilities (like "ls -l") display.
 	 **/
 	FileSize byteSize() const { return _size;   }
 
 	/**
-	 * The number of bytes actually allocated on the file system. Usually
+	 * The number of bytes actually allocated on the filesystem. Usually
 	 * this will be more than byteSize() since the last few bytes of a file
-	 * usually consume an additional cluster on the file system.
+	 * usually consume an additional cluster on the filesystem.
 	 *
 	 * In the case of sparse files, however, this might as well be
 	 * considerably less than byteSize() - this means that this file has
 	 * "holes", i.e. large portions filled with zeros. This is typical for
 	 * large core dumps for example. The only way to create such a file is
 	 * to lseek() far ahead of the previous file size and then writing
-	 * data. Most file system utilities will however disregard the fact
+	 * data. Most filesystem utilities will however disregard the fact
 	 * that files are sparse files and simply allocate the holes as well,
 	 * thus greatly increasing the disk space consumption of such a
-	 * file. Only some few file system utilities like "cp", "rsync", "tar"
+	 * file. Only some few filesystem utilities like "cp", "rsync", "tar"
 	 * have options to handle this more graciously - but usually only when
 	 * specifically requested. See the respective man pages.
 	 **/
@@ -945,7 +945,7 @@ namespace QDirStat
      * Format the filesystem object type from a mode, e.g. "Directory",
      * "Symbolic Link", "Block Device", "File".
      **/
-    QString formatFileSystemObjectType( mode_t mode );
+    QString formatFilesystemObjectType( mode_t mode );
 
 
     /**
