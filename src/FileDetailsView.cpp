@@ -6,6 +6,9 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
+
+#include "Qt4Compat.h"
+
 #include "FileDetailsView.h"
 #include "AdaptiveTimer.h"
 #include "DirInfo.h"
@@ -16,7 +19,6 @@
 #include "SystemFileChecker.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
-#include "Qt4Compat.h"
 #include "Logger.h"
 #include "Exception.h"
 

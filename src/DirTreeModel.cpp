@@ -10,6 +10,7 @@
 #include <QPalette>
 
 #include "Qt4Compat.h"
+
 #include "DirTreeModel.h"
 #include "DirTree.h"
 #include "FileInfoIterator.h"

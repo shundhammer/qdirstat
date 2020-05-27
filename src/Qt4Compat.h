@@ -45,10 +45,24 @@ inline void qSetComboBoxText( QComboBox *     comboBox,
 }
 
 
+inline void qEnableClearButton( QComboBox * comboBox )
+{
+    Q_UNUSED( comboBox );
+}
+
+
+inline void qEnableClearButton( QLineEdit * lineEdit )
+{
+    Q_UNUSED( lineEdit );
+}
+
+
+
 #else // Qt 5.x
 
 
 #include <QGuiApplication>
+#include <QLineEdit>
 
 
 inline QString qHtmlEscape( const QString & text )
@@ -67,6 +81,21 @@ inline void qSetComboBoxText( QComboBox *     comboBox,
 			      const QString & text )
 {
     comboBox->setCurrentText( text );
+}
+
+
+inline void qEnableClearButton( QComboBox * comboBox )
+{
+    QLineEdit * lineEdit = comboBox->lineEdit();
+
+    if ( lineEdit )
+	lineEdit->setClearButtonEnabled( true );
+}
+
+
+inline void qEnableClearButton( QLineEdit * lineEdit )
+{
+    lineEdit->setClearButtonEnabled( true );
 }
 
 

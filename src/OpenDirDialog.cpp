@@ -10,13 +10,14 @@
 #include <QDir>
 #include <QFileDialog>
 
+#include "Qt4Compat.h"
+
 #include "OpenDirDialog.h"
 #include "MountPoints.h"
 #include "ExistingDirCompleter.h"
 #include "ExistingDirValidator.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
-#include "Qt4Compat.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -41,6 +42,7 @@ OpenDirDialog::OpenDirDialog( QWidget * parent ):
     QString cwd = QDir::currentPath();
     const MountPoint * currentFS = MountPoints::findNearestMountPoint( cwd );
 
+    qEnableClearButton( _ui->pathComboBox );
     _ui->pathComboBox->clear();
     _ui->pathComboBox->addItem( "/" );
 

@@ -10,10 +10,11 @@
 #include <QMenu>
 #include <QAction>
 
+#include "Qt4Compat.h"
+
 #include "HeaderTweaker.h"
 #include "DirTreeView.h"
 #include "Settings.h"
-#include "Qt4Compat.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "SignalBlocker.h"

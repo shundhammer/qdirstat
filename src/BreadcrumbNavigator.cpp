@@ -6,7 +6,9 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
+
 #include "Qt4Compat.h" // qHtmlEscape()
+
 #include "BreadcrumbNavigator.h"
 #include "Logger.h"
 

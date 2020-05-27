@@ -43,6 +43,7 @@ ShowUnpkgFilesDialog::ShowUnpkgFilesDialog( QWidget * parent ):
     CHECK_NEW( validator );
 
     _ui->startingDirComboBox->setValidator( validator );
+    qEnableClearButton( _ui->startingDirComboBox );
 
     connect( validator, SIGNAL( isOk	  ( bool ) ),
 	     _okButton, SLOT  ( setEnabled( bool ) ) );

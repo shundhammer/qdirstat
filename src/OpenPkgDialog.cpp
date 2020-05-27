@@ -7,6 +7,8 @@
  */
 
 
+#include "Qt4Compat.h"
+
 #include "OpenPkgDialog.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -23,6 +25,7 @@ OpenPkgDialog::OpenPkgDialog( QWidget * parent ):
 
     CHECK_NEW( _ui );
     _ui->setupUi( this );
+    qEnableClearButton( _ui->pkgPatternField );
     _ui->pkgPatternField->setFocus();
 }
 
