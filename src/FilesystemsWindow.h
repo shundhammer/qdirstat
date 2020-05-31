@@ -136,13 +136,14 @@ namespace QDirStat
 
         // Getters
 
-        QString  device()           const { return  _device;          }
-        QString  mountPath()        const { return  _mountPath;       }
-        QString  fsType()           const { return  _fsType;          }
-        FileSize totalSize()        const { return  _totalSize;       }
-        FileSize usedSize()         const { return  _usedSize;        }
-        FileSize freeSizeForUser()  const { return  _freeSizeForUser; }
-        FileSize freeSizeForRoot()  const { return  _freeSizeForRoot; }
+        QString  device()           const { return _device;          }
+        QString  mountPath()        const { return _mountPath;       }
+        QString  fsType()           const { return _fsType;          }
+        FileSize totalSize()        const { return _totalSize;       }
+        FileSize usedSize()         const { return _usedSize;        }
+        FileSize freeSizeForUser()  const { return _freeSizeForUser; }
+        FileSize freeSizeForRoot()  const { return _freeSizeForRoot; }
+        bool     isNetworkMount()   const { return _isNetworkMount;  }
 
 	/**
 	 * Less-than operator for sorting.
@@ -158,6 +159,7 @@ namespace QDirStat
         FileSize _usedSize;
         FileSize _freeSizeForUser;
         FileSize _freeSizeForRoot;
+        bool     _isNetworkMount;
     };
 
 }

@@ -107,9 +107,10 @@ void FilesystemsWindow::initWidgets()
     }
 
     _ui->fsTree->setHeaderLabels( headers );
-
     _ui->fsTree->header()->setStretchLastSection( false );
     HeaderTweaker::resizeToContents( _ui->fsTree->header() );
+
+    _ui->fsTree->sortItems( FS_DeviceCol, Qt::AscendingOrder );
 }
 
 
@@ -124,7 +125,8 @@ FilesystemItem::FilesystemItem( MountPoint  * mountPoint,
     _totalSize      ( mountPoint->totalSize()       ),
     _usedSize	    ( mountPoint->usedSize()	    ),
     _freeSizeForUser( mountPoint->freeSizeForUser() ),
-    _freeSizeForRoot( mountPoint->freeSizeForRoot() )
+    _freeSizeForRoot( mountPoint->freeSizeForRoot() ),
+    _isNetworkMount ( mountPoint->isNetworkMount()  )
 {
     setText( FS_DeviceCol,    _device	 );
     setText( FS_MountPathCol, _mountPath );
@@ -153,7 +155,11 @@ bool FilesystemItem::operator<( const QTreeWidgetItem & rawOther ) const
 
     switch ( col )
     {
-	case FS_DeviceCol:		return device()	         < other.device();
+	case FS_DeviceCol:
+            if ( ! isNetworkMount() &&   other.isNetworkMount() ) return true;
+            if ( isNetworkMount()   && ! other.isNetworkMount() ) return false;
+            return device() < other.device();
+
 	case FS_MountPathCol:           return mountPath()       < other.mountPath();
 	case FS_TypeCol:                return fsType()          < other.fsType();
 	case FS_TotalSizeCol:           return totalSize()       < other.totalSize();
