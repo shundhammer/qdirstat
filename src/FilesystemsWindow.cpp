@@ -100,8 +100,8 @@ void FilesystemsWindow::initWidgets()
 
     if ( MountPoints::hasSizeInfo() )
     {
-	headers << tr( "Total Size" )
-		<< "	" + tr( "Used" )
+	headers << tr( "Size" )
+		<< tr( "Used" )
 		<< ""
 		<< tr( "Free for Users" )
 		<< ""
@@ -112,8 +112,15 @@ void FilesystemsWindow::initWidgets()
 
     _ui->fsTree->setHeaderLabels( headers );
     _ui->fsTree->header()->setStretchLastSection( false );
-    HeaderTweaker::resizeToContents( _ui->fsTree->header() );
 
+    // Right-align the numeric columns in the header
+
+    QTreeWidgetItem * hItem = _ui->fsTree->headerItem();
+
+    for ( int col = FS_TotalSizeCol; col < headers.size(); ++col )
+	hItem->setTextAlignment( col, Qt::AlignRight );
+
+    HeaderTweaker::resizeToContents( _ui->fsTree->header() );
     _ui->fsTree->sortItems( FS_DeviceCol, Qt::AscendingOrder );
 }
 
@@ -132,16 +139,20 @@ FilesystemItem::FilesystemItem( MountPoint  * mountPoint,
     _freeSizeForRoot( mountPoint->freeSizeForRoot() ),
     _isNetworkMount ( mountPoint->isNetworkMount()  )
 {
-    setText( FS_DeviceCol,    _device	 );
+    QString blanks = QString( 3, ' ' );
+
+    setText( FS_DeviceCol,    _device + blanks );
     setText( FS_MountPathCol, _mountPath );
     setText( FS_TypeCol,      _fsType	 );
 
     if ( parent->columnCount() >= FS_TotalSizeCol )
     {
-	setText( FS_TotalSizeCol,	formatSize( _totalSize	     ) );
-	setText( FS_UsedSizeCol,	formatSize( _usedSize	     ) );
-	setText( FS_FreeSizeForUserCol, formatSize( _freeSizeForUser ) );
-	setText( FS_FreeSizeForRootCol, formatSize( _freeSizeForRoot ) );
+	blanks = QString( 8, ' ' ); // Enforce left margin
+
+	setText( FS_TotalSizeCol,	blanks + formatSize( _totalSize	      ) );
+	setText( FS_UsedSizeCol,	blanks + formatSize( _usedSize	      ) );
+	setText( FS_FreeSizeForUserCol, blanks + formatSize( _freeSizeForUser ) );
+	setText( FS_FreeSizeForRootCol, blanks + formatSize( _freeSizeForRoot ) );
 
 	setText( FS_UsedPercentCol,	   formatPercentOfTotal( _usedSize	  ) );
 	setText( FS_FreePercentForUserCol, formatPercentOfTotal( _freeSizeForUser ) );
