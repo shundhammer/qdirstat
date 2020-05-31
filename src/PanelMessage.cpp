@@ -7,6 +7,7 @@
  */
 
 #include "PanelMessage.h"
+#include "SysUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -77,3 +78,15 @@ void PanelMessage::connectDetailsLink( const QObject * receiver,
     }
 }
 
+
+void PanelMessage::setDetailsUrl( const QString url )
+{
+    _detailsUrl = url;
+    connectDetailsLink( this, SLOT( openDetailsUrl() ) );
+}
+
+
+void PanelMessage::openDetailsUrl() const
+{
+    SysUtil::openInBrowser( _detailsUrl );
+}

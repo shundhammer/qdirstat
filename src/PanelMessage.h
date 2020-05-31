@@ -69,9 +69,30 @@ namespace QDirStat
 	void connectDetailsLink( const QObject * receiver,
 				 const char    * slotName );
 
+        /**
+         * Connect the "Details..." hyperlink to a web URL that will be opened
+         * in an external browser.
+         **/
+        void setDetailsUrl( const QString url );
+
+        /**
+         * Return the URL set with setDetailsUrl().
+         **/
+        QString detailsUrl() const { return _detailsUrl; }
+
+
+    protected slots:
+
+        /**
+         * Open the URL set with setDetailsUrl() in an external browser.
+         **/
+        void openDetailsUrl() const;
+
+
     protected:
 
 	Ui::PanelMessage * _ui;
+        QString            _detailsUrl;
 
     };	// class PanelMessage
 

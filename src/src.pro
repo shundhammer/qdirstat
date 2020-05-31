@@ -64,7 +64,8 @@ SOURCES	  = main.cpp			\
 	    FileInfoSorter.cpp		\
 	    FileSizeLabel.cpp		\
 	    FileSizeStats.cpp		\
-	    FileSizeStatsWindow.cpp	\
+            FileSizeStatsWindow.cpp	\
+            FileSystemsWindow.cpp       \
 	    FileTypeStats.cpp		\
 	    FileTypeStatsWindow.cpp	\
 	    GeneralConfigPage.cpp	\
@@ -155,6 +156,7 @@ HEADERS	  =				\
 	    FileSizeStats.h		\
 	    FileSizeStatsWindow.h	\
 	    FileTypeStats.h		\
+            FileSystemsWindow.h         \
 	    FileTypeStatsWindow.h	\
 	    GeneralConfigPage.h		\
 	    HeaderTweaker.h		\
@@ -170,7 +172,7 @@ HEADERS	  =				\
 	    MimeCategory.h		\
 	    MimeCategoryConfigPage.h	\
 	    MountPoints.h		\
-	    OpenDirDialog.h             \
+	    OpenDirDialog.h		\
 	    OpenPkgDialog.h		\
 	    OutputWindow.h		\
 	    PacManPkgManager.h		\
@@ -216,6 +218,7 @@ FORMS	  = main-window.ui		   \
 	    exclude-rules-config-page.ui   \
 	    file-size-stats-window.ui	   \
 	    file-type-stats-window.ui	   \
+	    filesystems-window.ui	   \
 	    locate-files-window.ui	   \
 	    open-dir-dialog.ui		   \
 	    open-pkg-dialog.ui		   \

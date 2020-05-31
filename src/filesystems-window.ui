@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LocateFilesWindow</class>
- <widget class="QDialog" name="LocateFilesWindow">
+ <class>FilesystemsWindow</class>
+ <widget class="QDialog" name="FilesystemsWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>220</height>
+    <width>850</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Locate Files by Type</string>
+   <string>Filesystems</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>6</number>
+   </property>
    <item>
     <widget class="QLabel" name="heading">
      <property name="font">
@@ -26,12 +29,15 @@
       </font>
      </property>
      <property name="text">
-      <string>Directories with File Type</string>
+      <string>&amp;Mounted Filesystems</string>
+     </property>
+     <property name="buddy">
+      <cstring>fsTree</cstring>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QTreeWidget" name="treeWidget">
+    <widget class="QTreeWidget" name="fsTree">
      <property name="sortingEnabled">
       <bool>true</bool>
      </property>
@@ -46,9 +52,19 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <widget class="QDirStat::MessagePanel" name="messagePanel" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="buttonsLayout">
      <property name="topMargin">
-      <number>5</number>
+      <number>0</number>
      </property>
      <item>
       <widget class="QPushButton" name="refreshButton">
@@ -87,12 +103,20 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QDirStat::MessagePanel</class>
+   <extends>QWidget</extends>
+   <header>MessagePanel.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
    <sender>closeButton</sender>
    <signal>clicked()</signal>
-   <receiver>LocateFilesWindow</receiver>
+   <receiver>FilesystemsWindow</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

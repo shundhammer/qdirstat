@@ -65,7 +65,7 @@ PathSelectorItem * PathSelector::addHomeDir()
 }
 
 
-PathSelectorItem * PathSelector::addMountPoint( const MountPoint * mountPoint )
+PathSelectorItem * PathSelector::addMountPoint( MountPoint * mountPoint )
 {
     CHECK_PTR( mountPoint );
 
@@ -81,8 +81,8 @@ PathSelectorItem * PathSelector::addMountPoint( const MountPoint * mountPoint )
 }
 
 
-PathSelectorItem * PathSelector::addMountPoint( const MountPoint * mountPoint,
-                                                const QIcon &	   icon )
+PathSelectorItem * PathSelector::addMountPoint( MountPoint *  mountPoint,
+                                                const QIcon & icon )
 {
     CHECK_PTR( mountPoint );
 
@@ -96,9 +96,9 @@ PathSelectorItem * PathSelector::addMountPoint( const MountPoint * mountPoint,
 }
 
 
-void PathSelector::addMountPoints( const QList<const MountPoint *> & mountPoints )
+void PathSelector::addMountPoints( const QList<MountPoint *> & mountPoints )
 {
-    foreach ( const MountPoint * mountPoint, mountPoints )
+    foreach ( MountPoint * mountPoint, mountPoints )
 	addMountPoint( mountPoint );
 }
 
@@ -166,8 +166,8 @@ PathSelectorItem::PathSelectorItem( const QString & path,
 }
 
 
-PathSelectorItem::PathSelectorItem( const MountPoint * mountPoint,
-				    PathSelector *     parent ):
+PathSelectorItem::PathSelectorItem( MountPoint *   mountPoint,
+				    PathSelector * parent ):
     QListWidgetItem( parent ),
     _path( mountPoint->path() ),
     _mountPoint( mountPoint )

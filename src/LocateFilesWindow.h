@@ -63,6 +63,7 @@ namespace QDirStat
 	 **/
 	virtual ~LocateFilesWindow();
 
+
     public:
 
         /**
@@ -101,6 +102,7 @@ namespace QDirStat
 	 **/
 	virtual void reject() Q_DECL_OVERRIDE;
 
+
     protected slots:
 
 	/**
@@ -108,6 +110,7 @@ namespace QDirStat
 	 * treemap widgets via their SelectionModel.
 	 **/
 	void selectResult( QTreeWidgetItem * item );
+
 
     protected:
 

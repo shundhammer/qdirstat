@@ -154,7 +154,7 @@ QString DirReadJob::device( const DirInfo * dir ) const
 
     if ( dir )
     {
-	const MountPoint * mountPoint = MountPoints::findByPath( dir->url() );
+	MountPoint * mountPoint = MountPoints::findByPath( dir->url() );
 
 	if ( mountPoint )
 	    device = mountPoint->device();
@@ -166,15 +166,15 @@ QString DirReadJob::device( const DirInfo * dir ) const
 
 bool DirReadJob::shouldCrossIntoFilesystem( const DirInfo * dir ) const
 {
-    const MountPoint * mountPoint = MountPoints::findByPath( dir->url() );
+    MountPoint * mountPoint = MountPoints::findByPath( dir->url() );
 
     bool doCross =
-        ! mountPoint->isSystemMount()  &&       //  /dev, /proc, /sys, ...
-        ! mountPoint->isDuplicate()    &&       //  bind mount or multiple mounted
-        ! mountPoint->isNetworkMount();         //  NFS or CIFS (Samba)
+	! mountPoint->isSystemMount()  &&	//  /dev, /proc, /sys, ...
+	! mountPoint->isDuplicate()    &&	//  bind mount or multiple mounted
+	! mountPoint->isNetworkMount();		//  NFS or CIFS (Samba)
 
     logDebug() << ( doCross ? "Reading" : "Not reading" )
-               << " mounted filesystem " << mountPoint->path() << endl;
+	       << " mounted filesystem " << mountPoint->path() << endl;
 
     return doCross;
 }

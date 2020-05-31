@@ -122,7 +122,7 @@ void DirTree::startReading( const QString & rawUrl )
     _url = fileInfo.absoluteFilePath();
     // logDebug() << "rawUrl: \"" << rawUrl << "\"" << endl;
     logInfo() << "   url: \"" << _url	 << "\"" << endl;
-    const MountPoint * mountPoint = MountPoints::findNearestMountPoint( _url );
+    MountPoint * mountPoint = MountPoints::findNearestMountPoint( _url );
     _device = mountPoint ? mountPoint->device() : "";
     logInfo() << "device: " << _device << endl;
 

@@ -322,6 +322,8 @@ void MainWindow::connectActions()
 
     _ui->actionFileTypeStats->setShortcutContext( Qt::ApplicationShortcut );
 
+    CONNECT_ACTION( _ui->actionShowFilesystems,	   this, showFilesystems() );
+
 
 
     // "Edit" menu
@@ -732,14 +734,14 @@ void MainWindow::askOpenDir()
     QString path;
     DirTree * tree = _dirTreeModel->tree();
     bool crossFilesystems = tree->crossFilesystems();
-    
+
 #if USE_CUSTOM_OPEN_DIR_DIALOG
     path = QDirStat::OpenDirDialog::askOpenDir( &crossFilesystems, this );
 #else
     path = QFileDialog::getExistingDirectory( this, // parent
                                               tr("Select directory to scan") );
 #endif
-    
+
     if ( ! path.isEmpty() )
     {
 	tree->reset();
@@ -1212,6 +1214,21 @@ void MainWindow::showFileSizeStats()
 	return;
 
     FileSizeStatsWindow::populateSharedInstance( sel );
+}
+
+
+void MainWindow::showFilesystems()
+{
+    if ( ! _filesystemsWindow )
+    {
+	// This deletes itself when the user closes it. The associated QPointer
+	// keeps track of that and sets the pointer to 0 when it happens.
+
+	_filesystemsWindow = new FilesystemsWindow( this );
+    }
+
+    _filesystemsWindow->populate();
+    _filesystemsWindow->show();
 }
 
 

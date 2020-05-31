@@ -18,6 +18,7 @@
 
 #include "ui_main-window.h"
 #include "FileTypeStatsWindow.h"
+#include "FilesystemsWindow.h"
 #include "PanelMessage.h"
 #include "UnreadableDirsWindow.h"
 #include "PkgFilter.h"
@@ -43,6 +44,7 @@ using QDirStat::FileInfo;
 using QDirStat::FileTypeStatsWindow;
 using QDirStat::PanelMessage;
 using QDirStat::UnreadableDirsWindow;
+using QDirStat::FilesystemsWindow;
 
 
 class MainWindow: public QMainWindow
@@ -315,6 +317,11 @@ protected slots:
     void showFileSizeStats();
 
     /**
+     * Show detailed information about mounted filesystems in a separate window.
+     **/
+    void showFilesystems();
+
+    /**
      * Change the main window layout. If no name is passed, the function tries
      * to check if the sender is a QAction and use its data().
      **/
@@ -441,6 +448,7 @@ private:
     QDirStat::ConfigDialog	*  _configDialog;
     QActionGroup		*  _layoutActionGroup;
     QPointer<FileTypeStatsWindow>  _fileTypeStatsWindow;
+    QPointer<FilesystemsWindow>    _filesystemsWindow;
     QPointer<PanelMessage>	   _dirPermissionsWarning;
     QPointer<UnreadableDirsWindow> _unreadableDirsWindow;
     QString			   _dUrl;

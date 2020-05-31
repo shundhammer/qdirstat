@@ -183,7 +183,7 @@ bool MountPoints::isEmpty()
 }
 
 
-const MountPoint * MountPoints::findByPath( const QString & path )
+MountPoint * MountPoints::findByPath( const QString & path )
 {
     instance()->ensurePopulated();
 
@@ -191,7 +191,7 @@ const MountPoint * MountPoints::findByPath( const QString & path )
 }
 
 
-const MountPoint * MountPoints::findNearestMountPoint( const QString & startPath )
+MountPoint * MountPoints::findNearestMountPoint( const QString & startPath )
 {
     QFileInfo fileInfo( startPath );
     QString path = fileInfo.canonicalFilePath(); // absolute path without symlinks or ..
@@ -199,7 +199,7 @@ const MountPoint * MountPoints::findNearestMountPoint( const QString & startPath
     if ( path != startPath )
 	logDebug() << startPath << " canonicalized is " << path << endl;
 
-    const MountPoint * mountPoint = findByPath( path );
+    MountPoint * mountPoint = findByPath( path );
 
     if ( ! mountPoint )
     {
@@ -226,7 +226,7 @@ bool MountPoints::isDeviceMounted( const QString & device )
     // Do NOT call ensurePopulated() here: This would cause a recursion in the
     // populating process!
 
-    foreach ( const MountPoint * mountPoint, instance()->_mountPointList )
+    foreach ( MountPoint * mountPoint, instance()->_mountPointList )
     {
 	if ( mountPoint->device() == device )
 	    return true;
@@ -339,7 +339,7 @@ bool MountPoints::checkForBtrfs()
 {
     ensurePopulated();
 
-    foreach ( const MountPoint * mountPoint, _mountPointMap )
+    foreach ( MountPoint * mountPoint, _mountPointMap )
     {
 	if ( mountPoint && mountPoint->isBtrfs() )
 	    return true;
@@ -349,12 +349,12 @@ bool MountPoints::checkForBtrfs()
 }
 
 
-QList<const MountPoint *> MountPoints::normalMountPoints()
+QList<MountPoint *> MountPoints::normalMountPoints()
 {
     instance()->ensurePopulated();
-    QList<const MountPoint *> result;
+    QList<MountPoint *> result;
 
-    foreach ( const MountPoint * mountPoint, instance()->_mountPointList )
+    foreach ( MountPoint * mountPoint, instance()->_mountPointList )
     {
 	if ( ! mountPoint->isSystemMount() && ! mountPoint->isDuplicate() )
 	    result << mountPoint;
@@ -366,15 +366,22 @@ QList<const MountPoint *> MountPoints::normalMountPoints()
 
 void MountPoints::dumpNormalMountPoints()
 {
-    foreach ( const MountPoint * mountPoint, normalMountPoints() )
+    foreach ( MountPoint * mountPoint, normalMountPoints() )
 	logDebug() << mountPoint << endl;
 }
 
 
 void MountPoints::dump()
 {
-    foreach ( const MountPoint * mountPoint, instance()->_mountPointList )
+    foreach ( MountPoint * mountPoint, instance()->_mountPointList )
     {
 	logDebug() << mountPoint << endl;
     }
 }
+
+
+#if HAVE_Q_STORAGE_INFO
+  bool MountPoints::hasSizeInfo() { return true; }
+#else
+  bool MountPoints::hasSizeInfo() { return false; }
+#endif

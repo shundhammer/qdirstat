@@ -182,7 +182,7 @@ namespace QDirStat
 	 * caller, i.e. the caller should not delete it. The pointer remains
 	 * valid until the next call to clear().
 	 **/
-	static const MountPoint * findByPath( const QString & path );
+	static MountPoint * findByPath( const QString & path );
 
 	/**
 	 * Find the nearest mount point upwards in the directory hierarchy
@@ -192,7 +192,7 @@ namespace QDirStat
 	 * This might return 0 if none of the files containing mount
 	 * information (/proc/mounts, /etc/mtab) could be read.
 	 **/
-	static const MountPoint * findNearestMountPoint( const QString & path );
+	static MountPoint * findNearestMountPoint( const QString & path );
 
 	/**
 	 * Return 'true' if any mount point has filesystem type "btrfs".
@@ -213,7 +213,7 @@ namespace QDirStat
 	 * The result is sorted by the order in which the filesystems were
 	 * mounted (the same as in /proc/mounts or in /etc/mtab).
 	 **/
-	static QList<const MountPoint *> normalMountPoints();
+	static QList<MountPoint *> normalMountPoints();
 
 	/**
 	 * Dump all current mount points to the log. This does not call
@@ -226,6 +226,12 @@ namespace QDirStat
 	 * system, bind or duplicate mount points.
 	 **/
 	static void dumpNormalMountPoints();
+
+	/**
+	 * Return 'true' if size information for mount points is available.
+	 * This may depend on the build OS and the Qt version.
+	 **/
+	static bool hasSizeInfo();
 
 
     protected:
@@ -277,7 +283,7 @@ namespace QDirStat
     }; // class MountPoints
 
 
-    inline QTextStream & operator<< ( QTextStream & stream, const MountPoint * mp )
+    inline QTextStream & operator<< ( QTextStream & stream, MountPoint * mp )
     {
 	if ( mp )
 	{

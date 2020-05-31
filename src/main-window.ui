@@ -189,6 +189,7 @@
     <addaction name="separator"/>
     <addaction name="actionFileSizeStats"/>
     <addaction name="actionFileTypeStats"/>
+    <addaction name="actionShowFilesystems"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -854,6 +855,14 @@
    </property>
    <property name="toolTip">
     <string>Help about the Unpackaged Files view (external browser)</string>
+   </property>
+  </action>
+  <action name="actionShowFilesystems">
+   <property name="text">
+    <string>Show &amp;Mounted Filesystems</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
    </property>
   </action>
  </widget>

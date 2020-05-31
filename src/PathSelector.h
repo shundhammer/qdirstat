@@ -48,7 +48,7 @@ namespace QDirStat
 	 * displays more information.
 	 **/
 	PathSelectorItem * addPath( const QString & path,
-                                    const QIcon &   icon = QIcon() );
+				    const QIcon &   icon = QIcon() );
 
 	/**
 	 * Convenience function: Add the current user's home directory.
@@ -62,19 +62,19 @@ namespace QDirStat
 	 * additional information like the filesystem type and, if available,
 	 * the size of the partition / filesystem.
 	 **/
-	PathSelectorItem * addMountPoint( const MountPoint * mountPoint );
+	PathSelectorItem * addMountPoint( MountPoint * mountPoint );
 
 	/**
 	 * Add a mount point with the specified icon.
 	 * Notice that you can also specify QIcon() to suppress any icon.
 	 **/
-	PathSelectorItem * addMountPoint( const MountPoint * mountPoint,
-                                          const QIcon &      icon );
+	PathSelectorItem * addMountPoint( MountPoint *	mountPoint,
+					  const QIcon & icon );
 
 	/**
 	 * Add a list of mount points with the appropriate icons.
 	 **/
-	void addMountPoints( const QList<const MountPoint *> & mountPoints );
+	void addMountPoints( const QList<MountPoint *> & mountPoints );
 
 
     signals:
@@ -88,18 +88,18 @@ namespace QDirStat
 	 **/
 	void pathSelected( const QString & path );
 
-        /**
-         * Emitted when the user double-clicks a path.
-         **/
+	/**
+	 * Emitted when the user double-clicks a path.
+	 **/
 	void pathDoubleClicked( const QString & path );
 
 
     public slots:
 
-        /**
-         * Select the item representing the parent mount point of 'path'.
-         **/
-        void selectParentMountPoint( const QString & path );
+	/**
+	 * Select the item representing the parent mount point of 'path'.
+	 **/
+	void selectParentMountPoint( const QString & path );
 
 
     protected slots:
@@ -117,7 +117,7 @@ namespace QDirStat
 
     protected:
 
-        QFileIconProvider _iconProvider;
+	QFileIconProvider _iconProvider;
 
     };	// class PathSelector
 
@@ -141,8 +141,8 @@ namespace QDirStat
 	 * Constructor for a mount point.
 	 * Use QListWidgetItem::setIcon() to set an icon.
 	 **/
-	PathSelectorItem( const MountPoint * mountPoint,
-			  PathSelector *     parent = 0	 );
+	PathSelectorItem( MountPoint *	 mountPoint,
+			  PathSelector * parent = 0 );
 
 	/**
 	 * Destructor.
@@ -158,13 +158,13 @@ namespace QDirStat
 	 * Return the mount point or 0 if this is a plain path without a mount
 	 * point.
 	 **/
-	const MountPoint * mountPoint() { return _mountPoint; }
+	MountPoint * mountPoint() { return _mountPoint; }
 
 
     protected:
 
-	QString		   _path;
-	const MountPoint * _mountPoint;
+	QString	     _path;
+	MountPoint * _mountPoint;
     };
 
 }	// namespace QDirStat
