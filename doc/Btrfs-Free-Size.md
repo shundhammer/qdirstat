@@ -38,7 +38,7 @@ that area.
 ### btrfs fi usage
 
 ```bash
-# sudo btrfs filesystem usage /mybtrfs
+sudo btrfs filesystem usage /mybtrfs
 
 Overall:
     Device size:		  40.00GiB
@@ -69,7 +69,7 @@ Unallocated:
 This can be slightly abbreviated to
 
 ```bash
-# sudo btrfs fi usage /mybtrfs
+sudo btrfs fi usage /mybtrfs
 ```
 
 _Notice that all Btrfs commands always need the mount point as the argument, not the device._
@@ -78,7 +78,7 @@ _Notice that all Btrfs commands always need the mount point as the argument, not
 ### btrfs fi df
 
 ```bash
-# sudo btrfs filesystem df /mybtrfs
+sudo btrfs filesystem df /mybtrfs
 
 Data, single: total=25.00GiB, used=24.02GiB
 System, DUP: total=32.00MiB, used=16.00KiB

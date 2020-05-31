@@ -55,7 +55,7 @@ void FilesystemsWindow::populate()
         item->setIcon( 0, icon );
     }
 
-    if ( true || MountPoints::hasBtrfs() )
+    if ( MountPoints::hasBtrfs() )
         showBtrfsFreeSizeWarning();
 }
 
