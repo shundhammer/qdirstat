@@ -1,9 +1,9 @@
 /*
  *   File name: FilesystemsWindow.h
- *   Summary:   QDirStat "Mounted Filesystems" window
- *   License:   GPL V2 - See file LICENSE for details.
+ *   Summary:	QDirStat "Mounted Filesystems" window
+ *   License:	GPL V2 - See file LICENSE for details.
  *
- *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
@@ -14,7 +14,7 @@
 #include <QTreeWidgetItem>
 
 #include "ui_filesystems-window.h"
-#include "FileInfo.h"   // FileSize
+#include "FileInfo.h"	// FileSize
 
 
 
@@ -25,87 +25,87 @@ namespace QDirStat
     /**
      * Modeless dialog to display details about mounted filesystems:
      *
-     *   - device
-     *   - mount point
-     *   - filesystem type
-     *   - used disk space
-     *   - free disk space for nonprivileged users
-     *   - free disk space for root
+     *	 - device
+     *	 - mount point
+     *	 - filesystem type
+     *	 - used disk space
+     *	 - free disk space for nonprivileged users
+     *	 - free disk space for root
      *
      * The sizes may not be available on all platforms (no Qt 4 support!) or
      * for some filesystem types.
      **/
     class FilesystemsWindow: public QDialog
     {
-        Q_OBJECT
+	Q_OBJECT
 
     public:
 
-        /**
-         * Constructor.
-         *
-         * Notice that this widget will destroy itself upon window close.
-         *
-         * It is advised to use a QPointer for storing a pointer to an instance
-         * of this class. The QPointer will keep track of this window
-         * auto-deleting itself when closed.
-         **/
-        FilesystemsWindow( QWidget * parent );
+	/**
+	 * Constructor.
+	 *
+	 * Notice that this widget will destroy itself upon window close.
+	 *
+	 * It is advised to use a QPointer for storing a pointer to an instance
+	 * of this class. The QPointer will keep track of this window
+	 * auto-deleting itself when closed.
+	 **/
+	FilesystemsWindow( QWidget * parent );
 
-        /**
-         * Destructor.
-         **/
-        virtual ~FilesystemsWindow();
+	/**
+	 * Destructor.
+	 **/
+	virtual ~FilesystemsWindow();
 
 
     public slots:
 
-        /**
-         * Populate the window with all normal filesystems. Bind mounts,
-         * filesystems mounted several times and Btrfs subvolumes are excluded.
-         **/
-        void populate();
+	/**
+	 * Populate the window with all normal filesystems. Bind mounts,
+	 * filesystems mounted several times and Btrfs subvolumes are excluded.
+	 **/
+	void populate();
 
-        /**
-         * Refresh (reload) all data.
-         **/
-        void refresh();
+	/**
+	 * Refresh (reload) all data.
+	 **/
+	void refresh();
 
-        /**
-         * Reject the dialog contents, i.e. the user clicked the "Cancel" or
-         * WM_CLOSE button. This not only closes the dialog, it also deletes
-         * it.
-         *
-         * Reimplemented from QDialog.
-         **/
-        virtual void reject() Q_DECL_OVERRIDE;
+	/**
+	 * Reject the dialog contents, i.e. the user clicked the "Cancel" or
+	 * WM_CLOSE button. This not only closes the dialog, it also deletes
+	 * it.
+	 *
+	 * Reimplemented from QDialog.
+	 **/
+	virtual void reject() Q_DECL_OVERRIDE;
 
 
     protected:
 
-        /**
-         * Clear all data and widget contents.
-         **/
-        void clear();
+	/**
+	 * Clear all data and widget contents.
+	 **/
+	void clear();
 
-        /**
-         * One-time initialization of the widgets in this window.
-         **/
-        void initWidgets();
+	/**
+	 * One-time initialization of the widgets in this window.
+	 **/
+	void initWidgets();
 
-        /**
-         * Show panel message warning about Btrfs and how it reports free sizes
-         **/
-        void showBtrfsFreeSizeWarning();
+	/**
+	 * Show panel message warning about Btrfs and how it reports free sizes
+	 **/
+	void showBtrfsFreeSizeWarning();
 
 
-        //
-        // Data members
-        //
+	//
+	// Data members
+	//
 
-        Ui::FilesystemsWindow * _ui;
+	Ui::FilesystemsWindow * _ui;
 
-    };  // class FilesystemsWindow
+    };	// class FilesystemsWindow
 
 
     /**
@@ -113,13 +113,16 @@ namespace QDirStat
      **/
     enum FilesystemColumns
     {
-        FS_DeviceCol = 0,
-        FS_MountPathCol,
-        FS_TypeCol,
-        FS_TotalSizeCol,
-        FS_UsedSizeCol,
-        FS_FreeSizeForUserCol,
-        FS_FreeSizeForRootCol
+	FS_DeviceCol = 0,
+	FS_MountPathCol,
+	FS_TypeCol,
+	FS_TotalSizeCol,
+	FS_UsedSizeCol,
+	FS_UsedPercentCol,
+	FS_FreeSizeForUserCol,
+	FS_FreePercentForUserCol,
+	FS_FreeSizeForRootCol,
+	FS_FreePercentForRootCol
     };
 
 
@@ -129,39 +132,49 @@ namespace QDirStat
     class FilesystemItem: public QTreeWidgetItem
     {
     public:
-        /**
-         * Constructor.
-         **/
-        FilesystemItem( MountPoint * mountPoint, QTreeWidget * parent );
+	/**
+	 * Constructor.
+	 **/
+	FilesystemItem( MountPoint * mountPoint, QTreeWidget * parent );
 
-        // Getters
+	// Getters
 
-        QString  device()           const { return _device;          }
-        QString  mountPath()        const { return _mountPath;       }
-        QString  fsType()           const { return _fsType;          }
-        FileSize totalSize()        const { return _totalSize;       }
-        FileSize usedSize()         const { return _usedSize;        }
-        FileSize freeSizeForUser()  const { return _freeSizeForUser; }
-        FileSize freeSizeForRoot()  const { return _freeSizeForRoot; }
-        bool     isNetworkMount()   const { return _isNetworkMount;  }
+	QString	 device()	    const { return _device;	     }
+	QString	 mountPath()	    const { return _mountPath;	     }
+	QString	 fsType()	    const { return _fsType;	     }
+	FileSize totalSize()	    const { return _totalSize;	     }
+	FileSize usedSize()	    const { return _usedSize;	     }
+	FileSize freeSizeForUser()  const { return _freeSizeForUser; }
+	FileSize freeSizeForRoot()  const { return _freeSizeForRoot; }
+	bool	 isNetworkMount()   const { return _isNetworkMount;  }
 
 	/**
 	 * Less-than operator for sorting.
 	 **/
-        bool operator<( const QTreeWidgetItem & rawOther ) const;
+	bool operator<( const QTreeWidgetItem & rawOther ) const;
+
+	/**
+	 * Format a partial size of totalSize() as percent.
+	 **/
+	QString formatPercentOfTotal( FileSize partialSize ) const;
+
+	/**
+	 * Format a percentage.
+	 **/
+	static QString formatPercent( float percent );
 
     protected:
 
-        QString  _device;
-        QString  _mountPath;
-        QString  _fsType;
-        FileSize _totalSize;
-        FileSize _usedSize;
-        FileSize _freeSizeForUser;
-        FileSize _freeSizeForRoot;
-        bool     _isNetworkMount;
+	QString	 _device;
+	QString	 _mountPath;
+	QString	 _fsType;
+	FileSize _totalSize;
+	FileSize _usedSize;
+	FileSize _freeSizeForUser;
+	FileSize _freeSizeForRoot;
+	bool	 _isNetworkMount;
     };
 
 }
 
-#endif  // FilesystemsWindow_h
+#endif	// FilesystemsWindow_h

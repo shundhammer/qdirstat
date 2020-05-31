@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>850</width>
+    <width>1024</width>
     <height>300</height>
    </rect>
   </property>
@@ -38,6 +38,12 @@
    </item>
    <item>
     <widget class="QTreeWidget" name="fsTree">
+     <property name="indentation">
+      <number>5</number>
+     </property>
+     <property name="rootIsDecorated">
+      <bool>true</bool>
+     </property>
      <property name="sortingEnabled">
       <bool>true</bool>
      </property>

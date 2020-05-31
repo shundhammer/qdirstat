@@ -44,19 +44,19 @@ void FilesystemsWindow::populate()
 
     foreach ( MountPoint * mountPoint, MountPoints::normalMountPoints() )
     {
-        CHECK_PTR( mountPoint);
+	CHECK_PTR( mountPoint);
 
-        FilesystemItem * item = new FilesystemItem( mountPoint, _ui->fsTree );
-        CHECK_NEW( item );
+	FilesystemItem * item = new FilesystemItem( mountPoint, _ui->fsTree );
+	CHECK_NEW( item );
 
-        QIcon icon = iconProvider.icon( mountPoint->isNetworkMount() ?
-                                         QFileIconProvider::Network :
-                                         QFileIconProvider::Drive      );
-        item->setIcon( 0, icon );
+	QIcon icon = iconProvider.icon( mountPoint->isNetworkMount() ?
+					 QFileIconProvider::Network :
+					 QFileIconProvider::Drive      );
+	item->setIcon( 0, icon );
     }
 
     if ( MountPoints::hasBtrfs() )
-        showBtrfsFreeSizeWarning();
+	showBtrfsFreeSizeWarning();
 }
 
 
@@ -100,10 +100,14 @@ void FilesystemsWindow::initWidgets()
 
     if ( MountPoints::hasSizeInfo() )
     {
-	headers << tr( "Size" )
-		<< tr( "Used" )
+	headers << tr( "Total Size" )
+		<< "	" + tr( "Used" )
+		<< ""
 		<< tr( "Free for Users" )
-		<< tr( "Free for Root"	);
+		<< ""
+		<< tr( "Free for Root"	)
+		<< ""
+	    ;
     }
 
     _ui->fsTree->setHeaderLabels( headers );
@@ -117,12 +121,12 @@ void FilesystemsWindow::initWidgets()
 
 
 FilesystemItem::FilesystemItem( MountPoint  * mountPoint,
-                                QTreeWidget * parent ):
+				QTreeWidget * parent ):
     QTreeWidgetItem( parent ),
     _device	    ( mountPoint->device()	    ),
     _mountPath	    ( mountPoint->path()	    ),
     _fsType	    ( mountPoint->filesystemType()  ),
-    _totalSize      ( mountPoint->totalSize()       ),
+    _totalSize	    ( mountPoint->totalSize()	    ),
     _usedSize	    ( mountPoint->usedSize()	    ),
     _freeSizeForUser( mountPoint->freeSizeForUser() ),
     _freeSizeForRoot( mountPoint->freeSizeForRoot() ),
@@ -139,10 +143,12 @@ FilesystemItem::FilesystemItem( MountPoint  * mountPoint,
 	setText( FS_FreeSizeForUserCol, formatSize( _freeSizeForUser ) );
 	setText( FS_FreeSizeForRootCol, formatSize( _freeSizeForRoot ) );
 
-	setTextAlignment( FS_TotalSizeCol,	 Qt::AlignRight );
-	setTextAlignment( FS_UsedSizeCol,	 Qt::AlignRight );
-	setTextAlignment( FS_FreeSizeForUserCol, Qt::AlignRight );
-	setTextAlignment( FS_FreeSizeForRootCol, Qt::AlignRight );
+	setText( FS_UsedPercentCol,	   formatPercentOfTotal( _usedSize	  ) );
+	setText( FS_FreePercentForUserCol, formatPercentOfTotal( _freeSizeForUser ) );
+	setText( FS_FreePercentForRootCol, formatPercentOfTotal( _freeSizeForRoot ) );
+
+	for ( int col = FS_TotalSizeCol; col < parent->columnCount(); ++col )
+	    setTextAlignment( col, Qt::AlignRight );
     }
 }
 
@@ -156,16 +162,36 @@ bool FilesystemItem::operator<( const QTreeWidgetItem & rawOther ) const
     switch ( col )
     {
 	case FS_DeviceCol:
-            if ( ! isNetworkMount() &&   other.isNetworkMount() ) return true;
-            if ( isNetworkMount()   && ! other.isNetworkMount() ) return false;
-            return device() < other.device();
+	    if ( ! isNetworkMount() &&	 other.isNetworkMount() ) return true;
+	    if ( isNetworkMount()   && ! other.isNetworkMount() ) return false;
+	    return device() < other.device();
 
-	case FS_MountPathCol:           return mountPath()       < other.mountPath();
-	case FS_TypeCol:                return fsType()          < other.fsType();
-	case FS_TotalSizeCol:           return totalSize()       < other.totalSize();
-	case FS_UsedSizeCol:            return usedSize()        < other.usedSize();
-	case FS_FreeSizeForUserCol:     return freeSizeForUser() < other.freeSizeForUser();
-	case FS_FreeSizeForRootCol:     return freeSizeForRoot() < other.freeSizeForRoot();
+	case FS_MountPathCol:		return mountPath()	 < other.mountPath();
+	case FS_TypeCol:		return fsType()		 < other.fsType();
+	case FS_TotalSizeCol:		return totalSize()	 < other.totalSize();
+	case FS_UsedSizeCol:		return usedSize()	 < other.usedSize();
+	case FS_FreeSizeForUserCol:	return freeSizeForUser() < other.freeSizeForUser();
+	case FS_FreeSizeForRootCol:	return freeSizeForRoot() < other.freeSizeForRoot();
 	default:			return QTreeWidgetItem::operator<( rawOther );
     }
 }
+
+
+QString FilesystemItem::formatPercentOfTotal( FileSize partialSize ) const
+{
+    return formatPercent( (100.0 * partialSize) / _totalSize );
+}
+
+
+QString FilesystemItem::formatPercent( float percent )
+{
+    if ( percent < 0.0 )	// Invalid percentage?
+	return "";
+
+    QString text;
+    text.setNum( percent, 'f', 1 );
+    text += "%";
+
+    return text;
+}
+
