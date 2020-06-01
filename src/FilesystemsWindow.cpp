@@ -76,6 +76,7 @@ void FilesystemsWindow::showBtrfsFreeSizeWarning()
 
 void FilesystemsWindow::refresh()
 {
+    MountPoints::reload();
     populate();
 }
 
@@ -124,6 +125,9 @@ void FilesystemsWindow::initWidgets()
 
     HeaderTweaker::resizeToContents( _ui->fsTree->header() );
     _ui->fsTree->sortItems( FS_DeviceCol, Qt::AscendingOrder );
+
+    connect( _ui->refreshButton, SIGNAL( clicked() ),
+             this,               SLOT  ( refresh() ) );
 }
 
 

@@ -239,6 +239,12 @@ namespace QDirStat
 	 **/
 	static bool hasSizeInfo();
 
+        /**
+         * Clear all information and reload it from disk.
+         * NOTICE: This invalidates ALL MountPoint pointers!
+         **/
+        static void reload();
+
 
     protected:
 	/**

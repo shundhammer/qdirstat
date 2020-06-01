@@ -336,6 +336,7 @@ bool MountPoints::read( const QString & filename )
     }
     else
     {
+        logDebug() << "Read " << _mountPointList.size() << " mount points from " << filename << endl;
 	_isPopulated = true;
 	return true;
     }
@@ -385,6 +386,14 @@ void MountPoints::dump()
 	logDebug() << mountPoint << endl;
     }
 }
+
+
+void MountPoints::reload()
+{
+    instance()->clear();
+    instance()->ensurePopulated();
+}
+
 
 
 #if HAVE_Q_STORAGE_INFO
