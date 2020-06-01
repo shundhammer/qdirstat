@@ -313,6 +313,8 @@ bool MountPoints::read( const QString & filename )
 	QString mountOpts = fields[3];
 	// ignoring fsck and dump order (0 0)
 
+        path.replace( "\\040", " " );
+
 	MountPoint * mountPoint = new MountPoint( device, path, fsType, mountOpts );
 	CHECK_NEW( mountPoint );
 
