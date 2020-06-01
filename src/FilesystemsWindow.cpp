@@ -154,7 +154,7 @@ FilesystemItem::FilesystemItem( MountPoint  * mountPoint,
 
     setTextAlignment( FS_TypeCol, Qt::AlignHCenter );
 
-    if ( parent->columnCount() >= FS_TotalSizeCol )
+    if ( parent->columnCount() >= FS_TotalSizeCol && _totalSize >= 0 )
     {
 	blanks = QString( 3, ' ' ); // Enforce left margin
 
