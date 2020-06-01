@@ -190,6 +190,9 @@ bool FilesystemItem::operator<( const QTreeWidgetItem & rawOther ) const
 
 QString FilesystemItem::formatPercentOfTotal( FileSize partialSize ) const
 {
+    if ( _totalSize == 0 )
+        return "";
+    
     return formatPercent( (100.0 * partialSize) / _totalSize );
 }
 
