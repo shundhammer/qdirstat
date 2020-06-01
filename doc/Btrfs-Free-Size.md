@@ -37,7 +37,7 @@ that area.
 
 ### btrfs fi usage
 
-```bash
+```
 sudo btrfs filesystem usage /mybtrfs
 
 Overall:
@@ -68,7 +68,7 @@ Unallocated:
 
 This can be slightly abbreviated to
 
-```bash
+```
 sudo btrfs fi usage /mybtrfs
 ```
 
@@ -77,7 +77,7 @@ _Notice that all Btrfs commands always need the mount point as the argument, not
 
 ### btrfs fi df
 
-```bash
+```
 sudo btrfs filesystem df /mybtrfs
 
 Data, single: total=25.00GiB, used=24.02GiB
@@ -91,7 +91,7 @@ Shorter: `sudo btrfs fi df /mybtrfs`
 
 ### btrfs fi show
 
-```bash
+```
 sudo btrfs filesystem show /mybtrfs
 
 Label: 'mybtrfs'  uuid: a0be3e1e-d127-45b8-85d6-...
