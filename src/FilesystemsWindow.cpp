@@ -17,6 +17,8 @@
 #include "Logger.h"
 #include "Exception.h"
 
+#define WARN_PERCENT	10.0
+
 using namespace QDirStat;
 
 
@@ -100,14 +102,11 @@ void FilesystemsWindow::initWidgets()
 
     if ( MountPoints::hasSizeInfo() )
     {
-	headers << tr( "Size" )
-		<< tr( "Used" )
-		<< ""
-		<< tr( "Free for Users" )
-		<< ""
-		<< tr( "Free for Root"	)
-		<< ""
-	    ;
+	headers << tr( "Size"	  )
+		<< tr( "Used"	  )
+		<< tr( "Reserved" )
+		<< tr( "Free"	  )
+		<< tr( "Free %"	  );
     }
 
     _ui->fsTree->setHeaderLabels( headers );
@@ -117,8 +116,11 @@ void FilesystemsWindow::initWidgets()
 
     QTreeWidgetItem * hItem = _ui->fsTree->headerItem();
 
-    for ( int col = FS_TotalSizeCol; col < headers.size(); ++col )
-	hItem->setTextAlignment( col, Qt::AlignRight );
+    for ( int col = 0; col < headers.size(); ++col )
+	hItem->setTextAlignment( col, Qt::AlignHCenter );
+
+    hItem->setToolTip( FS_ReservedSizeCol, tr( "Reserved for root" ) );
+    hItem->setToolTip( FS_FreeSizeCol,	   tr( "Free for unprivileged users" ) );
 
     HeaderTweaker::resizeToContents( _ui->fsTree->header() );
     _ui->fsTree->sortItems( FS_DeviceCol, Qt::AscendingOrder );
@@ -135,28 +137,49 @@ FilesystemItem::FilesystemItem( MountPoint  * mountPoint,
     _fsType	    ( mountPoint->filesystemType()  ),
     _totalSize	    ( mountPoint->totalSize()	    ),
     _usedSize	    ( mountPoint->usedSize()	    ),
-    _freeSizeForUser( mountPoint->freeSizeForUser() ),
-    _freeSizeForRoot( mountPoint->freeSizeForRoot() ),
-    _isNetworkMount ( mountPoint->isNetworkMount()  )
+    _reservedSize   ( mountPoint->reservedSize()    ),
+    _freeSize	    ( mountPoint->freeSizeForUser() ),
+    _isNetworkMount ( mountPoint->isNetworkMount()  ),
+    _isReadOnly	    ( mountPoint->isReadOnly()	    )
 {
-    QString blanks = QString( 3, ' ' );
+    QString blanks = QString( 4, ' ' );
 
     setText( FS_DeviceCol,    _device + blanks );
     setText( FS_MountPathCol, _mountPath );
     setText( FS_TypeCol,      _fsType	 );
 
+    setTextAlignment( FS_TypeCol, Qt::AlignHCenter );
+
     if ( parent->columnCount() >= FS_TotalSizeCol )
     {
-	blanks = QString( 8, ' ' ); // Enforce left margin
+	blanks = QString( 3, ' ' ); // Enforce left margin
 
-	setText( FS_TotalSizeCol,	blanks + formatSize( _totalSize	      ) );
-	setText( FS_UsedSizeCol,	blanks + formatSize( _usedSize	      ) );
-	setText( FS_FreeSizeForUserCol, blanks + formatSize( _freeSizeForUser ) );
-	setText( FS_FreeSizeForRootCol, blanks + formatSize( _freeSizeForRoot ) );
+	setText( FS_TotalSizeCol, blanks + formatSize( _totalSize	      ) );
+	setText( FS_UsedSizeCol,  blanks + formatSize( _usedSize	      ) );
 
-	setText( FS_UsedPercentCol,	   formatPercentOfTotal( _usedSize	  ) );
-	setText( FS_FreePercentForUserCol, formatPercentOfTotal( _freeSizeForUser ) );
-	setText( FS_FreePercentForRootCol, formatPercentOfTotal( _freeSizeForRoot ) );
+	if ( _reservedSize > 0 )
+	    setText( FS_ReservedSizeCol, blanks + formatSize( _reservedSize    ) );
+
+	if ( _isReadOnly )
+	    setText( FS_FreeSizeCol, QObject::tr( "read-only" ) );
+	else
+	{
+	    setText( FS_FreeSizeCol, blanks + formatSize( _freeSize ) );
+
+	    float freePercent = 0.0;
+
+	    if ( _totalSize > 0 )
+	    {
+		freePercent = 100.0 * _freeSize / _totalSize;
+		setText( FS_FreePercentCol, formatPercent( freePercent ) );
+
+		if ( freePercent < WARN_PERCENT )
+		{
+		    setForeground( FS_FreeSizeCol,    Qt::red );
+		    setForeground( FS_FreePercentCol, Qt::red );
+		}
+	    }
+	}
 
 	for ( int col = FS_TotalSizeCol; col < parent->columnCount(); ++col )
 	    setTextAlignment( col, Qt::AlignRight );
@@ -177,23 +200,15 @@ bool FilesystemItem::operator<( const QTreeWidgetItem & rawOther ) const
 	    if ( isNetworkMount()   && ! other.isNetworkMount() ) return false;
 	    return device() < other.device();
 
-	case FS_MountPathCol:		return mountPath()	 < other.mountPath();
-	case FS_TypeCol:		return fsType()		 < other.fsType();
-	case FS_TotalSizeCol:		return totalSize()	 < other.totalSize();
-	case FS_UsedSizeCol:		return usedSize()	 < other.usedSize();
-	case FS_FreeSizeForUserCol:	return freeSizeForUser() < other.freeSizeForUser();
-	case FS_FreeSizeForRootCol:	return freeSizeForRoot() < other.freeSizeForRoot();
+	case FS_MountPathCol:		return mountPath()    < other.mountPath();
+	case FS_TypeCol:		return fsType()	      < other.fsType();
+	case FS_TotalSizeCol:		return totalSize()    < other.totalSize();
+	case FS_UsedSizeCol:		return usedSize()     < other.usedSize();
+	case FS_ReservedSizeCol:	return reservedSize() < other.reservedSize();
+	case FS_FreePercentCol:
+	case FS_FreeSizeCol:		return freeSize()      < other.freeSize();
 	default:			return QTreeWidgetItem::operator<( rawOther );
     }
-}
-
-
-QString FilesystemItem::formatPercentOfTotal( FileSize partialSize ) const
-{
-    if ( _totalSize == 0 )
-        return "";
-    
-    return formatPercent( (100.0 * partialSize) / _totalSize );
 }
 
 

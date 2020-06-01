@@ -123,6 +123,12 @@ namespace QDirStat
 	FileSize usedSize() const;
 
 	/**
+	 * Reserved size for root for the filesystem of this mount point.
+	 * This returns -1 if no size information is available.
+	 **/
+	FileSize reservedSize() const;
+
+	/**
 	 * Available free size of this filesystem for non-privileged users.
 	 * This returns -1 if no size information is available.
 	 **/

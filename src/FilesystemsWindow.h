@@ -118,11 +118,9 @@ namespace QDirStat
 	FS_TypeCol,
 	FS_TotalSizeCol,
 	FS_UsedSizeCol,
-	FS_UsedPercentCol,
-	FS_FreeSizeForUserCol,
-	FS_FreePercentForUserCol,
-	FS_FreeSizeForRootCol,
-	FS_FreePercentForRootCol
+	FS_ReservedSizeCol,
+	FS_FreeSizeCol,
+	FS_FreePercentCol
     };
 
 
@@ -139,24 +137,20 @@ namespace QDirStat
 
 	// Getters
 
-	QString	 device()	    const { return _device;	     }
-	QString	 mountPath()	    const { return _mountPath;	     }
-	QString	 fsType()	    const { return _fsType;	     }
-	FileSize totalSize()	    const { return _totalSize;	     }
-	FileSize usedSize()	    const { return _usedSize;	     }
-	FileSize freeSizeForUser()  const { return _freeSizeForUser; }
-	FileSize freeSizeForRoot()  const { return _freeSizeForRoot; }
-	bool	 isNetworkMount()   const { return _isNetworkMount;  }
+	QString	 device()	  const { return _device;	  }
+	QString	 mountPath()	  const { return _mountPath;	  }
+	QString	 fsType()	  const { return _fsType;	  }
+	FileSize totalSize()	  const { return _totalSize;	  }
+	FileSize usedSize()	  const { return _usedSize;	  }
+	FileSize reservedSize()	  const { return _reservedSize;	  }
+	FileSize freeSize()	  const { return _freeSize;	  }
+	bool	 isNetworkMount() const { return _isNetworkMount; }
+	bool	 isReadOnly()	  const { return _isReadOnly;	  }
 
 	/**
 	 * Less-than operator for sorting.
 	 **/
 	bool operator<( const QTreeWidgetItem & rawOther ) const;
-
-	/**
-	 * Format a partial size of totalSize() as percent.
-	 **/
-	QString formatPercentOfTotal( FileSize partialSize ) const;
 
 	/**
 	 * Format a percentage.
@@ -170,9 +164,10 @@ namespace QDirStat
 	QString	 _fsType;
 	FileSize _totalSize;
 	FileSize _usedSize;
-	FileSize _freeSizeForUser;
-	FileSize _freeSizeForRoot;
+	FileSize _reservedSize;
+	FileSize _freeSize;
 	bool	 _isNetworkMount;
+	bool	 _isReadOnly;
     };
 
 }

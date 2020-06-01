@@ -103,6 +103,12 @@ FileSize MountPoint::usedSize() const
 }
 
 
+FileSize MountPoint::reservedSize() const
+{
+    return _storageInfo.bytesFree() - _storageInfo.bytesAvailable();
+}
+
+
 FileSize MountPoint::freeSizeForUser() const
 {
     return _storageInfo.bytesAvailable();
@@ -122,6 +128,7 @@ FileSize MountPoint::freeSizeForRoot() const
 bool	 MountPoint::hasSizeInfo()	const	{ return false; }
 FileSize MountPoint::totalSize()	const	{ return -1; }
 FileSize MountPoint::usedSize()		const	{ return -1; }
+FileSize MountPoint::reservedSize()	const	{ return -1; }
 FileSize MountPoint::freeSizeForUser()	const	{ return -1; }
 FileSize MountPoint::freeSizeForRoot()	const	{ return -1; }
 
