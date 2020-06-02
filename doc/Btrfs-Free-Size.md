@@ -10,7 +10,7 @@ like the `df` command or even system calls like `statfs()`; Btrfs only reports
 disk space used by files and directories to them.
 
 So it can easily happen (this is actually quite a common problem) that the `df`
-command or other similar commands that rely on Btrfs reporting sizes properly
+command (or other similar commands that rely on Btrfs reporting sizes properly)
 tells you that your Btrfs filesystem still has 15 GB of its total 30 GB
 available, yet you get a "no space left on device" error: The remaining space
 might be taken by filesystem snapshots and/or by copy-on-write.
