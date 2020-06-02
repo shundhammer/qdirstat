@@ -57,6 +57,17 @@ namespace QDirStat
 	 **/
 	virtual ~FilesystemsWindow();
 
+	/**
+	 * Read the path of the currently selected filesystem or an empty
+	 * string if there is none.
+	 **/
+	QString selectedPath() const;
+
+
+    signals:
+
+	void readFilesystem( const QString & path );
+
 
     public slots:
 
@@ -79,6 +90,20 @@ namespace QDirStat
 	 * Reimplemented from QDialog.
 	 **/
 	virtual void reject() Q_DECL_OVERRIDE;
+
+
+    protected slots:
+
+	/**
+	 * Enable or disable widgets such as the "Read" button.
+	 **/
+	void enableActions();
+
+	/**
+	 * Notification that the "Read" button was clicked:
+	 * Emit the readFilesystem() signal.
+	 **/
+	void readSelectedFilesystem();
 
 
     protected:

@@ -75,7 +75,14 @@
      <item>
       <widget class="QPushButton" name="refreshButton">
        <property name="text">
-        <string>&amp;Refresh</string>
+        <string>Re&amp;fresh</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="readButton">
+       <property name="text">
+        <string>&amp;Read</string>
        </property>
       </widget>
      </item>

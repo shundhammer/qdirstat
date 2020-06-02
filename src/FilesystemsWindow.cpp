@@ -125,9 +125,51 @@ void FilesystemsWindow::initWidgets()
 
     HeaderTweaker::resizeToContents( _ui->fsTree->header() );
     _ui->fsTree->sortItems( FS_DeviceCol, Qt::AscendingOrder );
+    enableActions();
 
     connect( _ui->refreshButton, SIGNAL( clicked() ),
-             this,               SLOT  ( refresh() ) );
+	     this,		 SLOT  ( refresh() ) );
+
+    connect( _ui->readButton,	 SIGNAL( clicked() ),
+	     this,		 SLOT  ( readSelectedFilesystem() ) );
+
+    connect( _ui->fsTree,	 SIGNAL( itemSelectionChanged() ),
+	     this,		 SLOT  ( enableActions()	) );
+}
+
+
+void FilesystemsWindow::enableActions()
+{
+    _ui->readButton->setEnabled( ! selectedPath().isEmpty() );
+}
+
+
+void FilesystemsWindow::readSelectedFilesystem()
+{
+    QString path = selectedPath();
+
+    if ( ! path.isEmpty() )
+    {
+	logDebug() << "Read " << path << endl;
+	emit readFilesystem( path );
+    }
+}
+
+
+QString FilesystemsWindow::selectedPath() const
+{
+    QString result;
+    QList<QTreeWidgetItem *> sel = _ui->fsTree->selectedItems();
+
+    if ( ! sel.isEmpty() )
+    {
+	FilesystemItem * item = dynamic_cast<FilesystemItem *>( sel.first() );
+
+	if ( item )
+	    result = item->mountPath();
+    }
+
+    return result;
 }
 
 

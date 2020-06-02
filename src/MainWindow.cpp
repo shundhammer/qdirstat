@@ -1225,6 +1225,9 @@ void MainWindow::showFilesystems()
 	// keeps track of that and sets the pointer to 0 when it happens.
 
 	_filesystemsWindow = new FilesystemsWindow( this );
+
+        connect( _filesystemsWindow, SIGNAL( readFilesystem( QString ) ),
+                 this,               SLOT  ( openUrl       ( QString ) ) );
     }
 
     _filesystemsWindow->populate();
