@@ -28,6 +28,7 @@ FilesystemsWindow::FilesystemsWindow( QWidget * parent ):
 {
     CHECK_NEW( _ui );
     _ui->setupUi( this );
+    MountPoints::reload();
     initWidgets();
     readWindowSettings( this, "FilesystemsWindow" );
 }
