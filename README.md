@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-05-27
+Updated: 2020-06-03
 
 
 ## Overview
@@ -122,6 +122,54 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2020-06-03
+
+  - New "Mounted Filesystems" window ("View" -> "Show Mounted Filesystems" or
+    Ctrl-M):
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-filesystems-window.png"](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-filesystems-window.png)
+
+    This shows information about "normal" mounted filesystems (excluding system
+    mounts like /dev, /proc, /sys, bind mounts, Btrfs subvolumes) with usage
+    data as reported by the filesystem itself. The "Reserved" column shows the
+    disk space reserved for the root user on that filesystem, "Free" is the
+    available space for non-privileged users.
+
+    Sometimes the "Used" size reported here may be quite different from what
+    QDirStat reports after reading that complete filesystem; this can be due to
+    metadata, journals or snapshots.
+
+  - Added a document about Btrfs free size and how different tools tend to show
+    different values: [Btrfs-Free-Size.md](doc/Btrfs-Free-Size.md)
+
+
+
+- 2020-05-27
+
+  - Implemented [GitHub Issue #129](https://github.com/shundhammer/qdirstat/issues/129):
+    _Option to continue reading at all mount points at once_.
+
+    Previously, you could choose to either always cross filesystems while
+    reading directories, or you could later open the parent branch of the mount
+    point in the tree view and then use "Continue reading at mount point" from
+    the main menu / context menu.
+
+    Now you can change this setting temporarily for the current program run; it
+    will continue reading at "normal" mount points, i.e. excluding system
+    mounts like /dev, /proc, /sys and also bind mounts or network mounts; but
+    it still reads Btrfs subvolumes.
+
+  - This new option needed a check box in the "Open Directory" dialog; so from
+    now on, QDirStat no longer uses the generic Qt file dialog, it has a custom
+    one:
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-open-dir-dialog.png"](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-open-dir-dialog.png)
+
+    In addition to that new check box at the bottom, there is now also a new
+    "places" widget for quick access to the user's home directory and all
+    ("normal", see above) mounted filesystems, including network mounts (NFS,
+    Samba / Cifs).
 
 
 - 2020-03-19
