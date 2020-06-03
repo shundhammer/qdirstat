@@ -112,8 +112,8 @@ filesystem: It cleans up metadata.
 How to invoke it, however, seems to be some black magic, and there are lots of
 guides out on the web; google for "btrfs balance". Some search results:
 
-https://www.thegeekdiary.com/how-to-re-balancing-btrfs-to-free-disk-space/
-http://marc.merlins.org/perso/btrfs/post_2014-05-04_Fixing-Btrfs-Filesystem-Full-Problems.html
+- https://www.thegeekdiary.com/how-to-re-balancing-btrfs-to-free-disk-space/
+- http://marc.merlins.org/perso/btrfs/post_2014-05-04_Fixing-Btrfs-Filesystem-Full-Problems.html
 
 
 ## Background Information
