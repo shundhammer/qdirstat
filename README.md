@@ -128,7 +128,7 @@ Download installable binary packages for various Linux distributions here:
   - New "Mounted Filesystems" window ("View" -> "Show Mounted Filesystems" or
     Ctrl-M):
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-filesystems-window.png"](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-filesystems-window.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-filesystems-window.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-filesystems-window.png)
 
     This shows information about "normal" mounted filesystems (excluding system
     mounts like /dev, /proc, /sys, bind mounts, Btrfs subvolumes) with usage
@@ -164,7 +164,7 @@ Download installable binary packages for various Linux distributions here:
     now on, QDirStat no longer uses the generic Qt file dialog, it has a custom
     one:
 
-    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-open-dir-dialog.png"](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-open-dir-dialog.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-open-dir-dialog.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-open-dir-dialog.png)
 
     In addition to that new check box at the bottom, there is now also a new
     "places" widget for quick access to the user's home directory and all
