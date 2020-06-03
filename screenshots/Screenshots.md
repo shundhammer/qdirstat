@@ -47,6 +47,15 @@ _"Files" pseudo directory selected_
 _Multi-selection_
 
 
+## Open Directory Dialog
+
+![Custom Open Directory Dialog Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-open-dir-dialog.png)
+
+_Custom "Open Directory" dialog with quick access to the home directory and to
+mounted filesystems. The "Cross Filesystems" check box here is a temporary
+override (just for this program run) of the configuration setting of the same
+name._
+
 
 ## Output During Cleanup Actions
 
@@ -71,6 +80,19 @@ directories that could not be read. This window is non-modal, i.e. the user can
 interact with the main window while it is open. A click on any directory in
 that list locates that directory in the main window, i.e. opens all parent
 branches and scrolls to ensure that directory is visible._
+
+
+## Mounted Filesystems Window
+
+![Custom Open Directory Dialog Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-filesystems-window.png)
+
+_This window (opened from the menu with View -> Show Mounted Filesystems) shows
+the currently mounted filesystems. It does not show system mounts like /dev,
+/proc, /sys, and also no bind mounts, no Btrfs subvolumes and no multiple
+mounts of the same filesystem._
+
+_The "Reserved" column shows the amount of disk space that is reserved for the
+root user; "Free" is what is available for non-privileged users._
 
 
 ## File Type Statistics
