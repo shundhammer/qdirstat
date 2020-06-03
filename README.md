@@ -227,7 +227,7 @@ Download installable binary packages for various Linux distributions here:
     links, it wrote the wrong size to the cache file: The result of _size /
     links_, not _size_.
 
-    This was part of [(GitHub Issue #124)](https://github.com/shundhammer/qdirstat/issues/124).
+    This was part of [GitHub Issue #124](https://github.com/shundhammer/qdirstat/issues/124).
 
 - 2020-02-24
 
