@@ -27,6 +27,25 @@ TARGET.files	 = qdirstat
 TARGET.path	 = $$INSTALL_PREFIX/bin
 INSTALLS	+= TARGET desktop icons
 
+
+# Fix the train wreck that Qt 5.15 is.
+#
+# Some genius decided to mark everything as deprecated that will change in
+# the upcoming Qt 6.0, but they had not considered that
+# THE PROPOSED CHANGES ARE COMPLETELY INCOMPATIBLE TO Qt 5.14 OR EARLIER!!
+#
+# Some enum values moved from the QString namespace to the Qt namespace; you
+# can write code that will compile with Qt 5.1 - 5.14 OR for Qt 5.15, but not both.
+#
+# Great move, guys. In the 20+ years (since 1998 or so) that I have been
+# working with Qt, this level of complete and utter fuck-up never happened
+# before, much less between minor versions.
+#
+# So there is only one solution: STFU, Qt!
+
+QMAKE_CXXFLAGS  +=  -Wno-deprecated -Wno-deprecated-declarations
+
+
 SOURCES	  = main.cpp			\
 	    ActionManager.cpp		\
 	    AdaptiveTimer.cpp		\
