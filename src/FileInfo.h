@@ -834,7 +834,7 @@ namespace QDirStat
          * Return the current hard links accounting policy.
          * See setIgnoreHardLinks() for details.
          **/
-        static bool ignoreHardLinks() { return _ignore_hard_links; }
+        static bool ignoreHardLinks() { return _ignoreHardLinks; }
 
 
     protected:
@@ -862,7 +862,7 @@ namespace QDirStat
 	FileInfo *	_next;			// pointer to the next entry
 	DirTree	 *	_tree;			// pointer to the parent tree
 
-        static bool     _ignore_hard_links;     // don't distribute size for multiple hard links
+        static bool     _ignoreHardLinks;       // don't distribute size for multiple hard links
 
     };	// class FileInfo
 
