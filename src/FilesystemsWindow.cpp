@@ -68,7 +68,7 @@ void FilesystemsWindow::showBtrfsFreeSizeWarning()
     PanelMessage * msg = new PanelMessage( _ui->messagePanel );
     CHECK_NEW( msg );
 
-    msg->setHeading( tr( "Btrfs free size information is misleading!" ) );
+    msg->setHeading( tr( "Btrfs free and used size information are misleading!" ) );
     msg->setText( tr( "Snapshots and copy-on-write may consume additional disk space." ) );
     msg->setDetailsUrl( "https://github.com/shundhammer/qdirstat/blob/master/doc/Btrfs-Free-Size.md" );
     _ui->messagePanel->add( msg );
