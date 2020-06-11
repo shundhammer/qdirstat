@@ -99,7 +99,7 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
 	if ( _isSparseFile )
 	{
 	    logDebug() << "Found sparse file: " << this
-		       << "    Byte size: " << formatSize( byteSize() )
+		       << "    Byte size: " << formatSize( rawByteSize() )
 		       << "  Allocated: " << formatSize( allocatedSize() )
 		       << " (" << (int) _blocks << " blocks)"
 		       << endl;
@@ -143,9 +143,9 @@ FileInfo::FileInfo( DirTree *	    tree,
     if ( blocks < 0 )
     {
 	_isSparseFile	= false;
-	_blocks		= _size / blockSize();
+	_blocks		= _size / STD_BLOCK_SIZE;
 
-	if ( ( _size % blockSize() ) > 0 )
+	if ( ( _size % STD_BLOCK_SIZE ) > 0 )
 	    _blocks++;
     }
     else
@@ -183,7 +183,7 @@ bool FileInfo::checkMagicNumber() const
 
 FileSize FileInfo::allocatedSize() const
 {
-    return blocks() * blockSize();
+    return blocks() * STD_BLOCK_SIZE;
 }
 
 

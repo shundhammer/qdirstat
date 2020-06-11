@@ -140,7 +140,7 @@ void CacheWriter::writeItem( gzFile cache, FileInfo * item )
 
     // Write size
 
-    gzprintf( cache, "\t%s", formatSize( item->byteSize() ).toUtf8().data() );
+    gzprintf( cache, "\t%s", formatSize( item->rawByteSize() ).toUtf8().data() );
 
 
     // Write mtime

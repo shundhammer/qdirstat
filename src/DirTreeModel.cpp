@@ -793,14 +793,14 @@ QString DirTreeModel::sizeText( FileInfo * item, QString (*fmtSz)(FileSize) )
         if ( item->isSparseFile() )
         {
             text = tr( "%1 / %2 Links (allocated: %3)" )
-                .arg( fmtSz( item->byteSize() ) )
+                .arg( fmtSz( item->rawByteSize() ) )
                 .arg( item->links() )
                 .arg( fmtSz( item->allocatedSize() ) );
         }
         else
         {
             text = tr( "%1 / %2 Links" )
-                .arg( fmtSz( item->byteSize() ) )
+                .arg( fmtSz( item->rawByteSize() ) )
                 .arg( item->links() );
         }
     }
@@ -809,7 +809,7 @@ QString DirTreeModel::sizeText( FileInfo * item, QString (*fmtSz)(FileSize) )
         if ( item->isSparseFile() )
         {
             text = tr( "%1 (allocated: %2)" )
-                .arg( fmtSz( item->byteSize() ) )
+                .arg( fmtSz( item->rawByteSize() ) )
                 .arg( fmtSz( item->allocatedSize() ) );
         }
     }

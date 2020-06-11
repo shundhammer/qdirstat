@@ -20,6 +20,14 @@
 
 #include "Logger.h"
 
+// The size of a standard disk block.
+//
+// Notice that this is different from st_blksize in the struct that the stat()
+// syscall returns, yet it is the reference unit for st_blocks in that same
+// struct.
+
+#define STD_BLOCK_SIZE  512L
+
 
 namespace QDirStat
 {
@@ -264,15 +272,15 @@ namespace QDirStat
 	 * of info functions can obtain. This is also what most filesystem
 	 * utilities (like "ls -l") display.
 	 **/
-	FileSize byteSize() const { return _size;   }
+	FileSize rawByteSize() const { return _size;   }
 
 	/**
 	 * The number of bytes actually allocated on the filesystem. Usually
-	 * this will be more than byteSize() since the last few bytes of a file
-	 * usually consume an additional cluster on the filesystem.
+	 * this will be more than rawByteSize() since the last few bytes of a
+	 * file usually consume an additional cluster on the filesystem.
 	 *
 	 * In the case of sparse files, however, this might as well be
-	 * considerably less than byteSize() - this means that this file has
+	 * considerably less than rawByteSize() - this means that this file has
 	 * "holes", i.e. large portions filled with zeros. This is typical for
 	 * large core dumps for example. The only way to create such a file is
 	 * to lseek() far ahead of the previous file size and then writing
@@ -297,12 +305,6 @@ namespace QDirStat
 	 * The file size in 512 byte blocks.
 	 **/
 	FileSize blocks() const { return _blocks; }
-
-	/**
-	 * The size of one single block that blocks() returns.
-	 * Notice: This is _not_ the blocksize that lstat() returns!
-	 **/
-	FileSize blockSize() const { return 512L;    }
 
 	/**
 	 * The modification time of the file (not the inode).

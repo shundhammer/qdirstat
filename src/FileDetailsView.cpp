@@ -192,7 +192,7 @@ void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
     {
 	label->setText( text );
 
-	if ( file->byteSize() >= 1024 ) // Not useful below 1 kB
+	if ( file->rawByteSize() >= 1024 ) // Not useful below 1 kB
 	    label->setContextText( DirTreeModel::sizeText( file, formatByteSize ) );
     }
 }
