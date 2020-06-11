@@ -80,6 +80,12 @@ namespace QDirStat
 	bool isBtrfs() const;
 
 	/**
+	 * Return 'true' if the filesystem type of this mount point starts with
+	 * "ntfs".
+	 **/
+        bool isNtfs() const;
+
+	/**
 	 * Return 'true' if this is a network filesystem like NFS or Samba
 	 * (cifs).
 	 **/
@@ -149,7 +155,7 @@ namespace QDirStat
 	bool	    _isDuplicate;
 
 #if HAVE_Q_STORAGE_INFO
-	QStorageInfo		    _storageInfo;
+	QStorageInfo _storageInfo;
 #endif
     }; // class MountPoint
 
@@ -247,6 +253,7 @@ namespace QDirStat
 
 
     protected:
+
 	/**
 	 * Constructor. Not for public use. Use instance() or the static
 	 * methods instead.
@@ -274,6 +281,12 @@ namespace QDirStat
 	 * Check if any of the mount points has filesystem type "btrfs".
 	 **/
 	bool checkForBtrfs();
+
+        /**
+         * Try to check with the external "lsblk" command (if available) what
+         * block devices use NTFS and return those device names in a list.
+         **/
+        QStringList findNtfsDevices();
 
 	/**
 	 * Return 'true' if 'device' is mounted.

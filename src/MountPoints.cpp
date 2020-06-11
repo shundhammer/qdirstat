@@ -12,8 +12,11 @@
 #include <QFileInfo>
 
 #include "MountPoints.h"
+#include "SysUtil.h"
 #include "Logger.h"
 #include "Exception.h"
+
+#define LSBLK_TIMEOUT_SEC       10
 
 using namespace QDirStat;
 
@@ -50,6 +53,12 @@ bool MountPoint::isReadOnly() const
 bool MountPoint::isBtrfs() const
 {
     return _filesystemType.toLower() == "btrfs";
+}
+
+
+bool MountPoint::isNtfs() const
+{
+    return _filesystemType.toLower().startsWith( "ntfs" );
 }
 
 
@@ -282,6 +291,7 @@ bool MountPoints::read( const QString & filename )
 	return false;
     }
 
+    QStringList ntfsDevices = findNtfsDevices();
     QTextStream in( &file );
     int lineNo = 0;
     int count  = 0;
@@ -314,6 +324,9 @@ bool MountPoints::read( const QString & filename )
 	// ignoring fsck and dump order (0 0)
 
         path.replace( "\\040", " " );
+
+        if ( fsType == "fuseblk" && ntfsDevices.contains( device ) )
+            fsType = "ntfs";
 
 	MountPoint * mountPoint = new MountPoint( device, path, fsType, mountOpts );
 	CHECK_NEW( mountPoint );
@@ -356,6 +369,50 @@ bool MountPoints::checkForBtrfs()
     }
 
     return false;
+}
+
+
+QStringList MountPoints::findNtfsDevices()
+{
+    QString lsblkCommand = "/bin/lsblk";
+
+    if ( ! SysUtil::haveCommand( lsblkCommand ) )
+        lsblkCommand = "/usr/bin/lsblk";
+    if ( ! SysUtil::haveCommand( lsblkCommand ) )
+    {
+        logInfo() << "No lsblk command available" << endl;
+
+        return QStringList();
+    }
+
+    logDebug() << endl;
+    QStringList ntfsDevices;
+    int exitCode;
+    QString output = SysUtil::runCommand( lsblkCommand,
+                                          QStringList()
+                                          << "--noheading"
+                                          << "--list"
+                                          << "--output"
+                                          << "name,fstype",
+                                          &exitCode,
+                                          LSBLK_TIMEOUT_SEC,
+                                          true,         // logCommand
+                                          false,        // logOutput
+                                          false );      // ignoreErrCode
+    if ( exitCode == 0 )
+    {
+        QStringList lines = output.split( "\n" )
+            .filter( QRegExp( "\\s+ntfs", Qt::CaseInsensitive ) );
+
+        foreach ( QString line, lines )
+        {
+            QString device = "/dev/" + line.split( QRegExp( "\\s+" ) ).first();
+            logDebug() << "NTFS on " << device << endl;
+            ntfsDevices << device;
+        }
+    }
+
+    return ntfsDevices;
 }
 
 
