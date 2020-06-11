@@ -824,7 +824,7 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 	return QVariant();
 
     if ( item->isDirInfo() )
-	return item->sizePrefix() + formatSize( item->totalSize() );
+	return item->sizePrefix() + formatSize( item->totalAllocatedSize() );
 
     QString text = sizeText( item );
 
