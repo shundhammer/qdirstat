@@ -173,8 +173,9 @@ void FileDetailsView::showFileInfo( FileInfo * file )
     _ui->fileUserLabel->setText( file->userName() );
     _ui->fileGroupLabel->setText( file->groupName() );
     _ui->filePermissionsLabel->setText( formatPermissions( file->mode() ) );
-
     _ui->fileMTimeLabel->setText( formatTime( file->mtime() ) );
+
+    suppressIfSameContent( _ui->fileSizeLabel, _ui->fileAllocatedLabel, _ui->fileAllocatedCaption );
 }
 
 
@@ -335,6 +336,8 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
 	setLabel( _ui->dirFileCountLabel,   dir->totalFiles(),	       prefix );
 	setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs(),       prefix );
 	_ui->dirLatestMTimeLabel->setText( formatTime( dir->latestMtime() ) );
+
+        suppressIfSameContent( _ui->dirTotalSizeLabel, _ui->dirAllocatedLabel, _ui->dirAllocatedCaption );
     }
     else  // Special msg -> show it and clear all summary fields
     {
@@ -453,6 +456,8 @@ void FileDetailsView::showDetails( PkgInfo * pkg )
 	setLabel( _ui->pkgItemCountLabel,   pkg->totalItems()	      );
 	setLabel( _ui->pkgFileCountLabel,   pkg->totalFiles()	      );
 	setLabel( _ui->pkgSubDirCountLabel, pkg->totalSubDirs()	      );
+
+        suppressIfSameContent( _ui->pkgTotalSizeLabel, _ui->pkgAllocatedLabel, _ui->pkgAllocatedCaption );
     }
     else  // Special msg -> show it and clear all summary fields
     {
@@ -494,6 +499,10 @@ void FileDetailsView::showPkgSummary( PkgInfo * pkg )
 	setLabel( _ui->pkgSummaryItemCountLabel,   pkg->totalItems()	     );
 	setLabel( _ui->pkgSummaryFileCountLabel,   pkg->totalFiles()	     );
 	setLabel( _ui->pkgSummarySubDirCountLabel, pkg->totalSubDirs()	     );
+
+        suppressIfSameContent( _ui->pkgSummaryTotalSizeLabel,
+                               _ui->pkgSummaryAllocatedLabel,
+                               _ui->pkgSummaryAllocatedCaption );
     }
     else
     {
@@ -557,6 +566,8 @@ void FileDetailsView::showSelectionSummary( const FileInfoSet & selectedItems )
     setLabel( _ui->selFileCountLabel,	     fileCount		      );
     setLabel( _ui->selDirCountLabel,	     dirCount		      );
     setLabel( _ui->selSubtreeFileCountLabel, subtreeFileCount	      );
+
+    suppressIfSameContent( _ui->selTotalSizeLabel, _ui->selAllocatedLabel, _ui->selAllocatedCaption );
 }
 
 
@@ -598,6 +609,22 @@ QString FileDetailsView::limitText( const QString & longText )
     logDebug() << "Limiting \"" << longText << "\"" << endl;
 
     return limited;
+}
+
+
+void FileDetailsView::suppressIfSameContent( FileSizeLabel * origLabel,
+                                             FileSizeLabel * cloneLabel,
+                                             QLabel        * caption )
+{
+    if ( origLabel->text() == cloneLabel->text() )
+    {
+        cloneLabel->clear();
+        caption->setEnabled( false );
+    }
+    else
+    {
+        caption->setEnabled( true );
+    }
 }
 
 

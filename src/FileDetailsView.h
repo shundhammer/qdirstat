@@ -167,6 +167,15 @@ namespace QDirStat
 	void setFileSizeLabel( FileSizeLabel * label,
 			       FileInfo	     * file );
 
+        /**
+         * Suppress the content of FileSizeLabel 'cloneLabel' if it has the
+         * same content as 'origLabel': Clear its text and disable its caption
+         * 'caption'.
+         **/
+        void suppressIfSameContent( FileSizeLabel * origLabel,
+                                    FileSizeLabel * cloneLabel,
+                                    QLabel        * caption );
+
 	/**
 	 * Set the text of an allocated size label including special handling
 	 * for sparse files and files with multiple hard links.
