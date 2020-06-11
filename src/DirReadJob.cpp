@@ -24,6 +24,9 @@
 #include "MountPoints.h"
 #include "Exception.h"
 
+#define DONT_TRUST_NTFS_HARD_LINKS      1
+#define VERBOSE_NTFS_HARD_LINKS         0
+
 using namespace QDirStat;
 
 
@@ -186,10 +189,14 @@ bool DirReadJob::shouldCrossIntoFilesystem( const DirInfo * dir ) const
 LocalDirReadJob::LocalDirReadJob( DirTree * tree,
 				  DirInfo * dir )
     : DirReadJob( tree, dir )
+    , _parentMountPoint( 0 )
     , _applyFileChildExcludeRules( false )
 {
     if ( _dir )
+    {
 	_dirName = _dir->url();
+        _parentMountPoint = MountPoints::findNearestMountPoint( _dirName );
+    }
 }
 
 
@@ -289,6 +296,26 @@ void LocalDirReadJob::startReading()
 			if ( readCacheFile( entryName ) )
 			    return;
 		    }
+
+#if DONT_TRUST_NTFS_HARD_LINKS
+
+                    if ( statInfo.st_nlink > 1 &&
+                         _parentMountPoint     &&
+                         _parentMountPoint->isNtfs() )
+                    {
+                        // NTFS seems to return bogus hard link counts; use 1 instead
+                        // See  https://github.com/shundhammer/qdirstat/issues/88
+
+#if VERBOSE_NTFS_HARD_LINKS
+                        logDebug() << "Not trusting NTFS with hard links: "
+                                   << _dir->url() << "/" << entryName
+                                   << " links: " << statInfo.st_nlink
+                                   << " -> resetting to 1"
+                                   << endl;
+#endif
+                        statInfo.st_nlink = 1;
+                    }
+#endif
 
 		    FileInfo * child = new FileInfo( entryName, &statInfo, _tree, _dir );
 		    CHECK_NEW( child );

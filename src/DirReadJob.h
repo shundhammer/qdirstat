@@ -25,6 +25,7 @@ namespace QDirStat
     class DirTree;
     class CacheReader;
     class DirReadJobQueue;
+    class MountPoint;
 
 
     /**
@@ -319,8 +320,9 @@ namespace QDirStat
 	// Data members
 	//
 
-	QString _dirName;
-	bool	_applyFileChildExcludeRules;
+	QString      _dirName;
+        MountPoint * _parentMountPoint;
+	bool	     _applyFileChildExcludeRules;
 
     };	// LocalDirReadJob
 
