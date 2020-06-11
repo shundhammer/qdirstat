@@ -812,6 +812,22 @@ QString DirTreeModel::sizeText( FileInfo * item, QString (*fmtSz)(FileSize) )
                 .arg( fmtSz( item->rawByteSize() ) )
                 .arg( fmtSz( item->rawAllocatedSize() ) );
         }
+#if 0
+        else
+        {
+            if ( item->rawAllocatedSize() > 0 && item->rawByteSize() < 8 * 1024L )
+            {
+                float usedRatio = item->rawByteSize() / (float) item->rawAllocatedSize();
+
+                if ( usedRatio < 0.7 )
+                {
+                    text = tr( "%1 (allocated: %2)" )
+                        .arg( fmtSz( item->rawByteSize() ) )
+                        .arg( fmtSz( item->rawAllocatedSize() ) );
+                }
+            }
+        }
+#endif
     }
 
     return text;
