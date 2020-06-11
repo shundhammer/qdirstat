@@ -169,6 +169,7 @@ void FileDetailsView::showFileInfo( FileInfo * file )
     _ui->fileMimeCategoryLabel->setText( category );
 
     setFileSizeLabel( _ui->fileSizeLabel, file );
+    setFileAllocatedLabel( _ui->fileAllocatedLabel, file );
     _ui->fileUserLabel->setText( file->userName() );
     _ui->fileGroupLabel->setText( file->groupName() );
     _ui->filePermissionsLabel->setText( formatPermissions( file->mode() ) );
@@ -194,6 +195,29 @@ void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
 
 	if ( file->rawByteSize() >= 1024 ) // Not useful below 1 kB
 	    label->setContextText( DirTreeModel::sizeText( file, formatByteSize ) );
+    }
+}
+
+
+void FileDetailsView::setFileAllocatedLabel( FileSizeLabel * label,
+					     FileInfo *	     file )
+{
+    CHECK_PTR( file );
+
+    if ( file->isSparseFile() )
+	label->clear(); // It's already in the size label
+    else
+    {
+	if ( file->links() > 1 )
+	{
+	    label->setText( tr( "%1 / %2 Links" )
+			    .arg( formatSize( file->rawAllocatedSize() ) )
+			    .arg( file->links() ) );
+	}
+	else
+	{
+	    label->setValue( file->allocatedSize() );
+	}
     }
 }
 
@@ -299,31 +323,27 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
 	    break;
     }
 
-#if 0
-    // Also displaying the error message in read seems a bit over the top.
-    setLabelColor( _ui->dirTotalSizeLabel,
-                   dir->readError() ? _dirReadErrColor : _normalTextColor );
-#endif
-
     if ( msg.isEmpty() )
     {
 	// No special msg -> show summary fields
 
 	QString prefix = dir->sizePrefix();
 
-	setLabel( _ui->dirTotalSizeLabel,   dir->totalSize(),	 prefix );
-	setLabel( _ui->dirItemCountLabel,   dir->totalItems(),	 prefix );
-	setLabel( _ui->dirFileCountLabel,   dir->totalFiles(),	 prefix );
-	setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs(), prefix );
-        _ui->dirLatestMTimeLabel->setText( formatTime( dir->latestMtime() ) );
+	setLabel( _ui->dirTotalSizeLabel,   dir->totalSize(),	       prefix );
+	setLabel( _ui->dirAllocatedLabel,   dir->totalAllocatedSize(), prefix );
+	setLabel( _ui->dirItemCountLabel,   dir->totalItems(),	       prefix );
+	setLabel( _ui->dirFileCountLabel,   dir->totalFiles(),	       prefix );
+	setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs(),       prefix );
+	_ui->dirLatestMTimeLabel->setText( formatTime( dir->latestMtime() ) );
     }
     else  // Special msg -> show it and clear all summary fields
     {
 	_ui->dirTotalSizeLabel->setText( msg );
+	_ui->dirAllocatedLabel->clear();
 	_ui->dirItemCountLabel->clear();
 	_ui->dirFileCountLabel->clear();
 	_ui->dirSubDirCountLabel->clear();
-        _ui->dirLatestMTimeLabel->clear();
+	_ui->dirLatestMTimeLabel->clear();
     }
 }
 
@@ -348,12 +368,12 @@ void FileDetailsView::showDirNodeInfo( DirInfo * dir )
 	_ui->dirMTimeLabel->setText( formatTime( dir->mtime() ) );
 
 
-        // Show permissions in read if there was a "permission denied" error
-        // while reading this directory
+	// Show permissions in read if there was a "permission denied" error
+	// while reading this directory
 
-        setLabelColor( _ui->dirPermissionsLabel,
-                       dir->readState() == DirPermissionDenied ?
-                       _dirReadErrColor : _normalTextColor );
+	setLabelColor( _ui->dirPermissionsLabel,
+		       dir->readState() == DirPermissionDenied ?
+		       _dirReadErrColor : _normalTextColor );
     }
 }
 
@@ -428,14 +448,16 @@ void FileDetailsView::showDetails( PkgInfo * pkg )
 
 	QString prefix = pkg->sizePrefix();
 
-	setLabel( _ui->pkgTotalSizeLabel,   pkg->totalSize()	);
-	setLabel( _ui->pkgItemCountLabel,   pkg->totalItems()	);
-	setLabel( _ui->pkgFileCountLabel,   pkg->totalFiles()	);
-	setLabel( _ui->pkgSubDirCountLabel, pkg->totalSubDirs() );
+	setLabel( _ui->pkgTotalSizeLabel,   pkg->totalSize()	      );
+	setLabel( _ui->pkgAllocatedLabel,   pkg->totalAllocatedSize() );
+	setLabel( _ui->pkgItemCountLabel,   pkg->totalItems()	      );
+	setLabel( _ui->pkgFileCountLabel,   pkg->totalFiles()	      );
+	setLabel( _ui->pkgSubDirCountLabel, pkg->totalSubDirs()	      );
     }
     else  // Special msg -> show it and clear all summary fields
     {
 	_ui->pkgTotalSizeLabel->setText( msg );
+	_ui->pkgAllocatedLabel->clear();
 	_ui->pkgItemCountLabel->clear();
 	_ui->pkgFileCountLabel->clear();
 	_ui->pkgSubDirCountLabel->clear();
@@ -467,10 +489,11 @@ void FileDetailsView::showPkgSummary( PkgInfo * pkg )
 
     if ( ! pkg->isBusy() && pkg->readState() == DirFinished )
     {
-	setLabel( _ui->pkgSummaryTotalSizeLabel,   pkg->totalSize()    );
-	setLabel( _ui->pkgSummaryItemCountLabel,   pkg->totalItems()   );
-	setLabel( _ui->pkgSummaryFileCountLabel,   pkg->totalFiles()   );
-	setLabel( _ui->pkgSummarySubDirCountLabel, pkg->totalSubDirs() );
+	setLabel( _ui->pkgSummaryTotalSizeLabel,   pkg->totalSize()	     );
+	setLabel( _ui->pkgSummaryAllocatedLabel,   pkg->totalAllocatedSize() );
+	setLabel( _ui->pkgSummaryItemCountLabel,   pkg->totalItems()	     );
+	setLabel( _ui->pkgSummaryFileCountLabel,   pkg->totalFiles()	     );
+	setLabel( _ui->pkgSummarySubDirCountLabel, pkg->totalSubDirs()	     );
     }
     else
     {
@@ -482,11 +505,12 @@ void FileDetailsView::showPkgSummary( PkgInfo * pkg )
 	}
 	else
 	{
-            if ( pkg->readError() )
+	    if ( pkg->readError() )
 		msg = tr( "[Read Error]" );
 	}
 
 	_ui->pkgSummaryTotalSizeLabel->setText( msg );
+	_ui->pkgSummaryAllocatedLabel->clear();
 	_ui->pkgSummaryItemCountLabel->clear();
 	_ui->pkgSummaryFileCountLabel->clear();
 	_ui->pkgSummarySubDirCountLabel->clear();
@@ -527,11 +551,12 @@ void FileDetailsView::showSelectionSummary( const FileInfoSet & selectedItems )
     _ui->selSubtreeFileCountCaption->setEnabled( subtreeFileCount > 0 );
     _ui->selSubtreeFileCountLabel->setEnabled( subtreeFileCount > 0 );
 
-    setLabel( _ui->selItemCount,	     sel.count()      );
-    setLabel( _ui->selTotalSizeLabel,	     sel.totalSize()  );
-    setLabel( _ui->selFileCountLabel,	     fileCount	      );
-    setLabel( _ui->selDirCountLabel,	     dirCount	      );
-    setLabel( _ui->selSubtreeFileCountLabel, subtreeFileCount );
+    setLabel( _ui->selItemCount,	     sel.count()	      );
+    setLabel( _ui->selTotalSizeLabel,	     sel.totalSize()	      );
+    setLabel( _ui->selAllocatedLabel,	     sel.totalAllocatedSize() );
+    setLabel( _ui->selFileCountLabel,	     fileCount		      );
+    setLabel( _ui->selDirCountLabel,	     dirCount		      );
+    setLabel( _ui->selSubtreeFileCountLabel, subtreeFileCount	      );
 }
 
 

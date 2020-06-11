@@ -82,6 +82,14 @@ namespace QDirStat
 	FileSize totalSize() const;
 
 	/**
+	 * Return the sum of all total allocated sizes in the set.
+	 *
+	 * It is desirable to call this on a normalized() set to avoid
+	 * duplicate accounting of sums.
+	 **/
+	FileSize totalAllocatedSize() const;
+
+	/**
 	 * Return 'true' if this set contains any ancestor (parent, parent's
 	 * parent etc.) of 'item'. This does not check if 'item' itself is in
 	 * the set.

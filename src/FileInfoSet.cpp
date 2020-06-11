@@ -197,3 +197,17 @@ FileSize FileInfoSet::totalSize() const
     return sum;
 }
 
+
+FileSize FileInfoSet::totalAllocatedSize() const
+{
+    FileSize sum = 0LL;
+
+    foreach ( FileInfo * item, *this )
+    {
+	if ( item )
+	    sum += item->totalAllocatedSize();
+    }
+
+    return sum;
+}
+
