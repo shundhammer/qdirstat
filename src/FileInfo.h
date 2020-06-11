@@ -26,7 +26,7 @@
 // syscall returns, yet it is the reference unit for st_blocks in that same
 // struct.
 
-#define STD_BLOCK_SIZE  512L
+#define STD_BLOCK_SIZE	512L
 
 
 namespace QDirStat
@@ -57,7 +57,7 @@ namespace QDirStat
 	DirOnRequestOnly,	// Will be read upon explicit request only (mount points)
 	DirCached,		// Content was read from a cache
 	DirAborted,		// Reading aborted upon user request
-        DirPermissionDenied,    // Insufficient permissions for reading
+	DirPermissionDenied,	// Insufficient permissions for reading
 	DirError		// Error while reading
     };
 
@@ -267,39 +267,47 @@ namespace QDirStat
 	QString octalPermissions() const;
 
 	/**
-	 * The file size in bytes. This does not take unused space in the last
-	 * disk block (cluster) into account, yet it is the only size all kinds
-	 * of info functions can obtain. This is also what most filesystem
-	 * utilities (like "ls -l") display.
-	 **/
-	FileSize rawByteSize() const { return _size;   }
-
-	/**
-	 * The number of bytes actually allocated on the filesystem. Usually
-	 * this will be more than rawByteSize() since the last few bytes of a
-	 * file usually consume an additional cluster on the filesystem.
-	 *
-	 * In the case of sparse files, however, this might as well be
-	 * considerably less than rawByteSize() - this means that this file has
-	 * "holes", i.e. large portions filled with zeros. This is typical for
-	 * large core dumps for example. The only way to create such a file is
-	 * to lseek() far ahead of the previous file size and then writing
-	 * data. Most filesystem utilities will however disregard the fact
-	 * that files are sparse files and simply allocate the holes as well,
-	 * thus greatly increasing the disk space consumption of such a
-	 * file. Only some few filesystem utilities like "cp", "rsync", "tar"
-	 * have options to handle this more graciously - but usually only when
-	 * specifically requested. See the respective man pages.
-	 **/
-	FileSize allocatedSize() const;
-
-	/**
 	 * The file size, taking into account multiple links for plain files or
 	 * the true allocated size for sparse files. For plain files with
 	 * multiple links this will be size/no_links, for sparse files it is
 	 * the number of bytes actually allocated.
 	 **/
 	FileSize size() const;
+
+	/**
+	 * The file size in bytes without taking multiple hard links into
+	 * account.
+	 **/
+	FileSize rawByteSize() const { return _size; }
+
+	/**
+	 * The number of bytes actually allocated on the filesystem, taking
+	 * multiple hard links (for plain files) into account.
+	 *
+	 * Usually this will be more than size() since the last few bytes of a
+	 * file usually consume an additional cluster on the filesystem.
+	 *
+	 * In the case of sparse files, however, this might as well be
+	 * considerably less than size() - this means that this file has
+	 * "holes", i.e. large portions filled with zeros. This is typical for
+	 * large core dumps for example. The only way to create such a file is
+	 * to lseek() far ahead of the previous file size and then writing
+	 * data. Most filesystem utilities will however disregard the fact that
+	 * files are sparse files and simply allocate the holes as well, thus
+	 * greatly increasing the disk space consumption of such a file. Only
+	 * some few filesystem utilities like "cp", "rsync", "tar" have options
+	 * to handle this more graciously - but usually only when specifically
+	 * requested. See the respective man pages.
+	 **/
+	FileSize allocatedSize() const;
+
+	/**
+	 * The allocated size without taking multiple hard links into account.
+	 *
+	 * If the filesystem can properly report the number of disk blocks
+	 * used, this is the same as blocks() * 512.
+	 **/
+	FileSize rawAllocatedSize() const { return _allocatedSize; }
 
 	/**
 	 * The file size in 512 byte blocks.
@@ -316,6 +324,12 @@ namespace QDirStat
 	 * Derived classes that have children should overwrite this.
 	 **/
 	virtual FileSize totalSize() { return size(); }
+
+	/**
+	 * Returns the total allocated size in bytes of this subtree.
+	 * Derived classes that have children should overwrite this.
+	 **/
+	virtual FileSize totalAllocatedSize() { return allocatedSize(); }
 
 	/**
 	 * Returns the total size in blocks of this subtree.
@@ -373,16 +387,16 @@ namespace QDirStat
 	 **/
 	virtual int directChildrenCount() { return 0; }
 
-        /**
-         * Returns the number of subdirectories below this item that could not
-         * be read (typically due to insufficient permissions).
-         *
-         * Notice that this does NOT include this item if it is a directory
-         * that could not be read.
+	/**
+	 * Returns the number of subdirectories below this item that could not
+	 * be read (typically due to insufficient permissions).
+	 *
+	 * Notice that this does NOT include this item if it is a directory
+	 * that could not be read.
 	 *
 	 * Derived classes that have children should overwrite this.
-         **/
-        virtual int errSubDirCount() { return 0; }
+	 **/
+	virtual int errSubDirCount() { return 0; }
 
 	/**
 	 * Returns the latest modification time of this subtree.
@@ -393,10 +407,10 @@ namespace QDirStat
 	/**
 	 * Returns the oldest modification time of any file in this subtree or
 	 * 0 if there is no file.
-         *
-         * Derived classes that have children should overwrite this.
+	 *
+	 * Derived classes that have children should overwrite this.
 	 **/
-        virtual time_t oldestFileMtime() { return isFile() ? _mtime : 0; }
+	virtual time_t oldestFileMtime() { return isFile() ? _mtime : 0; }
 
 	/**
 	 * Return the percentage of this subtree in regard to its parent
@@ -460,7 +474,16 @@ namespace QDirStat
 	 * number reaches zero, the entire subtree is done.
 	 * Derived classes that have children should overwrite this.
 	 **/
-	virtual int pendingReadJobs() { return 0;  }
+	virtual int pendingReadJobs() { return 0; }
+
+	/**
+	 * Return 'true' if the filesystem can report block sizes.
+	 *
+	 * This is determined heuristically from the nearest DirInfo parent: If
+	 * it has blocks() > 0 and size() > 0, we can safely assume that the
+	 * filesystem does report the number of blocks.
+	 **/
+	bool filesystemCanReportBlocks() const;
 
 
 	//
@@ -654,25 +677,25 @@ namespace QDirStat
 	 **/
 	virtual DirReadState readState() const { return DirFinished; }
 
-        /**
-         * Check if readState() is anything that indicates an error reading the
-         * directory, i.e. DirError or DirPermissionDenied.
-         *
-         * This default implementation always returns 'false'.
+	/**
+	 * Check if readState() is anything that indicates an error reading the
+	 * directory, i.e. DirError or DirPermissionDenied.
+	 *
+	 * This default implementation always returns 'false'.
 	 * Derived classes should overwrite this.
-         **/
-        virtual bool readError() const { return false; }
+	 **/
+	virtual bool readError() const { return false; }
 
-        /**
-         * Return a prefix for the total size (and similar accumulated fields)
-         * of this item: ">" if there might be more, i.e. if a subdirectory
-         * could not be read or if reading was aborted, an empty string
-         * otherwise.
-         *
-         * This default implementation returns an empty string. Derived classes
-         * that can handle child items should reimplement this.
-         **/
-        virtual QString sizePrefix() const { return ""; }
+	/**
+	 * Return a prefix for the total size (and similar accumulated fields)
+	 * of this item: ">" if there might be more, i.e. if a subdirectory
+	 * could not be read or if reading was aborted, an empty string
+	 * otherwise.
+	 *
+	 * This default implementation returns an empty string. Derived classes
+	 * that can handle child items should reimplement this.
+	 **/
+	virtual QString sizePrefix() const { return ""; }
 
 	/**
 	 * Returns true if this is a DirInfo object.
@@ -811,32 +834,32 @@ namespace QDirStat
 						 S_ISFIFO( _mode ) ||
 						 S_ISSOCK( _mode )   ) ? true : false; }
 
-        /**
-         * Set the policy how hard links are handled: By default, for files
-         * with multiple hard links, the size is distributed among each
-         * individual hard link for that file. So a file with a size of 4 kB
-         * and 4 hard links reports 1 kB to its parent directory.
-         *
-         * When this flag is set to 'true', it will report the full 4 kB each
-         * time, so all 4 hard links together will now add up to 16 kB. While
-         * this is probably a very bad idea if those links are all in the same
-         * directory (or subtree), it might even be useful if there are several
-         * separate subtrees that all share hard links between each other, but
-         * not within the same subtree. Some backup systems use this strategy
-         * to save disk space.
-         *
-         * Use this with caution.
-         *
-         * This flag will be read from the config file from the outside
-         * (DirTree) and set from there using this function.
-         **/
-        static void setIgnoreHardLinks( bool ignore );
+	/**
+	 * Set the policy how hard links are handled: By default, for files
+	 * with multiple hard links, the size is distributed among each
+	 * individual hard link for that file. So a file with a size of 4 kB
+	 * and 4 hard links reports 1 kB to its parent directory.
+	 *
+	 * When this flag is set to 'true', it will report the full 4 kB each
+	 * time, so all 4 hard links together will now add up to 16 kB. While
+	 * this is probably a very bad idea if those links are all in the same
+	 * directory (or subtree), it might even be useful if there are several
+	 * separate subtrees that all share hard links between each other, but
+	 * not within the same subtree. Some backup systems use this strategy
+	 * to save disk space.
+	 *
+	 * Use this with caution.
+	 *
+	 * This flag will be read from the config file from the outside
+	 * (DirTree) and set from there using this function.
+	 **/
+	static void setIgnoreHardLinks( bool ignore );
 
-        /**
-         * Return the current hard links accounting policy.
-         * See setIgnoreHardLinks() for details.
-         **/
-        static bool ignoreHardLinks() { return _ignoreHardLinks; }
+	/**
+	 * Return the current hard links accounting policy.
+	 * See setIgnoreHardLinks() for details.
+	 **/
+	static bool ignoreHardLinks() { return _ignoreHardLinks; }
 
 
     protected:
@@ -859,12 +882,13 @@ namespace QDirStat
 	FileSize	_size;			// size in bytes
 	FileSize	_blocks;		// 512 bytes blocks
 	time_t		_mtime;			// modification time
+	FileSize	_allocatedSize;		// allocated size in bytes
 
 	DirInfo	 *	_parent;		// pointer to the parent entry
 	FileInfo *	_next;			// pointer to the next entry
 	DirTree	 *	_tree;			// pointer to the parent tree
 
-        static bool     _ignoreHardLinks;       // don't distribute size for multiple hard links
+	static bool	_ignoreHardLinks;	// don't distribute size for multiple hard links
 
     };	// class FileInfo
 

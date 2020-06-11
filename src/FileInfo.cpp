@@ -44,19 +44,20 @@ FileInfo::FileInfo( DirTree    * tree,
     , _next( 0 )
     , _tree( tree )
 {
-    _isLocalFile  = true;
-    _isSparseFile = false;
-    _isIgnored	  = false;
-    _name	  = name ? name : "";
-    _device	  = 0;
-    _mode	  = 0;
-    _links	  = 0;
-    _uid	  = 0;
-    _gid	  = 0;
-    _size	  = 0;
-    _blocks	  = 0;
-    _mtime	  = 0;
-    _magic	  = FileInfoMagic;
+    _isLocalFile   = true;
+    _isSparseFile  = false;
+    _isIgnored	   = false;
+    _name	   = name ? name : "";
+    _device	   = 0;
+    _mode	   = 0;
+    _links	   = 0;
+    _uid	   = 0;
+    _gid	   = 0;
+    _size	   = 0;
+    _blocks	   = 0;
+    _mtime	   = 0;
+    _allocatedSize = 0;
+    _magic	   = FileInfoMagic;
 }
 
 
@@ -70,17 +71,18 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
 {
     CHECK_PTR( statInfo );
 
-    _isLocalFile = true;
-    _isIgnored	  = false;
-    _name	 = filenameWithoutPath;
+    _isLocalFile   = true;
+    _isIgnored	   = false;
+    _name	   = filenameWithoutPath;
 
-    _device	 = statInfo->st_dev;
-    _mode	 = statInfo->st_mode;
-    _links	 = statInfo->st_nlink;
-    _uid	 = statInfo->st_uid;
-    _gid	 = statInfo->st_gid;
-    _mtime	 = statInfo->st_mtime;
-    _magic	 = FileInfoMagic;
+    _device	   = statInfo->st_dev;
+    _mode	   = statInfo->st_mode;
+    _links	   = statInfo->st_nlink;
+    _uid	   = statInfo->st_uid;
+    _gid	   = statInfo->st_gid;
+    _mtime	   = statInfo->st_mtime;
+    _magic	   = FileInfoMagic;
+    _allocatedSize = 0;
 
     if ( isSpecial() )
     {
@@ -92,15 +94,34 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
     {
 	_size		= statInfo->st_size;
 	_blocks		= statInfo->st_blocks;
+
+	if ( _blocks == 0 && _size > 0 )
+	{
+	    if ( ! filesystemCanReportBlocks() )
+	    {
+		_allocatedSize = _size;
+
+		// Do not make any assumptions about fragment handling: The
+		// last block of the file might be partially unused, or the
+		// filesystem might do clever fragment handling, or it's an
+		// exported kernel table like /dev, /proc, /sys. So let's
+		// simply use the size reported by stat() for _allocatedSize.
+	    }
+	}
+	else
+	{
+	    _allocatedSize = _blocks * STD_BLOCK_SIZE;
+	}
+
 	_isSparseFile	= isFile()
-	    && _blocks >= 0				// if filesystem can report blocks
-	    && allocatedSize() + FRAGMENT_SIZE < _size; // allow for intelligent fragment handling
+	    && _blocks >= 0
+	    && _allocatedSize + FRAGMENT_SIZE < _size; // allow for intelligent fragment handling
 
 	if ( _isSparseFile )
 	{
 	    logDebug() << "Found sparse file: " << this
-		       << "    Byte size: " << formatSize( rawByteSize() )
-		       << "  Allocated: " << formatSize( allocatedSize() )
+		       << "    Byte size: " << formatSize( _size )
+		       << "  Allocated: " << formatSize( _allocatedSize )
 		       << " (" << (int) _blocks << " blocks)"
 		       << endl;
 	}
@@ -128,17 +149,18 @@ FileInfo::FileInfo( DirTree *	    tree,
     , _next( 0 )
     , _tree( tree )
 {
-    _name	 = filenameWithoutPath;
-    _isLocalFile = true;
-    _isIgnored	 = false;
-    _device	 = 0;
-    _mode	 = mode;
-    _size	 = size;
-    _mtime	 = mtime;
-    _links	 = links;
-    _uid	 = 0;
-    _gid	 = 0;
-    _magic	 = FileInfoMagic;
+    _name	   = filenameWithoutPath;
+    _isLocalFile   = true;
+    _isIgnored	   = false;
+    _device	   = 0;
+    _mode	   = mode;
+    _size	   = size;
+    _mtime	   = mtime;
+    _allocatedSize = 0;
+    _links	   = links;
+    _uid	   = 0;
+    _gid	   = 0;
+    _magic	   = FileInfoMagic;
 
     if ( blocks < 0 )
     {
@@ -147,6 +169,15 @@ FileInfo::FileInfo( DirTree *	    tree,
 
 	if ( ( _size % STD_BLOCK_SIZE ) > 0 )
 	    _blocks++;
+
+	// Don't make any assumptions about the file's tail. We might use
+	//
+	//   _allocatedSize = _blocks * STD_BLOCK_SIZE;
+	//
+	// but that might be wrong if the filesystem has intelligent fragment
+	// handling. Simply use the byte size instead.
+
+	_allocatedSize = _size;
     }
     else
     {
@@ -181,17 +212,22 @@ bool FileInfo::checkMagicNumber() const
 }
 
 
-FileSize FileInfo::allocatedSize() const
+FileSize FileInfo::size() const
 {
-    return blocks() * STD_BLOCK_SIZE;
+    FileSize sz = _isSparseFile ? _allocatedSize : _size;
+
+    if ( _links > 1 && ! _ignoreHardLinks && isFile() )
+	sz /= _links;
+
+    return sz;
 }
 
 
-FileSize FileInfo::size() const
+FileSize FileInfo::allocatedSize() const
 {
-    FileSize sz = _isSparseFile ? allocatedSize() : _size;
+    FileSize sz = _allocatedSize;
 
-    if ( _links > 1 && ! _ignoreHardLinks && ! isDir() )
+    if ( _links > 1 && ! _ignoreHardLinks && isFile() )
 	sz /= _links;
 
     return sz;
@@ -480,7 +516,7 @@ QString FileInfo::baseName() const
 void FileInfo::setIgnoreHardLinks( bool ignore )
 {
     if ( ignore )
-        logInfo() << "Ignoring hard links" << endl;
+	logInfo() << "Ignoring hard links" << endl;
 
     _ignoreHardLinks = ignore;
 }
@@ -603,6 +639,31 @@ PkgInfo * FileInfo::pkgInfoParent() const
 
     return 0;
 }
+
+
+bool FileInfo::filesystemCanReportBlocks() const
+{
+    const FileInfo * dir = this;
+
+    // Find the nearest real directory from here;
+    // do not use a DotEntry or an Attic because they always have 0 blocks.
+
+    while ( ! dir->isDirInfo() || dir->isPseudoDir() )
+    {
+	dir = dir ->parent();
+
+	if ( ! dir )
+	    return false;
+    }
+
+    logDebug() << "Checking block size of " << dir << ": " << (int) dir->blocks() << endl;
+
+    // A real directory never has a size == 0, so we can skip this check.
+
+    return dir->blocks() > 0;
+}
+
+
 
 
 QString QDirStat::formatTime( time_t rawTime )

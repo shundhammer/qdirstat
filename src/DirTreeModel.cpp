@@ -795,7 +795,7 @@ QString DirTreeModel::sizeText( FileInfo * item, QString (*fmtSz)(FileSize) )
             text = tr( "%1 / %2 Links (allocated: %3)" )
                 .arg( fmtSz( item->rawByteSize() ) )
                 .arg( item->links() )
-                .arg( fmtSz( item->allocatedSize() ) );
+                .arg( fmtSz( item->rawAllocatedSize() ) );
         }
         else
         {
@@ -810,7 +810,7 @@ QString DirTreeModel::sizeText( FileInfo * item, QString (*fmtSz)(FileSize) )
         {
             text = tr( "%1 (allocated: %2)" )
                 .arg( fmtSz( item->rawByteSize() ) )
-                .arg( fmtSz( item->allocatedSize() ) );
+                .arg( fmtSz( item->rawAllocatedSize() ) );
         }
     }
 
