@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-06-03
+Updated: 2020-06-11
 
 
 ## Overview
@@ -122,6 +122,23 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2020-06-11
+
+  - Fixed [GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134):
+    _Size Difference between QDirStat Reports and the "du" and "df" Commands_:
+
+    - Now also showing the _allocated_ size in the details panel for files and
+      directory trees. This can make a a big difference if there are lots of tiny files.
+
+    - Now showing the _allocated_ size for directories in the tree view, not
+      only the sum of all the _byte_ sizes of all the files in the subtree.
+
+    - Now using the _allocated_ size in the treemap so tiny files appear with
+      their true size, no longer disappearing in the grey background: A 6 bytes
+      file is now displayed with the 4 KB that it actually consumes, not just
+      the 6 bytes of its content.
+
 
 - 2020-06-03
 
