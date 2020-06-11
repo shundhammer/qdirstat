@@ -132,6 +132,16 @@ Download installable binary packages for various Linux distributions here:
     [GitHub Issue #88](https://github.com/shundhammer/qdirstat/issues/88)
     (NTFS hard links).
 
+  - Now ignoring hard links on NTFS; the (current?) ntfs-3g implementation
+    using fuseblk seems to disagree with Windows tools which files really have
+    hard links. And in this case I tend to have more faith in the Windows
+    tools. Now the total sizes of my Windows partitions as reported by QDirStat
+    are much closer to the sizes reported by the `df` command, the `statfs()`
+    system call and QDirStat's new "Filesystems" window.
+
+    See also [GitHub Issue #88](https://github.com/shundhammer/qdirstat/issues/88).
+
+
 - 2020-06-11
 
   - Fixed [GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134):
