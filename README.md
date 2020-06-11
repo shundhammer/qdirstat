@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-06-11
+Updated: 2020-06-12
 
 
 ## Overview
@@ -122,6 +122,15 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2020-06-12
+
+  - NTFS is now detected as "ntfs", no longer as "fuseblk" in the "Open
+    Directory" and the "Filesystems" dialogs.
+
+    This was fallout of
+    [GitHub Issue #88](https://github.com/shundhammer/qdirstat/issues/88)
+    (NTFS hard links).
 
 - 2020-06-11
 
