@@ -45,7 +45,7 @@ DirInfo::DirInfo( const QString & filenameWithoutPath,
     init();
     ensureDotEntry();
 
-    _directChildrenCount++;     // One for the newly created dot entry
+    _directChildrenCount++;	// One for the newly created dot entry
 }
 
 
@@ -65,7 +65,7 @@ DirInfo::DirInfo( DirTree *	  tree,
     init();
     ensureDotEntry();
 
-    _directChildrenCount++;     // One for the newly created dot entry
+    _directChildrenCount++;	// One for the newly created dot entry
 }
 
 
@@ -83,6 +83,7 @@ void DirInfo::init()
     _dotEntry		 = 0;
     _firstChild		 = 0;
     _totalSize		 = _size;
+    _totalAllocatedSize	 = _allocatedSize;
     _totalBlocks	 = _blocks;
     _totalItems		 = 0;
     _totalSubDirs	 = 0;
@@ -90,9 +91,9 @@ void DirInfo::init()
     _totalIgnoredItems	 = 0;
     _totalUnignoredItems = 0;
     _directChildrenCount = 0;
-    _errSubDirCount      = 0;
+    _errSubDirCount	 = 0;
     _latestMtime	 = _mtime;
-    _oldestFileMtime     = 0;
+    _oldestFileMtime	 = 0;
     _readState		 = DirQueued;
     _sortedChildren	 = 0;
     _lastSortCol	 = UndefinedCol;
@@ -223,6 +224,7 @@ void DirInfo::recalc()
     // logDebug() << this << endl;
 
     _totalSize		 = _size;
+    _totalAllocatedSize	 = _allocatedSize;
     _totalBlocks	 = _blocks;
     _totalItems		 = 0;
     _totalSubDirs	 = 0;
@@ -230,9 +232,9 @@ void DirInfo::recalc()
     _totalIgnoredItems	 = 0;
     _totalUnignoredItems = 0;
     _directChildrenCount = 0;
-    _errSubDirCount      = 0;
+    _errSubDirCount	 = 0;
     _latestMtime	 = _mtime;
-    _oldestFileMtime     = 0;
+    _oldestFileMtime	 = 0;
 
     FileInfoIterator it( this );
 
@@ -240,21 +242,22 @@ void DirInfo::recalc()
     {
 	_directChildrenCount++;
 	_totalSize	     += (*it)->totalSize();
+	_totalAllocatedSize  += (*it)->totalAllocatedSize();
 	_totalBlocks	     += (*it)->totalBlocks();
 	_totalItems	     += (*it)->totalItems() + 1;
 	_totalSubDirs	     += (*it)->totalSubDirs();
-        _errSubDirCount      += (*it)->errSubDirCount();
+	_errSubDirCount	     += (*it)->errSubDirCount();
 	_totalFiles	     += (*it)->totalFiles();
 	_totalIgnoredItems   += (*it)->totalIgnoredItems();
 	_totalUnignoredItems += (*it)->totalUnignoredItems();
 
 	if ( (*it)->isDir() )
-        {
+	{
 	    _totalSubDirs++;
 
-            if ( (*it)->readError() )
-                _errSubDirCount++;
-        }
+	    if ( (*it)->readError() )
+		_errSubDirCount++;
+	}
 
 	if ( (*it)->isFile() )
 	    _totalFiles++;
@@ -272,16 +275,16 @@ void DirInfo::recalc()
 	if ( childLatestMtime > _latestMtime )
 	    _latestMtime = childLatestMtime;
 
-        time_t childOldestFileMTime = (*it)->oldestFileMtime();
+	time_t childOldestFileMTime = (*it)->oldestFileMtime();
 
-        if ( childOldestFileMTime > 0 )
-        {
-            if ( _oldestFileMtime == 0 ||
-                 childOldestFileMTime < _oldestFileMtime )
-            {
-                _oldestFileMtime = childOldestFileMTime;
-            }
-        }
+	if ( childOldestFileMTime > 0 )
+	{
+	    if ( _oldestFileMtime == 0 ||
+		 childOldestFileMTime < _oldestFileMtime )
+	    {
+		_oldestFileMtime = childOldestFileMTime;
+	    }
+	}
 
 	++it;
     }
@@ -289,7 +292,7 @@ void DirInfo::recalc()
     if ( _attic )
     {
 	_totalIgnoredItems += _attic->totalIgnoredItems();
-        _errSubDirCount    += _attic->errSubDirCount();
+	_errSubDirCount	   += _attic->errSubDirCount();
     }
 
     _summaryDirty = false;
@@ -308,6 +311,15 @@ FileSize DirInfo::totalSize()
 	recalc();
 
     return _totalSize;
+}
+
+
+FileSize DirInfo::totalAllocatedSize()
+{
+    if ( _summaryDirty )
+	recalc();
+
+    return _totalAllocatedSize;
 }
 
 
@@ -521,9 +533,9 @@ void DirInfo::addToAttic( FileInfo * newChild )
     newChild->setIgnored( true );
 
     if ( newChild->isDir() )
-        _totalIgnoredItems += newChild->totalIgnoredItems();
+	_totalIgnoredItems += newChild->totalIgnoredItems();
     else
-        _totalIgnoredItems++;
+	_totalIgnoredItems++;
 
     CHECK_PTR( attic );
     attic->insertChild( newChild );
@@ -536,10 +548,10 @@ void DirInfo::childAdded( FileInfo * newChild )
 
     if ( newChild->isIgnored() )
     {
-        if ( newChild->isDir() )
-            _totalIgnoredItems += newChild->totalIgnoredItems();
-        else
-            _totalIgnoredItems++;
+	if ( newChild->isDir() )
+	    _totalIgnoredItems += newChild->totalIgnoredItems();
+	else
+	    _totalIgnoredItems++;
 
 	// Add ignored items only to all the totals if this directory is also
 	// ignored or if this is the attic.
@@ -557,8 +569,9 @@ void DirInfo::childAdded( FileInfo * newChild )
     {
 	if ( ! _summaryDirty )
 	{
-	    _totalSize	 += newChild->size();
-	    _totalBlocks += newChild->blocks();
+	    _totalSize		+= newChild->size();
+	    _totalAllocatedSize += newChild->allocatedSize();
+	    _totalBlocks	+= newChild->blocks();
 	    _totalItems++;
 
 	    if ( newChild->parent() == this )
@@ -573,16 +586,16 @@ void DirInfo::childAdded( FileInfo * newChild )
 	    if ( newChild->mtime() > _latestMtime )
 		_latestMtime = newChild->mtime();
 
-            time_t childOldestFileMTime = newChild->oldestFileMtime();
+	    time_t childOldestFileMTime = newChild->oldestFileMtime();
 
-            if ( childOldestFileMTime > 0 && newChild->isFile() )
-            {
-                if ( _oldestFileMtime == 0 ||
-                     childOldestFileMTime < _oldestFileMtime )
-                {
-                    _oldestFileMtime = childOldestFileMTime;
-                }
-            }
+	    if ( childOldestFileMTime > 0 && newChild->isFile() )
+	    {
+		if ( _oldestFileMtime == 0 ||
+		     childOldestFileMTime < _oldestFileMtime )
+		{
+		    _oldestFileMtime = childOldestFileMTime;
+		}
+	    }
 	}
 	else
 	{
@@ -706,7 +719,7 @@ void DirInfo::readJobFinished( DirInfo * dir )
 	dropSortCache();
 
     if ( dir && dir != this && dir->readError() )
-        _errSubDirCount++;
+	_errSubDirCount++;
 
     if ( _parent )
 	_parent->readJobFinished( dir );
@@ -732,19 +745,19 @@ bool DirInfo::readError() const
 {
     switch ( _readState )
     {
-        case DirError:
-        case DirPermissionDenied:
-            return true;
+	case DirError:
+	case DirPermissionDenied:
+	    return true;
 
 	case DirQueued:
 	case DirReading:
 	case DirFinished:
 	case DirOnRequestOnly:
 	case DirCached:
-        case DirAborted:
-            return false;
+	case DirAborted:
+	    return false;
 
-        // No 'default' branch so the compiler can catch unhandled enum values
+	// No 'default' branch so the compiler can catch unhandled enum values
     }
 
     return false;
@@ -758,18 +771,18 @@ QString DirInfo::sizePrefix() const
 	case DirQueued:
 	case DirReading:
 	case DirOnRequestOnly:
-            return "";
+	    return "";
 
-        case DirError:
-        case DirAborted:
-        case DirPermissionDenied:
-            return ">";
+	case DirError:
+	case DirAborted:
+	case DirPermissionDenied:
+	    return ">";
 
 	case DirFinished:
 	case DirCached:
-            return _errSubDirCount > 0 ? ">" : "";
+	    return _errSubDirCount > 0 ? ">" : "";
 
-        // No 'default' branch so the compiler can catch unhandled enum values
+	// No 'default' branch so the compiler can catch unhandled enum values
     }
 
     return "";
@@ -900,7 +913,7 @@ void DirInfo::ignoreEmptySubDirs()
 	    {
 		// logDebug() << "Ignoring empty subdir " << (*it) << endl;
 		(*it)->setIgnored( true );
-                _summaryDirty = true;
+		_summaryDirty = true;
 	    }
 	}
 
@@ -915,24 +928,24 @@ void DirInfo::clearTouched( bool recursive )
 
     if ( recursive )
     {
-        if ( ! isDotEntry() )
-        {
-            FileInfo * child = _firstChild;
+	if ( ! isDotEntry() )
+	{
+	    FileInfo * child = _firstChild;
 
-            while ( child )
-            {
-                if ( child->isDirInfo() )
-                    child->toDirInfo()->clearTouched();
+	    while ( child )
+	    {
+		if ( child->isDirInfo() )
+		    child->toDirInfo()->clearTouched();
 
-                child = child->next();
-            }
+		child = child->next();
+	    }
 
-            if ( _dotEntry )
-                _dotEntry->clearTouched();
-        }
+	    if ( _dotEntry )
+		_dotEntry->clearTouched();
+	}
 
-        if ( _attic )
-            _attic->clearTouched();
+	if ( _attic )
+	    _attic->clearTouched();
     }
 }
 
@@ -1040,26 +1053,26 @@ void DirInfo::dropSortCache( bool recursive )
 	// that could have a sort cache.
 
 	if ( recursive )
-        {
-            if ( ! isDotEntry() )
-            {
-                FileInfo * child = _firstChild;
+	{
+	    if ( ! isDotEntry() )
+	    {
+		FileInfo * child = _firstChild;
 
-                while ( child )
-                {
-                    if ( child->isDirInfo() )
-                        child->toDirInfo()->dropSortCache( recursive );
+		while ( child )
+		{
+		    if ( child->isDirInfo() )
+			child->toDirInfo()->dropSortCache( recursive );
 
-                    child = child->next();
-                }
+		    child = child->next();
+		}
 
-                if ( _dotEntry )
-                    _dotEntry->dropSortCache( recursive );
-            }
+		if ( _dotEntry )
+		    _dotEntry->dropSortCache( recursive );
+	    }
 
-            if ( _attic )
-                _attic->dropSortCache( recursive );
-        }
+	    if ( _attic )
+		_attic->dropSortCache( recursive );
+	}
     }
 }
 

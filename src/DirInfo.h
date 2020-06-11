@@ -75,6 +75,13 @@ namespace QDirStat
 	virtual FileSize totalSize() Q_DECL_OVERRIDE;
 
 	/**
+	 * Returns the total allocated size in bytes of this subtree.
+	 *
+	 * Reimplemented - inherited from FileInfo.
+	 **/
+	virtual FileSize totalAllocatedSize() Q_DECL_OVERRIDE;
+
+	/**
 	 * Returns the total size in blocks of this subtree.
 	 *
 	 * Reimplemented - inherited from FileInfo.
@@ -143,16 +150,16 @@ namespace QDirStat
 	 **/
 	virtual int directChildrenCount() Q_DECL_OVERRIDE;
 
-        /**
-         * Returns the number of subdirectories below this item that could not
-         * be read (typically due to insufficient permissions).
-         *
-         * Notice that this does NOT include this item if it is a directory
-         * that could not be read.
+	/**
+	 * Returns the number of subdirectories below this item that could not
+	 * be read (typically due to insufficient permissions).
+	 *
+	 * Notice that this does NOT include this item if it is a directory
+	 * that could not be read.
 	 *
 	 * Reimplemented - inherited from FileInfo.
-         **/
-        virtual int errSubDirCount() Q_DECL_OVERRIDE;
+	 **/
+	virtual int errSubDirCount() Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns the latest modification time of this subtree.
@@ -163,10 +170,10 @@ namespace QDirStat
 
 	/**
 	 * Returns the oldest modification time of any file in this subtree.
-         *
+	 *
 	 * Reimplemented - inherited from FileInfo.
 	 **/
-        virtual time_t oldestFileMtime() Q_DECL_OVERRIDE;
+	virtual time_t oldestFileMtime() Q_DECL_OVERRIDE;
 
 	/**
 	 * Returns 'true' if this had been excluded while reading.
@@ -352,7 +359,7 @@ namespace QDirStat
 
 	/**
 	 * Notification of a finished directory read job for 'dir'.
-         * This is cascaded upward in the tree.
+	 * This is cascaded upward in the tree.
 	 **/
 	void readJobFinished( DirInfo * dir );
 
@@ -379,40 +386,40 @@ namespace QDirStat
 	/**
 	 * Get the current state of the directory reading process:
 	 *
-	 *    DirQueued	            waiting in the directory read queue
-	 *    DirReading            reading in progress
-	 *    DirFinished           reading finished and OK
-	 *    DirAborted            reading aborted upon user request
-	 *    DirError	            error while reading
-         *    DirPermissionDenied   insufficient permissions
+	 *    DirQueued		    waiting in the directory read queue
+	 *    DirReading	    reading in progress
+	 *    DirFinished	    reading finished and OK
+	 *    DirAborted	    reading aborted upon user request
+	 *    DirError		    error while reading
+	 *    DirPermissionDenied   insufficient permissions
 	 *
 	 * Reimplemented - inherited from FileInfo.
 	 **/
 	virtual DirReadState readState() const Q_DECL_OVERRIDE;
 
-        /**
-         * Check if readState() is anything that indicates an error reading the
-         * directory. This returns 'true' for DirError or DirPermissionDenied,
-         * 'false' otherwise.
-         *
+	/**
+	 * Check if readState() is anything that indicates an error reading the
+	 * directory. This returns 'true' for DirError or DirPermissionDenied,
+	 * 'false' otherwise.
+	 *
 	 * Reimplemented - inherited from FileInfo.
-         **/
-        virtual bool readError() const Q_DECL_OVERRIDE;
+	 **/
+	virtual bool readError() const Q_DECL_OVERRIDE;
 
-        /**
-         * Return a prefix for the total size (and similar accumulated fields)
-         * of this item: ">" if there might be more, i.e. if a subdirectory
-         * could not be read or if reading was aborted, an empty string
-         * otherwise.
-         *
-         * Notice that this implementation also returns an empty string as long
-         * as this subtree is busy, i.e. reading is not finished: The ">"
-         * prefix should be something special to catch the user's attention,
-         * not something omnipresent that is commonly ignored.
-         *
-         * Reimplemented from FileInfo.
-         **/
-        virtual QString sizePrefix() const Q_DECL_OVERRIDE;
+	/**
+	 * Return a prefix for the total size (and similar accumulated fields)
+	 * of this item: ">" if there might be more, i.e. if a subdirectory
+	 * could not be read or if reading was aborted, an empty string
+	 * otherwise.
+	 *
+	 * Notice that this implementation also returns an empty string as long
+	 * as this subtree is busy, i.e. reading is not finished: The ">"
+	 * prefix should be something special to catch the user's attention,
+	 * not something omnipresent that is commonly ignored.
+	 *
+	 * Reimplemented from FileInfo.
+	 **/
+	virtual QString sizePrefix() const Q_DECL_OVERRIDE;
 
 	/**
 	 * Set the state of the directory reading process.
@@ -575,6 +582,7 @@ namespace QDirStat
 	// Some cached values
 
 	FileSize	_totalSize;
+	FileSize	_totalAllocatedSize;
 	FileSize	_totalBlocks;
 	int		_totalItems;
 	int		_totalSubDirs;
@@ -582,9 +590,9 @@ namespace QDirStat
 	int		_totalIgnoredItems;
 	int		_totalUnignoredItems;
 	int		_directChildrenCount;
-        int             _errSubDirCount;
+	int		_errSubDirCount;
 	time_t		_latestMtime;
-        time_t          _oldestFileMtime;
+	time_t		_oldestFileMtime;
 
 	FileInfoList *	_sortedChildren;
 	DataColumn	_lastSortCol;
