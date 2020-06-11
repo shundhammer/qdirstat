@@ -139,6 +139,9 @@ Download installable binary packages for various Linux distributions here:
       file is now displayed with the 4 KB that it actually consumes, not just
       the 6 bytes of its content.
 
+    More information and lots of screenshots at
+    [GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134).
+
 
 - 2020-06-03
 
