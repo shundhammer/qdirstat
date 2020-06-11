@@ -111,14 +111,14 @@ void TreemapTile::init()
 	_parentView->scene()->addItem( this );
 
     // logDebug() << "Creating treemap tile for " << this
-    //		  << " size " << formatSize( _orig->totalSize() ) << endl;
+    //		  << " size " << formatSize( _orig->totalAllocatedSize() ) << endl;
 }
 
 
 void TreemapTile::createChildren( const QRectF & rect,
 				  Orientation	 orientation )
 {
-    if ( _orig->totalSize() == 0 )	// Prevent division by zero
+    if ( _orig->totalAllocatedSize() == 0 )	// Prevent division by zero
 	return;
 
     if ( _parentView->squarify() )
@@ -143,7 +143,7 @@ void TreemapTile::createChildrenSimple( const QRectF & rect,
     int offset	 = 0;
     int size	 = dir == TreemapHorizontal ? rect.width() : rect.height();
     int count	 = 0;
-    double scale = (double) size / (double) _orig->totalSize();
+    double scale = (double) size / (double) _orig->totalAllocatedSize();
 
     _cushionSurface.addRidge( childDir, _cushionSurface.height(), rect );
     FileSize minSize = (FileSize) ( _parentView->minTileSize() / scale );
@@ -153,7 +153,7 @@ void TreemapTile::createChildrenSimple( const QRectF & rect,
     {
 	int childSize = 0;
 
-	childSize = (int) ( scale * (*it)->totalSize() );
+	childSize = (int) ( scale * (*it)->totalAllocatedSize() );
 
 	if ( childSize >= _parentView->minTileSize() )
 	{
@@ -182,13 +182,13 @@ void TreemapTile::createChildrenSimple( const QRectF & rect,
 
 void TreemapTile::createSquarifiedChildren( const QRectF & rect )
 {
-    if ( _orig->totalSize() == 0 )
+    if ( _orig->totalAllocatedSize() == 0 )
     {
-	logError()  << "Zero totalSize()" << endl;
+	logError()  << "Zero totalAllocatedSize()" << endl;
 	return;
     }
 
-    double scale	= rect.width() * (double) rect.height() / _orig->totalSize();
+    double scale	= rect.width() * (double) rect.height() / _orig->totalAllocatedSize();
     FileSize minSize	= (FileSize) ( _parentView->minTileSize() / scale );
 
     FileInfoSortedBySizeIterator it( _orig, minSize );
@@ -233,13 +233,13 @@ FileInfoList TreemapTile::squarify( const QRectF & rect,
 
     while ( *it && improvingAspectRatio )
     {
-	sum += (*it)->totalSize();
+	sum += (*it)->totalAllocatedSize();
 
-	if ( ! row.isEmpty() && sum != 0 && (*it)->totalSize() != 0 )
+	if ( ! row.isEmpty() && sum != 0 && (*it)->totalAllocatedSize() != 0 )
 	{
 	    double sumSquare	    = sum * sum;
-	    double worstAspectRatio = qMax( scaledLengthSquare * row.first()->totalSize() / sumSquare,
-                                            sumSquare / ( scaledLengthSquare * (*it)->totalSize() ) );
+	    double worstAspectRatio = qMax( scaledLengthSquare * row.first()->totalAllocatedSize() / sumSquare,
+                                            sumSquare / ( scaledLengthSquare * (*it)->totalAllocatedSize() ) );
 
 	    if ( lastWorstAspectRatio >= 0.0 &&
 		 worstAspectRatio > lastWorstAspectRatio )
@@ -252,13 +252,13 @@ FileInfoList TreemapTile::squarify( const QRectF & rect,
 
 	if ( improvingAspectRatio )
 	{
-	    // logDebug() << "Adding " << *it << " size " << (*it)->totalSize() << endl;
+	    // logDebug() << "Adding " << *it << " size " << (*it)->totalAllocatedSize() << endl;
 	    row.append( *it );
 	    ++it;
 	}
 	else
 	{
-	    // logDebug() << "Getting worse after adding " << *it << " size " << (*it)->totalSize() << endl;
+	    // logDebug() << "Getting worse after adding " << *it << " size " << (*it)->totalAllocatedSize() << endl;
 	}
     }
 
@@ -286,7 +286,7 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
     FileSize sum = 0;
 
     foreach ( FileInfo * item, row )
-	sum += item->totalSize();
+	sum += item->totalAllocatedSize();
 
     int secondary = (int) ( sum * scale / primary );
 
@@ -314,7 +314,7 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
 
     while ( it != end )
     {
-	int childSize = (int) ( (*it)->totalSize() / (double) sum * primary + 0.5 );
+	int childSize = (int) ( (*it)->totalAllocatedSize() / (double) sum * primary + 0.5 );
 
 	if ( childSize > remaining )	// Prevent overflow because of accumulated rounding errors
 	    childSize = remaining;
