@@ -433,6 +433,20 @@ float FileInfo::subtreePercent()
 }
 
 
+float FileInfo::subtreeAllocatedPercent()
+{
+    if ( ! parent()			     ||	// only if there is a parent as calculation base
+	 parent()->pendingReadJobs() > 0     ||	// not before subtree is finished reading
+	 parent()->totalAllocatedSize() == 0 ||	// avoid division by zero
+	 isExcluded() )				// not if this is an excluded object (dir)
+    {
+	return -1.0;
+    }
+
+    return ( 100.0 * totalAllocatedSize() ) / (float) parent()->totalAllocatedSize();
+}
+
+
 QString FileInfo::dotEntryName()
 {
     return QObject::tr( "<Files>" );
@@ -527,6 +541,12 @@ void FileInfo::setIgnoreHardLinks( bool ignore )
 
 QString QDirStat::formatSize( FileSize lSize )
 {
+    return formatSize( lSize, 1 );
+}
+
+
+QString QDirStat::formatSize( FileSize lSize, int precision )
+{
     QString sizeString;
     int	    unitIndex = 0;
 
@@ -560,7 +580,7 @@ QString QDirStat::formatSize( FileSize lSize )
 	    ++unitIndex;
 	}
 
-	sizeString.setNum( size, 'f', 1 );
+	sizeString.setNum( size, 'f', precision );
 	sizeString += " " + units.at( unitIndex );
     }
 

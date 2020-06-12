@@ -476,10 +476,10 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 			    }
 			    else
 			    {
-				return item->subtreePercent();
+				return item->subtreeAllocatedPercent();
 			    }
 			}
-		    case PercentNumCol:	      return item->subtreePercent();
+		    case PercentNumCol:	      return item->subtreeAllocatedPercent();
 		    case SizeCol:	      return item->totalSize();
 		    case TotalItemsCol:	      return item->totalItems();
 		    case TotalFilesCol:	      return item->totalFiles();
@@ -722,7 +722,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     {
 	case NameCol:		  return item->name();
 	case PercentBarCol:	  return item->isExcluded() ? tr( "[Excluded]" ) : QVariant();
-	case PercentNumCol:	  return item == _tree->firstToplevel() ? QVariant() : formatPercent( item->subtreePercent() );
+	case PercentNumCol:	  return item == _tree->firstToplevel() ? QVariant() : formatPercent( item->subtreeAllocatedPercent() );
 	case SizeCol:		  return sizeColText( item );
 	case LatestMTimeCol:	  return QString( "  " ) + formatTime( item->latestMtime() );
 	case UserCol:		  return limitedInfo ? QVariant() : item->userName();
@@ -834,6 +834,45 @@ QString DirTreeModel::sizeText( FileInfo * item, QString (*fmtSz)(FileSize) )
 }
 
 
+QString DirTreeModel::smallSizeText( FileInfo * item )
+{
+    if ( ! item->isFile() )
+        return "";
+
+    FileSize allocated = item->allocatedSize();
+    FileSize size      = item->size();
+    QString  text;
+
+    if ( allocated >= 1024 )
+    {
+        float used = size / (float) allocated;
+
+        if ( used < 0.8 &&
+             allocated % 1024 == 0   &&
+             allocated < 1024 * 1024   )
+        {
+            if ( size < 1024 )
+            {
+                text = QString( "%1 B (%2k)" )
+                    .arg( size )
+                    .arg( allocated / 1024 );
+            }
+            else
+            {
+                text = QString( "%1 (%2k)" )
+                    .arg( formatSize( size ) )
+                    .arg( allocated / 1024 );
+            }
+        }
+    }
+
+    if ( text.isEmpty() )
+        return formatSize( item->size() );
+
+    return text;
+}
+
+
 QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 {
     if ( item->isDevice() )
@@ -843,6 +882,9 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 	return item->sizePrefix() + formatSize( item->totalAllocatedSize() );
 
     QString text = sizeText( item );
+
+    if ( text.isEmpty() && item->isFile() && item->blocks() < 20 )
+        text = smallSizeText( item );
 
     if ( text.isEmpty() )
         text = formatSize( item->size() );

@@ -423,6 +423,17 @@ namespace QDirStat
 	virtual float subtreePercent();
 
 	/**
+	 * Return the percentage of this subtree's allocated size in regard to
+	 * its parent's allocated size.  (0.0..100.0). Return a negative value
+	 * if for any reason this cannot be calculated or it would not make any
+	 * sense.
+	 *
+	 * Derived classes are free to overwrite this, but this default
+	 * implementation should work well enough.
+	 **/
+	virtual float subtreeAllocatedPercent();
+
+	/**
 	 * Returns 'true' if this had been excluded while reading.
 	 * Derived classes may want to overwrite this.
 	 **/
@@ -905,13 +916,18 @@ namespace QDirStat
 
     /**
      * Format a file / subtree size human readable, i.e. in "GB" / "MB"
-     * etc. rather than huge numbers of digits.
+     * etc. rather than huge numbers of digits. 'precision' is the number of
+     * digits after the decimal point.
      *
      * Note: For logDebug() etc., operator<< is overwritten to do exactly that:
      *
      *	   logDebug() << "Size: " << x->totalSize() << endl;
      **/
-    QString formatSize ( FileSize size );
+    QString formatSize( FileSize size );
+
+    // Can't use a default argument when using this as a function pointer,
+    // so we really need the above overloaded version.
+    QString formatSize( FileSize size, int precision );
 
     /**
      * Format a file / subtree size as bytes, but still human readable with a

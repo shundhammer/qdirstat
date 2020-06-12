@@ -305,6 +305,15 @@ namespace QDirStat
         static QString sizeText( FileInfo * item,
                                  QString (*fmtSz)(FileSize) = formatSize );
 
+        /**
+         * Format a small size for a plain file for with both size and allocated size:
+         * "137 Bytes (4k)"
+         *
+         * This returns an empty text if this item is not a plain file.
+         **/
+        static QString smallSizeText( FileInfo * item );
+
+
 
     protected slots:
 
