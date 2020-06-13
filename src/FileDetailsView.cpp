@@ -289,6 +289,9 @@ void FileDetailsView::showDetails( DirInfo * dir )
     QString name    = dir->isPseudoDir() ? dir->name() : ( dir->baseName() + "/" );
     QString dirType = dir->isPseudoDir() ? tr( "Pseudo Directory" ) : tr( "Directory" );
 
+    if ( dir->isMountPoint() )
+        dirType = tr( "Mount Point" );
+
     setLabelLimited(_ui->dirNameLabel, name );
     _ui->dirTypeLabel->setText( dirType );
 
