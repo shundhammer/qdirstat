@@ -22,6 +22,7 @@
 #include "PanelMessage.h"
 #include "UnreadableDirsWindow.h"
 #include "PkgFilter.h"
+#include "Subtree.h"
 
 
 class QCloseEvent;
@@ -355,6 +356,12 @@ protected slots:
     void toggleVerboseSelection();
 
     /**
+     * Apply the future selection: Select the URL that was stored in
+     * _futureSelection, open that branch and clear _futureSelection.
+     **/
+    void applyFutureSelection();
+
+    /**
      * Open a popup dialog with a message that this feature is not implemented.
      **/
     void notImplemented();
@@ -464,6 +471,8 @@ private:
     QMap<QString, TreeLayout *>	   _layouts;
     TreeLayout *		   _currentLayout;
     QTimer			   _updateTimer;
+    QTimer                         _treeExpandTimer;
+    QDirStat::Subtree              _futureSelection;
 
 }; // class MainWindow
 

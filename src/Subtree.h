@@ -104,6 +104,17 @@ namespace QDirStat
         void set( FileInfo * subtree );
 
         /**
+         * Clear the subtree (but keep the tree).
+         **/
+        void clear() { set( 0 ); }
+
+        /**
+         * Return 'true' if this subtree is empty, i.e. if it was cleared or if
+         * no FileInfo was ever set.
+         **/
+        bool isEmpty() { return _url.isEmpty(); }
+
+        /**
          * Assignment Operator for a FileInfo pointer. This is an alias for
          * set().
          **/

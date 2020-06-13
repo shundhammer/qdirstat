@@ -21,6 +21,7 @@ namespace QDirStat
     class HeaderTweaker;
     class SelectionModelProxy;
     class CleanupCollection;
+    class FileInfo;
 
 
     /**
@@ -81,6 +82,11 @@ namespace QDirStat
 	 * Return this view's header tweaker.
 	 **/
 	HeaderTweaker * headerTweaker() const { return _headerTweaker; }
+
+        /**
+         * Expand or collapse an item based on a FileInfo pointer.
+         **/
+        void setExpanded( FileInfo * item, bool expanded = true );
 
 
     public slots:

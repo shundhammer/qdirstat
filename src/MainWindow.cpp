@@ -93,7 +93,9 @@ MainWindow::MainWindow():
     createLayouts();
     readSettings();
     _updateTimer.setInterval( UPDATE_MILLISEC );
+    _treeExpandTimer.setSingleShot( true );
     _dUrl = _ui->actionDonate->iconText();
+    _futureSelection.setUseRootFallback( false );
 
     _dirTreeModel = new DirTreeModel( this );
     CHECK_NEW( _dirTreeModel );
@@ -223,6 +225,9 @@ void MainWindow::connectSignals()
 
     connect( &_updateTimer,		SIGNAL( timeout()	  ),
 	     this,			SLOT  ( showElapsedTime() ) );
+
+    connect( &_treeExpandTimer,		  SIGNAL( timeout()	  ),
+             _ui->actionExpandTreeLevel1, SLOT( trigger()          ) );
 
     if ( _useTreemapHover )
     {
@@ -626,20 +631,28 @@ void MainWindow::busyDisplay()
     if ( ! PkgFilter::isPkgUrl( _dirTreeModel->tree()->url() ) &&
 	 ! _selectionModel->currentBranch() )
     {
-	// Wait until the toplevel entry has some children, then expand to level 1
-	QTimer::singleShot( 200, _ui->actionExpandTreeLevel1, SLOT( trigger() ) );
+        _treeExpandTimer.start( 200 );
+        // This will trigger actionExpandTreeLevel1. Hopefully after those 200
+        // millisec there will be some items in the tree to expand.
     }
 }
 
 
 void MainWindow::idleDisplay()
 {
+    logInfo() << endl;
+
     updateActions();
     _updateTimer.stop();
     int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::PercentNumCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
 
-    if ( ! _selectionModel->currentBranch() )
+    if ( ! _futureSelection.isEmpty() )
+    {
+        _treeExpandTimer.stop();
+        applyFutureSelection();
+    }
+    else if ( ! _selectionModel->currentBranch() )
     {
 	logDebug() << "No current branch - expanding tree to level 1" << endl;
 	expandTreeToLevel( 1 );
@@ -894,8 +907,27 @@ void MainWindow::refreshAll()
 void MainWindow::refreshSelected()
 {
     busyDisplay();
+    _futureSelection.set( _selectionModel->selectedItems().first() );
+    // logDebug() << "Setting future selection: " << _futureSelection.subtree() << endl;
     _dirTreeModel->refreshSelected();
     updateActions();
+}
+
+
+void MainWindow::applyFutureSelection()
+{
+    FileInfo * sel = _futureSelection.subtree();
+    // logDebug() << "Using future selection: " << sel << endl;
+
+    if ( sel )
+    {
+        _treeExpandTimer.stop();
+        _futureSelection.clear();
+        _selectionModel->setCurrentBranch( sel );
+
+        if ( sel->isMountPoint() )
+            _ui->dirTreeView->setExpanded( sel, true );
+    }
 }
 
 

@@ -189,3 +189,20 @@ void DirTreeView::closeAllExcept( const QModelIndex & branch )
     scrollTo( currentIndex() );
 }
 
+
+void DirTreeView::setExpanded( FileInfo * item, bool expanded )
+{
+    DirTreeModel * dirTreeModel = dynamic_cast<DirTreeModel *>( model() );
+
+    if ( ! dirTreeModel )
+    {
+	logError() << "Wrong model type" << endl;
+        return;
+    }
+
+    QModelIndex index = dirTreeModel->modelIndex( item );
+
+    if ( index.isValid() )
+        QTreeView::setExpanded( index, expanded );
+}
+
