@@ -295,9 +295,10 @@ namespace QDirStat
 			   Qt::SortOrder order = Qt::AscendingOrder ) Q_DECL_OVERRIDE;
 
         /**
-         * For plain files that have multiple hard links or that are sparse files or both,
-         * return a text describing the size: "20.0 MB / 4 Links", "1 GB (allocated: 2 kB)".
-         * For everything else, return an empty string.
+         * For plain files that have multiple hard links or that are sparse
+         * files or both, return a text describing the size: "20.0 MB / 4
+         * Links", "1 GB (allocated: 2 kB)". For everything else, return an
+         * empty string.
          *
          * 'fmtSz' is a pointer to a formatting function that takes a FileSize
          * argument and returns a QString.
@@ -306,12 +307,18 @@ namespace QDirStat
                                  QString (*fmtSz)(FileSize) = formatSize );
 
         /**
-         * Format a small size for a plain file for with both size and allocated size:
-         * "137 Bytes (4k)"
+         * Format a small size for a plain file for with both size and
+         * allocated size: "137 Bytes (4k)"
          *
          * This returns an empty text if this item is not a plain file.
          **/
         static QString smallSizeText( FileInfo * item );
+
+        /**
+         * Return 'true' if this is considered a small file, i.e. non-null, but
+         * 2 clusters allocated or less.
+         **/
+        static bool isSmallFile( FileInfo * item );
 
 
 

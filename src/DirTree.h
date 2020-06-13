@@ -343,6 +343,23 @@ namespace QDirStat
 	 **/
 	bool beingDestroyed() const { return _beingDestroyed; }
 
+        /**
+         * Return the number of 512-bytes blocks per cluster.
+         *
+         * This may be 0 if no small file (< 512 bytes) was found in this tree
+         * yet.
+         **/
+        int blocksPerCluster() const { return _blocksPerCluster; }
+
+        /**
+         * Return the cluster size of this tree, i.e. the disk space allocation
+         * unit. No non-zero file can have an allocated size smaller than this.
+         *
+         * This may be 0 if no small file (< 512 bytes) was found in this tree
+         * yet.
+         **/
+        FileSize clusterSize() const { return _blocksPerCluster * STD_BLOCK_SIZE; }
+
 
     signals:
 
@@ -451,6 +468,11 @@ namespace QDirStat
 	 **/
 	void recalc( DirInfo * dir );
 
+        /**
+         * Try to derive the cluster size from 'item'.
+         **/
+        void detectClusterSize( FileInfo * item );
+
 
 
 	// Data members
@@ -464,6 +486,8 @@ namespace QDirStat
 	ExcludeRules *		_excludeRules;
 	QList<DirTreeFilter *>	_filters;
 	bool			_beingDestroyed;
+        bool                    _haveClusterSize;
+        int                     _blocksPerCluster;
 
     };	// class DirTree
 

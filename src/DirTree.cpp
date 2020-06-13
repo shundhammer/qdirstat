@@ -30,7 +30,9 @@ using namespace QDirStat;
 DirTree::DirTree():
     QObject(),
     _excludeRules( 0 ),
-    _beingDestroyed( false )
+    _beingDestroyed( false ),
+    _haveClusterSize( false ),
+    _blocksPerCluster( 0 )
 {
     _isBusy	      = false;
     _crossFilesystems = false;
@@ -103,7 +105,9 @@ void DirTree::clear()
 	_root->clear();
     }
 
-    _isBusy = false;
+    _isBusy	      = false;
+    _haveClusterSize  = false;
+    _blocksPerCluster = 0;
     _device.clear();
 }
 
@@ -263,6 +267,9 @@ void DirTree::slotFinished()
 
 void DirTree::childAddedNotify( FileInfo * newChild )
 {
+    if ( ! _haveClusterSize )
+        detectClusterSize( newChild );
+
     emit childAdded( newChild );
 
     if ( newChild->dotEntry() )
@@ -641,5 +648,20 @@ void DirTree::recalc( DirInfo * dir )
 }
 
 
+void DirTree::detectClusterSize( FileInfo * item )
+{
+    if ( item &&
+         item->isFile()     &&
+         item->blocks() > 0 &&
+         item->size()   < STD_BLOCK_SIZE )
+    {
+        _blocksPerCluster = item->blocks();
+        _haveClusterSize  = true;
 
-// EOF
+        logInfo() << "Cluster size: " << _blocksPerCluster << " blocks ("
+                  << formatSize( clusterSize() ) << ")" << endl;
+        logDebug() << "Derived from " << item << " " << formatSize( item->size() )
+                   << " (allocated: " << formatSize( item->allocatedSize() ) << ")"
+                   << endl;
+    }
+}

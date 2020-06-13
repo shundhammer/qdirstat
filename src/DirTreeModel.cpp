@@ -22,13 +22,13 @@
 #include "Exception.h"
 #include "DebugHelpers.h"
 
-// Number of 512-bytes-blocks up to which a file will be considered small and
-// will also display the allocated size like (4k)
-#define SMALL_FILE_BLOCKS                       32
+// Number of clusters up to which a file will be considered small and will also
+// display the allocated size like (4k).
+#define SMALL_FILE_CLUSTERS                     2
 
 // Used ratio below which a small file will also display the allocated size
 // like (4k)
-#define SMALL_FILE_SHOW_ALLOC_THRESHOLD         0.75
+#define SMALL_FILE_SHOW_ALLOC_THRESHOLD		0.75
 
 using namespace QDirStat;
 
@@ -69,7 +69,7 @@ void DirTreeModel::readSettings()
     Settings settings;
     settings.beginGroup( "DirectoryTree" );
 
-    _tree->setCrossFilesystems  ( settings.value( "CrossFilesystems", false ).toBool() );
+    _tree->setCrossFilesystems	( settings.value( "CrossFilesystems", false ).toBool() );
     FileInfo::setIgnoreHardLinks( settings.value( "IgnoreHardLinks",  false ).toBool() );
     _treeIconDir	 = settings.value( "TreeIconDir" , ":/icons/tree-medium/" ).toString();
     _updateTimerMillisec = settings.value( "UpdateTimerMillisec", 333 ).toInt();
@@ -107,8 +107,8 @@ void DirTreeModel::writeSettings()
 
     settings.setDefaultValue( "CrossFilesystems",    _tree ? _tree->crossFilesystems() : false );
     settings.setDefaultValue( "IgnoreHardLinks",     FileInfo::ignoreHardLinks() );
-    settings.setDefaultValue( "TreeIconDir",	     _treeIconDir	         );
-    settings.setDefaultValue( "UpdateTimerMillisec", _updateTimerMillisec        );
+    settings.setDefaultValue( "TreeIconDir",	     _treeIconDir		 );
+    settings.setDefaultValue( "UpdateTimerMillisec", _updateTimerMillisec	 );
 
     settings.endGroup();
 
@@ -353,7 +353,7 @@ int DirTreeModel::rowCount( const QModelIndex & parentIndex ) const
 	    break;
 
 	case DirError:
-        case DirPermissionDenied:
+	case DirPermissionDenied:
 
 	    // This is a hybrid case: Depending on the dir reader, the dir may
 	    // or may not be finished at this time. For a local dir, it most
@@ -719,11 +719,11 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 	return QVariant();
 
     if ( item->isPkgInfo() &&
-         item->readState() == DirAborted &&
-         ! item->firstChild() &&
-         col != NameCol )
+	 item->readState() == DirAborted &&
+	 ! item->firstChild() &&
+	 col != NameCol )
     {
-        return "?";
+	return "?";
     }
 
     switch ( col )
@@ -743,16 +743,16 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     {
 	if ( item->readError() )
 	{
-            switch ( col )
-            {
-                case TotalItemsCol:
-                case TotalFilesCol:
-                case TotalSubDirsCol:
-                    return "?";
+	    switch ( col )
+	    {
+		case TotalItemsCol:
+		case TotalFilesCol:
+		case TotalSubDirsCol:
+		    return "?";
 
-                default:
-                    break;
-            }
+		default:
+		    break;
+	    }
 	}
 
 	QString prefix = item->sizePrefix();
@@ -767,7 +767,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
 		else
 		    return prefix + QString( "%1" ).arg( item->totalSubDirs() );
 
-	    case OldestFileMTimeCol:  return QString( "  " ) + formatTime( item->oldestFileMtime() );
+	    case OldestFileMTimeCol:  return QString( "	 " ) + formatTime( item->oldestFileMtime() );
 	}
     }
 
@@ -792,34 +792,34 @@ int DirTreeModel::directChildrenCount( FileInfo * subtree ) const
 QString DirTreeModel::sizeText( FileInfo * item, QString (*fmtSz)(FileSize) )
 {
     if ( ! item->isFile() )
-        return "";
+	return "";
 
     QString text;
 
     if ( item->links() > 1 )  // Multiple hard links
     {
-        if ( item->isSparseFile() )
-        {
-            text = tr( "%1 / %2 Links (allocated: %3)" )
-                .arg( fmtSz( item->rawByteSize() ) )
-                .arg( item->links() )
-                .arg( fmtSz( item->rawAllocatedSize() ) );
-        }
-        else
-        {
-            text = tr( "%1 / %2 Links" )
-                .arg( fmtSz( item->rawByteSize() ) )
-                .arg( item->links() );
-        }
+	if ( item->isSparseFile() )
+	{
+	    text = tr( "%1 / %2 Links (allocated: %3)" )
+		.arg( fmtSz( item->rawByteSize() ) )
+		.arg( item->links() )
+		.arg( fmtSz( item->rawAllocatedSize() ) );
+	}
+	else
+	{
+	    text = tr( "%1 / %2 Links" )
+		.arg( fmtSz( item->rawByteSize() ) )
+		.arg( item->links() );
+	}
     }
     else // No multiple hard links
     {
-        if ( item->isSparseFile() )
-        {
-            text = tr( "%1 (allocated: %2)" )
-                .arg( fmtSz( item->rawByteSize() ) )
-                .arg( fmtSz( item->rawAllocatedSize() ) );
-        }
+	if ( item->isSparseFile() )
+	{
+	    text = tr( "%1 (allocated: %2)" )
+		.arg( fmtSz( item->rawByteSize() ) )
+		.arg( fmtSz( item->rawAllocatedSize() ) );
+	}
     }
 
     return text;
@@ -829,7 +829,7 @@ QString DirTreeModel::sizeText( FileInfo * item, QString (*fmtSz)(FileSize) )
 QString DirTreeModel::smallSizeText( FileInfo * item )
 {
     if ( ! item->isFile() )
-        return "";
+	return "";
 
     FileSize allocated = item->allocatedSize();
     FileSize size      = item->size();
@@ -837,31 +837,42 @@ QString DirTreeModel::smallSizeText( FileInfo * item )
 
     if ( allocated >= 1024 )
     {
-        float used = size / (float) allocated;
+	float used = size / (float) allocated;
 
-        if ( used < SMALL_FILE_SHOW_ALLOC_THRESHOLD &&
-             allocated % 1024 == 0   &&
-             allocated < 1024 * 1024   )
-        {
-            if ( size < 1024 )
-            {
-                text = QString( "%1 B (%2k)" )
-                    .arg( size )
-                    .arg( allocated / 1024 );
-            }
-            else
-            {
-                text = QString( "%1 (%2k)" )
-                    .arg( formatSize( size ) )
-                    .arg( allocated / 1024 );
-            }
-        }
+	if ( used < SMALL_FILE_SHOW_ALLOC_THRESHOLD &&
+	     allocated % 1024 == 0   &&
+	     allocated < 1024 * 1024   )
+	{
+	    if ( size < 1024 )
+	    {
+		text = QString( "%1 B (%2k)" )
+		    .arg( size )
+		    .arg( allocated / 1024 );
+	    }
+	    else
+	    {
+		text = QString( "%1 (%2k)" )
+		    .arg( formatSize( size ) )
+		    .arg( allocated / 1024 );
+	    }
+	}
     }
 
     if ( text.isEmpty() )
-        return formatSize( item->size() );
+	return formatSize( item->size() );
 
     return text;
+}
+
+
+bool DirTreeModel::isSmallFile( FileInfo * item )
+{
+    return item					&&
+	item->isFile()				&&
+	item->blocks() > 0			&&
+	item->tree()				&&
+	item->tree()->clusterSize() > 0		&&
+	item->allocatedSize() <= item->tree()->clusterSize() * SMALL_FILE_CLUSTERS;
 }
 
 
@@ -875,11 +886,11 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 
     QString text = sizeText( item );
 
-    if ( text.isEmpty() && item->isFile() && item->blocks() <= SMALL_FILE_BLOCKS )
-        text = smallSizeText( item );
+    if ( text.isEmpty() && isSmallFile( item ) )
+	text = smallSizeText( item );
 
     if ( text.isEmpty() )
-        text = formatSize( item->size() );
+	text = formatSize( item->size() );
 
     return text;
 }
@@ -898,13 +909,13 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
     else if ( item->isDir()	 )
     {
 	if	( item->readState() == DirAborted )   icon = _stopIcon;
-	else if ( item->readError()       	  )   icon = _unreadableDirIcon;
+	else if ( item->readError()		  )   icon = _unreadableDirIcon;
 	else if ( item->isMountPoint()		  )   icon = _mountPointIcon;
 	else					      icon = _dirIcon;
     }
     else // ! item->isDir()
     {
-	if	( item->readError()     	  )   icon = _unreadableDirIcon;
+	if	( item->readError()		  )   icon = _unreadableDirIcon;
 	else if ( item->isFile()		  )   icon = _fileIcon;
 	else if ( item->isSymLink()		  )   icon = _symlinkIcon;
 	else if ( item->isBlockDevice()		  )   icon = _blockDeviceIcon;
