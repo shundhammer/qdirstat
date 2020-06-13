@@ -79,6 +79,11 @@ namespace QDirStat
         void setPath( const QString & path );
 
         /**
+         * Set a path in the path combo box and accept the dialog.
+         **/
+        void setPathAndAccept( const QString & path );
+        
+        /**
          * Go up one directory level.
          **/
         void goUp();

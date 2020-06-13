@@ -123,6 +123,9 @@ void OpenDirDialog::initConnections()
     connect( _ui->pathSelector, SIGNAL( pathSelected( QString ) ),
              this,              SLOT  ( setPath     ( QString ) ) );
 
+    connect( _ui->pathSelector, SIGNAL( pathDoubleClicked( QString ) ),
+             this,              SLOT  ( setPathAndAccept ( QString ) ) );
+
     QItemSelectionModel * selModel = _ui->dirTreeView->selectionModel();
 
     connect( selModel,  SIGNAL( currentChanged( QModelIndex, QModelIndex ) ),
@@ -191,6 +194,13 @@ void OpenDirDialog::setPath( const QString & path )
 
     _lastPath = path;
     _settingPath = false;
+}
+
+
+void OpenDirDialog::setPathAndAccept( const QString & path )
+{
+    setPath( path );
+    accept();
 }
 
 
