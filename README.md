@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-06-12
+Updated: 2020-06-13
 
 
 ## Overview
@@ -122,6 +122,19 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2020-06-13
+
+  - Now automatically reopening the old current branch in the tree view when
+    using actions like "refresh selected" and "continue reading at mount point
+    ([GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134)).
+
+  - Now automatically expanding the first directory level of a mount point
+    after "continue reading at mount point".
+
+  - Now correctly labelling a mount point as mount point in the "Details"
+    panel.
+
 
 - 2020-06-12
 
