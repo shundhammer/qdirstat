@@ -22,6 +22,14 @@
 #include "Exception.h"
 #include "DebugHelpers.h"
 
+// Number of 512-bytes-blocks up to which a file will be considered small and
+// will also display the allocated size like (4k)
+#define SMALL_FILE_BLOCKS                       32
+
+// Used ratio below which a small file will also display the allocated size
+// like (4k)
+#define SMALL_FILE_SHOW_ALLOC_THRESHOLD         0.75
+
 using namespace QDirStat;
 
 
@@ -812,22 +820,6 @@ QString DirTreeModel::sizeText( FileInfo * item, QString (*fmtSz)(FileSize) )
                 .arg( fmtSz( item->rawByteSize() ) )
                 .arg( fmtSz( item->rawAllocatedSize() ) );
         }
-#if 0
-        else
-        {
-            if ( item->rawAllocatedSize() > 0 && item->rawByteSize() < 8 * 1024L )
-            {
-                float usedRatio = item->rawByteSize() / (float) item->rawAllocatedSize();
-
-                if ( usedRatio < 0.7 )
-                {
-                    text = tr( "%1 (allocated: %2)" )
-                        .arg( fmtSz( item->rawByteSize() ) )
-                        .arg( fmtSz( item->rawAllocatedSize() ) );
-                }
-            }
-        }
-#endif
     }
 
     return text;
@@ -847,7 +839,7 @@ QString DirTreeModel::smallSizeText( FileInfo * item )
     {
         float used = size / (float) allocated;
 
-        if ( used < 0.8 &&
+        if ( used < SMALL_FILE_SHOW_ALLOC_THRESHOLD &&
              allocated % 1024 == 0   &&
              allocated < 1024 * 1024   )
         {
@@ -883,7 +875,7 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 
     QString text = sizeText( item );
 
-    if ( text.isEmpty() && item->isFile() && item->blocks() < 20 )
+    if ( text.isEmpty() && item->isFile() && item->blocks() <= SMALL_FILE_BLOCKS )
         text = smallSizeText( item );
 
     if ( text.isEmpty() )
