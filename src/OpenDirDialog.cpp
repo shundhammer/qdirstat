@@ -51,6 +51,7 @@ OpenDirDialog::OpenDirDialog( QWidget * parent ):
     CHECK_NEW( _ui );
     CHECK_NEW( _filesystemModel );
     _ui->setupUi( this );
+    MountPoints::reload();
 
     initPathComboBox();
     initDirTree();
