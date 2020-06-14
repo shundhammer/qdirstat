@@ -214,6 +214,13 @@ namespace QDirStat
 	// separate subdirectory. But this might change in the future, or it
 	// might even become configurable.
 
+
+        /**
+         * Get the FileInfo for a model index. This may return 0 if the index
+         * is invalid.
+         **/
+        FileInfo * itemFromIndex( const QModelIndex & index );
+
 	/**
 	 * Find the child number 'childNo' among the children of 'parent'.
 	 * Return 0 if not found.
@@ -388,7 +395,7 @@ namespace QDirStat
          * indicates if 'subtree' itself will become invalid.
 	 **/
 	void invalidatePersistent( FileInfo * subtree,
-                                   bool includeParent );
+                                   bool       includeParent );
 
 
     protected:

@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-06-13
+Updated: 2020-06-14
 
 
 ## Overview
@@ -123,11 +123,27 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2020-06-14
+
+  - Now displaying the allocated size for very small files (8 kB (2 clusters)
+    or less) in a much more subdued way so it's still there, but less
+    distracting.
+
+
+  - If a file is wasting very much space (i.e. if it uses 33% or less of its
+    allocated disk space), now displaying the allocated size in bold in the
+    "Details" panel to draw more attention to the fact. This affects pretty
+    much all tiny files with 1360 bytes or less since the cluster size of most
+    (all?) Linux filesystem is so large (4 kB for ext4, XFS, Btrfs).
+    
+  Screenshot for both changes at [GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134).
+
+
 - 2020-06-13
 
   - Now automatically reopening the old current branch in the tree view when
     using actions like "refresh selected" and "continue reading at mount point
-    ([GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134)).
+    ([GitHub Issue #135](https://github.com/shundhammer/qdirstat/issues/135)).
 
   - Now automatically expanding the first directory level of a mount point
     after "continue reading at mount point".

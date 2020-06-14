@@ -24,7 +24,7 @@
 
 // Number of clusters up to which a file will be considered small and will also
 // display the allocated size like (4k).
-#define SMALL_FILE_CLUSTERS                     2
+#define SMALL_FILE_CLUSTERS     2
 
 // Used used percent below which a small file will also display the allocated size
 // like (4k)
@@ -295,6 +295,20 @@ int DirTreeModel::rowNumber( FileInfo * child ) const
     }
 
     return row;
+}
+
+
+FileInfo * DirTreeModel::itemFromIndex( const QModelIndex & index )
+{
+    FileInfo * item = 0;
+
+    if ( index.isValid() )
+    {
+        item = static_cast<FileInfo *>( index.internalPointer() );
+        CHECK_MAGIC( item );
+    }
+
+    return item;
 }
 
 
@@ -835,11 +849,11 @@ QString DirTreeModel::smallSizeText( FileInfo * item )
     FileSize size      = item->size();
     QString  text;
 
-    if ( allocated >= 1024 )
+    if ( allocated >= 1024 )                    // at least 1k so the (?k) makes sense
     {
-        if ( item->usedPercent() < SMALL_FILE_SHOW_ALLOC_THRESHOLD &&
-             allocated % 1024 == 0   &&
-             allocated < 1024 * 1024   )
+        if ( allocated % 1024 == 0   &&         // if it's really even kB
+             allocated < 1024 * 1024   )        // and below 1 MB
+             // && item->usedPercent() < SMALL_FILE_SHOW_ALLOC_THRESHOLD &&
         {
             if ( size < 1024 )
             {

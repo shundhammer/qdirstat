@@ -15,6 +15,7 @@
 #include "ActionManager.h"
 #include "CleanupCollection.h"
 #include "PercentBar.h"
+#include "SizeColDelegate.h"
 #include "HeaderTweaker.h"
 #include "DirTree.h"
 #include "Exception.h"
@@ -29,7 +30,11 @@ DirTreeView::DirTreeView( QWidget * parent ):
 {
     _percentBarDelegate = new PercentBarDelegate( this );
     CHECK_NEW( _percentBarDelegate );
-    setItemDelegate( _percentBarDelegate );
+    setItemDelegateForColumn( PercentBarCol, _percentBarDelegate );
+
+    _sizeColDelegate = new SizeColDelegate( this );
+    CHECK_NEW( _sizeColDelegate );
+    setItemDelegateForColumn( SizeCol, _sizeColDelegate );
 
     setRootIsDecorated( true );
     setSortingEnabled( true );

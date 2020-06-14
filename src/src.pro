@@ -123,7 +123,8 @@ SOURCES	  = main.cpp			\
 	    SelectionModel.cpp		\
 	    Settings.cpp		\
 	    SettingsHelpers.cpp		\
-	    ShowUnpkgFilesDialog.cpp	\
+            ShowUnpkgFilesDialog.cpp	\
+            SizeColDelegate.cpp         \
 	    StdCleanup.cpp		\
 	    Subtree.cpp			\
 	    SysUtil.cpp			\
@@ -215,6 +216,7 @@ HEADERS	  =				\
 	    SettingsHelpers.h		\
 	    ShowUnpkgFilesDialog.h	\
 	    SignalBlocker.h		\
+            SizeColDelegate.h           \
 	    StdCleanup.h		\
 	    Subtree.h			\
 	    SysUtil.h			\
