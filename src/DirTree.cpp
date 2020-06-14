@@ -652,8 +652,8 @@ void DirTree::detectClusterSize( FileInfo * item )
 {
     if ( item &&
          item->isFile()     &&
-         item->blocks() > 0 &&
-         item->size()   < STD_BLOCK_SIZE )
+         item->blocks() > 1 &&          // 1..512 bytes fits into an NTFS fragment
+         item->size()   < 2 * STD_BLOCK_SIZE )
     {
         _blocksPerCluster = item->blocks();
         _haveClusterSize  = true;
