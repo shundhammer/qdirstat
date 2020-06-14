@@ -44,6 +44,7 @@ void FileSizeLabel::setValue( FileSize val, const QString & prefix )
 {
     _value  = val;
     _prefix = prefix;
+    _contextText.clear();
 
     if ( _value < 0 )
         QLabel::setText( "" );

@@ -172,7 +172,7 @@ void FileDetailsView::showFileInfo( FileInfo * file )
 
     setFileSizeLabel( _ui->fileSizeLabel, file );
     setFileAllocatedLabel( _ui->fileAllocatedLabel, file );
-    
+
     _ui->fileUserLabel->setText( file->userName() );
     _ui->fileGroupLabel->setText( file->groupName() );
     _ui->filePermissionsLabel->setText( formatPermissions( file->mode() ) );
@@ -190,19 +190,22 @@ void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
 
     QString text;
 
-    if ( file->links() > 1 )    // Not for sparse files!
-        text = DirTreeModel::sizeText( file );
-
-    if ( text.isEmpty() )
+    if ( file->links() > 1 )
     {
-	label->setValue( file->rawByteSize() );
-    }
-    else  // The exotic case: Multiple hard links or sparse file or both
-    {
-	label->setText( text );
+        label->setText( tr( "%1 / %2 Links" )
+                        .arg( formatSize( file->rawByteSize() ) )
+                        .arg( file->links() ) );
 
 	if ( file->rawByteSize() >= 1024 ) // Not useful below 1 kB
-	    label->setContextText( DirTreeModel::sizeText( file, formatByteSize ) );
+        {
+	    label->setContextText( tr( "%1 / %2 Links" )
+                                   .arg( formatByteSize( file->rawByteSize() ) )
+                                   .arg( file->links() ) );
+        }
+    }
+    else
+    {
+        label->setValue( file->size() );
     }
 }
 
@@ -217,6 +220,10 @@ void FileDetailsView::setFileAllocatedLabel( FileSizeLabel * label,
         label->setText( tr( "%1 / %2 Links" )
                         .arg( formatSize( file->rawAllocatedSize() ) )
                         .arg( file->links() ) );
+
+        label->setContextText( tr( "%1 / %2 Links" )
+                               .arg( formatByteSize( file->rawAllocatedSize() ) )
+                               .arg( file->links() ) );
     }
     else
     {
