@@ -80,7 +80,7 @@ void PercentBarDelegate::writeSettings()
 
     writeColorListEntry( settings, "Colors"    , _fillColors	);
     writeColorEntry    ( settings, "Background", _barBackground );
-    settings.setValue( "PercentBarColumnWidth", _sizeHintWidth	);
+    settings.setValue( "PercentBarColumnWidth",  _sizeHintWidth	);
 
     settings.endGroup();
 }
@@ -202,7 +202,7 @@ namespace QDirStat
 			       barBackground );
 	    /*
 	     * Notice: The Xlib XDrawRectangle() function always fills one
-	     * pixel less than specified. Altough this is very likely just a
+	     * pixel less than specified. Although this is very likely just a
 	     * plain old bug, it is documented that way. Obviously, Qt just
 	     * maps the fillRect() call directly to XDrawRectangle() so they
 	     * inherited that bug (although the Qt doc stays silent about
