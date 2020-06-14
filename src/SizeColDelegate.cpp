@@ -20,6 +20,11 @@
 #define ALLOC_COLOR_NORMAL      "#6666FF"
 #define ALLOC_COLOR_DARK_THEME  "#CCCCFF"
 
+#define MARGIN_RIGHT    2
+#define MARGIN_LEFT     8
+#define MARGIN_TOP      2
+#define MARGIN_BOTTOM   2
+
 using namespace QDirStat;
 
 
@@ -85,8 +90,8 @@ void SizeColDelegate::paint( QPainter		        * painter,
                     // to reserve some space for the allocated size.
 
                     QFontMetrics fontMetrics( option.font );
-                    int allocWidth   = fontMetrics.width( allocText );
-                    rect.setWidth( rect.width() - allocWidth );
+                    int allocWidth = fontMetrics.width( allocText );
+                    rect.setWidth( rect.width() - allocWidth - MARGIN_RIGHT );
 
                     painter->setPen( textColor );
                     painter->drawText( rect, alignment, sizeText );
@@ -99,7 +104,7 @@ void SizeColDelegate::paint( QPainter		        * painter,
                                        ALLOC_COLOR_NORMAL );
 
                     rect = option.rect;
-                    rect.setX( rect.x() + allocWidth );
+                    rect.setWidth( rect.width() - MARGIN_RIGHT );
 
                     painter->setPen( allocColor );
                     painter->drawText( rect, alignment, allocText );
@@ -120,16 +125,37 @@ void SizeColDelegate::paint( QPainter		        * painter,
 QSize SizeColDelegate::sizeHint( const QStyleOptionViewItem & option,
                                  const QModelIndex	    & index) const
 {
+    if ( index.isValid() && index.column() == SizeCol )
+    {
+        ensureModel( index );
+
+        if ( _model )
+        {
+            FileInfo * item = _model->itemFromIndex( index );
+
+            if ( item->isFile()     &&
+                 item->links() == 1 &&
+                 DirTreeModel::isSmallFile( item ) )
+            {
+                QString text = _model->data( index, Qt::DisplayRole ).toString();
+                QFontMetrics fontMetrics( option.font );
+                int width  = fontMetrics.width( text );
+                int height = fontMetrics.height();
+                QSize size( width  + MARGIN_RIGHT + MARGIN_LEFT,
+                            height + MARGIN_TOP   + MARGIN_BOTTOM );
+#if 0
+                logDebug() << "size hint for \"" << text << "\": "
+                           << size.width() << ", " << size.height() << endl;
+#endif
+                return size;
+            }
+        }
+    }
+
+    // logDebug() << "Using fallback" << endl;
     QSize size = QStyledItemDelegate::sizeHint( option, index );
 
-    if ( ! index.isValid() || index.column() != SizeCol )
-	return size;
-
-    ensureModel( index );
-
-    // TO DO
-
-    return size;
+    return QSize( size.width() + MARGIN_RIGHT + MARGIN_LEFT, size.height() );
 }
 
 
@@ -163,8 +189,6 @@ void SizeColDelegate::ensureModel( const QModelIndex & index ) const
 
         if ( ! _model )
             logError() << "WRONG_MODEL TYPE" << endl;
-        else
-            logDebug() << "Got the model" << endl;
     }
 }
 
