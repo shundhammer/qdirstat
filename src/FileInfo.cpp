@@ -689,7 +689,7 @@ bool FileInfo::filesystemCanReportBlocks() const
 	    return false;
     }
 
-    logDebug() << "Checking block size of " << dir << ": " << (int) dir->blocks() << endl;
+    // logDebug() << "Checking block size of " << dir << ": " << (int) dir->blocks() << endl;
 
     // A real directory never has a size == 0, so we can skip this check.
 
