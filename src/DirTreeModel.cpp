@@ -26,9 +26,9 @@
 // display the allocated size like (4k).
 #define SMALL_FILE_CLUSTERS                     2
 
-// Used ratio below which a small file will also display the allocated size
+// Used used percent below which a small file will also display the allocated size
 // like (4k)
-#define SMALL_FILE_SHOW_ALLOC_THRESHOLD		0.75
+#define SMALL_FILE_SHOW_ALLOC_THRESHOLD         75
 
 using namespace QDirStat;
 
@@ -837,29 +837,27 @@ QString DirTreeModel::smallSizeText( FileInfo * item )
 
     if ( allocated >= 1024 )
     {
-	float used = size / (float) allocated;
-
-	if ( used < SMALL_FILE_SHOW_ALLOC_THRESHOLD &&
-	     allocated % 1024 == 0   &&
-	     allocated < 1024 * 1024   )
-	{
-	    if ( size < 1024 )
-	    {
-		text = QString( "%1 B (%2k)" )
-		    .arg( size )
-		    .arg( allocated / 1024 );
-	    }
-	    else
-	    {
-		text = QString( "%1 (%2k)" )
-		    .arg( formatSize( size ) )
-		    .arg( allocated / 1024 );
-	    }
-	}
+        if ( item->usedPercent() < SMALL_FILE_SHOW_ALLOC_THRESHOLD &&
+             allocated % 1024 == 0   &&
+             allocated < 1024 * 1024   )
+        {
+            if ( size < 1024 )
+            {
+                text = QString( "%1 B (%2k)" )
+                    .arg( size )
+                    .arg( allocated / 1024 );
+            }
+            else
+            {
+                text = QString( "%1 (%2k)" )
+                    .arg( formatSize( size ) )
+                    .arg( allocated / 1024 );
+            }
+        }
     }
 
     if ( text.isEmpty() )
-	return formatSize( item->size() );
+        return formatSize( size );
 
     return text;
 }

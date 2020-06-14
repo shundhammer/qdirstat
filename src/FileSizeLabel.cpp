@@ -35,6 +35,7 @@ void FileSizeLabel::clear()
     _value = -1;
     _prefix.clear();
     _contextText.clear();
+    setBold( false );
     QLabel::clear();
 }
 
@@ -60,6 +61,14 @@ void FileSizeLabel::setText( const QString & newText,
     _contextText.clear();
 
     QLabel::setText( newText );
+}
+
+
+void FileSizeLabel::setBold( bool bold )
+{
+    QFont textFont = font();
+    textFont.setBold( bold );
+    setFont( textFont );
 }
 
 

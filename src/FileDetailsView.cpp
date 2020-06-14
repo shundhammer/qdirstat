@@ -170,12 +170,15 @@ void FileDetailsView::showFileInfo( FileInfo * file )
 
     setFileSizeLabel( _ui->fileSizeLabel, file );
     setFileAllocatedLabel( _ui->fileAllocatedLabel, file );
+    _ui->fileAllocatedLabel->setBold( file->usedPercent() < 33 );
+    
     _ui->fileUserLabel->setText( file->userName() );
     _ui->fileGroupLabel->setText( file->groupName() );
     _ui->filePermissionsLabel->setText( formatPermissions( file->mode() ) );
     _ui->fileMTimeLabel->setText( formatTime( file->mtime() ) );
 
     suppressIfSameContent( _ui->fileSizeLabel, _ui->fileAllocatedLabel, _ui->fileAllocatedCaption );
+
 }
 
 

@@ -234,6 +234,19 @@ FileSize FileInfo::allocatedSize() const
 }
 
 
+int FileInfo::usedPercent() const
+{
+    int percent = 100;
+
+    if ( _allocatedSize > 0 && _size > 0 )
+    {
+        percent = qRound( ( 100.0 * size() ) / allocatedSize() );
+    }
+
+    return percent;
+}
+
+
 QString FileInfo::url() const
 {
     if ( _parent )

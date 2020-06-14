@@ -81,6 +81,11 @@ namespace QDirStat
 	 **/
 	virtual FileSize totalAllocatedSize() Q_DECL_OVERRIDE;
 
+        /**
+         * The ratio of totalSize() / totalAllocatedSize() in percent.
+         **/
+        int totalUsedPercent();
+
 	/**
 	 * Returns the total size in blocks of this subtree.
 	 *

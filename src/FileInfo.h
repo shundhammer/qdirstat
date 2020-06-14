@@ -301,6 +301,11 @@ namespace QDirStat
 	 **/
 	FileSize allocatedSize() const;
 
+        /**
+         * The ratio of size() / allocatedSize() in percent.
+         **/
+        int usedPercent() const;
+
 	/**
 	 * The allocated size without taking multiple hard links into account.
 	 *

@@ -91,10 +91,15 @@ namespace QDirStat
         QString contextText() const { return _contextText; }
 
         /**
-         * Clear everything, including the visible text, the numeric value and
-         * the context menu text.
+         * Clear everything, including the visible text, the numeric value,
+         * the context menu text and the bold font.
          **/
         void clear();
+
+        /**
+         * Set or reset the font to bold.
+         **/
+        void setBold( bool bold = true );
 
 
     protected:

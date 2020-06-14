@@ -404,6 +404,19 @@ time_t DirInfo::oldestFileMtime()
 }
 
 
+int DirInfo::totalUsedPercent()
+{
+    int percent = 100;
+
+    if ( totalAllocatedSize() > 0 && totalSize() > 0 )
+    {
+        percent = qRound( ( 100.0 * totalSize() ) / totalAllocatedSize() );
+    }
+
+    return percent;
+}
+
+
 int DirInfo::directChildrenCount()
 {
     if ( _summaryDirty )
