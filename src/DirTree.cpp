@@ -660,8 +660,8 @@ void DirTree::detectClusterSize( FileInfo * item )
 
         logInfo() << "Cluster size: " << _blocksPerCluster << " blocks ("
                   << formatSize( clusterSize() ) << ")" << endl;
-        logDebug() << "Derived from " << item << " " << formatSize( item->size() )
-                   << " (allocated: " << formatSize( item->allocatedSize() ) << ")"
+        logDebug() << "Derived from " << item << " " << formatSize( item->rawByteSize() )
+                   << " (allocated: " << formatSize( item->rawAllocatedSize() ) << ")"
                    << endl;
     }
 }
