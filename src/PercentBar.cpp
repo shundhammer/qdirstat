@@ -25,11 +25,7 @@ PercentBarDelegate::PercentBarDelegate( QTreeView * treeView ):
     QStyledItemDelegate( 0 ),
     _treeView( treeView )
 {
-    _percentBarCol = DataColumns::toViewCol( PercentBarCol );
     readSettings();
-
-    connect( DataColumns::instance(), SIGNAL( columnsChanged() ),
-	     this,		      SLOT  ( columnsChanged() ) );
 }
 
 
@@ -86,17 +82,11 @@ void PercentBarDelegate::writeSettings()
 }
 
 
-void PercentBarDelegate::columnsChanged()
-{
-    _percentBarCol = DataColumns::toViewCol( PercentBarCol );
-}
-
-
 void PercentBarDelegate::paint( QPainter		   * painter,
 				const QStyleOptionViewItem & option,
 				const QModelIndex	   & index ) const
 {
-    if ( ! index.isValid() || index.column() != _percentBarCol )
+    if ( ! index.isValid() || index.column() != PercentBarCol )
 	return QStyledItemDelegate::paint( painter, option, index );
 
     QVariant data = index.data( RawDataRole );
@@ -154,7 +144,7 @@ QSize PercentBarDelegate::sizeHint( const QStyleOptionViewItem & option,
 {
     QSize size = QStyledItemDelegate::sizeHint( option, index );
 
-    if ( ! index.isValid() || index.column() != _percentBarCol )
+    if ( ! index.isValid() || index.column() != PercentBarCol )
 	return size;
 
     size.setWidth( _sizeHintWidth );

@@ -72,23 +72,8 @@ namespace QDirStat
 	 **/
 	ColorList defaultFillColors() const;
 
-	/**
-	 * Return the percent bar column.
-	 **/
-	int percentBarCol() const { return _percentBarCol; }
-
-	/**
-	 * Set the percent bar column.
-	 **/
-	void setPercentBarCol( int newCol )
-	    { _percentBarCol = newCol; }
 
     public slots:
-
-	/**
-	 * Notification that the columns have changed.
-	 **/
-	void columnsChanged();
 
 	/**
 	 * Read parameters from the settings file.
@@ -117,7 +102,6 @@ namespace QDirStat
 	ColorList   _fillColors;
 	QColor	    _barBackground;
 	int	    _sizeHintWidth;
-	int	    _percentBarCol;
 
     }; // class PercentBarDelegate
 
