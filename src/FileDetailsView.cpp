@@ -22,6 +22,8 @@
 #include "Logger.h"
 #include "Exception.h"
 
+#define ALLOCATED_FAT_PERCENT   33
+
 using namespace QDirStat;
 
 
@@ -170,15 +172,14 @@ void FileDetailsView::showFileInfo( FileInfo * file )
 
     setFileSizeLabel( _ui->fileSizeLabel, file );
     setFileAllocatedLabel( _ui->fileAllocatedLabel, file );
-    _ui->fileAllocatedLabel->setBold( file->usedPercent() < 33 );
     
     _ui->fileUserLabel->setText( file->userName() );
     _ui->fileGroupLabel->setText( file->groupName() );
     _ui->filePermissionsLabel->setText( formatPermissions( file->mode() ) );
     _ui->fileMTimeLabel->setText( formatTime( file->mtime() ) );
 
-    suppressIfSameContent( _ui->fileSizeLabel, _ui->fileAllocatedLabel, _ui->fileAllocatedCaption );
-
+    if ( ! file->isSparseFile() )
+        suppressIfSameContent( _ui->fileSizeLabel, _ui->fileAllocatedLabel, _ui->fileAllocatedCaption );
 }
 
 
@@ -187,11 +188,14 @@ void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
 {
     CHECK_PTR( file );
 
-    QString text = DirTreeModel::sizeText( file );
+    QString text;
 
-    if ( text.isEmpty() )  // The normal case: No hard links, not a sparse file
+    if ( file->links() > 1 )    // Not for sparse files!
+        DirTreeModel::sizeText( file );
+
+    if ( text.isEmpty() )
     {
-	label->setValue( file->size() );
+	label->setValue( file->rawByteSize() );
     }
     else  // The exotic case: Multiple hard links or sparse file or both
     {
@@ -208,21 +212,19 @@ void FileDetailsView::setFileAllocatedLabel( FileSizeLabel * label,
 {
     CHECK_PTR( file );
 
-    if ( file->isSparseFile() )
-	label->clear(); // It's already in the size label
+    if ( file->links() > 1 )
+    {
+        label->setText( tr( "%1 / %2 Links" )
+                        .arg( formatSize( file->rawAllocatedSize() ) )
+                        .arg( file->links() ) );
+    }
     else
     {
-	if ( file->links() > 1 )
-	{
-	    label->setText( tr( "%1 / %2 Links" )
-			    .arg( formatSize( file->rawAllocatedSize() ) )
-			    .arg( file->links() ) );
-	}
-	else
-	{
-	    label->setValue( file->allocatedSize() );
-	}
+        label->setValue( file->allocatedSize() );
     }
+
+    _ui->fileAllocatedLabel->setBold( file->usedPercent() < ALLOCATED_FAT_PERCENT ||
+                                      file->isSparseFile() );
 }
 
 
@@ -344,6 +346,7 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
 	_ui->dirLatestMTimeLabel->setText( formatTime( dir->latestMtime() ) );
 
         suppressIfSameContent( _ui->dirTotalSizeLabel, _ui->dirAllocatedLabel, _ui->dirAllocatedCaption );
+        _ui->dirAllocatedLabel->setBold( dir->totalUsedPercent() < ALLOCATED_FAT_PERCENT );
     }
     else  // Special msg -> show it and clear all summary fields
     {
