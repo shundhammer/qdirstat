@@ -191,7 +191,7 @@ void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
     QString text;
 
     if ( file->links() > 1 )    // Not for sparse files!
-        DirTreeModel::sizeText( file );
+        text = DirTreeModel::sizeText( file );
 
     if ( text.isEmpty() )
     {
