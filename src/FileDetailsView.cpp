@@ -205,7 +205,7 @@ void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
     }
     else
     {
-        label->setValue( file->size() );
+        label->setValue( file->rawByteSize() );
     }
 }
 
