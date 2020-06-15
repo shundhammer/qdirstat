@@ -149,12 +149,12 @@ namespace QDirStat
 	 **/
 	QString device( const DirInfo * dir ) const;
 
-        /**
-         * Check if we really should cross into a mounted filesystem; don't do
-         * it if this is a system mount, a bind mount, a filesystem mounted
-         * multiple times, or a network mount (NFS / Samba).
-         **/
-        bool shouldCrossIntoFilesystem( const DirInfo * dir ) const;
+	/**
+	 * Check if we really should cross into a mounted filesystem; don't do
+	 * it if this is a system mount, a bind mount, a filesystem mounted
+	 * multiple times, or a network mount (NFS / Samba).
+	 **/
+	bool shouldCrossIntoFilesystem( const DirInfo * dir ) const;
 
 
 	DirTree *	   _tree;
@@ -315,14 +315,22 @@ namespace QDirStat
 	 **/
 	QString fullName( const QString & entryName ) const;
 
+	/**
+	 * Return 'true' if the current filesystem is NTFS.
+	 **/
+	bool isNtfs();
+
 
 	//
 	// Data members
 	//
 
-	QString      _dirName;
-        MountPoint * _parentMountPoint;
-	bool	     _applyFileChildExcludeRules;
+	QString _dirName;
+	bool	_applyFileChildExcludeRules;
+	bool	_checkedForNtfs;
+	bool	_isNtfs;
+
+	static bool _warnedAboutNtfsHardLinks;
 
     };	// LocalDirReadJob
 

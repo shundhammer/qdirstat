@@ -186,22 +186,24 @@ bool DirReadJob::shouldCrossIntoFilesystem( const DirInfo * dir ) const
 
 
 
+bool LocalDirReadJob::_warnedAboutNtfsHardLinks = false;
+
+
 LocalDirReadJob::LocalDirReadJob( DirTree * tree,
-				  DirInfo * dir )
-    : DirReadJob( tree, dir )
-    , _parentMountPoint( 0 )
-    , _applyFileChildExcludeRules( false )
+				  DirInfo * dir ):
+    DirReadJob( tree, dir ),
+    _applyFileChildExcludeRules( false ),
+    _checkedForNtfs( false ),
+    _isNtfs( false )
 {
     if ( _dir )
-    {
 	_dirName = _dir->url();
-        _parentMountPoint = MountPoints::findNearestMountPoint( _dirName );
-    }
 }
 
 
 LocalDirReadJob::~LocalDirReadJob()
 {
+    // NOP
 }
 
 
@@ -299,24 +301,26 @@ void LocalDirReadJob::startReading()
 
 #if DONT_TRUST_NTFS_HARD_LINKS
 
-                    if ( statInfo.st_nlink > 1 &&
-                         _parentMountPoint     &&
-                         _parentMountPoint->isNtfs() )
+                    if ( statInfo.st_nlink > 1 && isNtfs() )
                     {
-                        // NTFS seems to return bogus hard link counts; use 1 instead
+                        // NTFS seems to return bogus hard link counts; use 1 instead.
                         // See  https://github.com/shundhammer/qdirstat/issues/88
 
-#if VERBOSE_NTFS_HARD_LINKS
-                        logDebug() << "Not trusting NTFS with hard links: "
-                                   << _dir->url() << "/" << entryName
-                                   << " links: " << statInfo.st_nlink
-                                   << " -> resetting to 1"
-                                   << endl;
+#if ! VERBOSE_NTFS_HARD_LINKS
+                        if ( ! _warnedAboutNtfsHardLinks )
 #endif
+                        {
+                            logWarning() << "Not trusting NTFS with hard links: \""
+                                         << _dir->url() << "/" << entryName
+                                         << "\" links: " << statInfo.st_nlink
+                                         << " -> resetting to 1"
+                                         << endl;
+                            _warnedAboutNtfsHardLinks = true;
+                        }
+
                         statInfo.st_nlink = 1;
                     }
 #endif
-
 		    FileInfo * child = new FileInfo( entryName, &statInfo, _tree, _dir );
 		    CHECK_NEW( child );
 
@@ -605,6 +609,24 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
 
 	return 0;
     }
+}
+
+
+bool LocalDirReadJob::isNtfs()
+{
+    if ( ! _checkedForNtfs )
+    {
+        _isNtfs         = false;
+        _checkedForNtfs = true;
+
+        if ( ! _dirName.isEmpty() )
+        {
+            MountPoint * mountPoint = MountPoints::findNearestMountPoint( _dirName );
+            _isNtfs = mountPoint && mountPoint->isNtfs();
+        }
+    }
+
+    return _isNtfs;
 }
 
 
