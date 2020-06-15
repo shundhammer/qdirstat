@@ -71,7 +71,10 @@ void SizeColDelegate::paint( QPainter		        * painter,
                 {
                     QRect rect           = option.rect;
                     const QPalette & pal = option.palette;
-                    QColor textColor     = pal.color( QPalette::Normal, QPalette::Text );
+                    QColor textColor     = pal.color( item->isIgnored() ?
+                                                      QPalette::Disabled : QPalette::Normal,
+                                                      QPalette::Text );
+
                     int alignment        = Qt::AlignRight | Qt::AlignVCenter;
                     bool invertColor     = _usingDarkTheme;
 
@@ -91,7 +94,7 @@ void SizeColDelegate::paint( QPainter		        * painter,
 
                     QFontMetrics fontMetrics( option.font );
                     int allocWidth = fontMetrics.width( allocText );
-                    rect.setWidth( rect.width() - allocWidth - MARGIN_RIGHT );
+                    rect.setWidth( rect.width() - allocWidth );
 
                     painter->setPen( textColor );
                     painter->drawText( rect, alignment, sizeText );
@@ -104,7 +107,7 @@ void SizeColDelegate::paint( QPainter		        * painter,
                                        ALLOC_COLOR_NORMAL );
 
                     rect = option.rect;
-                    rect.setWidth( rect.width() - MARGIN_RIGHT );
+                    rect.setWidth( rect.width() );
 
                     painter->setPen( allocColor );
                     painter->drawText( rect, alignment, allocText );
@@ -153,9 +156,13 @@ QSize SizeColDelegate::sizeHint( const QStyleOptionViewItem & option,
     }
 
     // logDebug() << "Using fallback" << endl;
-    QSize size = QStyledItemDelegate::sizeHint( option, index );
 
+#if 0
+    QSize size = QStyledItemDelegate::sizeHint( option, index );
     return QSize( size.width() + MARGIN_RIGHT + MARGIN_LEFT, size.height() );
+#endif
+    
+    return QStyledItemDelegate::sizeHint( option, index );
 }
 
 
