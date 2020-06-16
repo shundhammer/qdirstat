@@ -879,12 +879,33 @@ QString DirTreeModel::smallSizeText( FileInfo * item )
 
 bool DirTreeModel::isSmallFile( FileInfo * item )
 {
-    return item					&&
-	item->isFile()				&&
-	item->blocks() > 0			&&
-	item->tree()				&&
-	item->tree()->clusterSize() > 0		&&
-	item->allocatedSize() <= item->tree()->clusterSize() * SMALL_FILE_CLUSTERS;
+    if ( item			&&
+         item->isFile()		&&
+         item->blocks() > 0     &&
+         ! item->isSparseFile() &&
+         item->tree()		  )
+    {
+        FileSize clusterSize = item->tree()->clusterSize();
+
+	if ( clusterSize > 0 )
+        {
+            if ( item->allocatedSize() <= clusterSize * SMALL_FILE_CLUSTERS )
+                return true;
+
+            if ( item->allocatedSize() <= clusterSize * ( SMALL_FILE_CLUSTERS + 1 ) )
+            {
+                FileSize unused = item->allocatedSize() - item->rawByteSize();
+
+                // 'unused' might be negative for sparse files, but the check
+                // will still be successful.
+
+                if ( unused > clusterSize / 2 )
+                    return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 
