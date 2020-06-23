@@ -225,18 +225,19 @@ void DirTreeModel::loadIcons()
     if ( ! _treeIconDir.endsWith( "/" ) )
 	_treeIconDir += "/";
 
-    _dirIcon	       = QPixmap( _treeIconDir + "dir.png"	      );
-    _dotEntryIcon      = QPixmap( _treeIconDir + "dot-entry.png"      );
-    _fileIcon	       = QPixmap( _treeIconDir + "file.png"	      );
-    _symlinkIcon       = QPixmap( _treeIconDir + "symlink.png"	      );
-    _unreadableDirIcon = QPixmap( _treeIconDir + "unreadable-dir.png" );
-    _mountPointIcon    = QPixmap( _treeIconDir + "mount-point.png"    );
-    _stopIcon	       = QPixmap( _treeIconDir + "stop.png"	      );
-    _excludedIcon      = QPixmap( _treeIconDir + "excluded.png"	      );
-    _blockDeviceIcon   = QPixmap( _treeIconDir + "block-device.png"   );
-    _charDeviceIcon    = QPixmap( _treeIconDir + "char-device.png"    );
-    _specialIcon       = QPixmap( _treeIconDir + "special.png"	      );
-    _pkgIcon	       = QPixmap( _treeIconDir + "folder-pkg.png"     );
+    _dirIcon	       = QIcon( _treeIconDir + "dir.png"	    );
+    _dotEntryIcon      = QIcon( _treeIconDir + "dot-entry.png"      );
+    _fileIcon	       = QIcon( _treeIconDir + "file.png"	    );
+    _symlinkIcon       = QIcon( _treeIconDir + "symlink.png"	    );
+    _unreadableDirIcon = QIcon( _treeIconDir + "unreadable-dir.png" );
+    _mountPointIcon    = QIcon( _treeIconDir + "mount-point.png"    );
+    _stopIcon	       = QIcon( _treeIconDir + "stop.png"	    );
+    _excludedIcon      = QIcon( _treeIconDir + "excluded.png"	    );
+    _blockDeviceIcon   = QIcon( _treeIconDir + "block-device.png"   );
+    _charDeviceIcon    = QIcon( _treeIconDir + "char-device.png"    );
+    _specialIcon       = QIcon( _treeIconDir + "special.png"	    );
+    _pkgIcon	       = QIcon( _treeIconDir + "folder-pkg.png"     );
+    _atticIcon         = _dirIcon;
 }
 
 
@@ -934,9 +935,10 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
     if ( col != NameCol )
 	return QVariant();
 
-    QPixmap icon;
+    QIcon icon;
 
     if	    ( item->isDotEntry() )  icon = _dotEntryIcon;
+    else if ( item->isAttic() )	    icon = _atticIcon;
     else if ( item->isPkgInfo()	 )  icon = _pkgIcon;
     else if ( item->isExcluded() )  icon = _excludedIcon;
     else if ( item->isDir()	 )
@@ -944,6 +946,7 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
 	if	( item->readState() == DirAborted )   icon = _stopIcon;
 	else if ( item->readError()		  )   icon = _unreadableDirIcon;
 	else if ( item->isMountPoint()		  )   icon = _mountPointIcon;
+	else if ( item->isIgnored()		  )   icon = _atticIcon;
 	else					      icon = _dirIcon;
     }
     else // ! item->isDir()
@@ -956,7 +959,14 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
 	else if ( item->isSpecial()		  )   icon = _specialIcon;
     }
 
-    return icon.isNull() ? QVariant() : icon;
+    if ( icon.isNull() )
+	return QVariant();
+
+    bool  useDisabled = item->isIgnored() || item->isAttic();
+    QSize iconSize( icon.actualSize( QSize( 1024, 1024 ) ) );
+
+    return icon.pixmap( iconSize, useDisabled ?
+			QIcon::Disabled : QIcon::Normal );
 }
 
 

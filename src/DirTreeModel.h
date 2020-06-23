@@ -12,7 +12,7 @@
 
 #include <QAbstractItemModel>
 #include <QColor>
-#include <QPixmap>
+#include <QIcon>
 #include <QSet>
 #include <QTimer>
 #include <QTextStream>
@@ -120,15 +120,15 @@ namespace QDirStat
 	QModelIndexList persistentIndexList() const
 	    { return QAbstractItemModel::persistentIndexList(); }
 
-        /**
-         * Return 'true' if the application uses a dark widget theme.
-         **/
-        static bool usingDarkTheme();
+	/**
+	 * Return 'true' if the application uses a dark widget theme.
+	 **/
+	static bool usingDarkTheme();
 
-        /**
-         * Return 'true' if the application uses a light widget theme.
-         **/
-        static bool usingLightTheme() { return ! usingDarkTheme(); }
+	/**
+	 * Return 'true' if the application uses a light widget theme.
+	 **/
+	static bool usingLightTheme() { return ! usingDarkTheme(); }
 
 
     public slots:
@@ -137,21 +137,21 @@ namespace QDirStat
 	 **/
 	void openUrl( const QString & url );
 
-        /**
-         * Open a pkg URL: Read installed packages that match the specified
-         * PkgFilter and their file lists from the system's package manager(s).
-         *
-         * Notice that PkgFilter has a constructor that takes a QString and
-         * uses PkgFilter::Auto as the default filter mode to determine the
-         * filter mode from any special characters present in the URL, e.g.
-         *
-         * "Pkg:/"                     -> PkgFilter::SelectAll
-         * contains "*" or "?"         -> PkgFilter::Wildcard
-         * contains "^" or "$" or ".*" -> PkgFilter::RegExp
-         * "Pkg:/=foo"                 -> PkgFilter::ExactMatch
-         * otherwise                   -> PkgFilter::StartsWith
-         **/
-        void readPkg( const PkgFilter & pkgFilter );
+	/**
+	 * Open a pkg URL: Read installed packages that match the specified
+	 * PkgFilter and their file lists from the system's package manager(s).
+	 *
+	 * Notice that PkgFilter has a constructor that takes a QString and
+	 * uses PkgFilter::Auto as the default filter mode to determine the
+	 * filter mode from any special characters present in the URL, e.g.
+	 *
+	 * "Pkg:/"		       -> PkgFilter::SelectAll
+	 * contains "*" or "?"	       -> PkgFilter::Wildcard
+	 * contains "^" or "$" or ".*" -> PkgFilter::RegExp
+	 * "Pkg:/=foo"		       -> PkgFilter::ExactMatch
+	 * otherwise		       -> PkgFilter::StartsWith
+	 **/
+	void readPkg( const PkgFilter & pkgFilter );
 
 	/**
 	 * Clear this view's contents.
@@ -194,15 +194,15 @@ namespace QDirStat
 	 **/
 	void refreshSelected();
 
-        /**
-         * Set the update speed to slow (3 sec instead of 333 millisec).
-         **/
-        void setSlowUpdate( bool slow = true );
+	/**
+	 * Set the update speed to slow (3 sec instead of 333 millisec).
+	 **/
+	void setSlowUpdate( bool slow = true );
 
-        /**
-         * Return the slow update flag.
-         **/
-        bool slowUpdate() const { return _slowUpdate; }
+	/**
+	 * Return the slow update flag.
+	 **/
+	bool slowUpdate() const { return _slowUpdate; }
 
 
     public:
@@ -215,11 +215,11 @@ namespace QDirStat
 	// might even become configurable.
 
 
-        /**
-         * Get the FileInfo for a model index. This may return 0 if the index
-         * is invalid.
-         **/
-        FileInfo * itemFromIndex( const QModelIndex & index );
+	/**
+	 * Get the FileInfo for a model index. This may return 0 if the index
+	 * is invalid.
+	 **/
+	FileInfo * itemFromIndex( const QModelIndex & index );
 
 	/**
 	 * Find the child number 'childNo' among the children of 'parent'.
@@ -301,31 +301,31 @@ namespace QDirStat
 	virtual void sort( int column,
 			   Qt::SortOrder order = Qt::AscendingOrder ) Q_DECL_OVERRIDE;
 
-        /**
-         * For plain files that have multiple hard links or that are sparse
-         * files or both, return a text describing the size: "20.0 MB / 4
-         * Links", "1 GB (allocated: 2 kB)". For everything else, return an
-         * empty string.
-         *
-         * 'fmtSz' is a pointer to a formatting function that takes a FileSize
-         * argument and returns a QString.
-         **/
-        static QString sizeText( FileInfo * item,
-                                 QString (*fmtSz)(FileSize) = formatSize );
+	/**
+	 * For plain files that have multiple hard links or that are sparse
+	 * files or both, return a text describing the size: "20.0 MB / 4
+	 * Links", "1 GB (allocated: 2 kB)". For everything else, return an
+	 * empty string.
+	 *
+	 * 'fmtSz' is a pointer to a formatting function that takes a FileSize
+	 * argument and returns a QString.
+	 **/
+	static QString sizeText( FileInfo * item,
+				 QString (*fmtSz)(FileSize) = formatSize );
 
-        /**
-         * Format a small size for a plain file for with both size and
-         * allocated size: "137 Bytes (4k)"
-         *
-         * This returns an empty text if this item is not a plain file.
-         **/
-        static QString smallSizeText( FileInfo * item );
+	/**
+	 * Format a small size for a plain file for with both size and
+	 * allocated size: "137 Bytes (4k)"
+	 *
+	 * This returns an empty text if this item is not a plain file.
+	 **/
+	static QString smallSizeText( FileInfo * item );
 
-        /**
-         * Return 'true' if this is considered a small file, i.e. non-null, but
-         * 2 clusters allocated or less.
-         **/
-        static bool isSmallFile( FileInfo * item );
+	/**
+	 * Return 'true' if this is considered a small file, i.e. non-null, but
+	 * 2 clusters allocated or less.
+	 **/
+	static bool isSmallFile( FileInfo * item );
 
 
 
@@ -392,10 +392,10 @@ namespace QDirStat
 
 	/**
 	 * Invalidate all persistent indexes in 'subtree'. 'includeParent'
-         * indicates if 'subtree' itself will become invalid.
+	 * indicates if 'subtree' itself will become invalid.
 	 **/
 	void invalidatePersistent( FileInfo * subtree,
-                                   bool       includeParent );
+				   bool	      includeParent );
 
 
     protected:
@@ -443,16 +443,16 @@ namespace QDirStat
 	 **/
 	QVariant columnIcon( FileInfo * item, int col ) const;
 
-        /**
-         * Return the number of direct children (plus the attic if there is
-         * one) of a subtree.
-         **/
-        int directChildrenCount( FileInfo * subtree ) const;
+	/**
+	 * Return the number of direct children (plus the attic if there is
+	 * one) of a subtree.
+	 **/
+	int directChildrenCount( FileInfo * subtree ) const;
 
-        /**
-         * Return the text for the size for 'item'
-         **/
-        QVariant sizeColText( FileInfo * item ) const;
+	/**
+	 * Return the text for the size for 'item'
+	 **/
+	QVariant sizeColText( FileInfo * item ) const;
 
 	/**
 	 * Format a percentage value as string if it is non-negative.
@@ -460,23 +460,23 @@ namespace QDirStat
 	 **/
 	QVariant formatPercent( float percent ) const;
 
-        /**
-         * Start removing rows.
-         **/
-        void beginRemoveRows( const QModelIndex & parent, int first, int last );
+	/**
+	 * Start removing rows.
+	 **/
+	void beginRemoveRows( const QModelIndex & parent, int first, int last );
 
-        /**
-         * End removing rows.
-         *
-         * Unlike the QAbstractItemModel's implementation, this method checks
-         * if removing rows is in progress in the first place so there will not
-         * be a segfault (!) if endRemoveRows is called without a corresponding
-         * beginRemoveRows().
-         *
-         * As usual, Qt's item classes don't even give it an honest try to do
-         * the most basic checking. This implementation does.
-         **/
-        void endRemoveRows();
+	/**
+	 * End removing rows.
+	 *
+	 * Unlike the QAbstractItemModel's implementation, this method checks
+	 * if removing rows is in progress in the first place so there will not
+	 * be a segfault (!) if endRemoveRows is called without a corresponding
+	 * beginRemoveRows().
+	 *
+	 * As usual, Qt's item classes don't even give it an honest try to do
+	 * the most basic checking. This implementation does.
+	 **/
+	void endRemoveRows();
 
 
 	//
@@ -490,32 +490,33 @@ namespace QDirStat
 	QSet<DirInfo *>	 _pendingUpdates;
 	QTimer		 _updateTimer;
 	int		 _updateTimerMillisec;
-        int              _slowUpdateMillisec;
-        bool             _slowUpdate;
+	int		 _slowUpdateMillisec;
+	bool		 _slowUpdate;
 	DataColumn	 _sortCol;
 	Qt::SortOrder	 _sortOrder;
-        bool             _removingRows;
+	bool		 _removingRows;
 
-        // Colors
+	// Colors
 
-        QColor _dirReadErrColor;
-        QColor _subtreeReadErrColor;
+	QColor _dirReadErrColor;
+	QColor _subtreeReadErrColor;
 
 
 	// The various icons
 
-	QPixmap	_dirIcon;
-	QPixmap	_dotEntryIcon;
-	QPixmap	_fileIcon;
-	QPixmap _symlinkIcon;
-	QPixmap	_unreadableDirIcon;
-	QPixmap _mountPointIcon;
-	QPixmap _stopIcon;
-	QPixmap _excludedIcon;
-	QPixmap _blockDeviceIcon;
-	QPixmap _charDeviceIcon;
-	QPixmap _specialIcon;
-        QPixmap _pkgIcon;
+	QIcon _dirIcon;
+	QIcon _dotEntryIcon;
+	QIcon _atticIcon;
+	QIcon _fileIcon;
+	QIcon _symlinkIcon;
+	QIcon _unreadableDirIcon;
+	QIcon _mountPointIcon;
+	QIcon _stopIcon;
+	QIcon _excludedIcon;
+	QIcon _blockDeviceIcon;
+	QIcon _charDeviceIcon;
+	QIcon _specialIcon;
+	QIcon _pkgIcon;
 
     };	// class DirTreeModel
 
