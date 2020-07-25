@@ -74,7 +74,6 @@ void GeneralConfigPage::readSettings()
     settings.beginGroup( "DirectoryTree" );
 
     _ui->crossFilesystemsCheckBox->setChecked( settings.value( "CrossFilesystems"    , false ).toBool() );
-    _ui->ignoreHardLinksCheckBox->setChecked ( settings.value( "IgnoreHardLinks"     , false ).toBool() );
     _ui->treeUpdateIntervalSpinBox->setValue ( settings.value( "UpdateTimerMillisec" ,   333 ).toInt()  );
     QString treeIconDir = settings.value( "TreeIconDir", ":/icons/tree-medium/" ).toString();
 
@@ -102,7 +101,6 @@ void GeneralConfigPage::writeSettings()
     settings.beginGroup( "DirectoryTree" );
 
     settings.setValue( "CrossFilesystems"    , _ui->crossFilesystemsCheckBox->isChecked() );
-    settings.setValue( "IgnoreHardLinks"     , _ui->ignoreHardLinksCheckBox->isChecked()  );
     settings.setValue( "UpdateTimerMillisec" , _ui->treeUpdateIntervalSpinBox->value()    );
 
     switch ( _ui->treeIconThemeComboBox->currentIndex() )

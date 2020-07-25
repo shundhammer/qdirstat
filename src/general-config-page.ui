@@ -65,13 +65,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QCheckBox" name="ignoreHardLinksCheckBox">
-         <property name="text">
-          <string>Ignore &amp;hard links</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>
