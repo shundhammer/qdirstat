@@ -11,6 +11,313 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 ## QDirStat History
 
 
+- 2020-06-14
+
+  - Now displaying the allocated size for very small files (8 kB (2 clusters)
+    or less) in a much more subdued way so it's still there, but less
+    distracting.
+
+
+  - If a file is wasting very much space (i.e. if it uses 33% or less of its
+    allocated disk space), now displaying the allocated size in bold in the
+    "Details" panel to draw more attention to the fact. This affects pretty
+    much all tiny files with 1360 bytes or less since the cluster size of most
+    (all?) Linux filesystem is so large (4 kB for ext4, XFS, Btrfs).
+
+  Screenshot for both changes at [GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134).
+
+
+- 2020-06-13
+
+  - Now automatically reopening the old current branch in the tree view when
+    using actions like "refresh selected" and "continue reading at mount point
+    ([GitHub Issue #135](https://github.com/shundhammer/qdirstat/issues/135)).
+
+  - Now automatically expanding the first directory level of a mount point
+    after "continue reading at mount point".
+
+  - Now correctly labelling a mount point as mount point in the "Details"
+    panel.
+
+
+- 2020-06-12
+
+  - NTFS is now detected as "ntfs", no longer as "fuseblk" in the "Open
+    Directory" and the "Filesystems" dialogs.
+
+    This was fallout of
+    [GitHub Issue #88](https://github.com/shundhammer/qdirstat/issues/88)
+    (NTFS hard links).
+
+  - Now ignoring hard links on NTFS; the (current?) ntfs-3g implementation
+    using fuseblk seems to disagree with Windows tools which files really have
+    hard links. And in this case I tend to have more faith in the Windows
+    tools. Now the total sizes of my Windows partitions as reported by QDirStat
+    are much closer to the sizes reported by the `df` command, the `statfs()`
+    system call and QDirStat's new "Filesystems" window.
+
+    See also [GitHub Issue #88](https://github.com/shundhammer/qdirstat/issues/88).
+
+
+- 2020-06-11
+
+  - Fixed [GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134):
+    _Size Difference between QDirStat Reports and the "du" and "df" Commands_:
+
+    - Now also showing the _allocated_ size in the details panel for files and
+      directory trees. This can make a a big difference if there are lots of tiny files.
+
+    - Now showing the _allocated_ size for directories in the tree view, not
+      only the sum of all the _byte_ sizes of all the files in the subtree.
+
+    - Now using the _allocated_ size in the treemap so tiny files appear with
+      their true size, no longer disappearing in the grey background: A 6 bytes
+      file is now displayed with the 4 KB that it actually consumes, not just
+      the 6 bytes of its content.
+
+    More information and lots of screenshots at
+    [GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134).
+
+
+- 2020-06-03
+
+  - New "Mounted Filesystems" window ("View" -> "Show Mounted Filesystems" or
+    Ctrl-M):
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-filesystems-window.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-filesystems-window.png)
+
+    This shows information about "normal" mounted filesystems (excluding system
+    mounts like /dev, /proc, /sys, bind mounts, Btrfs subvolumes) with usage
+    data as reported by the filesystem itself. The "Reserved" column shows the
+    disk space reserved for the root user on that filesystem, "Free" is the
+    available space for non-privileged users.
+
+    Sometimes the "Used" size reported here may be quite different from what
+    QDirStat reports after reading that complete filesystem; this can be due to
+    metadata, journals or snapshots.
+
+  - Added a document about Btrfs free size and how different tools tend to show
+    different values: [Btrfs-Free-Size.md](doc/Btrfs-Free-Size.md)
+
+
+
+- 2020-05-27
+
+  - Implemented [GitHub Issue #129](https://github.com/shundhammer/qdirstat/issues/129):
+    _Option to continue reading at all mount points at once_.
+
+    Previously, you could choose to either always cross filesystems while
+    reading directories, or you could later open the parent branch of the mount
+    point in the tree view and then use "Continue reading at mount point" from
+    the main menu / context menu.
+
+    Now you can change this setting temporarily for the current program run; it
+    will continue reading at "normal" mount points, i.e. excluding system
+    mounts like `/dev`, `/proc`, `/sys` and also bind mounts or network mounts; but
+    it still reads Btrfs subvolumes.
+
+  - This new option needed a check box in the "Open Directory" dialog; so from
+    now on, QDirStat no longer uses the generic Qt file dialog, it has a custom
+    one:
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-open-dir-dialog.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-open-dir-dialog.png)
+
+    In addition to that new check box at the bottom, there is now also a new
+    "places" widget for quick access to the user's home directory and all
+    ("normal", see above) mounted filesystems, including network mounts (NFS,
+    Samba / Cifs).
+
+
+- 2020-03-19
+
+  - Added a config option to ignore hard links.
+
+    This is useful for a very small number of use cases. Hard links are not
+    very common anymore in today's Linux / BSD / Unix-like systems, so most
+    users won't have to bother with this at all.
+
+    By default, QDirStat sums up the disk space for a file with multiple hard
+    links for each hard link's share of the overall size: If a file with 1 MB
+    has 4 hard links, for each of those 4 links QDirStat adds 1/4 of the size
+    (i.e., 256 kB) to the parent directory. If all those 4 links are in the
+    same directory, that's very simple: They add up to 4 * 256 kB = 1 MB, so
+    the sum is correct.
+
+    If those hard links are all in different directories, each directory only
+    gets part of that disk space allocated, because in fact they share the disk
+    space among each other; the total disk space sum taking all those
+    directories into account is still correct, of course.
+
+    The trouble starts when you want to make a backup of only one of those
+    directories: Even though the disk space is still shared with other
+    directories, on the backup medium, you still need the disk space for that
+    complete file, i.e. the full 1 MB, not only that directory's share (256
+    kB). With a lot of hard-linked files, that can add up to a lot of
+    difference between what QDirStat displays and what disk space you actually
+    need for the backup.
+
+    There was a user who makes heavy use of that, and for that kind of use case
+    there is now the option to ignore hard links: In that case, QDirStat sums
+    up the complete size (the full 1 MB) for each hard link of the file.
+
+    While that is useful for this special case, and you can now see the total
+    size that you will need for your backup medium for that one directory, the
+    total size higher up in the directory tree where more than one of those
+    directories that share hard linked files with each other is off: That file
+    now appears 4 times with 1 MB each, so it will add up to 4 MB.
+
+    So please use that config option only when you are aware of the
+    consequences; this is a specialized option for rare, specialized use
+    cases. It basically makes sense only if the other hard links are all
+    outside the subtree that QDirStat displays.
+
+    If in doubt, leave this option off (which is the default).
+
+    More details at [GitHub Issue #124](https://github.com/shundhammer/qdirstat/issues/124).
+
+
+- 2020-03-06
+
+  - Fixed the internal cache writer (the one called from the _File_ menu, not
+    the _qdirstat-cache-writer_ Perl script): For files with multiple hard
+    links, it wrote the wrong size to the cache file: The result of _size /
+    links_, not _size_.
+
+    This was part of [GitHub Issue #124](https://github.com/shundhammer/qdirstat/issues/124).
+
+- 2020-02-24
+
+  - Fixed crash when terminating with Ctrl-Q while reading directories
+    [(GitHub Issue #122)](https://github.com/shundhammer/qdirstat/issues/122).
+
+
+--------------
+
+
+- 2020-02-13 **New stable release: 1.6.1**
+
+  **Summary:**
+
+  - Much better handling for "permission denied" errors while reading directories
+
+  - Now showing the exact byte size (134 495 994 Bytes instead of 128.3 MB)
+    upon mouse click in the tree (right click) and in the details panel (left
+    or right click)
+
+  - New optional tree column "Oldest File" (not enabled by default)
+
+  - Bug fix: Support for dark widget themes in file size histogram window
+
+
+  **Details:**
+
+  - If you start QDirStat with insufficient permissions, you could easily
+    overlook large subtrees in the filesystem that consume disk space, but were
+    not visible to you. They did get a special icon, but you would have to open
+    the parent directory in the tree view to see that.
+
+    Now, QDirStat notifies you in several ways:
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-err-dirs-light.png" height="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-err-dirs-light.png)
+
+    - All parent directories that contain a subtree that could not be read are
+      now displayed in dark red in the tree view.
+
+    - The _Size_ field of those directories as well as other accumulated values
+      (_Items_, _Files_, _Subdirs_) are now preceded with a "greater than" sign
+      to indicate that there is most likely more, but that information could
+      not be retrieved: ">7.2 MB" indicating that it's at least 7.2 MB and most
+      likely more than that, but we don't know because one or more
+      subdirectories could not be read.
+
+    - A message panel in the main window between the tree view and the treemap
+      with a message that some directories could not be read.
+
+      You can close the message with the `[x]` close button on its right side,
+      but you can also simply leave it open. This is a lot less obtrusive than
+      a pop-up dialog, yet less temporary than a message in the bottom status
+      line that will disappear in a few seconds or when anything else is
+      reported.
+
+    - Clicking on the "Details..." link in that message opens a separate window
+      to report all directories that could not be read (typically because of
+      insufficient permissions).
+
+      This window is non-modal, i.e. you can still interact with the main
+      window when it is open. Click on any directory that it lists to locate it
+      in the main window: The tree view will open that branch and scroll to
+      make it visible.
+
+      [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-unreadable-dirs-window.png" height="300">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-unreadable-dirs-window.png)
+
+    - In addition to the "locked folder" icon, unreadable directories are shown
+      in bright red in the tree view.
+
+    - When an unreadable directory is selected in the tree view, the details
+      panel now shows a large padlock icon and a message "[Permission Denied]",
+      and the permissions are highlighted in red.
+
+  - You can now see the exact size in bytes both in the tree view and in the
+    details panel: 134 495 994 Bytes instead of 128.3 MB. The field is still
+    (somewhat) human readable with thousands separators (using blanks to avoid
+    confusion with different decimal / thousands separators in different
+    languages).
+
+    This can make it easier to compare sizes with other tools that report them
+    in bytes or that insist in using 1000-based units (QDirStat uses 1024-based
+    size units: 1 kB = 1024 Bytes; 1 MB = 1024 kB; 1 GB = 1024 MB; etc.).
+
+    Not using tool tips that appear automatically was a conscious decision:
+    This level of detailed information is not needed that often, and tool tips
+    get in the way whenever the mouse cursor lingers too long at an active
+    spot. More often than not a tool tip obscurs other content that the user
+    might want to read at that very moment. This is why in QDirStat in the rare
+    cases that you are interested in those exact numbers, you have to click:
+
+    - In the tree view, right-click a size field (a left click is used for
+      selecting an item in tree views, so the context menu is pressed into
+      service for that purpose (only for the size column)).
+
+      [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-byte-size.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-byte-size.png)
+
+    - In the details panel, use left or right click. To indicate what fields
+      can be clicked, they are now underlined when the mouse hovers over them.
+
+      [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-byte-size-2a.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-byte-size-2a.png)
+
+      _Hovering over fields that can be clicked shows them underlined, very
+      much like a hyperlink._
+
+      [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-byte-size-2b.png" height="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-byte-size-2b.png)
+
+      _Clicking (left or right mouse button) shows more details: In this case,
+      the exact byte size._
+
+  - There is now an optional new column "Oldest File" that shows the timestamp
+    (the mtime) of the oldest file in a subtree.  This is strictly about files;
+    directories, symlinks and special files (block or character devices, FIFOs
+    etc.) are ignored for this.
+
+    This may be useful to spot some old cruft, for example leftover dot files
+    in your home directory. Many programs generate such files when you start
+    them for the first time, and they are rarely cleaned up when they fall out
+    of use.
+
+    Notice that this column is not enabled by default. If you would like to use
+    it, switch to layout L2 or L3, right-click the tree header to open the
+    columns context menu, select _Hidden Columns_, then _Show Column "Oldest
+    File"_.
+
+    Of course you can also sort by this column to see the oldest files first
+    (or last).
+
+  - Fixed text color in histogram in dark widget themes
+    [(GitHub Issue #117)](https://github.com/shundhammer/qdirstat/issues/117).
+
+
+--------------------
+
+
 - 2020-02-12
 
   - Fine-tuned error handling: If there is a "permission denied" error while
