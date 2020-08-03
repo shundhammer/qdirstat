@@ -125,12 +125,33 @@ Download installable binary packages for various Linux distributions here:
 
 - 2020-08-03
 
-  - Now ignoring mounted snap packages in the "Open Directory" dialog and in
-    the "Mounted Filesystems" window.
+  - Now ignoring the loopback mounts of installed snap packages in the "Open
+    Directory" dialog and in the "Mounted Filesystems" window.
 
-    Seriously, who comes up with those completely brain-dead ideas of
-    cluttering the mount points more and more with all kinds of useless stuff?
+    Yes, each of them has a separate loop mount, even if it's only installed,
+    not in active use. Those mounts clutter the output of commands like `df` or
+    `mount` with nonsensical cruft:
 
+    ```
+    df -hT | grep snap
+
+    /dev/loop0  squashfs  159M  159M  0 100% /snap/chromium/1244
+    /dev/loop1  squashfs   55M   55M  0 100% /snap/core18/1880
+    /dev/loop2  squashfs   63M   63M  0 100% /snap/gtk-common-themes/1506
+    /dev/loop3  squashfs   30M   30M  0 100% /snap/snapd/8542
+
+    ```
+
+    (From a freshly installed Xubuntu 20.04 LTS)
+
+    Thanks a lot. Time to extend my `df` shell alias to exclude filesystem type
+    "squashfs", too:
+
+    ```
+    alias df='/bin/df -x tmpfs -x devtmpfs -x squashfs -h $*'
+    ```
+
+------------
 
 - 2020-07-26 **New stable release: 1.7**
 
