@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-07-26
+Updated: 2020-08-03
 
 
 ## Overview
@@ -122,6 +122,15 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2020-08-03
+
+  - Now ignoring mounted snap packages in the "Open Directory" dialog and in
+    the "Mounted Filesystems" window.
+
+    Seriously, who comes up with those completely brain-dead ideas of
+    cluttering the mount points more and more with all kinds of useless stuff?
+
 
 - 2020-07-26 **New stable release: 1.7**
 

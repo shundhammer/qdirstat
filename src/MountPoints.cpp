@@ -92,6 +92,12 @@ bool MountPoint::isSystemMount() const
 }
 
 
+bool MountPoint::isSnapPackage() const
+{
+    return _path.startsWith( "/snap" ) && _filesystemType.toLower() == "squashfs";
+}
+
+
 #if HAVE_Q_STORAGE_INFO
 
 bool MountPoint::hasSizeInfo() const
@@ -337,6 +343,12 @@ bool MountPoints::read( const QString & filename )
 	    logInfo() << "Found duplicate mount of " << device << " at " << path << endl;
 	}
 
+        if ( mountPoint->isSnapPackage() )
+        {
+            QString pkgName = path.section( "/", 1, 1, QString::SectionSkipEmpty );
+            logInfo() << "Found snap package \"" << pkgName << "\" at " << path << endl;
+        }
+
 	_mountPointList << mountPoint;
 	_mountPointMap[ path ] = mountPoint;
 	++count;
@@ -423,8 +435,12 @@ QList<MountPoint *> MountPoints::normalMountPoints()
 
     foreach ( MountPoint * mountPoint, instance()->_mountPointList )
     {
-	if ( ! mountPoint->isSystemMount() && ! mountPoint->isDuplicate() )
+	if ( ! mountPoint->isSystemMount() &&
+             ! mountPoint->isDuplicate()   &&
+             ! mountPoint->isSnapPackage()    )
+        {
 	    result << mountPoint;
+        }
     }
 
     return result;

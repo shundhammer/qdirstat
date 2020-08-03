@@ -104,6 +104,12 @@ namespace QDirStat
 	 **/
 	bool isDuplicate() const { return _isDuplicate; }
 
+        /**
+         * Return 'true' if this is a snap package, i.e. it is a squashfs
+         * mounted below /snap.
+         **/
+        bool isSnapPackage() const;
+
 	/**
 	 * Set the 'duplicate' flag. This should only be set while /proc/mounts
 	 * or /etc/mtab is being read.
