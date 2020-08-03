@@ -89,6 +89,7 @@ QStringList UnpkgSettings::defaultExcludeDirs()
 	<< "/root"
 	<< "/tmp"
 	<< "/var"
+        << "/snap"
 	<< "/usr/lib/sysimage/rpm"
 	<< "/usr/local";
 }
