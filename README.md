@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-08-03
+Updated: 2020-08-20
 
 
 ## Overview
@@ -663,7 +663,7 @@ old code base that had been long overdue.
 - File size statistics window with histogram, percentiles, buckets and a lot of
   documentation that everybody should be able to understand. Even if (or,
   better yet, in particular if) your math teacher or statistics professor never
-  explained it properly, please have a lot at it.
+  explained it properly, please have a look at it.
 
 - Packages view: Show installed packages and their files in the tree. Supported
   for all Linux distributions using any of _dpkg_, _rpm_, _pacman_ as their
