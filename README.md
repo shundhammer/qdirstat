@@ -673,7 +673,7 @@ old code base that had been long overdue.
 - Unpackaged files view: Show a directory tree, but ignore all files that
   belong to an installed software package. Those ignored files are displayed in
   a special branch _<Ignored>_ in the tree view, and they are not displayed at
-  all in the treemap. This may be useful to find files that were manually
+  all in the treemap. This is useful to find files that were manually
   installed by a `sudo make install` command. More details at
   [Unpkg-View.md](doc/Unpkg-View.md).
 
