@@ -620,6 +620,9 @@
    <property name="toolTip">
     <string>Reread the selected branch from disk.</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
   </action>
   <action name="actionReadExcludedDirectory">
    <property name="text">
