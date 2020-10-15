@@ -130,7 +130,7 @@ Download installable binary packages for various Linux distributions here:
 
    - Added hotkey `[F6]` for _Refresh Selected_.
 
-     `[F5]` is still `Refresh All` like in all web browsers. Since window
+     `[F5]` is still _Refresh All_ like in all web browsers. Since window
      managers / desktop environments tend to consume `[F5]` with modifier keys
      (`[Shift] [F5]`, `[Alt] [F5]`, `[Ctrl] [F5]`), this is the closest we can
      get, and it's more consistent than using something like `[Ctrl] [R]`.
