@@ -135,7 +135,7 @@ Download installable binary packages for various Linux distributions here:
      (`[Shift] [F5]`, `[Alt] [F5]`, `[Ctrl] [F5]`), this is the closest we can
      get, and it's more consistent than using something like `[Ctrl] [R]`.
 
-     This was inspired by the discussion in https://github.com/shundhammer/qdirstat/pull/145.
+     This was inspired by the discussion in [PR#145](https://github.com/shundhammer/qdirstat/pull/145).
 
 - 2020-08-03
 
