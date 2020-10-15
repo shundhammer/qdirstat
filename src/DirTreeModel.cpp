@@ -1290,6 +1290,9 @@ void DirTreeModel::refreshSelected()
     CHECK_PTR( _selectionModel );
     FileInfo * sel = _selectionModel->selectedItems().first();
 
+    if ( sel && ! sel->isDir() && sel->parent() )
+        sel = sel->parent();
+
     if ( sel && sel->isDirInfo() )
     {
 	logDebug() << "Refreshing " << sel << endl;
