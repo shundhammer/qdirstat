@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-08-20
+Updated: 2020-10-15
 
 
 ## Overview
@@ -122,6 +122,20 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2020-10-15
+
+   - Enabled _Refresh Selected_ now for files as well. In that case, the parent
+     directory is refreshed.
+
+   - Added hotkey `[F6]` for _Refresh Selected_.
+
+     `[F5]` is still `Refresh All` like in all web browsers. Since window
+     managers / desktop environments tend to consume `[F5]` with modifier keys
+     (`[Shift] [F5]`, `[Alt] [F5]`, `[Ctrl] [F5]`), this is the closest we can
+     get, and it's more consistent than using something like `[Ctrl] [R]`.
+
+     This was inspired by the discussion in https://github.com/shundhammer/qdirstat/pull/145.
 
 - 2020-08-03
 
