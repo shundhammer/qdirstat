@@ -421,7 +421,22 @@ FileInfo * FileInfo::locate( QString url, bool findPseudoDirs )
 	if ( dotEntry() &&
 	     ! url.contains( "/" ) )	   // No (more) "/" in this URL
 	{
-	    result = dotEntry()->locate( url, findPseudoDirs );
+            logDebug() << "Searching DotEntry for " << url << " in " << this << endl;
+
+            child = dotEntry()->firstChild();
+
+            while ( child )
+            {
+                if ( child->name() == url )
+                {
+                    logDebug() << "Found " << url << " in " << dotEntry() << endl;
+                    return child;
+                }
+
+                child = child->next();
+            }
+
+            logDebug() << "Cant find " << url << " in DotEntry" << endl;
 	}
 
 	if ( ! result && attic() )
