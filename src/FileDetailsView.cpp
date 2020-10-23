@@ -22,7 +22,8 @@
 #include "Logger.h"
 #include "Exception.h"
 
-#define ALLOCATED_FAT_PERCENT   33
+#define ALLOCATED_FAT_PERCENT	33
+#define MAX_SYMLINK_TARGET_LEN	25
 
 using namespace QDirStat;
 
@@ -175,15 +176,30 @@ void FileDetailsView::showFileInfo( FileInfo * file )
 
     if ( isSymLink )
     {
-        _ui->fileSymLinkTargetLabel->setText( file->symLinkTarget() );
+	QString fullTarget  = file->symLinkTarget();
+	QString shortTarget = fullTarget;
+	QString contextText;
+
+	if ( shortTarget.length() >= MAX_SYMLINK_TARGET_LEN )
+	{
+	    if ( shortTarget.contains( '/' ) )
+		shortTarget = ".../" + baseName( shortTarget );
+	}
+
+	if ( shortTarget != fullTarget )
+	    contextText = fullTarget;
+
+	_ui->fileSymLinkTargetLabel->setText( shortTarget );
+	_ui->fileSymLinkTargetLabel->setContextText( contextText );
+
     }
     else // ! isSymLink
     {
-        QString category = mimeCategory( file );
+	QString category = mimeCategory( file );
 
-        _ui->fileMimeCategoryCaption->setEnabled( ! category.isEmpty() );
-        _ui->fileMimeCategoryLabel->setEnabled  ( ! category.isEmpty() );
-        _ui->fileMimeCategoryLabel->setText( category );
+	_ui->fileMimeCategoryCaption->setEnabled( ! category.isEmpty() );
+	_ui->fileMimeCategoryLabel->setEnabled	( ! category.isEmpty() );
+	_ui->fileMimeCategoryLabel->setText( category );
     }
 
     setFileSizeLabel( _ui->fileSizeLabel, file );
@@ -195,7 +211,7 @@ void FileDetailsView::showFileInfo( FileInfo * file )
     _ui->fileMTimeLabel->setText( formatTime( file->mtime() ) );
 
     if ( ! file->isSparseFile() )
-        suppressIfSameContent( _ui->fileSizeLabel, _ui->fileAllocatedLabel, _ui->fileAllocatedCaption );
+	suppressIfSameContent( _ui->fileSizeLabel, _ui->fileAllocatedLabel, _ui->fileAllocatedCaption );
 }
 
 
@@ -208,20 +224,20 @@ void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
 
     if ( file->links() > 1 )
     {
-        label->setText( tr( "%1 / %2 Links" )
-                        .arg( formatSize( file->rawByteSize() ) )
-                        .arg( file->links() ) );
+	label->setText( tr( "%1 / %2 Links" )
+			.arg( formatSize( file->rawByteSize() ) )
+			.arg( file->links() ) );
 
 	if ( file->rawByteSize() >= 1024 ) // Not useful below 1 kB
-        {
+	{
 	    label->setContextText( tr( "%1 / %2 Links" )
-                                   .arg( formatByteSize( file->rawByteSize() ) )
-                                   .arg( file->links() ) );
-        }
+				   .arg( formatByteSize( file->rawByteSize() ) )
+				   .arg( file->links() ) );
+	}
     }
     else
     {
-        label->setValue( file->rawByteSize() );
+	label->setValue( file->rawByteSize() );
     }
 }
 
@@ -233,21 +249,21 @@ void FileDetailsView::setFileAllocatedLabel( FileSizeLabel * label,
 
     if ( file->links() > 1 )
     {
-        label->setText( tr( "%1 / %2 Links" )
-                        .arg( formatSize( file->rawAllocatedSize() ) )
-                        .arg( file->links() ) );
+	label->setText( tr( "%1 / %2 Links" )
+			.arg( formatSize( file->rawAllocatedSize() ) )
+			.arg( file->links() ) );
 
-        label->setContextText( tr( "%1 / %2 Links" )
-                               .arg( formatByteSize( file->rawAllocatedSize() ) )
-                               .arg( file->links() ) );
+	label->setContextText( tr( "%1 / %2 Links" )
+			       .arg( formatByteSize( file->rawAllocatedSize() ) )
+			       .arg( file->links() ) );
     }
     else
     {
-        label->setValue( file->allocatedSize() );
+	label->setValue( file->allocatedSize() );
     }
 
     _ui->fileAllocatedLabel->setBold( file->usedPercent() < ALLOCATED_FAT_PERCENT ||
-                                      file->isSparseFile() );
+				      file->isSparseFile() );
 }
 
 
@@ -318,7 +334,7 @@ void FileDetailsView::showDetails( DirInfo * dir )
     QString dirType = dir->isPseudoDir() ? tr( "Pseudo Directory" ) : tr( "Directory" );
 
     if ( dir->isMountPoint() )
-        dirType = tr( "Mount Point" );
+	dirType = tr( "Mount Point" );
 
     setLabelLimited(_ui->dirNameLabel, name );
     _ui->dirTypeLabel->setText( dirType );
@@ -368,8 +384,8 @@ void FileDetailsView::showSubtreeInfo( DirInfo * dir )
 	setLabel( _ui->dirSubDirCountLabel, dir->totalSubDirs(),       prefix );
 	_ui->dirLatestMTimeLabel->setText( formatTime( dir->latestMtime() ) );
 
-        suppressIfSameContent( _ui->dirTotalSizeLabel, _ui->dirAllocatedLabel, _ui->dirAllocatedCaption );
-        _ui->dirAllocatedLabel->setBold( dir->totalUsedPercent() < ALLOCATED_FAT_PERCENT );
+	suppressIfSameContent( _ui->dirTotalSizeLabel, _ui->dirAllocatedLabel, _ui->dirAllocatedCaption );
+	_ui->dirAllocatedLabel->setBold( dir->totalUsedPercent() < ALLOCATED_FAT_PERCENT );
     }
     else  // Special msg -> show it and clear all summary fields
     {
@@ -489,7 +505,7 @@ void FileDetailsView::showDetails( PkgInfo * pkg )
 	setLabel( _ui->pkgFileCountLabel,   pkg->totalFiles()	      );
 	setLabel( _ui->pkgSubDirCountLabel, pkg->totalSubDirs()	      );
 
-        suppressIfSameContent( _ui->pkgTotalSizeLabel, _ui->pkgAllocatedLabel, _ui->pkgAllocatedCaption );
+	suppressIfSameContent( _ui->pkgTotalSizeLabel, _ui->pkgAllocatedLabel, _ui->pkgAllocatedCaption );
     }
     else  // Special msg -> show it and clear all summary fields
     {
@@ -532,9 +548,9 @@ void FileDetailsView::showPkgSummary( PkgInfo * pkg )
 	setLabel( _ui->pkgSummaryFileCountLabel,   pkg->totalFiles()	     );
 	setLabel( _ui->pkgSummarySubDirCountLabel, pkg->totalSubDirs()	     );
 
-        suppressIfSameContent( _ui->pkgSummaryTotalSizeLabel,
-                               _ui->pkgSummaryAllocatedLabel,
-                               _ui->pkgSummaryAllocatedCaption );
+	suppressIfSameContent( _ui->pkgSummaryTotalSizeLabel,
+			       _ui->pkgSummaryAllocatedLabel,
+			       _ui->pkgSummaryAllocatedCaption );
     }
     else
     {
@@ -645,17 +661,17 @@ QString FileDetailsView::limitText( const QString & longText )
 
 
 void FileDetailsView::suppressIfSameContent( FileSizeLabel * origLabel,
-                                             FileSizeLabel * cloneLabel,
-                                             QLabel        * caption )
+					     FileSizeLabel * cloneLabel,
+					     QLabel	   * caption )
 {
     if ( origLabel->text() == cloneLabel->text() )
     {
-        cloneLabel->clear();
-        caption->setEnabled( false );
+	cloneLabel->clear();
+	caption->setEnabled( false );
     }
     else
     {
-        caption->setEnabled( true );
+	caption->setEnabled( true );
     }
 }
 
