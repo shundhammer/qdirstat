@@ -850,6 +850,30 @@ namespace QDirStat
 						 S_ISFIFO( _mode ) ||
 						 S_ISSOCK( _mode )   ) ? true : false; }
 
+        /**
+         * Returns true if this is a symlink, but the (direct) link target does
+         * not exist. This does NOT check multiple symlink indirections,
+         * i.e. it does not check if the target is also a symlink if the target
+         * of that also exists.
+         *
+         * Intentionally not declaring this as 'const' since this might some
+         * day use cached information and do lazy initialization on its first
+         * call.
+         **/
+        bool isBrokenSymLink();
+
+        /**
+         * Return the (direct) target path if this is a symlink. This does not
+         * follow multiple symlink indirections, only the direct target.
+         *
+         * If this is not a symlink, an empty string is returned.
+         *
+         * Intentionally not declaring this as 'const' since this might some
+         * day use cached information and do lazy initialization on its first
+         * call.
+         **/
+        QString symLinkTarget();
+
 	/**
 	 * Set the policy how hard links are handled: By default, for files
 	 * with multiple hard links, the size is distributed among each

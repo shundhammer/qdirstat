@@ -7,11 +7,16 @@
  */
 
 
-#include <unistd.h>	// access(), getuid(), geteduid()
+#define DONT_DEPRECATE_STRERROR
+#include <unistd.h>	// access(), getuid(), geteduid(), readlink()
 #include <pwd.h>	// getpwuid()
+#include <limits.h>     // PATH_MAX
+#include <sys/stat.h>   // lstat()
+#include <sys/types.h>
 
 #include "SysUtil.h"
 #include "Process.h"
+#include "DirSaver.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -178,4 +183,93 @@ QString SysUtil::homeDir( uid_t uid )
     struct passwd * pw = getpwuid( uid );
 
     return pw ? QString::fromUtf8( pw->pw_dir ) : QString();
+}
+
+
+QString SysUtil::symLinkTarget( const QString & path )
+{
+    return QString::fromUtf8( readLink( path ) );
+}
+
+
+bool SysUtil::isBrokenSymLink( const QString & path )
+{
+    QByteArray target = readLink( path );
+
+    if ( target.size() == 0 )   // path is not a symlink
+        return false;           // so it's also not a broken symlink
+
+
+    // Start from the symlink's parent directory
+
+    QStringList pathSegments = path.split( '/', QString::SkipEmptyParts );
+    pathSegments.removeLast(); // We already know it's a symlink, not a directory
+    QString parentPath = "/" + pathSegments.join( '/' );
+    DirSaver dir( parentPath );
+
+    // We can't use access() here since that would follow symlinks.
+    // Let's use lstat() instead.
+
+    struct stat statBuf;
+    int statResult = lstat( target, &statBuf );
+
+    if ( statResult == 0 )      // lstat() successful?
+    {
+        return false;           // -> the symlink is not broken.
+    }
+    else                        // lstat() failed
+    {
+        if ( errno == EACCES )  // permission denied for one of the dirs in target
+        {
+            logWarning() << "Permission denied for one of the directories"
+                         << " in symlink target " << QString::fromUtf8( target )
+                         << " of symlink " << path
+                         << endl;
+
+            return false;       // We don't know if the symlink is broken
+        }
+        else
+        {
+            logWarning() << "Broken symlink " << path
+                         << " errno: " << strerror( errno )
+                         << endl;
+            return true;
+        }
+    }
+}
+
+
+QByteArray SysUtil::readLink( const QString & path )
+{
+    return readLink( path.toUtf8() );
+}
+
+
+QByteArray SysUtil::readLink( const QByteArray & path )
+{
+    QByteArray targetBuf( PATH_MAX, 0 );
+    ssize_t len = ::readlink( path, targetBuf.data(), targetBuf.size() );
+
+    if ( len == 0 )
+    {
+        logWarning() << QString::fromUtf8( path ) << " is not a symlink" << endl;
+    }
+    else if ( len == targetBuf.size() )
+    {
+        // Buffer overflow. Yes, this can actually happen:
+        //   http://insanecoding.blogspot.com/2007/11/pathmax-simply-isnt.html
+        //
+        // Since this is a very pathological case, we won't attempty any crazy
+        // workarounds and simply fail with an error in the log.
+
+        logError() << "Symlink target of " << QString::fromUtf8( path )
+                   << " is longer than " << PATH_MAX << " bytes" << endl;
+        targetBuf.clear();
+    }
+    else
+    {
+        targetBuf.resize( len );
+    }
+
+    return targetBuf;
 }

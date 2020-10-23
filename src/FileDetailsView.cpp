@@ -164,11 +164,27 @@ void FileDetailsView::showFileInfo( FileInfo * file )
     setLabelLimited(_ui->fileNameLabel, file->baseName() );
     _ui->fileTypeLabel->setText( formatFilesystemObjectType( file->mode() ) );
 
-    QString category = mimeCategory( file );
+    bool isSymLink = file->isSymLink();
 
-    _ui->fileMimeCategoryCaption->setEnabled( ! category.isEmpty() );
-    _ui->fileMimeCategoryLabel->setEnabled( ! category.isEmpty() );
-    _ui->fileMimeCategoryLabel->setText( category );
+    _ui->fileSymLinkTargetCaption->setVisible( isSymLink );
+    _ui->fileSymLinkTargetLabel->setVisible  ( isSymLink );
+    _ui->fileSymLinkBrokenWarning->setVisible( file->isBrokenSymLink() );
+
+    _ui->fileMimeCategoryCaption->setVisible ( ! isSymLink );
+    _ui->fileMimeCategoryLabel->setVisible   ( ! isSymLink );
+
+    if ( isSymLink )
+    {
+        _ui->fileSymLinkTargetLabel->setText( file->symLinkTarget() );
+    }
+    else // ! isSymLink
+    {
+        QString category = mimeCategory( file );
+
+        _ui->fileMimeCategoryCaption->setEnabled( ! category.isEmpty() );
+        _ui->fileMimeCategoryLabel->setEnabled  ( ! category.isEmpty() );
+        _ui->fileMimeCategoryLabel->setText( category );
+    }
 
     setFileSizeLabel( _ui->fileSizeLabel, file );
     setFileAllocatedLabel( _ui->fileAllocatedLabel, file );
@@ -275,7 +291,7 @@ void FileDetailsView::updatePkgInfo( const QVariant & pathVariant )
 
 void FileDetailsView::setSystemFileWarningVisibility( bool visible )
 {
-    _ui->filesystemFileWarning->setVisible( visible );
+    _ui->fileSystemFileWarning->setVisible( visible );
     _ui->fileSpacerCaption2->setVisible( visible );
 }
 

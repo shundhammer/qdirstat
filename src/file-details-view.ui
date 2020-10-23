@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>256</width>
+    <width>264</width>
     <height>427</height>
    </rect>
   </property>
@@ -14,7 +14,7 @@
    <string>Details</string>
   </property>
   <property name="currentIndex">
-   <number>5</number>
+   <number>0</number>
   </property>
   <widget class="QWidget" name="fileDetailsPage">
    <layout class="QHBoxLayout" name="fileDetailsHBox">
@@ -93,7 +93,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item row="3" column="0">
          <widget class="QLabel" name="fileMimeCategoryCaption">
           <property name="font">
            <font>
@@ -105,14 +105,14 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item row="3" column="1">
          <widget class="QLabel" name="fileMimeCategoryLabel">
           <property name="text">
            <string>Documents</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
+        <item row="4" column="0">
          <widget class="QLabel" name="fileSizeCaption">
           <property name="font">
            <font>
@@ -124,22 +124,22 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
+        <item row="4" column="1">
          <widget class="QDirStat::FileSizeLabel" name="fileSizeLabel">
           <property name="text">
            <string>42.0 kB</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
+        <item row="6" column="0">
          <widget class="QLabel" name="fileSpacerCaption1">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="filesystemFileWarning">
+        <item row="7" column="0">
+         <widget class="QLabel" name="fileSystemFileWarning">
           <property name="font">
            <font>
             <weight>75</weight>
@@ -152,7 +152,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="8" column="0">
          <widget class="QLabel" name="filePackageCaption">
           <property name="font">
            <font>
@@ -164,7 +164,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
+        <item row="8" column="1">
          <widget class="QLabel" name="filePackageLabel">
           <property name="text">
            <string>none</string>
@@ -174,14 +174,14 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
+        <item row="9" column="0">
          <widget class="QLabel" name="fileSpacerCaption2">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
+        <item row="10" column="0">
          <widget class="QLabel" name="fileUserCaption">
           <property name="font">
            <font>
@@ -193,14 +193,14 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="1">
+        <item row="10" column="1">
          <widget class="QLabel" name="fileUserLabel">
           <property name="text">
            <string>kilroy</string>
           </property>
          </widget>
         </item>
-        <item row="9" column="0">
+        <item row="11" column="0">
          <widget class="QLabel" name="fileGroupCaption">
           <property name="font">
            <font>
@@ -212,14 +212,14 @@
           </property>
          </widget>
         </item>
-        <item row="9" column="1">
+        <item row="11" column="1">
          <widget class="QLabel" name="fileGroupLabel">
           <property name="text">
            <string>users</string>
           </property>
          </widget>
         </item>
-        <item row="10" column="0">
+        <item row="12" column="0">
          <widget class="QLabel" name="filePermissionsCaption">
           <property name="font">
            <font>
@@ -231,14 +231,14 @@
           </property>
          </widget>
         </item>
-        <item row="10" column="1">
+        <item row="12" column="1">
          <widget class="QLabel" name="filePermissionsLabel">
           <property name="text">
            <string>rw-r--r--  0644</string>
           </property>
          </widget>
         </item>
-        <item row="11" column="0">
+        <item row="13" column="0">
          <widget class="QLabel" name="fileMTimeCaption">
           <property name="font">
            <font>
@@ -250,14 +250,14 @@
           </property>
          </widget>
         </item>
-        <item row="11" column="1">
+        <item row="13" column="1">
          <widget class="QLabel" name="fileMTimeLabel">
           <property name="text">
            <string>31.06.2018 09:18</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
+        <item row="5" column="0">
          <widget class="QLabel" name="fileAllocatedCaption">
           <property name="font">
            <font>
@@ -269,10 +269,46 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="5" column="1">
          <widget class="QDirStat::FileSizeLabel" name="fileAllocatedLabel">
           <property name="text">
            <string>42.0 kB</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="fileSymLinkTargetLabel">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="fileSymLinkTargetCaption">
+          <property name="font">
+           <font>
+            <italic>true</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Link Target:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="fileSymLinkBrokenWarning">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Broken Symlink! </string>
+          </property>
+          <property name="margin">
+           <number>0</number>
           </property>
          </widget>
         </item>

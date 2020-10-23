@@ -21,6 +21,7 @@
 #include "Attic.h"
 #include "DirTree.h"
 #include "PkgInfo.h"
+#include "SysUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -710,6 +711,25 @@ bool FileInfo::filesystemCanReportBlocks() const
 
     return dir->blocks() > 0;
 }
+
+
+bool FileInfo::isBrokenSymLink()
+{
+    if ( ! isSymLink() )
+        return false;
+
+    return SysUtil::isBrokenSymLink( url() );
+}
+
+
+QString FileInfo::symLinkTarget()
+{
+    if ( ! isSymLink() )
+        return QString();
+
+    return SysUtil::symLinkTarget( url() );
+}
+
 
 
 
