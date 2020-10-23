@@ -43,7 +43,7 @@ INSTALLS	+= TARGET desktop icons
 #
 # So there is only one solution: STFU, Qt!
 
-QMAKE_CXXFLAGS  +=  -Wno-deprecated -Wno-deprecated-declarations
+QMAKE_CXXFLAGS	+=  -Wno-deprecated -Wno-deprecated-declarations
 
 
 SOURCES	  = main.cpp			\
@@ -83,8 +83,8 @@ SOURCES	  = main.cpp			\
 	    FileInfoSorter.cpp		\
 	    FileSizeLabel.cpp		\
 	    FileSizeStats.cpp		\
-            FileSizeStatsWindow.cpp	\
-            FileSystemsWindow.cpp       \
+	    FileSizeStatsWindow.cpp	\
+	    FileSystemsWindow.cpp	\
 	    FileTypeStats.cpp		\
 	    FileTypeStatsWindow.cpp	\
 	    GeneralConfigPage.cpp	\
@@ -116,6 +116,7 @@ SOURCES	  = main.cpp			\
 	    PkgManager.cpp		\
 	    PkgQuery.cpp		\
 	    PkgReader.cpp		\
+	    PopupLabel.cpp		\
 	    Process.cpp			\
 	    ProcessStarter.cpp		\
 	    Refresher.cpp		\
@@ -123,8 +124,8 @@ SOURCES	  = main.cpp			\
 	    SelectionModel.cpp		\
 	    Settings.cpp		\
 	    SettingsHelpers.cpp		\
-            ShowUnpkgFilesDialog.cpp	\
-            SizeColDelegate.cpp         \
+	    ShowUnpkgFilesDialog.cpp	\
+	    SizeColDelegate.cpp		\
 	    StdCleanup.cpp		\
 	    Subtree.cpp			\
 	    SysUtil.cpp			\
@@ -176,7 +177,7 @@ HEADERS	  =				\
 	    FileSizeStats.h		\
 	    FileSizeStatsWindow.h	\
 	    FileTypeStats.h		\
-            FileSystemsWindow.h         \
+	    FileSystemsWindow.h		\
 	    FileTypeStatsWindow.h	\
 	    GeneralConfigPage.h		\
 	    HeaderTweaker.h		\
@@ -206,6 +207,7 @@ HEADERS	  =				\
 	    PkgManager.h		\
 	    PkgQuery.h			\
 	    PkgReader.h			\
+	    PopupLabel.h		\
 	    Process.h			\
 	    ProcessStarter.h		\
 	    Qt4Compat.h			\
@@ -216,7 +218,7 @@ HEADERS	  =				\
 	    SettingsHelpers.h		\
 	    ShowUnpkgFilesDialog.h	\
 	    SignalBlocker.h		\
-            SizeColDelegate.h           \
+	    SizeColDelegate.h		\
 	    StdCleanup.h		\
 	    Subtree.h			\
 	    SysUtil.h			\
