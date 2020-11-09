@@ -187,3 +187,4 @@ of such files, it would also be counterproductive and endanger consistency.
 - https://www.linuxlinks.com/btrfs/
 - https://btrfs.wiki.kernel.org/index.php/FAQ#How_much_free_space_do_I_have.3F
 - https://btrfs.wiki.kernel.org/index.php/SysadminGuide
+- https://en.opensuse.org/SDB:BTRFS
