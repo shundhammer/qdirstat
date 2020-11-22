@@ -94,7 +94,7 @@ SOURCES	  = main.cpp			\
 	    HistogramOverflowPanel.cpp	\
 	    HistogramView.cpp		\
 	    ListEditor.cpp		\
-	    LocateFilesWindow.cpp	\
+	    LocateFileTypeWindow.cpp	\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
 	    MessagePanel.cpp		\
@@ -185,7 +185,7 @@ HEADERS	  =				\
 	    HistogramView.h		\
 	    ListEditor.h		\
 	    ListMover.h			\
-	    LocateFilesWindow.h		\
+	    LocateFileTypeWindow.h	\
 	    Logger.h			\
 	    MainWindow.h		\
 	    MessagePanel.h		\
@@ -242,7 +242,7 @@ FORMS	  = main-window.ui		   \
 	    file-size-stats-window.ui	   \
 	    file-type-stats-window.ui	   \
 	    filesystems-window.ui	   \
-	    locate-files-window.ui	   \
+	    locate-file-type-window.ui	   \
 	    open-dir-dialog.ui		   \
 	    open-pkg-dialog.ui		   \
 	    show-unpkg-files-dialog.ui	   \

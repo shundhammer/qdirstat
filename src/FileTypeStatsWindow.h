@@ -26,7 +26,7 @@ namespace QDirStat
     class FileTypeStats;
     class MimeCategory;
     class SelectionModel;
-    class LocateFilesWindow;
+    class LocateFileTypeWindow;
 
 
     /**
@@ -133,7 +133,7 @@ namespace QDirStat
         Subtree                     _subtree;
 	SelectionModel *	    _selectionModel;
 	FileTypeStats *		    _stats;
-	static QPointer<LocateFilesWindow> _locateFilesWindow;
+	static QPointer<LocateFileTypeWindow> _locateFileTypeWindow;
     };
 
 

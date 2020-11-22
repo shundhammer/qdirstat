@@ -14,7 +14,7 @@
 #include "FileTypeStatsWindow.h"
 #include "FileTypeStats.h"
 #include "FileSizeStatsWindow.h"
-#include "LocateFilesWindow.h"
+#include "LocateFileTypeWindow.h"
 #include "DirTree.h"
 #include "MimeCategory.h"
 #include "SettingsHelpers.h"
@@ -29,7 +29,7 @@
 using namespace QDirStat;
 
 
-QPointer<LocateFilesWindow> FileTypeStatsWindow::_locateFilesWindow = 0;
+QPointer<LocateFileTypeWindow> FileTypeStatsWindow::_locateFileTypeWindow = 0;
 
 
 FileTypeStatsWindow::FileTypeStatsWindow( SelectionModel * selectionModel,
@@ -263,20 +263,20 @@ void FileTypeStatsWindow::locateCurrentFileType()
 
     if ( suffix.isEmpty() )
     {
-	if ( _locateFilesWindow )
-	    _locateFilesWindow->hide();
+	if ( _locateFileTypeWindow )
+	    _locateFileTypeWindow->hide();
 
 	return;
     }
 
     // logDebug() << "Locating " << current->suffix() << endl;
 
-    if ( ! _locateFilesWindow )
+    if ( ! _locateFileTypeWindow )
     {
-	_locateFilesWindow = new LocateFilesWindow( _selectionModel,
-						    qobject_cast<QWidget *>( parent() ) );
-	CHECK_NEW( _locateFilesWindow );
-	_locateFilesWindow->show();
+	_locateFileTypeWindow = new LocateFileTypeWindow( _selectionModel,
+                                                          qobject_cast<QWidget *>( parent() ) );
+	CHECK_NEW( _locateFileTypeWindow );
+	_locateFileTypeWindow->show();
 
 	// Not using 'this' as parent so the user can close the file types
 	// stats window, but keep the locate files window open; if 'this' were
@@ -289,11 +289,11 @@ void FileTypeStatsWindow::locateCurrentFileType()
     }
     else // Reusing existing window
     {
-	_locateFilesWindow->show();
-	_locateFilesWindow->raise();
+	_locateFileTypeWindow->show();
+	_locateFileTypeWindow->raise();
     }
 
-    _locateFilesWindow->populate( suffix, _subtree() );
+    _locateFileTypeWindow->populate( suffix, _subtree() );
 }
 
 

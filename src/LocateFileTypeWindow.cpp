@@ -1,6 +1,6 @@
 /*
- *   File name: LocateFilesWindow.cpp
- *   Summary:	QDirStat file type statistics window
+ *   File name: LocateFileTypeWindow.cpp
+ *   Summary:	QDirStat "locate files by type" window
  *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-#include "LocateFilesWindow.h"
+#include "LocateFileTypeWindow.h"
 #include "DirTree.h"
 #include "DotEntry.h"
 #include "SelectionModel.h"
@@ -21,10 +21,10 @@
 using namespace QDirStat;
 
 
-LocateFilesWindow::LocateFilesWindow( SelectionModel * selectionModel,
-				      QWidget *	       parent ):
+LocateFileTypeWindow::LocateFileTypeWindow( SelectionModel * selectionModel,
+                                            QWidget *	     parent ):
     QDialog( parent ),
-    _ui( new Ui::LocateFilesWindow ),
+    _ui( new Ui::LocateFileTypeWindow ),
     _selectionModel( selectionModel )
 {
     // logDebug() << "init" << endl;
@@ -32,7 +32,7 @@ LocateFilesWindow::LocateFilesWindow( SelectionModel * selectionModel,
     CHECK_NEW( _ui );
     _ui->setupUi( this );
     initWidgets();
-    readWindowSettings( this, "LocateFilesWindow" );
+    readWindowSettings( this, "LocateFileTypeWindow" );
 
     connect( _ui->refreshButton, SIGNAL( clicked() ),
 	     this,		 SLOT  ( refresh() ) );
@@ -43,27 +43,27 @@ LocateFilesWindow::LocateFilesWindow( SelectionModel * selectionModel,
 }
 
 
-LocateFilesWindow::~LocateFilesWindow()
+LocateFileTypeWindow::~LocateFileTypeWindow()
 {
     // logDebug() << "destroying" << endl;
-    writeWindowSettings( this, "LocateFilesWindow" );
+    writeWindowSettings( this, "LocateFileTypeWindow" );
 }
 
 
-void LocateFilesWindow::clear()
+void LocateFileTypeWindow::clear()
 {
     _searchSuffix.clear();
     _ui->treeWidget->clear();
 }
 
 
-void LocateFilesWindow::refresh()
+void LocateFileTypeWindow::refresh()
 {
     populate( searchSuffix(), _subtree() );
 }
 
 
-void LocateFilesWindow::initWidgets()
+void LocateFileTypeWindow::initWidgets()
 {
     QFont font = _ui->heading->font();
     font.setBold( true );
@@ -79,19 +79,19 @@ void LocateFilesWindow::initWidgets()
 }
 
 
-void LocateFilesWindow::reject()
+void LocateFileTypeWindow::reject()
 {
     deleteLater();
 }
 
 
-QString LocateFilesWindow::searchSuffix() const
+QString LocateFileTypeWindow::searchSuffix() const
 {
     return QString( "*" ) + _searchSuffix;
 }
 
 
-void LocateFilesWindow::populate( const QString & suffix, FileInfo * newSubtree )
+void LocateFileTypeWindow::populate( const QString & suffix, FileInfo * newSubtree )
 {
     clear();
 
@@ -142,7 +142,7 @@ void LocateFilesWindow::populate( const QString & suffix, FileInfo * newSubtree 
 }
 
 
-void LocateFilesWindow::populateRecursive( FileInfo * dir )
+void LocateFileTypeWindow::populateRecursive( FileInfo * dir )
 {
     if ( ! dir )
 	return;
@@ -183,7 +183,7 @@ void LocateFilesWindow::populateRecursive( FileInfo * dir )
 }
 
 
-FileInfoSet LocateFilesWindow::matchingFiles( FileInfo * item )
+FileInfoSet LocateFileTypeWindow::matchingFiles( FileInfo * item )
 {
     FileInfoSet result;
 
@@ -212,7 +212,7 @@ FileInfoSet LocateFilesWindow::matchingFiles( FileInfo * item )
 }
 
 
-void LocateFilesWindow::selectResult( QTreeWidgetItem * item )
+void LocateFileTypeWindow::selectResult( QTreeWidgetItem * item )
 {
     if ( ! item )
 	return;

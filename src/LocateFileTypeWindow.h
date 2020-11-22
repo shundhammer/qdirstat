@@ -1,19 +1,19 @@
 /*
- *   File name: LocateFilesWindow.h
- *   Summary:	QDirStat "locate files" window
+ *   File name: LocateFileTypeWindow.h
+ *   Summary:	QDirStat "locate files by type" window
  *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
-#ifndef LocateFilesWindow_h
-#define LocateFilesWindow_h
+#ifndef LocateFileTypeWindow_h
+#define LocateFileTypeWindow_h
 
 #include <QDialog>
 #include <QTreeWidgetItem>
 
-#include "ui_locate-files-window.h"
+#include "ui_locate-file-type-window.h"
 #include "FileInfo.h"
 #include "FileInfoSet.h"
 #include "Subtree.h"
@@ -40,7 +40,7 @@ namespace QDirStat
      * As a next step, the user can then start cleanup actions on those files
      * from the main window - in the tree view or in the treemap view.
      **/
-    class LocateFilesWindow: public QDialog
+    class LocateFileTypeWindow: public QDialog
     {
 	Q_OBJECT
 
@@ -55,13 +55,13 @@ namespace QDirStat
 	 * of this class. The QPointer will keep track of this window
 	 * auto-deleting itself when closed.
 	 **/
-	LocateFilesWindow( SelectionModel * selectionModel,
-			   QWidget *	    parent );
+	LocateFileTypeWindow( SelectionModel * selectionModel,
+                              QWidget *	       parent );
 
 	/**
 	 * Destructor.
 	 **/
-	virtual ~LocateFilesWindow();
+	virtual ~LocateFileTypeWindow();
 
 
     public:
@@ -140,10 +140,10 @@ namespace QDirStat
 	// Data members
 	//
 
-	Ui::LocateFilesWindow * _ui;
-        Subtree                 _subtree;
-	QString			_searchSuffix;
-	SelectionModel *	_selectionModel;
+	Ui::LocateFileTypeWindow * _ui;
+        Subtree                    _subtree;
+	QString			   _searchSuffix;
+	SelectionModel *	   _selectionModel;
     };
 
 
@@ -210,4 +210,4 @@ namespace QDirStat
 } // namespace QDirStat
 
 
-#endif // LocateFilesWindow_h
+#endif // LocateFileTypeWindow_h
