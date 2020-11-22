@@ -356,6 +356,17 @@ void MainWindow::connectActions()
     CONNECT_ACTION( _ui->actionResetTreemapZoom, _ui->treemapView, resetZoom()	    );
     CONNECT_ACTION( _ui->actionTreemapRebuild,	 _ui->treemapView, rebuildTreemap() );
 
+
+    // "Discover" menu
+
+    CONNECT_ACTION( _ui->actionDiscoverLargestFiles,    this, discoverLargestFiles()    );
+    CONNECT_ACTION( _ui->actionDiscoverNewestFiles,     this, discoverNewestFiles()     );
+    CONNECT_ACTION( _ui->actionDiscoverOldestFiles,     this, discoverOldestFiles()     );
+    CONNECT_ACTION( _ui->actionDiscoverHardLinkedFiles, this, discoverHardLinkedFiles() );
+    CONNECT_ACTION( _ui->actionDiscoverBrokenSymLinks,  this, discoverBrokenSymLinks()  );
+    CONNECT_ACTION( _ui->actionDiscoverSparseFiles,     this, discoverSparseFiles()     );
+
+
     // "Settings" menu
 
     CONNECT_ACTION( _ui->actionConfigure, this, openConfigDialog() );
@@ -1264,6 +1275,73 @@ void MainWindow::showFilesystems()
 
     _filesystemsWindow->populate();
     _filesystemsWindow->show();
+}
+
+
+void MainWindow::discoverLargestFiles()
+{
+    // FIXME
+    // FIXME
+    // FIXME
+    notImplemented();
+}
+
+
+void MainWindow::discoverNewestFiles()
+{
+    // FIXME
+    // FIXME
+    // FIXME
+    notImplemented();
+}
+
+
+void MainWindow::discoverOldestFiles()
+{
+    // FIXME
+    // FIXME
+    // FIXME
+    notImplemented();
+}
+
+
+void MainWindow::discoverHardLinkedFiles()
+{
+    discoverFiles( new QDirStat::HardLinkedFilesTreeWalker() );
+}
+
+
+void MainWindow::discoverBrokenSymLinks()
+{
+    // FIXME
+    // FIXME
+    // FIXME
+    notImplemented();
+}
+
+
+void MainWindow::discoverSparseFiles()
+{
+    discoverFiles( new QDirStat::SparseFilesTreeWalker() );
+}
+
+
+void MainWindow::discoverFiles( TreeWalker * treeWalker )
+{
+    if ( ! _locateFilesWindow )
+    {
+	// This deletes itself when the user closes it. The associated QPointer
+	// keeps track of that and sets the pointer to 0 when it happens.
+
+	_locateFilesWindow = new LocateFilesWindow( treeWalker, _selectionModel, this );
+    }
+    else
+    {
+        _locateFilesWindow->setTreeWalker( treeWalker );
+    }
+
+    _locateFilesWindow->populate( selectedDirOrRoot() );
+    _locateFilesWindow->show();
 }
 
 

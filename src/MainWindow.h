@@ -19,6 +19,8 @@
 #include "ui_main-window.h"
 #include "FileTypeStatsWindow.h"
 #include "FilesystemsWindow.h"
+#include "LocateFilesWindow.h"
+#include "TreeWalker.h"
 #include "PanelMessage.h"
 #include "UnreadableDirsWindow.h"
 #include "PkgFilter.h"
@@ -46,6 +48,7 @@ using QDirStat::FileTypeStatsWindow;
 using QDirStat::PanelMessage;
 using QDirStat::UnreadableDirsWindow;
 using QDirStat::FilesystemsWindow;
+using QDirStat::LocateFilesWindow;
 
 
 class MainWindow: public QMainWindow
@@ -199,6 +202,21 @@ public slots:
      * Navigate to the toplevel directory of this tree.
      **/
     void navigateToToplevel();
+
+    //
+    // "Discover" actions: Open a non-modal LocateFilesWindow that lists files
+    // of a certain category. A click on a file in that list opens the tree
+    // branch with that file in the main window and selects it.
+    //
+    // All of those actions re-use the same window.
+    //
+
+    void discoverLargestFiles();
+    void discoverNewestFiles();
+    void discoverOldestFiles();
+    void discoverHardLinkedFiles();
+    void discoverBrokenSymLinks();
+    void discoverSparseFiles();
 
     /**
      * Show online help.
@@ -406,6 +424,12 @@ protected:
     void mapTreeExpandAction( QAction * action, int level );
 
     /**
+     * Common part of all "discover" actions: Create or reuse a
+     * LocateFilesWindow with the specified TreeWalker.
+     **/
+    void discoverFiles( QDirStat::TreeWalker * treeWalker );
+
+    /**
      * Initialize the layout actions.
      **/
     void initLayoutActions();
@@ -456,6 +480,7 @@ private:
     QActionGroup		*  _layoutActionGroup;
     QPointer<FileTypeStatsWindow>  _fileTypeStatsWindow;
     QPointer<FilesystemsWindow>    _filesystemsWindow;
+    QPointer<LocateFilesWindow>    _locateFilesWindow;
     QPointer<PanelMessage>	   _dirPermissionsWarning;
     QPointer<UnreadableDirsWindow> _unreadableDirsWindow;
     QString			   _dUrl;

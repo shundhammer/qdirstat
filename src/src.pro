@@ -94,6 +94,7 @@ SOURCES	  = main.cpp			\
 	    HistogramOverflowPanel.cpp	\
 	    HistogramView.cpp		\
 	    ListEditor.cpp		\
+	    LocateFilesWindow.cpp	\
 	    LocateFileTypeWindow.cpp	\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
@@ -133,6 +134,7 @@ SOURCES	  = main.cpp			\
 	    Trash.cpp			\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
+            TreeWalker.cpp              \
 	    UnpkgSettings.cpp		\
 	    UnreadableDirsWindow.cpp
 
@@ -185,6 +187,7 @@ HEADERS	  =				\
 	    HistogramView.h		\
 	    ListEditor.h		\
 	    ListMover.h			\
+	    LocateFilesWindow.h         \
 	    LocateFileTypeWindow.h	\
 	    Logger.h			\
 	    MainWindow.h		\
@@ -225,7 +228,8 @@ HEADERS	  =				\
 	    SystemFileChecker.h		\
 	    Trash.h			\
 	    TreemapTile.h		\
-	    TreemapView.h		\
+            TreemapView.h		\
+            TreeWalker.h                \
 	    UnpkgSettings.cpp		\
 	    UnreadableDirsWindow.h	\
 	    Version.h
@@ -242,6 +246,7 @@ FORMS	  = main-window.ui		   \
 	    file-size-stats-window.ui	   \
 	    file-type-stats-window.ui	   \
 	    filesystems-window.ui	   \
+	    locate-files-window.ui	   \
 	    locate-file-type-window.ui	   \
 	    open-dir-dialog.ui		   \
 	    open-pkg-dialog.ui		   \

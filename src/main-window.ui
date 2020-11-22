@@ -245,11 +245,23 @@
     </property>
     <addaction name="actionConfigure"/>
    </widget>
+   <widget class="QMenu" name="menuDiscover">
+    <property name="title">
+     <string>&amp;Discover</string>
+    </property>
+    <addaction name="actionDiscoverLargestFiles"/>
+    <addaction name="actionDiscoverNewestFiles"/>
+    <addaction name="actionDiscoverOldestFiles"/>
+    <addaction name="actionDiscoverHardLinkedFiles"/>
+    <addaction name="actionDiscoverBrokenSymLinks"/>
+    <addaction name="actionDiscoverSparseFiles"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuGoTo"/>
    <addaction name="menuTreemap"/>
+   <addaction name="menuDiscover"/>
    <addaction name="menuCleanup"/>
    <addaction name="menuSettings"/>
    <addaction name="menuHelp"/>
@@ -866,6 +878,36 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionDiscoverLargestFiles">
+   <property name="text">
+    <string>&amp;Largest Files</string>
+   </property>
+  </action>
+  <action name="actionDiscoverNewestFiles">
+   <property name="text">
+    <string>&amp;Newest Files</string>
+   </property>
+  </action>
+  <action name="actionDiscoverOldestFiles">
+   <property name="text">
+    <string>&amp;Oldest Files</string>
+   </property>
+  </action>
+  <action name="actionDiscoverHardLinkedFiles">
+   <property name="text">
+    <string>Files with Multiple &amp;Hard Links</string>
+   </property>
+  </action>
+  <action name="actionDiscoverBrokenSymLinks">
+   <property name="text">
+    <string>&amp;Broken Symbolic LInks</string>
+   </property>
+  </action>
+  <action name="actionDiscoverSparseFiles">
+   <property name="text">
+    <string>&amp;Sparse Files</string>
    </property>
   </action>
  </widget>

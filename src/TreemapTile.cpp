@@ -16,7 +16,6 @@
 
 #include "TreemapTile.h"
 #include "TreemapView.h"
-#include "FileInfoIterator.h"
 #include "SelectionModel.h"
 #include "ActionManager.h"
 #include "CleanupCollection.h"
