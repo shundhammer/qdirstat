@@ -149,14 +149,14 @@ Download installable binary packages for various Linux distributions here:
 
     Finding the newest files can also be done by sorting the tree by the "last
     modified" column and then opening the topmost branches. This is often
-    useful to find out where some browser dumped that last download again.
+    useful to find out where some browser dumped that last download.
 
     Similarly, to find the oldest files, enable the "oldest files" tree column,
     sort by that and open branches until you can see a file.
 
     Files with multiple hard links or sparse files were mentioned in the log;
-    otherwise they were not so easy to find (or use the command line, of
-    course).
+    otherwise they were not so easy to find (short of using the command line,
+    of course).
     
 
 - 2020-10-23
