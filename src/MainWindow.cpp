@@ -1280,10 +1280,9 @@ void MainWindow::showFilesystems()
 
 void MainWindow::discoverLargestFiles()
 {
-    // FIXME
-    // FIXME
-    // FIXME
-    notImplemented();
+    discoverFiles( new QDirStat::LargestFilesTreeWalker() );
+    _locateFilesWindow->sortByColumn( LocateListSizeCol, Qt::DescendingOrder );
+    _locateFilesWindow->setHeading( tr( "Largest Files" ) );
 }
 
 
@@ -1308,6 +1307,8 @@ void MainWindow::discoverOldestFiles()
 void MainWindow::discoverHardLinkedFiles()
 {
     discoverFiles( new QDirStat::HardLinkedFilesTreeWalker() );
+    _locateFilesWindow->sortByColumn( LocateListPathCol, Qt::AscendingOrder );
+    _locateFilesWindow->setHeading( tr( "Files with Multiple Hard Links" ) );
 }
 
 
@@ -1323,6 +1324,8 @@ void MainWindow::discoverBrokenSymLinks()
 void MainWindow::discoverSparseFiles()
 {
     discoverFiles( new QDirStat::SparseFilesTreeWalker() );
+    _locateFilesWindow->sortByColumn( LocateListSizeCol, Qt::DescendingOrder );
+    _locateFilesWindow->setHeading( tr( "Sparse Files" ) );
 }
 
 

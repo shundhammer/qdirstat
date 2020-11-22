@@ -60,17 +60,34 @@ namespace QDirStat
 
 
     /**
+     * TreeWalker to find the largest files.
+     **/
+    class LargestFilesTreeWalker: public TreeWalker
+    {
+    public:
+
+        virtual void prepare( FileInfo * subtree );
+
+        virtual bool check( FileInfo * item )
+            { return item && item->isFile() && item->size() >= _threshold; }
+
+    protected:
+
+        FileSize _threshold;
+    };
+
+    /**
      * TreeWalker to find files with multiple hard links.
      **/
     class HardLinkedFilesTreeWalker: public TreeWalker
     {
     public:
-        
+
         virtual bool check( FileInfo * item )
             { return item && item->isFile() && item->links() > 1; }
     };
 
-    
+
     /**
      * TreeWalker to find sparse files.
      **/

@@ -80,6 +80,17 @@ namespace QDirStat
          **/
         void setTreeWalker( TreeWalker * newTreeWalker );
 
+        /**
+         * Set a text for the window heading (the bold label above the list).
+         **/
+        void setHeading( const QString & text );
+
+        /**
+         * Set the sort column and sort order (Qt::AscendingOrder or
+         * Qt::DescendingOrder).
+         **/
+        void sortByColumn( int col, Qt::SortOrder order );
+
 
     public slots:
 

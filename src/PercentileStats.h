@@ -58,7 +58,10 @@ namespace QDirStat
 	/**
 	 * Sort the collected data in ascending order.
 	 * This is necessary after all collect() calls.
-	 * The
+         *
+	 * The functions accessing results like min(), max(), median(),
+	 * quantile(), percentile() etc. all implicitly sort the data if they
+	 * are not sorted yet.
 	 **/
 	void sort();
 

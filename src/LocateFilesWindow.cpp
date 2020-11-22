@@ -83,9 +83,9 @@ void LocateFilesWindow::initWidgets()
 
     _ui->treeWidget->setColumnCount( LocateListColumnCount );
     _ui->treeWidget->setHeaderLabels( QStringList()
-				      << tr( "Path"  )
-				      << tr( "Size"  )
-				      << tr( "MTime" ) );
+				      << tr( "Path" )
+				      << tr( "Size" )
+				      << tr( "Last Modified" ) );
     _ui->treeWidget->header()->setStretchLastSection( false );
     HeaderTweaker::resizeToContents( _ui->treeWidget->header() );
 }
@@ -182,6 +182,16 @@ void LocateFilesWindow::locateInMainWindow( QTreeWidgetItem * item )
 }
 
 
+void LocateFilesWindow::setHeading( const QString & text )
+{
+    _ui->heading->setText( text );
+}
+
+
+void LocateFilesWindow::sortByColumn( int col, Qt::SortOrder order )
+{
+    _ui->treeWidget->sortByColumn( col, order );
+}
 
 
 
