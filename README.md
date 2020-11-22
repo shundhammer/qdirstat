@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-10-30
+Updated: 2020-11-22
 
 
 ## Overview
@@ -122,6 +122,42 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2020-11-22
+
+  - Added a "Discover" toplevel menu to easily find
+    - the largest files
+    - the newest files
+    - the oldest files
+    - files with multiple hard links
+    - broken symbolic links
+    - sparse files
+
+    in the whole displayed directory tree or, if a directory is selected, in
+    that subtree.
+
+    In each case, a non-modal dialog is opened with a list of the results.
+    Clicking on one of them selects it in the main window where you can see
+    more details and use cleanup actions.
+
+    Most of that was already there in some way or the other, but now it's
+    easier to discover (pun intended) and to use.
+
+    Finding large files is of course what the treemap is primarily for; just
+    spot large blobs and click on them to find out what they are and where they
+    are hiding.
+
+    Finding the newest files can also be done by sorting the tree by the "last
+    modified" column and then opening the topmost branches. This is often
+    useful to find out where some browser dumped that last download again.
+
+    Similarly, to find the oldest files, enable the "oldest files" tree column,
+    sort by that and open branches until you can see a file.
+
+    Files with multiple hard links or sparse files were mentioned in the log;
+    otherwise they were not so easy to find (or use the command line, of
+    course).
+    
 
 - 2020-10-23
 
