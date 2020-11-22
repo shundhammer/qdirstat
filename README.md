@@ -140,6 +140,8 @@ Download installable binary packages for various Linux distributions here:
     Clicking on one of them selects it in the main window where you can see
     more details and use cleanup actions.
 
+    [<img width="750" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-discover.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-discover.png)
+
     Most of that was already there in some way or the other, but now it's
     easier to discover (pun intended) and to use.
 

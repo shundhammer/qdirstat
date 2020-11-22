@@ -114,6 +114,15 @@ _Locating files with a specific extension. That branch is automatically opened
 in the tree view in the main window, and all matching files in that directory are selected._
 
 
+## Discovering Files
+
+![Discovering Files](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-discover.png)
+
+_Discovering files of certain categories. Similar to "locating by type" above,
+clicking a file in the list selects it in the tree view in the main window._
+
+
+
 ## Packages View
 
 ![Packages View Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-pkg-details.png)
