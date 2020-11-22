@@ -1280,56 +1280,54 @@ void MainWindow::showFilesystems()
 
 void MainWindow::discoverLargestFiles()
 {
-    discoverFiles( new QDirStat::LargestFilesTreeWalker() );
+    discoverFiles( new QDirStat::LargestFilesTreeWalker(),
+                   tr( "Largest Files in %1" ) );
     _locateFilesWindow->sortByColumn( LocateListSizeCol, Qt::DescendingOrder );
-    _locateFilesWindow->setHeading( tr( "Largest Files" ) );
 }
 
 
 void MainWindow::discoverNewestFiles()
 {
-    // FIXME
-    // FIXME
-    // FIXME
-    notImplemented();
+    discoverFiles( new QDirStat::NewFilesTreeWalker(),
+                   tr( "Newest Files in %1" ) );
+    _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::DescendingOrder );
 }
 
 
 void MainWindow::discoverOldestFiles()
 {
-    // FIXME
-    // FIXME
-    // FIXME
-    notImplemented();
+    discoverFiles( new QDirStat::OldFilesTreeWalker(),
+                   tr( "Oldest Files in %1" ) );
+    _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::AscendingOrder );
 }
 
 
 void MainWindow::discoverHardLinkedFiles()
 {
-    discoverFiles( new QDirStat::HardLinkedFilesTreeWalker() );
+    discoverFiles( new QDirStat::HardLinkedFilesTreeWalker(),
+                   tr( "Files with Multiple Hard Links in %1" ) );
     _locateFilesWindow->sortByColumn( LocateListPathCol, Qt::AscendingOrder );
-    _locateFilesWindow->setHeading( tr( "Files with Multiple Hard Links" ) );
 }
 
 
 void MainWindow::discoverBrokenSymLinks()
 {
-    // FIXME
-    // FIXME
-    // FIXME
-    notImplemented();
+    discoverFiles( new QDirStat::BrokenSymLinksTreeWalker(),
+                   tr( "Broken Symbolic Links in %1" ) );
+    _locateFilesWindow->sortByColumn( LocateListPathCol, Qt::AscendingOrder );
 }
 
 
 void MainWindow::discoverSparseFiles()
 {
-    discoverFiles( new QDirStat::SparseFilesTreeWalker() );
+    discoverFiles( new QDirStat::SparseFilesTreeWalker(),
+                   tr( "Sparse Files in %1" ) );
     _locateFilesWindow->sortByColumn( LocateListSizeCol, Qt::DescendingOrder );
-    _locateFilesWindow->setHeading( tr( "Sparse Files" ) );
 }
 
 
-void MainWindow::discoverFiles( TreeWalker * treeWalker )
+void MainWindow::discoverFiles( TreeWalker *    treeWalker,
+                                const QString & headingText )
 {
     if ( ! _locateFilesWindow )
     {
@@ -1343,8 +1341,14 @@ void MainWindow::discoverFiles( TreeWalker * treeWalker )
         _locateFilesWindow->setTreeWalker( treeWalker );
     }
 
-    _locateFilesWindow->populate( selectedDirOrRoot() );
-    _locateFilesWindow->show();
+    FileInfo * sel = selectedDirOrRoot();
+
+    if ( sel )
+    {
+        _locateFilesWindow->setHeading( headingText.arg( sel->url() ) );
+        _locateFilesWindow->populate( sel );
+        _locateFilesWindow->show();
+    }
 }
 
 
@@ -1441,7 +1445,7 @@ FileInfo * MainWindow::selectedDirOrRoot() const
     FileInfoSet selectedItems = _selectionModel->selectedItems();
     FileInfo * sel = selectedItems.first();
 
-    if ( ! sel )
+    if ( ! sel || ! sel->isDir() )
 	sel = _dirTreeModel->tree()->firstToplevel();
 
     return sel;

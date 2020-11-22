@@ -9,6 +9,8 @@
 
 #include "TreeWalker.h"
 #include "FileSizeStats.h"
+#include "FileMTimeStats.h"
+#include "SysUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -35,4 +37,52 @@ void LargestFilesTreeWalker::prepare( FileInfo * subtree )
         int index = stats.dataSize() - RESULTS_COUNT;
         _threshold = stats.data().at( index );
     }
+}
+
+
+void NewFilesTreeWalker::prepare( FileInfo * subtree )
+{
+    _threshold = 0;
+
+    FileMTimeStats stats;
+    stats.collect( subtree );
+    stats.sort();
+
+    if ( stats.dataSize() <= 100 )
+        _threshold = stats.quartile( 3 );
+    else if ( stats.dataSize() <= 1000 )
+        _threshold = stats.percentile( 99 );
+    else
+    {
+        int index = stats.dataSize() - RESULTS_COUNT;
+        _threshold = stats.data().at( index );
+    }
+}
+
+
+void OldFilesTreeWalker::prepare( FileInfo * subtree )
+{
+    _threshold = 0;
+
+    FileMTimeStats stats;
+    stats.collect( subtree );
+    stats.sort();
+
+    if ( stats.dataSize() <= 100 )
+        _threshold = stats.quartile( 1 );
+    else if ( stats.dataSize() <= 1000 )
+        _threshold = stats.percentile( 1 );
+    else
+    {
+        int index = RESULTS_COUNT;
+        _threshold = stats.data().at( index );
+    }
+}
+
+
+bool BrokenSymLinksTreeWalker::check( FileInfo * item )
+{
+    return item &&
+        item->isSymLink() &&
+        SysUtil::isBrokenSymLink( item->url() );
 }

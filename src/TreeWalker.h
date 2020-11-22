@@ -66,6 +66,9 @@ namespace QDirStat
     {
     public:
 
+        /**
+         * Find the threshold for what is considered a "large file".
+         **/
         virtual void prepare( FileInfo * subtree );
 
         virtual bool check( FileInfo * item )
@@ -76,6 +79,49 @@ namespace QDirStat
         FileSize _threshold;
     };
 
+
+    /**
+     * TreeWalker to find new files.
+     **/
+    class NewFilesTreeWalker: public TreeWalker
+    {
+    public:
+
+        /**
+         * Find the threshold for what is considered a "new file".
+         **/
+        virtual void prepare( FileInfo * subtree );
+
+        virtual bool check( FileInfo * item )
+            { return item && item->isFile() && item->mtime() >= _threshold; }
+
+    protected:
+
+        time_t _threshold;
+    };
+
+
+    /**
+     * TreeWalker to find old files.
+     **/
+    class OldFilesTreeWalker: public TreeWalker
+    {
+    public:
+
+        /**
+         * Find the threshold for what is considered an "old file".
+         **/
+        virtual void prepare( FileInfo * subtree );
+
+        virtual bool check( FileInfo * item )
+            { return item && item->isFile() && item->mtime() <= _threshold; }
+
+    protected:
+
+        time_t _threshold;
+    };
+
+
     /**
      * TreeWalker to find files with multiple hard links.
      **/
@@ -85,6 +131,17 @@ namespace QDirStat
 
         virtual bool check( FileInfo * item )
             { return item && item->isFile() && item->links() > 1; }
+    };
+
+
+    /**
+     * TreeWalker to find broken symlinks.
+     **/
+    class BrokenSymLinksTreeWalker: public TreeWalker
+    {
+    public:
+
+        virtual bool check( FileInfo * item );
     };
 
 

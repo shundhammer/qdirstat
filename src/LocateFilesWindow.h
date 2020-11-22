@@ -163,9 +163,9 @@ namespace QDirStat
      **/
     enum LocateListColumns
     {
-        LocateListPathCol,
 	LocateListSizeCol,
         LocateListMTimeCol,
+        LocateListPathCol,
         LocateListColumnCount
     };
 

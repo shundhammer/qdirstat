@@ -82,6 +82,7 @@ SOURCES	  = main.cpp			\
 	    FileInfoSet.cpp		\
 	    FileInfoSorter.cpp		\
 	    FileSizeLabel.cpp		\
+	    FileMTimeStats.cpp		\
 	    FileSizeStats.cpp		\
 	    FileSizeStatsWindow.cpp	\
 	    FileSystemsWindow.cpp	\
@@ -176,6 +177,7 @@ HEADERS	  =				\
 	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
 	    FileSizeLabel.h		\
+	    FileMTimeStats.h		\
 	    FileSizeStats.h		\
 	    FileSizeStatsWindow.h	\
 	    FileTypeStats.h		\

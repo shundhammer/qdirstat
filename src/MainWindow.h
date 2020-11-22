@@ -426,8 +426,12 @@ protected:
     /**
      * Common part of all "discover" actions: Create or reuse a
      * LocateFilesWindow with the specified TreeWalker.
+     *
+     * 'headingText' should include a "%1" placeholder for the path of the
+     * starting directory.
      **/
-    void discoverFiles( QDirStat::TreeWalker * treeWalker );
+    void discoverFiles( QDirStat::TreeWalker * treeWalker,
+                        const QString &        headingText );
 
     /**
      * Initialize the layout actions.
