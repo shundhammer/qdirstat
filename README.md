@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-11-22
+Updated: 2020-11-23
 
 
 ## Overview
@@ -122,6 +122,67 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2020-11-23
+
+  - Menu reorganization: They had become a little too crowded, especially on
+    the top level.
+
+    - Moved out some options from the menus; they are still available when
+      editing the config file manually:
+
+      - "Show current path"
+      - "Treemap as side panel"
+
+    - "Expand tree level" is now limited to level 5 (formerly 9). Opening that
+      many tree branches means a huge performance drop anyway.
+
+    - The former "Treemap" menu is now a submenu of "View". Most of those
+      actions are available as tool bar buttons and mouse wheel operations
+      anyway.
+
+    - The former "Settings" menu is gone; "Configure QDirStat" is now in the
+      "Edit" menu. There was only that one action in the "Settings" menu, and
+      that is quite wasteful in terms of screen space and toplevel menu
+      complexity.
+
+      I experimented shortly with moving some more settings there, e.g. "Show
+      details panel" and "Show tremap", but I reverted that: The details panel
+      is different for each layout (L1, L2, L3), and the layout switching
+      actions are in the "View" menu where they belong; so "Show details panel"
+      should really remain near them. And not having "Show treemap" in the
+      "Treemap" submenu would be very confusing.
+
+    The new toplevel menus are now:
+
+    - File
+    - Edit
+    - View
+    - Go To
+    - Discover
+    - Clean up
+    - Help
+
+    I.e. it's down to 7 items which is generally regarded as the gold standard
+    by usability experts.
+
+    I am not completely happy yet with how additional views are scattered among
+    several menus:
+
+    - "File" -> "Show installed packages"
+    - "File" -> "Show unpackaged files"
+    - "View" -> "File size statistics"
+    - "View" -> "File type statistics"
+    - "View" -> "Show mounted filesystems"
+
+    The rationale is that those views in the "File" menu load completely new
+    content, replacing the scanned directory in both the tree view and the
+    treemap; thus they are on a similar level as "Open directory", so they are
+    right next to that action.
+
+    The other views open in separate windows, so they are add-on views to the
+    currently loaded directory tree.
+
 
 - 2020-11-22
 
