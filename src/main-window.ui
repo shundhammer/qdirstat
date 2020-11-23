@@ -203,6 +203,8 @@
     </property>
     <addaction name="actionCopyPathToClipboard"/>
     <addaction name="actionMoveToTrash"/>
+    <addaction name="separator"/>
+    <addaction name="actionConfigure"/>
    </widget>
    <widget class="QMenu" name="menuGoTo">
     <property name="title">
@@ -218,6 +220,7 @@
     <addaction name="actionHelp"/>
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
+    <addaction name="separator"/>
     <addaction name="actionPkgViewHelp"/>
     <addaction name="actionUnpkgViewHelp"/>
     <addaction name="actionWhatsNew"/>
@@ -232,12 +235,6 @@
     </property>
     <addaction name="actionMoveToTrash"/>
     <addaction name="separator"/>
-   </widget>
-   <widget class="QMenu" name="menuSettings">
-    <property name="title">
-     <string>&amp;Settings</string>
-    </property>
-    <addaction name="actionConfigure"/>
    </widget>
    <widget class="QMenu" name="menuDiscover">
     <property name="title">
@@ -256,7 +253,6 @@
    <addaction name="menuGoTo"/>
    <addaction name="menuDiscover"/>
    <addaction name="menuCleanup"/>
-   <addaction name="menuSettings"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
