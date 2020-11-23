@@ -146,6 +146,7 @@
     <addaction name="actionOpenDir"/>
     <addaction name="actionOpenPkg"/>
     <addaction name="actionShowUnpkgFiles"/>
+    <addaction name="separator"/>
     <addaction name="actionRefreshAll"/>
     <addaction name="actionRefreshSelected"/>
     <addaction name="separator"/>
@@ -164,7 +165,7 @@
     </property>
     <widget class="QMenu" name="menuExpandTreeToLevel">
      <property name="title">
-      <string>E&amp;xpand Tree To Level</string>
+      <string>E&amp;xpand Tree to Level</string>
      </property>
      <addaction name="actionExpandTreeLevel0"/>
      <addaction name="actionExpandTreeLevel1"/>
@@ -648,7 +649,7 @@
      <normaloff>:/icons/preferences.png</normaloff>:/icons/preferences.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Configure QDirStat</string>
+    <string>C&amp;onfigure QDirStat</string>
    </property>
    <property name="toolTip">
     <string>Configure QDirStat</string>
@@ -751,7 +752,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Details Panel</string>
+    <string>Show &amp;Details Panel</string>
    </property>
    <property name="toolTip">
     <string>Show &amp;Details Panel</string>
@@ -762,7 +763,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Layout 1 (Short)</string>
+    <string>Layout &amp;1 (Short)</string>
    </property>
    <property name="iconText">
     <string>L1</string>
@@ -779,7 +780,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Layout 2 (Classic)</string>
+    <string>Layout &amp;2 (Classic)</string>
    </property>
    <property name="iconText">
     <string>L2</string>
@@ -793,7 +794,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Layout 3 (Full)</string>
+    <string>Layout &amp;3 (Full)</string>
    </property>
    <property name="iconText">
     <string>L3</string>
@@ -863,7 +864,7 @@
   </action>
   <action name="actionShowFilesystems">
    <property name="text">
-    <string>Show &amp;Mounted Filesystems</string>
+    <string>Show Mounted &amp;Filesystems</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
