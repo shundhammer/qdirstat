@@ -172,15 +172,21 @@
      <addaction name="actionExpandTreeLevel3"/>
      <addaction name="actionExpandTreeLevel4"/>
      <addaction name="actionExpandTreeLevel5"/>
-     <addaction name="actionExpandTreeLevel6"/>
-     <addaction name="actionExpandTreeLevel7"/>
-     <addaction name="actionExpandTreeLevel8"/>
-     <addaction name="actionExpandTreeLevel9"/>
+    </widget>
+    <widget class="QMenu" name="menuTreemap">
+     <property name="title">
+      <string>Tree&amp;map</string>
+     </property>
+     <addaction name="actionShowTreemap"/>
+     <addaction name="actionTreemapZoomIn"/>
+     <addaction name="actionTreemapZoomOut"/>
+     <addaction name="actionResetTreemapZoom"/>
+     <addaction name="actionTreemapRebuild"/>
     </widget>
     <addaction name="actionCloseAllTreeLevels"/>
     <addaction name="menuExpandTreeToLevel"/>
+    <addaction name="menuTreemap"/>
     <addaction name="separator"/>
-    <addaction name="actionShowCurrentPath"/>
     <addaction name="actionShowDetailsPanel"/>
     <addaction name="separator"/>
     <addaction name="actionLayout1"/>
@@ -197,18 +203,6 @@
     </property>
     <addaction name="actionCopyPathToClipboard"/>
     <addaction name="actionMoveToTrash"/>
-   </widget>
-   <widget class="QMenu" name="menuTreemap">
-    <property name="title">
-     <string>Tree&amp;map</string>
-    </property>
-    <addaction name="actionShowTreemap"/>
-    <addaction name="actionTreemapAsSidePanel"/>
-    <addaction name="separator"/>
-    <addaction name="actionTreemapZoomIn"/>
-    <addaction name="actionTreemapZoomOut"/>
-    <addaction name="actionResetTreemapZoom"/>
-    <addaction name="actionTreemapRebuild"/>
    </widget>
    <widget class="QMenu" name="menuGoTo">
     <property name="title">
@@ -260,7 +254,6 @@
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuGoTo"/>
-   <addaction name="menuTreemap"/>
    <addaction name="menuDiscover"/>
    <addaction name="menuCleanup"/>
    <addaction name="menuSettings"/>
