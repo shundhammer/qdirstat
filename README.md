@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-11-23
+Updated: 2020-11-24
 
 
 ## Overview
@@ -224,7 +224,7 @@ Download installable binary packages for various Linux distributions here:
 
 - 2020-10-23
 
-  - Now showing the target of symbolic links in the "Details" pane.
+  - Now showing the target of symbolic links in the details panel.
 
     If it's a short path, the whole path is shown; otherwise without the path
     (".../somewhere"), and the full path is shown as a pop-up upon mouse click.
