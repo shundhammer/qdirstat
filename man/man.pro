@@ -2,8 +2,8 @@
 
 isEmpty(INSTALL_PREFIX):INSTALL_PREFIX = /usr
 
-TEMPLATE     = app
-TARGET       = $(nothing)
+TEMPLATE     = aux
+TARGET       = man                 
 
 MAN_SRC      = qdirstat.1                 \
                qdirstat-cache-writer.1
