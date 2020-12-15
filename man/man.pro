@@ -24,5 +24,6 @@ man.files    = $$MAN_TARGET
 man.commands = gzip --keep --force $$MAN_SRC
 man.path     = $$INSTALL_PREFIX/share/man/man1
 
-INSTALLS    += man
-QMAKE_CLEAN += $$MAN_TARGET
+INSTALLS            += man
+QMAKE_EXTRA_TARGETS += man
+QMAKE_CLEAN         += $$MAN_TARGET
