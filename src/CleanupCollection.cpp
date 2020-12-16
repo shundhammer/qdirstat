@@ -14,6 +14,7 @@
 #include "CleanupCollection.h"
 #include "Cleanup.h"
 #include "StdCleanup.h"
+#include "DirTree.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
 #include "SelectionModel.h"
@@ -290,6 +291,12 @@ void CleanupCollection::execute()
     connect( outputWindow, SIGNAL( lastProcessFinished( int ) ),
 	     this,	   SIGNAL( cleanupFinished    ( int ) ) );
 
+
+    // Intentionally not using the normalized FileInfoSet here: If a user
+    // selects a file and one of its ancestors, he might be interested to
+    // perform an action on each of them individually. We can't know if the
+    // action on the ancestor affects any of its children.
+
     foreach ( FileInfo * item, selection )
     {
 	if ( cleanup->worksFor( item ) )
@@ -301,6 +308,19 @@ void CleanupCollection::execute()
 	    logWarning() << "Cleanup " << cleanup
 			 << " does not work for " << item << endl;
 	}
+    }
+
+    if ( cleanup->refreshPolicy() == Cleanup::AssumeDeleted )
+    {
+        // It is important to use the normalized FileInfoSet here to avoid a
+        // segfault because we are iterating over items whose ancestors we just
+        // deleted (thus invalidating pointers to it). Normalizing removes
+        // items from the set that also have any ancestors in the set.
+
+        foreach ( FileInfo * item, selection.normalized() )
+        {
+            item->tree()->deleteSubtree( item );
+        }
     }
 
     outputWindow->noMoreProcesses();

@@ -80,33 +80,12 @@ void Cleanup::execute( FileInfo *item, OutputWindow * outputWindow )
 {
     if ( worksFor( item ) )
     {
-	DirTree * tree = item->tree();
-
 	executeRecursive( item, outputWindow );
 
-	switch ( _refreshPolicy )
-	{
-	    case NoRefresh:
-		// Do nothing (by definition).
-		break;
-
-	    case RefreshThis:
-	    case RefreshParent:
-		// Done from CleanupCollection::execute() via a Refresher
-		// object that is triggered by the
-		// OutputWindow::lastProcessFinished() signal.
-		//
-		// Nothing left to do here.
-		break;
-
-	    case AssumeDeleted:
-
-		// Assume the cleanup action has deleted the item.
-		// Modify the DirTree accordingly.
-
-		tree->deleteSubtree( item );
-		break;
-	}
+        // Refreshing the tree based on the cleanup's refresh policy is now
+        // handled completely in CleanupCollection::execute() to be safer
+        // against segfaults due to pointers becoming invalid due to their
+        // parents having been deleted during refreshing.
     }
 }
 
