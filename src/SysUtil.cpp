@@ -9,6 +9,7 @@
 
 #define DONT_DEPRECATE_STRERROR
 #include <unistd.h>	// access(), getuid(), geteduid(), readlink()
+#include <errno.h>
 #include <pwd.h>	// getpwuid()
 #include <limits.h>     // PATH_MAX
 #include <sys/stat.h>   // lstat()
