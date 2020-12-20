@@ -113,6 +113,7 @@ void Cleanup::executeRecursive( FileInfo *item, OutputWindow * outputWindow )
 		     **/
 		    executeRecursive( subdir, outputWindow );
 		}
+
 		subdir = subdir->next();
 	    }
 	}
