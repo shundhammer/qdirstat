@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-11-24
+Updated: 2020-12-20
 
 
 ## Overview
@@ -516,6 +516,20 @@ for older entries._
 
 
 This is just a rough summary. For more details, see [DevHistory.md](doc/DevHistory.md).
+
+
+- 2020-07-26 New stable release: 1.7
+
+  - Closing the gap between sizes reported by QDirstat and sizes reported by
+    the `du` command: Now also taking the allocated size into account.
+
+  - Now also displaying the allocated size where it makes sense.
+
+  - New "Mounted Filesystems" window showing output similar to the `df` command
+    (but without the cruft).
+
+  - New directory selection dialog showing all (real) filesystems.
+
 
 - 2020-02-13 New stable release: 1.6.1
 
