@@ -55,14 +55,14 @@ FileInfoSet FileInfoSet::invalidRemoved() const
 
     foreach ( FileInfo * item, *this )
     {
-	if ( item->checkMagicNumber() )
+	if ( item && item->checkMagicNumber() )
 	{
-	    logDebug() << "Keeping " << item << endl;
+	    // logDebug() << "Keeping " << item << endl;
 	    result << item;
 	}
 	else
 	{
-	    logDebug() << "Removing invalid item" << endl;
+	    logWarning() << "Removing invalid item" << endl;
 	}
     }
 
