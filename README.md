@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-12-20
+Updated: 2020-12-21
 
 
 ## Overview
@@ -123,6 +123,13 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2020-12-21
+
+  - Fixed [GitHub Issue #146](https://github.com/shundhammer/qdirstat/issues/146):
+    Segfault when using a cleanup action with refresh policy _AssumeDeleted_ after
+    a cleanup action with _RefreshParent_ in the same directory.
+
+
 - 2020-11-23
 
   - Menu reorganization: They had become a little too crowded, especially on
@@ -220,7 +227,7 @@ Download installable binary packages for various Linux distributions here:
     Files with multiple hard links or sparse files were mentioned in the log;
     otherwise they were not so easy to find (short of using the command line,
     of course).
-    
+
 
 - 2020-10-23
 
