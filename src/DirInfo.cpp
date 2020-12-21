@@ -140,6 +140,7 @@ void DirInfo::clear()
     }
 
     _summaryDirty = true;
+    _deletingAll  = false;
     dropSortCache();
 }
 
