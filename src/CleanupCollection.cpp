@@ -317,9 +317,14 @@ void CleanupCollection::execute()
         // deleted (thus invalidating pointers to it). Normalizing removes
         // items from the set that also have any ancestors in the set.
 
-        foreach ( FileInfo * item, selection.normalized() )
+        foreach ( FileInfo * item, selection.invalidRemoved().normalized() )
         {
-            item->tree()->deleteSubtree( item );
+            DirTree * tree = item->tree();
+
+            if ( tree->isBusy() )
+                logWarning() << "Ignoring AssumeDeleted: DirTree is being read" << endl;
+            else
+                tree->deleteSubtree( item );
         }
     }
 
