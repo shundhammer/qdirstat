@@ -125,7 +125,7 @@ Download installable binary packages for various Linux distributions here:
 
 - 2020-12-21
 
-  - Fixed [GitHub Issue #146](https://github.com/shundhammer/qdirstat/issues/146):
+  - Fixed [GitHub Issue #149](https://github.com/shundhammer/qdirstat/issues/149):
     Segfault when using a cleanup action with refresh policy _AssumeDeleted_ after
     a cleanup action with _RefreshParent_ in the same directory.
 
