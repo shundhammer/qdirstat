@@ -14,7 +14,7 @@
 #include "Logger.h"
 #include "Exception.h"
 
-#define RESULTS_COUNT  100
+#define RESULTS_COUNT  50
 
 
 using namespace QDirStat;
@@ -29,9 +29,9 @@ void LargestFilesTreeWalker::prepare( FileInfo * subtree )
     stats.sort();
 
     if ( stats.dataSize() <= 100 )
-        _threshold = stats.quartile( 3 );
+        _threshold = stats.percentile( 80 );
     else if ( stats.dataSize() <= 1000 )
-        _threshold = stats.percentile( 99 );
+        _threshold = stats.percentile( 95 );
     else
     {
         int index = stats.dataSize() - RESULTS_COUNT;
@@ -49,9 +49,9 @@ void NewFilesTreeWalker::prepare( FileInfo * subtree )
     stats.sort();
 
     if ( stats.dataSize() <= 100 )
-        _threshold = stats.quartile( 3 );
+        _threshold = stats.percentile( 80 );
     else if ( stats.dataSize() <= 1000 )
-        _threshold = stats.percentile( 99 );
+        _threshold = stats.percentile( 95 );
     else
     {
         int index = stats.dataSize() - RESULTS_COUNT;
@@ -69,9 +69,9 @@ void OldFilesTreeWalker::prepare( FileInfo * subtree )
     stats.sort();
 
     if ( stats.dataSize() <= 100 )
-        _threshold = stats.quartile( 1 );
+        _threshold = stats.percentile( 20 );
     else if ( stats.dataSize() <= 1000 )
-        _threshold = stats.percentile( 1 );
+        _threshold = stats.percentile( 5 );
     else
     {
         int index = RESULTS_COUNT;

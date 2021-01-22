@@ -109,6 +109,7 @@ void LocateFilesWindow::populate( FileInfo * newSubtree )
     _ui->treeWidget->setSortingEnabled( false );
 
     populateRecursive( newSubtree ? newSubtree : _subtree() );
+    // logDebug() << "Results count: " << _ui->treeWidget->topLevelItemCount() << endl;
 
     _ui->treeWidget->setSortingEnabled( true );
     _ui->treeWidget->sortByColumn( LocateListPathCol, Qt::AscendingOrder );
