@@ -174,3 +174,8 @@ and/or (b) because they want that piece of software to be successful. Educating
 newbies and cleaning up after them is very low on most developers' list of fun
 things to do. They still do it, but it's painful for them. Please help
 minimizing that pain.
+
+
+## Further Reading
+
+- http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
