@@ -25,11 +25,31 @@ X11-based desktop on Linux, BSD and other Unix-like systems.
 QDirStat has a number of new features compared to KDirStat. To name a few:
 
 - Multi-selection in both the tree and the treemap.
+
 - Unlimited number of user-defined cleanup actions.
+
 - Properly show errors of cleanup actions (and their output, if desired).
-- File categories (MIME types) and their treemap color are now configurable.
-- Exclude rules for directories are easily configurable.
-- Desktop-agnostic; no longer relies on KDE or any other specific desktop.
+
+- Configurable file categories (MIME types), treemap colors, exclude rules,
+  tree columns.
+
+- Quick-switchable main window / tree column layouts (L1, L2, L3) that can each
+  be individually configured.
+
+- Details panel with more information, including what software package a system
+  file belongs to.
+
+- Packages view showing disk usage of installed software packages and their
+  individual files.
+
+- Unpackaged files view showing what files in system directories do not belong
+  to an installed software package.
+
+- File size histogram view.
+
+- Disk usage per file type (by filename extension).
+
+- Free and used sizes per mounted filessytem (like the _df_ command).
 
 See section [_New Features_](#new-features) for more details.
 
