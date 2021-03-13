@@ -49,7 +49,8 @@ QDirStat has a number of new features compared to KDirStat. To name a few:
 
 - Disk usage per file type (by filename extension).
 
-- Free and used sizes per mounted filessytem (like the _df_ command).
+- Mounted filesytems view showing free, used and reserved disk sizes
+  (graphical version of the _df_ command).
 
 See section [_New Features_](#new-features) for more details.
 
