@@ -13,6 +13,13 @@ License: GPL V2
 Updated: 2021-03-13
 
 
+## Screenshot
+
+[<img width="900" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-main-win.png)
+
+_Main window screenshot - notice the multi-selection in the tree and the treemap_
+
+
 ## Overview
 
 QDirStat is a graphical application to show where your disk space has gone and
@@ -53,14 +60,6 @@ QDirStat has a number of new features compared to KDirStat. To name a few:
   (graphical version of the _df_ command).
 
 See section [_New Features_](#new-features) for more details.
-
-
-
-## Screenshot
-
-[<img width="900" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-main-win.png)
-
-_Main window screenshot - notice the multi-selection in the tree and the treemap_
 
 
 ## Table of Contents
