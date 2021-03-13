@@ -1535,7 +1535,7 @@ void MainWindow::showAboutDialog()
     text += tr( "Qt-based directory statistics -- showing where all your disk space has gone "
 		" and trying to help you to clean it up." );
     text += "</p><p>";
-    text += "(c) 2015-2020 Stefan Hundhammer";
+    text += "(c) 2015-2021 Stefan Hundhammer";
     text += "</p><p>";
     text += tr( "Contact: " ) + QString( "<a href=\"mailto:%1\">%2</a>" ).arg( mailTo ).arg( mailTo );
     text += "</p><p>";
