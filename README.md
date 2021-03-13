@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2020-12-21
+Updated: 2021-03-13
 
 
 ## Overview
@@ -45,32 +45,19 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
 ## Table of Contents
 
 1. [Screenshot](#screenshot)
-1. [More Screenshots](#more-screenshots)
 1. [Latest Stable Release](#latest-stable-release)
 1. [Latest News](#latest-news)
 1. [History](#history)
-1. [Related Software](#related-software)
-   1. [WinDirStat and QDirStat](#windirstat-and-qdirstat)
-   1. [QDirStat and K4DirStat](#qdirstat-and-k4dirstat)
-   1. [Other](#other)
-1. [Motivation / Rant](#motivation--rant)
+1. [Related Software](#related-software): WinDirStat, K4DirStat and more
+1. [Motivation / Rant](#motivation--rant): Why?
 1. [Features](#features)
-   1. [New Features](#new-features)
-   1. [Old Features](#old-features)
-   1. [Features that are Gone (Compared to the Old KDirStat)](#features-that-are-gone)
 1. [MacOS X Compatibility](#macos-x-compatibility)
 1. [Windows Compatibility](#windows-compatibility)
 1. [Ready-made Packages](#ready-made-packages)
 1. [Building](#building)
-   1. [Build Environment](#build-environment)
-   1. [Compiling](#compiling)
-   1. [Installing](#installing)
-   1. [Install to a Custom Directory](#install-to-a-custom-directory)
 1. [Contributing](#contributing)
-1. [To Do](#to-do)
 1. [Troubleshooting](#troubleshooting)
-   1. [Can't Move a Directory to Trash](#cant-move-a-directory-to-trash)
-1. [Reference](#reference)
+1. [Further Reading](#further-reading)
 1. [Packaging Status](#packaging-status)
 1. [Donate](#donate)
 
@@ -103,10 +90,11 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
 ## Donate
 
-QDirStat is Free Open Source Software. You are not required to pay anything.
-Donations are most welcome, of course.
+QDirStat is Free Open Source Software; you are not required to pay anything.
+If you want to support continued development of QDirStat, donations are most
+welcome.
 
-Donate via PayPal (freely select the amount to donate):
+Donate any amount you like via PayPal:
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EYJXAVLGNRR5W)
 
@@ -1316,7 +1304,7 @@ and [GitHub-Workflow.md](doc/GitHub-Workflow.md)
 See file [Troubleshooting.md](doc/Troubleshooting.md)
 
 
-## Reference
+## Further Reading
 
 - Original [KDirStat](http://kdirstat.sourceforge.net/)  ([source code](https://github.com/shundhammer/kdirstat))
 - [K4Dirstat](https://bitbucket.org/jeromerobert/k4dirstat/wiki/Home) ([source code](https://bitbucket.org/jeromerobert/k4dirstat/src))
@@ -1339,9 +1327,10 @@ Repology: QDirStat versions in Linux / BSD distributions:
 
 ## Donate
 
-QDirStat is Free Open Source Software. You are not required to pay anything.
-Donations are most welcome, of course.
+QDirStat is Free Open Source Software; you are not required to pay anything.
+If you want to support continued development of QDirStat, donations are most
+welcome.
 
-Donate via PayPal (freely select the amount to donate):
+Donate any amount you like via PayPal:
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EYJXAVLGNRR5W)
