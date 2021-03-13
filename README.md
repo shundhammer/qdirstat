@@ -48,8 +48,8 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
 1. [Latest Stable Release](#latest-stable-release)
 1. [Latest News](#latest-news)
 1. [History](#history)
-1. [Related Software](#related-software): WinDirStat, K4DirStat and more
-1. [Motivation / Rant](#motivation--rant): Why?
+1. [Related Software](#related-software): KDirStat, WinDirStat, K4DirStat and more
+1. [Motivation / Rant: Why?](#motivation--rant-why)
 1. [Features](#features)
 1. [MacOS X Compatibility](#macos-x-compatibility)
 1. [Windows Compatibility](#windows-compatibility)
@@ -608,9 +608,21 @@ This is just a rough summary. For more details, see [DevHistory.md](doc/DevHisto
 
 ## Related Software
 
+### KDirStat and QDirStat
+
+KDirStat was the first program of this kind (combining a traditional tree view
+with a treemap), also written by the same author as QDirStat. It was made for
+KDE 1 back in early 2000; later ported to KDE 2, then KDE 3.
+
+QDirStat is based on that code, but made independent of any KDE libraries or
+infrastructure, so it has much fewer library and package dependencies;
+basically only the Qt 5 libs and libz, both of which most Linux / BSD machines
+have installed anyway if there is any graphical desktop installed.
+
+
 ### WinDirStat and QDirStat
 
-I keep reading articles and user forum comments about QDirStat being a "nice
+There are lots of articles and user forum comments about QDirStat being a "nice
 Linux port of WinDirStat". Well, nothing could be further from the truth:
 **WinDirStat is a Windows port of KDirStat**, the predecessor of QDirStat.
 
@@ -625,7 +637,7 @@ dialog.
 
 ### QDirStat and K4DirStat
 
-K4DirStat is a port to KDE 4 / Qt 4 of my old KDE 3 / Qt 3 KDirStat. QDirStat is
+K4DirStat is a port to KDE 4 / Qt 4 of the old KDE 3 / Qt 3 KDirStat. QDirStat is
 independent of that; it is based on the old KDE 3 KDirStat directly.
 
 
@@ -642,7 +654,7 @@ QDirStat vs. K4DirStat vs. Baobab vs. Filelight vs. ncdu (including benchmarks)
 in the Wiki.
 
 
-## Motivation / Rant
+## Motivation / Rant: Why?
 
 After having used KDE since its early days (since about 1998), I didn't like
 the direction anymore that KDE has been taking. I loved KDE 1, KDE 2, KDE
@@ -1201,6 +1213,11 @@ https://apps.fedoraproject.org/packages/qdirstat/builds/
 
 
 ## Building
+
+_Notice that for most mainstream Linux or BSD distributions you don't have to
+build your own; you can simply install a ready-made package from your normal
+package manager._
+
 
 ### Build Environment
 
