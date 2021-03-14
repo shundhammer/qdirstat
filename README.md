@@ -45,7 +45,7 @@ QDirStat has a number of new features compared to KDirStat. To name a few:
   - [Packages view](doc/Pkg-View.md) showing disk usage of installed software
     packages and their individual files.
   - [Unpackaged files view](doc/Unpkg-View.md) showing what files in system
-    directories do not belong to an installed software package.
+    directories do not belong to any installed software package.
 
 - New views:
   - Disk usage per file type (by filename extension).
