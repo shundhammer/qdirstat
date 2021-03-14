@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-03-13
+Updated: 2021-03-14
 
 
 ## Screenshot
@@ -40,24 +40,17 @@ QDirStat has a number of new features compared to KDirStat. To name a few:
 - Configurable file categories (MIME types), treemap colors, exclude rules,
   tree columns.
 
-- Quick-switchable main window / tree column layouts (L1, L2, L3) that can each
-  be individually configured.
+- Package manager support:
+  - Show what software package a system file belongs to.
+  - [Packages view](doc/Pkg-View.md) showing disk usage of installed software
+    packages and their individual files.
+  - [Unpackaged files view](doc/Unpkg-View.md) showing what files in system
+    directories do not belong to an installed software package.
 
-- Details panel with more information, including what software package a system
-  file belongs to.
-
-- [Packages view](doc/Pkg-View.md) showing disk usage of installed software
-  packages and their individual files.
-
-- [Unpackaged files view](doc/Unpkg-View.md) showing what files in system
-  directories do not belong to an installed software package.
-
-- File size histogram view.
-
-- Disk usage per file type (by filename extension).
-
-- Mounted filesytems view showing free, used and reserved disk sizes
-  (graphical version of the _df_ command).
+- New views:
+  - Disk usage per file type (by filename extension).
+  - File size histogram view.
+  - Free, used and reserved disk size for each mounted filesystem (like _df_)
 
 See section [_New Features_](#new-features) for more details.
 
