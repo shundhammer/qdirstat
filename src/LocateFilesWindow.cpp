@@ -7,11 +7,15 @@
  */
 
 
+#include <QMenu>
+
 #include "LocateFilesWindow.h"
 #include "DirTree.h"
 #include "FileInfoIterator.h"
 #include "DotEntry.h"
 #include "SelectionModel.h"
+#include "ActionManager.h"
+#include "CleanupCollection.h"
 #include "SettingsHelpers.h"
 #include "HeaderTweaker.h"
 #include "Logger.h"
@@ -20,13 +24,15 @@
 using namespace QDirStat;
 
 
-LocateFilesWindow::LocateFilesWindow( TreeWalker *     treeWalker,
-                                      SelectionModel * selectionModel,
-                                      QWidget *	       parent ):
+LocateFilesWindow::LocateFilesWindow( TreeWalker *        treeWalker,
+                                      SelectionModel *    selectionModel,
+                                      CleanupCollection * cleanupCollection,
+                                      QWidget *	          parent ):
     QDialog( parent ),
     _ui( new Ui::LocateFilesWindow ),
     _treeWalker( treeWalker ),
-    _selectionModel( selectionModel )
+    _selectionModel( selectionModel ),
+    _cleanupCollection( cleanupCollection )
 {
     // logDebug() << "init" << endl;
 
@@ -42,6 +48,9 @@ LocateFilesWindow::LocateFilesWindow( TreeWalker *     treeWalker,
     connect( _ui->treeWidget,	 SIGNAL( currentItemChanged( QTreeWidgetItem *,
 							     QTreeWidgetItem * ) ),
 	     this,		 SLOT  ( locateInMainWindow( QTreeWidgetItem * ) ) );
+
+    connect( _ui->treeWidget,    SIGNAL( customContextMenuRequested( const QPoint & ) ),
+             this,               SLOT  ( itemContextMenu           ( const QPoint & ) ) );
 }
 
 
@@ -81,6 +90,7 @@ void LocateFilesWindow::initWidgets()
     font.setBold( true );
     _ui->heading->setFont( font );
 
+    _ui->treeWidget->setContextMenuPolicy( Qt::CustomContextMenu );
     _ui->treeWidget->setColumnCount( LocateListColumnCount );
     _ui->treeWidget->setHeaderLabels( QStringList()
 				      << tr( "Size" )
@@ -88,6 +98,7 @@ void LocateFilesWindow::initWidgets()
 				      << tr( "Path" )  );
     _ui->treeWidget->header()->setStretchLastSection( false );
     HeaderTweaker::resizeToContents( _ui->treeWidget->header() );
+    addCleanupHotkeys();
 }
 
 
@@ -180,6 +191,47 @@ void LocateFilesWindow::locateInMainWindow( QTreeWidgetItem * item )
 
     // logDebug() << "Locating " << searchResult->path() << " in tree" << endl;
     _selectionModel->setCurrentItem( searchResult->path() );
+}
+
+
+void LocateFilesWindow::itemContextMenu( const QPoint & pos )
+{
+    QMenu menu;
+    QStringList actions;
+    actions << "actionMoveToTrash";
+
+    ActionManager::instance()->addActions( &menu, actions );
+
+    if ( _cleanupCollection && ! _cleanupCollection->isEmpty() )
+    {
+	menu.addSeparator();
+
+        foreach ( Cleanup * cleanup, _cleanupCollection->cleanupList() )
+        {
+            if ( cleanup->worksForFile() )
+                menu.addAction( cleanup );
+        }
+    }
+
+    menu.exec( _ui->treeWidget->mapToGlobal( pos ) );
+}
+
+
+void LocateFilesWindow::addCleanupHotkeys()
+{
+    QAction * moveToTrash = ActionManager::instance()->action( "actionMoveToTrash" );
+
+    if ( moveToTrash )
+        addAction( moveToTrash );
+
+    if ( _cleanupCollection )
+    {
+        foreach ( Cleanup * cleanup, _cleanupCollection->cleanupList() )
+        {
+            if ( cleanup->worksForFile() && ! cleanup->shortcut().isEmpty() )
+                addAction( cleanup );
+        }
+    }
 }
 
 

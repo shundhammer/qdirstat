@@ -24,6 +24,7 @@ namespace QDirStat
 {
     class DirTree;
     class SelectionModel;
+    class CleanupCollection;
 
 
     /**
@@ -55,9 +56,10 @@ namespace QDirStat
          * This class takes over ownership of the TreeWalker and will delete it
          * when appropriate.
 	 **/
-	LocateFilesWindow( TreeWalker *     treeWalker,
-                           SelectionModel * selectionModel,
-                           QWidget *	    parent );
+	LocateFilesWindow( TreeWalker *        treeWalker,
+                           SelectionModel *    selectionModel,
+                           CleanupCollection * cleanupCollection,
+                           QWidget *	       parent );
 
 	/**
 	 * Destructor.
@@ -127,6 +129,11 @@ namespace QDirStat
 	 **/
 	void locateInMainWindow( QTreeWidgetItem * item );
 
+        /**
+         * Open a context menu for an item in the results list.
+         **/
+        void itemContextMenu( const QPoint & pos );
+
 
     protected:
 
@@ -139,6 +146,11 @@ namespace QDirStat
 	 * One-time initialization of the widgets in this window.
 	 **/
 	void initWidgets();
+
+        /**
+         * Add the hotkeys (shortcuts) of the cleanup actions to this window.
+         **/
+        void addCleanupHotkeys();
 
 	/**
 	 * Recursively locate directories that contain files matching the
@@ -155,6 +167,7 @@ namespace QDirStat
         TreeWalker *            _treeWalker;
         Subtree                 _subtree;
 	SelectionModel *	_selectionModel;
+        CleanupCollection *     _cleanupCollection;
     };
 
 

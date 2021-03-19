@@ -1334,7 +1334,10 @@ void MainWindow::discoverFiles( TreeWalker *    treeWalker,
 	// This deletes itself when the user closes it. The associated QPointer
 	// keeps track of that and sets the pointer to 0 when it happens.
 
-	_locateFilesWindow = new LocateFilesWindow( treeWalker, _selectionModel, this );
+	_locateFilesWindow = new LocateFilesWindow( treeWalker,
+                                                    _selectionModel,
+                                                    _cleanupCollection,
+                                                    this );
     }
     else
     {
