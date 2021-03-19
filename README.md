@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-03-14
+Updated: 2021-03-19
 
 
 ## Screenshot
@@ -120,6 +120,14 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2020-03-19
+
+  - Added a context menu to the "Locate Files" window (the "Discover" results)
+    with the cleanup actions that are applicable to files.
+
+  - Keyboard shortcuts for cleanups now also work in the "Locate Files" window.
+
 
 - 2020-12-21
 
