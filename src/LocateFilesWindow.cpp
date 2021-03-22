@@ -32,7 +32,9 @@ LocateFilesWindow::LocateFilesWindow( TreeWalker *        treeWalker,
     _ui( new Ui::LocateFilesWindow ),
     _treeWalker( treeWalker ),
     _selectionModel( selectionModel ),
-    _cleanupCollection( cleanupCollection )
+    _cleanupCollection( cleanupCollection ),
+    _sortCol( LocateListPathCol ),
+    _sortOrder( Qt::AscendingOrder )
 {
     // logDebug() << "init" << endl;
 
@@ -81,6 +83,7 @@ void LocateFilesWindow::setTreeWalker( TreeWalker * newTreeWalker )
 void LocateFilesWindow::refresh()
 {
     populate( _subtree() );
+    selectFirstItem();
 }
 
 
@@ -123,30 +126,7 @@ void LocateFilesWindow::populate( FileInfo * newSubtree )
     // logDebug() << "Results count: " << _ui->treeWidget->topLevelItemCount() << endl;
 
     _ui->treeWidget->setSortingEnabled( true );
-    _ui->treeWidget->sortByColumn( LocateListPathCol, Qt::AscendingOrder );
-
-    // Make sure something is selected, even if this window is not the active
-    // one (for example because the user just clicked on another suffix in the
-    // file type stats window). When the window is activated, the tree widget
-    // automatically uses the topmost item as the current item, and in the
-    // default selection mode, this item is also selected. When the window is
-    // not active, this does not happen yet - until the window is activated.
-    //
-    // In the context of QDirStat, this means that this is also signaled to the
-    // SelectionModel, the corresponding branch in the main window's dir tree
-    // is opened, and the matching files are selected in the dir tree and in
-    // the treemap.
-    //
-    // It is very irritating if this only happens sometimes - when the "locate
-    // files" window is created, but not when it is just populated with new
-    // content from the outside (from the file type stats window).
-    //
-    // So let's make sure the topmost item is always selected.
-
-    QTreeWidgetItem * firstItem = _ui->treeWidget->topLevelItem( 0 );
-
-    if ( firstItem )
-        _ui->treeWidget->setCurrentItem( firstItem );
+    _ui->treeWidget->sortByColumn( _sortCol, _sortOrder );
 }
 
 
@@ -177,6 +157,15 @@ void LocateFilesWindow::populateRecursive( FileInfo * dir )
 
         ++it;
     }
+}
+
+
+void LocateFilesWindow::selectFirstItem()
+{
+    QTreeWidgetItem * firstItem = _ui->treeWidget->topLevelItem( 0 );
+
+    if ( firstItem )
+        _ui->treeWidget->setCurrentItem( firstItem );
 }
 
 
@@ -243,7 +232,11 @@ void LocateFilesWindow::setHeading( const QString & text )
 
 void LocateFilesWindow::sortByColumn( int col, Qt::SortOrder order )
 {
-    _ui->treeWidget->sortByColumn( col, order );
+    _sortCol   = col;
+    _sortOrder = order;
+
+    _ui->treeWidget->sortByColumn( _sortCol, _sortOrder );
+    selectFirstItem();
 }
 
 

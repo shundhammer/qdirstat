@@ -89,7 +89,7 @@ namespace QDirStat
 
         /**
          * Set the sort column and sort order (Qt::AscendingOrder or
-         * Qt::DescendingOrder).
+         * Qt::DescendingOrder), sort the list and select the first item.
          **/
         void sortByColumn( int col, Qt::SortOrder order );
 
@@ -148,6 +148,13 @@ namespace QDirStat
 	void initWidgets();
 
         /**
+         * Select the first item in the list. This will also select it in the
+         * main window, open the branch where this item is in and scroll the
+         * main window's tree so that item is visible tere.
+         **/
+        void selectFirstItem();
+
+        /**
          * Add the hotkeys (shortcuts) of the cleanup actions to this window.
          **/
         void addCleanupHotkeys();
@@ -168,6 +175,8 @@ namespace QDirStat
         Subtree                 _subtree;
 	SelectionModel *	_selectionModel;
         CleanupCollection *     _cleanupCollection;
+        int                     _sortCol;
+        Qt::SortOrder           _sortOrder;
     };
 
 
