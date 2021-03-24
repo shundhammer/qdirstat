@@ -103,8 +103,21 @@ function try_mount()
     if $(grep -q " $DEST " /proc/mounts); then
         echo "try_mount(): $DEST is already mounted - skipping."
     else
-        test -d "$DEST" || root_cmd "mkdir -p $DEST"
-        root_cmd "mount -o bind $SRC $DEST"
+        if [ -d $SRC -o $DRY_RUN -eq 1 ]; then
+            test -d "$DEST" || root_cmd "mkdir -p $DEST"
+            root_cmd "mount -o bind $SRC $DEST"
+        else
+            # The root directory doesn't have that source directory;
+            # so it must be a mount on top of a mount, e.g.
+            # a separate /var/log on top of a separate /var.
+            #
+            # It would be nice to show that exactly in the test run, but we
+            # don't have the "naked" root filesystem yet at that point
+            # (i.e. without any filesystem mounted on it), so the test run
+            # reports all those mounts on top of mounts as well.
+            # Nobody is perfect.
+            echo "$SRC does not exist - skipping."
+        fi
     fi
 }
 
@@ -157,8 +170,10 @@ function create_bind_mounts()
         TARGET=${MOUNT_POINT#/}     # Remove leading "/"
         TARGET=${TARGET//\//_}      # Replace all "/" with "_"
         TARGET="${MNT_SHADOWED}/${TARGET}"
-        # echo "MOUNT_POINT: $MOUNT_POINT  TARGET: $TARGET"
-        try_mount ${MNT_ROOT}$MOUNT_POINT $TARGET
+        SRC="${MNT_ROOT}$MOUNT_POINT"
+        # echo "MOUNT_POINT: $MOUNT_POINT  SRC: $SRC  TARGET: $TARGET"
+
+        try_mount $SRC $TARGET
     done
 }
 
