@@ -1,0 +1,222 @@
+#!/bin/bash
+#
+# Make the content of mount points (if there is any) visible.
+#
+# Author:  Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+# License: GPL V2
+#
+
+SCRIPT_NAME=$(basename $0)
+DRY_RUN=0
+CLEANUP=0
+SHADOWED_FILES_COUNT=0
+MNT_ROOT="/mnt/root"
+MNT_SHADOWED="/mnt/shadowed"
+
+
+# Show usage information and exit.
+function usage()
+{
+    echo "$SCRIPT_NAME [-h][-n]"
+    echo ""
+    echo "Make shadowed content of mount points of the root filesystem visible"
+    echo "with some bind mounts."
+    echo ""
+    echo "This needs root privileges unless started with the -n (dry run) option."
+    echo ""
+    echo "Options:"
+    echo ""
+    echo "-h  This usage message"
+    echo "-n  Dry run: Don't actually execute the commands, just show them."
+    echo "-c  Clean up: Unmount the bind mounts and remove the mount directories)."
+    echo ""
+    exit 2
+}
+
+
+# Write a message to stderr and exit with an error code.
+function die()
+{
+    echo "$SCRIPT_NAME: FATAL: $*" >&2
+    exit 1
+}
+
+
+# Process the command line and set some variables based on command line options.
+function process_command_line()
+{
+    while getopts "nhc" opt; do
+	case "${opt}" in
+	    n)
+		DRY_RUN=1
+                echo ""
+		echo "*** Dry run - not executing any dangerous commands. ***"
+                echo ""
+		;;
+            c)
+                CLEANUP=1
+                echo "Cleaning up"
+                echo ""
+                ;;
+	    *)
+		usage
+		;;
+	esac
+    done
+}
+
+
+# Check if we are running as root (including sudo) and exit if not.
+function enforce_root_privileges()
+{
+    test $(id -u) = 0 || die "This needs root privileges."
+}
+
+
+# Echo and execute a command that requires root privileges.
+# In dry run mode, only echo, don't execute it.
+function root_cmd()
+{
+    local cmd="$*"
+
+    echo "$cmd"
+    test $DRY_RUN -eq 1 || $cmd
+}
+
+
+# Try to bind-mount $1 to $2. Skip if the same mount already exists.
+# Only echo the commands in dry run mode.
+function try_mount()
+{
+    local SRC=$1
+    local DEST=$2
+
+    test -n "$SRC"  || die "try_mount() argument error: no SRC"
+    test -n "$DEST" || die "try_mount() argument error: no DEST"
+
+    if $(grep -q " $DEST " /proc/mounts); then
+        echo "try_mount(): $DEST is already mounted - skipping."
+    else
+        test -d "$DEST" || root_cmd "mkdir -p $DEST"
+        root_cmd "mount -o bind $SRC $DEST"
+    fi
+}
+
+
+# Show a summary of mounts below /mnt
+function mount_summary()
+{
+    echo ""
+    echo "Mounts below /mnt:"
+    echo ""
+    grep ' /mnt' /proc/mounts | cut -d ' ' -f1,2,3
+}
+
+
+function check_shadowed_files()
+{
+    if [ -d $MNT_SHADOWED ]; then
+        SHADOWED_FILES_COUNT=$(find $MNT_SHADOWED -type f | head -n 1000 | wc -l)
+    else
+        SHADOWED_FILES_COUNT=0
+    fi
+}
+
+
+# Create bind mounts:
+# - bind-mount the root filesystem to /mnt/root
+# - bind-mount each mount directly on the root filesystem to /mnt/shadowed/mp_name
+function create_bind_mounts()
+{
+    # Check if anything is mounted to /mnt
+    grep -q " /mnt " /proc/mounts && die "A filesystem is mounted to /mnt"
+
+    try_mount / $MNT_ROOT
+    test -d "$MNT_SHADOWED" || root_cmd "mkdir -p $MNT_SHADOWED"
+
+    # Exclude all mount points from the root device:
+    # They are either Btrfs subvolumes or bind mounts.
+    # Btrfs subvolumes are expected to contain files;
+    # bind mounts are duplicates of existing directories.
+    # Both would only confuse the user. Stick to "real" mounts.
+
+    ROOT_DEVICE=$(grep ' / ' /proc/mounts | cut -d ' ' -f 1)
+
+    for MOUNT_POINT in $(grep -v "^$ROOT_DEVICE" /proc/mounts | egrep -v " /(sys|proc|dev|run|mnt)" | cut -d ' ' -f 2 | grep -v '^/$')
+    do
+        # Examples for $MOUNT_POINT:
+        #   /home
+        #   /work/tmp
+
+        TARGET=${MOUNT_POINT#/}     # Remove leading "/"
+        TARGET=${TARGET//\//_}      # Replace all "/" with "_"
+        TARGET="${MNT_SHADOWED}/${TARGET}"
+        # echo "MOUNT_POINT: $MOUNT_POINT  TARGET: $TARGET"
+        try_mount ${MNT_ROOT}$MOUNT_POINT $TARGET
+    done
+}
+
+
+# Undo what a previous create_bind_mounts has done:
+# - unmount all bind mounts from /mnt/shadowed
+# - unmount the bind mount in /mnt/root
+# - remove all mount directories we created
+function tear_down_bind_mounts()
+{
+    for MOUNT in $(grep $MNT_SHADOWED /proc/mounts | cut -d ' ' -f 2)
+    do
+        root_cmd "umount $MOUNT"
+    done
+
+    test -d $MNT_SHADOWED && root_cmd "rmdir $MNT_SHADOWED/*"
+    test -d $MNT_SHADOWED && root_cmd "rmdir $MNT_SHADOWED"
+    root_cmd "umount $MNT_ROOT"
+    test -d $MNT_ROOT &&  root_cmd "rmdir $MNT_ROOT"
+}
+
+
+
+#----------------------------------------------------------------------
+# main()
+#----------------------------------------------------------------------
+
+process_command_line $*
+test $DRY_RUN -eq 1 || enforce_root_privileges
+
+if [ $CLEANUP -eq 1 ]; then
+    tear_down_bind_mounts
+    mount_summary
+    exit 0
+fi
+
+create_bind_mounts
+
+if [ -d $MNT_SHADOWED ]; then
+    check_shadowed_files
+    echo ""
+    
+    if [ $SHADOWED_FILES_COUNT -eq 0 ]; then
+        echo "=== Good news: No shadowed files. ==="
+    else
+        if [ $SHADOWED_FILES_COUNT -ge 1000 ]; then
+            echo "=== Found $SHADOWED_FILES_COUNT or more shadowed files. ==="
+        else
+            echo "=== Found $SHADOWED_FILES_COUNT shadowed files.==="
+        fi
+
+        echo ""
+        echo "=== Disk space in shadowed directories:"
+        echo ""
+        du -hs $MNT_SHADOWED/*
+
+        echo ""
+        echo "Now run    qdirstat $MNT_SHADOWED."
+        echo ""
+    fi
+    
+    echo ""
+    echo "Remember to later clean everything up with"
+    echo ""
+    echo "    $SCRIPT_NAME -c"
+    echo ""
+fi
