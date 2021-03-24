@@ -91,7 +91,7 @@ function root_cmd()
 
 
 # Try to bind-mount $1 to $2. Skip if the same mount already exists.
-# Only echo the commands in dry run mode.
+# In dry run mode, only echo, don't execute it.
 function try_mount()
 {
     local SRC=$1
@@ -108,12 +108,12 @@ function try_mount()
             root_cmd "mount -o bind $SRC $DEST"
         else
             # The root directory doesn't have that source directory;
-            # so it must be a mount on top of a mount, e.g.
-            # a separate /var/log on top of a separate /var.
+            # so it must be a mount on top of a mount, e.g. a separate
+            # /var/log on top of a separate /var.
             #
-            # It would be nice to show that exactly in the test run, but we
+            # It would be nice to show that exactly in the dry run, but we
             # don't have the "naked" root filesystem yet at that point
-            # (i.e. without any filesystem mounted on it), so the test run
+            # (i.e. without any filesystem mounted on it), so the dry run
             # reports all those mounts on top of mounts as well.
             # Nobody is perfect.
             echo "$SRC does not exist - skipping."
