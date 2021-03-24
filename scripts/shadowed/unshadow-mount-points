@@ -1,6 +1,9 @@
 #!/bin/bash
 #
-# Make the content of mount points (if there is any) visible.
+# Make shadowed content of mount points (if there is any) visible.
+#
+# IMPORTANT: Read the documentation:
+# https://github.com/shundhammer/qdirstat/blob/master/doc/Shadowed-by-Mount.md
 #
 # Author:  Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
 # License: GPL V2
@@ -23,6 +26,9 @@ function usage()
     echo "with some bind mounts."
     echo ""
     echo "This needs root privileges unless started with the -n (dry run) option."
+    echo ""
+    echo "Read the documentation at"
+    echo "https://github.com/shundhammer/qdirstat/blob/master/doc/Shadowed-by-Mount.md"
     echo ""
     echo "Options:"
     echo ""
@@ -194,7 +200,7 @@ create_bind_mounts
 if [ -d $MNT_SHADOWED ]; then
     check_shadowed_files
     echo ""
-    
+
     if [ $SHADOWED_FILES_COUNT -eq 0 ]; then
         echo "=== Good news: No shadowed files. ==="
     else
@@ -213,7 +219,7 @@ if [ -d $MNT_SHADOWED ]; then
         echo "Now run    qdirstat $MNT_SHADOWED."
         echo ""
     fi
-    
+
     echo ""
     echo "Remember to later clean everything up with"
     echo ""

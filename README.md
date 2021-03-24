@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-03-19
+Updated: 2021-03-24
 
 
 ## Screenshot
@@ -120,6 +120,14 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2020-03-24
+
+  - New document about [finding files that are shadowed by a mount](doc/Shadowed-by-Mount.md)
+
+  - New script for finding files on the root filesystem that are shadowed by a
+    mount (see doc link above).
+  
 
 - 2020-03-19
 
