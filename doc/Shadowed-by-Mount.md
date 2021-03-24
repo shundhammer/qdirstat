@@ -631,8 +631,9 @@ tux@linux:~/tmp> find /mnt/shadowed -type f | wc -l
 
 ## Delete or Move the Shadowed Files
 
-It is safe to delete or move anything **below** any of the directories in
-`/mnt/shadowed`:
+You can delete or move anything **below** any of the directories in
+`/mnt/shadowed` if you are absolutely sure what it is; read the
+[warning above](#warning):
 
 ```console
 tux@linux:~/tmp> sudo mv /mnt/shadowed/work_tmp/hidden-treasure .
