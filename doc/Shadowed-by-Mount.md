@@ -726,3 +726,10 @@ tux@linux:~/tmp> sudo ./unshadow-mount-points -c
 
 If all else fails and you got tangled up in a mess of bind-mounts or if you
 accidentially unmounted things like `/proc`, `/dev` or `/sys`, simply reboot.
+
+**Caveat:** Do not use `sudo fuser -mk /dev/sda..` on that device since it's
+your root filesystem: It will kill most of the processes on your machine,
+including your desktop and your login session; every process that uses a
+directory on the root filesystem as its current working directory and every
+process that has any file on the root filesystem open.
+
