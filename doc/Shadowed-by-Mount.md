@@ -713,7 +713,7 @@ tux@linux:~/tmp> grep "/mnt" /proc/mounts
 tux@linux:~/tmp>
 ```
 
-### Clean-up Troubleshooting
+## Clean-up Troubleshooting
 
 If anything went wrong, it's safe to call it again; that might be useful if one
 of the mounts is busy. You might have another shell in another terminal window
