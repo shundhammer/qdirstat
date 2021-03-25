@@ -664,19 +664,15 @@ supports a dry run (`-n`) so you can see what it _would_ do.
 
 ```console
 tux@linux:~/tmp> ./unshadow-mount-points -n -c
+Cleaning up
+
 
 *** Dry run - not executing any dangerous commands. ***
 
-Cleaning up
-
 umount /mnt/shadowed/tmp
-umount /mnt/root/mnt/shadowed/tmp
-umount /mnt/shadowed/work_tmp
-umount /mnt/root/mnt/shadowed/work_tmp
 umount /mnt/shadowed/work_src
-umount /mnt/root/mnt/shadowed/work_src
+umount /mnt/shadowed/work_tmp
 umount /mnt/shadowed/home
-umount /mnt/root/mnt/shadowed/home
 rmdir /mnt/shadowed/*
 rmdir /mnt/shadowed
 umount /mnt/root
@@ -687,10 +683,10 @@ Mounts below /mnt:
 /dev/sda2 /mnt/root btrfs
 /dev/sda2 /mnt/shadowed/tmp btrfs
 /dev/sda2 /mnt/root/mnt/shadowed/tmp btrfs
-/dev/sda2 /mnt/shadowed/work_tmp btrfs
-/dev/sda2 /mnt/root/mnt/shadowed/work_tmp btrfs
 /dev/sda2 /mnt/shadowed/work_src btrfs
 /dev/sda2 /mnt/root/mnt/shadowed/work_src btrfs
+/dev/sda2 /mnt/shadowed/work_tmp btrfs
+/dev/sda2 /mnt/root/mnt/shadowed/work_tmp btrfs
 /dev/sda2 /mnt/shadowed/home btrfs
 /dev/sda2 /mnt/root/mnt/shadowed/home btrfs
 ```
@@ -700,17 +696,9 @@ tux@linux:~/tmp> sudo ./unshadow-mount-points -c
 Cleaning up
 
 umount /mnt/shadowed/tmp
-umount /mnt/root/mnt/shadowed/tmp
-umount: /mnt/root/mnt/shadowed/tmp: not mounted.
-umount /mnt/shadowed/work_tmp
-umount /mnt/root/mnt/shadowed/work_tmp
-umount: /mnt/root/mnt/shadowed/work_tmp: not mounted.
 umount /mnt/shadowed/work_src
-umount /mnt/root/mnt/shadowed/work_src
-umount: /mnt/root/mnt/shadowed/work_src: not mounted.
+umount /mnt/shadowed/work_tmp
 umount /mnt/shadowed/home
-umount /mnt/root/mnt/shadowed/home
-umount: /mnt/root/mnt/shadowed/home: not mounted.
 rmdir /mnt/shadowed/*
 rmdir /mnt/shadowed
 umount /mnt/root
@@ -724,6 +712,8 @@ total 0
 tux@linux:~/tmp> grep "/mnt" /proc/mounts
 tux@linux:~/tmp>
 ```
+
+### Clean-up Troubleshooting
 
 If anything went wrong, it's safe to call it again; that might be useful if one
 of the mounts is busy. You might have another shell in another terminal window

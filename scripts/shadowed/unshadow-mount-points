@@ -184,7 +184,7 @@ function create_bind_mounts()
 # - remove all mount directories we created
 function tear_down_bind_mounts()
 {
-    for MOUNT in $(grep $MNT_SHADOWED /proc/mounts | cut -d ' ' -f 2)
+    for MOUNT in $(grep " $MNT_SHADOWED/" /proc/mounts | cut -d ' ' -f 2)
     do
         root_cmd "umount $MOUNT"
     done
