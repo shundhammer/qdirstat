@@ -120,7 +120,7 @@ void TreemapView::setDirTree( DirTree * newTree )
 
 void TreemapView::setSelectionModel( SelectionModel * selectionModel )
 {
-    logDebug() << endl;
+    // logDebug() << endl;
     _selectionModel = selectionModel;
     CHECK_PTR( _selectionModel );
 

@@ -363,7 +363,7 @@ bool MountPoints::read( const QString & filename )
     }
     else
     {
-        logDebug() << "Read " << _mountPointList.size() << " mount points from " << filename << endl;
+        // logDebug() << "Read " << _mountPointList.size() << " mount points from " << filename << endl;
 	_isPopulated = true;
 	return true;
     }
@@ -397,7 +397,6 @@ QStringList MountPoints::findNtfsDevices()
         return QStringList();
     }
 
-    logDebug() << endl;
     QStringList ntfsDevices;
     int exitCode;
     QString output = SysUtil::runCommand( lsblkCommand,
@@ -408,7 +407,7 @@ QStringList MountPoints::findNtfsDevices()
                                           << "name,fstype",
                                           &exitCode,
                                           LSBLK_TIMEOUT_SEC,
-                                          true,         // logCommand
+                                          false,        // logCommand
                                           false,        // logOutput
                                           false );      // ignoreErrCode
     if ( exitCode == 0 )
@@ -423,6 +422,9 @@ QStringList MountPoints::findNtfsDevices()
             ntfsDevices << device;
         }
     }
+
+    if ( ntfsDevices.isEmpty() )
+        logDebug() << "No NTFS devices found" << endl;
 
     return ntfsDevices;
 }
