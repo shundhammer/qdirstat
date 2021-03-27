@@ -374,13 +374,30 @@ void MainWindow::connectActions()
 
     // "Help" menu
 
-    CONNECT_ACTION( _ui->actionHelp,		this, showHelp()	  );
-    CONNECT_ACTION( _ui->actionPkgViewHelp,	this, showPkgViewHelp()	  );
-    CONNECT_ACTION( _ui->actionUnpkgViewHelp,	this, showUnpkgViewHelp() );
+    _ui->actionWhatsNew->setStatusTip( RELEASE_URL ); // defined in Version.h
+
+    CONNECT_ACTION( _ui->actionHelp,		this, openActionUrl()	  );
+    CONNECT_ACTION( _ui->actionPkgViewHelp,	this, openActionUrl()	  );
+    CONNECT_ACTION( _ui->actionUnpkgViewHelp,	this, openActionUrl()     );
+    CONNECT_ACTION( _ui->actionWhatsNew,	this, openActionUrl()	  );
+
     CONNECT_ACTION( _ui->actionAbout,		this, showAboutDialog()	  );
     CONNECT_ACTION( _ui->actionAboutQt,		qApp, aboutQt()		  );
-    CONNECT_ACTION( _ui->actionWhatsNew,	this, showWhatsNew()	  );
     CONNECT_ACTION( _ui->actionDonate,		this, showDonateDialog()  );
+
+
+    // Connect all actions of submenu "Help" -> "Problems and Solutions"
+    // to display the URL that they have in their statusTip property in a browser
+
+    foreach ( QAction * action, _ui->menuProblemsAndSolutions->actions() )
+    {
+        QString url = action->statusTip();
+
+        if ( url.isEmpty() )
+            logWarning() << "No URL in statusTip property of action " << action->objectName() << endl;
+        else
+            CONNECT_ACTION( action, this, openActionUrl() );
+    }
 
 
     // Invisible debug actions
@@ -1504,27 +1521,19 @@ void MainWindow::toggleVerboseSelection()
 }
 
 
-void MainWindow::showHelp()
+void MainWindow::openActionUrl()
 {
-    SysUtil::openInBrowser( "https://github.com/shundhammer/qdirstat/blob/master/README.md" );
-}
+    QAction * action = qobject_cast<QAction *>( sender() );
 
+    if ( action )
+    {
+        QString url = action->statusTip();
 
-void MainWindow::showPkgViewHelp()
-{
-    SysUtil::openInBrowser( "https://github.com/shundhammer/qdirstat/blob/master/doc/Pkg-View.md" );
-}
-
-
-void MainWindow::showUnpkgViewHelp()
-{
-    SysUtil::openInBrowser( "https://github.com/shundhammer/qdirstat/blob/master/doc/Unpkg-View.md" );
-}
-
-
-void MainWindow::showWhatsNew()
-{
-    SysUtil::openInBrowser( RELEASE_URL ); // defined in Version.h
+        if ( url.isEmpty() )
+            logError() << "No URL in statusTip() for action " << action->objectName();
+        else
+            SysUtil::openInBrowser( url );
+    }
 }
 
 

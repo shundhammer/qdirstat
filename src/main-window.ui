@@ -218,6 +218,15 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <widget class="QMenu" name="menuProblemsAndSolutions">
+     <property name="title">
+      <string>Problems and &amp;Solutions</string>
+     </property>
+     <addaction name="actionCantMoveDirToTrash"/>
+     <addaction name="actionBtrfsSizeReporting"/>
+     <addaction name="actionShadowedByMount"/>
+     <addaction name="actionHeadlessServers"/>
+    </widget>
     <addaction name="actionHelp"/>
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
@@ -225,6 +234,7 @@
     <addaction name="actionPkgViewHelp"/>
     <addaction name="actionUnpkgViewHelp"/>
     <addaction name="actionWhatsNew"/>
+    <addaction name="menuProblemsAndSolutions"/>
     <addaction name="actionDonate"/>
    </widget>
    <widget class="QMenu" name="menuCleanup">
@@ -574,7 +584,7 @@
     <string>&amp;Up One Level</string>
    </property>
    <property name="toolTip">
-    <string>Navigate one directory level up.</string>
+    <string>Up One Level</string>
    </property>
    <property name="shortcut">
     <string>Alt+Up</string>
@@ -604,15 +614,18 @@
     <string>&amp;About QDirStat...</string>
    </property>
    <property name="toolTip">
-    <string>Show version, copyright and license information about this program.</string>
+    <string>About QDirStat</string>
    </property>
   </action>
   <action name="actionAboutQt">
    <property name="text">
     <string>About &amp;Qt...</string>
    </property>
+   <property name="iconText">
+    <string>About Qt</string>
+   </property>
    <property name="toolTip">
-    <string>Show information about the Qt version used for building this program.</string>
+    <string>About Qt</string>
    </property>
   </action>
   <action name="actionRefreshSelected">
@@ -641,6 +654,9 @@
    </property>
    <property name="text">
     <string>Continue Reading at &amp;Mount Point</string>
+   </property>
+   <property name="toolTip">
+    <string>Continue Reading at Mount Point</string>
    </property>
   </action>
   <action name="actionConfigure">
@@ -707,22 +723,17 @@
    <property name="text">
     <string>QDirStat &amp;Help</string>
    </property>
-   <property name="shortcut">
-    <string>F1</string>
-   </property>
-  </action>
-  <action name="actionTreemapAsSidePanel">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>&amp;Treemap as side panel</string>
+   <property name="iconText">
+    <string>QDirStat Help</string>
    </property>
    <property name="toolTip">
-    <string>Show the Treeemap beside the directory tree, otherwise it will be shown beneath.</string>
+    <string>QDirStat Help</string>
+   </property>
+   <property name="statusTip">
+    <string>https://github.com/shundhammer/qdirstat/blob/master/README.md</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
   <action name="actionFileSizeStats">
@@ -831,6 +842,9 @@
    <property name="text">
     <string>Show Installed &amp;Packages...</string>
    </property>
+   <property name="toolTip">
+    <string>Show Installed Packages</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
    </property>
@@ -839,8 +853,14 @@
    <property name="text">
     <string>The &amp;Packages View...</string>
    </property>
+   <property name="iconText">
+    <string>The Packages View</string>
+   </property>
    <property name="toolTip">
-    <string>Help about the Packages View (external browser)</string>
+    <string>The Packages View</string>
+   </property>
+   <property name="statusTip">
+    <string>https://github.com/shundhammer/qdirstat/blob/master/doc/Pkg-View.md</string>
    </property>
   </action>
   <action name="actionShowUnpkgFiles">
@@ -858,8 +878,14 @@
    <property name="text">
     <string>The &amp;Unpackaged Files View...</string>
    </property>
+   <property name="iconText">
+    <string>The Unpackaged Files View</string>
+   </property>
    <property name="toolTip">
-    <string>Help about the Unpackaged Files view (external browser)</string>
+    <string>The Unpackaged Files View</string>
+   </property>
+   <property name="statusTip">
+    <string>https://github.com/shundhammer/qdirstat/blob/master/doc/Unpkg-View.md</string>
    </property>
   </action>
   <action name="actionShowFilesystems">
@@ -874,30 +900,106 @@
    <property name="text">
     <string>&amp;Largest Files</string>
    </property>
+   <property name="toolTip">
+    <string>Largest Files</string>
+   </property>
   </action>
   <action name="actionDiscoverNewestFiles">
    <property name="text">
     <string>&amp;Newest Files</string>
+   </property>
+   <property name="toolTip">
+    <string>Newest Files</string>
    </property>
   </action>
   <action name="actionDiscoverOldestFiles">
    <property name="text">
     <string>&amp;Oldest Files</string>
    </property>
+   <property name="toolTip">
+    <string>Oldest Files</string>
+   </property>
   </action>
   <action name="actionDiscoverHardLinkedFiles">
    <property name="text">
     <string>Files with Multiple &amp;Hard Links</string>
+   </property>
+   <property name="toolTip">
+    <string>Files with Multiple Hard Links</string>
    </property>
   </action>
   <action name="actionDiscoverBrokenSymLinks">
    <property name="text">
     <string>&amp;Broken Symbolic LInks</string>
    </property>
+   <property name="toolTip">
+    <string>Broken Symbolic LInks</string>
+   </property>
   </action>
   <action name="actionDiscoverSparseFiles">
    <property name="text">
     <string>&amp;Sparse Files</string>
+   </property>
+   <property name="toolTip">
+    <string>Sparse Files</string>
+   </property>
+  </action>
+  <action name="actionBtrfsSizeReporting">
+   <property name="text">
+    <string>&amp;Btrfs Size Reporting...</string>
+   </property>
+   <property name="statusTip">
+    <string>https://github.com/shundhammer/qdirstat/blob/master/doc/Btrfs-Free-Size.md</string>
+   </property>
+  </action>
+  <action name="actionShadowedByMount">
+   <property name="text">
+    <string>Files Shadowed by a &amp;Mount...</string>
+   </property>
+   <property name="iconText">
+    <string>Files Shadowed by a Mount</string>
+   </property>
+   <property name="toolTip">
+    <string>Files Shadowed by a Mount</string>
+   </property>
+   <property name="statusTip">
+    <string>https://github.com/shundhammer/qdirstat/blob/master/doc/Shadowed-by-Mount.md</string>
+   </property>
+  </action>
+  <action name="actionHeadlessServers">
+   <property name="text">
+    <string>QDirStat for &amp;Headless Servers...</string>
+   </property>
+   <property name="iconText">
+    <string>QDirStat for Headless Servers</string>
+   </property>
+   <property name="toolTip">
+    <string>QDirStat for Headless Servers</string>
+   </property>
+   <property name="statusTip">
+    <string>https://github.com/shundhammer/qdirstat/blob/master/doc/QDirStat-for-Servers.md</string>
+   </property>
+  </action>
+  <action name="actionCantMoveDirToTrash">
+   <property name="text">
+    <string>Can't Move a Directory to &amp;Trash...</string>
+   </property>
+   <property name="statusTip">
+    <string>https://github.com/shundhammer/qdirstat/blob/master/doc/Troubleshooting.md#cant-move-a-directory-to-trash</string>
+   </property>
+  </action>
+  <action name="actionTreemapAsSidePanel">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Treemap as side panel</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the Treeemap beside the directory tree, otherwise it will be shown beneath.</string>
    </property>
   </action>
  </widget>

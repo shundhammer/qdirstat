@@ -218,20 +218,15 @@ public slots:
     void discoverBrokenSymLinks();
     void discoverSparseFiles();
 
-    /**
-     * Show online help.
-     **/
-    void showHelp();
 
     /**
-     * Show online help about the packages view.
+     * Open the URL stored in an action's statusTip property with an external
+     * browser.
+     *
+     * For the "Help" menu, those URLs are defined in the Qt Designer UI file
+     * for the main window (main-window.ui). See actionHelp for an example.
      **/
-    void showPkgViewHelp();
-
-    /**
-     * Show online help about the packages view.
-     **/
-    void showUnpkgViewHelp();
+    void openActionUrl();
 
     /**
      * Show the "about" dialog.
@@ -242,11 +237,6 @@ public slots:
      * Show the "Donate" dialog.
      **/
     void showDonateDialog();
-
-    /**
-     * Show the release notes for the last released version in a web browser.
-     **/
-    void showWhatsNew();
 
     /**
      * Read parameters from the settings file.
