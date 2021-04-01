@@ -1329,6 +1329,7 @@ void MainWindow::discoverHardLinkedFiles()
 
 void MainWindow::discoverBrokenSymLinks()
 {
+    BusyPopup msg( tr( "Checking symlinks..." ), _ui->treemapView );
     discoverFiles( new QDirStat::BrokenSymLinksTreeWalker(),
                    tr( "Broken Symbolic Links in %1" ) );
     _locateFilesWindow->sortByColumn( LocateListPathCol, Qt::AscendingOrder );
