@@ -14,69 +14,93 @@
 #include "Logger.h"
 #include "Exception.h"
 
-#define RESULTS_COUNT  50
+#define MAX_RESULTS  200
 
 
 using namespace QDirStat;
 
 
+qreal TreeWalker::upperPercentileThreshold( PercentileStats & stats )
+{
+    int percentile = 0;
+
+    if      ( stats.dataSize() <= 100 )                 percentile = 80;
+    else if ( stats.dataSize() * 0.10 <= MAX_RESULTS )  percentile = 90;
+    else if ( stats.dataSize() * 0.05 <= MAX_RESULTS )  percentile = 95;
+    else if ( stats.dataSize() * 0.01 <= MAX_RESULTS )  percentile = 99;
+
+    qreal threshold = 0.0;
+
+    if ( percentile > 0 )
+    {
+        logDebug() << "Threshold: " << percentile << ". percentile" << endl;
+        threshold = stats.percentile( percentile );
+    }
+    else
+    {
+        logDebug() << "Threshold: " << MAX_RESULTS << " items" << endl;
+        int index = stats.dataSize() - MAX_RESULTS;
+        threshold = stats.data().at( index );
+    }
+
+    return threshold;
+}
+
+
+qreal TreeWalker::lowerPercentileThreshold( PercentileStats & stats )
+{
+    int percentile = 0;
+
+    if      ( stats.dataSize() <= 100 )                 percentile = 20;
+    else if ( stats.dataSize() * 0.10 <= MAX_RESULTS )  percentile = 10;
+    else if ( stats.dataSize() * 0.05 <= MAX_RESULTS )  percentile =  5;
+    else if ( stats.dataSize() * 0.01 <= MAX_RESULTS )  percentile =  1;
+
+    qreal threshold = 0.0;
+
+    if ( percentile > 0 )
+    {
+        logDebug() << "Threshold: " << percentile << ". percentile" << endl;
+        threshold = stats.percentile( percentile );
+    }
+    else
+    {
+        logDebug() << "Threshold: " << MAX_RESULTS << " items" << endl;
+        int index = MAX_RESULTS;
+        threshold = stats.data().at( index );
+    }
+
+    return threshold;
+}
+
+
+
+
 void LargestFilesTreeWalker::prepare( FileInfo * subtree )
 {
-    _threshold = 0;
 
     FileSizeStats stats;
     stats.collect( subtree );
     stats.sort();
-
-    if ( stats.dataSize() <= 100 )
-        _threshold = stats.percentile( 80 );
-    else if ( stats.dataSize() <= 1000 )
-        _threshold = stats.percentile( 95 );
-    else
-    {
-        int index = stats.dataSize() - RESULTS_COUNT;
-        _threshold = stats.data().at( index );
-    }
+    _threshold = (FileSize) upperPercentileThreshold( stats );
 }
 
 
 void NewFilesTreeWalker::prepare( FileInfo * subtree )
 {
-    _threshold = 0;
-
     FileMTimeStats stats;
     stats.collect( subtree );
     stats.sort();
-
-    if ( stats.dataSize() <= 100 )
-        _threshold = stats.percentile( 80 );
-    else if ( stats.dataSize() <= 1000 )
-        _threshold = stats.percentile( 95 );
-    else
-    {
-        int index = stats.dataSize() - RESULTS_COUNT;
-        _threshold = stats.data().at( index );
-    }
+    _threshold = (time_t) upperPercentileThreshold( stats );
 }
 
 
 void OldFilesTreeWalker::prepare( FileInfo * subtree )
 {
-    _threshold = 0;
-
     FileMTimeStats stats;
     stats.collect( subtree );
     stats.sort();
-
-    if ( stats.dataSize() <= 100 )
-        _threshold = stats.percentile( 20 );
-    else if ( stats.dataSize() <= 1000 )
-        _threshold = stats.percentile( 5 );
-    else
-    {
-        int index = RESULTS_COUNT;
-        _threshold = stats.data().at( index );
-    }
+    _threshold = (time_t) lowerPercentileThreshold( stats );
 }
 
 

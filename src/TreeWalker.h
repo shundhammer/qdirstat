@@ -15,6 +15,9 @@
 
 namespace QDirStat
 {
+    class PercentileStats;
+
+
     /**
      * Abstract base class to walk recursively through a FileInfo tree to check
      * for each tree item whether or not it should be used for further
@@ -55,6 +58,20 @@ namespace QDirStat
          * Derived classes are required to implement this.
          **/
         virtual bool check( FileInfo * item ) = 0;
+
+    protected:
+
+        /**
+         * Calculate a data value threshold from a set of PercentileStats from
+         * an upper percentile up to the maximum value (P100).
+         **/
+        qreal upperPercentileThreshold( PercentileStats & stats );
+
+        /**
+         * Calculate a data value threshold from a set of PercentileStats from
+         * an the minimum value (P0) to a lower percentile.
+         **/
+        qreal lowerPercentileThreshold( PercentileStats & stats );
 
     };  // class TreeWalker
 
