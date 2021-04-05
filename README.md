@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-03-24
+Updated: 2021-04-05
 
 
 ## Screenshot
@@ -111,7 +111,7 @@ Donate any amount you like via PayPal:
 
 ## Latest Stable Release
 
-**QDirStat V1.7**
+**QDirStat V1.7.1**
 
 See the [release announcement](https://github.com/shundhammer/qdirstat/releases).
 
@@ -121,93 +121,49 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
-- 2020-03-24
+- 2021-04-05 **New stable release: 1.7.1**
 
-  - New document about [finding files that are shadowed by a mount](doc/Shadowed-by-Mount.md)
+  **Summary:**
 
-  - New script for finding files on the root filesystem that are shadowed by a
-    mount (see doc link above).
-  
+  - Added a "Discover" toplevel menu with actions to easily find
+    - the largest files
+    - the newest files
+    - the oldest files
+    - files with multiple hard links
+    - broken symbolic links
+    - sparse files
 
-- 2020-03-19
+  - Now showing the target of symbolic links in the details panel.
+    If the target does not exist, a **Broken Link** warning is also shown.
 
-  - Added a context menu to the "Locate Files" window (the "Discover" results)
-    with the cleanup actions that are applicable to files.
+  - Menu reorganization. The new toplevel menus are now:
 
-  - Keyboard shortcuts for cleanups now also work in the "Locate Files" window.
+    File, Edit, View, Go To, Discover, Clean up, Help
 
+  - Enabled _Refresh Selected_ now for files as well. In that case, the parent
+    directory is refreshed.
 
-- 2020-12-21
+  - Added hotkey `[F6]` for _Refresh Selected_.
 
-  - Fixed [GitHub Issue #149](https://github.com/shundhammer/qdirstat/issues/149):
-    Segfault when using a cleanup action with refresh policy _AssumeDeleted_ after
-    a cleanup action with _RefreshParent_ in the same directory.
+  - Now ignoring the loopback mounts of installed snap packages in the "Open
+    Directory" dialog and in the "Mounted Filesystems" window.
 
+  - Added links to external documents to a new "Problems and Solutions" submenu
+    of the "Help" menu so they are more easily discoverable.
 
-- 2020-11-23
+  - Added a document about
+    [finding files that are shadowed by a mount](doc/Shadowed-by-Mount.md)
+    and a script for the most common case.
 
-  - Menu reorganization: They had become a little too crowded, especially on
-    the top level.
+  - Bug fix: Fixed [GitHub Issue #149](https://github.com/shundhammer/qdirstat/issues/149):
 
-    - Moved out some options from the menus; they are still available when
-      editing the config file manually:
-
-      - "Show current path"
-      - "Treemap as side panel"
-
-    - "Expand tree level" is now limited to level 5 (formerly 9). Opening that
-      many tree branches means a huge performance drop anyway.
-
-    - The former "Treemap" menu is now a submenu of "View". Most of those
-      actions are available as tool bar buttons and mouse wheel operations
-      anyway.
-
-    - The former "Settings" menu is gone; "Configure QDirStat" is now in the
-      "Edit" menu. There was only that one action in the "Settings" menu, and
-      that is quite wasteful in terms of screen space and toplevel menu
-      complexity.
-
-      I experimented shortly with moving some more settings there, e.g. "Show
-      details panel" and "Show tremap", but I reverted that: The details panel
-      is different for each layout (L1, L2, L3), and the layout switching
-      actions are in the "View" menu where they belong; so "Show details panel"
-      should really remain near them. And not having "Show treemap" in the
-      "Treemap" submenu would be very confusing.
-
-    The new toplevel menus are now:
-
-    - File
-    - Edit
-    - View
-    - Go To
-    - Discover
-    - Clean up
-    - Help
-
-    I.e. it's down to 7 items which is generally regarded as the gold standard
-    by usability experts.
-
-    I am not completely happy yet with how additional views are scattered among
-    several menus:
-
-    - "File" -> "Show installed packages"
-    - "File" -> "Show unpackaged files"
-    - "View" -> "File size statistics"
-    - "View" -> "File type statistics"
-    - "View" -> "Show mounted filesystems"
-
-    The rationale is that those views in the "File" menu load completely new
-    content, replacing the scanned directory in both the tree view and the
-    treemap; thus they are on a similar level as "Open directory", so they are
-    right next to that action.
-
-    The other views open in separate windows, so they are add-on views to the
-    currently loaded directory tree.
+    Segfault when using a cleanup action with refresh policy _AssumeDeleted_
+    after a cleanup action with _RefreshParent_ in the same directory.
 
 
-- 2020-11-22
+  **Details:**
 
-  - Added a "Discover" toplevel menu to easily find
+  - Added a "Discover" toplevel menu with actions to easily find
     - the largest files
     - the newest files
     - the oldest files
@@ -243,8 +199,6 @@ Download installable binary packages for various Linux distributions here:
     of course).
 
 
-- 2020-10-23
-
   - Now showing the target of symbolic links in the details panel.
 
     If it's a short path, the whole path is shown; otherwise without the path
@@ -252,7 +206,35 @@ Download installable binary packages for various Linux distributions here:
 
     If the target does not exist, a **Broken Link** warning is also shown.
 
-- 2020-10-15
+
+  - Menu reorganization: They had become a little too crowded, especially on
+    the top level.
+
+    - The new toplevel menus are now:
+
+      File, Edit, View, Go To, Discover, Clean up, Help
+
+      I.e. it's down to 7 items which is generally regarded as the gold
+      standard by usability experts.
+
+    - The former "Settings" menu is gone; "Configure QDirStat" is now in the
+      "Edit" menu. There was only that one action in the "Settings" menu, and
+      that is quite wasteful in terms of screen space and toplevel menu
+      complexity.
+
+    - Moved out some options entirely from the menus; they are still available
+      when editing the config file manually:
+
+      - "Show current path"
+      - "Treemap as side panel"
+
+    - "Expand tree level" is now limited to level 5 (formerly 9). Opening that
+      many tree branches means a huge performance drop anyway.
+
+    - The former "Treemap" menu is now a submenu of "View". Most of those
+      actions are available as tool bar buttons and mouse wheel operations
+      anyway.
+
 
   - Enabled _Refresh Selected_ now for files as well. In that case, the parent
     directory is refreshed.
@@ -265,8 +247,6 @@ Download installable binary packages for various Linux distributions here:
     get, and it's more consistent than using something like `[Ctrl] [R]`.
 
     This was inspired by the discussion in [PR#145](https://github.com/shundhammer/qdirstat/pull/145).
-
-- 2020-08-03
 
   - Now ignoring the loopback mounts of installed snap packages in the "Open
     Directory" dialog and in the "Mounted Filesystems" window.
@@ -287,242 +267,19 @@ Download installable binary packages for various Linux distributions here:
 
     (From a freshly installed Xubuntu 20.04 LTS)
 
-    Thanks a lot. Time to extend my `df` shell alias to exclude filesystem type
-    "squashfs", too:
 
-    ```
-    alias df='/bin/df -x tmpfs -x devtmpfs -x squashfs -h $*'
-    ```
 
-------------
+  - Added links to external documents to a new "Problems and Solutions" submenu
+    of the "Help" menu so they are more easily discoverable.
 
-- 2020-07-26 **New stable release: 1.7**
+  - Added a document about
+    [finding files that are shadowed by a mount](doc/Shadowed-by-Mount.md)
+    and a script for the most common case.
 
-  **Summary:**
+  - Bug fix: Fixed [GitHub Issue #149](https://github.com/shundhammer/qdirstat/issues/149):
 
-  - Closing the gap between sizes reported by QDirstat and sizes reported by
-    the `du` command: Now also taking the allocated size into account.
-
-  - Now also displaying the allocated size where it makes sense.
-
-  - New "Mounted Filesystems" window showing output similar to the `df` command
-    (but without the cruft).
-
-  - New directory selection dialog showing all (real) filesystems.
-
-  - New checkbox to cross filesystems (temporarily) in the directory selection
-    dialog.
-
-  - Workaround for NTFS oddities: Ignoring hard links on NTFS.
-
-  - Added config option to ignore hard links in general.
-
-  - Added a document about Btrfs free size and how different tools tend to show
-    different values: [Btrfs-Free-Size.md](doc/Btrfs-Free-Size.md)
-
-  - Bug fixes
-
-
-  **Details:**
-
-  - Closing the gap between sizes reported by QDirstat and sizes reported by
-    the `du` command: Now also taking the allocated size into account.
-
-    There were repeated threads on various social media where users wondered
-    why QDirStat displayed different sizes than the `du` or the `df` commands,
-    sometimes slightly different, sometimes off by quite a lot.
-
-    In short, this is mostly due to the difference between a file's _byte size_
-    and its _allocated blocks_: On most filesystem types, a file of 49 bytes
-    still consumes a minimum of 4 KB (4096 bytes); disk space is allocated in
-    _clusters_ (typically 4 KB), not byte by byte. On a typical Linux root
-    filesystem with many thousands of tiny files, this difference can add up to
-    a lot.
-
-    Formerly, QDirStat only added up the _byte sizes_, disregarding the
-    allocated, but really unused part at the end of tiny files. The rationale
-    was that some filesystem types handle that in more intelligent ways, yet
-    there is no documented way to get information from a filesystem if it
-    actually does that. It turned out that in reality, most of them don't
-    bother; they simply let most of that last cluster go to waste.
-
-    Now QDirStat displays _both_ sizes where useful:
-
-    [<img width="845" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-tiny-files.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-tiny-files.png)
-
-    - For tiny files, the tree view now shows both sizes: "49 B (4k)"
-
-    - For directories, the tree view now shows the total of the _allocated_
-      sizes. This may sound a bit inconsistent, but it feels very natural and
-      intuitive: You are typically interested in how much disk space the
-      subtree consumes, no matter if some part of that is really wasted.
-
-    - The _details_ view shows both sizes when there is a difference (in the
-      displayed numeric precision): "Size: 42.1 MB" vs. "Allocated: 42.2 MB",
-      but not "Size: 42.0 MB" vs. "Allocated: 42.0 MB".
-
-    - Treemap tiles now correspond to a file's _allocated_ size. This makes a
-      real difference for tiny files.
-
-    More details at [GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134):
-    _Size Difference between QDirStat Reports and the "du" and "df" Commands_.
-
-
-  - New "Mounted Filesystems" window ("View" -> "Show Mounted Filesystems" or
-    Ctrl-M):
-
-    [<img width="611" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-filesystems-window.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-filesystems-window.png)
-
-    This shows information about "normal" mounted filesystems (excluding system
-    mounts like `/dev`, `/proc`, `/sys`, bind mounts, Btrfs subvolumes) with
-    usage data as reported by the filesystem itself. The "Reserved" column
-    shows the disk space reserved for the root user on that filesystem, "Free"
-    is the available space for non-privileged users.
-
-    Sometimes the "Used" size reported here may be different from what QDirStat
-    reports after reading that complete filesystem; this can be due to
-    metadata, journals or snapshots. Notice that in those cases, the `du`
-    command will also display a different value than the `df` command.
-
-
-  - QDirStat now has its own custom directory selection dialog; it no longer
-    uses one of the simplistic Qt standard file dialogs:
-
-    [<img width="498" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-open-dir-dialog.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-open-dir-dialog.png)
-
-    The "Places" bar on the left shows your home directory and all "real"
-    filesystems (the same as in the new "Mounted Filesystems" window). For each
-    filesystem, it shows
-
-    - The mount point
-    - The total size of the filesystem
-    - The filesystem type ("ext4", "btrfs", "ntfs", ...)
-    - The device name ("/dev/sda2") (in a tooltip)
-
-    In the "Path" combo box you can simply edit the path or copy and paste it
-    from another window. Use the "Up" button to move one directory level up.
-
-  - The "Cross Filesystems" checkbox lets you temporarily override the global
-    configuration option of the same name: QDirStat will then no longer stop
-    when a mount point is found during reading a subtree, it will descend into
-    that mounted filesystem and read it, too; but again, only for "real"
-    filesystems, not for system mounts such as `/dev`, `/sys`, `/proc`, not for
-    bind mounts, not for filesystems mounted multiple times, and not for
-    network mounts (NFS, Samba / CIFS).
-
-    More details at [GitHub Issue #129](https://github.com/shundhammer/qdirstat/issues/129).
-
-
-  - Added a workaround for wrong size sums on NTFS: Now disregarding hard links
-    on NTFS.
-
-    The (current?) _ntfs-3g_ implementation using _fuseblk_ seems to disagree
-    with Windows tools which files really have hard links.
-
-    It appears that _ntfs-3g_ regards even the MS-DOS compatible short filename
-    (`PROGRA~2` vs. `Program Files`) as a hard link which is of course utter
-    nonsense; that means that almost all files on an NTFS partition are
-    reported as having multiple hard links, so QDirStat displayed them as
-    having only half their real size.
-
-    Notice that this is a bug in _ntfs-3g_, not in QDirStat.
-
-    See also [GitHub Issue #88](https://github.com/shundhammer/qdirstat/issues/88).
-
-
-  - <summary>
-    Added a config option to ignore hard links.
-    </summary>
-
-     <details>
-
-     This is useful for a very small number of use cases. Hard links are not
-     very common anymore in today's Linux / BSD / Unix-like systems, so most
-     users won't have to bother with this at all.
-
-     By default, QDirStat sums up the disk space for a file with multiple hard
-     links for each hard link's share of the overall size: If a file with 1 MB
-     has 4 hard links, for each of those 4 links QDirStat adds 1/4 of the size
-     (i.e., 256 kB) to the parent directory. If all those 4 links are in the
-     same directory, that's very simple: They add up to 4 * 256 kB = 1 MB, so
-     the sum is correct.
-
-     If those hard links are all in different directories, each directory only
-     gets part of that disk space allocated, because in fact they share the disk
-     space among each other; the total disk space sum taking all those
-     directories into account is still correct, of course.
-
-     The trouble starts when you want to make a backup of only one of those
-     directories: Even though the disk space is still shared with other
-     directories, on the backup medium, you still need the disk space for that
-     complete file, i.e. the full 1 MB, not only that directory's share (256
-     kB). With a lot of hard-linked files, that can add up to a lot of
-     difference between what QDirStat displays and what disk space you actually
-     need for the backup.
-
-     There was a user who makes heavy use of that, and for that kind of use case
-     there is now the option to ignore hard links: In that case, QDirStat sums
-     up the complete size (the full 1 MB) for each hard link of the file.
-
-     While that is useful for this special case, and you can now see the total
-     size that you will need for your backup medium for that one directory, the
-     total size higher up in the directory tree where more than one of those
-     directories that share hard linked files with each other is off: That file
-     now appears 4 times with 1 MB each, so it will add up to 4 MB.
-
-     There is now a new config option in `~/.config/QDirStat/QDirStat.conf`:
-
-     ```ini
-     [DirectoryTree]
-     ...
-     IgnoreHardLinks=false
-     ```
-
-     This is intentionally not available in the GUI config dialog to avoid
-     confusion; use a text editor (while QDirStat is not running) to change
-     this setting.
-
-     Please use that config option only when you are aware of the consequences;
-     this is a specialized option for rare, specialized use cases. It basically
-     makes sense only if the other hard links are all outside the subtree that
-     QDirStat displays.
-
-     More details at [GitHub Issue #124](https://github.com/shundhammer/qdirstat/issues/124).
-     </details>
-
-
-  - There is now a new document about Btrfs free size and how different tools
-    tend to show different values: [Btrfs-Free-Size.md](doc/Btrfs-Free-Size.md)
-
-    Whenever users run out of disk space on Btrfs (which happens a lot, mostly
-    because of snapshots) and they try to figure out where all their disk space
-    went, they are confused about different tools reporting totally different
-    and inconsistent sizes; traditional Linux / Unix command line tools like
-    `du` and `df` just like GUI tools like QDirStat. Hopefully, this document
-    will shed some light on that.
-
-
-  **Bug Fixes:**
-
-  - Fixed the internal cache writer (the one called from the _File_ menu, not
-    the _qdirstat-cache-writer_ Perl script): For files with multiple hard
-    links, it wrote the wrong size to the cache file: The result of _size /
-    links_, not _size_.
-
-    This was part of [GitHub Issue #124](https://github.com/shundhammer/qdirstat/issues/124).
-
-  - Fixed crash when terminating with Ctrl-Q while reading directories
-    [(GitHub Issue #122)](https://github.com/shundhammer/qdirstat/issues/122).
-
-  - Now automatically reopening the old current branch in the tree view when
-    using actions like "refresh selected" and "continue reading at mount point
-    ([GitHub Issue #135](https://github.com/shundhammer/qdirstat/issues/135)).
-
-  - Not a bug, but a minor new feature: Now automatically expanding the first
-    directory level of a mount point after "continue reading at mount point".
-
-  - Now correctly labelling a mount point as mount point in the "Details"
-    panel.
+    Segfault when using a cleanup action with refresh policy _AssumeDeleted_
+    after a cleanup action with _RefreshParent_ in the same directory.
 
 
 -------------
@@ -537,6 +294,23 @@ for older entries._
 
 
 This is just a rough summary. For more details, see [DevHistory.md](doc/DevHistory.md).
+
+- 2021-04-05 New stable release: 1.7.1
+
+  - Added a "Discover" toplevel menu with actions to easily find
+    - the largest files
+    - the newest files
+    - the oldest files
+    - files with multiple hard links
+    - broken symbolic links
+    - sparse files
+
+  - Now showing the target of symbolic links in the details panel.
+    If the target does not exist, a **Broken Link** warning is also shown.
+
+  - Menu reorganization. The new toplevel menus are now:
+
+    File, Edit, View, Go To, Discover, Clean up, Help
 
 
 - 2020-07-26 New stable release: 1.7
