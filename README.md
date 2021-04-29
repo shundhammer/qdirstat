@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-04-05
+Updated: 2021-04-30
 
 
 ## Screenshot
@@ -994,15 +994,7 @@ QDirStat packages for openSUSE Tumbleweed / Leap (15.x, 42.x) and SLE (15, 12):
 
 ### Ubuntu
 
-- Recent releases (Artful Aardvark (17.10) or later):
-
-  https://packages.ubuntu.com/search?keywords=qdirstat&searchon=names
-
-- Older releases (Pre-17.10):
-
-  Use Nathan Rennie-Waldock's
-  [**QDirStat PPA**](https://launchpad.net/~nathan-renniewaldock/+archive/ubuntu/qdirstat)
-
+https://packages.ubuntu.com/search?keywords=qdirstat&searchon=names
 
 
 ### Debian
