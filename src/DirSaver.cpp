@@ -34,7 +34,10 @@ void DirSaver::cd( const QString & newPath )
     }
 
     // logDebug() << "cd " << newPath << endl;
-    chdir( newPath.toUtf8() );
+    int result = chdir( newPath.toUtf8() );
+
+    if ( result != 0 )
+        logWarning() << "chdir( " << newPath << " ) failed" << endl;
 }
 
 
