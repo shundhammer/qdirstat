@@ -128,6 +128,14 @@ namespace QDirStat
 	virtual void currentChanged( const QModelIndex & current,
 				     const QModelIndex & oldCurrent ) Q_DECL_OVERRIDE;
 
+        /**
+         * Keyboard event handler.
+         *
+         * Reimplemented from QTreeView.
+         **/
+        virtual void keyPressEvent( QKeyEvent * event ) Q_DECL_OVERRIDE;
+
+
 	// Data members
 
 	PercentBarDelegate * _percentBarDelegate;

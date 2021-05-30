@@ -8,6 +8,7 @@
 
 
 #include <QMenu>
+#include <QKeyEvent>
 
 #include "DirTreeView.h"
 #include "DirTreeModel.h"
@@ -211,3 +212,25 @@ void DirTreeView::setExpanded( FileInfo * item, bool expanded )
         QTreeView::setExpanded( index, expanded );
 }
 
+
+void DirTreeView::keyPressEvent( QKeyEvent * event )
+{
+    if ( event )
+    {
+        switch ( event->key() )
+        {
+            case Qt::Key_Asterisk:
+                // By default, this opens all tree branches which completely
+                // kills our performance, negating all our lazy sorting in
+                // each branch in the DirTreeModel / DirInfo classes.
+                //
+                // So let's just ignore this key; we have better alternatives
+                // with "Tree" -> "Expand to Level" -> "Level 0" .. "Level 5".
+                return;
+
+            default:
+                QTreeView::keyPressEvent( event );
+                break;
+        }
+    }
+}
