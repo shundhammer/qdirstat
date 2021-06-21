@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-04-30
+Updated: 2021-06-21
 
 
 ## Screenshot
@@ -120,6 +120,16 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2021-06-21 [QDirStat AppImage and why I don't like it](https://github.com/shundhammer/qdirstat/issues/168)
+
+    TL;DR:
+    - It's big and fat (113 MB)
+    - It's an outdated version (QDirStat 1.6.1 from 16 months ago)
+    - It doesn't even tell you what version it contains
+    - It still needs a fairly recent version of GLibc, so you can't run it on Ubuntu 18.04 LTS
+    - It's unclear if at least the libraries inside (e.g. the Qt libs) are up to date
+
 
 - 2021-04-05 **New stable release: 1.7.1**
 
