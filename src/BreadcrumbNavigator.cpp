@@ -12,7 +12,11 @@
 #include "BreadcrumbNavigator.h"
 #include "Logger.h"
 
+#define SHORTEN_PATH_THRESHOLD          150
+#define SHORTEN_COMPONENT_THRESHOLD      16
+
 using namespace QDirStat;
+
 
 
 BreadcrumbNavigator::BreadcrumbNavigator( QWidget * parent ):
@@ -38,6 +42,7 @@ BreadcrumbNavigator::~BreadcrumbNavigator()
 void BreadcrumbNavigator::setPath( FileInfo * item )
 {
     QString html;
+    bool    doShorten = pathLen( item ) > SHORTEN_PATH_THRESHOLD;
 
     while ( item )
     {
@@ -57,6 +62,9 @@ void BreadcrumbNavigator::setPath( FileInfo * item )
             else
                 splitBasePath( item->name(), basePath, name );
 
+            if ( doShorten )
+                name = ellideMiddle( name, SHORTEN_COMPONENT_THRESHOLD );
+
             QString href= QString( "<a href=\"%1\">%2</a>" )
                 .arg( item->debugUrl() )
                 .arg( qHtmlEscape( name ) );
@@ -71,6 +79,31 @@ void BreadcrumbNavigator::setPath( FileInfo * item )
     }
 
     setText( html );
+}
+
+
+int BreadcrumbNavigator::pathLen( FileInfo * item ) const
+{
+    if ( ! item )
+        return 0;
+
+    if ( ! item->isDirInfo() && item->parent() )
+        return item->parent()->debugUrl().length();
+    else
+        return item->debugUrl().length();
+}
+
+
+QString BreadcrumbNavigator::ellideMiddle( const QString & longText, int maxLen ) const
+{
+    if ( maxLen < 1 || longText.size() < maxLen )
+	return longText;
+
+    QString ellided = longText.left( maxLen / 2 - 2 );
+    ellided += "...";
+    ellided += longText.right( maxLen / 2 - 1 );
+
+    return ellided;
 }
 
 

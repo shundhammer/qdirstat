@@ -87,6 +87,17 @@ namespace QDirStat
         void splitBasePath( const QString & path,
                             QString       & basePath_ret, // return parameter
                             QString       & name_ret );   // return parameter
+
+        /**
+         * Return the length of the directory path of 'item'.
+         **/
+        int pathLen( FileInfo * item ) const;
+
+        /**
+         * Elide a text that would be longer than maxLen in the middle and
+         * return the shortened text.
+         **/
+        QString ellideMiddle( const QString & text, int maxLen ) const;
     };
 
 } // namespace QDirStat
