@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-06-21
+Updated: 2021-06-24
 
 
 ## Screenshot
@@ -120,6 +120,13 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2021-06-24
+
+  - First (crude) fix for [GitHub issue #169](https://github.com/shundhammer/qdirstat/issues/169):
+    Breadcrumbs navigator becomes too wide for very long paths.
+    Now shortening path components if the overall path would become too wide.
+    Right now it shortens them a bit too aggressively.
 
 - 2021-06-21 [QDirStat AppImage and why I don't like it](https://github.com/shundhammer/qdirstat/issues/168)
 
