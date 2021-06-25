@@ -17,8 +17,6 @@
 
 namespace QDirStat
 {
-    class DirTree;
-
     /**
      * Helper class for extended file mtime statistics.
      * This is very similar to FileSizeStats.

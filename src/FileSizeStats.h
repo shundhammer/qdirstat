@@ -16,8 +16,6 @@
 
 namespace QDirStat
 {
-    class DirTree;
-
     /**
      * Helper class for extended file size statistics.
      *
