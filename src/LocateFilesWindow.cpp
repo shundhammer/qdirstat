@@ -60,8 +60,9 @@ LocateFilesWindow::~LocateFilesWindow()
 {
     // logDebug() << "destroying" << endl;
 
-    delete _treeWalker;
     writeWindowSettings( this, "LocateFilesWindow" );
+    delete _treeWalker;
+    delete _ui;
 }
 
 

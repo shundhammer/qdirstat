@@ -67,6 +67,7 @@ OutputWindow::~OutputWindow()
     }
 
     writeSettings();
+    delete _ui;
 }
 
 

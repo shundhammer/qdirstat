@@ -66,6 +66,7 @@ ConfigDialog::ConfigDialog( QWidget * parent ):
 ConfigDialog::~ConfigDialog()
 {
     // logDebug() << "ConfigDialog destructor" << endl;
+    delete _ui;
 }
 
 

@@ -63,6 +63,8 @@ MimeCategoryConfigPage::~MimeCategoryConfigPage()
 
     if ( _dirTree )
 	delete _dirTree;
+
+    delete _ui;
 }
 
 

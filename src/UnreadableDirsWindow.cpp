@@ -27,7 +27,7 @@ UnreadableDirsWindow::UnreadableDirsWindow( SelectionModel * selectionModel,
     _ui( new Ui::UnreadableDirsWindow ),
     _selectionModel( selectionModel )
 {
-    logDebug() << "init" << endl;
+    // logDebug() << "init" << endl;
 
     CHECK_NEW( _ui );
     _ui->setupUi( this );
@@ -42,8 +42,9 @@ UnreadableDirsWindow::UnreadableDirsWindow( SelectionModel * selectionModel,
 
 UnreadableDirsWindow::~UnreadableDirsWindow()
 {
-    logDebug() << "destroying" << endl;
+    // logDebug() << "destroying" << endl;
     writeWindowSettings( this, "UnreadableDirsWindow" );
+    delete _ui;
 }
 
 

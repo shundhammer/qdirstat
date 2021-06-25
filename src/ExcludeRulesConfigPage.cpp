@@ -45,6 +45,7 @@ ExcludeRulesConfigPage::ExcludeRulesConfigPage( QWidget * parent ):
 ExcludeRulesConfigPage::~ExcludeRulesConfigPage()
 {
     // logDebug() << "ExcludeRulesConfigPage destructor" << endl;
+    delete _ui;
 }
 
 

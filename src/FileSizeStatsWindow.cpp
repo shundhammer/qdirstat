@@ -65,6 +65,8 @@ FileSizeStatsWindow::~FileSizeStatsWindow()
 {
     // logDebug() << "destroying" << endl;
     writeWindowSettings( this, "FileSizeStatsWindow" );
+    delete _stats;
+    delete _ui;
 }
 
 

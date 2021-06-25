@@ -71,7 +71,7 @@ OpenDirDialog::OpenDirDialog( QWidget * parent ):
 
 OpenDirDialog::~OpenDirDialog()
 {
-    // NOP
+    delete _ui;
 }
 
 

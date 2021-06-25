@@ -180,6 +180,7 @@ MainWindow::~MainWindow()
 	delete _configDialog;
 
     delete _ui->dirTreeView;
+    delete _ui;
     delete _cleanupCollection;
     delete _selectionModel;
     delete _dirTreeModel;

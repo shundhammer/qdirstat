@@ -36,6 +36,7 @@ MessagePanel::MessagePanel( QWidget * parent ):
 MessagePanel::~MessagePanel()
 {
     _instances.removeAll( this );
+    delete _ui;
 }
 
 

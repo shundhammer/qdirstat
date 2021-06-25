@@ -47,6 +47,7 @@ LocateFileTypeWindow::~LocateFileTypeWindow()
 {
     // logDebug() << "destroying" << endl;
     writeWindowSettings( this, "LocateFileTypeWindow" );
+    delete _ui;
 }
 
 

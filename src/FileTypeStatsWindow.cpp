@@ -70,6 +70,7 @@ FileTypeStatsWindow::~FileTypeStatsWindow()
 {
     // logDebug() << "destroying" << endl;
     writeWindowSettings( this, "FileTypeStatsWindow" );
+    delete _ui;
 }
 
 

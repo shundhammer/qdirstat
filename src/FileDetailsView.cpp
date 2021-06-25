@@ -62,6 +62,7 @@ FileDetailsView::FileDetailsView( QWidget * parent ):
 FileDetailsView::~FileDetailsView()
 {
     writeSettings();
+    delete _ui;
 }
 
 

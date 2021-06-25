@@ -49,6 +49,7 @@ CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
 CleanupConfigPage::~CleanupConfigPage()
 {
     // logDebug() << "CleanupConfigPage destructor" << endl;
+    delete _ui;
 }
 
 

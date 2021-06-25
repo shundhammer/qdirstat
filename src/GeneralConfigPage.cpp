@@ -29,7 +29,7 @@ GeneralConfigPage::GeneralConfigPage( QWidget * parent ):
 
 GeneralConfigPage::~GeneralConfigPage()
 {
-    // NOP
+    delete _ui;
 }
 
 

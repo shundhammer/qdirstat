@@ -63,7 +63,7 @@ ShowUnpkgFilesDialog::ShowUnpkgFilesDialog( QWidget * parent ):
 
 ShowUnpkgFilesDialog::~ShowUnpkgFilesDialog()
 {
-
+    delete _ui;
 }
 
 

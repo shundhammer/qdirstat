@@ -30,7 +30,7 @@ PanelMessage::PanelMessage( QWidget * parent ):
 
 PanelMessage::~PanelMessage()
 {
-
+    delete _ui;
 }
 
 
