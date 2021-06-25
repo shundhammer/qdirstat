@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-06-24
+Updated: 2021-06-26
 
 
 ## Screenshot
@@ -120,6 +120,17 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2021-06-26
+
+  - Improved the fix for [GitHub issue #169](https://github.com/shundhammer/qdirstat/issues/169):
+    Breadcrumbs navigator becomes too wide for very long paths.
+
+    Now no longer aggressively shortening all path components in the
+    breadcrumbs navigator when the complete path becomes even just a little bit
+    too long, but concentrating on the longest parts and shortening them one by
+    one until the complete path is not too long anymore.
+
 
 - 2021-06-24
 
