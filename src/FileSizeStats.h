@@ -40,14 +40,6 @@ namespace QDirStat
 	 **/
 	FileSizeStats();
 
-        /**
-         * Populate the internal 'data' list.
-         *
-         * Implemented from PercentileStats.
-         * This overloaded version does not do anything.
-         **/
-        virtual void collect() Q_DECL_OVERRIDE;
-
 	/**
 	 * Recurse through all file elements in the tree and append the own
 	 * size for each file to the data collection. Notice that the data are

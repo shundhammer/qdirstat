@@ -27,11 +27,6 @@ FileMTimeStats::FileMTimeStats():
 }
 
 
-void FileMTimeStats::collect()
-{
-
-}
-
 void FileMTimeStats::collect( DirTree * tree )
 {
     Q_CHECK_PTR( tree );

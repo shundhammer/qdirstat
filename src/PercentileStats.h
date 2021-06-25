@@ -22,6 +22,7 @@ namespace QDirStat
      * Base class for percentile-related statistics calculation.
      *
      * Derived classes have to make sure to populate the internal 'data' list.
+     * Typically, some kind of collect() method is used for that.
      *
      * Notice that one data item (one qreal, i.e. one 64 bit double) is
      * stored for each file (or each matching file) in this object, so this is
@@ -47,13 +48,6 @@ namespace QDirStat
 	 * Clear the collected data and shrink the list.
 	 **/
 	void clear();
-
-        /**
-         * Populate the internal 'data' list.
-         *
-         * Derived classes are required to implement this.
-         **/
-        virtual void collect() = 0;
 
 	/**
 	 * Sort the collected data in ascending order.

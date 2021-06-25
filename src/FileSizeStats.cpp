@@ -27,11 +27,6 @@ FileSizeStats::FileSizeStats():
 }
 
 
-void FileSizeStats::collect()
-{
-
-}
-
 void FileSizeStats::collect( DirTree * tree )
 {
     Q_CHECK_PTR( tree );
