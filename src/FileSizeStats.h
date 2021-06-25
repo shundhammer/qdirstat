@@ -12,7 +12,6 @@
 
 #include "PercentileStats.h"
 #include "FileInfo.h"
-#include "HistogramView.h"
 
 
 namespace QDirStat
