@@ -11,6 +11,7 @@
 
 
 #include <QLabel>
+#include <QVector>
 
 #include "FileInfo.h"
 #include "DirTree.h"
@@ -18,6 +19,21 @@
 
 namespace QDirStat
 {
+    /**
+     * Helper class to represent one single breadcrumb
+     **/
+    struct Breadcrumb
+    {
+        Breadcrumb( const QString & path = QString() ):
+            pathComponent( path )
+            {}
+
+        QString pathComponent;
+        QString displayName;   // This may be shortened
+        QString url;
+    };
+
+
     /**
      * Widget for "breadcrumb" navigation in a directory tree:
      *
@@ -89,15 +105,50 @@ namespace QDirStat
                             QString       & name_ret );   // return parameter
 
         /**
-         * Return the length of the directory path of 'item'.
+         * Return the total display length of all breadcrumbs plus delimiters.
          **/
-        int pathLen( FileInfo * item ) const;
+        int breadcrumbsLen() const;
 
         /**
          * Elide a text that would be longer than maxLen in the middle and
          * return the shortened text.
          **/
         QString ellideMiddle( const QString & text, int maxLen ) const;
+
+        /**
+         * Fill the internal _breadcrumbs with content by traversing up the
+         * tree from 'item' to the toplevel.
+         **/
+        void fillBreadcrumbs( FileInfo * item );
+
+        /**
+         * Generate HTML from _breadcrumbs
+         **/
+        QString html() const;
+
+        /**
+         * Shorten exessively long _breadcrumbs so they have a better chance to
+         * fit on the screen.
+         **/
+        void shortenBreadcrumbs();
+
+        /**
+         * Return the index of the longest breadcrumb that has not been
+         * shortened yet or -1 if there is no more.
+         **/
+        int pickLongBreadcrumb();
+
+        /**
+         * Write the internal _breadcrumbs to the log.
+         **/
+        void logBreadcrumbs() const;
+
+
+        //
+        // Data members
+        //
+
+        QVector<Breadcrumb> _breadcrumbs;
     };
 
 } // namespace QDirStat

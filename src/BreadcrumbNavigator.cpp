@@ -12,8 +12,8 @@
 #include "BreadcrumbNavigator.h"
 #include "Logger.h"
 
-#define SHORTEN_PATH_THRESHOLD          150
-#define SHORTEN_COMPONENT_THRESHOLD      16
+#define MAX_TOTAL_LEN           150
+#define SHORTENED_LEN            12
 
 using namespace QDirStat;
 
@@ -41,10 +41,36 @@ BreadcrumbNavigator::~BreadcrumbNavigator()
 
 void BreadcrumbNavigator::setPath( FileInfo * item )
 {
-    QString html;
-    bool    doShorten = pathLen( item ) > SHORTEN_PATH_THRESHOLD;
+    fillBreadcrumbs( item );
+    shortenBreadcrumbs();
+    setText( html() );
+}
 
-    while ( item )
+
+void BreadcrumbNavigator::fillBreadcrumbs( FileInfo * item )
+{
+    _breadcrumbs.clear();
+
+    while ( item && ! item->isDirInfo() )
+        item = item->parent();
+
+    if ( ! item || ! item->tree() )
+        return;
+
+    // logDebug() << item->debugUrl() << endl;
+    int depth = item->treeLevel();
+    _breadcrumbs = QVector<Breadcrumb>( depth + 1, Breadcrumb() );
+
+    QString name;
+    QString basePath;
+
+    FileInfo * toplevel = item->tree()->firstToplevel();
+    splitBasePath( toplevel->name(), basePath, name );
+
+    if ( ! basePath.isEmpty() )
+        _breadcrumbs[ 0 ].pathComponent = basePath;
+
+    while ( item && depth > 0 )
     {
         // Stop at the DirTree's <root> pseudo item
         if ( item->tree() && item == item->tree()->root() )
@@ -52,45 +78,119 @@ void BreadcrumbNavigator::setPath( FileInfo * item )
 
         if ( item->isDirInfo() )
         {
-            QString basePath;
-            QString name;
+            splitBasePath( item->name(), basePath, name );
 
-            if ( item->isDotEntry() )
-                name = FileInfo::dotEntryName();
-            else if ( item->isAttic() )
-                name = FileInfo::atticName();
-            else
-                splitBasePath( item->name(), basePath, name );
-
-            if ( doShorten )
-                name = ellideMiddle( name, SHORTEN_COMPONENT_THRESHOLD );
-
-            QString href= QString( "<a href=\"%1\">%2</a>" )
-                .arg( item->debugUrl() )
-                .arg( qHtmlEscape( name ) );
-
-            if ( name != "/" )
-                href += "/";
-
-            html = qHtmlEscape( basePath ) + href + html;
+            _breadcrumbs[ depth ].pathComponent = name;
+            _breadcrumbs[ depth ].url = item->debugUrl();
         }
 
         item = item->parent();
+        --depth;
     }
 
-    setText( html );
+    if ( _breadcrumbs[ 0 ].pathComponent.isEmpty() )
+        _breadcrumbs.removeFirst();
+
+    // logBreadcrumbs();
 }
 
 
-int BreadcrumbNavigator::pathLen( FileInfo * item ) const
+QString BreadcrumbNavigator::html() const
 {
-    if ( ! item )
-        return 0;
+    QString html;
+    QString name;
 
-    if ( ! item->isDirInfo() && item->parent() )
-        return item->parent()->debugUrl().length();
-    else
-        return item->debugUrl().length();
+    for ( int i=0; i < _breadcrumbs.size(); ++i )
+    {
+        const Breadcrumb & crumb = _breadcrumbs[ i ];
+        name = crumb.displayName;
+
+        if ( name.isEmpty() )
+            name = crumb.pathComponent;
+
+        if ( ! name.isEmpty() )
+        {
+            if ( crumb.url.isEmpty() )
+            {
+                html += qHtmlEscape( name );
+            }
+            else
+            {
+                html += QString( "<a href=\"%1\">%2</a>" )
+                    .arg( crumb.url )
+                    .arg( qHtmlEscape( name ) );
+            }
+
+            if ( ! name.endsWith( "/" ) )
+                html += "/";
+        }
+    }
+
+    return html;
+}
+
+
+void BreadcrumbNavigator::shortenBreadcrumbs()
+{
+    while ( breadcrumbsLen() > MAX_TOTAL_LEN )
+    {
+        int index = pickLongBreadcrumb();
+
+        if ( index < 0 )
+            return;
+
+        Breadcrumb & crumb = _breadcrumbs[ index ];
+        crumb.displayName = ellideMiddle( crumb.pathComponent, SHORTENED_LEN );
+
+#if 0
+        logDebug() << "Shortened #" << index
+                   << " from " << crumb.pathComponent.length()
+                   << " to " <<  crumb.displayName.length()
+                   << ": " << crumb.pathComponent
+                   << endl;
+#endif
+    }
+}
+
+
+int BreadcrumbNavigator::pickLongBreadcrumb()
+{
+    int longestIndex = -1;
+    int maxLen       = 0;
+
+    for ( int i=0; i < _breadcrumbs.size(); ++i )
+    {
+        const Breadcrumb & crumb = _breadcrumbs[ i ];
+
+        if ( crumb.displayName.isEmpty() &&
+             crumb.pathComponent.length() > maxLen )
+        {
+            longestIndex = i;
+            maxLen = crumb.pathComponent.length();
+        }
+    }
+
+    return longestIndex;
+}
+
+
+int BreadcrumbNavigator::breadcrumbsLen() const
+{
+    int len = 0;
+
+    for ( int i=0; i < _breadcrumbs.size(); ++i )
+    {
+        const Breadcrumb & crumb = _breadcrumbs[ i ];
+        const QString &    name  = crumb.displayName.isEmpty() ?
+            crumb.pathComponent : crumb.displayName;
+
+        len += name.length();
+
+        if ( ! name.endsWith( "/" ) )
+            ++len;      // For the "/" delimiter
+    }
+
+    return len;
 }
 
 
@@ -134,3 +234,23 @@ void BreadcrumbNavigator::logPathClicked( const QString & path )
 {
     logInfo() << "Clicked path " << path << endl;
 }
+
+
+void BreadcrumbNavigator::logBreadcrumbs() const
+{
+    logNewline();
+
+    for ( int i=0; i < _breadcrumbs.size(); ++i )
+    {
+        const Breadcrumb & crumb = _breadcrumbs[ i ];
+
+        logDebug() << "_breadcrumb[ " << i << " ]: "
+                   << " pathComponent: \"" << crumb.pathComponent
+                   << "\" displayName: \"" << crumb.displayName
+                   << "\" url: " << crumb.url << "\""
+                   << endl;
+    }
+
+    logNewline();
+}
+

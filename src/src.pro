@@ -129,7 +129,7 @@ SOURCES	  = main.cpp			\
 	    SettingsHelpers.cpp		\
 	    ShowUnpkgFilesDialog.cpp	\
 	    SizeColDelegate.cpp		\
-	    StdCleanup.cpp		\
+            StdCleanup.cpp		\
 	    Subtree.cpp			\
 	    SysUtil.cpp			\
 	    SystemFileChecker.cpp	\
