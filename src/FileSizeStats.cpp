@@ -20,18 +20,14 @@
 using namespace QDirStat;
 
 
-FileSizeStats::FileSizeStats():
+FileSizeStats::FileSizeStats( FileInfo * subtree ):
     PercentileStats()
 {
-
-}
-
-
-void FileSizeStats::collect( DirTree * tree )
-{
-    Q_CHECK_PTR( tree );
-
-    collect( tree->root() );
+    if ( subtree )
+    {
+        collect( subtree );
+        sort();
+    }
 }
 
 
@@ -63,20 +59,6 @@ void FileSizeStats::collect( FileInfo * subtree )
 
 	++it;
     }
-}
-
-
-void FileSizeStats::collect( DirTree * tree, const QString & suffix )
-{
-    Q_CHECK_PTR( tree );
-
-    if ( ! suffix.startsWith( "." ) )
-    {
-        logError() << "Suffix should start with \".\" - got \""
-                   << suffix << "\"" << endl;
-    }
-
-    collect( tree->root(), suffix );
 }
 
 

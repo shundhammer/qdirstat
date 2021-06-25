@@ -79,27 +79,21 @@ qreal TreeWalker::lowerPercentileThreshold( PercentileStats & stats )
 void LargestFilesTreeWalker::prepare( FileInfo * subtree )
 {
 
-    FileSizeStats stats;
-    stats.collect( subtree );
-    stats.sort();
+    FileSizeStats stats( subtree );
     _threshold = (FileSize) upperPercentileThreshold( stats );
 }
 
 
 void NewFilesTreeWalker::prepare( FileInfo * subtree )
 {
-    FileMTimeStats stats;
-    stats.collect( subtree );
-    stats.sort();
+    FileMTimeStats stats( subtree );
     _threshold = (time_t) upperPercentileThreshold( stats );
 }
 
 
 void OldFilesTreeWalker::prepare( FileInfo * subtree )
 {
-    FileMTimeStats stats;
-    stats.collect( subtree );
-    stats.sort();
+    FileMTimeStats stats( subtree );
     _threshold = (time_t) lowerPercentileThreshold( stats );
 }
 

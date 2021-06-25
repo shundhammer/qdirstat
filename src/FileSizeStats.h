@@ -36,16 +36,10 @@ namespace QDirStat
     public:
 
 	/**
-	 * Constructor.
+	 * Constructor. If 'subtree' is non-null, immediately collect data from
+	 * that subtree.
 	 **/
-	FileSizeStats();
-
-	/**
-	 * Recurse through all file elements in the tree and append the own
-	 * size for each file to the data collection. Notice that the data are
-	 * unsorted after this.
-	 **/
-	void collect( DirTree * tree );
+	FileSizeStats( FileInfo * subtree = 0 );
 
 	/**
 	 * Recurse through all file elements in the subtree and append the own
@@ -53,15 +47,6 @@ namespace QDirStat
 	 * unsorted after this.
 	 **/
 	void collect( FileInfo * subtree );
-
-	/**
-	 * Recurse through all file elements in the tree and append the own
-	 * size for each file with the specified suffix to the data
-	 * collection. Notice that the data are unsorted after this.
-	 *
-	 * 'suffix' should start with ".", e.g. ".jpg".
-	 **/
-	void collect( DirTree * tree, const QString & suffix );
 
 	/**
 	 * Recurse through all file elements in the subtree and append the own

@@ -20,18 +20,14 @@
 using namespace QDirStat;
 
 
-FileMTimeStats::FileMTimeStats():
+FileMTimeStats::FileMTimeStats( FileInfo * subtree ):
     PercentileStats()
 {
-
-}
-
-
-void FileMTimeStats::collect( DirTree * tree )
-{
-    Q_CHECK_PTR( tree );
-
-    collect( tree->root() );
+    if ( subtree )
+    {
+        collect( subtree );
+        sort();
+    }
 }
 
 

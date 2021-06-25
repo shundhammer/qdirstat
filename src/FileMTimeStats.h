@@ -37,16 +37,10 @@ namespace QDirStat
     public:
 
 	/**
-	 * Constructor.
+	 * Constructor. If 'subtree' is non-null, immediately collect data from
+	 * that subtree.
 	 **/
-	FileMTimeStats();
-
-	/**
-	 * Recurse through all file elements in the tree and append the mtime
-	 * for each file to the data collection. Notice that the data are
-	 * unsorted after this.
-	 **/
-	void collect( DirTree * tree );
+	FileMTimeStats( FileInfo * subtree = 0 );
 
 	/**
 	 * Recurse through all file elements in the subtree and append the
