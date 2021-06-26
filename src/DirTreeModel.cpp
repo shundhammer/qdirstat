@@ -843,7 +843,7 @@ QString DirTreeModel::sizeText( FileInfo * item, QString (*fmtSz)(FileSize) )
 
 QString DirTreeModel::smallSizeText( FileInfo * item )
 {
-    if ( ! item->isFile() )
+    if ( ! item->isFile() && ! item->isSymLink() )
 	return "";
 
     FileSize allocated = item->allocatedSize();
@@ -878,13 +878,13 @@ QString DirTreeModel::smallSizeText( FileInfo * item )
 }
 
 
-bool DirTreeModel::isSmallFile( FileInfo * item )
+bool DirTreeModel::isSmallFileOrSymLink( FileInfo * item )
 {
-    if ( item			&&
-         item->isFile()		&&
-         item->blocks() > 0     &&
-         ! item->isSparseFile() &&
-         item->tree()		  )
+    if ( item			                  &&
+         ( item->isFile() || item->isSymLink()  ) &&
+         item->blocks() > 0                       &&
+         ! item->isSparseFile()                   &&
+         item->tree()		                    )
     {
         FileSize clusterSize = item->tree()->clusterSize();
 
@@ -920,7 +920,7 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 
     QString text = sizeText( item );
 
-    if ( text.isEmpty() && isSmallFile( item ) )
+    if ( text.isEmpty() && isSmallFileOrSymLink( item ) )
 	text = smallSizeText( item );
 
     if ( text.isEmpty() )

@@ -58,9 +58,8 @@ void SizeColDelegate::paint( QPainter		        * painter,
 
         if ( item )
         {
-            if ( item->isFile()     &&
-                 item->links() == 1 &&
-                 DirTreeModel::isSmallFile( item ) )
+            if ( DirTreeModel::isSmallFileOrSymLink( item ) &&
+                 item->links() == 1 )
             {
                 // logDebug() << "Small file " << item << endl;
 
@@ -136,9 +135,8 @@ QSize SizeColDelegate::sizeHint( const QStyleOptionViewItem & option,
         {
             FileInfo * item = _model->itemFromIndex( index );
 
-            if ( item->isFile()     &&
-                 item->links() == 1 &&
-                 DirTreeModel::isSmallFile( item ) )
+            if ( DirTreeModel::isSmallFileOrSymLink( item ) &&
+                 item->links() == 1                            )
             {
                 QString text = _model->data( index, Qt::DisplayRole ).toString();
                 QFontMetrics fontMetrics( option.font );
@@ -161,7 +159,7 @@ QSize SizeColDelegate::sizeHint( const QStyleOptionViewItem & option,
     QSize size = QStyledItemDelegate::sizeHint( option, index );
     return QSize( size.width() + MARGIN_RIGHT + MARGIN_LEFT, size.height() );
 #endif
-    
+
     return QStyledItemDelegate::sizeHint( option, index );
 }
 

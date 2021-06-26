@@ -322,10 +322,10 @@ namespace QDirStat
 	static QString smallSizeText( FileInfo * item );
 
 	/**
-	 * Return 'true' if this is considered a small file, i.e. non-null, but
-	 * 2 clusters allocated or less.
+	 * Return 'true' if this is considered a small file or symlink,
+	 * i.e. non-null, but 2 clusters allocated or less.
 	 **/
-	static bool isSmallFile( FileInfo * item );
+	static bool isSmallFileOrSymLink( FileInfo * item );
 
 
 
