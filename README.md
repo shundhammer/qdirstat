@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-06-26
+Updated: 2021-07-02
 
 
 ## Screenshot
@@ -120,6 +120,16 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2021-07-02
+
+  - Don't show inactive (unmounted) mounts managed by the automounter anymore
+    in the "Mounted Filesystems" window. They were listed there as filesystem
+    type "autofs" and 0 bytes total size which was not very useful.
+
+    Once they become auto-mounted by a user accessing them in the filesystem,
+    they are shown there normally, of course.
+
 
 - 2021-06-26
 

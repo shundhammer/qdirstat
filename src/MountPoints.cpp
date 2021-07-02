@@ -73,6 +73,18 @@ bool MountPoint::isNetworkMount() const
 }
 
 
+bool MountPoint::isAutofs() const
+{
+    return _filesystemType.toLower() == "autofs";
+}
+
+
+bool MountPoint::isUnmountedAutofs() const
+{
+    return isAutofs() && totalSize() == 0;
+}
+
+
 bool MountPoint::isSystemMount() const
 {
     // All normal block have a path with a slash like "/dev/something" or on some

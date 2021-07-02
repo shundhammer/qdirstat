@@ -98,6 +98,17 @@ namespace QDirStat
 	 **/
 	bool isSystemMount() const;
 
+        /**
+         * Return 'true' if this is an autofs, i.e. a filesystem managed by the
+         * automounter.
+         **/
+        bool isAutofs() const;
+
+        /**
+         * Return 'true' if this is an autofs that is not currently mounted.
+         **/
+        bool isUnmountedAutofs() const;
+
 	/**
 	 * Return 'true' if this is a duplicate mount, i.e. either a bind mount
 	 * or a filesystem that was mounted multiple times.
