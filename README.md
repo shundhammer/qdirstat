@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-07-02
+Updated: 2021-07-08
 
 
 ## Screenshot
@@ -27,7 +27,8 @@ to help you to clean it up.
 
 This is a Qt-only port of the old Qt3/KDE3-based KDirStat, now based on the
 latest Qt 5. It does not need any KDE libs or infrastructure. It runs on every
-X11-based desktop on Linux, BSD and other Unix-like systems.
+X11-based desktop on Linux, BSD and other Unix-like systems and of course in a
+Docker container.
 
 QDirStat has a number of new features compared to KDirStat. To name a few:
 
@@ -67,6 +68,7 @@ See section [_New Features_](#new-features) for more details.
 1. [MacOS X Compatibility](#macos-x-compatibility)
 1. [Windows Compatibility](#windows-compatibility)
 1. [Ready-made Packages](#ready-made-packages)
+1. [QDirStat Docker Container](#qdirstat-docker-container)
 1. [Building](#building)
 1. [Contributing](#contributing)
 1. [Troubleshooting](#troubleshooting)
@@ -996,16 +998,22 @@ the team.
 
 ## Windows Compatibility
 
-None for the forseeable future. Use [WinDirStat](https://windirstat.info/).
+There is no native Windows version, but you can use the
+[docker](#qdirstat-docker-container) container.
+Other than that, there is [WinDirStat](https://windirstat.info/).
 
 <details>
+There are currently no plans for doing a native Windows port.
+
 Directory reading might be quite easy to replace for Windows; we don't have
 that problem with devices and crossing filesystems on that platform.
 
 But the cleanups might be a challenge, "move to trash" works completely
 differently, and we'd need an installer for a Windows version.
 
-So, for the time being, use [WinDirStat](https://windirstat.info/) instead.
+So, for the time being, use the [docker](#qdirstat-docker-container) or
+[WinDirStat](https://windirstat.info/) instead.
+
 WinDirStat is a close relative to the KDirStat family anyway; the author had
 liked KDirStat on Linux so much that he decided to write a Windows clone and
 called it WinDirStat.
@@ -1043,6 +1051,37 @@ https://packages.debian.org/search?keywords=qdirstat
 ### Fedora
 
 https://apps.fedoraproject.org/packages/qdirstat/builds/
+
+
+## QDirStat Docker Container
+
+@jlesage kindly provides a
+[docker container for QDirStat](https://hub.docker.com/r/jlesage/qdirstat).
+
+That makes QDirStat usable even on non-Linux / non-Unix systems such as Windows
+or MacOS X.
+
+Docker is basically a virtualized environment to run software that was designed
+for a different operating system.
+
+It is very much like using VmWare or VirtualBox, but with much less overhead:
+You don't have to install that other system first and then on top of that the
+application that you really want to run. A docker container contains everything
+that is needed, and it is preconfigured for that application.
+
+
+### How to use Docker on Windows
+
+- Download and install [Docker Desktop for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
+- Use the Docker Desktop for Windows to launch the
+[QDirStat Docker](https://hub.docker.com/r/jlesage/qdirstat) (as a Linux container)
+- Adapt the command line so the disk that you want to explore is used
+
+More information:
+
+- https://docs.docker.com/docker-for-windows/install/
+- https://docs.docker.com/get-started/
+
 
 
 ## Building
