@@ -1,0 +1,5 @@
+qdirstat (1.7.1-22) focal; urgency=medium
+
+  * Initial release (packaged with debocker/auto-debocker.sh in 'ubuntu:focal')
+
+ -- Stavros Ntentos <133706+stdedos@users.noreply.github.com>  Tue, 13 Jul 2021 22:51:50 +0300
