@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 #include <pwd.h>	// getpwuid()
 #include <grp.h>	// getgrgid()
+#include <time.h>       // gmtime()
 #include <unistd.h>
 
 #include <QDateTime>
@@ -57,6 +58,8 @@ FileInfo::FileInfo( DirTree    * tree,
     _size	   = 0;
     _blocks	   = 0;
     _mtime	   = 0;
+    _mtimeYear     = -1;
+    _mtimeMonth    = -1;
     _allocatedSize = 0;
     _magic	   = FileInfoMagic;
 }
@@ -82,6 +85,8 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
     _uid	   = statInfo->st_uid;
     _gid	   = statInfo->st_gid;
     _mtime	   = statInfo->st_mtime;
+    _mtimeYear     = -1;
+    _mtimeMonth    = -1;
     _magic	   = FileInfoMagic;
     _allocatedSize = 0;
 
@@ -157,6 +162,8 @@ FileInfo::FileInfo( DirTree *	    tree,
     _mode	   = mode;
     _size	   = size;
     _mtime	   = mtime;
+    _mtimeYear     = -1;
+    _mtimeMonth    = -1;
     _allocatedSize = 0;
     _links	   = links;
     _uid	   = 0;
@@ -729,6 +736,39 @@ QString FileInfo::symLinkTarget()
 
     return SysUtil::symLinkTarget( url() );
 }
+
+
+short FileInfo::mtimeYear()
+{
+    if ( _mtimeYear == -1 )
+        processMtime();
+
+    return _mtimeYear;
+}
+
+
+short FileInfo::mtimeMonth()
+{
+    if ( _mtimeMonth == -1 )
+        processMtime();
+
+    return _mtimeMonth;
+}
+
+
+void  FileInfo::processMtime()
+{
+    if ( isPseudoDir() || isPkgInfo() )
+        return;
+
+    // Using gmtime() which is standard C/C++
+    // unlike gmtime_r() which is not
+    struct tm * mtime_tm = gmtime( &_mtime );
+
+    _mtimeYear  = mtime_tm->tm_year + 1900;
+    _mtimeMonth = mtime_tm->tm_mon  + 1;
+}
+
 
 
 

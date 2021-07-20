@@ -324,6 +324,24 @@ namespace QDirStat
 	 **/
 	time_t mtime() const { return _mtime; }
 
+        /**
+         * The year of the modification time of the file (1970-2037).
+         *
+         * The first call to this will calculate the value from _mtime and
+         * cache it (and the corresponding month); that's why this is not a
+         * const method.
+         **/
+        short mtimeYear();
+
+        /**
+         * The month of the modification time of the file (1-12).
+         *
+         * The first call to this will calculate the value from _mtime and
+         * cache it (and the corresponding year); that's why this is not a
+         * const method.
+         **/
+        short mtimeMonth();
+
 	/**
 	 * Returns the total size in bytes of this subtree.
 	 * Derived classes that have children should overwrite this.
@@ -904,6 +922,13 @@ namespace QDirStat
 
     protected:
 
+        /**
+         * Calculate values that are dependent on _mtime, yet quite expensive
+         * to calculate, and cache them: _mtimeYear, _mtimeMonth
+         **/
+        void processMtime();
+
+
 	// Data members.
 	//
 	// Keep this short in order to use as little memory as possible -
@@ -921,8 +946,10 @@ namespace QDirStat
 	gid_t		_gid;			// Group ID of owner
 	FileSize	_size;			// size in bytes
 	FileSize	_blocks;		// 512 bytes blocks
-	time_t		_mtime;			// modification time
 	FileSize	_allocatedSize;		// allocated size in bytes
+	time_t		_mtime;			// modification time
+        short           _mtimeYear;             // year  of the modification time or -1
+        short           _mtimeMonth;            // month of the modification time or -1
 
 	DirInfo	 *	_parent;		// pointer to the parent entry
 	FileInfo *	_next;			// pointer to the next entry
