@@ -1004,6 +1004,11 @@ namespace QDirStat
     QString formatTime( time_t rawTime );
 
     /**
+     * Format a percentage.
+     **/
+    QString formatPercent( float percent );
+
+    /**
      * Return the last pathname component of a file name.
      *
      * Examples:

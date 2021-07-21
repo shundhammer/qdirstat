@@ -10,6 +10,7 @@
 #include <QFileIconProvider>
 
 #include "FilesystemsWindow.h"
+#include "FileInfo.h"
 #include "MountPoints.h"
 #include "SettingsHelpers.h"
 #include "HeaderTweaker.h"
@@ -261,17 +262,3 @@ bool FilesystemItem::operator<( const QTreeWidgetItem & rawOther ) const
 	default:			return QTreeWidgetItem::operator<( rawOther );
     }
 }
-
-
-QString FilesystemItem::formatPercent( float percent )
-{
-    if ( percent < 0.0 )	// Invalid percentage?
-	return "";
-
-    QString text;
-    text.setNum( percent, 'f', 1 );
-    text += "%";
-
-    return text;
-}
-

@@ -572,83 +572,6 @@ void FileInfo::setIgnoreHardLinks( bool ignore )
 }
 
 
-//---------------------------------------------------------------------------
-
-
-QString QDirStat::formatSize( FileSize lSize )
-{
-    return formatSize( lSize, 1 );
-}
-
-
-QString QDirStat::formatSize( FileSize lSize, int precision )
-{
-    QString sizeString;
-    int	    unitIndex = 0;
-
-    static QStringList units;
-
-    if ( units.isEmpty() )
-    {
-	units << QObject::tr( "Bytes" )
-	      << QObject::tr( "kB" )
-	      << QObject::tr( "MB" )
-	      << QObject::tr( "GB" )
-	      << QObject::tr( "TB" )
-	      << QObject::tr( "PB" )
-	      << QObject::tr( "EB" )
-	      << QObject::tr( "ZB" )
-	      << QObject::tr( "YB" );
-    }
-
-    if ( lSize < 1024 )
-    {
-	sizeString.setNum( lSize );
-	sizeString += " " + units.at( unitIndex );
-    }
-    else
-    {
-	double size = lSize;
-
-	while ( size >= 1024.0 && unitIndex < units.size() - 1 )
-	{
-	    size /= 1024.0;
-	    ++unitIndex;
-	}
-
-	sizeString.setNum( size, 'f', precision );
-	sizeString += " " + units.at( unitIndex );
-    }
-
-    return sizeString;
-}
-
-
-QString QDirStat::formatByteSize( FileSize size )
-{
-
-    QString bytesString;
-    bytesString.setNum( size );
-
-    QString sizeString;
-
-    while ( ! bytesString.isEmpty() )
-    {
-	QString digits = bytesString.right( 3 );
-	bytesString.chop( 3 );
-
-	if ( ! sizeString.isEmpty() )
-	    sizeString.prepend( " " ); // thousands separator
-
-	sizeString.prepend( digits );
-    }
-
-    sizeString = QObject::tr( "%1 Bytes" ).arg( sizeString );
-
-    return sizeString;
-}
-
-
 DirInfo * FileInfo::toDirInfo()
 {
     DirInfo * dirInfo = dynamic_cast<DirInfo *>( this );
@@ -771,7 +694,95 @@ void  FileInfo::processMtime()
 
 
 
+//---------------------------------------------------------------------------
 
+
+
+QString QDirStat::formatSize( FileSize lSize )
+{
+    return formatSize( lSize, 1 );
+}
+
+
+QString QDirStat::formatSize( FileSize lSize, int precision )
+{
+    QString sizeString;
+    int	    unitIndex = 0;
+
+    static QStringList units;
+
+    if ( units.isEmpty() )
+    {
+	units << QObject::tr( "Bytes" )
+	      << QObject::tr( "kB" )
+	      << QObject::tr( "MB" )
+	      << QObject::tr( "GB" )
+	      << QObject::tr( "TB" )
+	      << QObject::tr( "PB" )
+	      << QObject::tr( "EB" )
+	      << QObject::tr( "ZB" )
+	      << QObject::tr( "YB" );
+    }
+
+    if ( lSize < 1024 )
+    {
+	sizeString.setNum( lSize );
+	sizeString += " " + units.at( unitIndex );
+    }
+    else
+    {
+	double size = lSize;
+
+	while ( size >= 1024.0 && unitIndex < units.size() - 1 )
+	{
+	    size /= 1024.0;
+	    ++unitIndex;
+	}
+
+	sizeString.setNum( size, 'f', precision );
+	sizeString += " " + units.at( unitIndex );
+    }
+
+    return sizeString;
+}
+
+
+QString QDirStat::formatByteSize( FileSize size )
+{
+
+    QString bytesString;
+    bytesString.setNum( size );
+
+    QString sizeString;
+
+    while ( ! bytesString.isEmpty() )
+    {
+	QString digits = bytesString.right( 3 );
+	bytesString.chop( 3 );
+
+	if ( ! sizeString.isEmpty() )
+	    sizeString.prepend( " " ); // thousands separator
+
+	sizeString.prepend( digits );
+    }
+
+    sizeString = QObject::tr( "%1 Bytes" ).arg( sizeString );
+
+    return sizeString;
+}
+
+
+QString QDirStat::formatPercent( float percent )
+{
+    if ( percent < 0.0 )	// Invalid percentage?
+	return "";
+
+    QString text;
+    text.setNum( percent, 'f', 1 );
+    text += "%";
+
+    return text;
+}
 
 
 QString QDirStat::formatTime( time_t rawTime )
@@ -784,18 +795,21 @@ QString QDirStat::formatTime( time_t rawTime )
 }
 
 
-// See also FileInfo::baseName()
-
-QString QDirStat::baseName( const QString & fileName )
-{
-    QStringList segments = fileName.split( '/', QString::SkipEmptyParts );
-    return segments.isEmpty() ? "" : segments.last();
-}
-
-
 QString QDirStat::formatPermissions( mode_t mode )
 {
     return symbolicMode( mode, true ) + "  " + formatOctal( ALLPERMS & mode );
+}
+
+
+QString QDirStat::formatFilesystemObjectType( mode_t mode )
+{
+    if	    ( S_ISDIR ( mode ) ) return QObject::tr( "Directory"	);
+    else if ( S_ISCHR ( mode ) ) return QObject::tr( "Character Device" );
+    else if ( S_ISBLK ( mode ) ) return QObject::tr( "Block Device"	);
+    else if ( S_ISFIFO( mode ) ) return QObject::tr( "Named Pipe"	);
+    else if ( S_ISLNK ( mode ) ) return QObject::tr( "Symbolic Link"	);
+    else if ( S_ISSOCK( mode ) ) return QObject::tr( "Socket"		);
+    else			 return QObject::tr( "File"		);
 }
 
 
@@ -853,13 +867,11 @@ QString QDirStat::symbolicMode( mode_t mode, bool omitTypeForRegularFiles )
 }
 
 
-QString QDirStat::formatFilesystemObjectType( mode_t mode )
+// See also FileInfo::baseName()
+
+QString QDirStat::baseName( const QString & fileName )
 {
-    if	    ( S_ISDIR ( mode ) ) return QObject::tr( "Directory"	);
-    else if ( S_ISCHR ( mode ) ) return QObject::tr( "Character Device" );
-    else if ( S_ISBLK ( mode ) ) return QObject::tr( "Block Device"	);
-    else if ( S_ISFIFO( mode ) ) return QObject::tr( "Named Pipe"	);
-    else if ( S_ISLNK ( mode ) ) return QObject::tr( "Symbolic Link"	);
-    else if ( S_ISSOCK( mode ) ) return QObject::tr( "Socket"		);
-    else			 return QObject::tr( "File"		);
+    QStringList segments = fileName.split( '/', QString::SkipEmptyParts );
+    return segments.isEmpty() ? "" : segments.last();
 }
+

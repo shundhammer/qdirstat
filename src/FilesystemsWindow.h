@@ -177,10 +177,6 @@ namespace QDirStat
 	 **/
 	bool operator<( const QTreeWidgetItem & rawOther ) const;
 
-	/**
-	 * Format a percentage.
-	 **/
-	static QString formatPercent( float percent );
 
     protected:
 

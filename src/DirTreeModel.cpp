@@ -1274,12 +1274,10 @@ void DirTreeModel::invalidatePersistent( FileInfo * subtree,
 
 QVariant DirTreeModel::formatPercent( float percent ) const
 {
-    if ( percent < 0.0 )	// Invalid percentage?
-	return QVariant();
+    QString text = ::formatPercent( percent );
 
-    QString text;
-    text.setNum( percent, 'f', 1 );
-    text += "%";
+    if ( text.isEmpty() )
+        return QVariant();
 
     return text;
 }
