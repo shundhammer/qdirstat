@@ -18,6 +18,7 @@
 
 #include "ui_main-window.h"
 #include "FileTypeStatsWindow.h"
+#include "FileAgeStatsWindow.h"
 #include "FilesystemsWindow.h"
 #include "LocateFilesWindow.h"
 #include "TreeWalker.h"
@@ -45,6 +46,7 @@ namespace QDirStat
 
 using QDirStat::FileInfo;
 using QDirStat::FileTypeStatsWindow;
+using QDirStat::FileAgeStatsWindow;
 using QDirStat::PanelMessage;
 using QDirStat::UnreadableDirsWindow;
 using QDirStat::FilesystemsWindow;
@@ -316,14 +318,19 @@ protected slots:
     void openConfigDialog();
 
     /**
+     * Show file size statistics for the currently selected directory.
+     **/
+    void showFileSizeStats();
+
+    /**
      * Show file type statistics for the currently selected directory.
      **/
     void showFileTypeStats();
 
     /**
-     * Show file size statistics for the currently selected directory.
+     * Show file age statistics for the currently selected directory.
      **/
-    void showFileSizeStats();
+    void showFileAgeStats();
 
     /**
      * Show detailed information about mounted filesystems in a separate window.
@@ -473,6 +480,7 @@ private:
     QDirStat::ConfigDialog	*  _configDialog;
     QActionGroup		*  _layoutActionGroup;
     QPointer<FileTypeStatsWindow>  _fileTypeStatsWindow;
+    QPointer<FileAgeStatsWindow>   _fileAgeStatsWindow;
     QPointer<FilesystemsWindow>    _filesystemsWindow;
     QPointer<LocateFilesWindow>    _locateFilesWindow;
     QPointer<PanelMessage>	   _dirPermissionsWarning;

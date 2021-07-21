@@ -118,8 +118,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>68</width>
-           <height>288</height>
+           <width>88</width>
+           <height>278</height>
           </rect>
          </property>
         </widget>
@@ -136,7 +136,7 @@
      <x>0</x>
      <y>0</y>
      <width>1157</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -196,6 +196,7 @@
     <addaction name="separator"/>
     <addaction name="actionFileSizeStats"/>
     <addaction name="actionFileTypeStats"/>
+    <addaction name="actionFileAgeStats"/>
     <addaction name="actionShowFilesystems"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
@@ -622,7 +623,7 @@
     <string>About &amp;Qt...</string>
    </property>
    <property name="iconText">
-    <string>About Qt</string>
+    <string>About Qt...</string>
    </property>
    <property name="toolTip">
     <string>About Qt</string>
@@ -854,7 +855,7 @@
     <string>The &amp;Packages View...</string>
    </property>
    <property name="iconText">
-    <string>The Packages View</string>
+    <string>The Packages View...</string>
    </property>
    <property name="toolTip">
     <string>The Packages View</string>
@@ -879,7 +880,7 @@
     <string>The &amp;Unpackaged Files View...</string>
    </property>
    <property name="iconText">
-    <string>The Unpackaged Files View</string>
+    <string>The Unpackaged Files View...</string>
    </property>
    <property name="toolTip">
     <string>The Unpackaged Files View</string>
@@ -957,7 +958,7 @@
     <string>Files Shadowed by a &amp;Mount...</string>
    </property>
    <property name="iconText">
-    <string>Files Shadowed by a Mount</string>
+    <string>Files Shadowed by a Mount...</string>
    </property>
    <property name="toolTip">
     <string>Files Shadowed by a Mount</string>
@@ -971,7 +972,7 @@
     <string>QDirStat for &amp;Headless Servers...</string>
    </property>
    <property name="iconText">
-    <string>QDirStat for Headless Servers</string>
+    <string>QDirStat for Headless Servers...</string>
    </property>
    <property name="toolTip">
     <string>QDirStat for Headless Servers</string>
@@ -1000,6 +1001,14 @@
    </property>
    <property name="toolTip">
     <string>Show the Treeemap beside the directory tree, otherwise it will be shown beneath.</string>
+   </property>
+  </action>
+  <action name="actionFileAgeStats">
+   <property name="text">
+    <string>File &amp;Age Statistics</string>
+   </property>
+   <property name="shortcut">
+    <string>F4</string>
    </property>
   </action>
  </widget>

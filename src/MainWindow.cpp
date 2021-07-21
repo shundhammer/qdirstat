@@ -328,6 +328,7 @@ void MainWindow::connectActions()
 
     _ui->actionFileTypeStats->setShortcutContext( Qt::ApplicationShortcut );
 
+    CONNECT_ACTION( _ui->actionFileAgeStats,	   this, showFileAgeStats() );
     CONNECT_ACTION( _ui->actionShowFilesystems,	   this, showFilesystems() );
 
 
@@ -456,6 +457,7 @@ void MainWindow::updateActions()
 
     _ui->actionFileSizeStats->setEnabled( ! reading && nothingOrOneDir );
     _ui->actionFileTypeStats->setEnabled( ! reading && nothingOrOneDir );
+    _ui->actionFileAgeStats->setEnabled ( ! reading && nothingOrOneDir );
 
     bool showingTreemap = _ui->treemapView->isVisible();
 
@@ -1275,6 +1277,21 @@ void MainWindow::showFileSizeStats()
 	return;
 
     FileSizeStatsWindow::populateSharedInstance( sel );
+}
+
+
+void MainWindow::showFileAgeStats()
+{
+    if ( ! _fileAgeStatsWindow )
+    {
+	// This deletes itself when the user closes it. The associated QPointer
+	// keeps track of that and sets the pointer to 0 when it happens.
+
+	_fileAgeStatsWindow = new FileAgeStatsWindow( this );
+    }
+
+    _fileAgeStatsWindow->populate( selectedDirOrRoot() );
+    _fileAgeStatsWindow->show();
 }
 
 

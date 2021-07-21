@@ -76,7 +76,8 @@ SOURCES	  = main.cpp			\
 	    ExcludeRules.cpp		\
 	    ExcludeRulesConfigPage.cpp	\
 	    ExistingDirCompleter.cpp	\
-	    ExistingDirValidator.cpp	\
+            ExistingDirValidator.cpp	\
+            FileAgeStatsWindow.cpp      \
 	    FileDetailsView.cpp		\
 	    FileInfo.cpp		\
 	    FileInfoIterator.cpp	\
@@ -172,6 +173,7 @@ HEADERS	  =				\
 	    ExcludeRulesConfigPage.h	\
 	    ExistingDirCompleter.h	\
 	    ExistingDirValidator.h	\
+            FileAgeStatsWindow.h        \
 	    FileDetailsView.h		\
 	    FileInfo.h			\
 	    FileInfoIterator.h		\
@@ -246,8 +248,9 @@ FORMS	  = main-window.ui		   \
 	    general-config-page.ui	   \
 	    mime-category-config-page.ui   \
 	    exclude-rules-config-page.ui   \
+            file-age-stats-window.ui       \
 	    file-size-stats-window.ui	   \
-	    file-type-stats-window.ui	   \
+            file-type-stats-window.ui	   \
 	    filesystems-window.ui	   \
 	    locate-files-window.ui	   \
 	    locate-file-type-window.ui	   \
