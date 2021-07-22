@@ -12,6 +12,7 @@
 
 #include <QDialog>
 #include <QTreeWidgetItem>
+#include <QHash>
 
 #include "ui_file-age-stats-window.h"
 #include "FileInfo.h"
@@ -20,6 +21,10 @@
 
 namespace QDirStat
 {
+    class YearStats;
+    typedef QHash<short, YearStats> YearStatsHash;
+
+
     /**
      * Modeless dialog to display file age statistics, i.e. statistics about
      * the years of last modification times of files in a subtree.
@@ -83,12 +88,56 @@ namespace QDirStat
 	 **/
 	void initWidgets();
 
+        /**
+         * Recursively collect year statistics for all file children
+         **/
+        void collectYearStats( FileInfo * dir );
+
+        /**
+         * Sum up the totals over all years and calculate the percentages for
+         * each year
+         **/
+        void calcPercentages();
+
+        /**
+         * Create an item in the years tree / list widget for each year
+         **/
+        void populateYearListWidget();
+
+
 	//
 	// Data members
 	//
 
 	Ui::FileAgeStatsWindow * _ui;
 	Subtree			 _subtree;
+        YearStatsHash            _yearStats;
+        int                      _totalFilesCount;
+        FileSize                 _totalFilesSize;
+
+    };
+
+
+    /**
+     * File modification year statistics for one year
+     **/
+    class YearStats
+    {
+    public:
+
+	short		year;
+	int		filesCount;
+	float		filesPercent;	// 0.0 .. 100.0
+	FileSize	size;
+	float		sizePercent;	// 0.0 .. 100.0
+
+	YearStats():
+            year(0),
+            filesCount(0),
+            filesPercent(0.0),
+            size(0),
+            sizePercent(0.0)
+            {}
     };
 
 
@@ -103,19 +152,6 @@ namespace QDirStat
 	YearListSizeCol,
 	YearListSizePercentCol,
 	YearListColumnCount
-    };
-
-
-    class YearStats
-    {
-    public:
-	YearStats();
-
-	short		year;
-	int		filesCount;
-	float		filesPercent;	// 0.0 .. 100.0
-	FileSize	size;
-	float		sizePercent;	// 0.0 .. 100.0
     };
 
 

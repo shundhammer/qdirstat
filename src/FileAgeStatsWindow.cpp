@@ -7,6 +7,8 @@
  */
 
 
+#include <algorithm>    // std::sort()
+
 #include "FileAgeStatsWindow.h"
 #include "DirTree.h"
 #include "FileInfoIterator.h"
@@ -22,7 +24,7 @@ FileAgeStatsWindow::FileAgeStatsWindow( QWidget * parent ):
     QDialog( parent ),
     _ui( new Ui::FileAgeStatsWindow )
 {
-    logDebug() << "init" << endl;
+    // logDebug() << "init" << endl;
 
     CHECK_NEW( _ui );
     _ui->setupUi( this );
@@ -36,7 +38,7 @@ FileAgeStatsWindow::FileAgeStatsWindow( QWidget * parent ):
 
 FileAgeStatsWindow::~FileAgeStatsWindow()
 {
-    logDebug() << "destroying" << endl;
+    // logDebug() << "destroying" << endl;
 
     writeWindowSettings( this, "FileAgeStatsWindow" );
     delete _ui;
@@ -46,6 +48,9 @@ FileAgeStatsWindow::~FileAgeStatsWindow()
 void FileAgeStatsWindow::clear()
 {
     _ui->treeWidget->clear();
+    _yearStats.clear();
+    _totalFilesCount = 0;
+    _totalFilesSize  = 0;
 }
 
 
@@ -60,17 +65,30 @@ void FileAgeStatsWindow::initWidgets()
     QFont font = _ui->heading->font();
     font.setBold( true );
     _ui->heading->setFont( font );
-    
+
     // _ui->heading->setText( text );
 
-    _ui->treeWidget->setColumnCount( YearListColumnCount );
-    _ui->treeWidget->setHeaderLabels( QStringList()
-				      << tr( "Year" )
-                                      << tr( "Files" )
-                                      << tr( "Files %" )
-                                      << tr( "Size" )
-                                      << tr( "Size %" ) );
+    // _ui->treeWidget->setColumnCount( YearListColumnCount );
+
+    QStringList headers;
+
+    headers << tr( "Year"    )
+            << tr( "Files"   )
+            << tr( "Files %" )
+            << tr( "Size"    )
+            << tr( "Size %"  );
+
+
+    _ui->treeWidget->setHeaderLabels( headers );
     _ui->treeWidget->header()->setStretchLastSection( false );
+
+    // Center the column headers
+
+    QTreeWidgetItem * hItem = _ui->treeWidget->headerItem();
+
+    for ( int col = 0; col < headers.size(); ++col )
+	hItem->setTextAlignment( col, Qt::AlignHCenter );
+
     HeaderTweaker::resizeToContents( _ui->treeWidget->header() );
 }
 
@@ -83,16 +101,94 @@ void FileAgeStatsWindow::reject()
 
 void FileAgeStatsWindow::populate( FileInfo * newSubtree )
 {
-    logDebug() << "populating with " << newSubtree << endl;
+    // logDebug() << "populating with " << newSubtree << endl;
 
     clear();
+    _subtree = newSubtree;
 
     // For better Performance: Disable sorting while inserting many items
     _ui->treeWidget->setSortingEnabled( false );
 
+    collectYearStats( _subtree() );
+    calcPercentages();
+    populateYearListWidget();
 
     _ui->treeWidget->setSortingEnabled( true );
     _ui->treeWidget->sortByColumn( YearListYearCol, Qt::DescendingOrder );
+}
+
+
+void FileAgeStatsWindow::collectYearStats( FileInfo * dir )
+{
+    if ( ! dir )
+	return;
+
+    FileInfoIterator it( dir );
+
+    while ( *it )
+    {
+	FileInfo * item = *it;
+
+        if ( item && item->isFile() )
+        {
+            short year = item->mtimeYear();
+            YearStats &stats = _yearStats[ year ];
+
+            stats.year = year;
+            stats.filesCount++;
+            stats.size += item->size();
+        }
+
+	if ( item->hasChildren() )
+	{
+	    collectYearStats( item );
+	}
+
+        ++it;
+    }
+}
+
+
+void FileAgeStatsWindow::calcPercentages()
+{
+    // Sum up the totals over all years
+
+    _totalFilesCount = 0;
+    _totalFilesSize  = 0;
+
+    foreach ( const YearStats & stats, _yearStats )
+    {
+        _totalFilesCount += stats.filesCount;
+        _totalFilesSize  += stats.size;
+    }
+
+    for ( YearStatsHash::iterator it = _yearStats.begin();
+          it != _yearStats.end();
+          ++it )
+    {
+        YearStats & stats = it.value();
+
+        if ( _totalFilesCount > 0 )
+            stats.filesPercent = ( 100.0 * stats.filesCount ) / _totalFilesCount;
+
+        if ( _totalFilesSize > 0 )
+            stats.sizePercent = ( 100.0 * stats.size ) / _totalFilesSize;
+    }
+}
+
+
+void FileAgeStatsWindow::populateYearListWidget()
+{
+    QList<short> years = _yearStats.keys();
+    std::sort( years.begin(), years.end() );
+
+    foreach ( short year, years )
+    {
+        YearListItem * item = new YearListItem( _yearStats[ year ] );
+        CHECK_NEW( item );
+
+        _ui->treeWidget->addTopLevelItem( item );
+    }
 }
 
 
@@ -104,11 +200,11 @@ YearListItem::YearListItem( const YearStats & yearStats ) :
     QTreeWidgetItem( QTreeWidgetItem::UserType ),
     _stats( yearStats )
 {
-    setText( YearListYearCol,         QString::number( _stats.year         ) );
-    setText( YearListFilesCountCol,   QString::number( _stats.filesCount   ) );
-    setText( YearListFilesPercentCol, formatPercent  ( _stats.filesPercent ) );
-    setText( YearListSizeCol,         formatSize     ( _stats.size         ) );
-    setText( YearListSizePercentCol,  formatPercent  ( _stats.sizePercent  ) );
+    setText( YearListYearCol,         QString::number( _stats.year         ) + " " );
+    setText( YearListFilesCountCol,   QString::number( _stats.filesCount   ) + " " );
+    setText( YearListFilesPercentCol, formatPercent  ( _stats.filesPercent ) + " " );
+    setText( YearListSizeCol,         formatSize     ( _stats.size         ) + " " );
+    setText( YearListSizePercentCol,  formatPercent  ( _stats.sizePercent  ) + " " );
 
     for ( int col = 0; col < YearListColumnCount; col++ )
         setTextAlignment( col, Qt::AlignRight );
