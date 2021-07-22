@@ -31,14 +31,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="summaryLabel">
-     <property name="text">
-      <string>Modification years: 2011 - 2019
-Median: 2018</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QTreeWidget" name="treeWidget">
      <property name="rootIsDecorated">
       <bool>false</bool>

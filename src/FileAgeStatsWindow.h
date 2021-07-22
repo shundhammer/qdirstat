@@ -91,7 +91,7 @@ namespace QDirStat
         /**
          * Recursively collect year statistics for all file children
          **/
-        void collectYearStats( FileInfo * dir );
+        void collect( FileInfo * dir );
 
         /**
          * Sum up the totals over all years and calculate the percentages for
@@ -102,7 +102,7 @@ namespace QDirStat
         /**
          * Create an item in the years tree / list widget for each year
          **/
-        void populateYearListWidget();
+        void populateListWidget();
 
 
 	//

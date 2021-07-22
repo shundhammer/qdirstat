@@ -106,19 +106,22 @@ void FileAgeStatsWindow::populate( FileInfo * newSubtree )
     clear();
     _subtree = newSubtree;
 
+    _ui->heading->setText( tr( "File Age Statistics for %1" )
+                           .arg( _subtree.url() ) );
+
     // For better Performance: Disable sorting while inserting many items
     _ui->treeWidget->setSortingEnabled( false );
 
-    collectYearStats( _subtree() );
+    collect( _subtree() );
     calcPercentages();
-    populateYearListWidget();
+    populateListWidget();
 
     _ui->treeWidget->setSortingEnabled( true );
     _ui->treeWidget->sortByColumn( YearListYearCol, Qt::DescendingOrder );
 }
 
 
-void FileAgeStatsWindow::collectYearStats( FileInfo * dir )
+void FileAgeStatsWindow::collect( FileInfo * dir )
 {
     if ( ! dir )
 	return;
@@ -141,7 +144,7 @@ void FileAgeStatsWindow::collectYearStats( FileInfo * dir )
 
 	if ( item->hasChildren() )
 	{
-	    collectYearStats( item );
+	    collect( item );
 	}
 
         ++it;
@@ -177,7 +180,7 @@ void FileAgeStatsWindow::calcPercentages()
 }
 
 
-void FileAgeStatsWindow::populateYearListWidget()
+void FileAgeStatsWindow::populateListWidget()
 {
     QList<short> years = _yearStats.keys();
     std::sort( years.begin(), years.end() );
