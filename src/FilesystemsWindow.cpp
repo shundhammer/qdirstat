@@ -119,7 +119,7 @@ void FilesystemsWindow::initWidgets()
     _ui->fsTree->setHeaderLabels( headers );
     _ui->fsTree->header()->setStretchLastSection( false );
 
-    // Right-align the numeric columns in the header
+    // Center the column headers
 
     QTreeWidgetItem * hItem = _ui->fsTree->headerItem();
 
