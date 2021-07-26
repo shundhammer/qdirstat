@@ -98,6 +98,16 @@ void FileAgeStatsWindow::reject()
 }
 
 
+void FileAgeStatsWindow::syncedPopulate( FileInfo * newSubtree )
+{
+    if ( _ui->syncCheckBox->isChecked() &&
+         newSubtree && newSubtree->isDir() )
+    {
+        populate( newSubtree );
+    }
+}
+
+
 void FileAgeStatsWindow::populate( FileInfo * newSubtree )
 {
     // logDebug() << "populating with " << newSubtree << endl;

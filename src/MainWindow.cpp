@@ -1288,6 +1288,9 @@ void MainWindow::showFileAgeStats()
 	// keeps track of that and sets the pointer to 0 when it happens.
 
 	_fileAgeStatsWindow = new FileAgeStatsWindow( this );
+
+        connect( _selectionModel,	SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
+                 _fileAgeStatsWindow,	SLOT  ( syncedPopulate    ( FileInfo *		   ) ) );
     }
 
     _fileAgeStatsWindow->populate( selectedDirOrRoot() );

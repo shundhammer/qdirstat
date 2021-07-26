@@ -57,6 +57,11 @@ namespace QDirStat
 	 **/
 	void populate( FileInfo * subtree = 0 );
 
+        /**
+         * Populate the window if the "sync" check box is checked.
+         **/
+        void syncedPopulate( FileInfo * subtree );
+
 	/**
 	 * Refresh (reload) all data.
 	 **/
