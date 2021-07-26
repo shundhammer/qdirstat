@@ -89,6 +89,16 @@ namespace QDirStat
 	 **/
 	void populateListWidget();
 
+        /**
+         * Fill the gaps between years.
+         **/
+        void fillGaps();
+
+        /**
+         * Find the gaps between years.
+         **/
+        YearsList findGaps();
+
 
 	//
 	// Data members
@@ -116,7 +126,7 @@ namespace QDirStat
 
 
     /**
-     * Item class for the years	 list (which is really a tree widget),
+     * Item class for the years list (which is really a tree widget),
      * representing one year with accumulated values.
      **/
     class YearListItem: public QTreeWidgetItem

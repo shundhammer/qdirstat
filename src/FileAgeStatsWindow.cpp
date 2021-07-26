@@ -128,6 +128,41 @@ void FileAgeStatsWindow::populateListWidget()
 
         _ui->treeWidget->addTopLevelItem( item );
     }
+
+    fillGaps();
+}
+
+
+void FileAgeStatsWindow::fillGaps()
+{
+    foreach ( short year, findGaps() )
+    {
+        YearListItem * item = new YearListItem( YearStats( year ) );
+        CHECK_NEW( item );
+
+        _ui->treeWidget->addTopLevelItem( item );
+    }
+}
+
+
+YearsList FileAgeStatsWindow::findGaps()
+{
+    YearsList gaps;
+    const YearsList & years = _stats->years();
+
+    if ( years.isEmpty() )
+        return gaps;
+
+    if ( years.last() - years.first() == years.count() - 1 )
+        return gaps;
+
+    for ( short yr = years.first(); yr < years.last(); yr++ )
+    {
+        if ( ! years.contains( yr ) )
+            gaps << yr;
+    }
+
+    return gaps;
 }
 
 
@@ -139,11 +174,15 @@ YearListItem::YearListItem( const YearStats & yearStats ) :
     QTreeWidgetItem( QTreeWidgetItem::UserType ),
     _stats( yearStats )
 {
-    setText( YearListYearCol,         QString::number( _stats.year         ) + " " );
-    setText( YearListFilesCountCol,   QString::number( _stats.filesCount   ) + " " );
-    setText( YearListFilesPercentCol, formatPercent  ( _stats.filesPercent ) + " " );
-    setText( YearListSizeCol,         formatSize     ( _stats.size         ) + " " );
-    setText( YearListSizePercentCol,  formatPercent  ( _stats.sizePercent  ) + " " );
+    setText( YearListYearCol,             QString::number( _stats.year         ) + " " );
+
+    if ( _stats.filesCount > 0 )
+    {
+        setText( YearListFilesCountCol,   QString::number( _stats.filesCount   ) + " " );
+        setText( YearListFilesPercentCol, formatPercent  ( _stats.filesPercent ) + " " );
+        setText( YearListSizeCol,         formatSize     ( _stats.size         ) + " " );
+        setText( YearListSizePercentCol,  formatPercent  ( _stats.sizePercent  ) + " " );
+    }
 
     for ( int col = 0; col < YearListColumnCount; col++ )
         setTextAlignment( col, Qt::AlignRight );
@@ -169,4 +208,3 @@ bool YearListItem::operator<( const QTreeWidgetItem & rawOther ) const
 	default:		        return QTreeWidgetItem::operator<( rawOther );
     }
 }
-

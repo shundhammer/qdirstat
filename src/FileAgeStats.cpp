@@ -127,9 +127,6 @@ YearStats FileAgeStats::yearStats( short year )
         // Return default-constructed stats (i.e. all fields are 0)
         // for the requested year
 
-        YearStats result;
-        result.year = year;
-
-        return result;
+        return YearStats( year );
     }
 }

@@ -111,8 +111,8 @@ namespace QDirStat
 	FileSize	size;
 	float		sizePercent;	// 0.0 .. 100.0
 
-	YearStats():
-            year( 0 ),
+	YearStats( short yr = 0 ):
+            year( yr ),
             filesCount( 0 ),
             filesPercent( 0.0 ),
             size( 0 ),
