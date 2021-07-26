@@ -77,6 +77,7 @@ SOURCES	  = main.cpp			\
 	    ExcludeRulesConfigPage.cpp	\
 	    ExistingDirCompleter.cpp	\
             ExistingDirValidator.cpp	\
+            FileAgeStats.cpp		\
             FileAgeStatsWindow.cpp      \
 	    FileDetailsView.cpp		\
 	    FileInfo.cpp		\
@@ -173,6 +174,7 @@ HEADERS	  =				\
 	    ExcludeRulesConfigPage.h	\
 	    ExistingDirCompleter.h	\
 	    ExistingDirValidator.h	\
+            FileAgeStats.h		\
             FileAgeStatsWindow.h        \
 	    FileDetailsView.h		\
 	    FileInfo.h			\

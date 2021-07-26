@@ -7,11 +7,8 @@
  */
 
 
-#include <algorithm>    // std::sort()
-
 #include "FileAgeStatsWindow.h"
 #include "DirTree.h"
-#include "FileInfoIterator.h"
 #include "SettingsHelpers.h"
 #include "HeaderTweaker.h"
 #include "Logger.h"
@@ -22,11 +19,14 @@ using namespace QDirStat;
 
 FileAgeStatsWindow::FileAgeStatsWindow( QWidget * parent ):
     QDialog( parent ),
-    _ui( new Ui::FileAgeStatsWindow )
+    _ui( new Ui::FileAgeStatsWindow ),
+    _stats( new FileAgeStats( 0 ) )
 {
     // logDebug() << "init" << endl;
 
     CHECK_NEW( _ui );
+    CHECK_NEW( _stats );
+
     _ui->setupUi( this );
     initWidgets();
     readWindowSettings( this, "FileAgeStatsWindow" );
@@ -41,16 +41,15 @@ FileAgeStatsWindow::~FileAgeStatsWindow()
     // logDebug() << "destroying" << endl;
 
     writeWindowSettings( this, "FileAgeStatsWindow" );
+    delete _stats;
     delete _ui;
 }
 
 
 void FileAgeStatsWindow::clear()
 {
+    _stats->clear();
     _ui->treeWidget->clear();
-    _yearStats.clear();
-    _totalFilesCount = 0;
-    _totalFilesSize  = 0;
 }
 
 
@@ -112,8 +111,7 @@ void FileAgeStatsWindow::populate( FileInfo * newSubtree )
     // For better Performance: Disable sorting while inserting many items
     _ui->treeWidget->setSortingEnabled( false );
 
-    collect( _subtree() );
-    calcPercentages();
+    _stats->collect( _subtree() );
     populateListWidget();
 
     _ui->treeWidget->setSortingEnabled( true );
@@ -121,73 +119,11 @@ void FileAgeStatsWindow::populate( FileInfo * newSubtree )
 }
 
 
-void FileAgeStatsWindow::collect( FileInfo * dir )
-{
-    if ( ! dir )
-	return;
-
-    FileInfoIterator it( dir );
-
-    while ( *it )
-    {
-	FileInfo * item = *it;
-
-        if ( item && item->isFile() )
-        {
-            short year = item->mtimeYear();
-            YearStats &stats = _yearStats[ year ];
-
-            stats.year = year;
-            stats.filesCount++;
-            stats.size += item->size();
-        }
-
-	if ( item->hasChildren() )
-	{
-	    collect( item );
-	}
-
-        ++it;
-    }
-}
-
-
-void FileAgeStatsWindow::calcPercentages()
-{
-    // Sum up the totals over all years
-
-    _totalFilesCount = 0;
-    _totalFilesSize  = 0;
-
-    foreach ( const YearStats & stats, _yearStats )
-    {
-        _totalFilesCount += stats.filesCount;
-        _totalFilesSize  += stats.size;
-    }
-
-    for ( YearStatsHash::iterator it = _yearStats.begin();
-          it != _yearStats.end();
-          ++it )
-    {
-        YearStats & stats = it.value();
-
-        if ( _totalFilesCount > 0 )
-            stats.filesPercent = ( 100.0 * stats.filesCount ) / _totalFilesCount;
-
-        if ( _totalFilesSize > 0 )
-            stats.sizePercent = ( 100.0 * stats.size ) / _totalFilesSize;
-    }
-}
-
-
 void FileAgeStatsWindow::populateListWidget()
 {
-    QList<short> years = _yearStats.keys();
-    std::sort( years.begin(), years.end() );
-
-    foreach ( short year, years )
+    foreach ( short year, _stats->years() )
     {
-        YearListItem * item = new YearListItem( _yearStats[ year ] );
+        YearListItem * item = new YearListItem( _stats->yearStats( year ) );
         CHECK_NEW( item );
 
         _ui->treeWidget->addTopLevelItem( item );
