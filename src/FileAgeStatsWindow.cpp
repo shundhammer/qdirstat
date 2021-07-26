@@ -9,6 +9,7 @@
 
 #include "FileAgeStatsWindow.h"
 #include "DirTree.h"
+#include "Settings.h"
 #include "SettingsHelpers.h"
 #include "HeaderTweaker.h"
 #include "Logger.h"
@@ -29,7 +30,7 @@ FileAgeStatsWindow::FileAgeStatsWindow( QWidget * parent ):
 
     _ui->setupUi( this );
     initWidgets();
-    readWindowSettings( this, "FileAgeStatsWindow" );
+    readSettings();
 
     connect( _ui->refreshButton, SIGNAL( clicked() ),
 	     this,		 SLOT  ( refresh() ) );
@@ -40,7 +41,7 @@ FileAgeStatsWindow::~FileAgeStatsWindow()
 {
     // logDebug() << "destroying" << endl;
 
-    writeWindowSettings( this, "FileAgeStatsWindow" );
+    writeSettings();
     delete _stats;
     delete _ui;
 }
@@ -173,6 +174,30 @@ YearsList FileAgeStatsWindow::findGaps()
     }
 
     return gaps;
+}
+
+
+void FileAgeStatsWindow::readSettings()
+{
+    Settings settings;
+
+    settings.beginGroup( "FileAgeStatsWindow" );
+    _ui->syncCheckBox->setChecked( settings.value( "SyncWithMainWindow", true ).toBool() );
+    settings.endGroup();
+
+    readWindowSettings( this, "FileAgeStatsWindow" );
+}
+
+
+void FileAgeStatsWindow::writeSettings()
+{
+    Settings settings;
+
+    settings.beginGroup( "FileAgeStatsWindow" );
+    settings.setValue( "SyncWithMainWindow", _ui->syncCheckBox->isChecked() );
+    settings.endGroup();
+
+    writeWindowSettings( this, "FileAgeStatsWindow" );
 }
 
 

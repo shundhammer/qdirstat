@@ -76,6 +76,16 @@ namespace QDirStat
 	 **/
 	virtual void reject() Q_DECL_OVERRIDE;
 
+	/**
+	 * Read settings from the config file
+	 **/
+	void readSettings();
+
+	/**
+	 * Write settings to the config file
+	 **/
+	void writeSettings();
+
 
     protected:
 
