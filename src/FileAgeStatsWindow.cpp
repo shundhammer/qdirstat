@@ -7,6 +7,8 @@
  */
 
 
+#include <QDate>
+
 #include "FileAgeStatsWindow.h"
 #include "DirTree.h"
 #include "Settings.h"
@@ -23,7 +25,8 @@ FileAgeStatsWindow::FileAgeStatsWindow( QWidget * parent ):
     _ui( new Ui::FileAgeStatsWindow ),
     _stats( new FileAgeStats( 0 ) ),
     _filesPercentBarDelegate( 0 ),
-    _sizePercentBarDelegate( 0 )
+    _sizePercentBarDelegate( 0 ),
+    _startGapsWithCurrentYear( true )
 {
     // logDebug() << "init" << endl;
 
@@ -182,15 +185,17 @@ void FileAgeStatsWindow::fillGaps()
 YearsList FileAgeStatsWindow::findGaps()
 {
     YearsList gaps;
-    const YearsList & years = _stats->years();
+    const YearsList & years = _stats->years(); // sorted in ascending order
 
     if ( years.isEmpty() )
         return gaps;
 
-    if ( years.last() - years.first() == years.count() - 1 )
+    short lastYear = _startGapsWithCurrentYear ? currentYear() : years.last();
+
+    if ( lastYear - years.first() == years.count() - 1 )
         return gaps;
 
-    for ( short yr = years.first(); yr < years.last(); yr++ )
+    for ( short yr = years.first(); yr <= lastYear; yr++ )
     {
         if ( ! years.contains( yr ) )
             gaps << yr;
@@ -200,12 +205,19 @@ YearsList FileAgeStatsWindow::findGaps()
 }
 
 
+short FileAgeStatsWindow::currentYear() const
+{
+    return (short) QDate::currentDate().year();
+}
+
+
 void FileAgeStatsWindow::readSettings()
 {
     Settings settings;
 
     settings.beginGroup( "FileAgeStatsWindow" );
     _ui->syncCheckBox->setChecked( settings.value( "SyncWithMainWindow", true ).toBool() );
+    _startGapsWithCurrentYear = settings.value( "StartGapsWithCurrentYear", true ).toBool();
     settings.endGroup();
 
     readWindowSettings( this, "FileAgeStatsWindow" );
@@ -217,7 +229,8 @@ void FileAgeStatsWindow::writeSettings()
     Settings settings;
 
     settings.beginGroup( "FileAgeStatsWindow" );
-    settings.setValue( "SyncWithMainWindow", _ui->syncCheckBox->isChecked() );
+    settings.setValue( "SyncWithMainWindow",       _ui->syncCheckBox->isChecked() );
+    settings.setValue( "StartGapsWithCurrentYear", _startGapsWithCurrentYear      );
     settings.endGroup();
 
     writeWindowSettings( this, "FileAgeStatsWindow" );

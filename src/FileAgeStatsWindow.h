@@ -115,6 +115,11 @@ namespace QDirStat
          **/
         YearsList findGaps();
 
+        /**
+         * Return the current year.
+         **/
+        short currentYear() const;
+
 
 	//
 	// Data members
@@ -125,6 +130,7 @@ namespace QDirStat
         PercentBarDelegate *     _filesPercentBarDelegate;
         PercentBarDelegate *     _sizePercentBarDelegate;
 	Subtree			 _subtree;
+        bool                     _startGapsWithCurrentYear;
 
     };	// class FileAgeStatsWindow
 
