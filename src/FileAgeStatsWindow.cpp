@@ -44,9 +44,8 @@ FileAgeStatsWindow::FileAgeStatsWindow( QWidget * parent ):
 
 FileAgeStatsWindow::~FileAgeStatsWindow()
 {
-    logDebug() << "destroying" << endl;
-
     writeSettings();
+    
     delete _stats;
     delete _ui;
 }
