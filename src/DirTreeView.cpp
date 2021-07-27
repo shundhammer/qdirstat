@@ -54,7 +54,6 @@ DirTreeView::DirTreeView( QWidget * parent ):
 
 DirTreeView::~DirTreeView()
 {
-    delete _percentBarDelegate;
     delete _headerTweaker;
 }
 

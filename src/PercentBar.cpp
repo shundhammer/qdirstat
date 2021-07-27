@@ -22,7 +22,7 @@ using namespace QDirStat;
 
 PercentBarDelegate::PercentBarDelegate( QTreeView * treeView,
                                         int         percentBarCol ):
-    QStyledItemDelegate( 0 ),
+    QStyledItemDelegate( treeView ),
     _treeView( treeView ),
     _percentBarCol( percentBarCol ),
     _invisibleLevels( 1 ),      // invisible root

@@ -29,6 +29,7 @@ using namespace QDirStat;
 
 
 SizeColDelegate::SizeColDelegate( QTreeView * treeView ):
+    QStyledItemDelegate( treeView ),
     _treeView( treeView ),
     _model( 0 )
 {

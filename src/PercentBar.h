@@ -202,10 +202,10 @@ namespace QDirStat
     protected:
 
         /**
-         * Get the percentage data for the specified model index. This is
-         * where this class is different from the base class: It uses a special
-         * data role that is specific to the DirTreeModel. This does not need
-         * to parse strings, it receives numeric data directly.
+         * Get the percentage data for the specified model index. This is where
+         * this class is different from the base class: It uses a special data
+         * role that is specific to the DirTreeModel. This does not need to
+         * parse strings, it receives numeric data directly.
          *
          * Reimplemented from PercentBarDelegate.
          **/
