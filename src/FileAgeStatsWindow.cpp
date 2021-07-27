@@ -173,6 +173,7 @@ void FileAgeStatsWindow::fillGaps()
         YearListItem * item = new YearListItem( YearStats( year ) );
         CHECK_NEW( item );
 
+        item->setFlags( Qt::NoItemFlags ); // disabled
         _ui->treeWidget->addTopLevelItem( item );
     }
 }
