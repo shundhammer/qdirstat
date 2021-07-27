@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-07-08
+Updated: 2021-07-27
 
 
 ## Screenshot
@@ -122,6 +122,17 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2021-07-27
+
+  - Added a whole new type of view: _File Age Statistics_, displaying file
+    modification times by years, so you can see during what time frame there
+    was any activity in a directory tree:
+
+    [<img width="700" src="https://user-images.githubusercontent.com/11538225/127198386-215ecc9a-325c-4954-afef-e1d7f271c013.png">](https://user-images.githubusercontent.com/11538225/127198386-215ecc9a-325c-4954-afef-e1d7f271c013.png)
+
+    More details and a lot more screenshots at [GitHub issue #172](https://github.com/shundhammer/qdirstat/issues/172).
+
 
 - 2021-07-02
 
