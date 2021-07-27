@@ -17,6 +17,7 @@
 #include "FileAgeStats.h"
 #include "FileInfo.h"
 #include "Subtree.h"
+#include "PercentBar.h"
 
 
 namespace QDirStat
@@ -121,6 +122,8 @@ namespace QDirStat
 
 	Ui::FileAgeStatsWindow * _ui;
 	FileAgeStats *		 _stats;
+        PercentBarDelegate *     _filesPercentBarDelegate;
+        PercentBarDelegate *     _sizePercentBarDelegate;
 	Subtree			 _subtree;
 
     };	// class FileAgeStatsWindow
@@ -133,8 +136,10 @@ namespace QDirStat
     {
 	YearListYearCol,
 	YearListFilesCountCol,
+	YearListFilesPercentBarCol,
 	YearListFilesPercentCol,
 	YearListSizeCol,
+	YearListSizePercentBarCol,
 	YearListSizePercentCol,
 	YearListColumnCount
     };

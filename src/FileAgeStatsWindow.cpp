@@ -21,7 +21,9 @@ using namespace QDirStat;
 FileAgeStatsWindow::FileAgeStatsWindow( QWidget * parent ):
     QDialog( parent ),
     _ui( new Ui::FileAgeStatsWindow ),
-    _stats( new FileAgeStats( 0 ) )
+    _stats( new FileAgeStats( 0 ) ),
+    _filesPercentBarDelegate( 0 ),
+    _sizePercentBarDelegate( 0 )
 {
     // logDebug() << "init" << endl;
 
@@ -44,6 +46,8 @@ FileAgeStatsWindow::~FileAgeStatsWindow()
     writeSettings();
     delete _stats;
     delete _ui;
+    delete _filesPercentBarDelegate;
+    delete _sizePercentBarDelegate;
 }
 
 
@@ -74,13 +78,31 @@ void FileAgeStatsWindow::initWidgets()
 
     headers << tr( "Year"    )
             << tr( "Files"   )
-            << tr( "Files %" )
+            << tr( "Files %" )  // percent bar
+            << tr( "%"       )  // percent value
             << tr( "Size"    )
-            << tr( "Size %"  );
+            << tr( "Size %"  )  // percent bar
+            << tr( "%"       ); // percent value
 
 
     _ui->treeWidget->setHeaderLabels( headers );
     _ui->treeWidget->header()->setStretchLastSection( false );
+
+
+    // Delegates for the percent bars
+
+    _filesPercentBarDelegate =
+        new PercentBarDelegate( _ui->treeWidget, YearListFilesPercentBarCol );
+    CHECK_NEW( _filesPercentBarDelegate );
+    _filesPercentBarDelegate->setStartColorIndex( 2 );
+    _ui->treeWidget->setItemDelegateForColumn( YearListFilesPercentBarCol, _filesPercentBarDelegate );
+
+    _sizePercentBarDelegate =
+        new PercentBarDelegate( _ui->treeWidget, YearListSizePercentBarCol );
+    CHECK_NEW( _sizePercentBarDelegate );
+    _sizePercentBarDelegate->setStartColorIndex( 1 );
+    _ui->treeWidget->setItemDelegateForColumn( YearListSizePercentBarCol, _sizePercentBarDelegate );
+
 
     // Center the column headers
 
@@ -213,10 +235,14 @@ YearListItem::YearListItem( const YearStats & yearStats ) :
 
     if ( _stats.filesCount > 0 )
     {
-        setText( YearListFilesCountCol,   QString::number( _stats.filesCount   ) + " " );
-        setText( YearListFilesPercentCol, formatPercent  ( _stats.filesPercent ) + " " );
-        setText( YearListSizeCol,         formatSize     ( _stats.size         ) + " " );
-        setText( YearListSizePercentCol,  formatPercent  ( _stats.sizePercent  ) + " " );
+        QString pre( 4, ' ' );
+
+        setText( YearListFilesCountCol,      QString::number( _stats.filesCount   ) + " " );
+        setText( YearListFilesPercentBarCol, formatPercent  ( _stats.filesPercent ) + " " );
+        setText( YearListFilesPercentCol,    formatPercent  ( _stats.filesPercent ) + " " );
+        setText( YearListSizeCol,            pre + formatSize( _stats.size        ) + " " );
+        setText( YearListSizePercentBarCol,  formatPercent  ( _stats.sizePercent  ) + " " );
+        setText( YearListSizePercentCol,     formatPercent  ( _stats.sizePercent  ) + " " );
     }
 
     for ( int col = 0; col < YearListColumnCount; col++ )
@@ -237,8 +263,10 @@ bool YearListItem::operator<( const QTreeWidgetItem & rawOther ) const
     {
 	case YearListYearCol:		return _stats.year         < other.stats().year;
 	case YearListFilesCountCol:	return _stats.filesCount   < other.stats().filesCount;
+        case YearListFilesPercentBarCol:
 	case YearListFilesPercentCol:	return _stats.filesPercent < other.stats().filesPercent;
 	case YearListSizeCol:           return _stats.size         < other.stats().size;
+        case YearListSizePercentBarCol:
 	case YearListSizePercentCol:	return _stats.sizePercent  < other.stats().sizePercent;
 	default:		        return QTreeWidgetItem::operator<( rawOther );
     }
