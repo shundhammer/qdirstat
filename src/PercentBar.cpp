@@ -17,6 +17,8 @@
 #include "FileInfo.h"
 #include "Logger.h"
 
+#define MIN_PERCENT_BAR_HEIGHT  22
+
 using namespace QDirStat;
 
 
@@ -184,6 +186,7 @@ QSize PercentBarDelegate::sizeHint( const QStyleOptionViewItem & option,
 	return size;
 
     size.setWidth( _sizeHintWidth );
+    size.setHeight( qMax( size.height(), MIN_PERCENT_BAR_HEIGHT ) );
 
     return size;
 }
