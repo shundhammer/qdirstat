@@ -108,6 +108,16 @@ namespace QDirStat
 	 **/
 	ColorList defaultFillColors() const;
 
+        /**
+         * Set the index of the starting color (default: 0).
+         **/
+        void setStartColorIndex( int index ) { _startColorIndex = index; }
+
+        /**
+         * Return the index of the starting color.
+         **/
+        int startColorIndex() const { return _startColorIndex; }
+
 
     public slots:
 
@@ -153,6 +163,7 @@ namespace QDirStat
 	QTreeView * _treeView;
         int         _percentBarCol;
         int         _invisibleLevels;
+        int         _startColorIndex;
 	ColorList   _fillColors;
 	QColor	    _barBackground;
 	int	    _sizeHintWidth;

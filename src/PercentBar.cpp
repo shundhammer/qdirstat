@@ -25,7 +25,8 @@ PercentBarDelegate::PercentBarDelegate( QTreeView * treeView,
     QStyledItemDelegate( 0 ),
     _treeView( treeView ),
     _percentBarCol( percentBarCol ),
-    _invisibleLevels( 1 )       // invisible root
+    _invisibleLevels( 1 ),      // invisible root
+    _startColorIndex( 0 )
 {
     readSettings();
 }
@@ -108,8 +109,9 @@ void PercentBarDelegate::paint( QPainter		   * painter,
 	    }
 
 	    int depth = treeLevel( index ) - _invisibleLevels;
+            int colorIndex = depth + _startColorIndex;
 	    int indentPixel  = ( depth * _treeView->indentation() ) / 2;
-	    QColor fillColor = _fillColors.at( depth % _fillColors.size() );
+	    QColor fillColor = _fillColors.at( colorIndex % _fillColors.size() );
 
 	    paintPercentBar( percent,
 			     painter,
