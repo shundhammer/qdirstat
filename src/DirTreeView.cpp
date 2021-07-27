@@ -29,7 +29,7 @@ DirTreeView::DirTreeView( QWidget * parent ):
     QTreeView( parent ),
     _cleanupCollection(0)
 {
-    _percentBarDelegate = new PercentBarDelegate( this );
+    _percentBarDelegate = new DirTreePercentBarDelegate( this, PercentBarCol );
     CHECK_NEW( _percentBarDelegate );
     setItemDelegateForColumn( PercentBarCol, _percentBarDelegate );
 

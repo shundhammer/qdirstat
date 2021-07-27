@@ -17,7 +17,7 @@ class QAction;
 
 namespace QDirStat
 {
-    class PercentBarDelegate;
+    class DirTreePercentBarDelegate;
     class SizeColDelegate;
     class HeaderTweaker;
     class SelectionModelProxy;
@@ -138,10 +138,10 @@ namespace QDirStat
 
 	// Data members
 
-	PercentBarDelegate * _percentBarDelegate;
-        SizeColDelegate    * _sizeColDelegate;
-	HeaderTweaker	   * _headerTweaker;
-	CleanupCollection  * _cleanupCollection;
+	DirTreePercentBarDelegate * _percentBarDelegate;
+        SizeColDelegate *           _sizeColDelegate;
+	HeaderTweaker *             _headerTweaker;
+	CleanupCollection *         _cleanupCollection;
 
     };	// class DirTreeView
 

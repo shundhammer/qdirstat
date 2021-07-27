@@ -11,7 +11,6 @@
 #include <QTreeView>
 
 #include "PercentBar.h"
-#include "DirTreeModel.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
 #include "Exception.h"
@@ -21,9 +20,12 @@
 using namespace QDirStat;
 
 
-PercentBarDelegate::PercentBarDelegate( QTreeView * treeView ):
+PercentBarDelegate::PercentBarDelegate( QTreeView * treeView,
+                                        int         percentBarCol ):
     QStyledItemDelegate( 0 ),
-    _treeView( treeView )
+    _treeView( treeView ),
+    _percentBarCol( percentBarCol ),
+    _invisibleLevels( 1 )       // invisible root
 {
     readSettings();
 }
@@ -86,10 +88,10 @@ void PercentBarDelegate::paint( QPainter		   * painter,
 				const QStyleOptionViewItem & option,
 				const QModelIndex	   & index ) const
 {
-    if ( ! index.isValid() || index.column() != PercentBarCol )
+    if ( ! index.isValid() || index.column() != _percentBarCol )
 	return QStyledItemDelegate::paint( painter, option, index );
 
-    QVariant data = index.data( RawDataRole );
+    QVariant data = percentData( index );
 
     if ( data.isValid() )
     {
@@ -105,7 +107,7 @@ void PercentBarDelegate::paint( QPainter		   * painter,
 		percent = 100.0f;
 	    }
 
-	    int depth = treeLevel( index ) - 2; // compensate for invisible root and toplevel
+	    int depth = treeLevel( index ) - _invisibleLevels;
 	    int indentPixel  = ( depth * _treeView->indentation() ) / 2;
 	    QColor fillColor = _fillColors.at( depth % _fillColors.size() );
 
@@ -121,6 +123,38 @@ void PercentBarDelegate::paint( QPainter		   * painter,
 	    return QStyledItemDelegate::paint( painter, option, index );
 	}
     }
+}
+
+
+QVariant PercentBarDelegate::percentData( const QModelIndex & index ) const
+{
+    QVariant result;
+    QVariant data = index.data( Qt::DisplayRole );
+
+    if ( data.isValid() )
+    {
+        // This expects a string value formatted like "42.0%"
+
+        QString text = data.toString();
+
+        if ( text.isEmpty() )
+            return data;
+
+        text.remove( '%' );
+
+	bool ok = true;
+	float percent = text.toFloat( &ok );
+
+        if ( ! ok )
+        {
+            logWarning() << "float conversion failed from \"" << text << "\"" << endl;
+            return data;
+        }
+
+        result = QVariant( percent );
+    }
+
+    return result;
 }
 
 
@@ -140,11 +174,11 @@ int PercentBarDelegate::treeLevel( const QModelIndex & index ) const
 
 
 QSize PercentBarDelegate::sizeHint( const QStyleOptionViewItem & option,
-				    const QModelIndex	       & index) const
+                                    const QModelIndex	       & index) const
 {
     QSize size = QStyledItemDelegate::sizeHint( option, index );
 
-    if ( ! index.isValid() || index.column() != PercentBarCol )
+    if ( ! index.isValid() || index.column() != _percentBarCol )
 	return size;
 
     size.setWidth( _sizeHintWidth );
