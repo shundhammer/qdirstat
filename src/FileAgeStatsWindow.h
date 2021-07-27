@@ -171,8 +171,18 @@ namespace QDirStat
 
 	/**
 	 * Less-than operator for sorting.
+         *
+         * Reimplemented from QTreeWidgetItem.
 	 **/
 	virtual bool operator<( const QTreeWidgetItem & other ) const Q_DECL_OVERRIDE;
+
+        /**
+         * Generic data method for different roles. Here used for more exotic
+         * settings like the vertical alignment where there is no simpler way.
+         *
+         * Reimplemented from QTreeWidgetItem.
+         **/
+        virtual QVariant data( int column, int role ) const Q_DECL_OVERRIDE;
 
     protected:
 

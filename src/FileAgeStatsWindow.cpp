@@ -45,7 +45,7 @@ FileAgeStatsWindow::FileAgeStatsWindow( QWidget * parent ):
 FileAgeStatsWindow::~FileAgeStatsWindow()
 {
     writeSettings();
-    
+
     delete _stats;
     delete _ui;
 }
@@ -255,9 +255,21 @@ YearListItem::YearListItem( const YearStats & yearStats ) :
         setText( YearListSizePercentBarCol,  formatPercent  ( _stats.sizePercent  ) + " " );
         setText( YearListSizePercentCol,     formatPercent  ( _stats.sizePercent  ) + " " );
     }
+}
 
-    for ( int col = 0; col < YearListColumnCount; col++ )
-        setTextAlignment( col, Qt::AlignRight );
+
+QVariant YearListItem::data( int column, int role ) const
+{
+    if ( role == Qt::TextAlignmentRole )
+    {
+        // Vertical alignment can't be set in any easier way (?)
+
+        int alignment = Qt::AlignVCenter | Qt::AlignRight;
+
+        return alignment;
+    }
+
+    return QTreeWidgetItem::data( column, role );
 }
 
 
