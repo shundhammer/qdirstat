@@ -228,9 +228,7 @@ namespace QDirStat
 
     protected:
 
-	Ui::FileAgeStatsWindow * _ui;
-	YearStats		 _stats;
-	Subtree			 _subtree;
+	YearStats _stats;
 
     };	// class YearListItem
 
