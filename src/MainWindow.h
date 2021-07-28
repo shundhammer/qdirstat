@@ -219,6 +219,7 @@ public slots:
     void discoverHardLinkedFiles();
     void discoverBrokenSymLinks();
     void discoverSparseFiles();
+    void discoverFilesFromYear( short year );
 
 
     /**

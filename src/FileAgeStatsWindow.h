@@ -22,6 +22,8 @@
 
 namespace QDirStat
 {
+    class YearListItem;
+
     /**
      * Modeless dialog to display file age statistics, i.e. statistics about
      * the years of last modification times of files in a subtree.
@@ -88,6 +90,31 @@ namespace QDirStat
 	void writeSettings();
 
 
+    signals:
+
+        /**
+         * Emitted when the user clicks the "Locate" button (which is only
+         * enabled when there are 1..1000 files from that year).
+         **/
+        void locateFilesFromYear( short year );
+
+
+    protected slots:
+
+        /**
+         * Emit the locateFilesFromYear() signal for the currently selected
+         * item's year. Do nothing if nothing is selected.
+         **/
+        void locateFiles();
+
+        /**
+         * Enable or disable actions and buttons depending on the internal
+         * state, e.g. if any item is selected and the number of files for the
+         * selected year are in the specified range (1..1000).
+         **/
+        void enableActions();
+
+
     protected:
 
 	/**
@@ -117,8 +144,23 @@ namespace QDirStat
 
         /**
          * Return the current year.
+         *
+         * Not named currentYear() to avoid confusion with the year that is
+         * currently selected in the tree widget.
          **/
-        short currentYear() const;
+        short thisYear() const;
+
+        /**
+         * Return the year that is currently selected in the tree widget
+         * or -1 if nothing is selected.
+         **/
+        short selectedYear() const;
+
+        /**
+         * Return the currently selected item in the tree widget or 0
+         * if there is none or if it is the wrong type.
+         **/
+        YearListItem * selectedItem() const;
 
 
 	//

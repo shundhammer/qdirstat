@@ -17,6 +17,11 @@
 #include "Logger.h"
 #include "Exception.h"
 
+// Remember to adapt the tooltip text for the "Locate" button in the .ui file
+// and the method docs in the .h file if this value is changed
+
+#define MAX_LOCATE_FILES        1000
+
 using namespace QDirStat;
 
 
@@ -36,9 +41,6 @@ FileAgeStatsWindow::FileAgeStatsWindow( QWidget * parent ):
     _ui->setupUi( this );
     initWidgets();
     readSettings();
-
-    connect( _ui->refreshButton, SIGNAL( clicked() ),
-	     this,		 SLOT  ( refresh() ) );
 }
 
 
@@ -112,6 +114,18 @@ void FileAgeStatsWindow::initWidgets()
 	hItem->setTextAlignment( col, Qt::AlignHCenter );
 
     HeaderTweaker::resizeToContents( _ui->treeWidget->header() );
+
+
+    // Signal/slot connections
+
+    connect( _ui->refreshButton, SIGNAL( clicked() ),
+	     this,		 SLOT  ( refresh() ) );
+
+    connect( _ui->treeWidget,    SIGNAL( itemSelectionChanged() ),
+             this,               SLOT  ( enableActions()        ) );
+
+    connect( _ui->locateButton,  SIGNAL( clicked()     ),
+             this,               SLOT  ( locateFiles() ) );
 }
 
 
@@ -149,6 +163,8 @@ void FileAgeStatsWindow::populate( FileInfo * newSubtree )
 
     _ui->treeWidget->setSortingEnabled( true );
     _ui->treeWidget->sortByColumn( YearListYearCol, Qt::DescendingOrder );
+
+    enableActions();
 }
 
 
@@ -187,7 +203,7 @@ YearsList FileAgeStatsWindow::findGaps()
     if ( years.isEmpty() )
         return gaps;
 
-    short lastYear = _startGapsWithCurrentYear ? currentYear() : years.last();
+    short lastYear = _startGapsWithCurrentYear ? thisYear() : years.last();
 
     if ( lastYear - years.first() == years.count() - 1 )
         return gaps;
@@ -202,9 +218,51 @@ YearsList FileAgeStatsWindow::findGaps()
 }
 
 
-short FileAgeStatsWindow::currentYear() const
+short FileAgeStatsWindow::thisYear() const
 {
     return (short) QDate::currentDate().year();
+}
+
+
+short FileAgeStatsWindow::selectedYear() const
+{
+    YearListItem * item = selectedItem();
+
+    return item ? item->stats().year : -1;
+}
+
+
+YearListItem * FileAgeStatsWindow::selectedItem() const
+{
+    QTreeWidgetItem *currentItem = _ui->treeWidget->currentItem();
+
+    return currentItem ? dynamic_cast<YearListItem *>( currentItem ) : 0;
+}
+
+
+void FileAgeStatsWindow::locateFiles()
+{
+    short year = selectedYear();
+
+    if ( year > 0 )
+        emit locateFilesFromYear( year );
+}
+
+
+void FileAgeStatsWindow::enableActions()
+{
+    bool locateEnabled = false;
+
+    YearListItem * sel = selectedItem();
+
+    if ( sel )
+    {
+        locateEnabled =
+            sel->stats().filesCount > 0 &&
+            sel->stats().filesCount <= MAX_LOCATE_FILES;
+    }
+
+    _ui->locateButton->setEnabled( locateEnabled );
 }
 
 

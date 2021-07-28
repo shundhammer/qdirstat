@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-07-27
+Updated: 2021-07-28
 
 
 ## Screenshot
@@ -122,6 +122,18 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2021-07-28
+
+  - Added a "Locate" button to the new _File Age Statistics_ button, using the
+    same window as the actions from the "Discover" menu.
+
+    This is enabled if there are no more than 1000 files in the currently
+    selected year to avoid the results list to become too long and too
+    unwieldy. If there are more than 1000 files in the currently selected year,
+    break it down to another subdirectory first; otherwise you'd be ending up
+    with the better part of the whole filesystem in the results list in the
+    extreme case.
 
 - 2021-07-27
 

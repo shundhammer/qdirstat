@@ -1011,6 +1011,11 @@
     <string>F4</string>
    </property>
   </action>
+  <action name="actionDiscoverFilesFromYear">
+   <property name="text">
+    <string>Files from &amp;Year</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

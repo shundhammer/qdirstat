@@ -173,6 +173,27 @@ namespace QDirStat
             { return item && item->isFile() && item->isSparseFile(); }
     };
 
+
+    /**
+     * TreeWalkder to find files with the specified modification year.
+     **/
+    class FilesFromYearTreeWalker: public TreeWalker
+    {
+    public:
+
+        FilesFromYearTreeWalker( short year ):
+            TreeWalker(),
+            _year( year )
+            {}
+
+        virtual bool check( FileInfo * item )
+            { return item && item->isFile() && item->mtimeYear() == _year; }
+
+    protected:
+
+        short _year;
+    };
+
 }       // namespace QDirStat
 
 #endif  // TreeWalker_h

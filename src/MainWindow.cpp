@@ -1290,7 +1290,10 @@ void MainWindow::showFileAgeStats()
 	_fileAgeStatsWindow = new FileAgeStatsWindow( this );
 
         connect( _selectionModel,	SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
-                 _fileAgeStatsWindow,	SLOT  ( syncedPopulate    ( FileInfo *		   ) ) );
+                 _fileAgeStatsWindow,   SLOT  ( syncedPopulate    ( FileInfo *		   ) ) );
+
+        connect( _fileAgeStatsWindow,   SIGNAL( locateFilesFromYear  ( short ) ),
+                 this,                  SLOT  ( discoverFilesFromYear( short ) ) );
     }
 
     _fileAgeStatsWindow->populate( selectedDirOrRoot() );
@@ -1365,6 +1368,15 @@ void MainWindow::discoverSparseFiles()
 }
 
 
+void MainWindow::discoverFilesFromYear( short year )
+{
+    QString headingText = tr( "Files from %1 in %2" ).arg( year ).arg( "%1");
+
+    discoverFiles( new QDirStat::FilesFromYearTreeWalker( year ), headingText );
+    _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::AscendingOrder );
+}
+
+
 void MainWindow::discoverFiles( TreeWalker *    treeWalker,
                                 const QString & headingText )
 {
@@ -1387,7 +1399,9 @@ void MainWindow::discoverFiles( TreeWalker *    treeWalker,
 
     if ( sel )
     {
-        _locateFilesWindow->setHeading( headingText.arg( sel->url() ) );
+        if ( ! headingText.isEmpty() )
+            _locateFilesWindow->setHeading( headingText.arg( sel->url() ) );
+
         _locateFilesWindow->populate( sel );
         _locateFilesWindow->show();
     }
