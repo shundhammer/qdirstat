@@ -301,21 +301,26 @@ QString FileInfo::debugUrl() const
     if ( _tree && this == _tree->root() )
 	return "<root>";
 
-    if ( isDotEntry() )
-	return url() + "/" + dotEntryName();
+    QString result = url();
 
-    if ( isAttic() )
+    if ( isDotEntry() )
+    {
+	result += "/" + dotEntryName();
+    }
+    else if ( isAttic() )
     {
 	if ( _parent )
 	{
 	    if ( _tree && _parent != _tree->root() )
-		return _parent->debugUrl() + "/" + atticName();
+		result = _parent->debugUrl() + "/" + atticName();
 	}
-
-	return url() + "/" + atticName();
+        else
+            result += "/" + atticName();
     }
 
-    return url() ;
+    result.replace( "//", "/" );
+
+    return result;
 }
 
 
