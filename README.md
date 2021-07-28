@@ -125,7 +125,7 @@ Download installable binary packages for various Linux distributions here:
 
 - 2021-07-28
 
-  - Added a "Locate" button to the new _File Age Statistics_ button, using the
+  - Added a "Locate" button to the new _File Age Statistics_ view, using the
     same window as the actions from the "Discover" menu.
 
     This is enabled if there are no more than 1000 files in the currently
