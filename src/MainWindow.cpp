@@ -720,7 +720,7 @@ void MainWindow::readingFinished()
 
     idleDisplay();
 
-    QString elapsedTime = formatMillisecTime( _stopWatch.elapsed() );
+    QString elapsedTime = formatMillisec( _stopWatch.elapsed() );
     _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );
     logInfo() << "Reading finished after " << elapsedTime << endl;
 
@@ -739,7 +739,7 @@ void MainWindow::readingAborted()
     logInfo() << endl;
 
     idleDisplay();
-    QString elapsedTime = formatMillisecTime( _stopWatch.elapsed() );
+    QString elapsedTime = formatMillisec( _stopWatch.elapsed() );
     _ui->statusBar->showMessage( tr( "Aborted. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );
     logInfo() << "Reading aborted after " << elapsedTime << endl;
 }
@@ -1287,7 +1287,7 @@ void MainWindow::openConfigDialog()
 void MainWindow::showElapsedTime()
 {
     showProgress( tr( "Reading... %1" )
-		  .arg( formatMillisecTime( _stopWatch.elapsed(), false ) ) );
+		  .arg( formatMillisec( _stopWatch.elapsed(), false ) ) );
 }
 
 
@@ -1740,44 +1740,3 @@ void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurren
     }
 }
 
-
-QString MainWindow::formatMillisecTime( qint64 millisec, bool showMillisec )
-{
-    QString formattedTime;
-    int hours;
-    int min;
-    int sec;
-
-    hours	= millisec / 3600000L;	// 60*60*1000
-    millisec	%= 3600000L;
-
-    min		= millisec / 60000L;	// 60*1000
-    millisec	%= 60000L;
-
-    sec		= millisec / 1000L;
-    millisec	%= 1000L;
-
-    if ( hours < 1 && min < 1 && sec < 60 )
-    {
-	formattedTime.setNum( sec );
-
-	if ( showMillisec )
-	{
-	    formattedTime += QString( ".%1" ).arg( millisec,
-						   3,	// fieldWidth
-						   10,	// base
-						   QChar( '0' ) ); // fillChar
-	}
-
-	formattedTime += " " + tr( "sec" );
-    }
-    else
-    {
-	formattedTime = QString( "%1:%2:%3" )
-	    .arg( hours, 2, 10, QChar( '0' ) )
-	    .arg( min,	 2, 10, QChar( '0' ) )
-	    .arg( sec,	 2, 10, QChar( '0' ) );
-    }
-
-    return formattedTime;
-}

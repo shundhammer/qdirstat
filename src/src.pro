@@ -76,32 +76,33 @@ SOURCES	  = main.cpp			\
 	    ExcludeRules.cpp		\
 	    ExcludeRulesConfigPage.cpp	\
 	    ExistingDirCompleter.cpp	\
-            ExistingDirValidator.cpp	\
-            FileAgeStats.cpp		\
-            FileAgeStatsWindow.cpp      \
+	    ExistingDirValidator.cpp	\
+	    FileAgeStats.cpp		\
+	    FileAgeStatsWindow.cpp	\
 	    FileDetailsView.cpp		\
 	    FileInfo.cpp		\
 	    FileInfoIterator.cpp	\
 	    FileInfoSet.cpp		\
 	    FileInfoSorter.cpp		\
-	    FileSizeLabel.cpp		\
 	    FileMTimeStats.cpp		\
+	    FileSizeLabel.cpp		\
 	    FileSizeStats.cpp		\
 	    FileSizeStatsWindow.cpp	\
 	    FileSystemsWindow.cpp	\
 	    FileTypeStats.cpp		\
 	    FileTypeStatsWindow.cpp	\
+	    FormatUtil.cpp		\
 	    GeneralConfigPage.cpp	\
 	    HeaderTweaker.cpp		\
 	    HistogramDraw.cpp		\
 	    HistogramItems.cpp		\
 	    HistogramOverflowPanel.cpp	\
-            HistogramView.cpp		\
-            History.cpp                 \
-            HistoryButtons.cpp		\
+	    HistogramView.cpp		\
+	    History.cpp			\
+	    HistoryButtons.cpp		\
 	    ListEditor.cpp		\
-	    LocateFilesWindow.cpp	\
 	    LocateFileTypeWindow.cpp	\
+	    LocateFilesWindow.cpp	\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
 	    MessagePanel.cpp		\
@@ -133,14 +134,14 @@ SOURCES	  = main.cpp			\
 	    SettingsHelpers.cpp		\
 	    ShowUnpkgFilesDialog.cpp	\
 	    SizeColDelegate.cpp		\
-            StdCleanup.cpp		\
+	    StdCleanup.cpp		\
 	    Subtree.cpp			\
 	    SysUtil.cpp			\
 	    SystemFileChecker.cpp	\
 	    Trash.cpp			\
+	    TreeWalker.cpp		\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
-            TreeWalker.cpp              \
 	    UnpkgSettings.cpp		\
 	    UnreadableDirsWindow.cpp
 
@@ -176,30 +177,25 @@ HEADERS	  =				\
 	    ExcludeRulesConfigPage.h	\
 	    ExistingDirCompleter.h	\
 	    ExistingDirValidator.h	\
-            FileAgeStats.h		\
-            FileAgeStatsWindow.h        \
 	    FileDetailsView.h		\
 	    FileInfo.h			\
 	    FileInfoIterator.h		\
 	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
-	    FileSizeLabel.h		\
 	    FileMTimeStats.h		\
+	    FileSizeLabel.h		\
 	    FileSizeStats.h		\
 	    FileSizeStatsWindow.h	\
-	    FileTypeStats.h		\
 	    FileSystemsWindow.h		\
-	    FileTypeStatsWindow.h	\
+	    FileTypeStats.h		\
 	    GeneralConfigPage.h		\
 	    HeaderTweaker.h		\
 	    HistogramItems.h		\
 	    HistogramView.h		\
-            History.h                   \
-            HistoryButtons.h		\
 	    ListEditor.h		\
 	    ListMover.h			\
-	    LocateFilesWindow.h         \
 	    LocateFileTypeWindow.h	\
+	    LocateFilesWindow.h		\
 	    Logger.h			\
 	    MainWindow.h		\
 	    MessagePanel.h		\
@@ -239,33 +235,40 @@ HEADERS	  =				\
 	    SystemFileChecker.h		\
 	    Trash.h			\
 	    TreemapTile.h		\
-            TreemapView.h		\
-            TreeWalker.h                \
 	    UnpkgSettings.cpp		\
 	    UnreadableDirsWindow.h	\
+	    FileAgeStats.h		\
+	    FileAgeStatsWindow.h	\
+	    FileSize.h			\
+	    FileTypeStatsWindow.h	\
+	    FormatUtil.h		\
+	    History.h			\
+	    HistoryButtons.h		\
+	    TreeWalker.h		\
+	    TreemapView.h		\
 	    Version.h
 
 
 
 FORMS	  = main-window.ui		   \
-	    output-window.ui		   \
-	    config-dialog.ui		   \
 	    cleanup-config-page.ui	   \
-	    general-config-page.ui	   \
-	    mime-category-config-page.ui   \
+	    config-dialog.ui		   \
 	    exclude-rules-config-page.ui   \
-            file-age-stats-window.ui       \
+	    file-age-stats-window.ui	   \
+	    file-details-view.ui	   \
 	    file-size-stats-window.ui	   \
-            file-type-stats-window.ui	   \
+	    file-type-stats-window.ui	   \
 	    filesystems-window.ui	   \
-	    locate-files-window.ui	   \
+	    general-config-page.ui	   \
 	    locate-file-type-window.ui	   \
+	    locate-files-window.ui	   \
+	    message-panel.ui		   \
+	    mime-category-config-page.ui   \
 	    open-dir-dialog.ui		   \
 	    open-pkg-dialog.ui		   \
-	    show-unpkg-files-dialog.ui	   \
-	    file-details-view.ui	   \
-	    message-panel.ui		   \
+	    output-window.ui		   \
 	    panel-message.ui		   \
+	    show-unpkg-files-dialog.ui	   \
 	    unreadable-dirs-window.ui
 
 

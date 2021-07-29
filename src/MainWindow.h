@@ -479,11 +479,6 @@ protected:
      **/
     virtual void closeEvent( QCloseEvent *event ) Q_DECL_OVERRIDE;
 
-    /**
-     * Format a millisecond-based time
-     **/
-    QString formatMillisecTime( qint64 millisec, bool showMillisec = true );
-
 
 private:
 
