@@ -208,10 +208,12 @@
     <addaction name="separator"/>
     <addaction name="actionConfigure"/>
    </widget>
-   <widget class="QMenu" name="menuGoTo">
+   <widget class="QMenu" name="menuGo">
     <property name="title">
-     <string>&amp;Go To</string>
+     <string>&amp;Go</string>
     </property>
+    <addaction name="actionGoBack"/>
+    <addaction name="actionGoForward"/>
     <addaction name="actionGoUp"/>
     <addaction name="actionGoToToplevel"/>
    </widget>
@@ -262,7 +264,7 @@
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
-   <addaction name="menuGoTo"/>
+   <addaction name="menuGo"/>
    <addaction name="menuDiscover"/>
    <addaction name="menuCleanup"/>
    <addaction name="menuHelp"/>
@@ -279,7 +281,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionGoBack"/>
-   <addaction name="actionGoNext"/>
+   <addaction name="actionGoForward"/>
    <addaction name="actionGoUp"/>
    <addaction name="actionRefreshAll"/>
    <addaction name="separator"/>
@@ -599,7 +601,7 @@
      <normaloff>:/icons/go-top.png</normaloff>:/icons/go-top.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Toplevel</string>
+    <string>To &amp;Toplevel</string>
    </property>
    <property name="toolTip">
     <string>Navigate to the toplevel directory of this tree.</string>
@@ -1024,7 +1026,7 @@
      <normaloff>:/icons/go-left.png</normaloff>:/icons/go-left.png</iconset>
    </property>
    <property name="text">
-    <string>Go &amp;Back</string>
+    <string>&amp;Back</string>
    </property>
    <property name="toolTip">
     <string>Go back to the previous directory</string>
@@ -1033,16 +1035,16 @@
     <string>Alt+Left</string>
    </property>
   </action>
-  <action name="actionGoNext">
+  <action name="actionGoForward">
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/icons/go-right.png</normaloff>:/icons/go-right.png</iconset>
    </property>
    <property name="text">
-    <string>Go &amp;Next</string>
+    <string>&amp;Forward</string>
    </property>
    <property name="toolTip">
-    <string>Go to the next directory (after going back)</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Go forward again to the next directory (after going back).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="shortcut">
     <string>Alt+Right</string>

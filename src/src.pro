@@ -96,7 +96,8 @@ SOURCES	  = main.cpp			\
 	    HistogramDraw.cpp		\
 	    HistogramItems.cpp		\
 	    HistogramOverflowPanel.cpp	\
-	    HistogramView.cpp		\
+            HistogramView.cpp		\
+            History.cpp                 \
 	    ListEditor.cpp		\
 	    LocateFilesWindow.cpp	\
 	    LocateFileTypeWindow.cpp	\
@@ -192,6 +193,7 @@ HEADERS	  =				\
 	    HeaderTweaker.h		\
 	    HistogramItems.h		\
 	    HistogramView.h		\
+            History.h                   \
 	    ListEditor.h		\
 	    ListMover.h			\
 	    LocateFilesWindow.h         \
