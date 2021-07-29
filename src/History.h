@@ -101,12 +101,13 @@ namespace QDirStat
 
         /**
          * Move to any valid history item by index directly.
+         * Return 'true' if successful, 'false' if error.
          *
          * This is intended for a history menu where the user can navigate
          * directly to any item in that menu. The effect is the same as
          * multiple goBack() or goForward() calls until that item is reached.
          **/
-        void setCurrentIndex( int index );
+        bool setCurrentIndex( int index );
 
         /**
          * Return 'true' if the history is empty, 'false' otherwise.

@@ -10,6 +10,7 @@
 #include <QApplication>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QMenu>
 #include <QFileDialog>
 #include <QSignalMapper>
 #include <QClipboard>
@@ -128,10 +129,12 @@ MainWindow::MainWindow():
     _history = new History();
     CHECK_NEW( _history );
 
+    initHistoryButtons();
+
 #ifdef Q_OS_MACX
     // This makes the application to look like more "native" on macOS
-    setUnifiedTitleAndToolBarOnMac(true);
-    _ui->toolBar->setMovable(false);
+    setUnifiedTitleAndToolBarOnMac( true );
+    _ui->toolBar->setMovable( false );
 #endif
 
     connectSignals();
@@ -1240,7 +1243,10 @@ void MainWindow::navigateToUrl( const QString & url )
 
 void MainWindow::addToHistory( FileInfo * item )
 {
-    if ( item && item->isDirInfo() )
+    if ( item && ! item->isDirInfo() && item->parent() )
+        item = item->parent();
+
+    if ( item )
     {
         QString url = item->debugUrl();
 
@@ -1249,6 +1255,71 @@ void MainWindow::addToHistory( FileInfo * item )
             _history->add( url );
             updateHistoryActions();
         }
+    }
+}
+
+
+void MainWindow::initHistoryButtons()
+{
+    _historyMenu = new QMenu( this );
+    _historyMenu->addAction( "Dummy 1" );
+
+    connect( _historyMenu, SIGNAL( aboutToShow()       ),
+             this,         SLOT  ( updateHistoryMenu() ) );
+
+    connect( _historyMenu, SIGNAL( triggered        ( QAction * ) ),
+             this,         SLOT  ( historyMenuAction( QAction * ) ) );
+
+    initHistoryButton( _ui->actionGoBack    );
+    initHistoryButton( _ui->actionGoForward );
+}
+
+
+void MainWindow::initHistoryButton( QAction * action )
+{
+    CHECK_PTR( action );
+
+    QWidget * widget = _ui->toolBar->widgetForAction( action );
+
+    if ( widget )
+    {
+        QToolButton * toolButton = qobject_cast<QToolButton *>( widget );
+
+        if ( toolButton )
+            toolButton->setMenu( _historyMenu );
+    }
+}
+
+
+void MainWindow::updateHistoryMenu()
+{
+    _historyMenu->clear();
+    QActionGroup * actionGroup = new QActionGroup( _historyMenu );
+
+    QStringList items = _history->allItems();
+    int current = _history->currentIndex();
+
+    for ( int i = items.size() - 1; i >= 0; i-- )
+    {
+        QAction * action = new QAction( items.at( i ), _historyMenu );
+        action->setCheckable( true );
+        action->setChecked( i == current );
+        action->setData( i );
+        actionGroup->addAction( action );
+        _historyMenu->addAction( action );
+    }
+}
+
+
+void MainWindow::historyMenuAction( QAction * action )
+{
+    if ( action )
+    {
+        QVariant data = action->data();
+        int index = data.toInt();
+
+        if ( _history->setCurrentIndex( index ) )
+            navigateToUrl( _history->currentItem() );
     }
 }
 

@@ -33,6 +33,7 @@ class QCloseEvent;
 class QSortFilterProxyModel;
 class QSignalMapper;
 class TreeLayout;
+class QMenu;
 
 
 namespace QDirStat
@@ -401,10 +402,16 @@ protected slots:
      **/
     void addToHistory( FileInfo * item );
 
-#if 0
-    void initHistoryButtons();
-    void postHistoryMenu();
-#endif
+    /**
+     * Clear the old history menu and add all current history items to it.
+     **/
+    void updateHistoryMenu();
+
+    /**
+     * The user activated an action from the history menu; fetch the history
+     * item index from that action and navigate to that history item.
+     **/
+    void historyMenuAction( QAction * action );
 
     /**
      * Open a popup dialog with a message that this feature is not implemented.
@@ -472,6 +479,17 @@ protected:
     void navigateToUrl( const QString & url );
 
     /**
+     * Initialize the history buttons: Change the tool buttons to handle a menu
+     * upon long click.
+     **/
+    void initHistoryButtons();
+
+    /**
+     * Initialize the history button for one action.
+     **/
+    void initHistoryButton( QAction * action );
+
+    /**
      * Initialize the layout actions.
      **/
     void initLayoutActions();
@@ -521,6 +539,7 @@ private:
     QDirStat::ConfigDialog	 * _configDialog;
     QDirStat::History            * _history;
     QActionGroup		 * _layoutActionGroup;
+    QMenu                        * _historyMenu;
     QPointer<FileTypeStatsWindow>  _fileTypeStatsWindow;
     QPointer<FileAgeStatsWindow>   _fileAgeStatsWindow;
     QPointer<FilesystemsWindow>    _filesystemsWindow;

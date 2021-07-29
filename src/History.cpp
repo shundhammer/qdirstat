@@ -98,17 +98,21 @@ QString History::goForward()
 }
 
 
-void History::setCurrentIndex( int index )
+bool History::setCurrentIndex( int index )
 {
     if ( index >= 0 && index < _items.size() )
     {
         _current = index;
         dump();
+
+        return true;
     }
     else
     {
         logWarning() << "Index " << index << " out of range" << endl;
         dump();
+
+        return false;
     }
 }
 
