@@ -172,7 +172,7 @@ namespace QDirStat
 	/**
 	 * Return the path of this directory.
 	 **/
-	QString	 path() const { return _path; }
+	QString path() const { return _path; }
 
 	/**
 	 * Less-than operator for sorting.
