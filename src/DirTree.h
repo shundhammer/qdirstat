@@ -18,14 +18,13 @@
 
 #include <QList>
 
-#include "Logger.h"
-#include "DirInfo.h"
 #include "DirReadJob.h"
 #include "PkgFilter.h"
 
 
 namespace QDirStat
 {
+    class DirInfo;
     class DirReadJob;
     class FileInfoSet;
     class ExcludeRules;
@@ -495,4 +494,3 @@ namespace QDirStat
 
 
 #endif // ifndef DirTree_h
-

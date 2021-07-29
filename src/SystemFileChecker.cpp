@@ -8,13 +8,13 @@
 
 
 #include "SystemFileChecker.h"
-#include "FileInfo.h"
 #include "DirInfo.h"
 
 
 #define MIN_NON_SYSTEM_UID      500
 
 using namespace QDirStat;
+
 
 bool SystemFileChecker::isSystemFile( FileInfo * file )
 {

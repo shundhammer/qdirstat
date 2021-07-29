@@ -10,7 +10,6 @@
 #include <QFileIconProvider>
 
 #include "FilesystemsWindow.h"
-#include "FileInfo.h"
 #include "MountPoints.h"
 #include "SettingsHelpers.h"
 #include "HeaderTweaker.h"

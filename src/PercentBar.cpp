@@ -14,7 +14,6 @@
 #include "Settings.h"
 #include "SettingsHelpers.h"
 #include "Exception.h"
-#include "FileInfo.h"
 #include "Logger.h"
 
 #define MIN_PERCENT_BAR_HEIGHT  22

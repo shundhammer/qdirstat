@@ -13,6 +13,7 @@
 
 #include "DirTreeModel.h"
 #include "DirTree.h"
+#include "DirInfo.h"
 #include "FileInfoIterator.h"
 #include "DataColumns.h"
 #include "SelectionModel.h"

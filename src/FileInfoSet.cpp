@@ -8,9 +8,8 @@
 
 
 #include "FileInfoSet.h"
-#include "FileInfo.h"
-#include "DirInfo.h"
 #include "DirTree.h"
+#include "DirInfo.h"
 #include "Logger.h"
 #include "Exception.h"
 

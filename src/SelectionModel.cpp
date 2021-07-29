@@ -10,6 +10,7 @@
 #include "SelectionModel.h"
 #include "DirTreeModel.h"
 #include "DirTree.h"
+#include "DirInfo.h"
 #include "SignalBlocker.h"
 #include "Exception.h"
 #include "Logger.h"

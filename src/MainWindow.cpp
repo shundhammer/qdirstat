@@ -30,7 +30,6 @@
 #include "Exception.h"
 #include "ExcludeRules.h"
 #include "FileDetailsView.h"
-#include "FileInfo.h"
 #include "FileSizeStatsWindow.h"
 #include "HeaderTweaker.h"
 #include "Logger.h"

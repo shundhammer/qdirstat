@@ -11,6 +11,7 @@
 #include <QUrl>
 
 #include "DirTreeCache.h"
+#include "DirInfo.h"
 #include "DirTree.h"
 #include "DotEntry.h"
 #include "ExcludeRules.h"

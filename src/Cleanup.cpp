@@ -13,9 +13,8 @@
 #include <QFileInfo>
 
 #include "Cleanup.h"
-#include "FileInfo.h"
 #include "DirTree.h"
-#include "DirSaver.h"
+#include "DirInfo.h"
 #include "OutputWindow.h"
 #include "Process.h"
 #include "Logger.h"

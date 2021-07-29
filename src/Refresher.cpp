@@ -9,6 +9,7 @@
 
 #include "Refresher.h"
 #include "DirTree.h"
+#include "DirInfo.h"
 #include "FileInfoSet.h"
 #include "Logger.h"
 

@@ -10,6 +10,7 @@
 #include "Qt4Compat.h" // qHtmlEscape()
 
 #include "BreadcrumbNavigator.h"
+#include "DirInfo.h"
 #include "Logger.h"
 
 #define MAX_TOTAL_LEN           150

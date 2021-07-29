@@ -12,7 +12,6 @@
 #include <QActionGroup>
 
 #include "HistoryButtons.h"
-#include "FileInfo.h"
 #include "DirInfo.h"
 #include "Logger.h"
 #include "Exception.h"
