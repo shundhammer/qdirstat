@@ -485,9 +485,9 @@ protected:
     void initHistoryButtons();
 
     /**
-     * Initialize the history button for one action.
+     * Add the history menu to the toolbar button for an action.
      **/
-    void initHistoryButton( QAction * action );
+    void addHistoryMenuToButton( QAction * action );
 
     /**
      * Initialize the layout actions.

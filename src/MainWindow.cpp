@@ -1267,12 +1267,12 @@ void MainWindow::initHistoryButtons()
     connect( _historyMenu, SIGNAL( triggered        ( QAction * ) ),
              this,         SLOT  ( historyMenuAction( QAction * ) ) );
 
-    initHistoryButton( _ui->actionGoBack    );
-    initHistoryButton( _ui->actionGoForward );
+    addHistoryMenuToButton( _ui->actionGoBack    );
+    addHistoryMenuToButton( _ui->actionGoForward );
 }
 
 
-void MainWindow::initHistoryButton( QAction * action )
+void MainWindow::addHistoryMenuToButton( QAction * action )
 {
     CHECK_PTR( action );
 
