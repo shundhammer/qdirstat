@@ -130,8 +130,8 @@ Download installable binary packages for various Linux distributions here:
     browser when navigating the filesystem.
 
     It also has a history menu when you long-press the "Back" or "Forward"
-    buttons, and of course it uses the same keyboard shortcuts `Alt`-`Cursor
-    Left` and `Alt`-`Cursor Right` that all common web browsers use.
+    buttons, and of course it uses the same keyboard shortcuts `[Alt] [Cursor
+    Left]` and `[Alt] [Cursor Right]` that all common web browsers use.
 
 
 - 2021-07-28
