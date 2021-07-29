@@ -11,7 +11,7 @@
 #include "Logger.h"
 #include "Exception.h"
 
-#define HISTORY_MAX     10
+#define HISTORY_MAX     16
 
 using namespace QDirStat;
 
