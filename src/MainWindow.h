@@ -219,7 +219,7 @@ public slots:
     void discoverHardLinkedFiles();
     void discoverBrokenSymLinks();
     void discoverSparseFiles();
-    void discoverFilesFromYear( short year );
+    void discoverFilesFromYear( const QString & path, short year );
 
 
     /**
@@ -427,9 +427,13 @@ protected:
      *
      * 'headingText' should include a "%1" placeholder for the path of the
      * starting directory.
+     *
+     * 'path' can optionally (if non-empty) override the current selection of
+     * the tree as the starting directory.
      **/
     void discoverFiles( QDirStat::TreeWalker * treeWalker,
-                        const QString &        headingText );
+                        const QString &        headingText,
+                        const QString &        path = "" );
 
     /**
      * Initialize the layout actions.

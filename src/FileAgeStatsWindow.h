@@ -95,8 +95,13 @@ namespace QDirStat
         /**
          * Emitted when the user clicks the "Locate" button (which is only
          * enabled when there are 1..1000 files from that year).
+         *
+         * 'path' is also sent because otherwise the main window will use the
+         * tree's root if a file and not a directory is currently
+         * selected. This is a common case after the user clicked on a file
+         * result in the "locate" window.
          **/
-        void locateFilesFromYear( short year );
+        void locateFilesFromYear( const QString & path, short year );
 
 
     protected slots:

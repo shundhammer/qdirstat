@@ -245,7 +245,7 @@ void FileAgeStatsWindow::locateFiles()
     short year = selectedYear();
 
     if ( year > 0 )
-        emit locateFilesFromYear( year );
+        emit locateFilesFromYear( _subtree.url(), year );
 }
 
 

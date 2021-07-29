@@ -1292,8 +1292,8 @@ void MainWindow::showFileAgeStats()
         connect( _selectionModel,	SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
                  _fileAgeStatsWindow,   SLOT  ( syncedPopulate    ( FileInfo *		   ) ) );
 
-        connect( _fileAgeStatsWindow,   SIGNAL( locateFilesFromYear  ( short ) ),
-                 this,                  SLOT  ( discoverFilesFromYear( short ) ) );
+        connect( _fileAgeStatsWindow,   SIGNAL( locateFilesFromYear  ( QString, short ) ),
+                 this,                  SLOT  ( discoverFilesFromYear( QString, short ) ) );
     }
 
     _fileAgeStatsWindow->populate( selectedDirOrRoot() );
@@ -1368,17 +1368,18 @@ void MainWindow::discoverSparseFiles()
 }
 
 
-void MainWindow::discoverFilesFromYear( short year )
+void MainWindow::discoverFilesFromYear( const QString & path, short year )
 {
     QString headingText = tr( "Files from %1 in %2" ).arg( year ).arg( "%1");
 
-    discoverFiles( new QDirStat::FilesFromYearTreeWalker( year ), headingText );
+    discoverFiles( new QDirStat::FilesFromYearTreeWalker( year ), headingText, path );
     _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::AscendingOrder );
 }
 
 
 void MainWindow::discoverFiles( TreeWalker *    treeWalker,
-                                const QString & headingText )
+                                const QString & headingText,
+                                const QString & path )
 {
     if ( ! _locateFilesWindow )
     {
@@ -1395,7 +1396,16 @@ void MainWindow::discoverFiles( TreeWalker *    treeWalker,
         _locateFilesWindow->setTreeWalker( treeWalker );
     }
 
-    FileInfo * sel = selectedDirOrRoot();
+    FileInfo * sel = 0;
+
+    if ( ! path.isEmpty() )
+    {
+        sel = _dirTreeModel->tree()->locate( path,
+                                             true ); // findPseudoDirs
+    }
+
+    if ( ! sel )
+        sel = selectedDirOrRoot();
 
     if ( sel )
     {
