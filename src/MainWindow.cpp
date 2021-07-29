@@ -283,10 +283,19 @@ void MainWindow::connectActions()
     CONNECT_ACTION( _ui->actionQuit,			    qApp, quit()	      );
 
 
+    // "Edit" menu
+
+    CONNECT_ACTION( _ui->actionCopyPathToClipboard, this, copyCurrentPathToClipboard() );
+    CONNECT_ACTION( _ui->actionMoveToTrash,	    this, moveToTrash()                );
+    CONNECT_ACTION( _ui->actionConfigure,           this, openConfigDialog()           );
+
 
     // "View" menu
 
 #if HAVE_SIGNAL_MAPPER
+
+    // QSignalMapper is deprecated from Qt 5.13 on.
+    // On systems with older versions, there may or may not be C++11 compiler.
 
     _treeLevelMapper = new QSignalMapper( this );
 
@@ -306,7 +315,7 @@ void MainWindow::connectActions()
 
     mapTreeExpandAction( _ui->actionCloseAllTreeLevels, 0 );
 
-#else
+#else   // QSignalMapper not available / deprecated? (Qt 5.13 or later) -> use a C++11 lambda
 
     connect( _ui->actionExpandTreeLevel0,   &QAction::triggered, [=]() { expandTreeToLevel( 0 ); } );
     connect( _ui->actionExpandTreeLevel1,   &QAction::triggered, [=]() { expandTreeToLevel( 1 ); } );
@@ -338,26 +347,11 @@ void MainWindow::connectActions()
 
     _ui->actionFileTypeStats->setShortcutContext( Qt::ApplicationShortcut );
 
-    CONNECT_ACTION( _ui->actionFileAgeStats,	   this, showFileAgeStats() );
-    CONNECT_ACTION( _ui->actionShowFilesystems,	   this, showFilesystems() );
+    CONNECT_ACTION( _ui->actionFileAgeStats,	   this, showFileAgeStats()  );
+    CONNECT_ACTION( _ui->actionShowFilesystems,	   this, showFilesystems()   );
 
 
-
-    // "Edit" menu
-
-    CONNECT_ACTION( _ui->actionCopyPathToClipboard, this, copyCurrentPathToClipboard() );
-    CONNECT_ACTION( _ui->actionMoveToTrash,	    this, moveToTrash() );
-
-
-    // "Go" menu
-
-    CONNECT_ACTION( _ui->actionGoBack,	     this, historyGoBack() );
-    CONNECT_ACTION( _ui->actionGoForward,    this, historyGoForward() );
-    CONNECT_ACTION( _ui->actionGoUp,	     this, navigateUp() );
-    CONNECT_ACTION( _ui->actionGoToToplevel, this, navigateToToplevel() );
-
-
-    // "Treemap" menu
+    // "View" -> "Treemap" submenu
 
     connect( _ui->actionShowTreemap, SIGNAL( toggled( bool )   ),
 	     this,		     SLOT  ( showTreemapView() ) );
@@ -371,6 +365,14 @@ void MainWindow::connectActions()
     CONNECT_ACTION( _ui->actionTreemapRebuild,	 _ui->treemapView, rebuildTreemap() );
 
 
+    // "Go" menu
+
+    CONNECT_ACTION( _ui->actionGoBack,	     this, historyGoBack() );
+    CONNECT_ACTION( _ui->actionGoForward,    this, historyGoForward() );
+    CONNECT_ACTION( _ui->actionGoUp,	     this, navigateUp() );
+    CONNECT_ACTION( _ui->actionGoToToplevel, this, navigateToToplevel() );
+
+
     // "Discover" menu
 
     CONNECT_ACTION( _ui->actionDiscoverLargestFiles,    this, discoverLargestFiles()    );
@@ -379,11 +381,6 @@ void MainWindow::connectActions()
     CONNECT_ACTION( _ui->actionDiscoverHardLinkedFiles, this, discoverHardLinkedFiles() );
     CONNECT_ACTION( _ui->actionDiscoverBrokenSymLinks,  this, discoverBrokenSymLinks()  );
     CONNECT_ACTION( _ui->actionDiscoverSparseFiles,     this, discoverSparseFiles()     );
-
-
-    // "Settings" menu
-
-    CONNECT_ACTION( _ui->actionConfigure, this, openConfigDialog() );
 
 
     // "Help" menu
@@ -416,13 +413,13 @@ void MainWindow::connectActions()
 
     // Invisible debug actions
 
-    addAction( _ui->actionVerboseSelection );
-    addAction( _ui->actionDumpSelection );
+    addAction( _ui->actionVerboseSelection );    // Shift-F7
+    addAction( _ui->actionDumpSelection );       // F7
 
-    connect( _ui->actionVerboseSelection, SIGNAL( toggled( bool )	   ),  // Shift-F7
+    connect( _ui->actionVerboseSelection, SIGNAL( toggled( bool )	   ),
 	     this,			  SLOT	( toggleVerboseSelection() ) );
 
-    CONNECT_ACTION( _ui->actionDumpSelection, _selectionModel, dumpSelectedItems() ); // F7
+    CONNECT_ACTION( _ui->actionDumpSelection, _selectionModel, dumpSelectedItems() );
 }
 
 
@@ -721,7 +718,7 @@ void MainWindow::readingFinished()
 
     idleDisplay();
 
-    QString elapsedTime = formatTime( _stopWatch.elapsed() );
+    QString elapsedTime = formatMillisecTime( _stopWatch.elapsed() );
     _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );
     logInfo() << "Reading finished after " << elapsedTime << endl;
 
@@ -740,7 +737,7 @@ void MainWindow::readingAborted()
     logInfo() << endl;
 
     idleDisplay();
-    QString elapsedTime = formatTime( _stopWatch.elapsed() );
+    QString elapsedTime = formatMillisecTime( _stopWatch.elapsed() );
     _ui->statusBar->showMessage( tr( "Aborted. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );
     logInfo() << "Reading aborted after " << elapsedTime << endl;
 }
@@ -1392,7 +1389,7 @@ void MainWindow::openConfigDialog()
 void MainWindow::showElapsedTime()
 {
     showProgress( tr( "Reading... %1" )
-		  .arg( formatTime( _stopWatch.elapsed(), false ) ) );
+		  .arg( formatMillisecTime( _stopWatch.elapsed(), false ) ) );
 }
 
 
@@ -1839,7 +1836,7 @@ void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurren
 }
 
 
-QString MainWindow::formatTime( qint64 millisec, bool showMillisec )
+QString MainWindow::formatMillisecTime( qint64 millisec, bool showMillisec )
 {
     QString formattedTime;
     int hours;

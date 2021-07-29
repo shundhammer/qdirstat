@@ -527,7 +527,7 @@ protected:
     /**
      * Format a millisecond-based time
      **/
-    QString formatTime( qint64 millisec, bool showMillisec = true );
+    QString formatMillisecTime( qint64 millisec, bool showMillisec = true );
 
 
 private:
