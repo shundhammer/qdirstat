@@ -118,8 +118,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>88</width>
-           <height>278</height>
+           <width>68</width>
+           <height>288</height>
           </rect>
          </property>
         </widget>
@@ -136,7 +136,7 @@
      <x>0</x>
      <y>0</y>
      <width>1157</width>
-     <height>27</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -278,6 +278,8 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionGoBack"/>
+   <addaction name="actionGoNext"/>
    <addaction name="actionGoUp"/>
    <addaction name="actionRefreshAll"/>
    <addaction name="separator"/>
@@ -1014,6 +1016,36 @@
   <action name="actionDiscoverFilesFromYear">
    <property name="text">
     <string>Files from &amp;Year</string>
+   </property>
+  </action>
+  <action name="actionGoBack">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/go-left.png</normaloff>:/icons/go-left.png</iconset>
+   </property>
+   <property name="text">
+    <string>Go &amp;Back</string>
+   </property>
+   <property name="toolTip">
+    <string>Go back to the previous directory</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Left</string>
+   </property>
+  </action>
+  <action name="actionGoNext">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/go-right.png</normaloff>:/icons/go-right.png</iconset>
+   </property>
+   <property name="text">
+    <string>Go &amp;Next</string>
+   </property>
+   <property name="toolTip">
+    <string>Go to the next directory (after going back)</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Right</string>
    </property>
   </action>
  </widget>
