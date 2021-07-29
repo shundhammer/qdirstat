@@ -72,7 +72,7 @@
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Locate the files from that year&lt;/p&gt;&lt;p&gt;(only if no more than 1000)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="text">
-        <string>&amp;Locate...</string>
+        <string>&amp;Locate</string>
        </property>
       </widget>
      </item>
