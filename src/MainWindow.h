@@ -521,6 +521,9 @@ private:
 
 /**
  * Helper class for the different layouts of the tree view layout.
+ *
+ * Notice that the column layouts are handled in the HeaderTweaker and its
+ * ColumnLayout helper class; see also HeaderTweaker.h and HeaderTweaker.cpp.
  **/
 class TreeLayout
 {

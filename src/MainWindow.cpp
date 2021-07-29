@@ -1475,6 +1475,12 @@ void MainWindow::initLayoutActions()
 
 void MainWindow::createLayouts()
 {
+    // Notice that the column layouts are handled in the HeaderTweaker and its
+    // ColumnLayout helper class; see also HeaderTweaker.h and .cpp.
+    //
+    // The layout names "L1", "L2", "L3" here are important: They need to match
+    // the names in the HeaderTweaker.
+
     TreeLayout * layout;
 
     layout = new TreeLayout( "L1" );
@@ -1489,6 +1495,7 @@ void MainWindow::createLayouts()
     CHECK_NEW( layout );
     _layouts[ "L3" ] = layout;
 
+    // L3 is the only one where the defaults for the flags need changing.
     layout->showDetailsPanel = false;
 }
 
