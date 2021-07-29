@@ -10,7 +10,6 @@
 #include <QApplication>
 #include <QCloseEvent>
 #include <QMessageBox>
-#include <QMenu>
 #include <QFileDialog>
 #include <QSignalMapper>
 #include <QClipboard>
@@ -71,6 +70,7 @@ using QDirStat::DirTreeModel;
 using QDirStat::SelectionModel;
 using QDirStat::CleanupCollection;
 using QDirStat::PkgFilter;
+using QDirStat::HistoryButtons;
 
 
 MainWindow::MainWindow():
@@ -126,10 +126,9 @@ MainWindow::MainWindow():
 
     _ui->breadcrumbNavigator->clear();
 
-    _history = new History();
-    CHECK_NEW( _history );
-
-    initHistoryButtons();
+    _historyButtons = new HistoryButtons( _ui->actionGoBack,
+                                          _ui->actionGoForward );
+    CHECK_NEW( _historyButtons );
 
 #ifdef Q_OS_MACX
     // This makes the application to look like more "native" on macOS
@@ -190,7 +189,7 @@ MainWindow::~MainWindow()
     delete _cleanupCollection;
     delete _selectionModel;
     delete _dirTreeModel;
-    delete _history;
+    delete _historyButtons;
 
     qDeleteAll( _layouts );
 }
@@ -220,7 +219,10 @@ void MainWindow::connectSignals()
 	     _ui->breadcrumbNavigator,	SLOT  ( setPath		  ( FileInfo *		   ) ) );
 
     connect( _selectionModel,		SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
-	     this,                      SLOT  ( addToHistory      ( FileInfo *		   ) ) );
+	     _historyButtons,           SLOT  ( addToHistory      ( FileInfo *		   ) ) );
+
+    connect( _historyButtons,           SIGNAL( navigateToUrl( QString ) ),
+             this,                      SLOT  ( navigateToUrl( QString ) ) );
 
     connect( _ui->breadcrumbNavigator,	SIGNAL( pathClicked   ( QString ) ),
 	     _selectionModel,		SLOT  ( setCurrentItem( QString ) ) );
@@ -367,10 +369,10 @@ void MainWindow::connectActions()
 
     // "Go" menu
 
-    CONNECT_ACTION( _ui->actionGoBack,	     this, historyGoBack() );
-    CONNECT_ACTION( _ui->actionGoForward,    this, historyGoForward() );
-    CONNECT_ACTION( _ui->actionGoUp,	     this, navigateUp() );
-    CONNECT_ACTION( _ui->actionGoToToplevel, this, navigateToToplevel() );
+    CONNECT_ACTION( _ui->actionGoBack,	     _historyButtons,   historyGoBack()      );
+    CONNECT_ACTION( _ui->actionGoForward,    _historyButtons,   historyGoForward()   );
+    CONNECT_ACTION( _ui->actionGoUp,	     this,              navigateUp()         );
+    CONNECT_ACTION( _ui->actionGoToToplevel, this,              navigateToToplevel() );
 
 
     // "Discover" menu
@@ -476,7 +478,7 @@ void MainWindow::updateActions()
     _ui->actionResetTreemapZoom->setEnabled( showingTreemap && _ui->treemapView->canZoomOut() );
     _ui->actionTreemapRebuild->setEnabled  ( showingTreemap );
 
-    updateHistoryActions();
+    _historyButtons->updateActions();
 }
 
 
@@ -746,7 +748,7 @@ void MainWindow::readingAborted()
 void MainWindow::openUrl( const QString & url )
 {
     _enableDirPermissionsWarning = true;
-    _history->clear();
+    _historyButtons->clearHistory();
 
     if ( PkgFilter::isPkgUrl( url ) )
 	readPkg( url );
@@ -987,7 +989,7 @@ void MainWindow::stopReading()
 void MainWindow::readCache( const QString & cacheFileName )
 {
     _dirTreeModel->clear();
-    _history->clear();
+    _historyButtons->clearHistory();
 
     if ( ! cacheFileName.isEmpty() )
 	_dirTreeModel->tree()->readCache( cacheFileName );
@@ -1197,30 +1199,9 @@ void MainWindow::navigateToToplevel()
 }
 
 
-void MainWindow::updateHistoryActions()
-{
-    _ui->actionGoBack->setEnabled   ( _history->canGoBack()    );
-    _ui->actionGoForward->setEnabled( _history->canGoForward() );
-}
-
-
-void MainWindow::historyGoBack()
-{
-    navigateToUrl( _history->goBack() );
-    updateHistoryActions();
-}
-
-
-void MainWindow::historyGoForward()
-{
-    navigateToUrl( _history->goForward() );
-    updateHistoryActions();
-}
-
-
 void MainWindow::navigateToUrl( const QString & url )
 {
-    logDebug() << "Navigating to " << url << endl;
+    // logDebug() << "Navigating to " << url << endl;
 
     if ( ! url.isEmpty() )
     {
@@ -1234,89 +1215,6 @@ void MainWindow::navigateToUrl( const QString & url )
             _selectionModel->setCurrentItem( sel,
                                              true ); // select
         }
-    }
-}
-
-
-void MainWindow::addToHistory( FileInfo * item )
-{
-    if ( item && ! item->isDirInfo() && item->parent() )
-        item = item->parent();
-
-    if ( item )
-    {
-        QString url = item->debugUrl();
-
-        if ( url != _history->currentItem() )
-        {
-            _history->add( url );
-            updateHistoryActions();
-        }
-    }
-}
-
-
-void MainWindow::initHistoryButtons()
-{
-    _historyMenu = new QMenu( this );
-    _historyMenu->addAction( "Dummy 1" );
-
-    connect( _historyMenu, SIGNAL( aboutToShow()       ),
-             this,         SLOT  ( updateHistoryMenu() ) );
-
-    connect( _historyMenu, SIGNAL( triggered        ( QAction * ) ),
-             this,         SLOT  ( historyMenuAction( QAction * ) ) );
-
-    addHistoryMenuToButton( _ui->actionGoBack    );
-    addHistoryMenuToButton( _ui->actionGoForward );
-}
-
-
-void MainWindow::addHistoryMenuToButton( QAction * action )
-{
-    CHECK_PTR( action );
-
-    QWidget * widget = _ui->toolBar->widgetForAction( action );
-
-    if ( widget )
-    {
-        QToolButton * toolButton = qobject_cast<QToolButton *>( widget );
-
-        if ( toolButton )
-            toolButton->setMenu( _historyMenu );
-    }
-}
-
-
-void MainWindow::updateHistoryMenu()
-{
-    _historyMenu->clear();
-    QActionGroup * actionGroup = new QActionGroup( _historyMenu );
-
-    QStringList items = _history->allItems();
-    int current = _history->currentIndex();
-
-    for ( int i = items.size() - 1; i >= 0; i-- )
-    {
-        QAction * action = new QAction( items.at( i ), _historyMenu );
-        action->setCheckable( true );
-        action->setChecked( i == current );
-        action->setData( i );
-        actionGroup->addAction( action );
-        _historyMenu->addAction( action );
-    }
-}
-
-
-void MainWindow::historyMenuAction( QAction * action )
-{
-    if ( action )
-    {
-        QVariant data = action->data();
-        int index = data.toInt();
-
-        if ( _history->setCurrentIndex( index ) )
-            navigateToUrl( _history->currentItem() );
     }
 }
 

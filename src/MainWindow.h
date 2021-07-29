@@ -20,7 +20,7 @@
 #include "FileTypeStatsWindow.h"
 #include "FileAgeStatsWindow.h"
 #include "FilesystemsWindow.h"
-#include "History.h"
+#include "HistoryButtons.h"
 #include "LocateFilesWindow.h"
 #include "TreeWalker.h"
 #include "PanelMessage.h"
@@ -207,23 +207,6 @@ public slots:
      **/
     void navigateToToplevel();
 
-    /**
-     * Handle the browser-like "Go Back" button (action):
-     * Move one entry back in the history of visited directories.
-     **/
-    void historyGoBack();
-
-    /**
-     * Handle the browser-like "Go Forward" button (action):
-     * Move one entry back in the history of visited directories.
-     **/
-    void historyGoForward();
-
-    /**
-     * Enable or disable the browser-like "Go Back" and "Go Forward" actions.
-     **/
-    void updateHistoryActions();
-
     //
     // "Discover" actions: Open a non-modal LocateFilesWindow that lists files
     // of a certain category. A click on a file in that list opens the tree
@@ -333,6 +316,13 @@ protected slots:
     void cleanupFinished( int errorCount );
 
     /**
+     * Navigate to the specified URL, i.e. make that directory the current and
+     * selected one; scroll there and open the tree branches so that URL is
+     * visible.
+     **/
+    void navigateToUrl( const QString & url );
+
+    /**
      * Open the config dialog.
      **/
     void openConfigDialog();
@@ -397,23 +387,6 @@ protected slots:
     void applyFutureSelection();
 
     /**
-     * Add a FileInfo item to the history if it's a directory and its URL is
-     * not the same as the current history item.
-     **/
-    void addToHistory( FileInfo * item );
-
-    /**
-     * Clear the old history menu and add all current history items to it.
-     **/
-    void updateHistoryMenu();
-
-    /**
-     * The user activated an action from the history menu; fetch the history
-     * item index from that action and navigate to that history item.
-     **/
-    void historyMenuAction( QAction * action );
-
-    /**
      * Open a popup dialog with a message that this feature is not implemented.
      **/
     void notImplemented();
@@ -472,24 +445,6 @@ protected:
                         const QString &        path = "" );
 
     /**
-     * Navigate to the specified URL, i.e. make that directory the current and
-     * selected one; scroll there and open the tree branches so that URL is
-     * visible.
-     **/
-    void navigateToUrl( const QString & url );
-
-    /**
-     * Initialize the history buttons: Change the tool buttons to handle a menu
-     * upon long click.
-     **/
-    void initHistoryButtons();
-
-    /**
-     * Add the history menu to the toolbar button for an action.
-     **/
-    void addHistoryMenuToButton( QAction * action );
-
-    /**
      * Initialize the layout actions.
      **/
     void initLayoutActions();
@@ -537,9 +492,8 @@ private:
     QDirStat::SelectionModel	 * _selectionModel;
     QDirStat::CleanupCollection  * _cleanupCollection;
     QDirStat::ConfigDialog	 * _configDialog;
-    QDirStat::History            * _history;
+    QDirStat::HistoryButtons     * _historyButtons;
     QActionGroup		 * _layoutActionGroup;
-    QMenu                        * _historyMenu;
     QPointer<FileTypeStatsWindow>  _fileTypeStatsWindow;
     QPointer<FileAgeStatsWindow>   _fileAgeStatsWindow;
     QPointer<FilesystemsWindow>    _filesystemsWindow;

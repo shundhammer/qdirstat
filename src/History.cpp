@@ -77,7 +77,7 @@ QString History::goBack()
     }
 
     _current--;
-    dump();
+    // dump();
 
     return currentItem();
 }
@@ -92,7 +92,7 @@ QString History::goForward()
     }
 
     _current++;
-    dump();
+    // dump();
 
     return currentItem();
 }
@@ -103,7 +103,7 @@ bool History::setCurrentIndex( int index )
     if ( index >= 0 && index < _items.size() )
     {
         _current = index;
-        dump();
+        // dump();
 
         return true;
     }
@@ -146,8 +146,8 @@ void History::add( const QString & item )
     _items << item;
     _current++;
 
-    logDebug() << "After add():" << endl;
-    dump();
+    // logDebug() << "After add():" << endl;
+    // dump();
 }
 
 
