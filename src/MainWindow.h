@@ -20,12 +20,13 @@
 #include "FileTypeStatsWindow.h"
 #include "FileAgeStatsWindow.h"
 #include "FilesystemsWindow.h"
+#include "History.h"
 #include "LocateFilesWindow.h"
 #include "TreeWalker.h"
 #include "PanelMessage.h"
-#include "UnreadableDirsWindow.h"
 #include "PkgFilter.h"
 #include "Subtree.h"
+#include "UnreadableDirsWindow.h"
 
 
 class QCloseEvent;
@@ -44,13 +45,13 @@ namespace QDirStat
     class UnpkgSettings;
 }
 
+using QDirStat::FileAgeStatsWindow;
 using QDirStat::FileInfo;
 using QDirStat::FileTypeStatsWindow;
-using QDirStat::FileAgeStatsWindow;
-using QDirStat::PanelMessage;
-using QDirStat::UnreadableDirsWindow;
 using QDirStat::FilesystemsWindow;
 using QDirStat::LocateFilesWindow;
+using QDirStat::PanelMessage;
+using QDirStat::UnreadableDirsWindow;
 
 
 class MainWindow: public QMainWindow
@@ -204,6 +205,23 @@ public slots:
      * Navigate to the toplevel directory of this tree.
      **/
     void navigateToToplevel();
+
+    /**
+     * Handle the browser-like "Go Back" button (action):
+     * Move one entry back in the history of visited directories.
+     **/
+    void historyGoBack();
+
+    /**
+     * Handle the browser-like "Go Forward" button (action):
+     * Move one entry back in the history of visited directories.
+     **/
+    void historyGoForward();
+
+    /**
+     * Enable or disable the browser-like "Go Back" and "Go Forward" actions.
+     **/
+    void updateHistoryActions();
 
     //
     // "Discover" actions: Open a non-modal LocateFilesWindow that lists files
@@ -378,6 +396,17 @@ protected slots:
     void applyFutureSelection();
 
     /**
+     * Add a FileInfo item to the history if it's a directory and its URL is
+     * not the same as the current history item.
+     **/
+    void addToHistory( FileInfo * item );
+
+#if 0
+    void initHistoryButtons();
+    void postHistoryMenu();
+#endif
+
+    /**
      * Open a popup dialog with a message that this feature is not implemented.
      **/
     void notImplemented();
@@ -436,6 +465,13 @@ protected:
                         const QString &        path = "" );
 
     /**
+     * Navigate to the specified URL, i.e. make that directory the current and
+     * selected one; scroll there and open the tree branches so that URL is
+     * visible.
+     **/
+    void navigateToUrl( const QString & url );
+
+    /**
      * Initialize the layout actions.
      **/
     void initLayoutActions();
@@ -478,12 +514,13 @@ protected:
 
 private:
 
-    Ui::MainWindow		*  _ui;
-    QDirStat::DirTreeModel	*  _dirTreeModel;
-    QDirStat::SelectionModel	*  _selectionModel;
-    QDirStat::CleanupCollection *  _cleanupCollection;
-    QDirStat::ConfigDialog	*  _configDialog;
-    QActionGroup		*  _layoutActionGroup;
+    Ui::MainWindow		 * _ui;
+    QDirStat::DirTreeModel	 * _dirTreeModel;
+    QDirStat::SelectionModel	 * _selectionModel;
+    QDirStat::CleanupCollection  * _cleanupCollection;
+    QDirStat::ConfigDialog	 * _configDialog;
+    QDirStat::History            * _history;
+    QActionGroup		 * _layoutActionGroup;
     QPointer<FileTypeStatsWindow>  _fileTypeStatsWindow;
     QPointer<FileAgeStatsWindow>   _fileAgeStatsWindow;
     QPointer<FilesystemsWindow>    _filesystemsWindow;

@@ -155,7 +155,6 @@ namespace QDirStat
         int             _current;
         QStringList     _items;
 
-
     };  // class History
 }
 

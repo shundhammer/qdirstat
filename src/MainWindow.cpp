@@ -125,6 +125,9 @@ MainWindow::MainWindow():
 
     _ui->breadcrumbNavigator->clear();
 
+    _history = new History();
+    CHECK_NEW( _history );
+
 #ifdef Q_OS_MACX
     // This makes the application to look like more "native" on macOS
     setUnifiedTitleAndToolBarOnMac(true);
@@ -184,6 +187,7 @@ MainWindow::~MainWindow()
     delete _cleanupCollection;
     delete _selectionModel;
     delete _dirTreeModel;
+    delete _history;
 
     qDeleteAll( _layouts );
 }
@@ -211,6 +215,9 @@ void MainWindow::connectSignals()
 
     connect( _selectionModel,		SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
 	     _ui->breadcrumbNavigator,	SLOT  ( setPath		  ( FileInfo *		   ) ) );
+
+    connect( _selectionModel,		SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
+	     this,                      SLOT  ( addToHistory      ( FileInfo *		   ) ) );
 
     connect( _ui->breadcrumbNavigator,	SIGNAL( pathClicked   ( QString ) ),
 	     _selectionModel,		SLOT  ( setCurrentItem( QString ) ) );
@@ -339,8 +346,10 @@ void MainWindow::connectActions()
     CONNECT_ACTION( _ui->actionMoveToTrash,	    this, moveToTrash() );
 
 
-    // "Go To" menu
+    // "Go" menu
 
+    CONNECT_ACTION( _ui->actionGoBack,	     this, historyGoBack() );
+    CONNECT_ACTION( _ui->actionGoForward,    this, historyGoForward() );
     CONNECT_ACTION( _ui->actionGoUp,	     this, navigateUp() );
     CONNECT_ACTION( _ui->actionGoToToplevel, this, navigateToToplevel() );
 
@@ -466,6 +475,8 @@ void MainWindow::updateActions()
     _ui->actionTreemapZoomOut->setEnabled  ( showingTreemap && _ui->treemapView->canZoomOut() );
     _ui->actionResetTreemapZoom->setEnabled( showingTreemap && _ui->treemapView->canZoomOut() );
     _ui->actionTreemapRebuild->setEnabled  ( showingTreemap );
+
+    updateHistoryActions();
 }
 
 
@@ -735,6 +746,7 @@ void MainWindow::readingAborted()
 void MainWindow::openUrl( const QString & url )
 {
     _enableDirPermissionsWarning = true;
+    _history->clear();
 
     if ( PkgFilter::isPkgUrl( url ) )
 	readPkg( url );
@@ -975,6 +987,7 @@ void MainWindow::stopReading()
 void MainWindow::readCache( const QString & cacheFileName )
 {
     _dirTreeModel->clear();
+    _history->clear();
 
     if ( ! cacheFileName.isEmpty() )
 	_dirTreeModel->tree()->readCache( cacheFileName );
@@ -988,6 +1001,8 @@ void MainWindow::askReadCache()
 						     DEFAULT_CACHE_NAME );
     if ( ! fileName.isEmpty() )
 	readCache( fileName );
+
+    updateActions();
 }
 
 
@@ -1178,6 +1193,62 @@ void MainWindow::navigateToToplevel()
 	expandTreeToLevel( 1 );
 	_selectionModel->setCurrentItem( toplevel,
 					 true ); // select
+    }
+}
+
+
+void MainWindow::updateHistoryActions()
+{
+    _ui->actionGoBack->setEnabled   ( _history->canGoBack()    );
+    _ui->actionGoForward->setEnabled( _history->canGoForward() );
+}
+
+
+void MainWindow::historyGoBack()
+{
+    navigateToUrl( _history->goBack() );
+    updateHistoryActions();
+}
+
+
+void MainWindow::historyGoForward()
+{
+    navigateToUrl( _history->goForward() );
+    updateHistoryActions();
+}
+
+
+void MainWindow::navigateToUrl( const QString & url )
+{
+    logDebug() << "Navigating to " << url << endl;
+
+    if ( ! url.isEmpty() )
+    {
+        FileInfo * sel =
+            _dirTreeModel->tree()->locate( url,
+                                           true ); // findPseudoDirs
+
+        if ( sel )
+
+        {
+            _selectionModel->setCurrentItem( sel,
+                                             true ); // select
+        }
+    }
+}
+
+
+void MainWindow::addToHistory( FileInfo * item )
+{
+    if ( item && item->isDirInfo() )
+    {
+        QString url = item->debugUrl();
+
+        if ( url != _history->currentItem() )
+        {
+            _history->add( url );
+            updateHistoryActions();
+        }
     }
 }
 

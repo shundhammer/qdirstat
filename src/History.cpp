@@ -11,7 +11,7 @@
 #include "Logger.h"
 #include "Exception.h"
 
-#define HISTORY_MAX     20
+#define HISTORY_MAX     10
 
 using namespace QDirStat;
 
@@ -115,17 +115,12 @@ void History::setCurrentIndex( int index )
 
 void History::add( const QString & item )
 {
-    logDebug() << "adding \"" << item << "\"" << endl;
-    dump();
-
     // Remove all items after the current one
 
     while ( canGoForward() )
     {
-        logDebug() << "Removing the last item" << endl;
         _items.removeLast();
         // _current remains the same!
-        dump();
     }
 
 
@@ -134,13 +129,11 @@ void History::add( const QString & item )
 
     while ( _items.size() >= capacity() )
     {
-        logDebug() << "Removing the first item" << endl;
         _items.removeFirst();
 
         // Since we removed all items after the current one in the previous
         // step, the current one is the last one.
         _current = _items.size() - 1;
-        dump();
     }
 
 
@@ -173,7 +166,7 @@ void History::dump() const
 
         logDebug() << prefix
                    << "#" << i
-                   << ": \"" << _items.at( i ) << "\"";
+                   << ": \"" << _items.at( i ) << "\"" << endl;
     }
 
     logNewline();
