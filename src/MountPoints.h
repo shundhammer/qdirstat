@@ -23,7 +23,7 @@
 #  include <QStorageInfo>
 #endif
 
-#include "FileInfo.h"	// FileSize
+#include "FileSize.h"
 
 
 namespace QDirStat

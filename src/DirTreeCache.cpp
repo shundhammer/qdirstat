@@ -14,6 +14,7 @@
 #include "DirTree.h"
 #include "DotEntry.h"
 #include "ExcludeRules.h"
+#include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 

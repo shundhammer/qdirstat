@@ -12,6 +12,7 @@
 
 #include "FileSizeStats.h"
 #include "FileInfoIterator.h"
+#include "FormatUtil.h"
 #include "Exception.h"
 
 #define VERBOSE_SORT_THRESHOLD  50000

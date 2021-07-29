@@ -11,6 +11,7 @@
 
 #include "PathSelector.h"
 #include "MountPoints.h"
+#include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 

@@ -11,6 +11,7 @@
 #include <QMouseEvent>
 
 #include "FileSizeLabel.h"
+#include "FormatUtil.h"
 #include "Logger.h"
 
 using namespace QDirStat;

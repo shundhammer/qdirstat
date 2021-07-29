@@ -20,6 +20,7 @@
 #include "DataColumns.h"
 #include "FileInfo.h"
 #include "PkgFilter.h"
+#include "FormatUtil.h"
 
 
 namespace QDirStat

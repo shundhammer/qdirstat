@@ -13,6 +13,7 @@
 #include "DirTree.h"
 #include "FileInfoIterator.h"
 #include "ExcludeRules.h"
+#include "FormatUtil.h"
 
 
 namespace Debug

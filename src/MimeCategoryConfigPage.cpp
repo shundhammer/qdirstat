@@ -15,6 +15,7 @@
 #include "MimeCategoryConfigPage.h"
 #include "DirTree.h"
 #include "DirInfo.h"
+#include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 

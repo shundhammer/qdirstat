@@ -19,6 +19,7 @@
 #include "Settings.h"
 #include "SettingsHelpers.h"
 #include "Logger.h"
+#include "FormatUtil.h"
 #include "Exception.h"
 #include "DebugHelpers.h"
 

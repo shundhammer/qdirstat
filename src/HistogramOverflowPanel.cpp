@@ -10,7 +10,7 @@
 #include <QGraphicsItem>
 
 #include "HistogramView.h"
-#include "FileInfo.h"
+#include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 

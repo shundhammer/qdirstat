@@ -14,7 +14,7 @@
 
 #include "HistogramView.h"
 #include "DelayedRebuilder.h"
-#include "FileInfo.h"
+#include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 

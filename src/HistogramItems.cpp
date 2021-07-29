@@ -11,7 +11,7 @@
 #include <QToolTip>
 
 #include "HistogramItems.h"
-#include "FileInfo.h"
+#include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 

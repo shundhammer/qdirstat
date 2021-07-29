@@ -9,7 +9,7 @@
 
 #include "BucketsTableModel.h"
 #include "HistogramView.h"
-#include "FileInfo.h"
+#include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 

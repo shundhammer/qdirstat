@@ -19,7 +19,6 @@
 #include <QList>
 
 #include "FileSize.h"
-#include "FormatUtil.h"
 #include "Logger.h"
 
 // The size of a standard disk block.

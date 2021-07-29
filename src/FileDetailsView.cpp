@@ -19,6 +19,7 @@
 #include "SystemFileChecker.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
+#include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 

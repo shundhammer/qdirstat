@@ -15,6 +15,7 @@
 #include "SettingsHelpers.h"
 #include "HeaderTweaker.h"
 #include "PanelMessage.h"
+#include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 

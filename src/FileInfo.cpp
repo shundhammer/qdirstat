@@ -22,6 +22,7 @@
 #include "Attic.h"
 #include "DirTree.h"
 #include "PkgInfo.h"
+#include "FormatUtil.h"
 #include "SysUtil.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -126,8 +127,8 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
 	if ( _isSparseFile )
 	{
 	    logDebug() << "Found sparse file: " << this
-		       << "    Byte size: " << formatSize( _size )
-		       << "  Allocated: " << formatSize( _allocatedSize )
+		       << "    Byte size: "     << formatSize( _size )
+		       << "  Allocated: "       << formatSize( _allocatedSize )
 		       << " (" << (int) _blocks << " blocks)"
 		       << endl;
 	}

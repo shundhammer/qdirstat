@@ -26,7 +26,7 @@ namespace Debug
     /**
      * Dump the direct children of 'dir' to the log.
      **/
-    void dumpDirectChildren(FileInfo * dir);
+    void dumpDirectChildren( FileInfo * dir );
 
     /**
      * Dump the direct children of 'dir' sorted by size to the log.

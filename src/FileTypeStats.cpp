@@ -11,6 +11,7 @@
 #include "DirTree.h"
 #include "FileInfoIterator.h"
 #include "MimeCategorizer.h"
+#include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 

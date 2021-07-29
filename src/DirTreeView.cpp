@@ -19,6 +19,7 @@
 #include "SizeColDelegate.h"
 #include "HeaderTweaker.h"
 #include "DirTree.h"
+#include "FormatUtil.h"
 #include "Exception.h"
 #include "Logger.h"
 
