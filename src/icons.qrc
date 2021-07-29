@@ -12,6 +12,8 @@
 	<file>icons/file-manager.png</file>
 	<file>icons/go-bottom.png</file>
 	<file>icons/go-down.png</file>
+	<file>icons/go-left.png</file>
+	<file>icons/go-right.png</file>
 	<file>icons/go-top.png</file>
 	<file>icons/go-up.png</file>
 	<file>icons/hard-disk.png</file>
