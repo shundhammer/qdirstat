@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-07-28
+Updated: 2021-07-29
 
 
 ## Screenshot
@@ -122,6 +122,17 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2021-07-29
+
+  - Added a "Back" and a "Forward" button to move back and forth in the history
+    of visited directories; i.e. QDirStat behaves now very much like a web
+    browser when navigating the filesystem.
+
+    It also has a history menu when you long-press the "Back" or "Forward"
+    buttons, and of course it uses the same keyboard shortcuts `Alt`-`Cursor
+    Left` and `Alt`-`Cursor Right` that all common web browsers use.
+
 
 - 2021-07-28
 
