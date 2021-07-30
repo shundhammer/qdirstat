@@ -1213,6 +1213,7 @@ void MainWindow::navigateToUrl( const QString & url )
         {
             _selectionModel->setCurrentItem( sel,
                                              true ); // select
+            _ui->dirTreeView->setExpanded( sel, true );
         }
     }
 }
