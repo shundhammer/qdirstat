@@ -9,6 +9,7 @@
 
 #include <QApplication>
 #include <QCloseEvent>
+#include <QMouseEvent>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSignalMapper>
@@ -611,6 +612,37 @@ void MainWindow::treemapAsSidePanel()
 	_ui->mainWinSplitter->setOrientation(Qt::Horizontal);
     else
 	_ui->mainWinSplitter->setOrientation(Qt::Vertical);
+}
+
+
+void MainWindow::mousePressEvent( QMouseEvent * event )
+{
+    if ( event )
+    {
+        QAction * action = 0;
+
+        switch ( event->buttons() )
+        {
+            case Qt::BackButton:
+                action = _ui->actionGoBack;
+                break;
+
+            case Qt::ForwardButton:
+                action = _ui->actionGoForward;
+                break;
+
+            default:
+                break;
+        }
+
+        if ( action )
+        {
+            event->accept();
+
+            if ( action->isEnabled() )
+                action->trigger();
+        }
+    }
 }
 
 

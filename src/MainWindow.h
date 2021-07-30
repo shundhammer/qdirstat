@@ -30,6 +30,7 @@
 
 
 class QCloseEvent;
+class QMouseEvent;
 class QSortFilterProxyModel;
 class QSignalMapper;
 class TreeLayout;
@@ -478,6 +479,12 @@ protected:
      * Window close event ([x] icon in the top right window)
      **/
     virtual void closeEvent( QCloseEvent *event ) Q_DECL_OVERRIDE;
+
+    /**
+     * Handle mouse buttons: Activate history actions actionGoBack and
+     * actionGoForward with the "back" and "forward" mouse buttons as well.
+     **/
+    virtual void mousePressEvent( QMouseEvent * event ) Q_DECL_OVERRIDE;
 
 
 private:
