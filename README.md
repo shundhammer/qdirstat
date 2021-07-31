@@ -132,7 +132,7 @@ Download installable binary packages for various Linux distributions here:
     files of course only locates the files that were last modified within that
     month.
 
-    [<img width="500" src="https://user-images.githubusercontent.com/11538225/127743490-439ce7f8-40eb-405c-bbfb-89bc4a1873e0.png">]
+    <img width="500" src="https://user-images.githubusercontent.com/11538225/127743490-439ce7f8-40eb-405c-bbfb-89bc4a1873e0.png">
 
     More details and more screenshots at [GitHub issue #172](https://github.com/shundhammer/qdirstat/issues/172).
 
