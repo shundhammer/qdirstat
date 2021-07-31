@@ -145,10 +145,10 @@ void FileAgeStats::calcPercentages()
 
 void FileAgeStats::calcMonthPercentages( short year )
 {
-    YearStats & yearStats = _yearStats[ year ];
+    YearStats * yearStats = this->yearStats( year );
 
-    if ( yearStats.filesCount == 0 )    // nothing at all that year?
-        return;                         // -> skip the rest
+    if ( ! yearStats )
+        return;
 
     for ( int month = 1; month <= 12; month++ )
     {
@@ -156,10 +156,11 @@ void FileAgeStats::calcMonthPercentages( short year )
 
         if ( stats )
         {
-            stats->filesPercent = ( 100.0 * stats->filesCount ) / yearStats.filesCount;
+            if ( yearStats->filesCount > 0 )
+                stats->filesPercent = ( 100.0 * stats->filesCount ) / yearStats->filesCount;
 
-            if ( yearStats.size > 0 )
-                stats->sizePercent = ( 100.0 * stats->size ) / yearStats.size;
+            if ( yearStats->size > 0 )
+                stats->sizePercent = ( 100.0 * stats->size ) / yearStats->size;
         }
     }
 }
