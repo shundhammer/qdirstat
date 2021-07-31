@@ -222,7 +222,8 @@ public slots:
     void discoverHardLinkedFiles();
     void discoverBrokenSymLinks();
     void discoverSparseFiles();
-    void discoverFilesFromYear( const QString & path, short year );
+    void discoverFilesFromYear ( const QString & path, short year );
+    void discoverFilesFromMonth( const QString & path, short year, short month );
 
 
     /**

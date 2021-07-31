@@ -1361,8 +1361,11 @@ void MainWindow::showFileAgeStats()
         connect( _selectionModel,	SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
                  _fileAgeStatsWindow,   SLOT  ( syncedPopulate    ( FileInfo *		   ) ) );
 
-        connect( _fileAgeStatsWindow,   SIGNAL( locateFilesFromYear  ( QString, short ) ),
-                 this,                  SLOT  ( discoverFilesFromYear( QString, short ) ) );
+        connect( _fileAgeStatsWindow,   SIGNAL( locateFilesFromYear   ( QString, short        ) ),
+                 this,                  SLOT  ( discoverFilesFromYear ( QString, short        ) ) );
+
+        connect( _fileAgeStatsWindow,   SIGNAL( locateFilesFromMonth  ( QString, short, short ) ),
+                 this,                  SLOT  ( discoverFilesFromMonth( QString, short, short ) ) );
     }
 
     _fileAgeStatsWindow->populate( selectedDirOrRoot() );
@@ -1442,6 +1445,15 @@ void MainWindow::discoverFilesFromYear( const QString & path, short year )
     QString headingText = tr( "Files from %1 in %2" ).arg( year ).arg( "%1");
 
     discoverFiles( new QDirStat::FilesFromYearTreeWalker( year ), headingText, path );
+    _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::AscendingOrder );
+}
+
+
+void MainWindow::discoverFilesFromMonth( const QString & path, short year, short month )
+{
+    QString headingText = tr( "Files from %1/%2 in %3" ).arg( month ).arg( year).arg( "%1");
+
+    discoverFiles( new QDirStat::FilesFromMonthTreeWalker( year, month ), headingText, path );
     _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::AscendingOrder );
 }
 

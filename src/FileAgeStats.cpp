@@ -7,6 +7,7 @@
  */
 
 #include <algorithm>    // std::sort()
+#include <QDate>
 
 #include "FileAgeStats.h"
 #include "FileInfoIterator.h"
@@ -14,6 +15,11 @@
 #include "Exception.h"
 
 using namespace QDirStat;
+
+
+short FileAgeStats::_thisYear  = 0;
+short FileAgeStats::_thisMonth = 0;
+short FileAgeStats::_lastYear  = 0;
 
 
 FileAgeStats::FileAgeStats( FileInfo * subtree )
@@ -36,8 +42,23 @@ void FileAgeStats::clear()
     _yearStats.clear();
     _yearsList.clear();
 
+    clearMonthStats( thisYear() );
+    clearMonthStats( lastYear() );
+
     _totalFilesCount = 0;
     _totalFilesSize  = 0;
+}
+
+
+void FileAgeStats::clearMonthStats( short year )
+{
+    for ( int month = 1; month <= 12; month++ )
+    {
+        YearStats * stats = monthStats( year, month );
+
+        if ( stats )
+            *stats = YearStats( year, month );
+    }
 }
 
 
@@ -63,12 +84,22 @@ void FileAgeStats::collectRecursive( FileInfo * dir )
 
         if ( item && item->isFile() )
         {
-            short year = item->mtimeYear();
-            YearStats &stats = _yearStats[ year ];
+            short year  = item->mtimeYear();
+            short month = item->mtimeMonth();
 
-            stats.year = year;
-            stats.filesCount++;
-            stats.size += item->size();
+            YearStats &yearStats = _yearStats[ year ];
+
+            yearStats.year = year;
+            yearStats.filesCount++;
+            yearStats.size += item->size();
+
+            YearStats * monthStats = this->monthStats( year, month );
+
+            if ( monthStats )
+            {
+                monthStats->filesCount++;
+                monthStats->size += item->size();
+            }
         }
 
 	if ( item->hasChildren() )
@@ -106,6 +137,31 @@ void FileAgeStats::calcPercentages()
         if ( _totalFilesSize > 0 )
             stats.sizePercent = ( 100.0 * stats.size ) / _totalFilesSize;
     }
+
+    calcMonthPercentages( _thisYear );
+    calcMonthPercentages( _lastYear );
+}
+
+
+void FileAgeStats::calcMonthPercentages( short year )
+{
+    YearStats & yearStats = _yearStats[ year ];
+
+    if ( yearStats.filesCount == 0 )    // nothing at all that year?
+        return;                         // -> skip the rest
+
+    for ( int month = 1; month <= 12; month++ )
+    {
+        YearStats * stats = monthStats( year, month );
+
+        if ( stats )
+        {
+            stats->filesPercent = ( 100.0 * stats->filesCount ) / yearStats.filesCount;
+
+            if ( yearStats.size > 0 )
+                stats->sizePercent = ( 100.0 * stats->size ) / yearStats.size;
+        }
+    }
 }
 
 
@@ -116,17 +172,59 @@ void FileAgeStats::collectYears()
 }
 
 
-YearStats FileAgeStats::yearStats( short year )
+YearStats * FileAgeStats::yearStats( short year )
 {
     if ( _yearStats.contains( year ) )
-    {
-        return _yearStats[ year ];
-    }
+        return &( _yearStats[ year ] );
     else
-    {
-        // Return default-constructed stats (i.e. all fields are 0)
-        // for the requested year
+        return 0;
+}
 
-        return YearStats( year );
+
+YearStats * FileAgeStats::monthStats( short year, short month )
+{
+    YearStats * stats = 0;
+
+    if ( month >= 1 && month <= 12 )
+    {
+        if ( year == thisYear() && month <= thisMonth() )
+            stats = &( _thisYearMonthStats[ month - 1 ] );
+        else if ( year == lastYear() )
+            stats = &( _lastYearMonthStats[ month - 1 ] );
     }
+
+    return stats;
+}
+
+
+bool FileAgeStats::monthStatsAvailableFor( short year ) const
+{
+    return year == _thisYear || year == _lastYear;
+}
+
+
+short FileAgeStats::thisYear()
+{
+    if ( _thisYear == 0 )
+        _thisYear = (short) QDate::currentDate().year();
+
+    return _thisYear;
+}
+
+
+short FileAgeStats::thisMonth()
+{
+    if ( _thisMonth == 0 )
+        _thisMonth = (short) QDate::currentDate().month();
+
+    return _thisMonth;
+}
+
+
+short FileAgeStats::lastYear()
+{
+    if ( _lastYear == 0 )
+        _lastYear = thisYear() - 1;
+
+    return _lastYear;
 }

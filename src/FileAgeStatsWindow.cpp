@@ -7,8 +7,6 @@
  */
 
 
-#include <QDate>
-
 #include "FileAgeStatsWindow.h"
 #include "DirTree.h"
 #include "Settings.h"
@@ -97,7 +95,7 @@ void FileAgeStatsWindow::initWidgets()
     _filesPercentBarDelegate =
         new PercentBarDelegate( _ui->treeWidget, YearListFilesPercentBarCol );
     CHECK_NEW( _filesPercentBarDelegate );
-    _filesPercentBarDelegate->setStartColorIndex( 2 );
+    _filesPercentBarDelegate->setStartColorIndex( 7 );
     _ui->treeWidget->setItemDelegateForColumn( YearListFilesPercentBarCol, _filesPercentBarDelegate );
 
     _sizePercentBarDelegate =
@@ -173,10 +171,39 @@ void FileAgeStatsWindow::populateListWidget()
 {
     foreach ( short year, _stats->years() )
     {
-        YearListItem * item = new YearListItem( _stats->yearStats( year ) );
-        CHECK_NEW( item );
+        YearStats * yearStats = _stats->yearStats( year );
 
-        _ui->treeWidget->addTopLevelItem( item );
+        if ( yearStats )
+        {
+            // Add a year item
+
+            YearListItem * item = new YearListItem( *yearStats );
+            CHECK_NEW( item );
+
+            _ui->treeWidget->addTopLevelItem( item );
+
+
+            // Add the month items if applicable
+
+            if ( _stats->monthStatsAvailableFor( year ) )
+            {
+                for ( short month = 1; month <= 12; month++ )
+                {
+                    YearStats * monthStats = _stats->monthStats( year, month );
+
+                    if ( monthStats )
+                    {
+                        YearListItem * monthItem = new YearListItem( *monthStats );
+                        CHECK_NEW( monthItem );
+
+                        if ( monthStats->filesCount == 0 )
+                            monthItem->setFlags( Qt::NoItemFlags ); // disabled
+
+                        item->addChild( monthItem );
+                    }
+                }
+            }
+        }
     }
 
     fillGaps();
@@ -204,7 +231,7 @@ YearsList FileAgeStatsWindow::findGaps()
     if ( years.isEmpty() )
         return gaps;
 
-    short lastYear = _startGapsWithCurrentYear ? thisYear() : years.last();
+    short lastYear = _startGapsWithCurrentYear ? FileAgeStats::thisYear() : years.last();
 
     if ( lastYear - years.first() == years.count() - 1 )
         return gaps;
@@ -219,20 +246,6 @@ YearsList FileAgeStatsWindow::findGaps()
 }
 
 
-short FileAgeStatsWindow::thisYear() const
-{
-    return (short) QDate::currentDate().year();
-}
-
-
-short FileAgeStatsWindow::selectedYear() const
-{
-    YearListItem * item = selectedItem();
-
-    return item ? item->stats().year : -1;
-}
-
-
 YearListItem * FileAgeStatsWindow::selectedItem() const
 {
     QTreeWidgetItem *currentItem = _ui->treeWidget->currentItem();
@@ -243,10 +256,18 @@ YearListItem * FileAgeStatsWindow::selectedItem() const
 
 void FileAgeStatsWindow::locateFiles()
 {
-    short year = selectedYear();
+    YearListItem * item = selectedItem();
 
-    if ( year > 0 )
+    if ( item )
+    {
+        short month = item->stats().month;
+        short year  = item->stats().year;
+
+    if ( month > 0 && year > 0 )
+        emit locateFilesFromMonth( _subtree.url(), year, month );
+    else if ( year > 0 )
         emit locateFilesFromYear( _subtree.url(), year );
+    }
 }
 
 
@@ -301,7 +322,10 @@ YearListItem::YearListItem( const YearStats & yearStats ) :
     QTreeWidgetItem( QTreeWidgetItem::UserType ),
     _stats( yearStats )
 {
-    setText( YearListYearCol,             QString::number( _stats.year         ) + " " );
+    if ( _stats.month > 0 )
+        setText( YearListYearCol,            monthName( yearStats.month ) );
+    else
+        setText( YearListYearCol,            QString::number( _stats.year         ) + " " );
 
     if ( _stats.filesCount > 0 )
     {
@@ -317,13 +341,40 @@ YearListItem::YearListItem( const YearStats & yearStats ) :
 }
 
 
+QString YearListItem::monthName( short month ) const
+{
+    switch ( month )
+    {
+        case  1: return QObject::tr( "Jan." );
+        case  2: return QObject::tr( "Feb." );
+        case  3: return QObject::tr( "Mar." );
+        case  4: return QObject::tr( "Apr." );
+        case  5: return QObject::tr( "May"  );
+        case  6: return QObject::tr( "Jun." );
+        case  7: return QObject::tr( "Jul." );
+        case  8: return QObject::tr( "Aug." );
+        case  9: return QObject::tr( "Sep." );
+        case 10: return QObject::tr( "Oct." );
+        case 11: return QObject::tr( "Nov." );
+        case 12: return QObject::tr( "Dec." );
+    }
+
+    return "";
+}
+
+
 QVariant YearListItem::data( int column, int role ) const
 {
     if ( role == Qt::TextAlignmentRole )
     {
         // Vertical alignment can't be set in any easier way (?)
 
-        int alignment = Qt::AlignVCenter | Qt::AlignRight;
+        int alignment = Qt::AlignVCenter;
+
+        if ( column == YearListYearCol )
+            alignment |= Qt::AlignLeft;
+        else
+            alignment |= Qt::AlignRight;
 
         return alignment;
     }
@@ -343,7 +394,14 @@ bool YearListItem::operator<( const QTreeWidgetItem & rawOther ) const
 
     switch ( col )
     {
-	case YearListYearCol:		return _stats.year         < other.stats().year;
+	case YearListYearCol:
+            {
+                if ( _stats.month > 0 )
+                    return _stats.month < other.stats().month;
+                else
+                    return _stats.year  < other.stats().year;
+            }
+
 	case YearListFilesCountCol:	return _stats.filesCount   < other.stats().filesCount;
         case YearListFilesPercentBarCol:
 	case YearListFilesPercentCol:	return _stats.filesPercent < other.stats().filesPercent;

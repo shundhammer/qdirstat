@@ -94,7 +94,7 @@ namespace QDirStat
 
         /**
          * Emitted when the user clicks the "Locate" button (which is only
-         * enabled when there are 1..1000 files from that year).
+         * enabled when there are 1..1000 files for that year).
          *
          * 'path' is also sent because otherwise the main window will use the
          * tree's root if a file and not a directory is currently
@@ -102,6 +102,11 @@ namespace QDirStat
          * result in the "locate" window.
          **/
         void locateFilesFromYear( const QString & path, short year );
+
+        /**
+         * Similar than 'locateFilesFromYear()', but with year and month (1-12).
+         **/
+        void locateFilesFromMonth( const QString & path, short year, short month );
 
 
     protected slots:
@@ -146,20 +151,6 @@ namespace QDirStat
          * Find the gaps between years.
          **/
         YearsList findGaps();
-
-        /**
-         * Return the current year.
-         *
-         * Not named currentYear() to avoid confusion with the year that is
-         * currently selected in the tree widget.
-         **/
-        short thisYear() const;
-
-        /**
-         * Return the year that is currently selected in the tree widget
-         * or -1 if nothing is selected.
-         **/
-        short selectedYear() const;
 
         /**
          * Return the currently selected item in the tree widget or 0
@@ -230,6 +221,13 @@ namespace QDirStat
          * Reimplemented from QTreeWidgetItem.
          **/
         virtual QVariant data( int column, int role ) const Q_DECL_OVERRIDE;
+
+        /**
+         * Return the (translated) short month name or an empty string if it's
+         * out of the 1-12 range.
+         **/
+        QString monthName( short month ) const;
+
 
     protected:
 
