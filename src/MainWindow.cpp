@@ -42,6 +42,7 @@
 #include "PanelMessage.h"
 #include "PkgManager.h"
 #include "PkgQuery.h"
+#include "QDirStatApp.h"
 #include "Refresher.h"
 #include "SelectionModel.h"
 #include "Settings.h"
@@ -67,10 +68,10 @@ using namespace QDirStat;
 
 using QDirStat::DataColumns;
 using QDirStat::DirTreeModel;
-using QDirStat::SelectionModel;
-using QDirStat::CleanupCollection;
-using QDirStat::PkgFilter;
 using QDirStat::HistoryButtons;
+using QDirStat::PkgFilter;
+using QDirStat::QDirStatApp;
+using QDirStat::app;
 
 
 MainWindow::MainWindow():
@@ -98,11 +99,10 @@ MainWindow::MainWindow():
     _dUrl = _ui->actionDonate->iconText();
     _futureSelection.setUseRootFallback( false );
 
-    _dirTreeModel = new DirTreeModel( this );
-    CHECK_NEW( _dirTreeModel );
+    QDirStatApp::createInstance();
 
-    _selectionModel = new SelectionModel( _dirTreeModel, this );
-    CHECK_NEW( _selectionModel );
+    _dirTreeModel   = app()->dirTreeModel();
+    _selectionModel = app()->selectionModel();
 
     _ui->dirTreeView->setModel( _dirTreeModel );
     _ui->dirTreeView->setSelectionModel( _selectionModel );
@@ -112,8 +112,7 @@ MainWindow::MainWindow():
 
     _dirTreeModel->setSelectionModel( _selectionModel );
 
-    _cleanupCollection = new CleanupCollection( _selectionModel );
-    CHECK_NEW( _cleanupCollection );
+    _cleanupCollection = app()->cleanupCollection();
 
     _cleanupCollection->addToMenu   ( _ui->menuCleanup,
 				      true ); // keepUpdated
@@ -171,6 +170,8 @@ MainWindow::MainWindow():
 
 MainWindow::~MainWindow()
 {
+    logDebug() << "Destroying main window" << endl;
+
     if ( _currentLayout )
 	saveLayout( _currentLayout );
 
@@ -186,12 +187,13 @@ MainWindow::~MainWindow()
 
     delete _ui->dirTreeView;
     delete _ui;
-    delete _cleanupCollection;
-    delete _selectionModel;
-    delete _dirTreeModel;
     delete _historyButtons;
 
     qDeleteAll( _layouts );
+
+    QDirStatApp::deleteInstance();
+
+    logDebug() << "Main window destroyed" << endl;
 }
 
 

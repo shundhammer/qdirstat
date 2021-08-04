@@ -48,6 +48,7 @@ QMAKE_CXXFLAGS	+=  -Wno-deprecated -Wno-deprecated-declarations
 
 
 SOURCES	  = main.cpp			\
+            QDirStatApp.cpp             \
 	    ActionManager.cpp		\
 	    AdaptiveTimer.cpp		\
 	    Attic.cpp			\
@@ -147,6 +148,7 @@ SOURCES	  = main.cpp			\
 
 
 HEADERS	  =				\
+            QDirStatApp.h		\
 	    ActionManager.h		\
 	    AdaptiveTimer.h		\
 	    Attic.h			\

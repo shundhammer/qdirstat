@@ -100,7 +100,7 @@ int main( int argc, char *argv[] )
     QCoreApplication::setOrganizationName( "QDirStat" );
     QCoreApplication::setApplicationName ( "QDirStat" );
 
-    QApplication app( argc, argv);
+    QApplication qtApp( argc, argv);
     QStringList argList = QCoreApplication::arguments();
     argList.removeFirst(); // Remove program name
 
@@ -144,7 +144,7 @@ int main( int argc, char *argv[] )
     }
 
     if ( ! fatal )
-	app.exec();
+	qtApp.exec();
 
     delete mainWin;
 
