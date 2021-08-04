@@ -10,6 +10,7 @@
 #include <iostream>	// cerr
 
 #include <QApplication>
+#include "QDirStatApp.h"
 #include "MainWindow.h"
 #include "DirTreeModel.h"
 #include "PkgFilter.h"
@@ -111,7 +112,7 @@ int main( int argc, char *argv[] )
     bool dont_ask = commandLineSwitch( "--dont-ask", "-d", argList );
 
     if ( commandLineSwitch( "--slow-update", "-s", argList ) )
-	mainWin->dirTreeModel()->setSlowUpdate();
+        QDirStat::app()->dirTreeModel()->setSlowUpdate();
 
     if ( argList.isEmpty() )
     {

@@ -64,6 +64,8 @@ QDirStatApp::QDirStatApp()
     _selectionModel = new SelectionModel( _dirTreeModel );
     CHECK_NEW( _selectionModel );
 
+    _dirTreeModel->setSelectionModel( _selectionModel );
+
     _cleanupCollection = new CleanupCollection( _selectionModel );
     CHECK_NEW( _cleanupCollection );
 }

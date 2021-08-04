@@ -38,11 +38,8 @@ class QMenu;
 
 namespace QDirStat
 {
-    class CleanupCollection;
     class ConfigDialog;
-    class DirTreeModel;
     class FileInfo;
-    class SelectionModel;
     class UnpkgSettings;
 }
 
@@ -64,10 +61,6 @@ public:
     MainWindow();
     virtual ~MainWindow();
 
-    /**
-     * Return the DirTreeModel used in this window.
-     **/
-    QDirStat::DirTreeModel * dirTreeModel() const { return _dirTreeModel; }
 
 public slots:
 
@@ -490,9 +483,6 @@ protected:
 private:
 
     Ui::MainWindow		 * _ui;
-    QDirStat::DirTreeModel	 * _dirTreeModel;
-    QDirStat::SelectionModel	 * _selectionModel;
-    QDirStat::CleanupCollection  * _cleanupCollection;
     QDirStat::ConfigDialog	 * _configDialog;
     QDirStat::HistoryButtons     * _historyButtons;
     QActionGroup		 * _layoutActionGroup;
