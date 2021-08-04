@@ -21,11 +21,9 @@
 
 namespace QDirStat
 {
-    class DirTree;
     class FileInfo;
     class FileTypeStats;
     class MimeCategory;
-    class SelectionModel;
     class LocateFileTypeWindow;
 
 
@@ -58,8 +56,6 @@ namespace QDirStat
 	 **/
 	virtual ~FileTypeStatsWindow();
 
-    public:
-
         /**
          * Obtain the subtree from the last used URL.
          **/
@@ -69,6 +65,24 @@ namespace QDirStat
 	 * Populate the widgets for a subtree.
 	 **/
 	void populate( FileInfo * subtree );
+
+        /**
+         * Convenience function for creating, populating and showing the shared
+         * instance.
+         **/
+        static void populateSharedInstance( FileInfo * subtree );
+
+        /**
+         * Static method for using one shared instance of this class between
+         * multiple parts of the application. This will create a new instance
+         * if there is none yet (or anymore).
+         *
+         * Do not hold on to this pointer; the instance destroys itself when
+         * the user closes the window, and then the pointer becomes invalid.
+         *
+         * After getting this shared instance, call populate() and show().
+         **/
+        static FileTypeStatsWindow * sharedInstance();
 
 
     public slots:
@@ -98,12 +112,14 @@ namespace QDirStat
 	 **/
 	virtual void reject() Q_DECL_OVERRIDE;
 
+
     protected slots:
 
 	/**
 	 * Enable or disable the actions depending on the current item.
 	 **/
 	void enableActions( QTreeWidgetItem * currentItem );
+
 
     protected:
 
@@ -131,7 +147,9 @@ namespace QDirStat
 	Ui::FileTypeStatsWindow *   _ui;
         Subtree                     _subtree;
 	FileTypeStats *		    _stats;
+
 	static QPointer<LocateFileTypeWindow> _locateFileTypeWindow;
+        static QPointer<FileTypeStatsWindow>  _sharedInstance;
     };
 
 

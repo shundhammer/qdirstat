@@ -7,11 +7,15 @@
  */
 
 
+#include <QWidget>
+#include <QList>
+
 #include "QDirStatApp.h"
 #include "DirTreeModel.h"
 #include "DirTree.h"
 #include "SelectionModel.h"
 #include "CleanupCollection.h"
+#include "MainWindow.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -81,6 +85,27 @@ QDirStatApp::~QDirStatApp()
 
     logDebug() << "App destroyed." << endl;
 }
+
+
+QWidget * QDirStatApp::findMainWindow() const
+{
+    QWidget * mainWin = 0;
+    QWidgetList toplevel = QApplication::topLevelWidgets();
+
+    for ( QWidgetList::const_iterator it = toplevel.constBegin();
+          it != toplevel.constEnd() && ! mainWin;
+          ++it )
+    {
+        mainWin = qobject_cast<MainWindow *>( *it );
+    }
+
+    if ( ! mainWin )
+        logWarning() << "NULL mainWin for shared instance" << endl;
+
+    return mainWin;
+}
+
+
 
 
 QDirStatApp * QDirStat::app()

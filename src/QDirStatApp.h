@@ -10,6 +10,9 @@
 #define QDirStatApp_h
 
 
+class QWidget;
+
+
 namespace QDirStat
 {
     class DirTreeModel;
@@ -114,6 +117,19 @@ namespace QDirStat
          * to the user's liking with the configuration dialog.
          **/
         CleanupCollection * cleanupCollection() const { return _cleanupCollection; }
+
+
+        //
+        // Convenience methods
+        //
+
+        /**
+         * Return the (first) MainWindow instance of the running program that
+         * is suitable as a widget parent for subwindows to maintain the
+         * correct window stacking order (and avoid having subwindows disappear
+         * behind the main window). Return 0 if there is no MainWindow (yet).
+         **/
+        QWidget * findMainWindow() const;
 
 
     protected:

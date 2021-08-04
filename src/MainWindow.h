@@ -17,7 +17,6 @@
 #include <QPointer>
 
 #include "ui_main-window.h"
-#include "FileTypeStatsWindow.h"
 #include "FileAgeStatsWindow.h"
 #include "FilesystemsWindow.h"
 #include "HistoryButtons.h"
@@ -45,7 +44,6 @@ namespace QDirStat
 
 using QDirStat::FileAgeStatsWindow;
 using QDirStat::FileInfo;
-using QDirStat::FileTypeStatsWindow;
 using QDirStat::FilesystemsWindow;
 using QDirStat::LocateFilesWindow;
 using QDirStat::PanelMessage;
@@ -498,7 +496,6 @@ private:
     QDirStat::ConfigDialog	 * _configDialog;
     QDirStat::HistoryButtons     * _historyButtons;
     QActionGroup		 * _layoutActionGroup;
-    QPointer<FileTypeStatsWindow>  _fileTypeStatsWindow;
     QPointer<FileAgeStatsWindow>   _fileAgeStatsWindow;
     QPointer<FilesystemsWindow>    _filesystemsWindow;
     QPointer<LocateFilesWindow>    _locateFilesWindow;

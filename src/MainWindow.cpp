@@ -32,6 +32,7 @@
 #include "ExcludeRules.h"
 #include "FileDetailsView.h"
 #include "FileSizeStatsWindow.h"
+#include "FileTypeStatsWindow.h"
 #include "HeaderTweaker.h"
 #include "Logger.h"
 #include "MimeCategorizer.h"
@@ -65,12 +66,6 @@
 #define USE_CUSTOM_OPEN_DIR_DIALOG 1
 
 using namespace QDirStat;
-
-using QDirStat::DataColumns;
-using QDirStat::HistoryButtons;
-using QDirStat::PkgFilter;
-using QDirStat::QDirStatApp;
-using QDirStat::app;
 
 
 MainWindow::MainWindow():
@@ -1355,27 +1350,13 @@ void MainWindow::showElapsedTime()
 
 void MainWindow::showFileTypeStats()
 {
-    if ( ! _fileTypeStatsWindow )
-    {
-	// This deletes itself when the user closes it. The associated QPointer
-	// keeps track of that and sets the pointer to 0 when it happens.
-
-	_fileTypeStatsWindow = new FileTypeStatsWindow( this );
-    }
-
-    _fileTypeStatsWindow->populate( selectedDirOrRoot() );
-    _fileTypeStatsWindow->show();
+    FileTypeStatsWindow::populateSharedInstance( selectedDirOrRoot() );
 }
 
 
 void MainWindow::showFileSizeStats()
 {
-    FileInfo * sel = selectedDirOrRoot();
-
-    if ( ! sel || ! sel->hasChildren() )
-	return;
-
-    FileSizeStatsWindow::populateSharedInstance( sel );
+    FileSizeStatsWindow::populateSharedInstance( selectedDirOrRoot() );
 }
 
 
@@ -1810,4 +1791,3 @@ void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurren
 	app()->selectionModel()->dumpSelectedItems();
     }
 }
-

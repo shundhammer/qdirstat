@@ -18,6 +18,7 @@
 #include "MimeCategory.h"
 #include "SettingsHelpers.h"
 #include "HeaderTweaker.h"
+#include "QDirStatApp.h"
 #include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -30,6 +31,7 @@ using namespace QDirStat;
 
 
 QPointer<LocateFileTypeWindow> FileTypeStatsWindow::_locateFileTypeWindow = 0;
+QPointer<FileTypeStatsWindow>  FileTypeStatsWindow::_sharedInstance       = 0;
 
 
 FileTypeStatsWindow::FileTypeStatsWindow( QWidget * parent ):
@@ -109,6 +111,28 @@ void FileTypeStatsWindow::initWidgets()
 void FileTypeStatsWindow::refresh()
 {
     populate( _subtree() );
+}
+
+
+FileTypeStatsWindow * FileTypeStatsWindow::sharedInstance()
+{
+    if ( ! _sharedInstance )
+    {
+	_sharedInstance = new FileTypeStatsWindow( app()->findMainWindow() );
+	CHECK_NEW( _sharedInstance );
+    }
+
+    return _sharedInstance;
+}
+
+
+void FileTypeStatsWindow::populateSharedInstance( FileInfo * subtree )
+{
+    if ( ! subtree )
+        return;
+
+    sharedInstance()->populate( subtree );
+    sharedInstance()->show();
 }
 
 

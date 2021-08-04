@@ -97,6 +97,7 @@ namespace QDirStat
 	 **/
 	virtual void reject() Q_DECL_OVERRIDE;
 
+
     protected slots:
 
         /**
@@ -126,6 +127,7 @@ namespace QDirStat
          * Show help for a topic determinded by the sender of this signal.
          **/
         void showHelp();
+
 
     protected:
 

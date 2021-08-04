@@ -21,11 +21,13 @@
 #include "MainWindow.h"
 #include "SettingsHelpers.h"
 #include "HeaderTweaker.h"
+#include "QDirStatApp.h"
 #include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
 
 using namespace QDirStat;
+
 
 QPointer<FileSizeStatsWindow> FileSizeStatsWindow::_sharedInstance = 0;
 
@@ -75,21 +77,7 @@ FileSizeStatsWindow * FileSizeStatsWindow::sharedInstance()
 {
     if ( ! _sharedInstance )
     {
-	QWidget * parent = 0;
-
-	QWidgetList toplevel = QApplication::topLevelWidgets();
-
-	for ( QWidgetList::const_iterator it = toplevel.constBegin();
-	      it != toplevel.constEnd() && ! parent;
-	      ++it )
-	{
-	    parent = qobject_cast<MainWindow *>( *it );
-	}
-
-	if ( ! parent )
-	    logWarning() << "NULL parent for shared instance" << endl;
-
-	_sharedInstance = new FileSizeStatsWindow( parent );
+	_sharedInstance = new FileSizeStatsWindow( app()->findMainWindow() );
 	CHECK_NEW( _sharedInstance );
     }
 
@@ -149,6 +137,9 @@ void FileSizeStatsWindow::calc()
 void FileSizeStatsWindow::populateSharedInstance( FileInfo *	  subtree,
 						  const QString & suffix  )
 {
+    if ( ! subtree )
+        return;
+
     sharedInstance()->populate( subtree, suffix );
     sharedInstance()->show();
 }
