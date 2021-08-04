@@ -1360,7 +1360,7 @@ void MainWindow::showFileTypeStats()
 	// This deletes itself when the user closes it. The associated QPointer
 	// keeps track of that and sets the pointer to 0 when it happens.
 
-	_fileTypeStatsWindow = new FileTypeStatsWindow( app()->selectionModel(), this );
+	_fileTypeStatsWindow = new FileTypeStatsWindow( this );
     }
 
     _fileTypeStatsWindow->populate( selectedDirOrRoot() );

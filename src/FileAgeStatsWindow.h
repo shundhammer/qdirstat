@@ -39,7 +39,7 @@ namespace QDirStat
 	 *
 	 * Notice that this widget will destroy itself upon window close.
 	 **/
-	FileAgeStatsWindow( QWidget * parent );
+	FileAgeStatsWindow( QWidget * parent = 0 );
 
 	/**
 	 * Destructor.

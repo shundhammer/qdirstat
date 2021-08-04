@@ -15,7 +15,6 @@
 #include "FileTypeStats.h"
 #include "FileSizeStatsWindow.h"
 #include "LocateFileTypeWindow.h"
-#include "DirTree.h"
 #include "MimeCategory.h"
 #include "SettingsHelpers.h"
 #include "HeaderTweaker.h"
@@ -33,11 +32,9 @@ using namespace QDirStat;
 QPointer<LocateFileTypeWindow> FileTypeStatsWindow::_locateFileTypeWindow = 0;
 
 
-FileTypeStatsWindow::FileTypeStatsWindow( SelectionModel * selectionModel,
-					  QWidget *	   parent ):
+FileTypeStatsWindow::FileTypeStatsWindow( QWidget * parent ):
     QDialog( parent ),
-    _ui( new Ui::FileTypeStatsWindow ),
-    _selectionModel( selectionModel )
+    _ui( new Ui::FileTypeStatsWindow )
 {
     // logDebug() << "init" << endl;
 
@@ -275,8 +272,7 @@ void FileTypeStatsWindow::locateCurrentFileType()
 
     if ( ! _locateFileTypeWindow )
     {
-	_locateFileTypeWindow = new LocateFileTypeWindow( _selectionModel,
-                                                          qobject_cast<QWidget *>( parent() ) );
+	_locateFileTypeWindow = new LocateFileTypeWindow( qobject_cast<QWidget *>( parent() ) );
 	CHECK_NEW( _locateFileTypeWindow );
 	_locateFileTypeWindow->show();
 

@@ -55,8 +55,7 @@ namespace QDirStat
 	 * of this class. The QPointer will keep track of this window
 	 * auto-deleting itself when closed.
 	 **/
-	LocateFileTypeWindow( SelectionModel * selectionModel,
-                              QWidget *	       parent );
+	LocateFileTypeWindow( QWidget *	parent = 0 );
 
 	/**
 	 * Destructor.
@@ -143,7 +142,6 @@ namespace QDirStat
 	Ui::LocateFileTypeWindow * _ui;
         Subtree                    _subtree;
 	QString			   _searchSuffix;
-	SelectionModel *	   _selectionModel;
     };
 
 

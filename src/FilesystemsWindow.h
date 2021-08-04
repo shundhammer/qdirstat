@@ -50,7 +50,7 @@ namespace QDirStat
 	 * of this class. The QPointer will keep track of this window
 	 * auto-deleting itself when closed.
 	 **/
-	FilesystemsWindow( QWidget * parent );
+	FilesystemsWindow( QWidget * parent = 0 );
 
 	/**
 	 * Destructor.

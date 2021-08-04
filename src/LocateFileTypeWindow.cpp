@@ -10,6 +10,7 @@
 #include <algorithm>
 
 #include "LocateFileTypeWindow.h"
+#include "QDirStatApp.h"        // SelectionModel
 #include "DirTree.h"
 #include "DotEntry.h"
 #include "SelectionModel.h"
@@ -22,11 +23,9 @@
 using namespace QDirStat;
 
 
-LocateFileTypeWindow::LocateFileTypeWindow( SelectionModel * selectionModel,
-                                            QWidget *	     parent ):
+LocateFileTypeWindow::LocateFileTypeWindow( QWidget * parent ):
     QDialog( parent ),
-    _ui( new Ui::LocateFileTypeWindow ),
-    _selectionModel( selectionModel )
+    _ui( new Ui::LocateFileTypeWindow )
 {
     // logDebug() << "init" << endl;
 
@@ -230,9 +229,9 @@ void LocateFileTypeWindow::selectResult( QTreeWidgetItem * item )
     // logDebug() << "Selecting " << searchResult->path() << " with " << matches.size() << " matches" << endl;
 
     if ( ! matches.isEmpty() )
-	_selectionModel->setCurrentItem( matches.first(), true );
+	app()->selectionModel()->setCurrentItem( matches.first(), true );
 
-    _selectionModel->setSelectedItems( matches );
+    app()->selectionModel()->setSelectedItems( matches );
 }
 
 
