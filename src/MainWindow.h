@@ -31,7 +31,6 @@
 
 class QCloseEvent;
 class QMouseEvent;
-class QSortFilterProxyModel;
 class QSignalMapper;
 class TreeLayout;
 class QMenu;
