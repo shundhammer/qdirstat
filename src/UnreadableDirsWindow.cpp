@@ -10,6 +10,7 @@
 #include <algorithm>
 
 #include "UnreadableDirsWindow.h"
+#include "QDirStatApp.h"        // SelectionModel
 #include "DirTree.h"
 #include "Attic.h"
 #include "SelectionModel.h"
@@ -21,11 +22,9 @@
 using namespace QDirStat;
 
 
-UnreadableDirsWindow::UnreadableDirsWindow( SelectionModel * selectionModel,
-					    QWidget *	     parent ):
+UnreadableDirsWindow::UnreadableDirsWindow( QWidget * parent ):
     QDialog( parent ),
-    _ui( new Ui::UnreadableDirsWindow ),
-    _selectionModel( selectionModel )
+    _ui( new Ui::UnreadableDirsWindow )
 {
     // logDebug() << "init" << endl;
 
@@ -172,8 +171,8 @@ void UnreadableDirsWindow::selectResult( QTreeWidgetItem * item )
 
     // logDebug() << "Selecting " << searchResult->path() << ": " << dir << endl;
 
-    _selectionModel->setCurrentItem( dir,
-				     true ); // select
+    app()->selectionModel()->setCurrentItem( dir,
+                                             true ); // select
 }
 
 

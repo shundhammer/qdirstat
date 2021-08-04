@@ -1267,9 +1267,8 @@ void MainWindow::navigateToUrl( const QString & url )
 
     if ( ! url.isEmpty() )
     {
-        FileInfo * sel =
-            app()->dirTree()->locate( url,
-                                           true ); // findPseudoDirs
+        FileInfo * sel = app()->dirTree()->locate( url,
+                                                   true ); // findPseudoDirs
 
         if ( sel )
 
@@ -1513,7 +1512,7 @@ void MainWindow::discoverFiles( TreeWalker *    treeWalker,
     if ( ! path.isEmpty() )
     {
         sel = app()->dirTree()->locate( path,
-                                             true ); // findPseudoDirs
+                                        true ); // findPseudoDirs
     }
 
     if ( ! sel )
@@ -1664,7 +1663,7 @@ void MainWindow::showUnreadableDirs()
 	// This deletes itself when the user closes it. The associated QPointer
 	// keeps track of that and sets the pointer to 0 when it happens.
 
-	_unreadableDirsWindow = new UnreadableDirsWindow( app()->selectionModel(), this );
+	_unreadableDirsWindow = new UnreadableDirsWindow( this );
     }
 
     _unreadableDirsWindow->populate( app()->dirTree()->root() );

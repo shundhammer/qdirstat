@@ -24,7 +24,6 @@ namespace QDirStat
     class DirTree;
     class FileTypeStats;
     class MimeCategory;
-    class SelectionModel;
 
 
     /**
@@ -64,8 +63,7 @@ namespace QDirStat
 	 * of this class. The QPointer will keep track of this window
 	 * auto-deleting itself when closed.
 	 **/
-	UnreadableDirsWindow( SelectionModel * selectionModel,
-			      QWidget *	       parent );
+	UnreadableDirsWindow( QWidget *	parent = 0 );
 
 	/**
 	 * Destructor.
@@ -133,7 +131,6 @@ namespace QDirStat
 
 	Ui::UnreadableDirsWindow * _ui;
 	Subtree			   _subtree;
-	SelectionModel *	   _selectionModel;
     };
 
 
