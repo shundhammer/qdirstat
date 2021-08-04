@@ -414,9 +414,21 @@ protected:
     void connectSignals();
 
     /**
-     * Set up QObject connections from the actions from the .ui file
+     * Connect menu QActions from the .ui file to actions of this class
      **/
-    void connectActions();
+    void connectMenuActions();
+
+    void connectFileMenu();
+    void connectEditMenu();
+    void connectViewMenu();
+    void connectViewExpandMenu();
+    void connectViewTreemapMenu();
+    void connectGoMenu();
+    void connectDiscoverMenu();
+    void connectHelpMenu();
+    void connectHelpSolutionsMenu();
+
+    void connectDebugActions();
 
     /**
      * Set up the _treeLevelMapper to map an "expand tree to level x" action to

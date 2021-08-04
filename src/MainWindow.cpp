@@ -100,8 +100,8 @@ MainWindow::MainWindow():
 
     // Explicitly create the QDirStatApp singleton instance for clarity.
     //
-    // Otherwise, the first call to app() would implicitly it and with it the
-    // DirTreeModel, the SelectionModel and the CleanupCollection.
+    // Otherwise, the first call to app() would implicitly create it and with
+    // it the DirTreeModel, the SelectionModel and the CleanupCollection.
 
     QDirStatApp::createInstance();
 
@@ -133,7 +133,7 @@ MainWindow::MainWindow():
 #endif
 
     connectSignals();
-    connectActions();
+    connectMenuActions();
     changeLayout( _layoutName );
 
     if ( ! PkgQuery::haveGetInstalledPkgSupport() ||
@@ -250,11 +250,6 @@ void MainWindow::connectSignals()
 		 this,			  SLOT	( showSummary()		  ) );
     }
 
-    // Debug connections
-
-    connect( _ui->dirTreeView,		  SIGNAL( clicked    ( QModelIndex ) ),
-	     this,			  SLOT	( itemClicked( QModelIndex ) ) );
-
     connect( app()->selectionModel(),	  SIGNAL( selectionChanged() ),
 	     this,			  SLOT	( selectionChanged() ) );
 
@@ -267,10 +262,22 @@ void MainWindow::connectSignals()
     connect( (ACTION), SIGNAL( triggered() ), (RECEIVER), SLOT( RCVR_SLOT ) )
 
 
-void MainWindow::connectActions()
+void MainWindow::connectMenuActions()
 {
-    // "File" menu
+    connectFileMenu();
+    connectEditMenu();
+    connectViewMenu();
+    connectGoMenu();
+    connectDiscoverMenu();
+    // CleanupCollection::updateMenus() handles the "Clean Up" menu
+    connectHelpMenu();
 
+    connectDebugActions();      // Invisible F7 / Shift-F7 actions
+}
+
+
+void MainWindow::connectFileMenu()
+{
     CONNECT_ACTION( _ui->actionOpenDir,			    this, askOpenDir()	      );
     CONNECT_ACTION( _ui->actionOpenPkg,			    this, askOpenPkg()	      );
     CONNECT_ACTION( _ui->actionShowUnpkgFiles,		    this, askShowUnpkgFiles() );
@@ -282,17 +289,45 @@ void MainWindow::connectActions()
     CONNECT_ACTION( _ui->actionAskWriteCache,		    this, askWriteCache()     );
     CONNECT_ACTION( _ui->actionAskReadCache,		    this, askReadCache()      );
     CONNECT_ACTION( _ui->actionQuit,			    qApp, quit()	      );
+}
 
 
-    // "Edit" menu
+void MainWindow::connectEditMenu()
+{
 
     CONNECT_ACTION( _ui->actionCopyPathToClipboard, this, copyCurrentPathToClipboard() );
     CONNECT_ACTION( _ui->actionMoveToTrash,	    this, moveToTrash()                );
     CONNECT_ACTION( _ui->actionConfigure,           this, openConfigDialog()           );
+}
 
 
-    // "View" menu
+void MainWindow::connectViewMenu()
+{
+    connectViewExpandMenu();
+    connectViewTreemapMenu();
 
+    connect( _ui->actionShowCurrentPath,  SIGNAL( toggled   ( bool ) ),
+	     _ui->breadcrumbNavigator,	  SLOT	( setVisible( bool ) ) );
+
+    connect( _ui->actionShowDetailsPanel, SIGNAL( toggled   ( bool ) ),
+	     _ui->fileDetailsPanel,	  SLOT	( setVisible( bool ) ) );
+
+    CONNECT_ACTION( _ui->actionLayout1,		   this, changeLayout() );
+    CONNECT_ACTION( _ui->actionLayout2,		   this, changeLayout() );
+    CONNECT_ACTION( _ui->actionLayout3,		   this, changeLayout() );
+
+    CONNECT_ACTION( _ui->actionFileSizeStats,	   this, showFileSizeStats() );
+    CONNECT_ACTION( _ui->actionFileTypeStats,	   this, showFileTypeStats() );
+
+    _ui->actionFileTypeStats->setShortcutContext( Qt::ApplicationShortcut );
+
+    CONNECT_ACTION( _ui->actionFileAgeStats,	   this, showFileAgeStats()  );
+    CONNECT_ACTION( _ui->actionShowFilesystems,	   this, showFilesystems()   );
+}
+
+
+void MainWindow::connectViewExpandMenu()
+{
 #if HAVE_SIGNAL_MAPPER
 
     // QSignalMapper is deprecated from Qt 5.13 on.
@@ -332,28 +367,11 @@ void MainWindow::connectActions()
     connect( _ui->actionCloseAllTreeLevels, &QAction::triggered, [=]() { expandTreeToLevel( 0 ); } );
 
 #endif
-
-    connect( _ui->actionShowCurrentPath,  SIGNAL( toggled   ( bool ) ),
-	     _ui->breadcrumbNavigator,	  SLOT	( setVisible( bool ) ) );
-
-    connect( _ui->actionShowDetailsPanel, SIGNAL( toggled   ( bool ) ),
-	     _ui->fileDetailsPanel,	  SLOT	( setVisible( bool ) ) );
-
-    CONNECT_ACTION( _ui->actionLayout1,		   this, changeLayout() );
-    CONNECT_ACTION( _ui->actionLayout2,		   this, changeLayout() );
-    CONNECT_ACTION( _ui->actionLayout3,		   this, changeLayout() );
-
-    CONNECT_ACTION( _ui->actionFileSizeStats,	   this, showFileSizeStats() );
-    CONNECT_ACTION( _ui->actionFileTypeStats,	   this, showFileTypeStats() );
-
-    _ui->actionFileTypeStats->setShortcutContext( Qt::ApplicationShortcut );
-
-    CONNECT_ACTION( _ui->actionFileAgeStats,	   this, showFileAgeStats()  );
-    CONNECT_ACTION( _ui->actionShowFilesystems,	   this, showFilesystems()   );
+}
 
 
-    // "View" -> "Treemap" submenu
-
+void MainWindow::connectViewTreemapMenu()
+{
     connect( _ui->actionShowTreemap, SIGNAL( toggled( bool )   ),
 	     this,		     SLOT  ( showTreemapView() ) );
 
@@ -364,28 +382,31 @@ void MainWindow::connectActions()
     CONNECT_ACTION( _ui->actionTreemapZoomOut,	 _ui->treemapView, zoomOut()	    );
     CONNECT_ACTION( _ui->actionResetTreemapZoom, _ui->treemapView, resetZoom()	    );
     CONNECT_ACTION( _ui->actionTreemapRebuild,	 _ui->treemapView, rebuildTreemap() );
+}
 
 
-    // "Go" menu
-
+void MainWindow::connectGoMenu()
+{
     CONNECT_ACTION( _ui->actionGoBack,	     _historyButtons,   historyGoBack()      );
     CONNECT_ACTION( _ui->actionGoForward,    _historyButtons,   historyGoForward()   );
     CONNECT_ACTION( _ui->actionGoUp,	     this,              navigateUp()         );
     CONNECT_ACTION( _ui->actionGoToToplevel, this,              navigateToToplevel() );
+}
 
 
-    // "Discover" menu
-
+void MainWindow::connectDiscoverMenu()
+{
     CONNECT_ACTION( _ui->actionDiscoverLargestFiles,    this, discoverLargestFiles()    );
     CONNECT_ACTION( _ui->actionDiscoverNewestFiles,     this, discoverNewestFiles()     );
     CONNECT_ACTION( _ui->actionDiscoverOldestFiles,     this, discoverOldestFiles()     );
     CONNECT_ACTION( _ui->actionDiscoverHardLinkedFiles, this, discoverHardLinkedFiles() );
     CONNECT_ACTION( _ui->actionDiscoverBrokenSymLinks,  this, discoverBrokenSymLinks()  );
     CONNECT_ACTION( _ui->actionDiscoverSparseFiles,     this, discoverSparseFiles()     );
+}
 
 
-    // "Help" menu
-
+void MainWindow::connectHelpMenu()
+{
     _ui->actionWhatsNew->setStatusTip( RELEASE_URL ); // defined in Version.h
 
     CONNECT_ACTION( _ui->actionHelp,		this, openActionUrl()	  );
@@ -397,7 +418,12 @@ void MainWindow::connectActions()
     CONNECT_ACTION( _ui->actionAboutQt,		qApp, aboutQt()		  );
     CONNECT_ACTION( _ui->actionDonate,		this, showDonateDialog()  );
 
+    connectHelpSolutionsMenu();
+}
 
+
+void MainWindow::connectHelpSolutionsMenu()
+{
     // Connect all actions of submenu "Help" -> "Problems and Solutions"
     // to display the URL that they have in their statusTip property in a browser
 
@@ -410,8 +436,11 @@ void MainWindow::connectActions()
         else
             CONNECT_ACTION( action, this, openActionUrl() );
     }
+}
 
 
+void MainWindow::connectDebugActions()
+{
     // Invisible debug actions
 
     addAction( _ui->actionVerboseSelection );    // Shift-F7
@@ -421,6 +450,9 @@ void MainWindow::connectActions()
 	     this,			  SLOT	( toggleVerboseSelection() ) );
 
     CONNECT_ACTION( _ui->actionDumpSelection, app()->selectionModel(), dumpSelectedItems() );
+
+    connect( _ui->dirTreeView,		  SIGNAL( clicked    ( QModelIndex ) ),
+	     this,			  SLOT	( itemClicked( QModelIndex ) ) );
 }
 
 
