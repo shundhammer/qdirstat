@@ -10,9 +10,9 @@
 #include <QMenu>
 
 #include "LocateFilesWindow.h"
-#include "DirTree.h"
+#include "QDirStatApp.h"        // SelectionModel, CleanupCollection
+#include "TreeWalker.h"
 #include "FileInfoIterator.h"
-#include "DotEntry.h"
 #include "SelectionModel.h"
 #include "ActionManager.h"
 #include "CleanupCollection.h"
@@ -25,15 +25,11 @@
 using namespace QDirStat;
 
 
-LocateFilesWindow::LocateFilesWindow( TreeWalker *        treeWalker,
-                                      SelectionModel *    selectionModel,
-                                      CleanupCollection * cleanupCollection,
-                                      QWidget *	          parent ):
+LocateFilesWindow::LocateFilesWindow( TreeWalker * treeWalker,
+                                      QWidget    * parent ):
     QDialog( parent ),
     _ui( new Ui::LocateFilesWindow ),
     _treeWalker( treeWalker ),
-    _selectionModel( selectionModel ),
-    _cleanupCollection( cleanupCollection ),
     _sortCol( LocateListPathCol ),
     _sortOrder( Qt::AscendingOrder )
 {
@@ -181,7 +177,7 @@ void LocateFilesWindow::locateInMainWindow( QTreeWidgetItem * item )
     CHECK_PTR( _subtree.tree() );
 
     // logDebug() << "Locating " << searchResult->path() << " in tree" << endl;
-    _selectionModel->setCurrentItem( searchResult->path() );
+    app()->selectionModel()->setCurrentItem( searchResult->path() );
 }
 
 
@@ -193,11 +189,11 @@ void LocateFilesWindow::itemContextMenu( const QPoint & pos )
 
     ActionManager::instance()->addActions( &menu, actions );
 
-    if ( _cleanupCollection && ! _cleanupCollection->isEmpty() )
+    if ( app()->cleanupCollection() && ! app()->cleanupCollection()->isEmpty() )
     {
 	menu.addSeparator();
 
-        foreach ( Cleanup * cleanup, _cleanupCollection->cleanupList() )
+        foreach ( Cleanup * cleanup, app()->cleanupCollection()->cleanupList() )
         {
             if ( cleanup->worksForFile() )
                 menu.addAction( cleanup );
@@ -215,9 +211,9 @@ void LocateFilesWindow::addCleanupHotkeys()
     if ( moveToTrash )
         addAction( moveToTrash );
 
-    if ( _cleanupCollection )
+    if ( app()->cleanupCollection() )
     {
-        foreach ( Cleanup * cleanup, _cleanupCollection->cleanupList() )
+        foreach ( Cleanup * cleanup, app()->cleanupCollection()->cleanupList() )
         {
             if ( cleanup->worksForFile() && ! cleanup->shortcut().isEmpty() )
                 addAction( cleanup );

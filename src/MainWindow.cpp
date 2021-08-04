@@ -1490,17 +1490,14 @@ void MainWindow::discoverFilesFromMonth( const QString & path, short year, short
 
 void MainWindow::discoverFiles( TreeWalker *    treeWalker,
                                 const QString & headingText,
-                                const QString & path )
+                                const QString & path         )
 {
     if ( ! _locateFilesWindow )
     {
 	// This deletes itself when the user closes it. The associated QPointer
 	// keeps track of that and sets the pointer to 0 when it happens.
 
-	_locateFilesWindow = new LocateFilesWindow( treeWalker,
-                                                    app()->selectionModel(),
-                                                    app()->cleanupCollection(),
-                                                    this );
+	_locateFilesWindow = new LocateFilesWindow( treeWalker, this );
     }
     else
     {

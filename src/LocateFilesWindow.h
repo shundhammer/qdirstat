@@ -15,16 +15,12 @@
 
 #include "ui_locate-files-window.h"
 #include "FileInfo.h"
-#include "FileInfoSet.h"
 #include "Subtree.h"
-#include "TreeWalker.h"
 
 
 namespace QDirStat
 {
-    class DirTree;
-    class SelectionModel;
-    class CleanupCollection;
+    class TreeWalker;
 
 
     /**
@@ -56,10 +52,8 @@ namespace QDirStat
          * This class takes over ownership of the TreeWalker and will delete it
          * when appropriate.
 	 **/
-	LocateFilesWindow( TreeWalker *        treeWalker,
-                           SelectionModel *    selectionModel,
-                           CleanupCollection * cleanupCollection,
-                           QWidget *	       parent );
+	LocateFilesWindow( TreeWalker * treeWalker,
+                           QWidget    *	parent = 0 );
 
 	/**
 	 * Destructor.
@@ -173,8 +167,6 @@ namespace QDirStat
 	Ui::LocateFilesWindow * _ui;
         TreeWalker *            _treeWalker;
         Subtree                 _subtree;
-	SelectionModel *	_selectionModel;
-        CleanupCollection *     _cleanupCollection;
         int                     _sortCol;
         Qt::SortOrder           _sortOrder;
     };
