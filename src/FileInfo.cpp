@@ -124,6 +124,7 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
 	    && _blocks >= 0
 	    && _allocatedSize + FRAGMENT_SIZE < _size; // allow for intelligent fragment handling
 
+#if 0
 	if ( _isSparseFile )
 	{
 	    logDebug() << "Found sparse file: " << this
@@ -132,6 +133,7 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
 		       << " (" << (int) _blocks << " blocks)"
 		       << endl;
 	}
+#endif
 
 #if 0
 	if ( isFile() && _links > 1 )

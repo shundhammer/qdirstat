@@ -60,7 +60,7 @@ DirTree * QDirStatApp::dirTree() const
 
 QDirStatApp::QDirStatApp()
 {
-    logDebug() << "Creating app" << endl;
+    // logDebug() << "Creating app" << endl;
 
     _dirTreeModel = new DirTreeModel();
     CHECK_NEW( _dirTreeModel );
@@ -77,13 +77,13 @@ QDirStatApp::QDirStatApp()
 
 QDirStatApp::~QDirStatApp()
 {
-    logDebug() << "Destroying app" << endl;
+    // logDebug() << "Destroying app" << endl;
 
     delete _cleanupCollection;
     delete _selectionModel;
     delete _dirTreeModel;
 
-    logDebug() << "App destroyed." << endl;
+    // logDebug() << "App destroyed." << endl;
 }
 
 

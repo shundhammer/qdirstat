@@ -162,7 +162,7 @@ MainWindow::MainWindow():
 
 MainWindow::~MainWindow()
 {
-    logDebug() << "Destroying main window" << endl;
+    // logDebug() << "Destroying main window" << endl;
 
     if ( _currentLayout )
 	saveLayout( _currentLayout );
@@ -185,7 +185,7 @@ MainWindow::~MainWindow()
 
     QDirStatApp::deleteInstance();
 
-    logDebug() << "Main window destroyed" << endl;
+    // logDebug() << "Main window destroyed" << endl;
 }
 
 
