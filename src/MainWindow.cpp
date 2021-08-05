@@ -365,6 +365,16 @@ void MainWindow::connectViewExpandMenu()
 }
 
 
+void MainWindow::mapTreeExpandAction( QAction * action, int level )
+{
+    if ( _treeLevelMapper )
+    {
+	CONNECT_ACTION( action, _treeLevelMapper, map() );
+	_treeLevelMapper->setMapping( action, level );
+    }
+}
+
+
 void MainWindow::connectViewTreemapMenu()
 {
     connect( _ui->actionShowTreemap, SIGNAL( toggled( bool )   ),
@@ -451,16 +461,6 @@ void MainWindow::connectDebugActions()
 }
 
 
-void MainWindow::mapTreeExpandAction( QAction * action, int level )
-{
-    if ( _treeLevelMapper )
-    {
-	CONNECT_ACTION( action, _treeLevelMapper, map() );
-	_treeLevelMapper->setMapping( action, level );
-    }
-}
-
-
 void MainWindow::updateActions()
 {
     bool reading	     = app()->dirTree()->isBusy();
@@ -505,6 +505,18 @@ void MainWindow::updateActions()
     _ui->actionTreemapRebuild->setEnabled  ( showingTreemap );
 
     _historyButtons->updateActions();
+}
+
+
+FileInfo * MainWindow::selectedDirOrRoot() const
+{
+    FileInfoSet selectedItems = app()->selectionModel()->selectedItems();
+    FileInfo * sel = selectedItems.first();
+
+    if ( ! sel || ! sel->isDir() )
+	sel = app()->dirTree()->firstToplevel();
+
+    return sel;
 }
 
 
@@ -635,9 +647,28 @@ void MainWindow::showTreemapView()
 void MainWindow::treemapAsSidePanel()
 {
     if ( _ui->actionTreemapAsSidePanel->isChecked() )
-	_ui->mainWinSplitter->setOrientation(Qt::Horizontal);
+	_ui->mainWinSplitter->setOrientation( Qt::Horizontal );
     else
-	_ui->mainWinSplitter->setOrientation(Qt::Vertical);
+	_ui->mainWinSplitter->setOrientation( Qt::Vertical );
+}
+
+
+void MainWindow::updateFileDetailsView()
+{
+    if ( _ui->fileDetailsView->isVisible() )
+    {
+	FileInfoSet sel = app()->selectionModel()->selectedItems();
+
+	if ( sel.isEmpty() )
+	    _ui->fileDetailsView->showDetails( app()->selectionModel()->currentItem() );
+	else
+	{
+	    if ( sel.count() == 1 )
+		_ui->fileDetailsView->showDetails( sel.first() );
+	    else
+		_ui->fileDetailsView->showDetails( sel );
+	}
+    }
 }
 
 
@@ -672,7 +703,7 @@ void MainWindow::mousePressEvent( QMouseEvent * event )
 }
 
 
-void MainWindow::closeEvent( QCloseEvent *event )
+void MainWindow::closeEvent( QCloseEvent * event )
 {
     if ( _modified )
     {
@@ -876,6 +907,16 @@ void MainWindow::askOpenPkg()
 	app()->dirTree()->reset();
 	readPkg( pkgFilter );
     }
+}
+
+
+void MainWindow::readPkg( const PkgFilter & pkgFilter )
+{
+    // logInfo() << "URL: " << pkgFilter.url() << endl;
+
+    updateWindowTitle( pkgFilter.url() );
+    expandTreeToLevel( 0 );   // Performance boost: Down from 25 to 6 sec.
+    app()->dirTreeModel()->readPkg( pkgFilter );
 }
 
 
@@ -1088,16 +1129,6 @@ void MainWindow::askWriteCache()
 }
 
 
-void MainWindow::readPkg( const PkgFilter & pkgFilter )
-{
-    // logInfo() << "URL: " << pkgFilter.url() << endl;
-
-    updateWindowTitle( pkgFilter.url() );
-    expandTreeToLevel( 0 );   // Performance boost: Down from 25 to 6 sec.
-    app()->dirTreeModel()->readPkg( pkgFilter );
-}
-
-
 void MainWindow::updateWindowTitle( const QString & url )
 {
     QString windowTitle = "QDirStat";
@@ -1112,20 +1143,16 @@ void MainWindow::updateWindowTitle( const QString & url )
 }
 
 
-void MainWindow::expandTreeToLevel( int level )
-{
-    logDebug() << "Expanding tree to level " << level << endl;
-
-    if ( level < 1 )
-	_ui->dirTreeView->collapseAll();
-    else
-	_ui->dirTreeView->expandToDepth( level - 1 );
-}
-
-
 void MainWindow::showProgress( const QString & text )
 {
     _ui->statusBar->showMessage( text, _statusBarTimeout );
+}
+
+
+void MainWindow::showElapsedTime()
+{
+    showProgress( tr( "Reading... %1" )
+		  .arg( formatMillisec( _stopWatch.elapsed(), false ) ) );
 }
 
 
@@ -1170,25 +1197,6 @@ void MainWindow::showSummary()
 }
 
 
-void MainWindow::updateFileDetailsView()
-{
-    if ( _ui->fileDetailsView->isVisible() )
-    {
-	FileInfoSet sel = app()->selectionModel()->selectedItems();
-
-	if ( sel.isEmpty() )
-	    _ui->fileDetailsView->showDetails( app()->selectionModel()->currentItem() );
-	else
-	{
-	    if ( sel.count() == 1 )
-		_ui->fileDetailsView->showDetails( sel.first() );
-	    else
-		_ui->fileDetailsView->showDetails( sel );
-	}
-    }
-}
-
-
 void MainWindow::startingCleanup( const QString & cleanupName )
 {
     showProgress( tr( "Starting cleanup action %1" ).arg( cleanupName ) );
@@ -1227,6 +1235,17 @@ void MainWindow::copyCurrentPathToClipboard()
     {
 	showProgress( tr( "No current item" ) );
     }
+}
+
+
+void MainWindow::expandTreeToLevel( int level )
+{
+    logDebug() << "Expanding tree to level " << level << endl;
+
+    if ( level < 1 )
+	_ui->dirTreeView->collapseAll();
+    else
+	_ui->dirTreeView->expandToDepth( level - 1 );
 }
 
 
@@ -1338,13 +1357,6 @@ void MainWindow::openConfigDialog()
 	_configDialog->setup();
 	_configDialog->show();
     }
-}
-
-
-void MainWindow::showElapsedTime()
-{
-    showProgress( tr( "Reading... %1" )
-		  .arg( formatMillisec( _stopWatch.elapsed(), false ) ) );
 }
 
 
@@ -1602,18 +1614,6 @@ void MainWindow::applyLayout( TreeLayout * layout )
 }
 
 
-FileInfo * MainWindow::selectedDirOrRoot() const
-{
-    FileInfoSet selectedItems = app()->selectionModel()->selectedItems();
-    FileInfo * sel = selectedItems.first();
-
-    if ( ! sel || ! sel->isDir() )
-	sel = app()->dirTree()->firstToplevel();
-
-    return sel;
-}
-
-
 void MainWindow::showDirPermissionsWarning()
 {
     if ( _dirPermissionsWarning || ! _enableDirPermissionsWarning )
@@ -1646,20 +1646,6 @@ void MainWindow::showUnreadableDirs()
 
     _unreadableDirsWindow->populate( app()->dirTree()->root() );
     _unreadableDirsWindow->show();
-}
-
-
-void MainWindow::toggleVerboseSelection()
-{
-    // Verbose selection is toggled with Shift-F7
-
-    _verboseSelection = _ui->actionVerboseSelection->isChecked();
-
-    if ( app()->selectionModel() )
-	app()->selectionModel()->setVerbose( _verboseSelection );
-
-    logInfo() << "Verbose selection is now " << ( _verboseSelection ? "on" : "off" )
-	      << ". Change this with Shift-F7." << endl;
 }
 
 
@@ -1731,11 +1717,54 @@ void MainWindow::showDonateDialog()
 }
 
 
+void MainWindow::selectionChanged()
+{
+    showSummary();
+    updateFileDetailsView();
+
+    if ( _verboseSelection )
+    {
+	logNewline();
+	app()->selectionModel()->dumpSelectedItems();
+    }
+}
+
+
+void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurrent )
+{
+    showSummary();
+
+    if ( ! oldCurrent )
+	updateFileDetailsView();
+
+    if ( _verboseSelection )
+    {
+	logDebug() << "new current: " << newCurrent << endl;
+	logDebug() << "old current: " << oldCurrent << endl;
+	app()->selectionModel()->dumpSelectedItems();
+    }
+}
+
+
 
 
 //---------------------------------------------------------------------------
 //			       Debugging Helpers
 //---------------------------------------------------------------------------
+
+
+void MainWindow::toggleVerboseSelection()
+{
+    // Verbose selection is toggled with Shift-F7
+
+    _verboseSelection = _ui->actionVerboseSelection->isChecked();
+
+    if ( app()->selectionModel() )
+	app()->selectionModel()->setVerbose( _verboseSelection );
+
+    logInfo() << "Verbose selection is now " << ( _verboseSelection ? "on" : "off" )
+	      << ". Change this with Shift-F7." << endl;
+}
 
 
 void MainWindow::itemClicked( const QModelIndex & index )
@@ -1761,33 +1790,4 @@ void MainWindow::itemClicked( const QModelIndex & index )
     }
 
     // app()->dirTreeModel()->dumpPersistentIndexList();
-}
-
-
-void MainWindow::selectionChanged()
-{
-    showSummary();
-    updateFileDetailsView();
-
-    if ( _verboseSelection )
-    {
-	logDebug() << endl;
-	app()->selectionModel()->dumpSelectedItems();
-    }
-}
-
-
-void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurrent )
-{
-    showSummary();
-
-    if ( ! oldCurrent )
-	updateFileDetailsView();
-
-    if ( _verboseSelection )
-    {
-	logDebug() << "new current: " << newCurrent << endl;
-	logDebug() << "old current: " << oldCurrent << endl;
-	app()->selectionModel()->dumpSelectedItems();
-    }
 }
