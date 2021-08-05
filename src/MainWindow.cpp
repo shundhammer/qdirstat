@@ -364,16 +364,6 @@ void MainWindow::connectViewExpandMenu()
 }
 
 
-void MainWindow::mapTreeExpandAction( QAction * action, int level )
-{
-    if ( _treeLevelMapper )
-    {
-	CONNECT_ACTION( action, _treeLevelMapper, map() );
-	_treeLevelMapper->setMapping( action, level );
-    }
-}
-
-
 void MainWindow::connectViewTreemapMenu()
 {
     connect( _ui->actionShowTreemap, SIGNAL( toggled( bool )   ),
@@ -1187,6 +1177,18 @@ void MainWindow::expandTreeToLevel( int level )
 }
 
 
+void MainWindow::mapTreeExpandAction( QAction * action, int level )
+{
+    if ( _treeLevelMapper )
+    {
+	CONNECT_ACTION( action, _treeLevelMapper, map() );
+	_treeLevelMapper->setMapping( action, level );
+
+        // Each action in the _treeLevelMapper is mapped to expandTreeToLevel()
+    }
+}
+
+
 void MainWindow::navigateUp()
 {
     FileInfo * currentItem = app()->selectionModel()->currentItem();
@@ -1589,6 +1591,13 @@ void MainWindow::showUnreadableDirs()
 
 void MainWindow::openActionUrl()
 {
+    // Use a QAction that was set up in Qt Designer to just open an URL in an
+    // external web browser.
+    //
+    // This misappropriates the action's statusTip property to store the URL in
+    // a field that is easily accessible in Qt Designer, yet doesn't get in the
+    // way: It's not displayed automatically unlike the toolTip property.
+
     QAction * action = qobject_cast<QAction *>( sender() );
 
     if ( action )
@@ -1692,6 +1701,9 @@ void MainWindow::mousePressEvent( QMouseEvent * event )
 
         switch ( event->buttons() )
         {
+            // Handle the back / forward buttons on the mouse to act like the
+            // history back / forward buttons in the tool bar
+
             case Qt::BackButton:
                 action = _ui->actionGoBack;
                 break;
