@@ -838,7 +838,7 @@ void MainWindow::askOpenDir()
 void MainWindow::askOpenPkg()
 {
     bool canceled;
-    PkgFilter pkgFilter = OpenPkgDialog::askPkgFilter( canceled );
+    PkgFilter pkgFilter = OpenPkgDialog::askPkgFilter( &canceled );
 
     if ( ! canceled )
     {

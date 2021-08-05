@@ -55,17 +55,20 @@ PkgFilter OpenPkgDialog::pkgFilter()
 }
 
 
-PkgFilter OpenPkgDialog::askPkgFilter( bool &    canceled_ret,
+PkgFilter OpenPkgDialog::askPkgFilter( bool    * canceled_ret,
                                        QWidget * parent )
 {
     OpenPkgDialog dialog( parent );
     int result = dialog.exec();
 
     PkgFilter pkgFilter( "" );
-    canceled_ret = (result == QDialog::Rejected );
+    bool canceled = (result == QDialog::Rejected );
 
-    if ( ! canceled_ret )
+    if ( ! canceled )
         pkgFilter = dialog.pkgFilter();
+
+    if ( canceled_ret )
+        *canceled_ret = canceled;
 
     return pkgFilter;
 }
