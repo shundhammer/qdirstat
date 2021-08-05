@@ -72,7 +72,6 @@ MainWindow::MainWindow():
     QMainWindow(),
     _ui( new Ui::MainWindow ),
     _configDialog(0),
-    _modified( false ),
     _enableDirPermissionsWarning( false ),
     _verboseSelection( false ),
     _urlInWindowTitle( false ),
@@ -699,36 +698,6 @@ void MainWindow::mousePressEvent( QMouseEvent * event )
             if ( action->isEnabled() )
                 action->trigger();
         }
-    }
-}
-
-
-void MainWindow::closeEvent( QCloseEvent * event )
-{
-    if ( _modified )
-    {
-	int button = QMessageBox::question( this, tr( "Unsaved changes" ),
-					    tr( "Save changes?" ),
-					    QMessageBox::Save |
-					    QMessageBox::Discard |
-					    QMessageBox::Cancel );
-
-	if ( button == QMessageBox::Cancel )
-	{
-	    event->ignore();
-	    return;
-	}
-
-	if ( button == QMessageBox::Save )
-	{
-	    // saveFile();
-	}
-
-	event->accept();
-    }
-    else
-    {
-	event->accept();
     }
 }
 

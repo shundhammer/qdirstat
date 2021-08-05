@@ -479,11 +479,6 @@ protected:
     void writeLayoutSettings( TreeLayout * layout );
 
     /**
-     * Window close event ([x] icon in the top right window)
-     **/
-    virtual void closeEvent( QCloseEvent *event ) Q_DECL_OVERRIDE;
-
-    /**
      * Handle mouse buttons: Activate history actions actionGoBack and
      * actionGoForward with the "back" and "forward" mouse buttons as well.
      **/
@@ -503,7 +498,6 @@ private:
     QPointer<UnreadableDirsWindow> _unreadableDirsWindow;
     QString			   _dUrl;
     QElapsedTimer		   _stopWatch;
-    bool			   _modified;
     bool			   _enableDirPermissionsWarning;
     bool			   _verboseSelection;
     bool			   _urlInWindowTitle;
