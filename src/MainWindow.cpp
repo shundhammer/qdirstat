@@ -652,56 +652,6 @@ void MainWindow::treemapAsSidePanel()
 }
 
 
-void MainWindow::updateFileDetailsView()
-{
-    if ( _ui->fileDetailsView->isVisible() )
-    {
-	FileInfoSet sel = app()->selectionModel()->selectedItems();
-
-	if ( sel.isEmpty() )
-	    _ui->fileDetailsView->showDetails( app()->selectionModel()->currentItem() );
-	else
-	{
-	    if ( sel.count() == 1 )
-		_ui->fileDetailsView->showDetails( sel.first() );
-	    else
-		_ui->fileDetailsView->showDetails( sel );
-	}
-    }
-}
-
-
-void MainWindow::mousePressEvent( QMouseEvent * event )
-{
-    if ( event )
-    {
-        QAction * action = 0;
-
-        switch ( event->buttons() )
-        {
-            case Qt::BackButton:
-                action = _ui->actionGoBack;
-                break;
-
-            case Qt::ForwardButton:
-                action = _ui->actionGoForward;
-                break;
-
-            default:
-                break;
-        }
-
-        if ( action )
-        {
-            event->accept();
-
-            if ( action->isEnabled() )
-                action->trigger();
-        }
-    }
-}
-
-
 void MainWindow::busyDisplay()
 {
     _ui->treemapView->disable();
@@ -761,6 +711,25 @@ void MainWindow::idleDisplay()
 
     updateFileDetailsView();
     showTreemapView();
+}
+
+
+void MainWindow::updateFileDetailsView()
+{
+    if ( _ui->fileDetailsView->isVisible() )
+    {
+	FileInfoSet sel = app()->selectionModel()->selectedItems();
+
+	if ( sel.isEmpty() )
+	    _ui->fileDetailsView->showDetails( app()->selectionModel()->currentItem() );
+	else
+	{
+	    if ( sel.count() == 1 )
+		_ui->fileDetailsView->showDetails( sel.first() );
+	    else
+		_ui->fileDetailsView->showDetails( sel );
+	}
+    }
 }
 
 
@@ -1711,6 +1680,37 @@ void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurren
 	logDebug() << "new current: " << newCurrent << endl;
 	logDebug() << "old current: " << oldCurrent << endl;
 	app()->selectionModel()->dumpSelectedItems();
+    }
+}
+
+
+void MainWindow::mousePressEvent( QMouseEvent * event )
+{
+    if ( event )
+    {
+        QAction * action = 0;
+
+        switch ( event->buttons() )
+        {
+            case Qt::BackButton:
+                action = _ui->actionGoBack;
+                break;
+
+            case Qt::ForwardButton:
+                action = _ui->actionGoForward;
+                break;
+
+            default:
+                break;
+        }
+
+        if ( action )
+        {
+            event->accept();
+
+            if ( action->isEnabled() )
+                action->trigger();
+        }
     }
 }
 
