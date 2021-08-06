@@ -29,6 +29,7 @@ namespace QDirStat
     class ActionManager
     {
     public:
+
 	/**
 	 * Return the singleton instance of this class.
 	 **/
@@ -59,6 +60,7 @@ namespace QDirStat
 
 
     protected:
+
 	/**
 	 * Constructor. Protected because this is a singleton class.
 	 * Use instance() instead.

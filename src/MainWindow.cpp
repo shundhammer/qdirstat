@@ -266,7 +266,7 @@ void MainWindow::connectMenuActions()
     connectViewMenu();
     connectGoMenu();
     connectDiscoverMenu();
-    // CleanupCollection::updateMenus() handles the "Clean Up" menu
+    // CleanupCollection::add() handles the cleanup actions
     connectHelpMenu();
 
     connectDebugActions();      // Invisible F7 / Shift-F7 actions

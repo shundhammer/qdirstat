@@ -312,6 +312,7 @@ namespace QDirStat
 	void setOutputWindowTimeout  ( int timeoutMillisec )	   { _outputWindowTimeout   = timeoutMillisec; }
 	void setOutputWindowAutoClose( bool autoClose )		   { _outputWindowAutoClose = autoClose; }
 
+
     public slots:
 
 	/**
