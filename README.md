@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-07-31
+Updated: 2021-08-06
 
 
 ## Screenshot
@@ -122,6 +122,24 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2021-08-06
+
+  - Lots of internal restructuring and refactoring to keep the code
+    maintainable: In particular, the MainWindow code was getting out of hand
+    with more and more features and menu actions being added all the time, so
+    some of that was moved out to separate classes.
+
+    That involved quite some testing and rethinking how certain parts are
+    working, which in turn involved some head-scratching, rearranging code had
+    the byproduct of more internal documentation and also some small bug fixes.
+
+  - The "Permissions error" panel message didn't always go away when the user
+    had simply left it open and just opened a new directory; and probably also
+    in some other situations. Now it's always cleanly removed whenever a new
+    directory tree is read or when it's re-read ("Refresh all" or "Refresh
+    Selected"). That was one of those small bug fixes.
+
 
 - 2021-07-31
 
