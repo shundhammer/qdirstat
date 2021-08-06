@@ -776,21 +776,27 @@ void MainWindow::openDir( const QString & url )
     catch ( const SysCallFailedException & ex )
     {
 	CAUGHT( ex );
-	updateWindowTitle( "" );
-	app()->dirTree()->sendFinished();
-
-	QMessageBox errorPopup( QMessageBox::Warning,	// icon
-				tr( "Error" ),		// title
-				tr( "Could not open directory %1" ).arg( ex.resourceName() ), // text
-				QMessageBox::Ok,	// buttons
-				this );			// parent
-	errorPopup.setDetailedText( ex.what() );
-	errorPopup.exec();
+        showOpenDirErrorPopup( ex );
 	askOpenDir();
     }
 
     updateActions();
     expandTreeToLevel( 1 );
+}
+
+
+void MainWindow::showOpenDirErrorPopup( const SysCallFailedException & ex )
+{
+    updateWindowTitle( "" );
+    app()->dirTree()->sendFinished();
+
+    QMessageBox errorPopup( QMessageBox::Warning,	// icon
+                            tr( "Error" ),		// title
+                            tr( "Could not open directory %1" ).arg( ex.resourceName() ), // text
+                            QMessageBox::Ok,            // buttons
+                            this );			// parent
+    errorPopup.setDetailedText( ex.what() );
+    errorPopup.exec();
 }
 
 
@@ -921,16 +927,7 @@ void MainWindow::showUnpkgFiles( const UnpkgSettings & unpkgSettings )
     catch ( const SysCallFailedException & ex )
     {
 	CAUGHT( ex );
-	updateWindowTitle( "" );
-	app()->dirTree()->sendFinished();
-
-	QMessageBox errorPopup( QMessageBox::Warning,	// icon
-				tr( "Error" ),		// title
-				tr( "Could not open directory %1" ).arg( ex.resourceName() ), // text
-				QMessageBox::Ok,	// buttons
-				this );			// parent
-	errorPopup.setDetailedText( ex.what() );
-	errorPopup.exec();
+        showOpenDirErrorPopup( ex );
     }
 
     updateActions();

@@ -31,6 +31,7 @@ class QCloseEvent;
 class QMouseEvent;
 class QSignalMapper;
 class TreeLayout;
+class SysCallFailedException;
 class QMenu;
 
 
@@ -438,6 +439,14 @@ protected:
      * Write settings for one layout.
      **/
     void writeLayoutSettings( TreeLayout * layout );
+
+    /**
+     * Show an error popup that a directory could not be opened and wait until
+     * the user confirmed it.
+     *
+     * The relevant informatoin is all in the exception.
+     **/
+    void showOpenDirErrorPopup( const SysCallFailedException & ex );
 
     /**
      * Handle mouse buttons: Activate history actions actionGoBack and
