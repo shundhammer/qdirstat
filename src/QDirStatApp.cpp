@@ -13,6 +13,7 @@
 #include "QDirStatApp.h"
 #include "DirTreeModel.h"
 #include "DirTree.h"
+#include "FileInfoSet.h"
 #include "SelectionModel.h"
 #include "CleanupCollection.h"
 #include "MainWindow.h"
@@ -103,6 +104,18 @@ QWidget * QDirStatApp::findMainWindow() const
         logWarning() << "NULL mainWin for shared instance" << endl;
 
     return mainWin;
+}
+
+
+FileInfo * QDirStatApp::selectedDirOrRoot() const
+{
+    FileInfoSet selectedItems = app()->selectionModel()->selectedItems();
+    FileInfo * sel = selectedItems.first();
+
+    if ( ! sel || ! sel->isDir() )
+	sel = app()->dirTree()->firstToplevel();
+
+    return sel;
 }
 
 

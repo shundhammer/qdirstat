@@ -20,6 +20,7 @@ namespace QDirStat
     class SelectionModel;
     class CleanupCollection;
     class QDirStatApp;
+    class FileInfo;
 
 
     /**
@@ -123,6 +124,8 @@ namespace QDirStat
         // Convenience methods
         //
 
+
+
         /**
          * Return the (first) MainWindow instance of the running program that
          * is suitable as a widget parent for subwindows to maintain the
@@ -130,6 +133,15 @@ namespace QDirStat
          * behind the main window). Return 0 if there is no MainWindow (yet).
          **/
         QWidget * findMainWindow() const;
+
+        /**
+         * Return the first selected directory from the SelectionModel or, if
+         * none is selected, the DirTree's root directory.
+         *
+         * Notice that this might still return 0 if the tree is completely
+         * empty.
+         **/
+        FileInfo * selectedDirOrRoot() const;
 
 
     protected:

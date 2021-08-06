@@ -120,6 +120,9 @@ MainWindow::MainWindow():
                                           _ui->actionGoForward );
     CHECK_NEW( _historyButtons );
 
+    _discoverActions = new DiscoverActions( this );
+    CHECK_NEW( _discoverActions );
+
 #ifdef Q_OS_MACX
     // This makes the application to look like more "native" on macOS
     setUnifiedTitleAndToolBarOnMac( true );
@@ -390,12 +393,12 @@ void MainWindow::connectGoMenu()
 
 void MainWindow::connectDiscoverMenu()
 {
-    CONNECT_ACTION( _ui->actionDiscoverLargestFiles,    this, discoverLargestFiles()    );
-    CONNECT_ACTION( _ui->actionDiscoverNewestFiles,     this, discoverNewestFiles()     );
-    CONNECT_ACTION( _ui->actionDiscoverOldestFiles,     this, discoverOldestFiles()     );
-    CONNECT_ACTION( _ui->actionDiscoverHardLinkedFiles, this, discoverHardLinkedFiles() );
-    CONNECT_ACTION( _ui->actionDiscoverBrokenSymLinks,  this, discoverBrokenSymLinks()  );
-    CONNECT_ACTION( _ui->actionDiscoverSparseFiles,     this, discoverSparseFiles()     );
+    CONNECT_ACTION( _ui->actionDiscoverLargestFiles,    _discoverActions, discoverLargestFiles()    );
+    CONNECT_ACTION( _ui->actionDiscoverNewestFiles,     _discoverActions, discoverNewestFiles()     );
+    CONNECT_ACTION( _ui->actionDiscoverOldestFiles,     _discoverActions, discoverOldestFiles()     );
+    CONNECT_ACTION( _ui->actionDiscoverHardLinkedFiles, _discoverActions, discoverHardLinkedFiles() );
+    CONNECT_ACTION( _ui->actionDiscoverBrokenSymLinks,  _discoverActions, discoverBrokenSymLinks()  );
+    CONNECT_ACTION( _ui->actionDiscoverSparseFiles,     _discoverActions, discoverSparseFiles()     );
 }
 
 
@@ -494,18 +497,6 @@ void MainWindow::updateActions()
     _ui->actionTreemapRebuild->setEnabled  ( showingTreemap );
 
     _historyButtons->updateActions();
-}
-
-
-FileInfo * MainWindow::selectedDirOrRoot() const
-{
-    FileInfoSet selectedItems = app()->selectionModel()->selectedItems();
-    FileInfo * sel = selectedItems.first();
-
-    if ( ! sel || ! sel->isDir() )
-	sel = app()->dirTree()->firstToplevel();
-
-    return sel;
 }
 
 
@@ -1302,13 +1293,13 @@ void MainWindow::openConfigDialog()
 
 void MainWindow::showFileTypeStats()
 {
-    FileTypeStatsWindow::populateSharedInstance( selectedDirOrRoot() );
+    FileTypeStatsWindow::populateSharedInstance( app()->selectedDirOrRoot() );
 }
 
 
 void MainWindow::showFileSizeStats()
 {
-    FileSizeStatsWindow::populateSharedInstance( selectedDirOrRoot() );
+    FileSizeStatsWindow::populateSharedInstance( app()->selectedDirOrRoot() );
 }
 
 
@@ -1325,13 +1316,13 @@ void MainWindow::showFileAgeStats()
                  _fileAgeStatsWindow,     SLOT  ( syncedPopulate    ( FileInfo *             ) ) );
 
         connect( _fileAgeStatsWindow,     SIGNAL( locateFilesFromYear   ( QString, short ) ),
-                 this,                    SLOT  ( discoverFilesFromYear ( QString, short ) ) );
+                 _discoverActions,        SLOT  ( discoverFilesFromYear ( QString, short ) ) );
 
         connect( _fileAgeStatsWindow,     SIGNAL( locateFilesFromMonth  ( QString, short, short ) ),
-                 this,                    SLOT  ( discoverFilesFromMonth( QString, short, short ) ) );
+                 _discoverActions,        SLOT  ( discoverFilesFromMonth( QString, short, short ) ) );
     }
 
-    _fileAgeStatsWindow->populate( selectedDirOrRoot() );
+    _fileAgeStatsWindow->populate( app()->selectedDirOrRoot() );
     _fileAgeStatsWindow->show();
 }
 
@@ -1351,111 +1342,6 @@ void MainWindow::showFilesystems()
 
     _filesystemsWindow->populate();
     _filesystemsWindow->show();
-}
-
-
-void MainWindow::discoverLargestFiles()
-{
-    discoverFiles( new QDirStat::LargestFilesTreeWalker(),
-                   tr( "Largest Files in %1" ) );
-    _locateFilesWindow->sortByColumn( LocateListSizeCol, Qt::DescendingOrder );
-}
-
-
-void MainWindow::discoverNewestFiles()
-{
-    discoverFiles( new QDirStat::NewFilesTreeWalker(),
-                   tr( "Newest Files in %1" ) );
-    _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::DescendingOrder );
-}
-
-
-void MainWindow::discoverOldestFiles()
-{
-    discoverFiles( new QDirStat::OldFilesTreeWalker(),
-                   tr( "Oldest Files in %1" ) );
-    _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::AscendingOrder );
-}
-
-
-void MainWindow::discoverHardLinkedFiles()
-{
-    discoverFiles( new QDirStat::HardLinkedFilesTreeWalker(),
-                   tr( "Files with Multiple Hard Links in %1" ) );
-    _locateFilesWindow->sortByColumn( LocateListPathCol, Qt::AscendingOrder );
-}
-
-
-void MainWindow::discoverBrokenSymLinks()
-{
-    BusyPopup msg( tr( "Checking symlinks..." ), _ui->treemapView );
-    discoverFiles( new QDirStat::BrokenSymLinksTreeWalker(),
-                   tr( "Broken Symbolic Links in %1" ) );
-    _locateFilesWindow->sortByColumn( LocateListPathCol, Qt::AscendingOrder );
-}
-
-
-void MainWindow::discoverSparseFiles()
-{
-    discoverFiles( new QDirStat::SparseFilesTreeWalker(),
-                   tr( "Sparse Files in %1" ) );
-    _locateFilesWindow->sortByColumn( LocateListSizeCol, Qt::DescendingOrder );
-}
-
-
-void MainWindow::discoverFilesFromYear( const QString & path, short year )
-{
-    QString headingText = tr( "Files from %1 in %2" ).arg( year ).arg( "%1");
-
-    discoverFiles( new QDirStat::FilesFromYearTreeWalker( year ), headingText, path );
-    _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::AscendingOrder );
-}
-
-
-void MainWindow::discoverFilesFromMonth( const QString & path, short year, short month )
-{
-    QString headingText = tr( "Files from %1/%2 in %3" ).arg( month ).arg( year).arg( "%1");
-
-    discoverFiles( new QDirStat::FilesFromMonthTreeWalker( year, month ), headingText, path );
-    _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::AscendingOrder );
-}
-
-
-void MainWindow::discoverFiles( TreeWalker *    treeWalker,
-                                const QString & headingText,
-                                const QString & path         )
-{
-    if ( ! _locateFilesWindow )
-    {
-	// This deletes itself when the user closes it. The associated QPointer
-	// keeps track of that and sets the pointer to 0 when it happens.
-
-	_locateFilesWindow = new LocateFilesWindow( treeWalker, this );
-    }
-    else
-    {
-        _locateFilesWindow->setTreeWalker( treeWalker );
-    }
-
-    FileInfo * sel = 0;
-
-    if ( ! path.isEmpty() )
-    {
-        sel = app()->dirTree()->locate( path,
-                                        true ); // findPseudoDirs
-    }
-
-    if ( ! sel )
-        sel = selectedDirOrRoot();
-
-    if ( sel )
-    {
-        if ( ! headingText.isEmpty() )
-            _locateFilesWindow->setHeading( headingText.arg( sel->url() ) );
-
-        _locateFilesWindow->populate( sel );
-        _locateFilesWindow->show();
-    }
 }
 
 

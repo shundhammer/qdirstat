@@ -71,6 +71,7 @@ SOURCES	  = main.cpp			\
 	    DirTreePatternFilter.cpp	\
 	    DirTreePkgFilter.cpp	\
 	    DirTreeView.cpp		\
+	    DiscoverActions.cpp		\
 	    DotEntry.cpp		\
 	    DpkgPkgManager.cpp		\
 	    Exception.cpp		\
@@ -172,6 +173,7 @@ HEADERS	  =				\
 	    DirTreePatternFilter.h	\
 	    DirTreePkgFilter.h		\
 	    DirTreeView.h		\
+	    DiscoverActions.h		\
 	    DotEntry.h			\
 	    DpkgPkgManager.h		\
 	    Exception.h			\

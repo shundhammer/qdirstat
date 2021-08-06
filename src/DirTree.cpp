@@ -21,6 +21,7 @@
 #include "PkgReader.h"
 #include "MountPoints.h"
 #include "FormatUtil.h"
+#include "Logger.h"
 #include "Exception.h"
 
 #define VERBOSE_EXCLUDE_RULES	1

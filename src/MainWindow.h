@@ -20,8 +20,7 @@
 #include "FileAgeStatsWindow.h"
 #include "FilesystemsWindow.h"
 #include "HistoryButtons.h"
-#include "LocateFilesWindow.h"
-#include "TreeWalker.h"
+#include "DiscoverActions.h"
 #include "PanelMessage.h"
 #include "PkgFilter.h"
 #include "Subtree.h"
@@ -39,13 +38,13 @@ namespace QDirStat
 {
     class ConfigDialog;
     class FileInfo;
+    class DiscoverActions;
     class UnpkgSettings;
 }
 
 using QDirStat::FileAgeStatsWindow;
 using QDirStat::FileInfo;
 using QDirStat::FilesystemsWindow;
-using QDirStat::LocateFilesWindow;
 using QDirStat::PanelMessage;
 using QDirStat::UnreadableDirsWindow;
 
@@ -197,24 +196,6 @@ public slots:
      * Navigate to the toplevel directory of this tree.
      **/
     void navigateToToplevel();
-
-    //
-    // "Discover" actions: Open a non-modal LocateFilesWindow that lists files
-    // of a certain category. A click on a file in that list opens the tree
-    // branch with that file in the main window and selects it.
-    //
-    // All of those actions re-use the same window.
-    //
-
-    void discoverLargestFiles();
-    void discoverNewestFiles();
-    void discoverOldestFiles();
-    void discoverHardLinkedFiles();
-    void discoverBrokenSymLinks();
-    void discoverSparseFiles();
-    void discoverFilesFromYear ( const QString & path, short year );
-    void discoverFilesFromMonth( const QString & path, short year, short month );
-
 
     /**
      * Open the URL stored in an action's statusTip property with an external
@@ -401,12 +382,6 @@ protected slots:
 protected:
 
     /**
-     * Return the first selected directory or, if none is selected, the root
-     * directory.
-     **/
-    FileInfo * selectedDirOrRoot() const;
-
-    /**
      * Set up QObject connections (all except from QActions)
      **/
     void connectSignals();
@@ -433,20 +408,6 @@ protected:
      * the correct slot.
      **/
     void mapTreeExpandAction( QAction * action, int level );
-
-    /**
-     * Common part of all "discover" actions: Create or reuse a
-     * LocateFilesWindow with the specified TreeWalker.
-     *
-     * 'headingText' should include a "%1" placeholder for the path of the
-     * starting directory.
-     *
-     * 'path' can optionally (if non-empty) override the current selection of
-     * the tree as the starting directory.
-     **/
-    void discoverFiles( QDirStat::TreeWalker * treeWalker,
-                        const QString &        headingText,
-                        const QString &        path = "" );
 
     /**
      * Initialize the layout actions.
@@ -490,10 +451,10 @@ private:
     Ui::MainWindow		 * _ui;
     QDirStat::ConfigDialog	 * _configDialog;
     QDirStat::HistoryButtons     * _historyButtons;
+    QDirStat::DiscoverActions    * _discoverActions;
     QActionGroup		 * _layoutActionGroup;
     QPointer<FileAgeStatsWindow>   _fileAgeStatsWindow;
     QPointer<FilesystemsWindow>    _filesystemsWindow;
-    QPointer<LocateFilesWindow>    _locateFilesWindow;
     QPointer<PanelMessage>	   _dirPermissionsWarning;
     QPointer<UnreadableDirsWindow> _unreadableDirsWindow;
     QString			   _dUrl;
