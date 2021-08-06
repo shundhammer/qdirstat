@@ -96,10 +96,8 @@ namespace QDirStat
         static void populateSharedInstance( FileInfo * newSubtree );
 
         /**
-         * Convenience function for closing the shared instance if it is open.
-         * Since the window has also the DeleteOnClose flag set, this will also
-         * destroy the shared instance and set the shared instance QPointer to
-         * 0.
+         * Convenience function for closing and deleteing the shared instance
+         * if it is open.
          **/
         static void closeSharedInstance();
 

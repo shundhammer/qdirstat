@@ -108,11 +108,9 @@ void UnreadableDirsWindow::populateSharedInstance( FileInfo * subtree )
 void UnreadableDirsWindow::closeSharedInstance()
 {
     if ( _sharedInstance )
-        _sharedInstance->close();
+        _sharedInstance->deleteLater();
 
-    // If the shared instance is non-null, it is also guaranteed to be open:
-    // Since it has the DeleteOnClose flag set, closing it also deletes it and
-    // resets the QPointer to 0.
+    // The QPointer will automatically reset itself
 }
 
 
