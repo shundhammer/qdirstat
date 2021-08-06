@@ -40,6 +40,7 @@ namespace QDirStat
     class ConfigDialog;
     class FileInfo;
     class DiscoverActions;
+    class PkgManager;
     class UnpkgSettings;
 }
 
@@ -47,7 +48,9 @@ using QDirStat::FileAgeStatsWindow;
 using QDirStat::FileInfo;
 using QDirStat::FilesystemsWindow;
 using QDirStat::PanelMessage;
+using QDirStat::PkgManager;
 using QDirStat::UnreadableDirsWindow;
+using QDirStat::UnpkgSettings;
 
 
 class MainWindow: public QMainWindow
@@ -439,6 +442,26 @@ protected:
      * Write settings for one layout.
      **/
     void writeLayoutSettings( TreeLayout * layout );
+
+    /**
+     * Apply the exclude rules from 'unpkgSettings' to the DirTree.
+     **/
+    void setUnpkgExcludeRules( const UnpkgSettings & unpkgSettings );
+
+    /**
+     * Apply the filters to the DirTree:
+     * - Ignore all files that belong to an installed package
+     * - Ignore all file patterns ("*.pyc" etc.) the user wishes to ignore
+     **/
+    void setUnpkgFilters( const UnpkgSettings & unpkgSettings,
+                          PkgManager          * pkgManager );
+
+    /**
+     * Parse the starting directory in the 'unpkgSettings' and remove the
+     * starting "unpkg:" part to it is suitable for actually opening a
+     * directory. Return the parsed directory path.
+     **/
+    QString parseUnpkgStartingDir( const UnpkgSettings & unpkgSettings );
 
     /**
      * Show an error popup that a directory could not be opened and wait until

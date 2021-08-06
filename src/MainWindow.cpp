@@ -887,40 +887,16 @@ void MainWindow::showUnpkgFiles( const UnpkgSettings & unpkgSettings )
     app()->dirTreeModel()->clear(); // For instant feedback
     BusyPopup msg( tr( "Reading file lists..." ), this );
 
-    QString dir = unpkgSettings.startingDir;
-    dir.replace( QRegExp( "^unpkg:" ), "" );
 
-    if ( dir != unpkgSettings.startingDir )
-	logInfo() << "Parsed starting dir: " << dir << endl;
-
-
-    // Set up the exclude rules
-
-    ExcludeRules * excludeRules = new ExcludeRules( unpkgSettings.excludeDirs );
-    CHECK_NEW( excludeRules );
-
-    DirTree * tree = app()->dirTree();
-    tree->setExcludeRules( excludeRules );
-
-
-    // Prepare the filters with the complete file list of all installed packages
-
-    DirTreeFilter * filter = new DirTreePkgFilter( pkgManager );
-    CHECK_NEW( filter );
-
-    tree->clearFilters();
-    tree->addFilter( filter );
-
-    foreach ( const QString & pattern, unpkgSettings.ignorePatterns )
-    {
-	tree->addFilter( DirTreePatternFilter::create( pattern ) );
-    }
-
+    setUnpkgExcludeRules( unpkgSettings );
+    setUnpkgFilters( unpkgSettings, pkgManager );
 
     // Start reading the directory
 
     try
     {
+        QString dir = parseUnpkgStartingDir( unpkgSettings );
+
 	app()->dirTreeModel()->openUrl( dir );
 	updateWindowTitle( app()->dirTree()->url() );
     }
@@ -931,6 +907,50 @@ void MainWindow::showUnpkgFiles( const UnpkgSettings & unpkgSettings )
     }
 
     updateActions();
+}
+
+
+void MainWindow::setUnpkgExcludeRules( const UnpkgSettings & unpkgSettings )
+{
+    // Set up the exclude rules for directories that should be ignored
+
+    ExcludeRules * excludeRules = new ExcludeRules( unpkgSettings.excludeDirs );
+    CHECK_NEW( excludeRules );
+
+    app()->dirTree()->setExcludeRules( excludeRules );
+}
+
+
+void MainWindow::setUnpkgFilters( const UnpkgSettings & unpkgSettings,
+                                  PkgManager          * pkgManager )
+{
+    // Filter for ignoring all files from all installed packages
+
+    DirTreeFilter * filter = new DirTreePkgFilter( pkgManager );
+    CHECK_NEW( filter );
+
+    app()->dirTree()->clearFilters();
+    app()->dirTree()->addFilter( filter );
+
+
+    // Add the filters for each file pattern the user explicitly requested to ignore
+
+    foreach ( const QString & pattern, unpkgSettings.ignorePatterns )
+    {
+	app()->dirTree()->addFilter( DirTreePatternFilter::create( pattern ) );
+    }
+}
+
+
+QString MainWindow::parseUnpkgStartingDir( const UnpkgSettings & unpkgSettings )
+{
+    QString dir = unpkgSettings.startingDir;
+    dir.replace( QRegExp( "^unpkg:" ), "" );
+
+    if ( dir != unpkgSettings.startingDir )
+	logInfo() << "Parsed starting dir: " << dir << endl;
+
+    return dir;
 }
 
 
