@@ -974,6 +974,13 @@ void MainWindow::refreshAll()
 	else
 	    app()->dirTreeModel()->openUrl( url );
 
+        // No need to check if the URL is an unpkg:/ URL:
+        //
+        // In that case, the previous filters are still set, and just reading
+        // the dir tree again from disk with openUrl() will filter out the
+        // unwanted packaged files, ignored extensions and excluded directories
+        // again.
+
 	updateActions();
     }
     else
