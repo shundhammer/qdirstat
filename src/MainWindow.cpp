@@ -644,6 +644,10 @@ void MainWindow::busyDisplay()
     // have fixed permissions or ownership of those directories.
 
     UnreadableDirsWindow::closeSharedInstance();
+
+    if ( _dirPermissionsWarning )
+        _dirPermissionsWarning->deleteLater();
+
     _updateTimer.start();
 
     // It would be nice to sort by read jobs during reading, but this confuses
