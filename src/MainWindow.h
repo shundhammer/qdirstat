@@ -24,7 +24,6 @@
 #include "PanelMessage.h"
 #include "PkgFilter.h"
 #include "Subtree.h"
-#include "UnreadableDirsWindow.h"
 
 
 class QCloseEvent;
@@ -49,7 +48,6 @@ using QDirStat::FileInfo;
 using QDirStat::FilesystemsWindow;
 using QDirStat::PanelMessage;
 using QDirStat::PkgManager;
-using QDirStat::UnreadableDirsWindow;
 using QDirStat::UnpkgSettings;
 
 
@@ -488,7 +486,6 @@ private:
     QPointer<FileAgeStatsWindow>   _fileAgeStatsWindow;
     QPointer<FilesystemsWindow>    _filesystemsWindow;
     QPointer<PanelMessage>	   _dirPermissionsWarning;
-    QPointer<UnreadableDirsWindow> _unreadableDirsWindow;
     QString			   _dUrl;
     QElapsedTimer		   _stopWatch;
     bool			   _enableDirPermissionsWarning;

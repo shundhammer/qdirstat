@@ -11,6 +11,7 @@
 #define UnreadableDirsWindow_h
 
 #include <QDialog>
+#include <QPointer>
 #include <QTreeWidgetItem>
 
 #include "ui_unreadable-dirs-window.h"
@@ -76,6 +77,33 @@ namespace QDirStat
 	const Subtree & subtree() const { return _subtree; }
 
 
+        /**
+         * Static method for using one shared instance of this class between
+         * multiple parts of the application. This will create a new instance
+         * if there is none yet (or anymore).
+         *
+         * Do not hold on to this pointer; the instance destroys itself when
+         * the user closes the window, and then the pointer becomes invalid.
+         *
+         * After getting this shared instance, call populate() and show().
+         **/
+        static UnreadableDirsWindow * sharedInstance();
+
+        /**
+         * Convenience function for creating, populating and showing the shared
+         * instance.
+         **/
+        static void populateSharedInstance( FileInfo * newSubtree );
+
+        /**
+         * Convenience function for closing the shared instance if it is open.
+         * Since the window has also the DeleteOnClose flag set, this will also
+         * destroy the shared instance and set the shared instance QPointer to
+         * 0.
+         **/
+        static void closeSharedInstance();
+
+
     public slots:
 
 	/**
@@ -131,6 +159,8 @@ namespace QDirStat
 
 	Ui::UnreadableDirsWindow * _ui;
 	Subtree			   _subtree;
+
+        static QPointer<UnreadableDirsWindow> _sharedInstance;
     };
 
 

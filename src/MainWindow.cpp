@@ -51,6 +51,7 @@
 #include "ShowUnpkgFilesDialog.h"
 #include "SysUtil.h"
 #include "Trash.h"
+#include "UnreadableDirsWindow.h"
 #include "Version.h"
 
 #define LONG_MESSAGE		25*1000
@@ -638,19 +639,11 @@ void MainWindow::busyDisplay()
     _ui->treemapView->disable();
     updateActions();
 
-    if ( _unreadableDirsWindow )
-    {
-	// Close the window that lists unreadable directories: With the next
-	// directory read, things might have changed; the user may have fixed
-	// permissions or ownership of those directories.
-	//
-	// Closing this window also deletes it (because it has the
-	// DeleteOnClose flag set). The QPointer we use will take care of
-	// resetting itself to 0 when the underlying QObject is deleted.
+    // If it is open, close the window that lists unreadable directories:
+    // With the next directory read, things might have changed; the user may
+    // have fixed permissions or ownership of those directories.
 
-	_unreadableDirsWindow->close();
-    }
-
+    UnreadableDirsWindow::closeSharedInstance();
     _updateTimer.start();
 
     // It would be nice to sort by read jobs during reading, but this confuses
@@ -1486,16 +1479,7 @@ void MainWindow::showDirPermissionsWarning()
 
 void MainWindow::showUnreadableDirs()
 {
-    if ( ! _unreadableDirsWindow )
-    {
-	// This deletes itself when the user closes it. The associated QPointer
-	// keeps track of that and sets the pointer to 0 when it happens.
-
-	_unreadableDirsWindow = new UnreadableDirsWindow( this );
-    }
-
-    _unreadableDirsWindow->populate( app()->dirTree()->root() );
-    _unreadableDirsWindow->show();
+    UnreadableDirsWindow::populateSharedInstance( app()->dirTree()->root() );
 }
 
 

@@ -22,6 +22,9 @@
 using namespace QDirStat;
 
 
+QPointer<UnreadableDirsWindow> UnreadableDirsWindow::_sharedInstance = 0;
+
+
 UnreadableDirsWindow::UnreadableDirsWindow( QWidget * parent ):
     QDialog( parent ),
     _ui( new Ui::UnreadableDirsWindow )
@@ -44,6 +47,18 @@ UnreadableDirsWindow::~UnreadableDirsWindow()
     // logDebug() << "destroying" << endl;
     writeWindowSettings( this, "UnreadableDirsWindow" );
     delete _ui;
+}
+
+
+UnreadableDirsWindow * UnreadableDirsWindow::sharedInstance()
+{
+    if ( ! _sharedInstance )
+    {
+	_sharedInstance = new UnreadableDirsWindow( app()->findMainWindow() );
+	CHECK_NEW( _sharedInstance );
+    }
+
+    return _sharedInstance;
 }
 
 
@@ -77,6 +92,27 @@ void UnreadableDirsWindow::initWidgets()
 void UnreadableDirsWindow::reject()
 {
     deleteLater();
+}
+
+
+void UnreadableDirsWindow::populateSharedInstance( FileInfo * subtree )
+{
+    if ( ! subtree )
+        return;
+
+    sharedInstance()->populate( subtree );
+    sharedInstance()->show();
+}
+
+
+void UnreadableDirsWindow::closeSharedInstance()
+{
+    if ( _sharedInstance )
+        _sharedInstance->close();
+
+    // If the shared instance is non-null, it is also guaranteed to be open:
+    // Since it has the DeleteOnClose flag set, closing it also deletes it and
+    // resets the QPointer to 0.
 }
 
 
