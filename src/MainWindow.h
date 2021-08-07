@@ -442,6 +442,12 @@ protected:
     void writeLayoutSettings( TreeLayout * layout );
 
     /**
+     * Check for package manager support and enable or disable some of the
+     * related actions in the menus accordingly.
+     **/
+    void checkPkgManagerSupport();
+
+    /**
      * Apply the exclude rules from 'unpkgSettings' to the DirTree.
      **/
     void setUnpkgExcludeRules( const UnpkgSettings & unpkgSettings );

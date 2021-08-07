@@ -107,6 +107,10 @@ SOURCES	  = main.cpp			\
 	    LocateFilesWindow.cpp	\
 	    Logger.cpp			\
 	    MainWindow.cpp		\
+	    MainWindowHelp.cpp          \
+	    MainWindowLayout.cpp	\
+	    MainWindowMenus.cpp		\
+	    MainWindowUnpkg.cpp		\
 	    MessagePanel.cpp		\
 	    MimeCategorizer.cpp		\
 	    MimeCategory.cpp		\

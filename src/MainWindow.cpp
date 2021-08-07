@@ -12,12 +12,10 @@
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QSignalMapper>
 #include <QClipboard>
 
 #include "MainWindow.h"
 #include "ActionManager.h"
-#include "BusyPopup.h"
 #include "CleanupCollection.h"
 #include "CleanupConfigPage.h"
 #include "ConfigDialog.h"
@@ -26,17 +24,13 @@
 #include "DirTree.h"
 #include "DirTreeCache.h"
 #include "DirTreeModel.h"
-#include "DirTreePatternFilter.h"
-#include "DirTreePkgFilter.h"
 #include "Exception.h"
 #include "ExcludeRules.h"
 #include "FileDetailsView.h"
 #include "FileSizeStatsWindow.h"
 #include "FileTypeStatsWindow.h"
-#include "HeaderTweaker.h"
 #include "Logger.h"
 #include "MimeCategorizer.h"
-#include "MimeCategoryConfigPage.h"
 #include "OpenDirDialog.h"
 #include "OpenPkgDialog.h"
 #include "OutputWindow.h"
@@ -48,21 +42,12 @@
 #include "SelectionModel.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
-#include "ShowUnpkgFilesDialog.h"
 #include "SysUtil.h"
 #include "Trash.h"
 #include "UnreadableDirsWindow.h"
-#include "Version.h"
 
 #define LONG_MESSAGE		25*1000
 #define UPDATE_MILLISEC		200
-
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 13, 0 ))
-#  define HAVE_SIGNAL_MAPPER	  1
-#else
-// QSignalMapper is deprecated from Qt 5.13 on
-#  define HAVE_SIGNAL_MAPPER	  0
-#endif
 
 #define USE_CUSTOM_OPEN_DIR_DIALOG 1
 
@@ -72,7 +57,7 @@ using namespace QDirStat;
 MainWindow::MainWindow():
     QMainWindow(),
     _ui( new Ui::MainWindow ),
-    _configDialog(0),
+    _configDialog( 0 ),
     _enableDirPermissionsWarning( false ),
     _verboseSelection( false ),
     _urlInWindowTitle( false ),
@@ -86,19 +71,18 @@ MainWindow::MainWindow():
     _ui->setupUi( this );
     ActionManager::instance()->addWidgetTree( this );
     initLayoutActions();
-    createLayouts();
+    createLayouts();    // see MainWindowLayout.cpp
     readSettings();
     _updateTimer.setInterval( UPDATE_MILLISEC );
     _treeExpandTimer.setSingleShot( true );
     _dUrl = _ui->actionDonate->iconText();
     _futureSelection.setUseRootFallback( false );
 
-    // Explicitly create the QDirStatApp singleton instance for clarity.
-    //
-    // Otherwise, the first call to app() would implicitly create it and with
-    // it the DirTreeModel, the SelectionModel and the CleanupCollection.
-
-    QDirStatApp::createInstance();
+    // The first call to app() creates the QDirStatApp and with it
+    // - the DirTreeModel
+    // - the DirTree (owned and managed by the DirTreeModel)
+    // - the SelectionModel
+    // - the CleanupCollection.
 
     _ui->dirTreeView->setModel( app()->dirTreeModel() );
     _ui->dirTreeView->setSelectionModel( app()->selectionModel() );
@@ -131,29 +115,10 @@ MainWindow::MainWindow():
 #endif
 
     connectSignals();
-    connectMenuActions();
-    changeLayout( _layoutName );
+    connectMenuActions();               // see MainWindowMenus.cpp
+    changeLayout( _layoutName );        // see MainWindowLayout.cpp
 
-    if ( ! PkgQuery::haveGetInstalledPkgSupport() ||
-	 ! PkgQuery::haveFileListSupport()	    )
-    {
-	logInfo() << "No package manager support "
-		  << "for getting installed packages or file lists"
-		  << endl;
-
-	_ui->actionOpenPkg->setEnabled( false );
-    }
-
-    PkgManager * pkgManager = PkgQuery::primaryPkgManager();
-
-    if ( ! pkgManager || ! pkgManager->supportsFileListCache() )
-    {
-	logInfo() << "No package manager support "
-		  << "for getting a file lists cache"
-		  << endl;
-
-	_ui->actionShowUnpkgFiles->setEnabled( false );
-    }
+    checkPkgManagerSupport();
 
     if ( ! _ui->actionShowTreemap->isChecked() )
 	_ui->treemapView->disable();
@@ -168,7 +133,7 @@ MainWindow::~MainWindow()
     // logDebug() << "Destroying main window" << endl;
 
     if ( _currentLayout )
-	saveLayout( _currentLayout );
+	saveLayout( _currentLayout );   // see MainWindowLayout.cpp
 
     writeSettings();
     ExcludeRules::instance()->writeSettings();
@@ -189,6 +154,31 @@ MainWindow::~MainWindow()
     QDirStatApp::deleteInstance();
 
     // logDebug() << "Main window destroyed" << endl;
+}
+
+
+void MainWindow::checkPkgManagerSupport()
+{
+    if ( ! PkgQuery::haveGetInstalledPkgSupport() ||
+	 ! PkgQuery::haveFileListSupport()	    )
+    {
+	logInfo() << "No package manager support "
+		  << "for getting installed packages or file lists"
+		  << endl;
+
+	_ui->actionOpenPkg->setEnabled( false );
+    }
+
+    PkgManager * pkgManager = PkgQuery::primaryPkgManager();
+
+    if ( ! pkgManager || ! pkgManager->supportsFileListCache() )
+    {
+	logInfo() << "No package manager support "
+		  << "for getting a file lists cache"
+		  << endl;
+
+	_ui->actionShowUnpkgFiles->setEnabled( false );
+    }
 }
 
 
@@ -253,204 +243,6 @@ void MainWindow::connectSignals()
 
     connect( app()->selectionModel(),	  SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
 	     this,			  SLOT	( currentItemChanged( FileInfo *, FileInfo * ) ) );
-}
-
-
-#define CONNECT_ACTION(ACTION, RECEIVER, RCVR_SLOT) \
-    connect( (ACTION), SIGNAL( triggered() ), (RECEIVER), SLOT( RCVR_SLOT ) )
-
-
-void MainWindow::connectMenuActions()
-{
-    connectFileMenu();
-    connectEditMenu();
-    connectViewMenu();
-    connectGoMenu();
-    connectDiscoverMenu();
-    // CleanupCollection::add() handles the cleanup actions
-    connectHelpMenu();
-
-    connectDebugActions();      // Invisible F7 / Shift-F7 actions
-}
-
-
-void MainWindow::connectFileMenu()
-{
-    CONNECT_ACTION( _ui->actionOpenDir,			    this, askOpenDir()	      );
-    CONNECT_ACTION( _ui->actionOpenPkg,			    this, askOpenPkg()	      );
-    CONNECT_ACTION( _ui->actionShowUnpkgFiles,		    this, askShowUnpkgFiles() );
-    CONNECT_ACTION( _ui->actionRefreshAll,		    this, refreshAll()	      );
-    CONNECT_ACTION( _ui->actionRefreshSelected,		    this, refreshSelected()   );
-    CONNECT_ACTION( _ui->actionReadExcludedDirectory,	    this, refreshSelected()   );
-    CONNECT_ACTION( _ui->actionContinueReadingAtMountPoint, this, refreshSelected()   );
-    CONNECT_ACTION( _ui->actionStopReading,		    this, stopReading()	      );
-    CONNECT_ACTION( _ui->actionAskWriteCache,		    this, askWriteCache()     );
-    CONNECT_ACTION( _ui->actionAskReadCache,		    this, askReadCache()      );
-    CONNECT_ACTION( _ui->actionQuit,			    qApp, quit()	      );
-}
-
-
-void MainWindow::connectEditMenu()
-{
-
-    CONNECT_ACTION( _ui->actionCopyPathToClipboard, this, copyCurrentPathToClipboard() );
-    CONNECT_ACTION( _ui->actionMoveToTrash,	    this, moveToTrash()                );
-    CONNECT_ACTION( _ui->actionConfigure,           this, openConfigDialog()           );
-}
-
-
-void MainWindow::connectViewMenu()
-{
-    connectViewExpandMenu();
-    connectViewTreemapMenu();
-
-    connect( _ui->actionShowCurrentPath,  SIGNAL( toggled   ( bool ) ),
-	     _ui->breadcrumbNavigator,	  SLOT	( setVisible( bool ) ) );
-
-    connect( _ui->actionShowDetailsPanel, SIGNAL( toggled   ( bool ) ),
-	     _ui->fileDetailsPanel,	  SLOT	( setVisible( bool ) ) );
-
-    CONNECT_ACTION( _ui->actionLayout1,		   this, changeLayout() );
-    CONNECT_ACTION( _ui->actionLayout2,		   this, changeLayout() );
-    CONNECT_ACTION( _ui->actionLayout3,		   this, changeLayout() );
-
-    CONNECT_ACTION( _ui->actionFileSizeStats,	   this, showFileSizeStats() );
-    CONNECT_ACTION( _ui->actionFileTypeStats,	   this, showFileTypeStats() );
-
-    _ui->actionFileTypeStats->setShortcutContext( Qt::ApplicationShortcut );
-
-    CONNECT_ACTION( _ui->actionFileAgeStats,	   this, showFileAgeStats()  );
-    CONNECT_ACTION( _ui->actionShowFilesystems,	   this, showFilesystems()   );
-}
-
-
-void MainWindow::connectViewExpandMenu()
-{
-#if HAVE_SIGNAL_MAPPER
-
-    // QSignalMapper is deprecated from Qt 5.13 on.
-    // On systems with older versions, there may or may not be C++11 compiler.
-
-    _treeLevelMapper = new QSignalMapper( this );
-
-    connect( _treeLevelMapper, SIGNAL( mapped		( int ) ),
-	     this,	       SLOT  ( expandTreeToLevel( int ) ) );
-
-    mapTreeExpandAction( _ui->actionExpandTreeLevel0, 0 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel1, 1 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel2, 2 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel3, 3 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel4, 4 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel5, 5 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel6, 6 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel7, 7 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel8, 8 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel9, 9 );
-
-    mapTreeExpandAction( _ui->actionCloseAllTreeLevels, 0 );
-
-#else   // QSignalMapper not available / deprecated? (Qt 5.13 or later) -> use a C++11 lambda
-
-    connect( _ui->actionExpandTreeLevel0,   &QAction::triggered, [=]() { expandTreeToLevel( 0 ); } );
-    connect( _ui->actionExpandTreeLevel1,   &QAction::triggered, [=]() { expandTreeToLevel( 1 ); } );
-    connect( _ui->actionExpandTreeLevel2,   &QAction::triggered, [=]() { expandTreeToLevel( 2 ); } );
-    connect( _ui->actionExpandTreeLevel3,   &QAction::triggered, [=]() { expandTreeToLevel( 3 ); } );
-    connect( _ui->actionExpandTreeLevel4,   &QAction::triggered, [=]() { expandTreeToLevel( 4 ); } );
-    connect( _ui->actionExpandTreeLevel5,   &QAction::triggered, [=]() { expandTreeToLevel( 5 ); } );
-    connect( _ui->actionExpandTreeLevel6,   &QAction::triggered, [=]() { expandTreeToLevel( 6 ); } );
-    connect( _ui->actionExpandTreeLevel7,   &QAction::triggered, [=]() { expandTreeToLevel( 7 ); } );
-    connect( _ui->actionExpandTreeLevel8,   &QAction::triggered, [=]() { expandTreeToLevel( 8 ); } );
-    connect( _ui->actionExpandTreeLevel9,   &QAction::triggered, [=]() { expandTreeToLevel( 9 ); } );
-
-    connect( _ui->actionCloseAllTreeLevels, &QAction::triggered, [=]() { expandTreeToLevel( 0 ); } );
-
-#endif
-}
-
-
-void MainWindow::connectViewTreemapMenu()
-{
-    connect( _ui->actionShowTreemap, SIGNAL( toggled( bool )   ),
-	     this,		     SLOT  ( showTreemapView() ) );
-
-    connect( _ui->actionTreemapAsSidePanel, SIGNAL( toggled( bool )	 ),
-	     this,			    SLOT  ( treemapAsSidePanel() ) );
-
-    CONNECT_ACTION( _ui->actionTreemapZoomIn,	 _ui->treemapView, zoomIn()	    );
-    CONNECT_ACTION( _ui->actionTreemapZoomOut,	 _ui->treemapView, zoomOut()	    );
-    CONNECT_ACTION( _ui->actionResetTreemapZoom, _ui->treemapView, resetZoom()	    );
-    CONNECT_ACTION( _ui->actionTreemapRebuild,	 _ui->treemapView, rebuildTreemap() );
-}
-
-
-void MainWindow::connectGoMenu()
-{
-    CONNECT_ACTION( _ui->actionGoBack,	     _historyButtons,   historyGoBack()      );
-    CONNECT_ACTION( _ui->actionGoForward,    _historyButtons,   historyGoForward()   );
-    CONNECT_ACTION( _ui->actionGoUp,	     this,              navigateUp()         );
-    CONNECT_ACTION( _ui->actionGoToToplevel, this,              navigateToToplevel() );
-}
-
-
-void MainWindow::connectDiscoverMenu()
-{
-    CONNECT_ACTION( _ui->actionDiscoverLargestFiles,    _discoverActions, discoverLargestFiles()    );
-    CONNECT_ACTION( _ui->actionDiscoverNewestFiles,     _discoverActions, discoverNewestFiles()     );
-    CONNECT_ACTION( _ui->actionDiscoverOldestFiles,     _discoverActions, discoverOldestFiles()     );
-    CONNECT_ACTION( _ui->actionDiscoverHardLinkedFiles, _discoverActions, discoverHardLinkedFiles() );
-    CONNECT_ACTION( _ui->actionDiscoverBrokenSymLinks,  _discoverActions, discoverBrokenSymLinks()  );
-    CONNECT_ACTION( _ui->actionDiscoverSparseFiles,     _discoverActions, discoverSparseFiles()     );
-}
-
-
-void MainWindow::connectHelpMenu()
-{
-    _ui->actionWhatsNew->setStatusTip( RELEASE_URL ); // defined in Version.h
-
-    CONNECT_ACTION( _ui->actionHelp,		this, openActionUrl()	  );
-    CONNECT_ACTION( _ui->actionPkgViewHelp,	this, openActionUrl()	  );
-    CONNECT_ACTION( _ui->actionUnpkgViewHelp,	this, openActionUrl()     );
-    CONNECT_ACTION( _ui->actionWhatsNew,	this, openActionUrl()	  );
-
-    CONNECT_ACTION( _ui->actionAbout,		this, showAboutDialog()	  );
-    CONNECT_ACTION( _ui->actionAboutQt,		qApp, aboutQt()		  );
-    CONNECT_ACTION( _ui->actionDonate,		this, showDonateDialog()  );
-
-    connectHelpSolutionsMenu();
-}
-
-
-void MainWindow::connectHelpSolutionsMenu()
-{
-    // Connect all actions of submenu "Help" -> "Problems and Solutions"
-    // to display the URL that they have in their statusTip property in a browser
-
-    foreach ( QAction * action, _ui->menuProblemsAndSolutions->actions() )
-    {
-        QString url = action->statusTip();
-
-        if ( url.isEmpty() )
-            logWarning() << "No URL in statusTip property of action " << action->objectName() << endl;
-        else
-            CONNECT_ACTION( action, this, openActionUrl() );
-    }
-}
-
-
-void MainWindow::connectDebugActions()
-{
-    // Invisible debug actions
-
-    addAction( _ui->actionVerboseSelection );    // Shift-F7
-    addAction( _ui->actionDumpSelection );       // F7
-
-    connect( _ui->actionVerboseSelection, SIGNAL( toggled( bool )	   ),
-	     this,			  SLOT	( toggleVerboseSelection() ) );
-
-    CONNECT_ACTION( _ui->actionDumpSelection, app()->selectionModel(), dumpSelectedItems() );
-
-    connect( _ui->dirTreeView,		  SIGNAL( clicked    ( QModelIndex ) ),
-	     this,			  SLOT	( itemClicked( QModelIndex ) ) );
 }
 
 
@@ -551,24 +343,10 @@ void MainWindow::readSettings()
     }
 
     foreach ( TreeLayout * layout, _layouts )
-	readLayoutSettings( layout );
+	readLayoutSettings( layout );   // see MainWindowLayout.cpp
 
     ExcludeRules::instance()->readSettings();
     Debug::dumpExcludeRules();
-}
-
-
-void MainWindow::readLayoutSettings( TreeLayout * layout )
-{
-    CHECK_PTR( layout );
-
-    Settings settings;
-    settings.beginGroup( QString( "TreeViewLayout_%1" ).arg( layout->name ) );
-
-    layout->showCurrentPath  = settings.value( "ShowCurrentPath" , layout->showCurrentPath  ).toBool();
-    layout->showDetailsPanel = settings.value( "ShowDetailsPanel", layout->showDetailsPanel ).toBool();
-
-    settings.endGroup();
 }
 
 
@@ -598,21 +376,7 @@ void MainWindow::writeSettings()
     settings.endGroup();
 
     foreach ( TreeLayout * layout, _layouts )
-	writeLayoutSettings( layout );
-}
-
-
-void MainWindow::writeLayoutSettings( TreeLayout * layout )
-{
-    CHECK_PTR( layout );
-
-    Settings settings;
-    settings.beginGroup( QString( "TreeViewLayout_%1" ).arg( layout->name ) );
-
-    settings.setValue( "ShowCurrentPath" , layout->showCurrentPath  );
-    settings.setValue( "ShowDetailsPanel", layout->showDetailsPanel );
-
-    settings.endGroup();
+	writeLayoutSettings( layout );  // see MainWindowLayout.cpp
 }
 
 
@@ -757,7 +521,7 @@ void MainWindow::openUrl( const QString & url )
     if ( PkgFilter::isPkgUrl( url ) )
 	readPkg( url );
     else if ( isUnpkgUrl( url ) )
-	showUnpkgFiles( url );
+	showUnpkgFiles( url );  // see MainWinUnpkg.cpp
     else
 	openDir( url );
 }
@@ -839,121 +603,6 @@ void MainWindow::readPkg( const PkgFilter & pkgFilter )
     updateWindowTitle( pkgFilter.url() );
     expandTreeToLevel( 0 );   // Performance boost: Down from 25 to 6 sec.
     app()->dirTreeModel()->readPkg( pkgFilter );
-}
-
-
-void MainWindow::askShowUnpkgFiles()
-{
-    PkgManager * pkgManager = PkgQuery::primaryPkgManager();
-
-    if ( ! pkgManager )
-    {
-	logError() << "No supported primary package manager" << endl;
-	return;
-    }
-
-    ShowUnpkgFilesDialog dialog( this );
-
-    if ( dialog.exec() == QDialog::Accepted )
-	showUnpkgFiles( dialog.values() );
-}
-
-
-void MainWindow::showUnpkgFiles( const QString & url )
-{
-    UnpkgSettings unpkgSettings( UnpkgSettings::ReadFromConfig );
-    unpkgSettings.startingDir = url;
-
-    showUnpkgFiles( unpkgSettings );
-}
-
-
-void MainWindow::showUnpkgFiles( const UnpkgSettings & unpkgSettings )
-{
-    logDebug() << "Settings:" << endl;
-    unpkgSettings.dump();
-
-    PkgManager * pkgManager = PkgQuery::primaryPkgManager();
-
-    if ( ! pkgManager )
-    {
-	logError() << "No supported primary package manager" << endl;
-	return;
-    }
-
-    app()->dirTreeModel()->clear(); // For instant feedback
-    BusyPopup msg( tr( "Reading file lists..." ), this );
-
-
-    setUnpkgExcludeRules( unpkgSettings );
-    setUnpkgFilters( unpkgSettings, pkgManager );
-
-    // Start reading the directory
-
-    try
-    {
-        QString dir = parseUnpkgStartingDir( unpkgSettings );
-
-	app()->dirTreeModel()->openUrl( dir );
-	updateWindowTitle( app()->dirTree()->url() );
-    }
-    catch ( const SysCallFailedException & ex )
-    {
-	CAUGHT( ex );
-        showOpenDirErrorPopup( ex );
-    }
-
-    updateActions();
-}
-
-
-void MainWindow::setUnpkgExcludeRules( const UnpkgSettings & unpkgSettings )
-{
-    // Set up the exclude rules for directories that should be ignored
-
-    ExcludeRules * excludeRules = new ExcludeRules( unpkgSettings.excludeDirs );
-    CHECK_NEW( excludeRules );
-
-    app()->dirTree()->setExcludeRules( excludeRules );
-}
-
-
-void MainWindow::setUnpkgFilters( const UnpkgSettings & unpkgSettings,
-                                  PkgManager          * pkgManager )
-{
-    // Filter for ignoring all files from all installed packages
-
-    DirTreeFilter * filter = new DirTreePkgFilter( pkgManager );
-    CHECK_NEW( filter );
-
-    app()->dirTree()->clearFilters();
-    app()->dirTree()->addFilter( filter );
-
-
-    // Add the filters for each file pattern the user explicitly requested to ignore
-
-    foreach ( const QString & pattern, unpkgSettings.ignorePatterns )
-    {
-	app()->dirTree()->addFilter( DirTreePatternFilter::create( pattern ) );
-    }
-}
-
-
-QString MainWindow::parseUnpkgStartingDir( const UnpkgSettings & unpkgSettings )
-{
-    QString dir = unpkgSettings.startingDir;
-    dir.replace( QRegExp( "^unpkg:" ), "" );
-
-    if ( dir != unpkgSettings.startingDir )
-	logInfo() << "Parsed starting dir: " << dir << endl;
-
-    return dir;
-}
-
-
-bool MainWindow::isUnpkgUrl( const QString & url )
-{
-    return url.startsWith( "unpkg:/" );
 }
 
 
@@ -1189,18 +838,6 @@ void MainWindow::expandTreeToLevel( int level )
 }
 
 
-void MainWindow::mapTreeExpandAction( QAction * action, int level )
-{
-    if ( _treeLevelMapper )
-    {
-	CONNECT_ACTION( action, _treeLevelMapper, map() );
-	_treeLevelMapper->setMapping( action, level );
-
-        // Each action in the _treeLevelMapper is mapped to expandTreeToLevel()
-    }
-}
-
-
 void MainWindow::navigateUp()
 {
     FileInfo * currentItem = app()->selectionModel()->currentItem();
@@ -1366,101 +1003,6 @@ void MainWindow::showFilesystems()
 }
 
 
-void MainWindow::initLayoutActions()
-{
-    // Qt Designer does not support QActionGroups; it was there for Qt 3, but
-    // they dropped that feature for Qt 4/5.
-
-    _layoutActionGroup = new QActionGroup( this );
-    CHECK_NEW( _layoutActionGroup );
-
-    _layoutActionGroup->addAction( _ui->actionLayout1 );
-    _layoutActionGroup->addAction( _ui->actionLayout2 );
-    _layoutActionGroup->addAction( _ui->actionLayout3 );
-
-    _ui->actionLayout1->setData( "L1" );
-    _ui->actionLayout2->setData( "L2" );
-    _ui->actionLayout3->setData( "L3" );
-}
-
-
-void MainWindow::createLayouts()
-{
-    // Notice that the column layouts are handled in the HeaderTweaker and its
-    // ColumnLayout helper class; see also HeaderTweaker.h and .cpp.
-    //
-    // The layout names "L1", "L2", "L3" here are important: They need to match
-    // the names in the HeaderTweaker.
-
-    TreeLayout * layout;
-
-    layout = new TreeLayout( "L1" );
-    CHECK_NEW( layout );
-    _layouts[ "L1" ] = layout;
-
-    layout = new TreeLayout( "L2" );
-    CHECK_NEW( layout );
-    _layouts[ "L2" ] = layout;
-
-    layout = new TreeLayout( "L3" );
-    CHECK_NEW( layout );
-    _layouts[ "L3" ] = layout;
-
-    // L3 is the only one where the defaults for the flags need changing.
-    layout->showDetailsPanel = false;
-}
-
-
-void MainWindow::changeLayout( const QString & name )
-{
-    _layoutName = name;
-
-    if ( _layoutName.isEmpty() )
-    {
-	// Get the layout to use from data() from the QAction that sent the signal.
-
-	QAction * action   = qobject_cast<QAction *>( sender() );
-	_layoutName = action && action->data().isValid() ?
-	    action->data().toString() : "L2";
-    }
-
-    logDebug() << "Changing to layout " << _layoutName << endl;
-
-    _ui->dirTreeView->headerTweaker()->changeLayout( _layoutName );
-
-    if ( _currentLayout )
-	saveLayout( _currentLayout );
-
-    if ( _layouts.contains( _layoutName ) )
-    {
-	_currentLayout = _layouts[ _layoutName ];
-	applyLayout( _currentLayout );
-    }
-    else
-    {
-	logError() << "No layout " << _layoutName << endl;
-    }
-}
-
-
-void MainWindow::saveLayout( TreeLayout * layout )
-{
-    CHECK_PTR( layout );
-
-    layout->showCurrentPath  = _ui->actionShowCurrentPath->isChecked();
-    layout->showDetailsPanel = _ui->actionShowDetailsPanel->isChecked();
-}
-
-
-void MainWindow::applyLayout( TreeLayout * layout )
-{
-    CHECK_PTR( layout );
-
-    _ui->actionShowCurrentPath->setChecked ( layout->showCurrentPath  );
-    _ui->actionShowDetailsPanel->setChecked( layout->showDetailsPanel );
-}
-
-
 void MainWindow::showDirPermissionsWarning()
 {
     if ( _dirPermissionsWarning || ! _enableDirPermissionsWarning )
@@ -1484,81 +1026,6 @@ void MainWindow::showDirPermissionsWarning()
 void MainWindow::showUnreadableDirs()
 {
     UnreadableDirsWindow::populateSharedInstance( app()->dirTree()->root() );
-}
-
-
-void MainWindow::openActionUrl()
-{
-    // Use a QAction that was set up in Qt Designer to just open an URL in an
-    // external web browser.
-    //
-    // This misappropriates the action's statusTip property to store the URL in
-    // a field that is easily accessible in Qt Designer, yet doesn't get in the
-    // way: It's not displayed automatically unlike the toolTip property.
-
-    QAction * action = qobject_cast<QAction *>( sender() );
-
-    if ( action )
-    {
-        QString url = action->statusTip();
-
-        if ( url.isEmpty() )
-            logError() << "No URL in statusTip() for action " << action->objectName();
-        else
-            SysUtil::openInBrowser( url );
-    }
-}
-
-
-void MainWindow::showAboutDialog()
-{
-    QString homePage = "https://github.com/shundhammer/qdirstat";
-    QString mailTo   = "qdirstat@gmx.de";
-
-    QString text = "<h2>QDirStat " QDIRSTAT_VERSION "</h2>";
-    text += "<p>";
-    text += tr( "Qt-based directory statistics -- showing where all your disk space has gone "
-		" and trying to help you to clean it up." );
-    text += "</p><p>";
-    text += "(c) 2015-2021 Stefan Hundhammer";
-    text += "</p><p>";
-    text += tr( "Contact: " ) + QString( "<a href=\"mailto:%1\">%2</a>" ).arg( mailTo ).arg( mailTo );
-    text += "</p><p>";
-    text += QString( "<p><a href=\"%1\">%2</a></p>" ).arg( homePage ).arg( homePage );
-    text += tr( "License: GPL V2 (GNU General Public License Version 2)" );
-    text += "</p><p>";
-    text += tr( "This is free Open Source software, provided to you hoping that it might be "
-		"useful for you. It does not cost you anything, but on the other hand there "
-		"is no warranty or promise of anything." );
-    text += "</p><p>";
-    text += tr( "This software was made with the best intentions and greatest care, but still "
-		"there is the off chance that something might go wrong which might damage "
-		"data on your computer. Under no circumstances will the authors of this program "
-		"be held responsible for anything like that. Use this program at your own risk." );
-    text += "</p>";
-
-    QMessageBox::about( this, tr( "About QDirStat" ), text );
-}
-
-
-void MainWindow::showDonateDialog()
-{
-    QString dUrl = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EYJXAVLGNRR5W";
-
-    QString text = "<h2>Donate</h2>";
-    text += "<p>";
-    text += tr( "QDirStat is Free Open Source Software. "
-		"You are not required to pay anything. "
-		"Donations are most welcome, of course." );
-    text += "</p><p>";
-    text += tr( "You can donate any amount of your choice:" );
-    text += "</p><p>";
-    text += QString( "<a href=\"%1\">QDirStat at PayPal</a>" ).arg(_dUrl );
-    text += "</p><p>";
-    text += tr( "(external browser window)" );
-    text += "</p>";
-
-    QMessageBox::about( this, tr( "Donate" ), text );
 }
 
 
@@ -1670,3 +1137,12 @@ void MainWindow::itemClicked( const QModelIndex & index )
 
     // app()->dirTreeModel()->dumpPersistentIndexList();
 }
+
+
+// For more MainWindow:: methods, See also:
+//
+//   - MainWindowHelp.cpp
+//   - MainWindowLayout.cpp
+//   - MainWindowMenus.cpp
+//   - MainWindowUnpkg.cpp
+
