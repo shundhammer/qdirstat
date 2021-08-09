@@ -10,6 +10,8 @@ The `test-dir.tar.bz2` tarball contains:
 
 - Files with hard links
 
+- Various symlinks: Valid, broken, pointing to directories without permissions
+
 - A directory without execute permissions
 
 - A directory without read permissions
