@@ -64,7 +64,7 @@ void DirTreeView::currentChanged( const QModelIndex & current,
 {
     // logDebug() << "Setting new current to " << current << endl;
     QTreeView::currentChanged( current, oldCurrent );
-    scrollTo( current, QAbstractItemView::PositionAtCenter );
+    scrollTo( current );
 }
 
 
