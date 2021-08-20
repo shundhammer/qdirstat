@@ -64,7 +64,7 @@ void DirTreeView::currentChanged( const QModelIndex & current,
 {
     // logDebug() << "Setting new current to " << current << endl;
     QTreeView::currentChanged( current, oldCurrent );
-    scrollTo( current );
+    scrollTo( current, QAbstractItemView::PositionAtCenter );
 }
 
 
@@ -192,7 +192,7 @@ void DirTreeView::closeAllExcept( const QModelIndex & branch )
 	collapse( index );
     }
 
-    scrollTo( currentIndex() );
+    scrollTo( currentIndex(), QAbstractItemView::PositionAtCenter );
 }
 
 

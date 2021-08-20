@@ -191,7 +191,7 @@ void OpenDirDialog::setPath( const QString & path )
     QModelIndex index = _filesystemModel->index( path );
     _ui->dirTreeView->setCurrentIndex( index );
     _ui->dirTreeView->setExpanded( index, true );
-    _ui->dirTreeView->scrollTo( index );
+    _ui->dirTreeView->scrollTo( index, QAbstractItemView::PositionAtCenter );
     _ui->pathSelector->selectParentMountPoint( path );
 
     _lastPath = path;
