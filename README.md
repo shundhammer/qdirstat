@@ -51,6 +51,7 @@ QDirStat has a number of new features compared to KDirStat. To name a few:
 - New views:
   - Disk usage per file type (by filename extension).
   - File size histogram view.
+  - File age view (files per year and recent months).
   - Free, used and reserved disk size for each mounted filesystem (like _df_)
 
 See section [_New Features_](#new-features) for more details.
@@ -713,6 +714,12 @@ old code base that had been long overdue.
   documentation that everybody should be able to understand. Even if (or,
   better yet, in particular if) your math teacher or statistics professor never
   explained it properly, please have a look at it.
+
+- File age statistics window: This lists the number and total size of changed
+  files by years and for recent (13-24) months. You can see in what time frame
+  there was any activity (i.e. any changes) in a directory tree, i.e. when it
+  last was in active use; or if it might be a good candidate to be moved to
+  archive media.
 
 - Packages view: Show installed packages and their files in the tree. Supported
   for all Linux distributions using any of _dpkg_, _rpm_, _pacman_ as their
