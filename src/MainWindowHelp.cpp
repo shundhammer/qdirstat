@@ -54,16 +54,19 @@ void MainWindow::showDonateDialog()
 
     QString text = "<h2>Donate</h2>";
     text += "<p>";
-    text += tr( "QDirStat is Free Open Source Software. "
-		"You are not required to pay anything. "
-		"Donations are most welcome, of course." );
+    text += tr( "QDirStat is Free Open Source Software." );
     text += "</p><p>";
+    text += tr( "If you find it useful, please consider donating.\n" );
     text += tr( "You can donate any amount of your choice:" );
     text += "</p><p>";
+
+    text.replace( " ", "&nbsp;" );
+
     text += QString( "<a href=\"%1\">QDirStat at PayPal</a>" ).arg(_dUrl );
     text += "</p><p>";
     text += tr( "(external browser window)" );
     text += "</p>";
+
 
     QMessageBox::about( this, tr( "Donate" ), text );
 }

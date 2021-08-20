@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-08-06
+Updated: 2021-08-20
 
 
 ## Screenshot
@@ -102,11 +102,10 @@ _Full-size images and descriptions on the [Screenshots Page](https://github.com/
 
 ## Donate
 
-QDirStat is Free Open Source Software; you are not required to pay anything.
-If you want to support continued development of QDirStat, donations are most
-welcome.
+QDirStat is Free Open Source Software.
 
-Donate any amount you like via PayPal:
+If you find it useful, please consider donating.
+You can donate any amount of your choice via PayPal:
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EYJXAVLGNRR5W)
 
@@ -1280,10 +1279,9 @@ Repology: QDirStat versions in Linux / BSD distributions:
 
 ## Donate
 
-QDirStat is Free Open Source Software; you are not required to pay anything.
-If you want to support continued development of QDirStat, donations are most
-welcome.
+QDirStat is Free Open Source Software.
 
-Donate any amount you like via PayPal:
+If you find it useful, please consider donating.
+You can donate any amount of your choice via PayPal:
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EYJXAVLGNRR5W)
