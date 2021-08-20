@@ -190,6 +190,7 @@ void OpenDirDialog::setPath( const QString & path )
     qSetComboBoxText( _ui->pathComboBox, path );
     QModelIndex index = _filesystemModel->index( path );
     _ui->dirTreeView->setCurrentIndex( index );
+    _ui->dirTreeView->setExpanded( index, true );
     _ui->dirTreeView->scrollTo( index );
     _ui->pathSelector->selectParentMountPoint( path );
 
