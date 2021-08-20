@@ -74,15 +74,20 @@ namespace QDirStat
     public slots:
 
         /**
-         * Set a path in the path combo box.
+         * Set a path in the dirTree.
          **/
         void setPath( const QString & path );
 
         /**
-         * Set a path in the path combo box and accept the dialog.
+         * Set a path in the dirTree and expand (open) that branch.
+         **/
+        void setPathAndExpand( const QString & path );
+
+        /**
+         * Set a path in the dirTree and accept the dialog.
          **/
         void setPathAndAccept( const QString & path );
-        
+
         /**
          * Go up one directory level.
          **/

@@ -121,8 +121,8 @@ void OpenDirDialog::initConnections()
     connect( this,		SIGNAL( accepted()	),
 	     this,		SLOT  ( writeSettings() ) );
 
-    connect( _ui->pathSelector, SIGNAL( pathSelected( QString ) ),
-             this,              SLOT  ( setPath     ( QString ) ) );
+    connect( _ui->pathSelector, SIGNAL( pathSelected     ( QString ) ),
+             this,              SLOT  ( setPathAndExpand ( QString ) ) );
 
     connect( _ui->pathSelector, SIGNAL( pathDoubleClicked( QString ) ),
              this,              SLOT  ( setPathAndAccept ( QString ) ) );
@@ -188,14 +188,25 @@ void OpenDirDialog::setPath( const QString & path )
 
     populatePathComboBox( path );
     qSetComboBoxText( _ui->pathComboBox, path );
+    _ui->pathSelector->selectParentMountPoint( path );
     QModelIndex index = _filesystemModel->index( path );
     _ui->dirTreeView->setCurrentIndex( index );
-    _ui->dirTreeView->setExpanded( index, true );
-    _ui->dirTreeView->scrollTo( index, QAbstractItemView::PositionAtCenter );
-    _ui->pathSelector->selectParentMountPoint( path );
+    _ui->dirTreeView->scrollTo( index );
 
     _lastPath = path;
     _settingPath = false;
+}
+
+
+void OpenDirDialog::setPathAndExpand( const QString & path )
+{
+    setPath( path );
+
+    SignalBlocker sigBlockerPathSelector( _ui->pathSelector );
+    QModelIndex index = _filesystemModel->index( path );
+    _ui->dirTreeView->collapseAll();
+    _ui->dirTreeView->setExpanded( index, true );
+    _ui->dirTreeView->scrollTo( index, QAbstractItemView::PositionAtTop );
 }
 
 
