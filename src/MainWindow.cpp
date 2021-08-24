@@ -45,6 +45,7 @@
 #include "SysUtil.h"
 #include "Trash.h"
 #include "UnreadableDirsWindow.h"
+#include "Version.h"
 
 #define LONG_MESSAGE		25*1000
 #define UPDATE_MILLISEC		200
@@ -77,6 +78,7 @@ MainWindow::MainWindow():
     _treeExpandTimer.setSingleShot( true );
     _dUrl = _ui->actionDonate->iconText();
     _futureSelection.setUseRootFallback( false );
+    _ui->menubar->setCornerWidget( new QLabel( MENUBAR_VERSION ) );
 
     // The first call to app() creates the QDirStatApp and with it
     // - the DirTreeModel
