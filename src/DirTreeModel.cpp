@@ -917,8 +917,10 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
     if ( item->isDevice() )
 	return QVariant();
 
+    QString leftMargin( 2, ' ' );
+
     if ( item->isDirInfo() )
-	return item->sizePrefix() + formatSize( item->totalAllocatedSize() );
+	return leftMargin + item->sizePrefix() + formatSize( item->totalAllocatedSize() );
 
     QString text = sizeText( item );
 
@@ -926,7 +928,7 @@ QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 	text = smallSizeText( item );
 
     if ( text.isEmpty() )
-	text = formatSize( item->size() );
+	text = leftMargin + formatSize( item->size() );
 
     return text;
 }
