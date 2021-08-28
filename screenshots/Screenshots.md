@@ -114,13 +114,48 @@ _Locating files with a specific extension. That branch is automatically opened
 in the tree view in the main window, and all matching files in that directory are selected._
 
 
+## File Age Statistics
+
+![File Age Statistics: Years](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-age-years.png)
+
+_This window (opened fom the menu with View -> Show File Age Statistics) shows
+the modification time (mtime) of files (not directories) in the selected
+subtree broken down by years; i.e., it shows in what year the files were last
+modified._
+
+_For each year, it shows the number of files that were last modified in that
+year, the percent of that number relative to all files in that subtree both as
+a percentage bar and as a number, the total size of those files and the percent
+of that total size relative to the total size of that subtree, again as a
+percentage bar and as a number._
+
+
+![File Age Statistics: Years and Months](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-age-months.png)
+
+_File age statistics with the months of the current year expanded. It goes into
+finer detail for the months of the current year and the year before, i.e. the
+most recent 13-24 months. The percentages in the months are relative to that
+year, not to the complete subtree._
+
+_Notice that the months breakdown is always only displayed for the current year
+and the year before, no matter in what year any activity in that subtree
+starts._
+
+
+![File Age Statistics: Some Years Ago](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-age-long-ago.png)
+
+_File age statistics for a subtree where there was no activity at all for the
+last couple of years. Notice how the years up to that first active year are
+also displayed, but greyed out: You can instantly see that the last activity
+was some years ago, even without looking at the year numbers._
+
+
 ## Discovering Files
 
 ![Discovering Files](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-discover.png)
 
 _Discovering files of certain categories. Similar to "locating by type" above,
 clicking a file in the list selects it in the tree view in the main window._
-
 
 
 ## Packages View
