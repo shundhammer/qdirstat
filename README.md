@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-08-28
+Updated: 2021-08-29
 
 
 ## Screenshot
@@ -51,7 +51,7 @@ QDirStat has a number of new features compared to KDirStat. To name a few:
 - New views:
   - Disk usage per file type (by filename extension).
   - File size histogram view.
-  - [File Age View](doc/File-Age-Statistics.md)
+  - [File Age View](doc/File-Age-Stats.md)
   - Free, used and reserved disk size for each mounted filesystem (like _df_)
 
 See section [_New Features_](#new-features) for more details.
@@ -151,7 +151,7 @@ Download installable binary packages for various Linux distributions here:
     modified in that year or month, together with the total size of those files
     and a percent bar for both (number and total size).
 
-  - New documentation for that view: [File Age Statistics](doc/File-Age-Statistics.md)
+  - New documentation for that view: [File Age Statistics](doc/File-Age-Stats.md)
 
   - Navigation history for directories like in a web browser:
 
