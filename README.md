@@ -157,8 +157,6 @@ Download installable binary packages for various Linux distributions here:
 
     - New buttons _Back_ / _Forward_ in the tool bar
 
-    - Menu _Go_ -> _Back_ and _Go_ -> _Forward_
-
     - Standard keyboard shortcuts `[Alt] [Cursor Left]` /
       `[Alt] [Cursor Right]` like in all common web browsers
 

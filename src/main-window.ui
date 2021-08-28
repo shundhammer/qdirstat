@@ -212,8 +212,6 @@
     <property name="title">
      <string>&amp;Go</string>
     </property>
-    <addaction name="actionGoBack"/>
-    <addaction name="actionGoForward"/>
     <addaction name="actionGoUp"/>
     <addaction name="actionGoToToplevel"/>
    </widget>
