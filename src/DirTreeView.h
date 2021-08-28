@@ -135,6 +135,17 @@ namespace QDirStat
          **/
         virtual void keyPressEvent( QKeyEvent * event ) Q_DECL_OVERRIDE;
 
+        /**
+         * Mouse button handler.
+         *
+         * Don't let QTreeView steal and misappropriate the mouse back /
+         * forward buttons; we want consistent history buttons throughout the
+         * application.
+         *
+         * Reimplemented from QTreeView.
+         **/
+        virtual void mousePressEvent( QMouseEvent * event ) Q_DECL_OVERRIDE;
+
 
 	// Data members
 

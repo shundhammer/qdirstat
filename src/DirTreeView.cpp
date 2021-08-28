@@ -213,6 +213,36 @@ void DirTreeView::setExpanded( FileInfo * item, bool expanded )
 }
 
 
+void DirTreeView::mousePressEvent( QMouseEvent * event )
+{
+    if ( event )
+    {
+        switch ( event->button() )
+        {
+            // Leave the the back / forward buttons on the mouse to act like the
+            // history back / forward buttons in the tool bar.
+            //
+            // By default, the QTreeView parent class uses them to act as
+            // cursor up / cursor down in the tree which defeats the idea of
+            // using them as history consistently throughout the application,
+            // making those mouse buttons pretty much unusable.
+            //
+            // So this makes sure those events are immediately propagated up to
+            // the parent widget.
+
+            case Qt::BackButton:
+            case Qt::ForwardButton:
+                event->ignore();
+                break;
+
+            default:
+                QTreeView::mousePressEvent( event );
+                break;
+        }
+    }
+}
+
+
 void DirTreeView::keyPressEvent( QKeyEvent * event )
 {
     if ( event )

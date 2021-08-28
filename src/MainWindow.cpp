@@ -1066,27 +1066,28 @@ void MainWindow::mousePressEvent( QMouseEvent * event )
     {
         QAction * action = 0;
 
-        switch ( event->buttons() )
+        switch ( event->button() )
         {
             // Handle the back / forward buttons on the mouse to act like the
             // history back / forward buttons in the tool bar
 
             case Qt::BackButton:
+                // logDebug() << "BackButton" << endl;
                 action = _ui->actionGoBack;
                 break;
 
             case Qt::ForwardButton:
+                // logDebug() << "ForwardButton" << endl;
                 action = _ui->actionGoForward;
                 break;
 
             default:
+                QMainWindow::mousePressEvent( event );
                 break;
         }
 
         if ( action )
         {
-            event->accept();
-
             if ( action->isEnabled() )
                 action->trigger();
         }
