@@ -10,6 +10,275 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
 ## QDirStat History
 
+- 2021-08-06
+
+  - Lots of internal restructuring and refactoring to keep the code
+    maintainable: In particular, the MainWindow code was getting out of hand
+    with more and more features and menu actions being added all the time, so
+    some of that was moved out to separate classes.
+
+    That involved quite some testing and rethinking how certain parts are
+    working, which in turn involved some head-scratching, rearranging code had
+    the byproduct of more internal documentation and also some small bug fixes.
+
+  - The "Permissions error" panel message didn't always go away when the user
+    had simply left it open and just opened a new directory; and probably also
+    in some other situations. Now it's always cleanly removed whenever a new
+    directory tree is read or when it's re-read ("Refresh all" or "Refresh
+    Selected"). That was one of those small bug fixes.
+
+
+- 2021-07-31
+
+  - Now the "File Age Statistics" window also shows statistics for the months
+    of this and the last year as collapsible (and by default collapsed) items
+    in the same list, so you can break down the age of files further for the
+    last 13-24 months. If a month entry is selected in that list, locating the
+    files of course only locates the files that were last modified within that
+    month.
+
+    <img width="500" src="https://user-images.githubusercontent.com/11538225/127743490-439ce7f8-40eb-405c-bbfb-89bc4a1873e0.png">
+
+    More details and more screenshots at [GitHub issue #172](https://github.com/shundhammer/qdirstat/issues/172).
+
+
+
+- 2021-07-29
+
+  - Added a "Back" and a "Forward" button to move back and forth in the history
+    of visited directories; i.e. QDirStat behaves now very much like a web
+    browser when navigating the filesystem.
+
+    It also has a history menu when you long-press the "Back" or "Forward"
+    buttons, and of course it uses the same keyboard shortcuts `[Alt] [Cursor
+    Left]` and `[Alt] [Cursor Right]` that all common web browsers use.
+
+
+- 2021-07-28
+
+  - Added a "Locate" button to the new _File Age Statistics_ view, using the
+    same window as the actions from the "Discover" menu.
+
+    This is enabled if there are no more than 1000 files in the currently
+    selected year to avoid the results list to become too long and too
+    unwieldy. If there are more than 1000 files in the currently selected year,
+    break it down to another subdirectory first; otherwise you'd be ending up
+    with the better part of the whole filesystem in the results list in the
+    extreme case.
+
+- 2021-07-27
+
+  - Added a whole new type of view: _File Age Statistics_, displaying file
+    modification times by years, so you can see during what time frame there
+    was any activity in a directory tree:
+
+    [<img width="700" src="https://user-images.githubusercontent.com/11538225/127198386-215ecc9a-325c-4954-afef-e1d7f271c013.png">](https://user-images.githubusercontent.com/11538225/127198386-215ecc9a-325c-4954-afef-e1d7f271c013.png)
+
+    More details and a lot more screenshots at [GitHub issue #172](https://github.com/shundhammer/qdirstat/issues/172).
+
+
+- 2021-07-02
+
+  - Don't show inactive (unmounted) mounts managed by the automounter anymore
+    in the "Mounted Filesystems" window. They were listed there as filesystem
+    type "autofs" and 0 bytes total size which was not very useful.
+
+    Once they become auto-mounted by a user accessing them in the filesystem,
+    they are shown there normally, of course.
+
+
+- 2021-06-26
+
+  - Improved the fix for [GitHub issue #169](https://github.com/shundhammer/qdirstat/issues/169):
+    Breadcrumbs navigator becomes too wide for very long paths.
+
+    Now no longer aggressively shortening all path components in the
+    breadcrumbs navigator when the complete path becomes even just a little bit
+    too long, but concentrating on the longest parts and shortening them one by
+    one until the complete path is not too long anymore.
+
+
+- 2021-06-24
+
+  - First (crude) fix for [GitHub issue #169](https://github.com/shundhammer/qdirstat/issues/169):
+    Breadcrumbs navigator becomes too wide for very long paths.
+    Now shortening path components if the overall path would become too wide.
+    Right now it shortens them a bit too aggressively.
+
+- 2021-06-21 [QDirStat AppImage and why I don't like it](https://github.com/shundhammer/qdirstat/issues/168)
+
+    TL;DR:
+    - It's big and fat (113 MB)
+    - It's an outdated version (QDirStat 1.6.1 from 16 months ago)
+    - It doesn't even tell you what version it contains
+    - It still needs a fairly recent version of GLibc, so you can't run it on Ubuntu 18.04 LTS
+    - It's unclear if at least the libraries inside (e.g. the Qt libs) are up to date
+
+------------
+
+
+- 2021-04-05 **New stable release: 1.7.1**
+
+  **Summary:**
+
+  - Added a "Discover" toplevel menu with actions to easily find
+    - the largest files
+    - the newest files
+    - the oldest files
+    - files with multiple hard links
+    - broken symbolic links
+    - sparse files
+
+  - Now showing the target of symbolic links in the details panel.
+    If the target does not exist, a **Broken Link** warning is also shown.
+
+  - Menu reorganization. The new toplevel menus are now:
+
+    File, Edit, View, Go To, Discover, Clean up, Help
+
+  - Enabled _Refresh Selected_ now for files as well. In that case, the parent
+    directory is refreshed.
+
+  - Added hotkey `[F6]` for _Refresh Selected_.
+
+  - Now ignoring the loopback mounts of installed snap packages in the "Open
+    Directory" dialog and in the "Mounted Filesystems" window.
+
+  - Added links to external documents to a new "Problems and Solutions" submenu
+    of the "Help" menu so they are more easily discoverable.
+
+  - Added a document about
+    [finding files that are shadowed by a mount](doc/Shadowed-by-Mount.md)
+    and a script for the most common case.
+
+  - Bug fix: Fixed [GitHub Issue #149](https://github.com/shundhammer/qdirstat/issues/149):
+
+    Segfault when using a cleanup action with refresh policy _AssumeDeleted_
+    after a cleanup action with _RefreshParent_ in the same directory.
+
+
+  **Details:**
+
+  - Added a "Discover" toplevel menu with actions to easily find
+    - the largest files
+    - the newest files
+    - the oldest files
+    - files with multiple hard links
+    - broken symbolic links
+    - sparse files
+
+    in the whole displayed directory tree or, if a directory is selected, in
+    that subtree.
+
+    In each case, a non-modal dialog is opened with a list of the results.
+    Clicking on one of them selects it in the main window where you can see
+    more details and use cleanup actions.
+
+    [<img width="750" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-discover.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-discover.png)
+
+    Most of that was already there in some way or the other, but now it's
+    easier to discover (pun intended) and to use.
+
+    Finding large files is of course what the treemap is primarily for; just
+    spot large blobs and click on them to find out what they are and where they
+    are hiding.
+
+    Finding the newest files can also be done by sorting the tree by the "last
+    modified" column and then opening the topmost branches. This is often
+    useful to find out where some browser dumped that last download.
+
+    Similarly, to find the oldest files, enable the "oldest files" tree column,
+    sort by that and open branches until you can see a file.
+
+    Files with multiple hard links or sparse files were mentioned in the log;
+    otherwise they were not so easy to find (short of using the command line,
+    of course).
+
+
+  - Now showing the target of symbolic links in the details panel.
+
+    If it's a short path, the whole path is shown; otherwise without the path
+    (".../somewhere"), and the full path is shown as a pop-up upon mouse click.
+
+    If the target does not exist, a **Broken Link** warning is also shown.
+
+
+  - Menu reorganization: They had become a little too crowded, especially on
+    the top level.
+
+    - The new toplevel menus are now:
+
+      File, Edit, View, Go To, Discover, Clean up, Help
+
+      I.e. it's down to 7 items which is generally regarded as the gold
+      standard by usability experts.
+
+    - The former "Settings" menu is gone; "Configure QDirStat" is now in the
+      "Edit" menu. There was only that one action in the "Settings" menu, and
+      that is quite wasteful in terms of screen space and toplevel menu
+      complexity.
+
+    - Moved out some options entirely from the menus; they are still available
+      when editing the config file manually:
+
+      - "Show current path"
+      - "Treemap as side panel"
+
+    - "Expand tree level" is now limited to level 5 (formerly 9). Opening that
+      many tree branches means a huge performance drop anyway.
+
+    - The former "Treemap" menu is now a submenu of "View". Most of those
+      actions are available as tool bar buttons and mouse wheel operations
+      anyway.
+
+
+  - Enabled _Refresh Selected_ now for files as well. In that case, the parent
+    directory is refreshed.
+
+  - Added hotkey `[F6]` for _Refresh Selected_.
+
+    `[F5]` is still _Refresh All_ like in all web browsers. Since window
+    managers / desktop environments tend to consume `[F5]` with modifier keys
+    (`[Shift] [F5]`, `[Alt] [F5]`, `[Ctrl] [F5]`), this is the closest we can
+    get, and it's more consistent than using something like `[Ctrl] [R]`.
+
+    This was inspired by the discussion in [PR#145](https://github.com/shundhammer/qdirstat/pull/145).
+
+  - Now ignoring the loopback mounts of installed snap packages in the "Open
+    Directory" dialog and in the "Mounted Filesystems" window.
+
+    Yes, each of them has a separate loop mount, even if it's only installed,
+    not in active use. Those mounts clutter the output of commands like `df` or
+    `mount` with nonsensical cruft:
+
+    ```
+    df -hT | grep snap
+
+    /dev/loop0  squashfs  159M  159M  0 100% /snap/chromium/1244
+    /dev/loop1  squashfs   55M   55M  0 100% /snap/core18/1880
+    /dev/loop2  squashfs   63M   63M  0 100% /snap/gtk-common-themes/1506
+    /dev/loop3  squashfs   30M   30M  0 100% /snap/snapd/8542
+
+    ```
+
+    (From a freshly installed Xubuntu 20.04 LTS)
+
+
+
+  - Added links to external documents to a new "Problems and Solutions" submenu
+    of the "Help" menu so they are more easily discoverable.
+
+  - Added a document about
+    [finding files that are shadowed by a mount](doc/Shadowed-by-Mount.md)
+    and a script for the most common case.
+
+  - Bug fix: Fixed [GitHub Issue #149](https://github.com/shundhammer/qdirstat/issues/149):
+
+    Segfault when using a cleanup action with refresh policy _AssumeDeleted_
+    after a cleanup action with _RefreshParent_ in the same directory.
+
+----------
+
 
 - 2021-03-24
 
@@ -17,7 +286,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
   - New script for finding files on the root filesystem that are shadowed by a
     mount (see doc link above).
-  
+
 
 - 2021-03-19
 

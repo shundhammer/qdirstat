@@ -46,7 +46,7 @@ This helps to quickly see at a glance that there was a while with no activity,
 even without reading the year numbers.
 
 
-## Breaking Down Deeper into Subdirectories
+## Drilling Down Deeper into Subdirectories
 
 Simply leave the _File Age Statistics_ window open and click on another
 directory in the main window's tree view, and the _File Age Statistics_ window
