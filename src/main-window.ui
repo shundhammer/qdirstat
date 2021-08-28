@@ -236,6 +236,8 @@
     <addaction name="separator"/>
     <addaction name="actionPkgViewHelp"/>
     <addaction name="actionUnpkgViewHelp"/>
+    <addaction name="actionFileAgeStatsHelp"/>
+    <addaction name="separator"/>
     <addaction name="actionWhatsNew"/>
     <addaction name="menuProblemsAndSolutions"/>
     <addaction name="actionDonate"/>
@@ -1048,6 +1050,14 @@
    </property>
    <property name="shortcut">
     <string>Alt+Right</string>
+   </property>
+  </action>
+  <action name="actionFileAgeStatsHelp">
+   <property name="text">
+    <string>The File Age Statistics...</string>
+   </property>
+   <property name="statusTip">
+    <string>https://github.com/shundhammer/qdirstat/blob/master/doc/File-Age-Stats.md</string>
    </property>
   </action>
  </widget>

@@ -180,14 +180,15 @@ void MainWindow::connectHelpMenu()
 
     _ui->actionWhatsNew->setStatusTip( RELEASE_URL ); // defined in Version.h
 
-    CONNECT_ACTION( _ui->actionHelp,		this, openActionUrl()	  );
-    CONNECT_ACTION( _ui->actionPkgViewHelp,	this, openActionUrl()	  );
-    CONNECT_ACTION( _ui->actionUnpkgViewHelp,	this, openActionUrl()     );
-    CONNECT_ACTION( _ui->actionWhatsNew,	this, openActionUrl()	  );
+    CONNECT_ACTION( _ui->actionHelp,		 this, openActionUrl()    );
+    CONNECT_ACTION( _ui->actionPkgViewHelp,	 this, openActionUrl()    );
+    CONNECT_ACTION( _ui->actionUnpkgViewHelp,	 this, openActionUrl()    );
+    CONNECT_ACTION( _ui->actionFileAgeStatsHelp, this, openActionUrl()    );
+    CONNECT_ACTION( _ui->actionWhatsNew,	 this, openActionUrl()	  );
 
-    CONNECT_ACTION( _ui->actionAbout,		this, showAboutDialog()	  );
-    CONNECT_ACTION( _ui->actionAboutQt,		qApp, aboutQt()		  );
-    CONNECT_ACTION( _ui->actionDonate,		this, showDonateDialog()  );
+    CONNECT_ACTION( _ui->actionAbout,		 this, showAboutDialog()  );
+    CONNECT_ACTION( _ui->actionAboutQt,		 qApp, aboutQt()	  );
+    CONNECT_ACTION( _ui->actionDonate,		 this, showDonateDialog() );
 
     connectHelpSolutionsMenu();
 }
