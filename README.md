@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-08-29
+Updated: 2021-08-31
 
 
 ## Screenshot
@@ -923,7 +923,8 @@ called it WinDirStat.
 
 ### openSUSE / SUSE Linux Enterprise
 
-QDirStat packages for openSUSE Tumbleweed / Leap (15.x, 42.x) and SLE (15, 12):
+QDirStat packages for openSUSE Tumbleweed / Leap (15.x, 42.x) and SLE (15, 12)
+(_Notice that Leap 15.3 is wrongly sorted into the SLE category, not openSUSE as it should_):
 
 - Download page for the [**latest stable release**](https://software.opensuse.org/download/package?project=home:shundhammer:qdirstat-stable&package=qdirstat)
 
