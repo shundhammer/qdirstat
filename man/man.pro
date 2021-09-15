@@ -16,8 +16,9 @@ MAN_PATH     = $$INSTALL_PREFIX/share/man/man1
 man.files    = $$MAN_TARGET
 man.path     = $$MAN_PATH
 man.extra    = \
-	gzip --keep --force $$MAN_SRC; \
+	gzip -k -f $$MAN_SRC; \
 	install $$MAN_TARGET $(INSTALL_ROOT)$$MAN_PATH
+# Not using the --keep and --force long options to support simplistic busybox gzip
 
 # The INSTALL_ROOT environment variable is used for rpm builds in the spec file
 # to allow for a build root that is separate from the system directories:
