@@ -306,8 +306,8 @@ void MimeCategorizer::addDefaultCategories()
     CHECK_NEW( compressed );
     add( compressed );
 
-    compressed->addSuffix( "bz2" );
-    compressed->addSuffix( "gz" );
+    compressed->addSuffix( ".bz2" );
+    compressed->addSuffix( ".gz" );
 
 
     MimeCategory * images = new MimeCategory( tr( "Images" ), Qt::cyan );
