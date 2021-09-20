@@ -284,12 +284,21 @@ void MimeCategorizer::addDefaultCategories()
 			   << "cab"
 			   << "cpio.gz"
 			   << "deb"
+			   << "fsa"
 			   << "jar"
 			   << "rar"
 			   << "rpm"
 			   << "tar.bz2"
 			   << "tar.gz"
+			   << "tar.lz"
+			   << "tar.lzo"
+			   << "tar.xz"
+			   << "tar.zst"
+			   << "tbz2"
 			   << "tgz"
+			   << "txz"
+			   << "tz2"
+			   << "tzst"
 			   << "zip"
 			   );
 
@@ -306,8 +315,14 @@ void MimeCategorizer::addDefaultCategories()
     CHECK_NEW( compressed );
     add( compressed );
 
-    compressed->addSuffix( ".bz2" );
-    compressed->addSuffix( ".gz" );
+    compressed->addSuffixes( QStringList()
+             << "bz2"
+             << "gz"
+             << "lz"
+             << "lzo"
+             << "xz"
+             << "zst"
+             );
 
 
     MimeCategory * images = new MimeCategory( tr( "Images" ), Qt::cyan );
@@ -380,6 +395,7 @@ void MimeCategorizer::addDefaultCategories()
 
     music->addSuffixes( QStringList()
 			<< "aac"
+			<< "ape"
 			<< "f4a"
 			<< "f4b"
 			<< "flac"
@@ -390,6 +406,7 @@ void MimeCategorizer::addDefaultCategories()
 			<< "mp3"
 			<< "oga"
 			<< "ogg"
+			<< "opus"
 			<< "ra"
 			<< "rax"
 			<< "wav"
