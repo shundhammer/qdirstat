@@ -42,10 +42,10 @@ getSomeValue():
         void setSomeValue( const SomeType & newValue );  // setter
 
 Use a const reference for the setter parameter and the getter return type for
-nontrival data types (everything beyond a pointer or an int etc.), and the type
+nontrivial data types (everything beyond a pointer or an int etc.), and the type
 directly otherwise. Use your common sense.
 
-Use Qt types whereever possible. Do not introduce types that are also available
+Use Qt types wherever possible. Do not introduce types that are also available
 in a Qt version. In particular, do not use STL or Boost types unless there is
 no other reasonable way.
 

@@ -61,7 +61,7 @@ namespace QDirStat
 	 * the output are logged anyway unless 'ignoreErrCode' is 'true'.
 	 *
 	 * NOTICE 1: This uses a very basic command line parser; it simply
-	 * splits the command up whereever whitespace might occur. If any of
+	 * splits the command up wherever whitespace might occur. If any of
 	 * the arguments (no matter how sophisticated they might be quoted)
 	 * possibly contains any whitespace, this is unsafe; in that case, use
 	 * the overloaded version instead that accepts a QStringList as

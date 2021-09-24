@@ -279,7 +279,7 @@ namespace QDirStat
 	 *	Xfcd:	"thunar"
 	 *	LXDE:	"pcmanfm"
 	 *
-	 * What deskop is currently used is guessed from $XDG_CURRENT_DESKTOP.
+	 * What desktop is currently used is guessed from $XDG_CURRENT_DESKTOP.
 	 **/
 	static const QMap<QString, QString> & desktopSpecificApps();
 
@@ -393,7 +393,7 @@ namespace QDirStat
 	QString expandDesktopSpecificApps( const QString & unexpanded ) const;
 
 	/**
-	 * Return a string with all occurences of a single quote escaped with
+	 * Return a string with all occurrences of a single quote escaped with
 	 * backslash.
 	 **/
 	QString escaped( const QString & unescaped ) const;

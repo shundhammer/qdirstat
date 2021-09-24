@@ -10,7 +10,7 @@
 #
 #     sudo make install
 #
-# By default, everyting is installed to /usr.
+# By default, everything is installed to /usr.
 # If you want to install to, say, /usr/local, set INSTALL_PREFIX:
 #
 #     qmake INSTALL_PREFIX=/usr/local

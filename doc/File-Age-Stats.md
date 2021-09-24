@@ -39,7 +39,7 @@ the little arrows on the left).
 ![File Age Statistics: Years and Months](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-age-months.png)
 
 The list always starts with the current year, even if there was no activity in
-the subtree in that year (i.e. no file was modifed in that year). All inactive
+the subtree in that year (i.e. no file was modified in that year). All inactive
 years up to the last year with any activity are displayed.
 
 This helps to quickly see at a glance that there was a while with no activity,

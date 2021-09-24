@@ -38,7 +38,7 @@ https://unix.stackexchange.com/questions/87908/how-do-you-empty-the-buffers-and-
 
 ## Profiling QDirStat with Valgrind / KCachegrind
 
-### Prerequesites
+### Prerequisites
 
 Install vallgrind and kcachgrind:
 
@@ -51,7 +51,7 @@ Start QDirStat with the valgrind profiler:
 
     valgrind --tool=callgrind --dump-instr=yes --simulate-cache=yes --collect-jumps=yes qdirstat ~
 
-Don't use a huge directory since the profiling slows down everyting
+Don't use a huge directory since the profiling slows down everything
 considerably!
 
 The results go to a file `callgrind.out.*` in that directory. Visualize with

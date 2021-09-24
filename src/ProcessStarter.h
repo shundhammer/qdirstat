@@ -63,7 +63,7 @@ namespace QDirStat
         void setMaxParallel( int newVal ) { _maxParallel = newVal; }
 
         /**
-         * Return 'true' if this object will automaticallly delete itself when
+         * Return 'true' if this object will automatically delete itself when
          * the last process is started, 'false' otherwise.
          **/
         bool autoDelete() const { return _autoDelete; }

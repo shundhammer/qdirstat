@@ -171,7 +171,7 @@ your fork will increasingly get out of date, so you have to update it on a
 regular basis.
 
 There are two methods: `pull` and `fetch` / `rebase`. As long as you don't do
-any changes in your fork, there is no noticable difference; but when you work
+any changes in your fork, there is no noticeable difference; but when you work
 in your fork, i.e. when you commit changes there, `fetch` / `rebase` is highly
 recommended to keep the "railway yard" of parallel branches with merge and fork
 points in the `gitk` display to a minimum.

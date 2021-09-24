@@ -262,7 +262,7 @@ namespace QDirStat
 
 	/**
 	 * Schedule a rebuild of the treemap with 'newRoot'. If another rebuild
-	 * is scheduled before the timout is over, nothing will happen until
+	 * is scheduled before the timeout is over, nothing will happen until
 	 * the last scheduled timeout has elapsed.
 	 *
 	 * The purpose of this is to avoid unnecessary rebuilds when the user

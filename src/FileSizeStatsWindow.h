@@ -124,7 +124,7 @@ namespace QDirStat
         void autoPercentiles();
 
         /**
-         * Show help for a topic determinded by the sender of this signal.
+         * Show help for a topic determined by the sender of this signal.
          **/
         void showHelp();
 
@@ -187,7 +187,7 @@ namespace QDirStat
         void setRowBold( QTableWidget * table, int row );
 
         /**
-         * Set the forground (the text color) for all items in a table row.
+         * Set the foreground (the text color) for all items in a table row.
          **/
         void setRowForeground( QTableWidget * table, int row, const QBrush & brush );
 

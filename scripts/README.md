@@ -10,7 +10,7 @@ the result on any machine that has an X11 desktop running. The server doesn't
 need any more infrastructure than a normal Perl installation (i.e., no X11 /
 KDE / Gnome required).
 
-Using those cache files considerably speeds up QDirStat's reading proces. To
+Using those cache files considerably speeds up QDirStat's reading process. To
 give some rough numbers, on my laptop it takes QDirStat about 3 minutes to scan
 /usr. Reading the same information from a cache file takes 3-5 seconds.
 

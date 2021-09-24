@@ -1389,7 +1389,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     just avoiding to switch from user space to kernel space and back that often
     is a speed improvement.
 
-  - Reduced the display update inverval in the packages view. While reading
+  - Reduced the display update interval in the packages view. While reading
     package information, there is not all that much to see anyway. Yet
     constantly recalculating the column widths to make sure they fit their
     content is expensive. This is now done just every 5 seconds, not 3 times a
@@ -1504,7 +1504,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     one, and the result is simply multiplied by the number of items.
 
     Amazingly enough it was not sorting the items (which is what comes to mind
-    when there is such a performance bottleneck), no, it was someting as
+    when there is such a performance bottleneck), no, it was something as
     mundane as the widget having to figure out the proportions of its scroll
     bar slider vs. the scroll bar overall length. And for that, it needs to
     know the number of items (which is simple) and the height of each one
@@ -1944,7 +1944,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   tree columns header to enable them. They might be useful for some users; for
   others, they may be just more clutter being displayed.
 
-  Sorting by those colums is somewhat basic; both user and group are sorted by
+  Sorting by those columns is somewhat basic; both user and group are sorted by
   the numeric uid or guid; the permissions are sorted by the numeric value of
   the mode field. Looking up user or group names is a somewhat costly
   operation. It might also make sense to order system files first (user with
@@ -2506,7 +2506,7 @@ correctly when built with Qt 4.x
     QDirStat would not prompt for a directory to read, but read the current
     directory (typically the user's home directory) right away.
 
-  - More graceful handling for nonexisting paths specified on the commmand
+  - More graceful handling for nonexisting paths specified on the command
     line: It now no longer just throws an exception right after starting the
     program (which looks like a crash to the unwary user), but posts an error
     popup instead and then asks for a directory to read.
@@ -2732,7 +2732,7 @@ correctly when built with Qt 4.x
     programming - just because some tool never got ported to the 21st
     century. Sigh.
 
-    Yet another day of develpment completely wasted due to insufficiencies of
+    Yet another day of development completely wasted due to insufficiencies of
     underlying tools. Just great. I am getting fed up with this.
 
 

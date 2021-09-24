@@ -509,7 +509,7 @@ old code base that had been long overdue.
 - Proper output of cleanup actions with different colors for the commands that
   are executed, for their output and for error messages (see screenshot
   above). That output window can be configured to always open, to open after a
-  certain (configurable) timeout, or only if there are error mesages -- or not
+  certain (configurable) timeout, or only if there are error messages -- or not
   at all, of course. If things go wrong, you can kill the external command
   started by the cleanup action from there. You can zoom in and out (increase
   or decrease the font size) as you like.
@@ -683,7 +683,7 @@ Features ported from the old KDirStat:
   from the "File" menu -- or configure QDirStat to always read across file
   systems.
 
-- Efficent memory usage. A modern Linux root filesystem has well over 800,000
+- Efficient memory usage. A modern Linux root filesystem has well over 800,000
   objects (files, directories, symlinks, ...) and about 100,000 directories.
   This calls for minimalistic C++ objects to represent each one of
   them. QDirStat / KDirStat do their best to minimize that memory footprint.
