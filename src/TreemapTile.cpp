@@ -104,7 +104,9 @@ void TreemapTile::init()
 
     setFlags( ItemIsSelectable );
     _highlighter = 0;
-    setAcceptHoverEvents( true );
+
+    if ( ( _orig->isDir() && _orig->totalSubDirs() == 0 ) || _orig->isDotEntry() )
+        setAcceptHoverEvents( true );
 
     if ( ! _parentTile )
 	_parentView->scene()->addItem( this );
@@ -777,7 +779,7 @@ void TreemapTile::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 {
     Q_UNUSED( event );
 
-    // logDebug() << "Hovering over " << this << endl;
+    logDebug() << "Hovering over " << this << endl;
     _parentView->sendHoverEnter( _orig );
 }
 
@@ -786,7 +788,7 @@ void TreemapTile::hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
 {
     Q_UNUSED( event );
 
-    // logDebug() << "  Leaving " << this << endl;
+    logDebug() << "  Leaving " << this << endl;
     _parentView->sendHoverLeave( _orig );
 }
 
