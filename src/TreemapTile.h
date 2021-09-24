@@ -322,7 +322,7 @@ namespace QDirStat
         virtual void hoverEnterEvent( QGraphicsSceneHoverEvent * event ) Q_DECL_OVERRIDE;
 
         /**
-         * Hover enter event.
+         * Hover leave event.
 	 *
 	 * Reimplemented from QGraphicsItem.
          **/

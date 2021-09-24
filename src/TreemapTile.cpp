@@ -104,7 +104,7 @@ void TreemapTile::init()
 
     setFlags( ItemIsSelectable );
     _highlighter = 0;
-    setAcceptHoverEvents(true);
+    setAcceptHoverEvents( true );
 
     if ( ! _parentTile )
 	_parentView->scene()->addItem( this );
