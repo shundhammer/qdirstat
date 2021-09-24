@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 #
 # Create a complete file list for all installed packages
 # rpm version
@@ -7,7 +7,7 @@
 # License: GPL V2
 
 
-SCRIPT_NAME=$(basename $0)
+SCRIPT_NAME=$(basename "$0")
 
 TMPDIR=/tmp/qdirstat-$USER
 PKGLIST=$TMPDIR/pkglist.txt
@@ -24,8 +24,8 @@ die()
 
 create_tmpdir()
 {
-    test -d $TMPDIR || mkdir -p -m 700 $TMPDIR
-    test -d $TMPDIR || die "Can't create tmp dir $TMPDIR"
+    test -d "$TMPDIR" || mkdir -p -m 700 "$TMPDIR"
+    test -d "$TMPDIR" || die "Can't create tmp dir $TMPDIR"
 }
 
 
@@ -34,22 +34,21 @@ create_tmpdir()
 
 check_tmpdir_security()
 {
-
-    test $(stat $TMPDIR --format "%u") -eq $(id -u) || die "$TMPDIR: Wrong user ownership"
-    test $(stat $TMPDIR --format "%g") -eq $(id -g) || die "$TMPDIR: Wrong group ownership"
-    chmod 700 $TMPDIR
+    test "$(stat "$TMPDIR" --format "%u")" -eq "$(id -u)" || die "$TMPDIR: Wrong user ownership"
+    test "$(stat "$TMPDIR" --format "%g")" -eq "$(id -g)" || die "$TMPDIR: Wrong group ownership"
+    chmod 700 "$TMPDIR"
 }
 
 
 get_complete_filelist()
 {
-    rm -f $FILELIST
-    
+    rm -f "$FILELIST"
+
     echo -n "Reading file lists... "
-    rpm -qla | sort -u >$FILELIST
+    rpm -qla | sort -u >"$FILELIST"
     echo " done"
 
-    wc -l $FILELIST
+    wc -l "$FILELIST"
 }
 
 

@@ -6,8 +6,8 @@
 # License: GPL V2
 #
 
-SCRIPT_NAME=$(basename $0)
-SCRIPT_DIR=$(dirname $0)
+SCRIPT_NAME=$(basename "$0")
+SCRIPT_DIR=$(dirname "$0")
 
 TMPDIR=/tmp/qdirstat-$USER
 ROOT_CACHE=$TMPDIR/root.cache.gz
@@ -27,8 +27,8 @@ die()
 
 create_tmpdir()
 {
-    test -d $TMPDIR || mkdir -p -m 700 $TMPDIR
-    test -d $TMPDIR || die "Can't create tmp dir $TMPDIR"
+    test -d "$TMPDIR" || mkdir -p -m 700 "$TMPDIR"
+    test -d "$TMPDIR" || die "Can't create tmp dir $TMPDIR"
 }
 
 
@@ -37,10 +37,9 @@ create_tmpdir()
 
 check_tmpdir_security()
 {
-
-    test $(stat $TMPDIR --format "%u") -eq $(id -u) || die "$TMPDIR: Wrong user ownership"
-    test $(stat $TMPDIR --format "%g") -eq $(id -g) || die "$TMPDIR: Wrong group ownership"
-    chmod 700 $TMPDIR
+    test "$(stat "$TMPDIR" --format "%u")" -eq "$(id -u)" || die "$TMPDIR: Wrong user ownership"
+    test "$(stat "$TMPDIR" --format "%g")" -eq "$(id -g)" || die "$TMPDIR: Wrong group ownership"
+    chmod 700 "$TMPDIR"
 }
 
 
@@ -56,7 +55,7 @@ create_cache_file()
     # This needs root permissions to access all files in directories.
     # If "sudo" is not configured for this user, do this step manually.
 
-    sudo qdirstat-cache-writer -l / $ROOT_CACHE
+    sudo qdirstat-cache-writer -l / "$ROOT_CACHE"
     echo "done."
 }
 
@@ -86,20 +85,20 @@ create_complete_filelist()
 
 filter_out_pkg_files_from_cache()
 {
-    zcat $ROOT_CACHE                             \
-        | cache-exclude $FILELIST                \
-        | egrep -v '^.\s+/(home|tmp|root|var)/'  \
-        | egrep -v '^.\s+/usr/lib/sysimage/rpm/' \
-        | cache-kill-empty-dirs                  \
-        | gzip                                   \
-        >$UNPKG_CACHE
+    zcat "$ROOT_CACHE"                             \
+        | cache-exclude "$FILELIST"                \
+        | grep -E -v '^.\s+/(home|tmp|root|var)/'  \
+        | grep -E -v '^.\s+/usr/lib/sysimage/rpm/' \
+        | cache-kill-empty-dirs                    \
+        | gzip                                     \
+        >"$UNPKG_CACHE"
 }
 
 
 show_filtered_cache()
 {
     echo "qdirstat -c $UNPKG_CACHE"
-    qdirstat -c $UNPKG_CACHE
+    qdirstat -c "$UNPKG_CACHE"
 }
 
 
@@ -110,13 +109,12 @@ show_filtered_cache()
 # Use -f to force re-reading all information
 
 if [ "$1"x = "-f"x ]; then
-    rm -f $ROOT_CACHE
-    rm -f $FILELIST
+    rm -f "$ROOT_CACHE"
+    rm -f "$FILELIST"
 fi
 
-test -f $ROOT_CACHE || create_cache_file
-test -f $FILELIST   || create_complete_filelist
+test -f "$ROOT_CACHE" || create_cache_file
+test -f "$FILELIST"   || create_complete_filelist
 
 filter_out_pkg_files_from_cache
 show_filtered_cache
-

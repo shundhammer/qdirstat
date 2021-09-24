@@ -9,7 +9,7 @@
 # License: GPL V2
 #
 
-SCRIPT_NAME=$(basename $0)
+SCRIPT_NAME=$(basename "$0")
 DRY_RUN=0
 CLEANUP=0
 SHADOWED_FILES_COUNT=0
@@ -18,7 +18,7 @@ MNT_SHADOWED="/mnt/shadowed"
 
 
 # Show usage information and exit.
-function usage()
+usage()
 {
     echo "$SCRIPT_NAME [-h][-n]"
     echo ""
@@ -41,7 +41,7 @@ function usage()
 
 
 # Write a message to stderr and exit with an error code.
-function die()
+die()
 {
     echo "$SCRIPT_NAME: FATAL: $*" >&2
     exit 1
@@ -49,50 +49,50 @@ function die()
 
 
 # Process the command line and set some variables based on command line options.
-function process_command_line()
+process_command_line()
 {
     while getopts "nhc" opt; do
-	case "${opt}" in
-	    n)
-		DRY_RUN=1
+        case "${opt}" in
+            n)
+                DRY_RUN=1
                 echo ""
-		echo "*** Dry run - not executing any dangerous commands. ***"
+                echo "*** Dry run - not executing any dangerous commands. ***"
                 echo ""
-		;;
+                ;;
             c)
                 CLEANUP=1
                 echo "Cleaning up"
                 echo ""
                 ;;
-	    *)
-		usage
-		;;
-	esac
+            *)
+                usage
+                ;;
+        esac
     done
 }
 
 
 # Check if we are running as root (including sudo) and exit if not.
-function enforce_root_privileges()
+enforce_root_privileges()
 {
-    test $(id -u) = 0 || die "This needs root privileges."
+    test "$(id -u)" = 0 || die "This needs root privileges."
 }
 
 
 # Echo and execute a command that requires root privileges.
 # In dry run mode, only echo, don't execute it.
-function root_cmd()
+root_cmd()
 {
     local cmd="$*"
 
     echo "$cmd"
-    test $DRY_RUN -eq 1 || $cmd
+    test "$DRY_RUN" -eq 1 || $cmd
 }
 
 
 # Try to bind-mount $1 to $2. Skip if the same mount already exists.
 # In dry run mode, only echo, don't execute it.
-function try_mount()
+try_mount()
 {
     local SRC=$1
     local DEST=$2
@@ -100,10 +100,10 @@ function try_mount()
     test -n "$SRC"  || die "try_mount() argument error: no SRC"
     test -n "$DEST" || die "try_mount() argument error: no DEST"
 
-    if $(grep -q " $DEST " /proc/mounts); then
+    if grep -q " $DEST " /proc/mounts; then
         echo "try_mount(): $DEST is already mounted - skipping."
     else
-        if [ -d $SRC -o $DRY_RUN -eq 1 ]; then
+        if [ -d "$SRC" ] || [ "$DRY_RUN" -eq 1 ]; then
             test -d "$DEST" || root_cmd "mkdir -p $DEST"
             root_cmd "mount -o bind $SRC $DEST"
         else
@@ -123,7 +123,7 @@ function try_mount()
 
 
 # Show a summary of mounts below /mnt
-function mount_summary()
+mount_summary()
 {
     echo ""
     echo "Mounts below /mnt:"
@@ -132,10 +132,10 @@ function mount_summary()
 }
 
 
-function check_shadowed_files()
+check_shadowed_files()
 {
-    if [ -d $MNT_SHADOWED ]; then
-        SHADOWED_FILES_COUNT=$(find $MNT_SHADOWED -type f | head -n 1000 | wc -l)
+    if [ -d "$MNT_SHADOWED" ]; then
+        SHADOWED_FILES_COUNT=$(find "$MNT_SHADOWED" -type f | head -n 1000 | wc -l)
     else
         SHADOWED_FILES_COUNT=0
     fi
@@ -145,12 +145,12 @@ function check_shadowed_files()
 # Create bind mounts:
 # - bind-mount the root filesystem to /mnt/root
 # - bind-mount each mount directly on the root filesystem to /mnt/shadowed/mp_name
-function create_bind_mounts()
+create_bind_mounts()
 {
     # Check if anything is mounted to /mnt
     grep -q " /mnt " /proc/mounts && die "A filesystem is mounted to /mnt"
 
-    try_mount / $MNT_ROOT
+    try_mount / "$MNT_ROOT"
     test -d "$MNT_SHADOWED" || root_cmd "mkdir -p $MNT_SHADOWED"
 
     # Exclude all mount points from the root device:
@@ -161,7 +161,7 @@ function create_bind_mounts()
 
     ROOT_DEVICE=$(grep ' / ' /proc/mounts | cut -d ' ' -f 1)
 
-    for MOUNT_POINT in $(grep -v "^$ROOT_DEVICE" /proc/mounts | egrep -v " /(sys|proc|dev|run|mnt)" | cut -d ' ' -f 2 | grep -v '^/$')
+    for MOUNT_POINT in $(grep -v "^$ROOT_DEVICE" /proc/mounts | grep -E -v " /(sys|proc|dev|run|mnt)" | cut -d ' ' -f 2 | grep -v '^/$')
     do
         # Examples for $MOUNT_POINT:
         #   /home
@@ -173,7 +173,7 @@ function create_bind_mounts()
         SRC="${MNT_ROOT}$MOUNT_POINT"
         # echo "MOUNT_POINT: $MOUNT_POINT  SRC: $SRC  TARGET: $TARGET"
 
-        try_mount $SRC $TARGET
+        try_mount "$SRC" "$TARGET"
     done
 }
 
@@ -182,17 +182,17 @@ function create_bind_mounts()
 # - unmount all bind mounts from /mnt/shadowed
 # - unmount the bind mount in /mnt/root
 # - remove all mount directories we created
-function tear_down_bind_mounts()
+tear_down_bind_mounts()
 {
     for MOUNT in $(grep " $MNT_SHADOWED/" /proc/mounts | cut -d ' ' -f 2)
     do
         root_cmd "umount $MOUNT"
     done
 
-    test -d $MNT_SHADOWED && root_cmd "rmdir $MNT_SHADOWED/*"
-    test -d $MNT_SHADOWED && root_cmd "rmdir $MNT_SHADOWED"
+    test -d "$MNT_SHADOWED" && root_cmd "rmdir $MNT_SHADOWED/*"
+    test -d "$MNT_SHADOWED" && root_cmd "rmdir $MNT_SHADOWED"
     root_cmd "umount $MNT_ROOT"
-    test -d $MNT_ROOT &&  root_cmd "rmdir $MNT_ROOT"
+    test -d "$MNT_ROOT" &&  root_cmd "rmdir $MNT_ROOT"
 }
 
 
@@ -201,10 +201,10 @@ function tear_down_bind_mounts()
 # main()
 #----------------------------------------------------------------------
 
-process_command_line $*
-test $DRY_RUN -eq 1 || enforce_root_privileges
+process_command_line "$@"
+test "$DRY_RUN" -eq 1 || enforce_root_privileges
 
-if [ $CLEANUP -eq 1 ]; then
+if [ "$CLEANUP" -eq 1 ]; then
     tear_down_bind_mounts
     mount_summary
     exit 0
@@ -212,14 +212,14 @@ fi
 
 create_bind_mounts
 
-if [ -d $MNT_SHADOWED ]; then
+if [ -d "$MNT_SHADOWED" ]; then
     check_shadowed_files
     echo ""
 
-    if [ $SHADOWED_FILES_COUNT -eq 0 ]; then
+    if [ "$SHADOWED_FILES_COUNT" -eq 0 ]; then
         echo "=== Good news: No shadowed files. ==="
     else
-        if [ $SHADOWED_FILES_COUNT -ge 1000 ]; then
+        if [ "$SHADOWED_FILES_COUNT" -ge 1000 ]; then
             echo "=== Found $SHADOWED_FILES_COUNT or more shadowed files. ==="
         else
             echo "=== Found $SHADOWED_FILES_COUNT shadowed files.==="
@@ -228,7 +228,7 @@ if [ -d $MNT_SHADOWED ]; then
         echo ""
         echo "=== Disk space in shadowed directories:"
         echo ""
-        du -hs $MNT_SHADOWED/*
+        du -hs "$MNT_SHADOWED"/*
 
         echo ""
         echo "Now run    qdirstat $MNT_SHADOWED."

@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 #
 # Create a complete file list for all installed packages
 # dpkg version
@@ -7,7 +7,7 @@
 # License: GPL V2
 
 
-SCRIPT_NAME=$(basename $0)
+SCRIPT_NAME=$(basename "$0")
 
 die()
 {
@@ -19,8 +19,8 @@ die()
 
 create_tmpdir()
 {
-    test -d $TMPDIR || mkdir -p -m 700 $TMPDIR
-    test -d $TMPDIR || die "Can't create tmp dir $TMPDIR"
+    test -d "$TMPDIR" || mkdir -p -m 700 "$TMPDIR"
+    test -d "$TMPDIR" || die "Can't create tmp dir $TMPDIR"
 }
 
 
@@ -29,10 +29,9 @@ create_tmpdir()
 
 check_tmpdir_security()
 {
-
-    test $(stat $TMPDIR --format "%u") -eq $(id -u) || die "$TMPDIR: Wrong user ownership"
-    test $(stat $TMPDIR --format "%g") -eq $(id -g) || die "$TMPDIR: Wrong group ownership"
-    chmod 700 $TMPDIR
+    test "$(stat "$TMPDIR" --format "%u")" -eq "$(id -u)" || die "$TMPDIR: Wrong user ownership"
+    test "$(stat "$TMPDIR" --format "%g")" -eq "$(id -g)" || die "$TMPDIR: Wrong group ownership"
+    chmod 700 "$TMPDIR"
 }
 
 
@@ -48,8 +47,8 @@ FILELIST=$TMPDIR/filelist.txt
 
 create_pkglist()
 {
-    dpkg-query --show --showformat '${Package}:${Architecture}\n' >$PKGLIST
-    wc -l $PKGLIST
+    dpkg-query --show --showformat '${Package}:${Architecture}\n' >"$PKGLIST"
+    wc -l "$PKGLIST"
 }
 
 
@@ -61,11 +60,11 @@ clear_last_line()
 
 get_complete_filelist()
 {
-    rm -f $FILELIST_RAW
-    rm -f $FILELIST
+    rm -f "$FILELIST_RAW"
+    rm -f "$FILELIST"
 
     echo "Reading file lists..."
-    xargs <$PKGLIST dpkg --listfiles >>$FILELIST_RAW
+    xargs <"$PKGLIST" dpkg --listfiles >>"$FILELIST_RAW"
     clear_last_line
 }
 
@@ -74,17 +73,17 @@ filter_filelist()
 {
     echo "Filtering file list... "
 
-    sed -e 's/^diverted by.*to: //' <$FILELIST_RAW  | \
-    sed -e 's/^package diverts others to: //'	    | \
-    grep -v 'does not contain any files'	    | \
-    sort -u					    | \
-    grep -v '^ *$'				    | \
-    grep -v '^/\.$' >$FILELIST
+    sed -e 's/^diverted by.*to: //' <"$FILELIST_RAW"  | \
+    sed -e 's/^package diverts others to: //'         | \
+    grep -v 'does not contain any files'              | \
+    sort -u                                           | \
+    grep -v '^ *$'                                    | \
+    grep -v '^/\.$' >"$FILELIST"
 
     clear_last_line
-    wc -l $FILELIST
+    wc -l "$FILELIST"
 
-    rm $FILELIST_RAW
+    rm "$FILELIST_RAW"
 }
 
 
