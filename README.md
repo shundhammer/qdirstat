@@ -1016,7 +1016,7 @@ Recommended packages for developers:
 
 See also
 
-http://askubuntu.com/questions/508503/whats-the-development-package-for-qt5-in-14-04
+https://askubuntu.com/questions/508503/whats-the-development-package-for-qt5-in-14-04
 
 If you also have a Qt4 development environment installed, select the desired
 one via _qtchooser_:

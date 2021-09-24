@@ -33,7 +33,7 @@ shell would do the I/O redirection, so it would not have sufficient privileges)
 
 ### Reference
 
-http://unix.stackexchange.com/questions/87908/how-do-you-empty-the-buffers-and-cache-on-a-linux-system
+https://unix.stackexchange.com/questions/87908/how-do-you-empty-the-buffers-and-cache-on-a-linux-system
 
 
 ## Profiling QDirStat with Valgrind / KCachegrind

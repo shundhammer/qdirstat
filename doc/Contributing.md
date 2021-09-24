@@ -178,4 +178,4 @@ minimizing that pain.
 
 ## Further Reading
 
-- http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+- https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
