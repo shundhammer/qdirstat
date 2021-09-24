@@ -114,7 +114,7 @@ over large directory trees.
 When that is not an issue, but disk space is running out, of course the total
 size of those files may be more important.
 
-One use case is showcased in 
+One use case is showcased in
 [GitHub issue #172](https://github.com/shundhammer/qdirstat/issues/172):
 
 A photo collection that grew over the years. In that case, the number of files

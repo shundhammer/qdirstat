@@ -968,7 +968,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
       the exact byte size._
 
   - There is now an optional new column "Oldest File" that shows the timestamp
-    (the mtime) of the oldest file in a subtree.  This is strictly about files;
+    (the mtime) of the oldest file in a subtree. This is strictly about files;
     directories, symlinks and special files (block or character devices, FIFOs
     etc.) are ignored for this.
 
@@ -1013,7 +1013,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 - 2020-02-11
 
   - Now also showing the exact byte size of all size fields (of 1 kB and above)
-    upon click in the "Details" panel.  All clickable fields there are now
+    upon click in the "Details" panel. All clickable fields there are now
     underlined just like a hyperlink when the mouse hovers above them.
 
     I thought long and hard about using tool tips for that, but tool tips have
@@ -1154,7 +1154,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 - 2019-08-01
 
   - Added a column "Oldest File" that shows the timestamp (the mtime) of the
-    oldest file in a subtree.  This is strictly about files; directories,
+    oldest file in a subtree. This is strictly about files; directories,
     symlinks and special files (block or character devices, FIFOs etc.) are
     ignored for this.
 
@@ -2795,7 +2795,7 @@ correctly when built with Qt 4.x
 
   - Added new macros for use within cleanups: %terminal and %filemanager. They
     are expanded to the terminal window or file manager application,
-    respectively, of the current desktop (KDE, GNOME, Xfce, ...).  I just
+    respectively, of the current desktop (KDE, GNOME, Xfce, ...). I just
     wasted four hours (that could have been put to better use adding missing
     features - grrrr) because KDE's konsole misbehaves in every way possible
     (leading today's WTF count with 3):
@@ -2909,7 +2909,7 @@ correctly when built with Qt 4.x
     menus. ;-)
 
   - In addition to the old cleanup parameters, you can now configure the output
-    window behaviour.  The default is "show after timeout" with a timeout of
+    window behaviour. The default is "show after timeout" with a timeout of
     half a second. This may sound pretty short, but I started with 3 seconds
     and found that it felt sluggish. A modern PC can get a lot of things done
     in half a second; yet waiting for more than that feels like an eternity. So
@@ -3017,7 +3017,7 @@ correctly when built with Qt 4.x
 	      model object and the two views.
 
 - 2015-12-28  Treemaps are back. It's not perfect yet, but the basic rendering
-	      works.  I admit I was somewhat scared of that part, but the
+	      works. I admit I was somewhat scared of that part, but the
 	      transition from Qt3 QCanvas to QGraphicsScene / QGraphicsView
 	      went much smoother than I had expected. I am very glad I don't
 	      have to dig deep into the math again with those cushioned
@@ -3058,9 +3058,9 @@ correctly when built with Qt 4.x
 	      opened. Looks like I'll have to do that myself, too.
 
 - 2015-12-18  Found the crippling bugs that made the DirTreeModel do crazy
-	      things.  None of the Qt classes proved to be helpful to find that
+	      things. None of the Qt classes proved to be helpful to find that
 	      - they just happily do the crazy things. That's what I call poor
-	      design.  Now there is a first working QDirStat with a useful
+	      design. Now there is a first working QDirStat with a useful
 	      display tree, including icons (but no percentage bar graph yet).
 
 - 2015-12-07  First working DirTreeModel -- still minimalistic, but working.
@@ -3116,4 +3116,3 @@ _(Incomplete list, just highlighting important releases)_
     improved performance and resource consumption
 
 - 2000-01-21  KDirStat 0.86 for KDE 1 announced -- the first public version.
-

@@ -19,7 +19,7 @@ namespace QDirStat
 {
     class TreeWalker;
     class LocateFilesWindow;
-    
+
     /**
      * Class to keep QDirStat's "discover" actions self-contained.
      *
@@ -42,7 +42,7 @@ namespace QDirStat
         Q_OBJECT
 
     public:
-        
+
         DiscoverActions( QObject * parent = 0 );
         virtual ~DiscoverActions();
 
@@ -52,7 +52,7 @@ namespace QDirStat
         // Actions that can be connected directly to a QAction in one of the
         // menus in the main window
         //
-        
+
         void discoverLargestFiles();
         void discoverNewestFiles();
         void discoverOldestFiles();
@@ -60,12 +60,12 @@ namespace QDirStat
         void discoverBrokenSymLinks();
         void discoverSparseFiles();
 
-        
+
         //
         // Actions that are meant to be connected to the FileAgeWindow's
         // 'locate...()' signals (but they can be used stand-alone as well).
         //
-        
+
         void discoverFilesFromYear ( const QString & path, short year );
         void discoverFilesFromMonth( const QString & path, short year, short month );
 
@@ -88,9 +88,9 @@ namespace QDirStat
     protected:
 
         QPointer<LocateFilesWindow> _locateFilesWindow;
-        
+
     };  // class DiscoverActions
-    
+
 }       // namespace QDirStat
 
 #endif  // DiscoverActions_h

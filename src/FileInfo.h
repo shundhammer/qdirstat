@@ -965,7 +965,7 @@ namespace QDirStat
     //			       Static Functions
     //----------------------------------------------------------------------
 
-    
+
     /**
      * Return the last pathname component of a file name.
      *

@@ -151,4 +151,3 @@ https://en.wikipedia.org/wiki/Histogram
 [Up: Statistics Top Page](https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Statistics.md)
 
 [Top: QDirStat Home Page](https://github.com/shundhammer/qdirstat/blob/master/README.md)
-

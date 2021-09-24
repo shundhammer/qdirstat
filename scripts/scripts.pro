@@ -10,4 +10,3 @@ scripts.files  = qdirstat-cache-writer
 scripts.path   = $$INSTALL_PREFIX/bin
 
 INSTALLS      += scripts
-

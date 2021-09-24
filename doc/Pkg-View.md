@@ -335,4 +335,3 @@ https://github.com/shundhammer/qdirstat/blob/master/src/DpkgPkgManager.cpp
 
 https://github.com/shundhammer/qdirstat/blob/master/src/PacManPkgManager.h
 https://github.com/shundhammer/qdirstat/blob/master/src/PacManPkgManager.cpp
-

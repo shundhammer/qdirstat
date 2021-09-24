@@ -77,7 +77,7 @@
        <item>
         <widget class="QLabel" name="pathSelectorCaption">
          <property name="text">
-          <string>Places and 
+          <string>Places and
 &amp;Mounted Filesystems</string>
          </property>
          <property name="wordWrap">

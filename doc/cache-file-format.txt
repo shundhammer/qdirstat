@@ -228,4 +228,3 @@ If a non-directory entry has more than one hard link, the entry has a
 "links:" field indicating the number of hard links:
 
         links:  7
-
