@@ -420,7 +420,7 @@ void PkgReadJob::finalizeAll( DirInfo * subtree )
 {
     FileInfo * child = subtree->firstChild();
 
-    while( child )
+    while ( child )
     {
 	if ( child->isDirInfo() )
 	    finalizeAll( child->toDirInfo() );
