@@ -128,8 +128,8 @@ See separate document [GitHub-Workflow.md](https://github.com/shundhammer/qdirst
 If you did all of the above (and only then!) and still couldn't figure out
 what's wrong:
 
-- Use IRC (#qdirstat on irc.freenode.net; fallback: contact HuHa in #yast on
-  freenode IRC)
+- Use IRC (#qdirstat on irc.libera.chat; fallback: contact HuHa in #yast on
+  libera.chat IRC)
 - Write a mail
 
 It is a matter of professional courtesy to first use what is freely available
