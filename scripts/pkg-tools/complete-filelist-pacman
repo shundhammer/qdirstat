@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 #
 # Create a complete file list for all installed packages
 # rpm version

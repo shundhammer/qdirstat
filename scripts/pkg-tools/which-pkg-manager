@@ -1,4 +1,4 @@
-#/!bin/sh
+#!/bin/sh
 #
 # Show which primary package manager is used in the system.
 # Currently supported: dpkg, rpm, pacman
