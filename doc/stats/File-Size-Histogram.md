@@ -183,4 +183,3 @@ So the more pragmatic approach is to cut off at a sensible limit.
 [Up: Statistics Top Page](https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Statistics.md)
 
 [Top: QDirStat Home Page](https://github.com/shundhammer/qdirstat/blob/master/README.md)
-

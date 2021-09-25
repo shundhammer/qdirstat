@@ -101,7 +101,7 @@ bool SystemFileChecker::isSystemPath( const QString & path )
 
 bool SystemFileChecker::mightBeSystemPath( const QString & path )
 {
-    if ( path.contains  ( "/lost+found/" ) ||   // Also on other mounted filesytems!
+    if ( path.contains  ( "/lost+found/" ) ||   // Also on other mounted filesystems!
          path.startsWith( "/run/"        ) ||
          path.startsWith( "/srv/"        ) ||
          path.startsWith( "/var/"        )   )

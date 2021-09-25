@@ -128,7 +128,7 @@ void HistogramView::addOverflowPanel()
     nextPos = addText( nextPos, lines );
 
 
-    // Make sure the panel is tall enough to fit everyting in
+    // Make sure the panel is tall enough to fit everything in
 
     if ( nextPos.y() > cutoffPanel->rect().bottom() )
     {

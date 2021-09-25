@@ -45,5 +45,3 @@ https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Buckets-Table.md
 ## Navigation
 
 [Top: QDirStat Home Page](https://github.com/shundhammer/qdirstat/blob/master/README.md)
-
-

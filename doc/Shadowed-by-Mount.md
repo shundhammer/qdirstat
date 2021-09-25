@@ -12,7 +12,7 @@ disk space.
 
 For example, if your root filesystem contains an existing directory
 `/home/kilroy` with 2 GB worth of files, but you also have a separate `/home`
-filesystem that has an `/etc/fstab` entry, that separate `/home` fileystem is
+filesystem that has an `/etc/fstab` entry, that separate `/home` filesystem is
 mounted _over_ those files in `/home/kilroy`, making those 2 GB invisible and
 unaccessible, no matter if the separate `/home` also has a `/home/kilroy`
 directory. Of course those _shadowed_ files still occupy disk space; you just
@@ -51,7 +51,7 @@ more disks, just use a plain `lsblk` command to see all your disks with all
 your partitions.
 
 On many live systems you can even install software packages, so you may find it
-wortwhile to install QDirStat on your Ubuntu live system:
+worthwhile to install QDirStat on your Ubuntu live system:
 
 ```console
 tux@live-linux:~$ sudo apt install qdirstat
@@ -171,7 +171,7 @@ root@linux:~# egrep -v ' /(sys|proc|dev|run|mnt)' /proc/mounts | cut -d ' ' -f 2
 
 ### 2a. Caveat: Btrfs
 
-Btrfs, being the _enfant terrible_ of filesytems that it is, needs special
+Btrfs, being the _enfant terrible_ of filesystems that it is, needs special
 treatment, as always.
 
 When you bind-mount a Btrfs, you implicitly bind-mount its _subvolumes_, too
@@ -427,7 +427,7 @@ root@linux:~# rmdir /mnt/root
 ```
 
 Don't just use `rm -rf`; if there is still anything else than those
-directories, something (some `umount`?) went wrong. You might accidentially
+directories, something (some `umount`?) went wrong. You might accidentally
 remove a whole directory tree on your root filesystem, wrecking your system in
 the process. `rmdir` on the other hand is safe: It complains if the directory
 is not empty.
@@ -725,11 +725,10 @@ tux@linux:~/tmp> sudo ./unshadow-mount-points -c
 ```
 
 If all else fails and you got tangled up in a mess of bind-mounts or if you
-accidentially unmounted things like `/proc`, `/dev` or `/sys`, simply reboot.
+accidentally unmounted things like `/proc`, `/dev` or `/sys`, simply reboot.
 
 **Caveat:** Do not use `sudo fuser -mk /dev/sda..` on that device since it's
 your root filesystem: It will kill most of the processes on your machine,
 including your desktop and your login session; every process that uses a
 directory on the root filesystem as its current working directory and every
 process that has any file on the root filesystem open.
-

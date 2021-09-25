@@ -42,10 +42,10 @@ getSomeValue():
         void setSomeValue( const SomeType & newValue );  // setter
 
 Use a const reference for the setter parameter and the getter return type for
-nontrival data types (everything beyond a pointer or an int etc.), and the type
+nontrivial data types (everything beyond a pointer or an int etc.), and the type
 directly otherwise. Use your common sense.
 
-Use Qt types whereever possible. Do not introduce types that are also available
+Use Qt types wherever possible. Do not introduce types that are also available
 in a Qt version. In particular, do not use STL or Boost types unless there is
 no other reasonable way.
 
@@ -128,8 +128,8 @@ See separate document [GitHub-Workflow.md](https://github.com/shundhammer/qdirst
 If you did all of the above (and only then!) and still couldn't figure out
 what's wrong:
 
-- Use IRC (#qdirstat on irc.freenode.net; fallback: contact HuHa in #yast on
-  freenode IRC)
+- Use IRC (#qdirstat on irc.libera.chat; fallback: contact HuHa in #yast on
+  libera.chat IRC)
 - Write a mail
 
 It is a matter of professional courtesy to first use what is freely available
@@ -178,4 +178,4 @@ minimizing that pain.
 
 ## Further Reading
 
-- http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+- https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines

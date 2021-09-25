@@ -39,7 +39,7 @@ the little arrows on the left).
 ![File Age Statistics: Years and Months](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-age-months.png)
 
 The list always starts with the current year, even if there was no activity in
-the subtree in that year (i.e. no file was modifed in that year). All inactive
+the subtree in that year (i.e. no file was modified in that year). All inactive
 years up to the last year with any activity are displayed.
 
 This helps to quickly see at a glance that there was a while with no activity,
@@ -114,7 +114,7 @@ over large directory trees.
 When that is not an issue, but disk space is running out, of course the total
 size of those files may be more important.
 
-One use case is showcased in 
+One use case is showcased in
 [GitHub issue #172](https://github.com/shundhammer/qdirstat/issues/172):
 
 A photo collection that grew over the years. In that case, the number of files

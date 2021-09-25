@@ -85,7 +85,7 @@ sub read_exclude_file()
             $excludes{ $line } = 1;
         }
     }
-    
+
     close( EXCLUDE );
 
     my $size = keys %excludes;
@@ -200,4 +200,3 @@ Usage:
 USAGE-END
 
 }
-

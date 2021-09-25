@@ -102,7 +102,7 @@ namespace QDirStat
 
 	return stream;
     }
-    
+
 }       // namespace QDirStat
 
 #endif  // FormatUtil_h

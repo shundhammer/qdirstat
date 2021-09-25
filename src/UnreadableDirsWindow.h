@@ -96,7 +96,7 @@ namespace QDirStat
         static void populateSharedInstance( FileInfo * newSubtree );
 
         /**
-         * Convenience function for closing and deleteing the shared instance
+         * Convenience function for closing and deleting the shared instance
          * if it is open.
          **/
         static void closeSharedInstance();

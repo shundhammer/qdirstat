@@ -56,7 +56,7 @@ namespace QDirStat
      * order and how to map view columns to model columns and vice versa.
      *
      * The model uses the DataColumn enum internally. For the view, however,
-     * the columns may be rearranged, and any column may be ommitted (not
+     * the columns may be rearranged, and any column may be omitted (not
      * displayed at all). This class handles that mapping.
      **/
     class DataColumns: public QObject
@@ -116,7 +116,7 @@ namespace QDirStat
 	void setColumns( const DataColumnList & columns );
 
 	/**
-	 * Return the model colums that are currently being displayed.
+	 * Return the model columns that are currently being displayed.
 	 **/
 	const DataColumnList & columns() const { return _columns; }
 
@@ -131,7 +131,7 @@ namespace QDirStat
 	const DataColumnList allColumns() const { return defaultColumns(); }
 
 	/**
-	 * Return the number of columns that are curently displayed.
+	 * Return the number of columns that are currently displayed.
 	 **/
 	int colCount() const { return _columns.size(); }
 

@@ -14,7 +14,7 @@ namespace QDirStat
         ListMover( QList<Value_t> & list ):
             _list( list )
             {}
-        
+
         void moveUp( Value_t item )
         {
             int oldPos = _list.indexOf( item );
@@ -30,44 +30,44 @@ namespace QDirStat
         void moveDown( Value_t item )
         {
             int oldPos = _list.indexOf( item );
-        
+
             if ( oldPos < _list.size() - 1 )
             {
         	_list.removeAt( oldPos );
         	_list.insert( oldPos + 1, item );
             }
         }
-        
-        
+
+
         void moveToTop( Value_t item )
         {
             int oldPos = _list.indexOf( item );
-        
+
             if ( oldPos > 0 )
             {
         	_list.removeAt( oldPos );
         	_list.insert( 0, item );
             }
         }
-        
-        
+
+
         void moveToBottom( Value_t item )
         {
             int oldPos = _list.indexOf( item );
-        
+
             if ( oldPos < _list.size() - 1 )
             {
         	_list.removeAt( oldPos );
         	_list.insert( _list.size(), item );
            }
         }
-        
+
     protected:
         QList<Value_t> & _list;
     };
 
     typedef ListMover<void *> PtrListMover;
-        
+
 }       // namespace QDirStat
 
 #endif	// ListMover_h

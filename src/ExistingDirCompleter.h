@@ -37,9 +37,9 @@ namespace QDirStat
          * Destructor.
          **/
         virtual ~ExistingDirCompleter();
-        
+
     };  // class ExistingDirCompleter
-    
+
 }       // namespace QDirStat
 
 #endif  // ExistingDirCompleter_h

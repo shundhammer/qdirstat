@@ -101,7 +101,7 @@ namespace QDirStat
 	 * percentile. By a little stretch of the definition, percentile 0 is
 	 * the data minimum, percentile 100 is the data maximum.
 	 *
-	 * The inverval between one percentile and the next contains exactly 1%
+	 * The interval between one percentile and the next contains exactly 1%
 	 * of the data points.
 	 **/
 	void setPercentiles( const QRealList & newPercentiles );

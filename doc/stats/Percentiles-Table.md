@@ -30,7 +30,7 @@ Columns from left to right:
   | P100       | Max              |
 
 
-- The accumulated sum of all data points (of all files) between the the
+- The accumulated sum of all data points (of all files) between the
   previous percentile and this one.
 
 

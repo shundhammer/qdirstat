@@ -79,7 +79,7 @@ namespace QDirStat
     class DirTreeSuffixFilter: public DirTreeFilter
     {
     public:
-        
+
 	/**
 	 * Constructor. 'suffix' should start with a dot (".").
 	 **/

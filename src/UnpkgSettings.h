@@ -40,7 +40,7 @@ namespace QDirStat
         //
         // Data members (all public!)
         //
-        
+
         QString         startingDir;
         QStringList     excludeDirs;
         QStringList     ignorePatterns;

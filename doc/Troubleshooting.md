@@ -62,4 +62,3 @@ trash".
 
 So, if you have this problem, please use the .Trash directory workaround
 described above.
-

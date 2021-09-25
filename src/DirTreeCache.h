@@ -258,7 +258,7 @@ namespace QDirStat
 
 	/**
 	 * Recursively set the read status of all dirs from 'dir' on, send tree
-	 * signals and finalize local (i.e. clean up empty or unneded dot
+	 * signals and finalize local (i.e. clean up empty or unneeded dot
 	 * entries).
 	 **/
 	void finalizeRecursive( DirInfo * dir );

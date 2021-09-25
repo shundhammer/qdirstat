@@ -190,7 +190,7 @@ namespace QDirStat
 
 
     /**
-     * Impementation of the abstract DirReadJob class that reads a local
+     * Implementation of the abstract DirReadJob class that reads a local
      * directory.
      *
      * This will use lstat() system calls rather than KDE's network transparent

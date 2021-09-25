@@ -258,8 +258,8 @@ namespace QDirStat
 	/**
 	 * Constructor: Prepare to read the file list of existing PkgInfo node
 	 * 'pkg' and create a DirInfo or FileInfo node for each item in the
-	 * file list below 'pkg'. Operation starts when thes when the
-	 * 'readFileListProcess' has data to read, i.e. when it, i.e. it sends
+	 * file list below 'pkg'. Operation starts when the
+	 * 'readFileListProcess' has data to read, i.e. when it sends
 	 * the 'readFileListFinished' signal.
          *
          * Create the readFileListProcess, then this read job, add the read job

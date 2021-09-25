@@ -189,7 +189,7 @@ namespace QDirStat
 
 	/**
 	 * The file permissions and object type as returned by lstat().
-	 * You might want to use the repective convenience methods instead:
+	 * You might want to use the respective convenience methods instead:
 	 * isDir(), isFile(), ...
 	 *
 	 * See also symbolicPermissions(), octalPermissions()
@@ -965,7 +965,7 @@ namespace QDirStat
     //			       Static Functions
     //----------------------------------------------------------------------
 
-    
+
     /**
      * Return the last pathname component of a file name.
      *

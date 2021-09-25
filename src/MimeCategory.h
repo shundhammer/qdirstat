@@ -101,7 +101,7 @@ namespace QDirStat
          **/
 	void addSuffixes( const QStringList & suffixes,
                           Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive );
-        
+
 	/**
 	 * Clear any suffixes or patterns for this category.
 	 **/
@@ -173,7 +173,7 @@ namespace QDirStat
 
     };	// class MimeCategory
 
-    
+
     typedef QList<MimeCategory *> MimeCategoryList;
 
 

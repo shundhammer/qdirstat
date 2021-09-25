@@ -100,7 +100,7 @@ namespace QDirStat
      **/
     void writeWindowSettings( QWidget *       widget,
                               const QString & settingsGroup );
-    
+
 }	// namespace QDirStat
 
 #endif	// SettingsHelpers_h

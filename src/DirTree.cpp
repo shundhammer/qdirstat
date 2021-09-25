@@ -178,7 +178,7 @@ void DirTree::refresh( const FileInfoSet & refreshSet )
 
 	if ( item && item->checkMagicNumber() )
 	{
-	    if( item->isDirInfo() )
+	    if ( item->isDirInfo() )
 		refresh( item->toDirInfo() );
 	    else if ( item->parent() )
 		refresh( item->parent() );

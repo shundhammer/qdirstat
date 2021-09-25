@@ -43,7 +43,7 @@ namespace QDirStat
 		    const QString & mountOptions );
 
 	/**
-	 * Return the device that is mounted, someting like "/dev/sda3",
+	 * Return the device that is mounted, something like "/dev/sda3",
 	 * "/dev/mapper/crypto", "nas:/share/work".
 	 **/
 	QString device() const { return _device; }
