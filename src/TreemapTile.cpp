@@ -630,19 +630,19 @@ void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	    QGraphicsRectItem::mousePressEvent( event );
 	    // logDebug() << this << " mouse pressed" << endl;
 	    _parentView->setCurrentItem( this );
+            _parentView->clearParentsHighlight();
 	    break;
 
 	case Qt::MidButton:
-	    {
-		logDebug() << "Middle click on " << _orig << endl;
-                _parentView->highlightParents( this );
-            }
+            // logDebug() << "Middle click on " << _orig << endl;
+            _parentView->highlightParents( this );
             break;
 
 
 	case Qt::RightButton:
 	    // logDebug() << this << " right mouse pressed" << endl;
 	    _parentView->setCurrentItem( this );
+            _parentView->clearParentsHighlight();
 	    break;
 
 	default:
