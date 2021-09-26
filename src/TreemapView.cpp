@@ -82,6 +82,7 @@ void TreemapView::clear()
     _currentItem     = 0;
     _currentItemRect = 0;
     _rootTile	     = 0;
+    _parentHighlightList.clear();
 }
 
 
@@ -318,10 +319,8 @@ void TreemapView::rebuildTreemap( FileInfo *	 newRoot,
     if ( newSz.isEmpty() )
 	newSize = visibleSize();
 
-
     // Delete all old stuff.
     clear();
-
 
     if ( ! scene() )
     {
