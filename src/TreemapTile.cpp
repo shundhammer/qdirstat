@@ -632,6 +632,14 @@ void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	    _parentView->setCurrentItem( this );
 	    break;
 
+	case Qt::MidButton:
+	    {
+		logDebug() << "Middle click on " << _orig << endl;
+                _parentView->highlightParents( this );
+            }
+            break;
+
+
 	case Qt::RightButton:
 	    // logDebug() << this << " right mouse pressed" << endl;
 	    _parentView->setCurrentItem( this );
@@ -660,6 +668,7 @@ void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 	    }
 	    break;
 
+#if 0
 	case Qt::MidButton:
 	    {
 		logDebug() << "Selecting parent" << endl;
@@ -680,6 +689,7 @@ void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 		_parentView->setCurrentItem( newCurrentTile );
 	    }
 	    break;
+#endif
 
 	default:
 	    QGraphicsRectItem::mouseReleaseEvent( event );
@@ -779,7 +789,7 @@ void TreemapTile::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 {
     Q_UNUSED( event );
 
-    logDebug() << "Hovering over " << this << endl;
+    // logDebug() << "Hovering over " << this << endl;
     _parentView->sendHoverEnter( _orig );
 }
 
@@ -788,7 +798,7 @@ void TreemapTile::hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
 {
     Q_UNUSED( event );
 
-    logDebug() << "  Leaving " << this << endl;
+    // logDebug() << "  Leaving " << this << endl;
     _parentView->sendHoverLeave( _orig );
 }
 

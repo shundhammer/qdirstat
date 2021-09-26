@@ -670,6 +670,49 @@ QColor TreemapView::tileColor( FileInfo * file )
 }
 
 
+void TreemapView::highlightParents( TreemapTile * tile )
+{
+    if ( ! tile )
+        return;
+
+    TreemapTile * parent = tile->parentTile();
+    TreemapTile * currentHighlight = highlightedParent();
+
+    if ( currentHighlight && currentHighlight != parent )
+        clearParentsHighlight();
+
+    int lineWidth = 2;  // For the first (the direct) parent
+
+    while ( parent && parent != _rootTile )
+    {
+        HighlightRect * highlight = new HighlightRect( parent, Qt::white, lineWidth );
+        CHECK_NEW( highlight );
+        _parentHighlightList << highlight;
+
+        parent = parent->parentTile();
+        lineWidth = 1;  // For all higher-level parents
+    }
+}
+
+
+void TreemapView::clearParentsHighlight()
+{
+    qDeleteAll( _parentHighlightList );
+    _parentHighlightList.clear();
+}
+
+
+TreemapTile * TreemapView::highlightedParent() const
+{
+    TreemapTile * tile = 0;
+
+    if ( ! _parentHighlightList.empty() )
+        tile = _parentHighlightList.first()->tile();
+
+    return tile;
+}
+
+
 void TreemapView::sendHoverEnter( FileInfo * node )
 {
     emit hoverEnter( node );
@@ -687,7 +730,8 @@ void TreemapView::sendHoverLeave( FileInfo * node )
 
 
 HighlightRect::HighlightRect( QGraphicsScene * scene, const QColor & color, int lineWidth ):
-    QGraphicsRectItem()
+    QGraphicsRectItem(),
+    _tile(0)
 {
     QPen pen( color, lineWidth );
     pen.setStyle( Qt::DotLine );
@@ -700,16 +744,16 @@ HighlightRect::HighlightRect( QGraphicsScene * scene, const QColor & color, int 
 
 
 HighlightRect::HighlightRect( TreemapTile * tile, const QColor & color, int lineWidth ):
-    QGraphicsRectItem()
+    QGraphicsRectItem(),
+    _tile( tile )
 {
     CHECK_PTR( tile );
 
     setPen( QPen( color, lineWidth ) );
-    setZValue( 1e8 );	       // Not quite as high as the scene-wide highlight rect
+    setZValue( 1e6 + tile->zValue() );  // Not quite as high as the scene-wide highlight rect
     tile->scene()->addItem( this );
     highlight( tile );
 }
-
 
 
 void HighlightRect::highlight( TreemapTile * tile )

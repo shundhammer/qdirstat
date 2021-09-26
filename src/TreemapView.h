@@ -13,6 +13,7 @@
 
 #include <QGraphicsView>
 #include <QGraphicsRectItem>
+#include <QList>
 
 #include "FileInfo.h"
 
@@ -44,6 +45,8 @@ namespace QDirStat
     class CleanupCollection;
     class FileInfoSet;
     class DelayedRebuilder;
+
+    typedef QList<HighlightRect *> HighlightRectList;
 
 
     /**
@@ -137,6 +140,13 @@ namespace QDirStat
 	 **/
 	void setFixedColor( const QColor & fixedColor );
 
+        /**
+         * Return the tile of the deepest-level highlighted parent or 0 if no
+         * parent is currently highlighted. Notice that this returns the real
+         * tile corresponding to a directory, not the HighlightRect.
+         **/
+        TreemapTile * highlightedParent() const;
+
 
     public slots:
 
@@ -226,6 +236,16 @@ namespace QDirStat
          * Send a hoverLeave() signal for 'node'.
          **/
         void sendHoverLeave( FileInfo * node );
+
+        /**
+         * Highlight the parent tiles of item 'tile'.
+         **/
+        void highlightParents( TreemapTile * tile );
+
+        /**
+         * Clear previous parent highlights.
+         **/
+        void clearParentsHighlight();
 
 	/**
 	 * Read parameters from the settings file.
@@ -484,6 +504,7 @@ namespace QDirStat
 	TreemapTile	    * _currentItem;
 	HighlightRect	    * _currentItemRect;
 	FileInfo	    * _newRoot;
+        HighlightRectList     _parentHighlightList;
 	QString		      _savedRootUrl;
 
 	bool   _squarify;
@@ -563,6 +584,15 @@ namespace QDirStat
 	 * Set the pen style according to the 'selected' status of 'tile'.
 	 **/
 	void setPenStyle( TreemapTile * tile );
+
+        /**
+         * Return the tile that this highlights or 0 if there is none.
+         **/
+        TreemapTile * tile() const { return _tile; }
+
+    protected:
+
+        TreemapTile * _tile;
 
     }; // class TreemapSelectionRect
 
