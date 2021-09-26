@@ -599,6 +599,11 @@ void TreemapView::updateCurrentItem( FileInfo * currentItem )
     if ( ! scene() )
 	return;
 
+    TreemapTile * highlight = highlightedParent();
+
+    if ( highlight && currentItem && currentItem->parent() != highlight->orig() )
+        clearParentsHighlight();
+
     SignalBlocker sigBlocker( this );
     setCurrentItem( currentItem );
 }
