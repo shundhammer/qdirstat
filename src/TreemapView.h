@@ -598,6 +598,15 @@ namespace QDirStat
          **/
         TreemapTile * tile() const { return _tile; }
 
+        /**
+         * Return the shape of this item; in this case only the outline,
+         * leaving the inside hollow to avoid displaying the tooltip there as
+         * well.
+         *
+         * Reimplemented from QGraphicsRectItem / QGraphicsItem.
+         **/
+        virtual QPainterPath shape() const Q_DECL_OVERRIDE;
+
     protected:
 
         TreemapTile * _tile;

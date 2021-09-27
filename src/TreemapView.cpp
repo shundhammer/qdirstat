@@ -701,6 +701,7 @@ void TreemapView::highlightParents( TreemapTile * tile )
         HighlightRect * highlight = new HighlightRect( parent, Qt::white, lineWidth );
         CHECK_NEW( highlight );
         _parentHighlightList << highlight;
+        highlight->setToolTip( parent->orig()->debugUrl() );
 
         topParent = parent;
         parent = parent->parentTile();
@@ -783,6 +784,29 @@ HighlightRect::HighlightRect( TreemapTile * tile, const QColor & color, int line
     setZValue( TileHighlightLayer + tile->zValue() );
     tile->scene()->addItem( this );
     highlight( tile );
+}
+
+
+QPainterPath HighlightRect::shape() const
+{
+    if ( ! _tile )
+        return QGraphicsRectItem::shape();
+
+    // Return just the outline as the shape so any tooltip is only displayed on
+    // the outline, not inside as well; but use more than the line thickness of
+    // 1 or 2 pixels to make it humanly possible to position the mouse cursor
+    // close enough.
+    //
+    // Notice that it's still only on the inside of the line to avoid bad side
+    // effects with QGraphicsView's internal mechanisms.
+
+    const int thickness = 10;
+
+    QPainterPath path;
+    path.addRect( _tile->rect() );
+    path.addRect( _tile->rect().adjusted( thickness,   thickness,
+                                          -thickness, -thickness ) );
+    return path;
 }
 
 
