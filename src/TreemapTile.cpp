@@ -634,6 +634,17 @@ void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
 
 	case Qt::MidButton:
             // logDebug() << "Middle click on " << _orig << endl;
+
+            // Handle item selection (with or without Ctrl) ourselves here;
+            // unlike for a left click, the QGraphicsItem base class does
+            // not do this for us already.
+
+            if ( ( event->modifiers() & Qt::ControlModifier ) == 0 )
+                scene()->clearSelection();
+
+            setSelected( ! isSelected() );
+
+            _parentView->setCurrentItem( this );
             _parentView->highlightParents( this );
             break;
 
