@@ -487,6 +487,9 @@ void TreemapView::setCurrentItem( TreemapTile * tile )
 
     if ( _currentItem )
     {
+        if ( highlightedParent() != _currentItem->parentTile() )
+            clearParentsHighlight();
+
 	if ( ! _currentItemRect )
 	    _currentItemRect = new CurrentItemHighlighter( scene(), _currentItemColor );
     }
@@ -598,11 +601,6 @@ void TreemapView::updateCurrentItem( FileInfo * currentItem )
 {
     if ( ! scene() )
 	return;
-
-    TreemapTile * highlight = highlightedParent();
-
-    if ( highlight && currentItem && currentItem->parent() != highlight->orig() )
-        clearParentsHighlight();
 
     SignalBlocker sigBlocker( this );
     setCurrentItem( currentItem );
