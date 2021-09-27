@@ -13,6 +13,7 @@
 
 #include <QGraphicsView>
 #include <QGraphicsRectItem>
+#include <QGraphicsPathItem>
 #include <QList>
 
 #include "FileInfo.h"
@@ -39,6 +40,7 @@ namespace QDirStat
 {
     class TreemapTile;
     class HighlightRect;
+    class SceneMask;
     class DirTree;
     class SelectionModel;
     class SelectionModelProxy;
@@ -246,6 +248,11 @@ namespace QDirStat
          * Clear previous parent highlights.
          **/
         void clearParentsHighlight();
+
+        /**
+         * Clear the old scene mask if there is one.
+         **/
+        void clearSceneMask();
 
 	/**
 	 * Read parameters from the settings file.
@@ -503,6 +510,7 @@ namespace QDirStat
 	TreemapTile	    * _rootTile;
 	TreemapTile	    * _currentItem;
 	HighlightRect	    * _currentItemRect;
+        SceneMask           * _sceneMask;
 	FileInfo	    * _newRoot;
         HighlightRectList     _parentHighlightList;
 	QString		      _savedRootUrl;
@@ -626,6 +634,34 @@ namespace QDirStat
 	SelectedItemHighlighter( TreemapTile * tile, const QColor & color, int lineWidth = 2 ):
 	    HighlightRect( tile, color, lineWidth )
 	    {}
+    };
+
+
+
+    /**
+     * Semi-transparent mask that covers the complete scene except for one
+     * tile.
+     **/
+    class SceneMask: public QGraphicsPathItem
+    {
+    public:
+        /**
+         * Constructor: Create a semi-transparent mask that covers the complete
+         * scene (the complete treemap), but leaves 'tile' uncovered.
+         *
+         * 'opacity' (0.0 .. 1.0) indicates how transparent the mask is:
+         * 0.0 -> completely transparent; 1.0 -> solid.
+         **/
+        SceneMask( TreemapTile * tile, float opacity );
+
+        /**
+         * Return the tile that this masks.
+         **/
+        TreemapTile * tile() const { return _tile; }
+
+    protected:
+
+        TreemapTile * _tile;
     };
 
 }	// namespace QDirStat

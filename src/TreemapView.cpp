@@ -29,6 +29,14 @@
 using namespace QDirStat;
 
 
+// Treemap layers (Z values)
+
+const double TileLayer           = 0.0;
+const double SceneMaskLayer      = 1e5;
+const double TileHighlightLayer  = 1e6;
+const double SceneHighlightLayer = 1e10;
+
+
 TreemapView::TreemapView( QWidget * parent ):
     QGraphicsView( parent ),
     _tree(0),
@@ -39,6 +47,7 @@ TreemapView::TreemapView( QWidget * parent ):
     _rootTile(0),
     _currentItem(0),
     _currentItemRect(0),
+    _sceneMask(0),
     _newRoot(0),
     _useFixedColor(false),
     _useDirGradient(true)
@@ -82,6 +91,7 @@ void TreemapView::clear()
     _currentItem     = 0;
     _currentItemRect = 0;
     _rootTile	     = 0;
+    _sceneMask       = 0;
     _parentHighlightList.clear();
 }
 
@@ -683,6 +693,7 @@ void TreemapView::highlightParents( TreemapTile * tile )
     if ( currentHighlight && currentHighlight != parent )
         clearParentsHighlight();
 
+    TreemapTile * topParent = 0;
     int lineWidth = 2;  // For the first (the direct) parent
 
     while ( parent && parent != _rootTile )
@@ -691,8 +702,15 @@ void TreemapView::highlightParents( TreemapTile * tile )
         CHECK_NEW( highlight );
         _parentHighlightList << highlight;
 
+        topParent = parent;
         parent = parent->parentTile();
         lineWidth = 1;  // For all higher-level parents
+    }
+
+    if ( topParent )
+    {
+        clearSceneMask();
+        _sceneMask = new SceneMask( topParent, 0.6 );
     }
 }
 
@@ -701,6 +719,16 @@ void TreemapView::clearParentsHighlight()
 {
     qDeleteAll( _parentHighlightList );
     _parentHighlightList.clear();
+    clearSceneMask();
+}
+
+
+void TreemapView::clearSceneMask()
+{
+    if ( _sceneMask )
+        delete _sceneMask;
+
+    _sceneMask = 0;
 }
 
 
@@ -739,7 +767,7 @@ HighlightRect::HighlightRect( QGraphicsScene * scene, const QColor & color, int 
     pen.setStyle( Qt::DotLine );
     setPen( QPen( color, lineWidth ) );
     setPen( pen );
-    setZValue( 1e10 );		// Higher than everything else
+    setZValue( SceneHighlightLayer );
     hide();
     scene->addItem( this );
 }
@@ -752,7 +780,7 @@ HighlightRect::HighlightRect( TreemapTile * tile, const QColor & color, int line
     CHECK_PTR( tile );
 
     setPen( QPen( color, lineWidth ) );
-    setZValue( 1e6 + tile->zValue() );  // Not quite as high as the scene-wide highlight rect
+    setZValue( TileHighlightLayer + tile->zValue() );
     tile->scene()->addItem( this );
     highlight( tile );
 }
@@ -801,3 +829,30 @@ void CurrentItemHighlighter::highlight( TreemapTile * tile )
     setPenStyle( tile );
 }
 
+
+
+
+SceneMask::SceneMask( TreemapTile * tile, float opacity ):
+    QGraphicsPathItem(),
+    _tile( tile )
+{
+    // logDebug() << "Adding scene mask for " << tile->orig() << endl;
+    CHECK_PTR( tile );
+
+    QPainterPath path;
+    path.addRect( tile->scene()->sceneRect() );
+
+    // Since the default OddEvenFillRule leaves overlapping areas unfilled,
+    // adding the tile's rect that is inside the scene rect leaves the tile
+    // "cut out", i.e. unobscured.
+
+    path.addRect( tile->rect() );
+    setPath( path );
+
+    const int grey = 0x30;
+    QColor color( grey, grey, grey, opacity * 255 );
+    setBrush( color );
+
+    setZValue( SceneMaskLayer + tile->zValue() );
+    tile->scene()->addItem( this );
+}
