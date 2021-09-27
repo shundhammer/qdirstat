@@ -677,29 +677,6 @@ void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 	    }
 	    break;
 
-#if 0
-	case Qt::MidButton:
-	    {
-		logDebug() << "Selecting parent" << endl;
-
-		TreemapTile * oldCurrentTile = _parentView->currentItem();
-		TreemapTile * newCurrentTile = this;
-
-		// Select the next-higher ancestor if possible
-		if ( oldCurrentTile &&
-		     oldCurrentTile->parentTile() &&
-		     _orig->isInSubtree( oldCurrentTile->parentTile()->orig() ) )
-		{
-		    newCurrentTile = oldCurrentTile->parentTile();
-		}
-
-		_parentView->currentItem()->setSelected( false );
-		newCurrentTile->setSelected( true );
-		_parentView->setCurrentItem( newCurrentTile );
-	    }
-	    break;
-#endif
-
 	default:
 	    QGraphicsRectItem::mouseReleaseEvent( event );
 	    break;
