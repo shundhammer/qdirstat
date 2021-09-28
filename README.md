@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-08-31
+Updated: 2021-09-28
 
 
 ## Screenshot
@@ -125,6 +125,17 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2021-09-28
+
+  - Merged the changes for [GitHub issue #176] to _master_:
+
+    In the treemap, a middle click now also behaves like a left click
+    (including `Ctrl`+click); but it also displays white frames indicating the
+    parent directories of that item, and everything that does not belong to
+    that directory branch is covered by a transparent overlay.
+
+    See [GitHub issue #181] for a screenshot and more details.
+  
 
 - 2021-08-28 **New stable release: 1.8**
 
@@ -591,7 +602,8 @@ old code base that had been long overdue.
     - Left click:           Select item and make it the current item.
     - Right click:          Open the context menu with cleanup actions and more.
     - Ctrl+Left click:      Add item to selection or toggle selection.
-    - Middle click:         Select the current item's parent. Cycle back at toplevel.
+    - Middle click:         Like left click, but also show directory borders.
+    - Ctrl+Middle click:    Like Ctrl+left click, but also show directory borders.
     - Double click left:    Zoom treemap in.
     - Double click middle:  Zoom treemap out.
     - Mouse wheel:          Zoom treemap in or out.
