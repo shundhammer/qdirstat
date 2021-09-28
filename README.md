@@ -127,15 +127,18 @@ Download installable binary packages for various Linux distributions here:
 
 - 2021-09-28
 
-  - Merged the changes for [GitHub issue #176] to _master_:
+  - Merged the changes for
+    [GitHub issue #176](https://github.com/shundhammer/qdirstat/issues/176)
+    to _master_:
 
     In the treemap, a middle click now also behaves like a left click
     (including `Ctrl`+click); but it also displays white frames indicating the
     parent directories of that item, and everything that does not belong to
     that directory branch is covered by a transparent overlay.
 
-    See [GitHub issue #181] for a screenshot and more details.
-  
+    See [GitHub issue #181](https://github.com/shundhammer/qdirstat/issues/181)
+    for a screenshot and more details.
+
 
 - 2021-08-28 **New stable release: 1.8**
 
