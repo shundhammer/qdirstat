@@ -87,7 +87,7 @@ void DiscoverActions::discoverFilesFromYear( const QString & path, short year )
     QString headingText = tr( "Files from %1 in %2" ).arg( year ).arg( "%1");
 
     discoverFiles( new QDirStat::FilesFromYearTreeWalker( year ), headingText, path );
-    _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::AscendingOrder );
+    _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::DescendingOrder );
 }
 
 
@@ -96,7 +96,7 @@ void DiscoverActions::discoverFilesFromMonth( const QString & path, short year, 
     QString headingText = tr( "Files from %1/%2 in %3" ).arg( month ).arg( year).arg( "%1");
 
     discoverFiles( new QDirStat::FilesFromMonthTreeWalker( year, month ), headingText, path );
-    _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::AscendingOrder );
+    _locateFilesWindow->sortByColumn( LocateListMTimeCol, Qt::DescendingOrder );
 }
 
 
