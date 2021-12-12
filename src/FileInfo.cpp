@@ -47,6 +47,10 @@ FileInfo::FileInfo( DirTree    * tree,
     , _next( 0 )
     , _tree( tree )
 {
+    /**
+     * Default constructor: All fields are initialized empty.
+     **/
+
     _isLocalFile   = true;
     _isSparseFile  = false;
     _isIgnored	   = false;
@@ -74,6 +78,11 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
     , _next( 0 )
     , _tree( tree )
 {
+    /**
+     * Constructor from a stat buffer (i.e. based on an lstat() call).
+     * This is the standard case.
+     **/
+
     CHECK_PTR( statInfo );
 
     _isLocalFile   = true;
@@ -158,6 +167,11 @@ FileInfo::FileInfo( DirTree *	    tree,
     , _next( 0 )
     , _tree( tree )
 {
+    /**
+     * Constructor from the bare necessary fields
+     * for use from a cache file reader
+     **/
+
     _name	   = filenameWithoutPath;
     _isLocalFile   = true;
     _isIgnored	   = false;
@@ -190,10 +204,14 @@ FileInfo::FileInfo( DirTree *	    tree,
 
 	_allocatedSize = _size;
     }
-    else
+    else // blocks >= 0
     {
+        // The "blocks" field is optional in the cache file for use for sparse
+        // files only.
+
 	_isSparseFile	= true;
 	_blocks		= blocks;
+        _allocatedSize  = blocks * STD_BLOCK_SIZE;
     }
 
     // logDebug() << "Created FileInfo " << this << endl;
