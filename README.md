@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-09-28
+Updated: 2021-12-12
 
 
 ## Screenshot
@@ -124,6 +124,16 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2021-12-12
+
+  - Fixed [GitHub issue #184](https://github.com/shundhammer/qdirstat/issues/184):
+    When reading a cache file, sparse files were displayed as "allocated: 0 Bytes".
+
+    About QDirStat cache files:
+    - [qdirstat-cache-writer documentation](scripts/README.md)
+    - [QDirStat for Servers](doc/QDirStat-for-Servers.md)
+
 
 - 2021-09-28
 
