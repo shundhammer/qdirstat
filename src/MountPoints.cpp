@@ -449,9 +449,10 @@ QList<MountPoint *> MountPoints::normalMountPoints()
 
     foreach ( MountPoint * mountPoint, instance()->_mountPointList )
     {
-	if ( ! mountPoint->isSystemMount() &&
-             ! mountPoint->isDuplicate()   &&
-             ! mountPoint->isSnapPackage()    )
+	if ( ! mountPoint->isSystemMount()     &&
+             ! mountPoint->isDuplicate()       &&
+             ! mountPoint->isUnmountedAutofs() &&
+             ! mountPoint->isSnapPackage()        )
         {
 	    result << mountPoint;
         }

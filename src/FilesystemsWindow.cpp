@@ -51,9 +51,6 @@ void FilesystemsWindow::populate()
     {
 	CHECK_PTR( mountPoint);
 
-        if ( mountPoint->isUnmountedAutofs() )
-            continue;
-
 	FilesystemItem * item = new FilesystemItem( mountPoint, _ui->fsTree );
 	CHECK_NEW( item );
 

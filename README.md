@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-12-12
+Updated: 2021-12-30
 
 
 ## Screenshot
@@ -124,6 +124,16 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2021-12-30
+
+  - Don't show inactive (unmounted) mounts managed by the automounter anymore
+    in the "Places and Mounted Filesystems" bar of the "Open Directory"
+    dialog.
+
+    Notice that those directories are still accessible from the tree at the
+    right side, but they no longer take a prominent place in the left bar.
+
 
 - 2021-12-12
 
