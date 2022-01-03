@@ -4,13 +4,13 @@
 Qt-based directory statistics: KDirStat without any KDE -- from the author of
 the original KDirStat.
 
-(c) 2015-2021 Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+(c) 2015-2022 Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
 
 Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-12-30
+Updated: 2022-01-03
 
 
 ## Screenshot
