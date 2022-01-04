@@ -4,13 +4,13 @@
 Qt-based directory statistics: KDirStat without any KDE -- from the author of
 the original KDirStat.
 
-(c) 2015-2021 Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+(c) 2015-2022 Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
 
 Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2021-12-30
+Updated: 2022-01-04
 
 
 ## Screenshot
@@ -124,6 +124,14 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2022-01-04
+
+  - Now cutting off insanely long generated device names LUKS devices in the
+    "Mounted Filesystems" window: E.g. `/dev/mapper/luks-3fae43..." instead of
+    `luks-3fae4328-4294-4c77-8f98-d437c41da26c`. The long name is displayed in
+    a tooltip.
+
 
 - 2021-12-30
 
