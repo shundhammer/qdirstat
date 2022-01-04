@@ -192,8 +192,22 @@ FilesystemItem::FilesystemItem( MountPoint  * mountPoint,
     _isReadOnly	    ( mountPoint->isReadOnly()	    )
 {
     QString blanks = QString( 4, ' ' );
+    QString dev    = _device;
 
-    setText( FS_DeviceCol,    _device + blanks );
+    if ( dev.startsWith( "/dev/mapper/luks-" ) )
+    {
+        // Cut off insanely long generated device mapper LUKS names
+
+        int limit = sizeof( "/dev/mapper/luks-010203" ) - 1;
+
+        if ( dev.size() > limit )
+        {
+            dev = dev.left( limit ) + "...";
+            setToolTip( FS_DeviceCol, _device );
+        }
+    }
+
+    setText( FS_DeviceCol,    dev + blanks );
     setText( FS_MountPathCol, _mountPath );
     setText( FS_TypeCol,      _fsType	 );
 
