@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2022-01-04
+Updated: 2022-01-05
 
 
 ## Screenshot
@@ -127,10 +127,10 @@ Download installable binary packages for various Linux distributions here:
 
 - 2022-01-04
 
-  - Now cutting off insanely long generated device names LUKS devices in the
-    "Mounted Filesystems" window: E.g. `/dev/mapper/luks-3fae43..." instead of
-    `luks-3fae4328-4294-4c77-8f98-d437c41da26c`. The long name is displayed in
-    a tooltip.
+  - Now cutting off insanely long generated device names of LUKS devices in the
+    "Mounted Filesystems" window: E.g. `/dev/mapper/luks-3fae43...` instead of
+    `/dev/mapper/luks-3fae4328-4294-4c77-8f98-d437c41da26c`. The long name is
+    displayed in a tooltip.
 
 
 - 2021-12-30
