@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2022-01-05
+Updated: 2022-01-13
 
 
 ## Screenshot
@@ -69,7 +69,7 @@ See section [_New Features_](#new-features) for more details.
 1. [MacOS X Compatibility](#macos-x-compatibility)
 1. [Windows Compatibility](#windows-compatibility)
 1. [Ready-made Packages](#ready-made-packages)
-1. [QDirStat Docker Container](#qdirstat-docker-container)
+1. [QDirStat Docker Containers](#qdirstat-docker-containers)
 1. [Building](#building)
 1. [Contributing](#contributing)
 1. [Troubleshooting](#troubleshooting)
@@ -938,7 +938,7 @@ the team.
 ## Windows Compatibility
 
 There is no native Windows version, but you can use the
-[docker](#qdirstat-docker-container) container.
+[docker](#qdirstat-docker-containers) container.
 Other than that, there is [WinDirStat](https://windirstat.info/).
 
 <details>
@@ -950,7 +950,7 @@ that problem with devices and crossing filesystems on that platform.
 But the cleanups might be a challenge, "move to trash" works completely
 differently, and we'd need an installer for a Windows version.
 
-So, for the time being, use the [docker](#qdirstat-docker-container) or
+So, for the time being, use the [docker](#qdirstat-docker-containers) or
 [WinDirStat](https://windirstat.info/) instead.
 
 WinDirStat is a close relative to the KDirStat family anyway; the author had
@@ -993,13 +993,20 @@ https://packages.debian.org/search?keywords=qdirstat
 https://apps.fedoraproject.org/packages/qdirstat/builds/
 
 
-## QDirStat Docker Container
+## QDirStat Docker Containers
 
-@jlesage kindly provides a
-[docker container for QDirStat](https://hub.docker.com/r/jlesage/qdirstat).
+There are currently two publicly available docker containers for QDirStat:
 
-That makes QDirStat usable even on non-Linux / non-Unix systems such as Windows
-or MacOS X.
+- @jlesage's
+[docker container for QDirStat](https://hub.docker.com/r/jlesage/qdirstat)
+
+- The [linuxserver.io docker for QDirStat](https://github.com/linuxserver/docker-qdirstat)
+
+(see their respective _release_ pages for more detailed information about the
+QDirStat version they provide)
+
+Those containers make QDirStat usable even on non-Linux / non-Unix systems such
+as Windows or MacOS X.
 
 Docker is basically a virtualized environment to run software that was designed
 for a different operating system.
