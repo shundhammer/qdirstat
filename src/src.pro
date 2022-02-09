@@ -157,7 +157,8 @@ HEADERS	  =				\
 	    ActionManager.h		\
 	    AdaptiveTimer.h		\
 	    Attic.h			\
-	    BreadcrumbNavigator.h	\
+            BreadcrumbNavigator.h	\
+            BrokenLibc.h                \
 	    BucketsTableModel.h		\
 	    BusyPopup.h			\
 	    Cleanup.h			\

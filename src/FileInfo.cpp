@@ -26,6 +26,7 @@
 #include "SysUtil.h"
 #include "Logger.h"
 #include "Exception.h"
+#include "BrokenLibc.h"     // ALLPERMS
 
 // Some filesystems (NTFS seems to be among them) may handle block fragments
 // well. Don't report files as "sparse" files if the block size is only a few
