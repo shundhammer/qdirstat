@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2022-01-13
+Updated: 2022-02-25
 
 
 ## Screenshot
@@ -124,6 +124,25 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2022-02-25
+
+  - Prevent a hanging Samba (CIFS) or NFS mount from blocking the program, even
+    when no information from that mount is needed at all:
+
+    If you started QDirStat with a path on the command line, it collected the
+    information about used / free / reserved disk space for all mounted
+    filesytems already. If you had a network mount that didn't respond, you
+    still had to wait for a timeout before the program could continue.
+
+    Now it collects that information only when it's really needed:
+
+    - In the "Open Directory" dialog where it displays those sizes in the
+      "Places and Mounted Filesystems" bar on the left
+
+    - In the "Mounted Filesystems" (`du`-like) window (Menu "View" -> "Show
+      Mounted Filesystems").
+
 
 - 2022-01-04
 
