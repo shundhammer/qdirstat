@@ -124,7 +124,8 @@ QStorageInfo * MountPoint::storageInfo()
 {
     if ( ! _storageInfo )
     {
-        logDebug() << "creating QStorageInfo for " << _path << endl;
+        if ( isNetworkMount() )
+            logDebug() << "Creating QStorageInfo for " << _path << endl;
 
         _storageInfo = new QStorageInfo( _path );
         CHECK_NEW( _storageInfo );

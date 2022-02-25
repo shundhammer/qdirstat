@@ -337,6 +337,7 @@ QString OpenDirDialog::askOpenDir( bool *    crossFilesystems_ret,
     OpenDirDialog dialog( parent );
     dialog.pathSelector()->addHomeDir();
     dialog.pathSelector()->addMountPoints( MountPoints::normalMountPoints() );
+    logDebug() << "Waiting for user selection" << endl;
 
     if ( dialog.exec() == QDialog::Rejected )
     {
