@@ -29,11 +29,19 @@ MountPoint::MountPoint( const QString & device,
     _path( path ),
     _filesystemType( filesystemType ),
     _isDuplicate( false )
+#if HAVE_Q_STORAGE_INFO
+    , _storageInfo( 0 )
+#endif
 {
     _mountOptions = mountOptions.split( "," );
+}
 
+
+MountPoint::~MountPoint()
+{
 #if HAVE_Q_STORAGE_INFO
-    _storageInfo = QStorageInfo( path );
+    if ( _storageInfo )
+        delete _storageInfo;
 #endif
 }
 
@@ -79,7 +87,7 @@ bool MountPoint::isAutofs() const
 }
 
 
-bool MountPoint::isUnmountedAutofs() const
+bool MountPoint::isUnmountedAutofs()
 {
     return isAutofs() && totalSize() == 0;
 }
@@ -112,39 +120,53 @@ bool MountPoint::isSnapPackage() const
 
 #if HAVE_Q_STORAGE_INFO
 
+QStorageInfo * MountPoint::storageInfo()
+{
+    if ( ! _storageInfo )
+    {
+        logDebug() << "creating QStorageInfo for " << _path << endl;
+
+        _storageInfo = new QStorageInfo( _path );
+        CHECK_NEW( _storageInfo );
+    }
+
+    return _storageInfo;
+}
+
+
 bool MountPoint::hasSizeInfo() const
 {
     return true;
 }
 
 
-FileSize MountPoint::totalSize() const
+FileSize MountPoint::totalSize()
 {
-    return _storageInfo.bytesTotal();
+    return storageInfo()->bytesTotal();
 }
 
 
-FileSize MountPoint::usedSize() const
+FileSize MountPoint::usedSize()
 {
-    return _storageInfo.bytesTotal() - _storageInfo.bytesFree();
+    return storageInfo()->bytesTotal() - storageInfo()->bytesFree();
 }
 
 
-FileSize MountPoint::reservedSize() const
+FileSize MountPoint::reservedSize()
 {
-    return _storageInfo.bytesFree() - _storageInfo.bytesAvailable();
+    return storageInfo()->bytesFree() - storageInfo()->bytesAvailable();
 }
 
 
-FileSize MountPoint::freeSizeForUser() const
+FileSize MountPoint::freeSizeForUser()
 {
-    return _storageInfo.bytesAvailable();
+    return storageInfo()->bytesAvailable();
 }
 
 
-FileSize MountPoint::freeSizeForRoot() const
+FileSize MountPoint::freeSizeForRoot()
 {
-    return _storageInfo.bytesFree();
+    return storageInfo()->bytesFree();
 }
 
 #else  // ! HAVE_Q_STORAGE_INFO
@@ -152,12 +174,12 @@ FileSize MountPoint::freeSizeForRoot() const
 // Qt before 5.4 does not have QStorageInfo,
 // and statfs() is Linux-specific (not POSIX).
 
-bool	 MountPoint::hasSizeInfo()	const	{ return false; }
-FileSize MountPoint::totalSize()	const	{ return -1; }
-FileSize MountPoint::usedSize()		const	{ return -1; }
-FileSize MountPoint::reservedSize()	const	{ return -1; }
-FileSize MountPoint::freeSizeForUser()	const	{ return -1; }
-FileSize MountPoint::freeSizeForRoot()	const	{ return -1; }
+bool	 MountPoint::hasSizeInfo() const { return false; }
+FileSize MountPoint::totalSize()	 { return -1; }
+FileSize MountPoint::usedSize()		 { return -1; }
+FileSize MountPoint::reservedSize()	 { return -1; }
+FileSize MountPoint::freeSizeForUser()	 { return -1; }
+FileSize MountPoint::freeSizeForRoot()   { return -1; }
 
 #endif // ! HAVE_Q_STORAGE_INFO
 
@@ -483,7 +505,6 @@ void MountPoints::reload()
     instance()->clear();
     instance()->ensurePopulated();
 }
-
 
 
 #if HAVE_Q_STORAGE_INFO

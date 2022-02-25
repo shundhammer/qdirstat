@@ -18,6 +18,7 @@
 
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 4, 0 ))
 #  define HAVE_Q_STORAGE_INFO 0
+typedef void * QStorageInfo;
 #else
 #  define HAVE_Q_STORAGE_INFO 1
 #  include <QStorageInfo>
@@ -41,6 +42,11 @@ namespace QDirStat
 		    const QString & path,
 		    const QString & filesystemType,
 		    const QString & mountOptions );
+
+        /**
+         * Destructor.
+         **/
+        virtual ~MountPoint();
 
 	/**
 	 * Return the device that is mounted, something like "/dev/sda3",
@@ -107,7 +113,7 @@ namespace QDirStat
         /**
          * Return 'true' if this is an autofs that is not currently mounted.
          **/
-        bool isUnmountedAutofs() const;
+        bool isUnmountedAutofs();
 
 	/**
 	 * Return 'true' if this is a duplicate mount, i.e. either a bind mount
@@ -137,34 +143,42 @@ namespace QDirStat
 	 * Total size of the filesystem of this mount point.
 	 * This returns -1 if no size information is available.
 	 **/
-	FileSize totalSize() const;
+	FileSize totalSize();
 
 	/**
 	 * Total used size of the filesystem of this mount point.
 	 * This returns -1 if no size information is available.
 	 **/
-	FileSize usedSize() const;
+	FileSize usedSize();
 
 	/**
 	 * Reserved size for root for the filesystem of this mount point.
 	 * This returns -1 if no size information is available.
 	 **/
-	FileSize reservedSize() const;
+	FileSize reservedSize();
 
 	/**
 	 * Available free size of this filesystem for non-privileged users.
 	 * This returns -1 if no size information is available.
 	 **/
-	FileSize freeSizeForUser() const;
+	FileSize freeSizeForUser();
 
 	/**
 	 * Available free size of this filesystem for privileged users.
 	 * This returns -1 if no size information is available.
 	 **/
-	FileSize freeSizeForRoot() const;
+	FileSize freeSizeForRoot();
 
 
     protected:
+
+#if HAVE_Q_STORAGE_INFO
+        /**
+         * Lazy access to the QStorageInfo for this mount.
+         **/
+        QStorageInfo * storageInfo();
+#endif
+
 	QString	    _device;
 	QString	    _path;
 	QString	    _filesystemType;
@@ -172,7 +186,7 @@ namespace QDirStat
 	bool	    _isDuplicate;
 
 #if HAVE_Q_STORAGE_INFO
-	QStorageInfo _storageInfo;
+	QStorageInfo * _storageInfo;
 #endif
     }; // class MountPoint
 
