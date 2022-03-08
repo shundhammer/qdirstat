@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2022-02-25
+Updated: 2022-03-08
 
 
 ## Screenshot
@@ -124,6 +124,17 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2022-03-08
+
+  - Fixed [GitHub issue #190](https://github.com/shundhammer/qdirstat/issues/190):
+    MIME categories for overlapping suffixes
+
+    Files with multiple suffixes like `.tar.gz` were wrongly sorted into the
+    same MIME category as `.gz`. It did find the category for the longer one
+    (`.tar.gz`), but then it continued looking, resulting in the shortest
+    matching one (`.gz`). Now stopping at the longest hit.
+
 
 - 2022-02-25
 
