@@ -88,8 +88,10 @@ MimeCategory * MimeCategorizer::category( const QString & filename,
     // (ignoring any leading '.' separator)
     QString suffix = filename.section( '.', 1 );
 
-    while ( ! suffix.isEmpty() )
+    while ( ! suffix.isEmpty() && ! category )
     {
+        // logVerbose() << "Checking " << suffix << endl;
+
 	// Try case sensitive first
 
 	category = _caseSensitiveSuffixMap.value( suffix, 0 );
@@ -97,14 +99,19 @@ MimeCategory * MimeCategorizer::category( const QString & filename,
 	if ( ! category )
 	    category = _caseInsensitiveSuffixMap.value( suffix.toLower(), 0 );
 
-	if ( category && suffix_ret )
-	    *suffix_ret = suffix;
+	if ( category ) // success
+        {
+            if ( suffix_ret )
+                *suffix_ret = suffix;
+        }
+        else
+        {
+            // No match so far? Try the next suffix. Some files might have more
+            // than one, e.g., "tar.bz2" - if there is no match for "tar.bz2",
+            // there might be one for just "bz2".
 
-	// No match so far? Try the next suffix. Some files might have more
-	// than one, e.g., "tar.bz2" - if there is no match for "tar.bz2",
-	// there might be one for just "bz2".
-
-	suffix = suffix.section( '.', 1 );
+            suffix = suffix.section( '.', 1 );
+        }
     }
 
     if ( ! category ) // No match yet?
