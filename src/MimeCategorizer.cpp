@@ -340,13 +340,16 @@ void MimeCategorizer::addDefaultCategories()
 			 << "gif"
 			 << "jpeg"
 			 << "jpg"
+                         << "jxl"
 			 << "png"
+                         << "mng"
 			 << "svg"
 			 << "tif"
 			 << "tiff"
+                         << "webp"
 			 << "xcf.bz2"
 			 << "xcf.gz"
-			 << "xpm"	 // uncompressed, buy typically tiny
+			 << "xpm"	 // uncompressed, but typically tiny
 			 );
 
 
