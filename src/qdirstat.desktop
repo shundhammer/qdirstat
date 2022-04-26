@@ -1,10 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=QDirStat
-Exec=qdirstat %f
-Icon=qdirstat
-GenericName=QDirStat Directory Statistics
+Name=VS Code
+Exec=myapp %f
+Icon=myapp
+GenericName=MyApplication that does cool things
 Terminal=false
-MimeType=inode/directory;inode/mount-point;
-Categories=Qt;System;Filesystem;
-Keywords=directory;tree;size;statistic;disk;space;
+MimeType=inode/directory;
