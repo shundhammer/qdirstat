@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2022-03-08
+Updated: 2022-05-19
 
 
 ## Screenshot
@@ -124,6 +124,15 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2022-05-19
+
+  - Now using `xdg-open %d` in KDE Plasma for the "Open File Manager Here"
+    standard cleanup action. This may help for
+    [GitHub issue #192](https://github.com/shundhammer/qdirstat/issues/192),
+    yet still maintain the ability to use a powerful file manager like
+    _Konqueror_ (if that is configured), falling back to the standard _Dolphin_.
+    
 
 - 2022-03-08
 
