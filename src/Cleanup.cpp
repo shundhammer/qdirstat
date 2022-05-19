@@ -409,7 +409,11 @@ const QMap<QString, QString> & Cleanup::desktopSpecificApps()
 		// konsole doesn't comply with any standards whatsoever.
 
 		apps[ "%terminal"    ] = "konsole --workdir %d";
-		apps[ "%filemanager" ] = "konqueror --profile filemanagement";
+
+                // Using xdg-open to enable using konqueror if configured,
+                // falling back to dolphin otherwise.
+
+		apps[ "%filemanager" ] = "xdg-open %d";
 	    }
 	    else if ( desktop == "gnome" ||
 		      desktop == "unity"   )
