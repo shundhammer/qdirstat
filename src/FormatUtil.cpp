@@ -146,7 +146,7 @@ QString QDirStat::formatTime( time_t rawTime )
     if ( rawTime == (time_t) 0 )
 	return "";
 
-    QDateTime time = QDateTime::fromTime_t( rawTime );
+    QDateTime time = QDateTime::fromSecsSinceEpoch( rawTime );
 
     QString ret;
 
@@ -160,7 +160,7 @@ QString QDirStat::formatTime( time_t rawTime )
     }
     else
     {
-        ret = time.toString( Qt::DefaultLocaleShortDate );
+        ret = time.toString(QLocale::system().dateFormat(QLocale::ShortFormat));
     }
 
     return ret;
