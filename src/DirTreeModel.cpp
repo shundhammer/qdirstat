@@ -9,7 +9,7 @@
 
 #include <QPalette>
 
-#include "Qt4Compat.h"
+#include "QtCompat.h"
 
 #include "DirTreeModel.h"
 #include "DirTree.h"

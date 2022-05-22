@@ -12,7 +12,7 @@
 #include <QFileSystemModel>
 #include <QTimer>
 
-#include "Qt4Compat.h"
+#include "QtCompat.h"
 
 #include "OpenDirDialog.h"
 #include "MountPoints.h"

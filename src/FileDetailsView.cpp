@@ -7,7 +7,7 @@
  */
 
 
-#include "Qt4Compat.h"
+#include "QtCompat.h"
 
 #include "FileDetailsView.h"
 #include "AdaptiveTimer.h"

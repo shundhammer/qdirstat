@@ -1,17 +1,16 @@
 /*
- *   File name: Qt4Compat.h
- *   Summary:	Helpers for Qt4 compatibility
+ *   File name: QtCompat.h
+ *   Summary:	Helpers for Qt4, Qt5, Qt6 compatibility
  *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
-#ifndef Qt4Compat_h
-#define Qt4Compat_h
+#ifndef QtCompat_h
+#define QtCompat_h
 
 #include <QString>
 #include <QComboBox>
-
 
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
 
@@ -58,7 +57,7 @@ inline void qEnableClearButton( QLineEdit * lineEdit )
 
 
 
-#else // Qt 5.x
+#else // Qt >= 5.x
 
 
 #include <QGuiApplication>
@@ -102,5 +101,4 @@ inline void qEnableClearButton( QLineEdit * lineEdit )
 #endif
 
 
-
-#endif // Qt4Compat_h
+#endif // QtCompat_h

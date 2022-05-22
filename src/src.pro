@@ -235,7 +235,7 @@ HEADERS	  =				\
 	    PopupLabel.h		\
 	    Process.h			\
 	    ProcessStarter.h		\
-	    Qt4Compat.h			\
+	    QtCompat.h			\
 	    Refresher.h			\
 	    RpmPkgManager.h		\
 	    SearchFilter.h              \
