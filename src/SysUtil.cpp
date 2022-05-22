@@ -58,7 +58,7 @@ QString SysUtil::runCommand( const QString & commandLine,
     if ( exitCode_ret )
 	*exitCode_ret = -1;
 
-    QStringList args = commandLine.split( QRegExp( "\\s+" ) );
+    QStringList args = qregexp_splitString( QRegExp( "\\s+" ), commandLine );
 
     if ( args.size() < 1 )
     {

@@ -247,7 +247,7 @@ Process * PkgReader::createReadFileListProcess( PkgInfo * pkg )
 	return 0;
     }
 
-    QStringList args	 = command.split( QRegExp( "\\s+" ) );
+    QStringList args	 = qregexp_splitString( QRegExp( "\\s+" ), command);
     QString	program	 = args.takeFirst();
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();

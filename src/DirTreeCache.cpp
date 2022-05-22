@@ -805,7 +805,7 @@ QString CacheReader::unescapedPath( const QString & rawPath ) const
 QString CacheReader::cleanPath( const QString & rawPath ) const
 {
     QString clean = rawPath;
-    return clean.replace( _multiSlash, "/" );
+    return qregexp_replaceIn(_multiSlash, clean, QString("/"));
 }
 
 
