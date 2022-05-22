@@ -92,7 +92,7 @@ void SizeColDelegate::paint( QPainter		        * painter,
                     // to reserve some space for the allocated size.
 
                     QFontMetrics fontMetrics( option.font );
-                    int allocWidth = fontMetrics.width( allocText );
+                    int allocWidth = fontMetrics.horizontalAdvance( allocText );
                     rect.setWidth( rect.width() - allocWidth );
 
                     painter->setPen( textColor );
@@ -140,7 +140,7 @@ QSize SizeColDelegate::sizeHint( const QStyleOptionViewItem & option,
             {
                 QString text = _model->data( index, Qt::DisplayRole ).toString();
                 QFontMetrics fontMetrics( option.font );
-                int width  = fontMetrics.width( text );
+                int width  = fontMetrics.horizontalAdvance( text );
                 int height = fontMetrics.height();
                 QSize size( width  + MARGIN_RIGHT + MARGIN_LEFT,
                             height + MARGIN_TOP   + MARGIN_BOTTOM );
