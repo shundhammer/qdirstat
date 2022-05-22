@@ -12,7 +12,7 @@
 
 #include "SizeColDelegate.h"
 #include "DirTreeModel.h"
-#include "Qt4Compat.h"
+#include "QtCompat.h"
 #include "Exception.h"
 #include "FileInfo.h"
 #include "Logger.h"

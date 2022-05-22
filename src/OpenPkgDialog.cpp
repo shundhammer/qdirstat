@@ -7,7 +7,7 @@
  */
 
 
-#include "Qt4Compat.h"
+#include "QtCompat.h"
 
 #include "OpenPkgDialog.h"
 #include "Logger.h"

@@ -7,7 +7,7 @@
  */
 
 
-#include "Qt4Compat.h" // qHtmlEscape()
+#include "QtCompat.h" // qHtmlEscape()
 
 #include "BreadcrumbNavigator.h"
 #include "DirInfo.h"

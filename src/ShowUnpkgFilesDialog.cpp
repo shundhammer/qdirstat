@@ -10,7 +10,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 
-#include "Qt4Compat.h"
+#include "QtCompat.h"
 
 #include "ShowUnpkgFilesDialog.h"
 #include "ExistingDirCompleter.h"
