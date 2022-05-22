@@ -142,7 +142,7 @@ const QString Cleanup::itemDir( const FileInfo *item ) const
 
     if ( ! item->isDir() && ! item->isPseudoDir() )
     {
-	dir.replace( QRegExp ( "/[^/]*$" ), "" );
+        dir = qregexp_replaceIn( QRegExp( "/[^/]*$" ), dir, "" );
     }
 
     return dir;
@@ -160,7 +160,7 @@ QString Cleanup::cleanTitle() const
 
     // Get rid of any "&" characters in the text that denote keyboard
     // shortcuts in menus.
-    title.replace( QRegExp( "&" ), "" );
+    title = qregexp_replaceIn( QRegExp( "&" ), title, "");
 
     return title;
 }

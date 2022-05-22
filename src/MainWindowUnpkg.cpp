@@ -121,7 +121,7 @@ void MainWindow::setUnpkgFilters( const UnpkgSettings & unpkgSettings,
 QString MainWindow::parseUnpkgStartingDir( const UnpkgSettings & unpkgSettings )
 {
     QString dir = unpkgSettings.startingDir;
-    dir.replace( QRegExp( "^unpkg:" ), "" );
+    dir = qregexp_replaceIn( QRegExp( "^unpkg:" ), dir, "" );
 
     if ( dir != unpkgSettings.startingDir )
 	logInfo() << "Parsed starting dir: " << dir << endl;

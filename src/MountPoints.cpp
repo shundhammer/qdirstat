@@ -364,7 +364,7 @@ bool MountPoints::read( const QString & filename )
     while ( ! line.isNull() ) // in.atEnd() always returns true for /proc/*
     {
 	++lineNo;
-	QStringList fields = line.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+	QStringList fields = qregexp_splitString( QRegExp( "\\s+" ), line, Qt::SkipEmptyParts );
 
 	if ( fields.isEmpty() ) // allow empty lines
 	    continue;
@@ -534,12 +534,12 @@ void MountPoints::findNtfsDevices()
                                           false );      // ignoreErrCode
     if ( exitCode == 0 )
     {
-        QStringList lines = output.split( "\n" )
-            .filter( QRegExp( "\\s+ntfs", Qt::CaseInsensitive ) );
+        QStringList lines = qregexp_filterList(
+            QRegExp( "\\s+ntfs", Qt::CaseInsensitive ), output.split( "\n" ));
 
         foreach ( QString line, lines )
         {
-            QString device = "/dev/" + line.split( QRegExp( "\\s+" ) ).first();
+            QString device = "/dev/" + qregexp_splitString( QRegExp( "\\s+" ), line ).first();
             logDebug() << "NTFS on " << device << endl;
             _ntfsDevices << device;
         }

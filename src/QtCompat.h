@@ -11,6 +11,7 @@
 
 #include <QString>
 #include <QComboBox>
+#include <QRegExp>
 
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
 
@@ -97,6 +98,79 @@ inline void qEnableClearButton( QLineEdit * lineEdit )
     lineEdit->setClearButtonEnabled( true );
 }
 
+
+#endif
+
+
+// Qt5 and earlier QRegExp exists
+#if (QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 ))
+    inline QString qregexp_replaceIn(const QRegExp& regexp, const QString& source, const QString& after)
+    {
+        QString str = source;
+        return str.replace( regexp, after );
+    }
+
+    inline QString qregexp_removeIn(const QRegExp& regexp, const QString& source)
+    {
+        QString str = source;
+        return str.remove( regexp );
+    }
+
+    inline QStringList qregexp_splitString(const QRegExp& regexp, const QString& source, Qt::SplitBehavior behavior = Qt::KeepEmptyParts )
+    {
+       QString str = source;
+       return str.split(regexp, behavior);
+    }
+
+    inline bool qregexp_containedIn( const QRegExp& regexp, const QString& source)
+    {
+        return source.contains(regexp);
+    }
+
+    inline int qregexp_countIn( const QRegExp& regexp, const QString& source )
+    {
+        return source.count( regexp );
+    }
+
+    inline QStringList qregexp_filterList( const QRegExp& regexp, const QStringList& source )
+    {
+        return source.filter( regexp );
+    }
+
+
+//    #define QEnterEvent QEvent
+
+// Qt6, QRegExp is only available in compatibility modes
+#else
+    inline QString qregexp_replaceIn(const QRegExp& regexp, const QString& source, const QString& after)
+    {
+        return regexp.replaceIn( source, after);
+    }
+
+    inline QString qregexp_removeIn(const QRegExp& regexp, const QString& source)
+    {
+        return regexp.removeIn( source );
+    }
+
+    inline QStringList qregexp_splitString(const QRegExp& regexp, const QString& source, Qt::SplitBehavior behavior = Qt::KeepEmptyParts )
+    {
+        return regexp.splitString(source, behavior );
+    }
+
+    inline bool qregexp_containedIn( const QRegExp& regexp, const QString& source)
+    {
+        return regexp.containedIn( source );
+    }
+
+    inline int qregexp_countIn( const QRegExp& regexp, const QString& source )
+    {
+        return regexp.countIn(source);
+    }
+
+    inline QStringList qregexp_filterList( const QRegExp& regexp, const QStringList& source )
+    {
+        return regexp.filterList(source);
+    }
 
 #endif
 
