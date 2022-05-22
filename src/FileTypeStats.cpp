@@ -14,6 +14,7 @@
 #include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
+#include "QtCompat.h"
 
 using namespace QDirStat;
 
@@ -262,7 +263,7 @@ void FileTypeStats::removeCruft()
     }
 
 #if 1
-    logDebug() << "Merged " << cruft.size() << " suffixes to <NO SUFFIX>: "
+    logDebug() << "Merged " << (quint64)cruft.size() << " suffixes to <NO SUFFIX>: "
 	       << cruft.join( ", " ) << ENDL;
 #endif
     logDebug() << "Merged: " << totalMergedCount << " files "

@@ -263,7 +263,7 @@ FileInfo * DirTreeModel::findChild( DirInfo * parent, int childNo ) const
     if ( childNo < 0 || childNo >= childrenList.size() )
     {
 	logError() << "Child #" << childNo << " is out of range: 0.."
-		   << childrenList.size()-1 << " children for "
+		   << ((quint64)childrenList.size()-1) << " children for "
 		   << parent << ENDL;
 	Debug::dumpChildrenList( parent, childrenList );
 
@@ -1199,7 +1199,7 @@ void DirTreeModel::dumpPersistentIndexList() const
 {
     QModelIndexList persistentList = persistentIndexList();
 
-    logDebug() << persistentList.size() << " persistent indexes" << ENDL;
+    logDebug() << (quint64)persistentList.size() << " persistent indexes" << ENDL;
 
     for ( int i=0; i < persistentList.size(); ++i )
     {

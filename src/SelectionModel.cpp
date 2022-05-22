@@ -156,7 +156,7 @@ void SelectionModel::extendSelection( FileInfo * item, bool clear )
 void SelectionModel::setSelectedItems( const FileInfoSet & selectedItems )
 {
     if ( _verbose )
-	logDebug() << "Selecting " << selectedItems.size() << " items" << ENDL;
+	logDebug() << "Selecting " << ((quint64)selectedItems.size()) << " items" << ENDL;
 
     QItemSelection sel;
 
@@ -272,7 +272,7 @@ void SelectionModel::deletingChildNotify( FileInfo * deletedChild )
 void SelectionModel::dumpSelectedItems()
 {
     logDebug() << "Current item: " << _currentItem << ENDL;
-    logDebug() << selectedItems().size() << " items selected" << ENDL;
+    logDebug() << ((quint64)selectedItems().size()) << " items selected" << ENDL;
 
     foreach ( FileInfo * item, selectedItems() )
     {
