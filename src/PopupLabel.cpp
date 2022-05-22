@@ -77,7 +77,12 @@ void PopupLabel::mousePressEvent( QMouseEvent * event )
 }
 
 
+// this sucks ...
+#if (QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 ))
 void PopupLabel::enterEvent( QEvent * event )
+#else
+void PopupLabel::enterEvent( QEnterEvent * event )
+#endif
 {
     Q_UNUSED( event );
 
