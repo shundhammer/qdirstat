@@ -653,7 +653,7 @@ void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	    _parentView->setCurrentItem( this );
 	    break;
 
-	case Qt::MidButton:
+	case Qt::MiddleButton:
             // logDebug() << "Middle click on " << _orig << endl;
 
             // Handle item selection (with or without Ctrl) ourselves here;
@@ -726,7 +726,7 @@ void TreemapTile::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event )
 	    _parentView->zoomIn();
 	    break;
 
-	case Qt::MidButton:
+	case Qt::MiddleButton:
 	    logDebug() << "Zooming treemap out" << ENDL;
 	    _parentView->zoomOut();
 	    break;
