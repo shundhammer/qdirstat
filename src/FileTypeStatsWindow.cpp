@@ -324,7 +324,7 @@ void FileTypeStatsWindow::addTopXOtherItems( CategoryFileTypeItem  * otherCatego
         foreach ( FileTypeItem * item, otherItems )
             suffixes << item->text(0);
 
-        logDebug() << "Discarding " << otherItems.size()
+        logDebug() << "Discarding " << (quint64)otherItems.size()
                    << " suffixes below <other>: "
                    << suffixes.join( ", " )
                    << ENDL;
