@@ -76,7 +76,7 @@ void CleanupCollection::remove( Cleanup * cleanup )
 
     if ( index == -1 )
     {
-	logError() << "No such cleanup: " << cleanup << endl;
+	logError() << "No such cleanup: " << cleanup << Qt::endl;
 	return;
     }
 
@@ -102,7 +102,7 @@ int CleanupCollection::indexOf( Cleanup * cleanup ) const
     int index = _cleanupList.indexOf( cleanup );
 
     if ( index == -1 )
-	logError() << "Cleanup " << cleanup << " is not in this collection" << endl;
+	logError() << "Cleanup " << cleanup << " is not in this collection" << Qt::endl;
 
     return index;
 }
@@ -176,7 +176,7 @@ void CleanupCollection::updateActions()
 
 void CleanupCollection::updateMenus()
 {
-    _menus.removeAll( 0 ); // Remove QPointers that have become invalid
+    _menus.removeAll( nullptr ); // Remove QPointers that have become invalid
 
     foreach ( QMenu * menu, _menus )
     {
@@ -201,7 +201,7 @@ void CleanupCollection::updateMenus()
 
 void CleanupCollection::updateToolBars()
 {
-    _toolBars.removeAll( 0 ); // Remove QPointers that have become invalid
+    _toolBars.removeAll( nullptr ); // Remove QPointers that have become invalid
 
     foreach ( QToolBar * toolBar, _toolBars )
     {
@@ -231,7 +231,7 @@ void CleanupCollection::execute()
     if ( ! cleanup )
     {
 	logError() << "Wrong sender type: "
-		   << sender()->metaObject()->className() << endl;
+		   << sender()->metaObject()->className() << Qt::endl;
 	return;
     }
 
@@ -239,13 +239,13 @@ void CleanupCollection::execute()
 
     if ( selection.isEmpty() )
     {
-	logWarning() << "Nothing selected" << endl;
+	logWarning() << "Nothing selected" << Qt::endl;
 	return;
     }
 
     if ( cleanup->askForConfirmation() && ! confirmation( cleanup, selection ) )
     {
-	logDebug() << "User declined confirmation" << endl;
+	logDebug() << "User declined confirmation" << Qt::endl;
 	return;
     }
 
@@ -306,7 +306,7 @@ void CleanupCollection::execute()
 	else
 	{
 	    logWarning() << "Cleanup " << cleanup
-			 << " does not work for " << item << endl;
+			 << " does not work for " << item << Qt::endl;
 	}
     }
 
@@ -322,7 +322,7 @@ void CleanupCollection::execute()
             DirTree * tree = item->tree();
 
             if ( tree->isBusy() )
-                logWarning() << "Ignoring AssumeDeleted: DirTree is being read" << endl;
+                logWarning() << "Ignoring AssumeDeleted: DirTree is being read" << Qt::endl;
             else
                 tree->deleteSubtree( item );
         }
@@ -549,11 +549,11 @@ void CleanupCollection::readSettings()
 		    cleanup->setShortcut( hotkey );
 
 		// if ( ! shell.isEmpty() )
-		//    logDebug() << "Using custom shell " << shell << " for " << cleanup << endl;
+		//    logDebug() << "Using custom shell " << shell << " for " << cleanup << Qt::endl;
 	    }
 	    else
 	    {
-		logError() << "Need at least Command and Title for a cleanup" << endl;
+		logError() << "Need at least Command and Title for a cleanup" << Qt::endl;
 	    }
 
 	    settings.endGroup(); // [Cleanup_01], [Cleanup_02], ...

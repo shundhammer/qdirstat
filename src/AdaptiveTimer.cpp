@@ -77,7 +77,7 @@ void AdaptiveTimer::clear()
 
 void AdaptiveTimer::delayedRequest( const QVariant & payload )
 {
-    // logDebug() << "Received request for " << payload.toString() << endl;
+    // logDebug() << "Received request for " << payload.toString() << Qt::endl;
     _payload = payload;
 
     if ( _coolDownTimer.isActive() )
@@ -91,7 +91,7 @@ void AdaptiveTimer::delayedRequest( const QVariant & payload )
 
 void AdaptiveTimer::deliveryTimeout()
 {
-    // logDebug() << "Delivering request for " << _payload.toString() << endl;
+    // logDebug() << "Delivering request for " << _payload.toString() << Qt::endl;
     emit deliverRequest( _payload );
 }
 
@@ -105,7 +105,7 @@ void AdaptiveTimer::increaseDelay()
 #if VERBOSE_DELAY
         logDebug() << "Increasing delay to stage " << _delayStage
                    << ": " << delay << " millisec"
-                   << endl;
+                   << Qt::endl;
 #endif
 
         _deliveryTimer.setInterval( delay );
@@ -124,7 +124,7 @@ void AdaptiveTimer::decreaseDelay()
 #if VERBOSE_DELAY
         logDebug() << "Decreasing delay to stage " << _delayStage
                    << ": " << delay << " millisec"
-                   << endl;
+                   << Qt::endl;
 #endif
 
         _deliveryTimer.setInterval( delay );
@@ -137,7 +137,7 @@ void AdaptiveTimer::decreaseDelay()
 
 void AdaptiveTimer::heatUp()
 {
-    // logDebug() << "Heating up" << endl;
+    // logDebug() << "Heating up" << Qt::endl;
 
     if ( _coolDownStage < _coolDownPeriods.size() - 1 )
     {
@@ -147,7 +147,7 @@ void AdaptiveTimer::heatUp()
 #if VERBOSE_STAGES
         logDebug() << "Heating up to cooldown stage " << _coolDownStage
                    << ": " << coolDownInterval << " millisec"
-                   << endl;
+                   << Qt::endl;
 #endif
 
         _coolDownTimer.setInterval( coolDownInterval );
@@ -159,7 +159,7 @@ void AdaptiveTimer::heatUp()
 
 void AdaptiveTimer::coolDown()
 {
-    // logDebug() << "Cooling down" << endl;
+    // logDebug() << "Cooling down" << Qt::endl;
 
     if ( _coolDownStage > 0 )
     {
@@ -171,7 +171,7 @@ void AdaptiveTimer::coolDown()
 #if VERBOSE_STAGES
         logDebug() << "Cooling down to stage " << _coolDownStage
                    << ": " << coolDownInterval << " millisec"
-                   << endl;
+                   << Qt::endl;
 #endif
 
         _coolDownTimer.setInterval( coolDownInterval );

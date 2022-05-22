@@ -44,7 +44,7 @@ ExcludeRulesConfigPage::ExcludeRulesConfigPage( QWidget * parent ):
 
 ExcludeRulesConfigPage::~ExcludeRulesConfigPage()
 {
-    // logDebug() << "ExcludeRulesConfigPage destructor" << endl;
+    // logDebug() << "ExcludeRulesConfigPage destructor" << Qt::endl;
     delete _ui;
 }
 
@@ -58,7 +58,7 @@ void ExcludeRulesConfigPage::setup()
 
 void ExcludeRulesConfigPage::applyChanges()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     save( value( listWidget()->currentItem() ) );
     ExcludeRules::instance()->writeSettings();
@@ -67,7 +67,7 @@ void ExcludeRulesConfigPage::applyChanges()
 
 void ExcludeRulesConfigPage::discardChanges()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     listWidget()->clear();
     ExcludeRules::instance()->clear();
@@ -119,7 +119,7 @@ void ExcludeRulesConfigPage::enableEditRuleWidgets( bool enable )
 void ExcludeRulesConfigPage::save( void * value )
 {
     ExcludeRule * excludeRule = EXCLUDE_RULE_CAST( value );
-    // logDebug() << excludeRule << endl;
+    // logDebug() << excludeRule << Qt::endl;
 
     if ( ! excludeRule || updatesLocked() )
 	return;
@@ -144,7 +144,7 @@ void ExcludeRulesConfigPage::save( void * value )
 void ExcludeRulesConfigPage::load( void * value )
 {
     ExcludeRule * excludeRule = EXCLUDE_RULE_CAST( value );
-    // logDebug() << excludeRule << endl;
+    // logDebug() << excludeRule << Qt::endl;
 
     if ( updatesLocked() )
         return;

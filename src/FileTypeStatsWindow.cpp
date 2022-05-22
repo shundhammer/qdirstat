@@ -38,7 +38,7 @@ FileTypeStatsWindow::FileTypeStatsWindow( QWidget * parent ):
     QDialog( parent ),
     _ui( new Ui::FileTypeStatsWindow )
 {
-    // logDebug() << "init" << endl;
+    // logDebug() << "init" << Qt::endl;
 
     CHECK_NEW( _ui );
     _ui->setupUi( this );
@@ -68,7 +68,7 @@ FileTypeStatsWindow::FileTypeStatsWindow( QWidget * parent ):
 
 FileTypeStatsWindow::~FileTypeStatsWindow()
 {
-    // logDebug() << "destroying" << endl;
+    // logDebug() << "destroying" << Qt::endl;
     writeWindowSettings( this, "FileTypeStatsWindow" );
     delete _ui;
 }
@@ -213,7 +213,7 @@ void FileTypeStatsWindow::populate( FileInfo * newSubtree )
 		parentItem->addChild( item );
 	    else
 	    {
-		logError() << "ERROR: No parent category item for " << suffix << endl;
+		logError() << "ERROR: No parent category item for " << suffix << Qt::endl;
 		otherItems << item;
 		otherCount += count;
 		otherSum   += sum;
@@ -266,10 +266,10 @@ void FileTypeStatsWindow::populate( FileInfo * newSubtree )
 	    foreach ( FileTypeItem * item, otherItems )
 		suffixes << item->text(0);
 
-	    logDebug() << "Discarding " << otherItems.size()
+        logDebug() << "Discarding " << (quint64)otherItems.size()
 		       << " suffixes below <other>: "
 		       << suffixes.join( ", " )
-		       << endl;
+		       << Qt::endl;
 #endif
 	    qDeleteAll( otherItems );
 	}
@@ -292,7 +292,7 @@ void FileTypeStatsWindow::locateCurrentFileType()
 	return;
     }
 
-    // logDebug() << "Locating " << current->suffix() << endl;
+    // logDebug() << "Locating " << current->suffix() << Qt::endl;
 
     if ( ! _locateFileTypeWindow )
     {
@@ -327,7 +327,7 @@ void FileTypeStatsWindow::sizeStatsForCurrentFileType()
     if ( suffix.isEmpty() || ! dir )
         return;
 
-    logDebug() << "Size stats for " << suffix << endl;
+    logDebug() << "Size stats for " << suffix << Qt::endl;
 
     FileSizeStatsWindow::populateSharedInstance( dir, suffix );
 }
@@ -343,7 +343,7 @@ QString FileTypeStatsWindow::currentSuffix() const
 
     if ( current->suffix() == NO_SUFFIX )
     {
-	logWarning() << "NO_SUFFIX selected" << endl;
+	logWarning() << "NO_SUFFIX selected" << Qt::endl;
 
 	return QString();
     }

@@ -105,7 +105,7 @@ void PercentBarDelegate::paint( QPainter		   * painter,
 	    if ( percent > 100.0f )
 	    {
 		if ( percent > 103.0f )
-		    logError() << "Percent maxed out: " << percent << endl;
+		    logError() << "Percent maxed out: " << percent << Qt::endl;
 		percent = 100.0f;
 	    }
 
@@ -150,7 +150,7 @@ QVariant PercentBarDelegate::percentData( const QModelIndex & index ) const
 
         if ( ! ok )
         {
-            logWarning() << "float conversion failed from \"" << text << "\"" << endl;
+            logWarning() << "float conversion failed from \"" << text << "\"" << Qt::endl;
             return data;
         }
 

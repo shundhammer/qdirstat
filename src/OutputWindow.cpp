@@ -37,7 +37,7 @@ OutputWindow::OutputWindow( QWidget * parent ):
     _errorCount( 0 )
 {
     _ui->setupUi( this );
-    logDebug() << "Creating" << endl;
+    logDebug() << "Creating" << Qt::endl;
     readSettings();
 
     _ui->terminal->clear();
@@ -54,14 +54,14 @@ OutputWindow::OutputWindow( QWidget * parent ):
 
 OutputWindow::~OutputWindow()
 {
-    logDebug() << "Destructor" << endl;
+    logDebug() << "Destructor" << Qt::endl;
 
     if ( ! _processList.isEmpty() )
     {
-	logWarning() << _processList.size() << " processes left over" << endl;
+	logWarning() << _processList.size() << " processes left over" << Qt::endl;
 
 	foreach ( Process * process, _processList )
-	    logWarning() << "Left over: " << process << endl;
+	    logWarning() << "Left over: " << process << Qt::endl;
 
 	qDeleteAll( _processList );
     }
@@ -78,13 +78,13 @@ void OutputWindow::addProcess( Process * process )
     if ( _killedAll )
     {
 	logInfo() << "User killed all processes - "
-                  << "no longer accepting new processes" << endl;
+                  << "no longer accepting new processes" << Qt::endl;
 	process->kill();
 	process->deleteLater();
     }
 
     _processList << process;
-    // logDebug() << "Adding " << process << endl;
+    // logDebug() << "Adding " << process << Qt::endl;
 
     connect( process, SIGNAL( readyReadStandardOutput() ),
 	     this,    SLOT  ( readStdout()		) );
@@ -162,11 +162,11 @@ Process * OutputWindow::senderProcess( const char * function ) const
 	{
 	    logError() << "Expecting QProcess as sender() in " << function
 		       <<" , got "
-		       << sender()->metaObject()->className() << endl;
+		       << sender()->metaObject()->className() << Qt::endl;
 	}
 	else
 	{
-	    logError() << "NULL sender() in " << function << endl;
+	    logError() << "NULL sender() in " << function << Qt::endl;
 	}
     }
 
@@ -197,7 +197,7 @@ void OutputWindow::processFinished( int exitCode, QProcess::ExitStatus exitStatu
     switch ( exitStatus )
     {
 	case QProcess::NormalExit:
-	    logDebug() << "Process finished normally." << endl;
+	    logDebug() << "Process finished normally." << Qt::endl;
 	    addCommandLine( tr( "Process finished." ) );
 	    break;
 
@@ -210,12 +210,12 @@ void OutputWindow::processFinished( int exitCode, QProcess::ExitStatus exitStatu
 		// code of the shell; that would only be useful if the shell
 		// crashed or could not be started.
 
-		logError() << "Process crashed." << endl;
+		logError() << "Process crashed." << Qt::endl;
 		addStderr( tr( "Process crashed." ) );
 	    }
 	    else
 	    {
-		logError() << "Process crashed. Exit code: " << exitCode << endl;
+		logError() << "Process crashed. Exit code: " << exitCode << Qt::endl;
 		addStderr( tr( "Process crashed. Exit code: %1" ).arg( exitCode ) );
 	    }
 	    break;
@@ -229,7 +229,7 @@ void OutputWindow::processFinished( int exitCode, QProcess::ExitStatus exitStatu
 
 	if ( _processList.isEmpty() && _noMoreProcesses )
 	{
-	    logDebug() << "Emitting lastProcessFinished() err: " << _errorCount << endl;
+	    logDebug() << "Emitting lastProcessFinished() err: " << _errorCount << Qt::endl;
 	    emit lastProcessFinished( _errorCount );
 	}
 
@@ -273,7 +273,7 @@ void OutputWindow::processError( QProcess::ProcessError error )
 
     if ( ! msg.isEmpty() )
     {
-	logError() << msg << endl;
+	logError() << msg << Qt::endl;
 	addStderr( msg );
     }
 
@@ -285,7 +285,7 @@ void OutputWindow::processError( QProcess::ProcessError error )
 
 	if ( _processList.isEmpty() && _noMoreProcesses )
 	{
-	    logDebug() << "Emitting lastProcessFinished() err: " << _errorCount << endl;
+	    logDebug() << "Emitting lastProcessFinished() err: " << _errorCount << Qt::endl;
 	    emit lastProcessFinished( _errorCount );
 	}
 
@@ -306,7 +306,7 @@ void OutputWindow::closeIfDone()
 	if ( ( autoClose() && _errorCount == 0 ) ||
 	     _closed || ! isVisible() )
 	{
-	    logDebug() << "No more processes to watch. Auto-closing." << endl;
+	    logDebug() << "No more processes to watch. Auto-closing." << Qt::endl;
 	    this->deleteLater(); // It is safe to call this multiple times
 	}
     }
@@ -319,7 +319,7 @@ void OutputWindow::noMoreProcesses()
 
     if ( _processList.isEmpty() && _noMoreProcesses )
     {
-	logDebug() << "Emitting lastProcessFinished() err: " << _errorCount << endl;
+	logDebug() << "Emitting lastProcessFinished() err: " << _errorCount << Qt::endl;
 	emit lastProcessFinished( _errorCount );
     }
 
@@ -334,13 +334,13 @@ void OutputWindow::zoom( double factor )
     if ( font.pixelSize() != -1 )
     {
 	int pixelSize = qRound( font.pixelSize() * factor );
-	logDebug() << "New font size: " << pixelSize << " pixels" << endl;
+	logDebug() << "New font size: " << pixelSize << " pixels" << Qt::endl;
 	font.setPixelSize( pixelSize );
     }
     else
     {
 	qreal pointSize = font.pointSize() * factor;
-	logDebug() << "New font size: " << pointSize << " points" << endl;
+	logDebug() << "New font size: " << pointSize << " points" << Qt::endl;
 	font.setPointSize( pointSize );
     }
 
@@ -362,7 +362,7 @@ void OutputWindow::zoomOut()
 
 void OutputWindow::resetZoom()
 {
-    logDebug() << "Resetting font to normal" << endl;
+    logDebug() << "Resetting font to normal" << Qt::endl;
     _ui->terminal->setFont( _terminalDefaultFont );
 }
 
@@ -373,7 +373,7 @@ void OutputWindow::killAll()
 
     foreach ( Process * process, _processList )
     {
-	logInfo() << "Killing process " << process << endl;
+	logInfo() << "Killing process " << process << Qt::endl;
 	process->kill();
 	_processList.removeAll( process );
 	process->deleteLater();
@@ -439,7 +439,7 @@ Process * OutputWindow::startNextProcess()
 	}
 
 	addCommandLine( command( process ) );
-	logInfo() << "Starting: " << process << endl;
+	logInfo() << "Starting: " << process << Qt::endl;
 
 	process->start();
 	qApp->processEvents(); // Keep GUI responsive

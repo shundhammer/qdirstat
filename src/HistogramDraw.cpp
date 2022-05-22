@@ -27,7 +27,7 @@ void HistogramView::addHistogram()
     addAxes();
     addYAxisLabel();
     addXAxisLabel();
-    addXStartEndLabels();
+    addXStartendlabels();
     addQuartileText();
     addHistogramBars();
     addMarkers();
@@ -110,7 +110,7 @@ void HistogramView::addXAxisLabel()
 }
 
 
-void HistogramView::addXStartEndLabels()
+void HistogramView::addXStartendlabels()
 {
     QString startLabel = tr( "Min" );
 
@@ -119,14 +119,14 @@ void HistogramView::addXStartEndLabels()
 
     startLabel += "\n" + formatSize( percentile( _startPercentile ) );
 
-    QString endLabel = _endPercentile == 100 ?
+    QString endlabel = _endPercentile == 100 ?
 	tr( "Max" ) :
 	QString( "P%1" ).arg( _endPercentile );
 
     QString endSizeLabel = formatSize( percentile( _endPercentile ) );
 
     QGraphicsSimpleTextItem * startItem	  = scene()->addSimpleText( startLabel );
-    QGraphicsSimpleTextItem * endItem	  = scene()->addSimpleText( endLabel );
+    QGraphicsSimpleTextItem * endItem	  = scene()->addSimpleText( endlabel );
     QGraphicsSimpleTextItem * endSizeItem = scene()->addSimpleText( endSizeLabel );
 
     qreal endTextHeight = endItem->boundingRect().height();
@@ -225,7 +225,7 @@ void HistogramView::addHistogramBars()
 
     for ( int i=0; i < _buckets.size(); ++i )
     {
-	// logDebug() << "Adding bar #" << i << " with value " << _buckets[ i ] << endl;
+	// logDebug() << "Adding bar #" << i << " with value " << _buckets[ i ] << Qt::endl;
 	QRectF rect;
 	rect.setX( i * barWidth );
 	rect.setY( 0 );
@@ -294,7 +294,7 @@ void HistogramView::addMarkers()
 	if ( _percentileStep != 0 && _percentileStep != 5 && i % 10 == 0 )
 	    pen = _decilePen;
 
-	// logDebug() << "Adding marker for P" << i << endl;
+	// logDebug() << "Adding marker for P" << i << Qt::endl;
 	new PercentileMarker( this, i, "", zeroLine, pen );
     }
 

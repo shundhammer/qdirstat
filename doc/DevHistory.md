@@ -10,6 +10,13 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
 ## QDirStat History
 
+- 2022-05-22
+
+  - Added combined Qt5, Qt6 support (Experimental, I didn't test it yet with Qt4).
+  - Tested with Qt 5.15.2, Qt 6.2.4 Mac OS X (Mac OS Montery)
+  - Renamed the Qt4Compat.h to QtCompat.h. This file used for Qt4, Qt5 and Qt6 compatibility.
+  - Converted endl to Qt::endl to fix issues on Mac OS X
+
 - 2021-08-06
 
   - Lots of internal restructuring and refactoring to keep the code

@@ -45,7 +45,7 @@ ExistingDirValidator::validate( QString & input, int & pos) const
 #if 0
     logDebug() << "Checking \"" << input << "\": "
                << ( ok ? "OK" : "no such directory" )
-               << endl;
+               << Qt::endl;
 #endif
 
     return ok ? QValidator::Acceptable : QValidator::Intermediate;

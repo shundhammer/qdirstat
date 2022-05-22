@@ -36,7 +36,7 @@ MimeCategorizer::MimeCategorizer():
     QObject( 0 ),
     _mapsDirty( true )
 {
-    // logDebug() << "Creating MimeCategorizer" << endl;
+    // logDebug() << "Creating MimeCategorizer" << Qt::endl;
     readSettings();
 }
 
@@ -90,7 +90,7 @@ MimeCategory * MimeCategorizer::category( const QString & filename,
 
     while ( ! suffix.isEmpty() && ! category )
     {
-        // logVerbose() << "Checking " << suffix << endl;
+        // logVerbose() << "Checking " << suffix << Qt::endl;
 
 	// Try case sensitive first
 
@@ -119,7 +119,7 @@ MimeCategory * MimeCategorizer::category( const QString & filename,
 
 #if 0
     if ( category )
-	logVerbose() << "Found " << category << " for " << filename << endl;
+	logVerbose() << "Found " << category << " for " << filename << Qt::endl;
 #endif
 
     return category;
@@ -190,7 +190,7 @@ void MimeCategorizer::addSuffixes( QMap<QString, MimeCategory *> & suffixMap,
 	{
 	    logError() << "Duplicate suffix: " << suffix << " for "
 		       << suffixMap.value( suffix ) << " and " << category
-		       << endl;
+		       << Qt::endl;
 	}
 	else
 	{
@@ -235,7 +235,7 @@ void MimeCategorizer::readSettings()
 
 void MimeCategorizer::writeSettings()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
     MimeCategorySettings settings;
 
     // Remove all leftover cleanup descriptions
@@ -248,7 +248,7 @@ void MimeCategorizer::writeSettings()
 	MimeCategory * category = _categories.at(i);
 
 	settings.setValue( "Name", category->name() );
-	// logDebug() << "Adding " << groupName << ": " << category->name() << endl;
+	// logDebug() << "Adding " << groupName << ": " << category->name() << Qt::endl;
 	writeColorEntry( settings, "Color", category->color() );
 
 	QStringList patterns = category->humanReadablePatternList( Qt::CaseInsensitive );

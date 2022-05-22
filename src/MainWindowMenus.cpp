@@ -204,7 +204,7 @@ void MainWindow::connectHelpSolutionsMenu()
         QString url = action->statusTip();
 
         if ( url.isEmpty() )
-            logWarning() << "No URL in statusTip property of action " << action->objectName() << endl;
+            logWarning() << "No URL in statusTip property of action " << action->objectName() << Qt::endl;
         else
             CONNECT_ACTION( action, this, openActionUrl() );
     }

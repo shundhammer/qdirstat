@@ -38,7 +38,7 @@ UnpkgSettings::UnpkgSettings( InitPolicy initPolicy )
 
 void UnpkgSettings::read()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     QDirStat::Settings settings;
 
@@ -54,7 +54,7 @@ void UnpkgSettings::read()
 
 void UnpkgSettings::write()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     QDirStat::Settings settings;
 
@@ -70,9 +70,9 @@ void UnpkgSettings::write()
 
 void UnpkgSettings::dump() const
 {
-    logDebug() << "startingDir:    " << startingDir << endl;
-    logDebug() << "excludeDirs:    " << excludeDirs << endl;
-    logDebug() << "ignorePatterns: " << ignorePatterns << endl;
+    logDebug() << "startingDir:    " << startingDir << Qt::endl;
+    logDebug() << "excludeDirs:    " << excludeDirs << Qt::endl;
+    logDebug() << "ignorePatterns: " << ignorePatterns << Qt::endl;
 }
 
 

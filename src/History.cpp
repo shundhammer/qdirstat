@@ -109,7 +109,7 @@ bool History::setCurrentIndex( int index )
     }
     else
     {
-        logWarning() << "Index " << index << " out of range" << endl;
+        logWarning() << "Index " << index << " out of range" << Qt::endl;
         dump();
 
         return false;
@@ -146,7 +146,7 @@ void History::add( const QString & item )
     _items << item;
     _current++;
 
-    // logDebug() << "After add():" << endl;
+    // logDebug() << "After add():" << Qt::endl;
     // dump();
 }
 
@@ -155,7 +155,7 @@ void History::dump() const
 {
     if ( _items.isEmpty() )
     {
-        logDebug() << "Empty history" << endl;
+        logDebug() << "Empty history" << Qt::endl;
         return;
     }
 
@@ -170,7 +170,7 @@ void History::dump() const
 
         logDebug() << prefix
                    << "#" << i
-                   << ": \"" << _items.at( i ) << "\"" << endl;
+                   << ": \"" << _items.at( i ) << "\"" << Qt::endl;
     }
 
     logNewline();

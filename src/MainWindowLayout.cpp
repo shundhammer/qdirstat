@@ -6,6 +6,8 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
+#include <QActionGroup>
+
 
 #include "MainWindow.h"
 #include "QDirStatApp.h"
@@ -75,7 +77,7 @@ void MainWindow::changeLayout( const QString & name )
 	    action->data().toString() : "L2";
     }
 
-    logDebug() << "Changing to layout " << _layoutName << endl;
+    logDebug() << "Changing to layout " << _layoutName << Qt::endl;
 
     _ui->dirTreeView->headerTweaker()->changeLayout( _layoutName );
 
@@ -89,7 +91,7 @@ void MainWindow::changeLayout( const QString & name )
     }
     else
     {
-	logError() << "No layout " << _layoutName << endl;
+	logError() << "No layout " << _layoutName << Qt::endl;
     }
 }
 

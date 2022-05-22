@@ -10,7 +10,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 
-#include "Qt4Compat.h"
+#include "QtCompat.h"
 
 #include "ShowUnpkgFilesDialog.h"
 #include "ExistingDirCompleter.h"
@@ -91,7 +91,7 @@ QStringList ShowUnpkgFilesDialog::ignorePatterns() const
 QStringList ShowUnpkgFilesDialog::cleanedLines( QPlainTextEdit *widget ) const
 {
     QString	text  = widget->toPlainText();
-    QStringList lines = text.split( '\n', QString::SkipEmptyParts );
+    QStringList lines = text.split( '\n', Qt::SkipEmptyParts );
     QStringList result;
 
     foreach ( QString line, lines )
@@ -143,7 +143,7 @@ void ShowUnpkgFilesDialog::setValues( const UnpkgSettings & settings )
 
 void ShowUnpkgFilesDialog::readSettings()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     setValues( UnpkgSettings( UnpkgSettings::ReadFromConfig ) );;
     readWindowSettings( this, "ShowUnkpgFilesDialog" );
@@ -152,7 +152,7 @@ void ShowUnpkgFilesDialog::readSettings()
 
 void ShowUnpkgFilesDialog::writeSettings()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     UnpkgSettings settings = values();
     settings.write();

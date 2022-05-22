@@ -19,6 +19,7 @@
 #include "Process.h"
 #include "Logger.h"
 #include "Exception.h"
+#include "QtCompat.h"
 
 
 #define SIMULATE_COMMAND	1
@@ -131,7 +132,7 @@ const QString Cleanup::itemDir( const FileInfo *item ) const
 
     if ( ! item->isDir() && ! item->isPseudoDir() )
     {
-	dir.replace( QRegExp ( "/[^/]*$" ), "" );
+        dir = qregexp_replaceIn( QRegExp( "/[^/]*$" ), dir, "" );
     }
 
     return dir;
@@ -149,7 +150,7 @@ QString Cleanup::cleanTitle() const
 
     // Get rid of any "&" characters in the text that denote keyboard
     // shortcuts in menus.
-    title.replace( QRegExp( "&" ), "" );
+    title = qregexp_replaceIn( QRegExp( "&" ), title, "");
 
     return title;
 }
@@ -172,7 +173,7 @@ QString Cleanup::expandVariables( const FileInfo * item,
     if ( ! dirName.isEmpty() )
 	expanded.replace( "%d", quoted( escaped( dirName ) ) );
 
-    // logDebug() << "Expanded: \"" << expanded << "\"" << endl;
+    // logDebug() << "Expanded: \"" << expanded << "\"" << Qt::endl;
     return expanded;
 }
 
@@ -214,7 +215,7 @@ QString Cleanup::chooseShell( OutputWindow * outputWindow ) const
 
     if ( ! shell.isEmpty() )
     {
-	logDebug() << "Using custom shell " << shell << endl;
+	logDebug() << "Using custom shell " << shell << Qt::endl;
 
 	if ( ! isExecutable( shell ) )
 	{
@@ -229,7 +230,7 @@ QString Cleanup::chooseShell( OutputWindow * outputWindow ) const
     if ( shell.isEmpty() )
     {
 	shell = defaultShell();
-	logDebug() << "No custom shell configured - using " << shell << endl;
+	logDebug() << "No custom shell configured - using " << shell << Qt::endl;
     }
 
     if ( ! errMsg.isEmpty() )
@@ -252,7 +253,7 @@ void Cleanup::runCommand( const FileInfo * item,
     {
 	outputWindow->show(); // Regardless of user settings
 	outputWindow->addStderr( tr( "No usable shell - aborting cleanup action" ) );
-	logError() << "ERROR: No usable shell" << endl;
+	logError() << "ERROR: No usable shell" << Qt::endl;
 	return;
     }
 
@@ -263,7 +264,7 @@ void Cleanup::runCommand( const FileInfo * item,
     process->setProgram( shell );
     process->setArguments( QStringList() << "-c" << cleanupCommand );
     process->setWorkingDirectory( itemDir( item ) );
-    // logDebug() << "New process \"" << process << endl;
+    // logDebug() << "New process \"" << process << Qt::endl;
 
     outputWindow->addProcess( process );
 
@@ -321,7 +322,7 @@ QString Cleanup::loginShell()
 
 	if ( ! isExecutable( shell ) )
 	{
-	    logError() << "ERROR: Shell \"" << shell << "\" is not executable" << endl;
+	    logError() << "ERROR: Shell \"" << shell << "\" is not executable" << Qt::endl;
 	    shell = "";
 	}
     }
@@ -347,16 +348,16 @@ const QStringList & Cleanup::defaultShells()
 		 shells << shell;
 	    else if ( ! shell.isEmpty() )
 	    {
-		logWarning() << "Shell " << shell << " is not executable" << endl;
+		logWarning() << "Shell " << shell << " is not executable" << Qt::endl;
 	    }
 	}
 
 	if ( ! shells.isEmpty() )
-	    logDebug() << "Default shell: " << shells.first() << endl;
+	    logDebug() << "Default shell: " << shells.first() << Qt::endl;
     }
 
     if ( shells.isEmpty() )
-	logError() << "ERROR: No usable shell" << endl;
+	logError() << "ERROR: No usable shell" << Qt::endl;
 
     return shells;
 }
@@ -381,17 +382,17 @@ const QMap<QString, QString> & Cleanup::desktopSpecificApps()
 	else
 	{
 	    logDebug() << "Overriding $XDG_CURRENT_DESKTOP with $QDIRSTAT_DESKTOP (\""
-		       << desktop << "\")" << endl;
+		       << desktop << "\")" << Qt::endl;
 	}
 
 	if ( desktop.isEmpty() )
 	{
-	    logWarning() << "$XDG_CURRENT_DESKTOP is not set - using fallback apps" << endl;
+	    logWarning() << "$XDG_CURRENT_DESKTOP is not set - using fallback apps" << Qt::endl;
 	    apps = fallbackApps();
 	}
 	else
 	{
-	    logInfo() << "Detected desktop \"" << desktop << "\"" << endl;
+	    logInfo() << "Detected desktop \"" << desktop << "\"" << Qt::endl;
 	    desktop = desktop.toLower();
 
 	    if ( desktop == "kde" )
@@ -439,7 +440,7 @@ const QMap<QString, QString> & Cleanup::desktopSpecificApps()
 
 	    if ( apps.isEmpty() )
 	    {
-		logWarning() << "No mapping available for this desktop - using fallback apps" << endl;
+		logWarning() << "No mapping available for this desktop - using fallback apps" << Qt::endl;
 		apps = fallbackApps();
 	    }
 	}
@@ -448,7 +449,7 @@ const QMap<QString, QString> & Cleanup::desktopSpecificApps()
 	      it != apps.constEnd();
 	      ++it )
 	{
-	    logInfo() << it.key() << " => \"" << it.value() << "\"" << endl;
+	    logInfo() << it.key() << " => \"" << it.value() << "\"" << Qt::endl;
 	}
     }
 

@@ -7,7 +7,7 @@
  */
 
 
-#include "Qt4Compat.h"
+#include "QtCompat.h"
 
 #include "OpenPkgDialog.h"
 #include "Logger.h"
@@ -21,7 +21,7 @@ OpenPkgDialog::OpenPkgDialog( QWidget * parent ):
     QDialog( parent ),
     _ui( new Ui::OpenPkgDialog )
 {
-    // logDebug() << "init" << endl;
+    // logDebug() << "init" << Qt::endl;
 
     CHECK_NEW( _ui );
     _ui->setupUi( this );
@@ -40,7 +40,7 @@ PkgFilter OpenPkgDialog::pkgFilter()
 {
     if ( _ui->allPkgRadioButton->isChecked() )
     {
-        logDebug() << "SelectAll" << endl;
+        logDebug() << "SelectAll" << Qt::endl;
         return PkgFilter( "", PkgFilter::SelectAll );
     }
     else
@@ -48,7 +48,7 @@ PkgFilter OpenPkgDialog::pkgFilter()
         int mode        = _ui->filterModeComboBox->currentIndex();
         QString pattern = _ui->pkgPatternField->text();
         PkgFilter filter( pattern, (PkgFilter::FilterMode) mode );
-        // logDebug() << filter << endl;
+        // logDebug() << filter << Qt::endl;
 
         return filter;
     }

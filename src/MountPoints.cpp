@@ -15,6 +15,7 @@
 #include "SysUtil.h"
 #include "Logger.h"
 #include "Exception.h"
+#include "QtCompat.h"
 
 #define LSBLK_TIMEOUT_SEC       10
 
@@ -125,7 +126,7 @@ QStorageInfo * MountPoint::storageInfo()
     if ( ! _storageInfo )
     {
         if ( isNetworkMount() )
-            logDebug() << "Creating QStorageInfo for " << _path << endl;
+            logDebug() << "Creating QStorageInfo for " << _path << Qt::endl;
 
         _storageInfo = new QStorageInfo( _path );
         CHECK_NEW( _storageInfo );
@@ -254,13 +255,13 @@ MountPoint * MountPoints::findNearestMountPoint( const QString & startPath )
     QString path = fileInfo.canonicalFilePath(); // absolute path without symlinks or ..
 
     if ( path != startPath )
-	logDebug() << startPath << " canonicalized is " << path << endl;
+	logDebug() << startPath << " canonicalized is " << path << Qt::endl;
 
     MountPoint * mountPoint = findByPath( path );
 
     if ( ! mountPoint )
     {
-	QStringList pathComponents = startPath.split( "/", QString::SkipEmptyParts );
+    QStringList pathComponents = startPath.split( "/", Qt::SkipEmptyParts );
 
 	while ( ! mountPoint && ! pathComponents.isEmpty() )
 	{
@@ -272,7 +273,7 @@ MountPoint * MountPoints::findNearestMountPoint( const QString & startPath )
 	}
     }
 
-    // logDebug() << "Nearest mount point for " << startPath << " is " << mountPoint << endl;
+    // logDebug() << "Nearest mount point for " << startPath << " is " << mountPoint << Qt::endl;
 
     return mountPoint;
 }
@@ -315,7 +316,7 @@ void MountPoints::ensurePopulated()
     read( "/proc/mounts" ) || read( "/etc/mtab" );
 
     if ( ! _isPopulated )
-	logError() << "Could not read either /proc/mounts or /etc/mtab" << endl;
+	logError() << "Could not read either /proc/mounts or /etc/mtab" << Qt::endl;
 
     _isPopulated = true;
     // dumpNormalMountPoints();
@@ -328,7 +329,7 @@ bool MountPoints::read( const QString & filename )
 
     if ( ! file.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
-	logWarning() << "Can't open " << filename << endl;
+	logWarning() << "Can't open " << filename << Qt::endl;
 	return false;
     }
 
@@ -341,14 +342,14 @@ bool MountPoints::read( const QString & filename )
     while ( ! line.isNull() ) // in.atEnd() always returns true for /proc/*
     {
 	++lineNo;
-	QStringList fields = line.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+    QStringList fields = qregexp_splitString( QRegExp( "\\s+" ), line, Qt::SkipEmptyParts );
 
 	if ( fields.isEmpty() ) // allow empty lines
 	    continue;
 
 	if ( fields.size() < 4 )
 	{
-	    logError() << "Bad line " << filename << ":" << lineNo << ": " << line << endl;
+	    logError() << "Bad line " << filename << ":" << lineNo << ": " << line << Qt::endl;
 	    continue;
 	}
 
@@ -375,13 +376,13 @@ bool MountPoints::read( const QString & filename )
 	if ( ( ! mountPoint->isSystemMount() ) && isDeviceMounted( device ) )
 	{
 	    mountPoint->setDuplicate();
-	    logInfo() << "Found duplicate mount of " << device << " at " << path << endl;
+	    logInfo() << "Found duplicate mount of " << device << " at " << path << Qt::endl;
 	}
 
         if ( mountPoint->isSnapPackage() )
         {
             QString pkgName = path.section( "/", 1, 1, QString::SectionSkipEmpty );
-            logInfo() << "Found snap package \"" << pkgName << "\" at " << path << endl;
+            logInfo() << "Found snap package \"" << pkgName << "\" at " << path << Qt::endl;
         }
 
 	_mountPointList << mountPoint;
@@ -393,12 +394,12 @@ bool MountPoints::read( const QString & filename )
 
     if ( count < 1 )
     {
-	logWarning() << "Not a single mount point in " << filename << endl;
+	logWarning() << "Not a single mount point in " << filename << Qt::endl;
 	return false;
     }
     else
     {
-        // logDebug() << "Read " << _mountPointList.size() << " mount points from " << filename << endl;
+        // logDebug() << "Read " << _mountPointList.size() << " mount points from " << filename << Qt::endl;
 	_isPopulated = true;
 	return true;
     }
@@ -427,7 +428,7 @@ QStringList MountPoints::findNtfsDevices()
         lsblkCommand = "/usr/bin/lsblk";
     if ( ! SysUtil::haveCommand( lsblkCommand ) )
     {
-        logInfo() << "No lsblk command available" << endl;
+        logInfo() << "No lsblk command available" << Qt::endl;
 
         return QStringList();
     }
@@ -447,19 +448,18 @@ QStringList MountPoints::findNtfsDevices()
                                           false );      // ignoreErrCode
     if ( exitCode == 0 )
     {
-        QStringList lines = output.split( "\n" )
-            .filter( QRegExp( "\\s+ntfs", Qt::CaseInsensitive ) );
-
+        QStringList lines  = qregexp_filterList( QRegExp( "\\s+ntfs", Qt::CaseInsensitive ), output.split( "\n" ));
         foreach ( QString line, lines )
         {
-            QString device = "/dev/" + line.split( QRegExp( "\\s+" ) ).first();
-            logDebug() << "NTFS on " << device << endl;
+
+            QString device = "/dev/" + qregexp_splitString( QRegExp( "\\s+" ), line ).first();
+            logDebug() << "NTFS on " << device << Qt::endl;
             ntfsDevices << device;
         }
     }
 
     if ( ntfsDevices.isEmpty() )
-        logDebug() << "No NTFS devices found" << endl;
+        logDebug() << "No NTFS devices found" << Qt::endl;
 
     return ntfsDevices;
 }
@@ -488,7 +488,7 @@ QList<MountPoint *> MountPoints::normalMountPoints()
 void MountPoints::dumpNormalMountPoints()
 {
     foreach ( MountPoint * mountPoint, normalMountPoints() )
-	logDebug() << mountPoint << endl;
+	logDebug() << mountPoint << Qt::endl;
 }
 
 
@@ -496,7 +496,7 @@ void MountPoints::dump()
 {
     foreach ( MountPoint * mountPoint, instance()->_mountPointList )
     {
-	logDebug() << mountPoint << endl;
+	logDebug() << mountPoint << Qt::endl;
     }
 }
 

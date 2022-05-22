@@ -33,12 +33,12 @@ qreal TreeWalker::upperPercentileThreshold( PercentileStats & stats )
 
     if ( percentile > 0 )
     {
-        logDebug() << "Threshold: " << percentile << ". percentile" << endl;
+        logDebug() << "Threshold: " << percentile << ". percentile" << Qt::endl;
         threshold = stats.percentile( percentile );
     }
     else
     {
-        logDebug() << "Threshold: " << MAX_RESULTS << " items" << endl;
+        logDebug() << "Threshold: " << MAX_RESULTS << " items" << Qt::endl;
         int index = stats.dataSize() - MAX_RESULTS;
         threshold = stats.data().at( index );
     }
@@ -60,12 +60,12 @@ qreal TreeWalker::lowerPercentileThreshold( PercentileStats & stats )
 
     if ( percentile > 0 )
     {
-        logDebug() << "Threshold: " << percentile << ". percentile" << endl;
+        logDebug() << "Threshold: " << percentile << ". percentile" << Qt::endl;
         threshold = stats.percentile( percentile );
     }
     else
     {
-        logDebug() << "Threshold: " << MAX_RESULTS << " items" << endl;
+        logDebug() << "Threshold: " << MAX_RESULTS << " items" << Qt::endl;
         int index = MAX_RESULTS;
         threshold = stats.data().at( index );
     }

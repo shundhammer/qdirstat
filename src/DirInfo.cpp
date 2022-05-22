@@ -168,7 +168,7 @@ DotEntry * DirInfo::ensureDotEntry()
 {
     if ( ! _dotEntry )
     {
-	// logDebug() << "Creating dot entry for " << this << endl;
+	// logDebug() << "Creating dot entry for " << this << Qt::endl;
 
 	_dotEntry = new DotEntry( _tree, this );
 	CHECK_NEW( _dotEntry );
@@ -194,7 +194,7 @@ Attic * DirInfo::ensureAttic()
 {
     if ( ! _attic )
     {
-	// logDebug() << "Creating attic for " << this << endl;
+	// logDebug() << "Creating attic for " << this << Qt::endl;
 
 	_attic = new Attic( _tree, this );
 	CHECK_NEW( _attic );
@@ -222,7 +222,7 @@ bool DirInfo::hasAtticChildren() const
 
 void DirInfo::recalc()
 {
-    // logDebug() << this << endl;
+    // logDebug() << this << Qt::endl;
 
     _totalSize		 = _size;
     _totalAllocatedSize	 = _allocatedSize;
@@ -429,7 +429,7 @@ int DirInfo::directChildrenCount()
 
 int DirInfo::countDirectChildren()
 {
-    // logDebug() << this << endl;
+    // logDebug() << this << Qt::endl;
 
     _directChildrenCount = 0;
 
@@ -679,7 +679,7 @@ void DirInfo::unlinkChild( FileInfo * deletedChild )
     if ( deletedChild->parent() != this )
     {
 	logError() << deletedChild << " is not a child of " << this
-		   << " - cannot unlink from children list!" << endl;
+		   << " - cannot unlink from children list!" << Qt::endl;
 	return;
     }
 
@@ -688,7 +688,7 @@ void DirInfo::unlinkChild( FileInfo * deletedChild )
 
     if ( deletedChild == _firstChild )
     {
-	// logDebug() << "Unlinking first child " << deletedChild << endl;
+	// logDebug() << "Unlinking first child " << deletedChild << Qt::endl;
 	_firstChild = deletedChild->next();
 	return;
     }
@@ -699,7 +699,7 @@ void DirInfo::unlinkChild( FileInfo * deletedChild )
     {
 	if ( child->next() == deletedChild )
 	{
-	    // logDebug() << "Unlinking " << deletedChild << endl;
+	    // logDebug() << "Unlinking " << deletedChild << Qt::endl;
 	    child->setNext( deletedChild->next() );
 
 	    return;
@@ -709,7 +709,7 @@ void DirInfo::unlinkChild( FileInfo * deletedChild )
     }
 
     logError() << "Couldn't unlink " << deletedChild << " from "
-	       << this << " children list" << endl;
+	       << this << " children list" << Qt::endl;
 }
 
 
@@ -805,7 +805,7 @@ QString DirInfo::sizePrefix() const
 
 void DirInfo::finalizeLocal()
 {
-    // logDebug() << this << endl;
+    // logDebug() << this << Qt::endl;
 
     cleanupDotEntries();
     cleanupAttics();
@@ -925,7 +925,7 @@ void DirInfo::ignoreEmptySubDirs()
 	{
 	    if ( (*it)->totalUnignoredItems() == 0 )
 	    {
-		// logDebug() << "Ignoring empty subdir " << (*it) << endl;
+		// logDebug() << "Ignoring empty subdir " << (*it) << Qt::endl;
 		(*it)->setIgnored( true );
 		_summaryDirty = true;
 	    }
@@ -1000,7 +1000,7 @@ const FileInfoList & DirInfo::sortedChildren( DataColumn    sortCol,
 
     // Sort
 
-    // logDebug() << "Sorting children of " << this << " by " << sortCol << endl;
+    // logDebug() << "Sorting children of " << this << " by " << sortCol << Qt::endl;
 
     if ( sortCol != NameCol )
     {
@@ -1047,7 +1047,7 @@ void DirInfo::dropSortCache( bool recursive )
 {
     if ( _sortedChildren )
     {
-	// logDebug() << "Dropping sort cache for " << this << endl;
+	// logDebug() << "Dropping sort cache for " << this << Qt::endl;
 
 	// Intentionally deleting the list and creating a new one since
 	// QList never shrinks, it always just grows (this is documented):
@@ -1108,7 +1108,7 @@ void DirInfo::takeAllChildren( DirInfo * oldParent )
 
     if ( child )
     {
-	// logDebug() << "Reparenting all children of " << oldParent << " to " << this << endl;
+	// logDebug() << "Reparenting all children of " << oldParent << " to " << this << Qt::endl;
 
 	FileInfo * oldFirstChild = _firstChild;
 	_firstChild = child;

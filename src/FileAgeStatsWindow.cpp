@@ -32,7 +32,7 @@ FileAgeStatsWindow::FileAgeStatsWindow( QWidget * parent ):
     _sizePercentBarDelegate( 0 ),
     _startGapsWithCurrentYear( true )
 {
-    // logDebug() << "init" << endl;
+    // logDebug() << "init" << Qt::endl;
 
     CHECK_NEW( _ui );
     CHECK_NEW( _stats );
@@ -146,7 +146,7 @@ void FileAgeStatsWindow::syncedPopulate( FileInfo * newSubtree )
 
 void FileAgeStatsWindow::populate( FileInfo * newSubtree )
 {
-    // logDebug() << "populating with " << newSubtree << endl;
+    // logDebug() << "populating with " << newSubtree << Qt::endl;
 
     clear();
     _subtree = newSubtree;

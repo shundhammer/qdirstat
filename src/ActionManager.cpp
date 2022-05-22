@@ -52,7 +52,7 @@ QAction * ActionManager::action( const QString & actionName )
 	}
     }
 
-    logError() << "No action with name " << actionName << " found" << endl;
+    logError() << "No action with name " << actionName << " found" << Qt::endl;
     return 0;
 }
 

@@ -111,7 +111,7 @@ DataColumn DataColumns::mappedCol( DataColumn viewCol ) const
 {
     if ( viewCol < 0 || viewCol >= colCount() )
     {
-	logError() << "Invalid view column no.: " << (int) viewCol << endl;
+	logError() << "Invalid view column no.: " << (int) viewCol << Qt::endl;
 	return UndefinedCol;
     }
 
@@ -152,7 +152,7 @@ QString DataColumns::toString( DataColumn col )
 	    // can catch unhandled enum values
     }
 
-    logError() << "Unknown DataColumn " << (int) col << endl;
+    logError() << "Unknown DataColumn " << (int) col << Qt::endl;
     return QString( "<Unknown DataColumn %1>" ).arg( (int) col );
 }
 
@@ -170,7 +170,7 @@ DataColumn DataColumns::fromString( const QString & str )
 	    return col;
     }
 
-    logError() << "Undefined DataColumn \"" << str << "\"" << endl;
+    logError() << "Undefined DataColumn \"" << str << "\"" << Qt::endl;
     return UndefinedCol;
 }
 
@@ -208,9 +208,9 @@ void DataColumns::ensureNameColFirst( DataColumnList & colList )
 {
     if ( colList.first() != NameCol )
     {
-	logError() << "NameCol is required to be first!" << endl;
+	logError() << "NameCol is required to be first!" << Qt::endl;
 	colList.removeAll( NameCol );
 	colList.prepend( NameCol );
-	logError() << "Fixed column list: " << toStringList( colList ) << endl;
+	logError() << "Fixed column list: " << toStringList( colList ) << Qt::endl;
     }
 }

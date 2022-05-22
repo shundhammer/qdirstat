@@ -39,7 +39,7 @@ FileSizeStatsWindow::FileSizeStatsWindow( QWidget * parent ):
     _suffix( "" ),
     _stats( 0 )
 {
-    // logDebug() << "init" << endl;
+    // logDebug() << "init" << Qt::endl;
 
     CHECK_NEW( _ui );
     _ui->setupUi( this );
@@ -66,7 +66,7 @@ FileSizeStatsWindow::FileSizeStatsWindow( QWidget * parent ):
 
 FileSizeStatsWindow::~FileSizeStatsWindow()
 {
-    // logDebug() << "destroying" << endl;
+    // logDebug() << "destroying" << Qt::endl;
     writeWindowSettings( this, "FileSizeStatsWindow" );
     delete _stats;
     delete _ui;
@@ -155,7 +155,7 @@ void FileSizeStatsWindow::populate( FileInfo * subtree, const QString & suffix )
 
     if ( ! _subtree )
     {
-	logWarning() << "No tree" << endl;
+	logWarning() << "No tree" << Qt::endl;
 	return;
     }
 
@@ -444,7 +444,7 @@ void FileSizeStatsWindow::applyOptions()
     if ( newStart != histogram->startPercentile() ||
 	 newEnd	  != histogram->endPercentile()	    )
     {
-	logDebug() << "New start: " << newStart << " new end: " << newEnd << endl;
+	logDebug() << "New start: " << newStart << " new end: " << newEnd << Qt::endl;
 
 	histogram->setStartPercentile( newStart );
 	histogram->setEndPercentile  ( newEnd	);
@@ -491,10 +491,10 @@ void FileSizeStatsWindow::showHelp()
     else if ( button == _ui->percentilesTableHelpButton	   )  topic = "Percentiles-Table.md";
     else if ( button == _ui->bucketsTableHelpButton	   )  topic = "Buckets-Table.md";
 
-    logInfo() << "Help topic: " << topic << endl;
+    logInfo() << "Help topic: " << topic << Qt::endl;
     QString helpUrl = "https://github.com/shundhammer/qdirstat/blob/master/doc/stats/" + topic;
     QString program = "/usr/bin/xdg-open";
 
-    logInfo() << "Starting  " << program << " " << helpUrl << endl;
+    logInfo() << "Starting  " << program << " " << helpUrl << Qt::endl;
     QProcess::startDetached( program, QStringList() << helpUrl );
 }

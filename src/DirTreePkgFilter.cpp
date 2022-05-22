@@ -21,9 +21,9 @@ DirTreePkgFilter::DirTreePkgFilter( PkgManager * pkgManager )
 {
     CHECK_PTR( pkgManager );
 
-    logInfo() << "Creating file list cache for " << pkgManager->name() << endl;
+    logInfo() << "Creating file list cache for " << pkgManager->name() << Qt::endl;
     _fileListCache = pkgManager->createFileListCache( PkgFileListCache::LookupGlobal );
-    logInfo() << "Done." << endl;
+    logInfo() << "Done." << Qt::endl;
 }
 
 

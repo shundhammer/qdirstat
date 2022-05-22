@@ -7,6 +7,7 @@
  */
 
 
+#include <QActionGroup>
 #include <QApplication>
 #include <QCloseEvent>
 #include <QMouseEvent>
@@ -132,7 +133,7 @@ MainWindow::MainWindow():
 
 MainWindow::~MainWindow()
 {
-    // logDebug() << "Destroying main window" << endl;
+    // logDebug() << "Destroying main window" << Qt::endl;
 
     if ( _currentLayout )
 	saveLayout( _currentLayout );   // see MainWindowLayout.cpp
@@ -155,7 +156,7 @@ MainWindow::~MainWindow()
 
     QDirStatApp::deleteInstance();
 
-    // logDebug() << "Main window destroyed" << endl;
+    // logDebug() << "Main window destroyed" << Qt::endl;
 }
 
 
@@ -166,7 +167,7 @@ void MainWindow::checkPkgManagerSupport()
     {
 	logInfo() << "No package manager support "
 		  << "for getting installed packages or file lists"
-		  << endl;
+		  << Qt::endl;
 
 	_ui->actionOpenPkg->setEnabled( false );
     }
@@ -177,7 +178,7 @@ void MainWindow::checkPkgManagerSupport()
     {
 	logInfo() << "No package manager support "
 		  << "for getting a file lists cache"
-		  << endl;
+		  << Qt::endl;
 
 	_ui->actionShowUnpkgFiles->setEnabled( false );
     }
@@ -435,7 +436,7 @@ void MainWindow::busyDisplay()
 
 void MainWindow::idleDisplay()
 {
-    logInfo() << endl;
+    logInfo() << Qt::endl;
 
     updateActions();
     _updateTimer.stop();
@@ -449,7 +450,7 @@ void MainWindow::idleDisplay()
     }
     else if ( ! app()->selectionModel()->currentBranch() )
     {
-	logDebug() << "No current branch - expanding tree to level 1" << endl;
+	logDebug() << "No current branch - expanding tree to level 1" << Qt::endl;
 	expandTreeToLevel( 1 );
     }
 
@@ -486,13 +487,13 @@ void MainWindow::startingReading()
 
 void MainWindow::readingFinished()
 {
-    logInfo() << endl;
+    logInfo() << Qt::endl;
 
     idleDisplay();
 
     QString elapsedTime = formatMillisec( _stopWatch.elapsed() );
     _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );
-    logInfo() << "Reading finished after " << elapsedTime << endl;
+    logInfo() << "Reading finished after " << elapsedTime << Qt::endl;
 
     if ( app()->dirTree()->firstToplevel() &&
 	 app()->dirTree()->firstToplevel()->errSubDirCount() > 0 )
@@ -506,12 +507,12 @@ void MainWindow::readingFinished()
 
 void MainWindow::readingAborted()
 {
-    logInfo() << endl;
+    logInfo() << Qt::endl;
 
     idleDisplay();
     QString elapsedTime = formatMillisec( _stopWatch.elapsed() );
     _ui->statusBar->showMessage( tr( "Aborted. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );
-    logInfo() << "Reading aborted after " << elapsedTime << endl;
+    logInfo() << "Reading aborted after " << elapsedTime << Qt::endl;
 }
 
 
@@ -600,7 +601,7 @@ void MainWindow::askOpenPkg()
 
 void MainWindow::readPkg( const PkgFilter & pkgFilter )
 {
-    // logInfo() << "URL: " << pkgFilter.url() << endl;
+    // logInfo() << "URL: " << pkgFilter.url() << Qt::endl;
 
     updateWindowTitle( pkgFilter.url() );
     expandTreeToLevel( 0 );   // Performance boost: Down from 25 to 6 sec.
@@ -615,7 +616,7 @@ void MainWindow::refreshAll()
 
     if ( ! url.isEmpty() )
     {
-	logDebug() << "Refreshing " << url << endl;
+	logDebug() << "Refreshing " << url << Qt::endl;
 
 	if ( PkgFilter::isPkgUrl( url ) )
 	    app()->dirTreeModel()->readPkg( url );
@@ -642,7 +643,7 @@ void MainWindow::refreshSelected()
 {
     busyDisplay();
     _futureSelection.set( app()->selectionModel()->selectedItems().first() );
-    // logDebug() << "Setting future selection: " << _futureSelection.subtree() << endl;
+    // logDebug() << "Setting future selection: " << _futureSelection.subtree() << Qt::endl;
     app()->dirTreeModel()->refreshSelected();
     updateActions();
 }
@@ -651,7 +652,7 @@ void MainWindow::refreshSelected()
 void MainWindow::applyFutureSelection()
 {
     FileInfo * sel = _futureSelection.subtree();
-    // logDebug() << "Using future selection: " << sel << endl;
+    // logDebug() << "Using future selection: " << sel << Qt::endl;
 
     if ( sel )
     {
@@ -796,7 +797,7 @@ void MainWindow::startingCleanup( const QString & cleanupName )
 
 void MainWindow::cleanupFinished( int errorCount )
 {
-    logDebug() << "Error count: " << errorCount << endl;
+    logDebug() << "Error count: " << errorCount << Qt::endl;
 
     if ( errorCount == 0 )
 	showProgress( tr( "Cleanup action finished successfully." ) );
@@ -831,7 +832,7 @@ void MainWindow::copyCurrentPathToClipboard()
 
 void MainWindow::expandTreeToLevel( int level )
 {
-    logDebug() << "Expanding tree to level " << level << endl;
+    logDebug() << "Expanding tree to level " << level << Qt::endl;
 
     if ( level < 1 )
 	_ui->dirTreeView->collapseAll();
@@ -868,7 +869,7 @@ void MainWindow::navigateToToplevel()
 
 void MainWindow::navigateToUrl( const QString & url )
 {
-    // logDebug() << "Navigating to " << url << endl;
+    // logDebug() << "Navigating to " << url << Qt::endl;
 
     if ( ! url.isEmpty() )
     {
@@ -1053,8 +1054,8 @@ void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurren
 
     if ( _verboseSelection )
     {
-	logDebug() << "new current: " << newCurrent << endl;
-	logDebug() << "old current: " << oldCurrent << endl;
+	logDebug() << "new current: " << newCurrent << Qt::endl;
+	logDebug() << "old current: " << oldCurrent << Qt::endl;
 	app()->selectionModel()->dumpSelectedItems();
     }
 }
@@ -1072,12 +1073,12 @@ void MainWindow::mousePressEvent( QMouseEvent * event )
             // history back / forward buttons in the tool bar
 
             case Qt::BackButton:
-                // logDebug() << "BackButton" << endl;
+                // logDebug() << "BackButton" << Qt::endl;
                 action = _ui->actionGoBack;
                 break;
 
             case Qt::ForwardButton:
-                // logDebug() << "ForwardButton" << endl;
+                // logDebug() << "ForwardButton" << Qt::endl;
                 action = _ui->actionGoForward;
                 break;
 
@@ -1112,7 +1113,7 @@ void MainWindow::toggleVerboseSelection()
 	app()->selectionModel()->setVerbose( _verboseSelection );
 
     logInfo() << "Verbose selection is now " << ( _verboseSelection ? "on" : "off" )
-	      << ". Change this with Shift-F7." << endl;
+	      << ". Change this with Shift-F7." << Qt::endl;
 }
 
 
@@ -1129,13 +1130,13 @@ void MainWindow::itemClicked( const QModelIndex & index )
 		   << " col " << index.column()
 		   << " (" << QDirStat::DataColumns::fromViewCol( index.column() ) << ")"
 		   << "\t" << item
-		   << endl;
+		   << Qt::endl;
 	// << " data(0): " << index.model()->data( index, 0 ).toString()
-	// logDebug() << "Ancestors: " << Debug::modelTreeAncestors( index ).join( " -> " ) << endl;
+	// logDebug() << "Ancestors: " << Debug::modelTreeAncestors( index ).join( " -> " ) << Qt::endl;
     }
     else
     {
-	logDebug() << "Invalid model index" << endl;
+	logDebug() << "Invalid model index" << Qt::endl;
     }
 
     // app()->dirTreeModel()->dumpPersistentIndexList();

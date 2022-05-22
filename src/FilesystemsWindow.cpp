@@ -153,7 +153,7 @@ void FilesystemsWindow::readSelectedFilesystem()
 
     if ( ! path.isEmpty() )
     {
-	logDebug() << "Read " << path << endl;
+	logDebug() << "Read " << path << Qt::endl;
 	emit readFilesystem( path );
     }
 }

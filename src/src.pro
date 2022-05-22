@@ -23,6 +23,9 @@ major_is_less_5 = $$find(QT_MAJOR_VERSION, [234])
 !isEmpty(major_is_less_5):DEFINES += 'Q_DECL_OVERRIDE=""'
 isEmpty(INSTALL_PREFIX):INSTALL_PREFIX = /usr
 
+# QT6 Support
+greaterThan(QT_MAJOR_VERSION,5): QT += core5compat
+
 TARGET		 = qdirstat
 TARGET.files	 = qdirstat
 TARGET.path	 = $$INSTALL_PREFIX/bin
@@ -229,7 +232,7 @@ HEADERS	  =				\
 	    PopupLabel.h		\
 	    Process.h			\
 	    ProcessStarter.h		\
-	    Qt4Compat.h			\
+	    QtCompat.h			\
 	    Refresher.h			\
 	    RpmPkgManager.h		\
 	    SelectionModel.h		\
@@ -296,4 +299,3 @@ mac:ICON	= icons/qdirstat.icns
 # Regenerate this from the .png file with
 #   sudo apt install icnsutils
 #   png2icns qdirstat.icns qdirstat.png
-

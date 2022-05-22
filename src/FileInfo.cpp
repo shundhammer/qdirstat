@@ -141,14 +141,14 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
 		       << "    Byte size: "     << formatSize( _size )
 		       << "  Allocated: "       << formatSize( _allocatedSize )
 		       << " (" << (int) _blocks << " blocks)"
-		       << endl;
+		       << Qt::endl;
 	}
 #endif
 
 #if 0
 	if ( isFile() && _links > 1 )
 	{
-	    logDebug() << _links << " hard links: " << this << endl;
+	    logDebug() << _links << " hard links: " << this << Qt::endl;
 	}
 #endif
     }
@@ -215,7 +215,7 @@ FileInfo::FileInfo( DirTree *	    tree,
         _allocatedSize  = blocks * STD_BLOCK_SIZE;
     }
 
-    // logDebug() << "Created FileInfo " << this << endl;
+    // logDebug() << "Created FileInfo " << this << Qt::endl;
 }
 
 
@@ -456,7 +456,7 @@ FileInfo * FileInfo::locate( QString url, bool findPseudoDirs )
 	if ( dotEntry() &&
 	     ! url.contains( "/" ) )	   // No (more) "/" in this URL
 	{
-            // logDebug() << "Searching DotEntry for " << url << " in " << this << endl;
+            // logDebug() << "Searching DotEntry for " << url << " in " << this << Qt::endl;
 
             child = dotEntry()->firstChild();
 
@@ -464,14 +464,14 @@ FileInfo * FileInfo::locate( QString url, bool findPseudoDirs )
             {
                 if ( child->name() == url )
                 {
-                    // logDebug() << "Found " << url << " in " << dotEntry() << endl;
+                    // logDebug() << "Found " << url << " in " << dotEntry() << Qt::endl;
                     return child;
                 }
 
                 child = child->next();
             }
 
-            // logDebug() << "Cant find " << url << " in DotEntry" << endl;
+            // logDebug() << "Cant find " << url << " in DotEntry" << Qt::endl;
 	}
 
 	if ( ! result && attic() )
@@ -593,7 +593,7 @@ QString FileInfo::baseName() const
 void FileInfo::setIgnoreHardLinks( bool ignore )
 {
     if ( ignore )
-	logInfo() << "Ignoring hard links" << endl;
+	logInfo() << "Ignoring hard links" << Qt::endl;
 
     _ignoreHardLinks = ignore;
 }
@@ -662,7 +662,7 @@ bool FileInfo::filesystemCanReportBlocks() const
 	    return false;
     }
 
-    // logDebug() << "Checking block size of " << dir << ": " << (int) dir->blocks() << endl;
+    // logDebug() << "Checking block size of " << dir << ": " << (int) dir->blocks() << Qt::endl;
 
     // A real directory never has a size == 0, so we can skip this check.
 
@@ -728,7 +728,7 @@ void  FileInfo::processMtime()
 
 QString QDirStat::baseName( const QString & fileName )
 {
-    QStringList segments = fileName.split( '/', QString::SkipEmptyParts );
+    QStringList segments = fileName.split( '/', Qt::SkipEmptyParts );
     return segments.isEmpty() ? "" : segments.last();
 }
 

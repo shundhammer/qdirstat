@@ -41,7 +41,7 @@ void GeneralConfigPage::setup()
 
 void GeneralConfigPage::applyChanges()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     writeSettings();
 }
@@ -49,7 +49,7 @@ void GeneralConfigPage::applyChanges()
 
 void GeneralConfigPage::discardChanges()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     readSettings();
 }
@@ -57,7 +57,7 @@ void GeneralConfigPage::discardChanges()
 
 void GeneralConfigPage::readSettings()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     QDirStat::Settings settings;
     settings.beginGroup( "MainWindow" );
@@ -86,7 +86,7 @@ void GeneralConfigPage::readSettings()
 
 void GeneralConfigPage::writeSettings()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     QDirStat::Settings settings;
     settings.beginGroup( "MainWindow" );

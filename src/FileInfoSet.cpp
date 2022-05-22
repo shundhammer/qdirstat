@@ -40,7 +40,7 @@ FileInfoSet FileInfoSet::normalized() const
 	    normalized << item;
 #if 0
 	else
-	    logDebug() << "Removing " << item << " with ancestors in the set" << endl;
+	    logDebug() << "Removing " << item << " with ancestors in the set" << Qt::endl;
 #endif
     }
 
@@ -56,12 +56,12 @@ FileInfoSet FileInfoSet::invalidRemoved() const
     {
 	if ( item && item->checkMagicNumber() )
 	{
-	    // logDebug() << "Keeping " << item << endl;
+	    // logDebug() << "Keeping " << item << Qt::endl;
 	    result << item;
 	}
 	else
 	{
-	    logWarning() << "Removing invalid item" << endl;
+	    logWarning() << "Removing invalid item" << Qt::endl;
 	}
     }
 

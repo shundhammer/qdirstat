@@ -48,7 +48,7 @@ CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
 
 CleanupConfigPage::~CleanupConfigPage()
 {
-    // logDebug() << "CleanupConfigPage destructor" << endl;
+    // logDebug() << "CleanupConfigPage destructor" << Qt::endl;
     delete _ui;
 }
 
@@ -69,7 +69,7 @@ void CleanupConfigPage::setup()
 
 void CleanupConfigPage::applyChanges()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     save( value( listWidget()->currentItem() ) );
     _cleanupCollection->writeSettings();
@@ -78,7 +78,7 @@ void CleanupConfigPage::applyChanges()
 
 void CleanupConfigPage::discardChanges()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     listWidget()->clear();
     _cleanupCollection->clear();
@@ -122,7 +122,7 @@ void CleanupConfigPage::titleChanged( const QString & newTitle )
 void CleanupConfigPage::save( void * value )
 {
     Cleanup * cleanup = CLEANUP_CAST( value );
-    // logDebug() << cleanup << endl;
+    // logDebug() << cleanup << Qt::endl;
 
     if ( ! cleanup || updatesLocked() )
 	return;
@@ -163,7 +163,7 @@ void CleanupConfigPage::save( void * value )
 void CleanupConfigPage::load( void * value )
 {
     Cleanup * cleanup = CLEANUP_CAST( value );
-    // logDebug() << cleanup << endl;
+    // logDebug() << cleanup << Qt::endl;
 
     if ( ! cleanup || updatesLocked() )
 	return;

@@ -177,7 +177,7 @@ namespace QDirStat
 	 * Notice: You can simply use the QTextStream operator<< to output
 	 * exactly this:
 	 *
-	 * logDebug() << "Found fileInfo " << info << endl;
+	 * logDebug() << "Found fileInfo " << info << Qt::endl;
 	 **/
 	virtual QString debugUrl() const;
 

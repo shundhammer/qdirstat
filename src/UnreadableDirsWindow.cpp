@@ -29,7 +29,7 @@ UnreadableDirsWindow::UnreadableDirsWindow( QWidget * parent ):
     QDialog( parent ),
     _ui( new Ui::UnreadableDirsWindow )
 {
-    // logDebug() << "init" << endl;
+    // logDebug() << "init" << Qt::endl;
 
     CHECK_NEW( _ui );
     _ui->setupUi( this );
@@ -44,7 +44,7 @@ UnreadableDirsWindow::UnreadableDirsWindow( QWidget * parent ):
 
 UnreadableDirsWindow::~UnreadableDirsWindow()
 {
-    // logDebug() << "destroying" << endl;
+    // logDebug() << "destroying" << Qt::endl;
     writeWindowSettings( this, "UnreadableDirsWindow" );
     delete _ui;
 }
@@ -119,14 +119,14 @@ void UnreadableDirsWindow::populate( FileInfo * newSubtree )
     clear();
     _subtree = newSubtree;
 
-    logDebug() << "Locating all unreadable dirs below " << _subtree.url() << endl;
+    logDebug() << "Locating all unreadable dirs below " << _subtree.url() << Qt::endl;
 
     populateRecursive( newSubtree ? newSubtree : _subtree() );
     _ui->treeWidget->sortByColumn( 0, Qt::AscendingOrder );
 
     int count = _ui->treeWidget->topLevelItemCount();
     _ui->totalLabel->setText( QString( "Total: %1" ).arg( count ) );
-    logDebug() << count << " directories" << endl;
+    logDebug() << count << " directories" << Qt::endl;
 
     // Make sure something is selected, even if this window is not the active
     // one (for example because the user just clicked on another suffix in the
@@ -203,7 +203,7 @@ void UnreadableDirsWindow::selectResult( QTreeWidgetItem * item )
 
     FileInfo * dir = _subtree.tree()->locate( searchResult->path() );
 
-    // logDebug() << "Selecting " << searchResult->path() << ": " << dir << endl;
+    // logDebug() << "Selecting " << searchResult->path() << ": " << dir << Qt::endl;
 
     app()->selectionModel()->setCurrentItem( dir,
                                              true ); // select

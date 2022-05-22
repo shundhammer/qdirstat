@@ -33,7 +33,7 @@ LocateFilesWindow::LocateFilesWindow( TreeWalker * treeWalker,
     _sortCol( LocateListPathCol ),
     _sortOrder( Qt::AscendingOrder )
 {
-    // logDebug() << "init" << endl;
+    // logDebug() << "init" << Qt::endl;
 
     CHECK_PTR( _treeWalker );
     CHECK_NEW( _ui );
@@ -55,7 +55,7 @@ LocateFilesWindow::LocateFilesWindow( TreeWalker * treeWalker,
 
 LocateFilesWindow::~LocateFilesWindow()
 {
-    // logDebug() << "destroying" << endl;
+    // logDebug() << "destroying" << Qt::endl;
 
     writeWindowSettings( this, "LocateFilesWindow" );
     delete _treeWalker;
@@ -111,7 +111,7 @@ void LocateFilesWindow::reject()
 
 void LocateFilesWindow::populate( FileInfo * newSubtree )
 {
-    // logDebug() << "populating with " << newSubtree << endl;
+    // logDebug() << "populating with " << newSubtree << Qt::endl;
 
     clear();
     _subtree = newSubtree;
@@ -121,7 +121,7 @@ void LocateFilesWindow::populate( FileInfo * newSubtree )
     _ui->treeWidget->setSortingEnabled( false );
 
     populateRecursive( newSubtree ? newSubtree : _subtree() );
-    // logDebug() << "Results count: " << _ui->treeWidget->topLevelItemCount() << endl;
+    // logDebug() << "Results count: " << _ui->treeWidget->topLevelItemCount() << Qt::endl;
 
     _ui->treeWidget->setSortingEnabled( true );
     _ui->treeWidget->sortByColumn( _sortCol, _sortOrder );
@@ -176,7 +176,7 @@ void LocateFilesWindow::locateInMainWindow( QTreeWidgetItem * item )
     CHECK_DYNAMIC_CAST( searchResult, "LocateListItem" );
     CHECK_PTR( _subtree.tree() );
 
-    // logDebug() << "Locating " << searchResult->path() << " in tree" << endl;
+    // logDebug() << "Locating " << searchResult->path() << " in tree" << Qt::endl;
     app()->selectionModel()->setCurrentItem( searchResult->path() );
 }
 

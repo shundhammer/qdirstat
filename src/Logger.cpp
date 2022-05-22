@@ -9,6 +9,7 @@
 
 #define DONT_DEPRECATE_STRERROR
 #include "Logger.h"
+#include "QtCompat.h"
 
 #include <QFile>
 #include <QDir>
@@ -16,6 +17,7 @@
 #include <QString>
 #include <QRectF>
 #include <QPointF>
+#include <QRegExp>
 #include <QSizeF>
 #include <QSize>
 #include <QStringList>
@@ -81,7 +83,7 @@ Logger::~Logger()
 {
     if ( _logFile.isOpen() )
     {
-	logInfo() << "-- Log End --\n" << endl;
+	logInfo() << "-- Log End --\n" << Qt::endl;
 	_logFile.close();
     }
 
@@ -141,7 +143,7 @@ void Logger::openLogFile( const QString & filename )
 	    _logStream.setDevice( &_logFile );
 	    _logStream << "\n\n";
 	    log( __FILE__, __LINE__, __FUNCTION__, LogSeverityInfo )
-		<< "-- Log Start --" << endl;
+		<< "-- Log Start --" << Qt::endl;
 	}
 	else
 	{
@@ -256,7 +258,7 @@ void Logger::setLogLevel( Logger *logger, LogSeverity newLevel )
 
 void Logger::newline()
 {
-    _logStream << endl;
+    _logStream << Qt::endl;
 }
 
 
@@ -313,7 +315,7 @@ static void qt_logger( QtMsgType msgType, const char *msg)
     Logger::log( 0, // use default logger
 		 "[Qt]", 0, "", // file, line, function
 		 toLogSeverity( msgType ) )
-	<< msg << endl;
+	<< msg << Qt::endl;
 
     if ( msgType == QtFatalMsg )
     {
@@ -350,7 +352,7 @@ static void qt_logger( QtMsgType msgType,
             Logger::log( 0, // use default logger
                          context.file, context.line, context.function,
                          toLogSeverity( msgType ) )
-                << "[Qt] " << line << endl;
+                << "[Qt] " << line << Qt::endl;
         }
     }
 
@@ -403,20 +405,20 @@ static void qt_logger( QtMsgType msgType,
 
                 QString text = "FATAL: Could not connect to the display.";
                 fprintf( stderr, "\n%s\n", qPrintable( text ) );
-                logError() << text << endl;
+                logError() << text << Qt::endl;
             }
             else
             {
                 fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
             }
 
-            logInfo() << "-- Exiting --\n" << endl;
+            logInfo() << "-- Exiting --\n" << Qt::endl;
 	    exit( 1 ); // Don't dump core, just exit
         }
 	else
         {
             fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
-            logInfo() << "-- Aborting with core dump --\n" << endl;
+            logInfo() << "-- Aborting with core dump --\n" << Qt::endl;
 	    abort(); // Exit with core dump (it might contain a useful backtrace)
         }
     }
@@ -460,7 +462,7 @@ QString Logger::createLogDir( const QString & rawLogDir )
     if ( (uid_t) dirInfo.ownerId()  != getuid() )
     {
 	logError() << "ERROR: Directory " << logDir
-		   << " is not owned by " << userName() << endl;
+		   << " is not owned by " << userName() << Qt::endl;
 
 	QByteArray nameTemplate( QString( logDir + "-XXXXXX" ).toUtf8() );
 	char * result = mkdtemp( nameTemplate.data() );
@@ -473,7 +475,7 @@ QString Logger::createLogDir( const QString & rawLogDir )
 	else
 	{
 	    logError() << "Could not create log dir " << nameTemplate
-		       << ": " << formatErrno() << endl;
+		       << ": " << formatErrno() << Qt::endl;
 
 	    logDir = "/";
 	    // No permissions to write to /,
@@ -498,8 +500,8 @@ QString Logger::oldName( const QString & filename, int no )
     QString oldName = filename;
 
     if ( oldName.endsWith( ".log" ) )
-	oldName.remove( QRegExp( "\\.log$" ) );
 
+    oldName = qregexp_removeIn(QRegExp( "\\.log$" ), oldName);
     oldName += QString( "-%1.old" ).arg( no, 2, 10, QChar( '0' ) );
 
     return oldName;
@@ -511,7 +513,7 @@ QString Logger::oldNamePattern( const QString & filename )
     QString pattern = filename;
 
     if ( pattern.endsWith( ".log" ) )
-	pattern.remove( QRegExp( "\\.log$" ) );
+        pattern = qregexp_removeIn( QRegExp( "\\.log$" ), pattern);
 
     pattern += "-??.old";
 
@@ -536,7 +538,7 @@ void Logger::logRotate( const QString & logDir,
 	{
 	    bool success = dir.remove( newName );
 #if VERBOSE_ROTATE
-	    logDebug() << "Removing " << newName << ( success ? "" : " FAILED" ) << endl;
+	    logDebug() << "Removing " << newName << ( success ? "" : " FAILED" ) << Qt::endl;
 #else
 	    Q_UNUSED( success );
 #endif
@@ -548,7 +550,7 @@ void Logger::logRotate( const QString & logDir,
 #if VERBOSE_ROTATE
 	    logDebug() << "Renaming " << currentName << " to " << newName
 		       << ( success ? "" : " FAILED" )
-		       << endl;
+		       << Qt::endl;
 #else
 	    Q_UNUSED( success );
 #endif
@@ -566,7 +568,7 @@ void Logger::logRotate( const QString & logDir,
 	{
 	    bool success = dir.remove( match );
 #if VERBOSE_ROTATE
-	    logDebug() << "Removing leftover " << match << ( success ? "" : " FAILED" ) << endl;
+	    logDebug() << "Removing leftover " << match << ( success ? "" : " FAILED" ) << Qt::endl;
 #else
 	    Q_UNUSED( success );
 #endif

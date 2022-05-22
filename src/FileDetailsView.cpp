@@ -7,7 +7,7 @@
  */
 
 
-#include "Qt4Compat.h"
+#include "QtCompat.h"
 
 #include "FileDetailsView.h"
 #include "AdaptiveTimer.h"
@@ -130,7 +130,7 @@ void FileDetailsView::showDetails( FileInfo * file )
     }
     else
     {
-	// logDebug() << "Showing file details about " << file << endl;
+	// logDebug() << "Showing file details about " << file << Qt::endl;
 
 	setCurrentPage( _ui->fileDetailsPage );
 	showFileInfo( file );
@@ -299,7 +299,7 @@ void FileDetailsView::showFilePkgInfo( FileInfo * file )
 void FileDetailsView::updatePkgInfo( const QVariant & pathVariant )
 {
     QString path = pathVariant.toString();
-    // logDebug() << "Updating pkg info for " << path << endl;
+    // logDebug() << "Updating pkg info for " << path << Qt::endl;
 
     QString pkg = PkgQuery::owningPkg( path );
     _ui->filePackageLabel->setText( pkg );
@@ -322,7 +322,7 @@ void FileDetailsView::setFilePkgBlockVisibility( bool visible )
 
 void FileDetailsView::showDetails( DirInfo * dir )
 {
-    // logDebug() << "Showing dir details about " << dir << endl;
+    // logDebug() << "Showing dir details about " << dir << Qt::endl;
 
     if ( ! dir )
     {
@@ -455,7 +455,7 @@ void FileDetailsView::setDirBlockVisibility( bool visible )
 
 void FileDetailsView::showDetails( PkgInfo * pkg )
 {
-    // logDebug() << "Showing pkg details about " << pkg << endl;
+    // logDebug() << "Showing pkg details about " << pkg << Qt::endl;
 
     if ( ! pkg )
     {
@@ -491,7 +491,7 @@ void FileDetailsView::showDetails( PkgInfo * pkg )
 
 	case DirCached:
 	case DirOnRequestOnly:
-	    logError() << "Invalid readState for a Pkg" << endl;
+	    logError() << "Invalid readState for a Pkg" << Qt::endl;
 	    break;
     }
 
@@ -524,7 +524,7 @@ void FileDetailsView::showDetails( PkgInfo * pkg )
 
 void FileDetailsView::showPkgSummary( PkgInfo * pkg )
 {
-    // logDebug() << "Showing pkg details about " << pkg << endl;
+    // logDebug() << "Showing pkg details about " << pkg << Qt::endl;
 
     if ( ! pkg )
     {
@@ -581,7 +581,7 @@ void FileDetailsView::showPkgSummary( PkgInfo * pkg )
 
 void FileDetailsView::showSelectionSummary( const FileInfoSet & selectedItems )
 {
-    // logDebug() << "Showing selection summary" << endl;
+    // logDebug() << "Showing selection summary" << Qt::endl;
 
     setCurrentPage( _ui->selectionSummaryPage );
     FileInfoSet sel = selectedItems.normalized();
@@ -656,7 +656,7 @@ QString FileDetailsView::limitText( const QString & longText )
     limited += "...";
     limited += longText.right( _labelLimit / 2 - 1 );
 
-    logDebug() << "Limiting \"" << longText << "\"" << endl;
+    logDebug() << "Limiting \"" << longText << "\"" << Qt::endl;
 
     return limited;
 }

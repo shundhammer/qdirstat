@@ -31,7 +31,7 @@ PkgInfo::PkgInfo( const QString & name,
     _multiVersion( false ),
     _multiArch( false )
 {
-    // logDebug() << "Creating " << this << endl;
+    // logDebug() << "Creating " << this << Qt::endl;
 }
 
 
@@ -50,7 +50,7 @@ PkgInfo::PkgInfo( DirTree *       tree,
     _multiVersion( false ),
     _multiArch( false )
 {
-    // logDebug() << "Creating " << this << endl;
+    // logDebug() << "Creating " << this << Qt::endl;
 }
 
 
@@ -88,7 +88,7 @@ QString PkgInfo::pkgUrl( const QString & path ) const
 
 FileInfo * PkgInfo::locate( const QString & path )
 {
-    QStringList components = path.split( "/", QString::SkipEmptyParts );
+    QStringList components = path.split( "/", Qt::SkipEmptyParts );
 
     if ( isPkgUrl( path ) )
     {
@@ -101,7 +101,7 @@ FileInfo * PkgInfo::locate( const QString & path )
 
         if ( pkgName != _name )
         {
-            logError() << "Path " << path << " does not belong to " << this << endl;
+            logError() << "Path " << path << " does not belong to " << this << Qt::endl;
             return 0;
         }
 
@@ -122,7 +122,7 @@ FileInfo * PkgInfo::locate( const QStringList & pathComponents )
 FileInfo * PkgInfo::locate( DirInfo *           subtree,
                             const QStringList & pathComponents )
 {
-    // logDebug() << "Locating /" << pathComponents.join( "/" ) << " in " << subtree << endl;
+    // logDebug() << "Locating /" << pathComponents.join( "/" ) << " in " << subtree << Qt::endl;
 
     if ( ! subtree || pathComponents.isEmpty() )
         return 0;
@@ -134,13 +134,13 @@ FileInfo * PkgInfo::locate( DirInfo *           subtree,
 
     while ( *it )
     {
-        // logDebug() << "Checking " << (*it)->name() << " in " << subtree << " for " << wanted << endl;
+        // logDebug() << "Checking " << (*it)->name() << " in " << subtree << " for " << wanted << Qt::endl;
 
         if ( (*it)->name() == wanted )
         {
             if ( components.isEmpty() )
             {
-                // logDebug() << "  Found " << *it << endl;
+                // logDebug() << "  Found " << *it << Qt::endl;
                 return *it;
             }
             else

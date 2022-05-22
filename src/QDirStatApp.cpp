@@ -61,7 +61,7 @@ DirTree * QDirStatApp::dirTree() const
 
 QDirStatApp::QDirStatApp()
 {
-    // logDebug() << "Creating app" << endl;
+    // logDebug() << "Creating app" << Qt::endl;
 
     _dirTreeModel = new DirTreeModel();
     CHECK_NEW( _dirTreeModel );
@@ -78,13 +78,13 @@ QDirStatApp::QDirStatApp()
 
 QDirStatApp::~QDirStatApp()
 {
-    // logDebug() << "Destroying app" << endl;
+    // logDebug() << "Destroying app" << Qt::endl;
 
     delete _cleanupCollection;
     delete _selectionModel;
     delete _dirTreeModel;
 
-    // logDebug() << "App destroyed." << endl;
+    // logDebug() << "App destroyed." << Qt::endl;
 }
 
 
@@ -101,7 +101,7 @@ QWidget * QDirStatApp::findMainWindow() const
     }
 
     if ( ! mainWin )
-        logWarning() << "NULL mainWin for shared instance" << endl;
+        logWarning() << "NULL mainWin for shared instance" << Qt::endl;
 
     return mainWin;
 }

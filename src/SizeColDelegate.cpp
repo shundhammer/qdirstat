@@ -12,7 +12,7 @@
 
 #include "SizeColDelegate.h"
 #include "DirTreeModel.h"
-#include "Qt4Compat.h"
+#include "QtCompat.h"
 #include "Exception.h"
 #include "FileInfo.h"
 #include "Logger.h"
@@ -62,7 +62,7 @@ void SizeColDelegate::paint( QPainter		        * painter,
             if ( DirTreeModel::isSmallFileOrSymLink( item ) &&
                  item->links() == 1 )
             {
-                // logDebug() << "Small file " << item << endl;
+                // logDebug() << "Small file " << item << Qt::endl;
 
                 QString text = _model->data( index, Qt::DisplayRole ).toString();
                 QStringList fields = text.split( " (" );  //  "137 B (4k)"
@@ -93,7 +93,7 @@ void SizeColDelegate::paint( QPainter		        * painter,
                     // to reserve some space for the allocated size.
 
                     QFontMetrics fontMetrics( option.font );
-                    int allocWidth = fontMetrics.width( allocText );
+                    int allocWidth = fontMetrics.horizontalAdvance( allocText );
                     rect.setWidth( rect.width() - allocWidth );
 
                     painter->setPen( textColor );
@@ -118,7 +118,7 @@ void SizeColDelegate::paint( QPainter		        * painter,
         }
     }
 
-    // logDebug() << "Using fallback" << endl;
+    // logDebug() << "Using fallback" << Qt::endl;
 
     // Fallback: Use the standard delegate.
     return QStyledItemDelegate::paint( painter, option, index );
@@ -141,20 +141,20 @@ QSize SizeColDelegate::sizeHint( const QStyleOptionViewItem & option,
             {
                 QString text = _model->data( index, Qt::DisplayRole ).toString();
                 QFontMetrics fontMetrics( option.font );
-                int width  = fontMetrics.width( text );
+                int width  = fontMetrics.horizontalAdvance( text );
                 int height = fontMetrics.height();
                 QSize size( width  + MARGIN_RIGHT + MARGIN_LEFT,
                             height + MARGIN_TOP   + MARGIN_BOTTOM );
 #if 0
                 logDebug() << "size hint for \"" << text << "\": "
-                           << size.width() << ", " << size.height() << endl;
+                           << size.width() << ", " << size.height() << Qt::endl;
 #endif
                 return size;
             }
         }
     }
 
-    // logDebug() << "Using fallback" << endl;
+    // logDebug() << "Using fallback" << Qt::endl;
 
 #if 0
     QSize size = QStyledItemDelegate::sizeHint( option, index );
@@ -194,7 +194,7 @@ void SizeColDelegate::ensureModel( const QModelIndex & index ) const
             _model = const_cast<DirTreeModel *>( constModel );
 
         if ( ! _model )
-            logError() << "WRONG_MODEL TYPE" << endl;
+            logError() << "WRONG_MODEL TYPE" << Qt::endl;
     }
 }
 

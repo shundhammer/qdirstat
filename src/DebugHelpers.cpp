@@ -31,7 +31,7 @@ namespace Debug
 	{
 	    logDebug() << "Children of " << dir
 		       << "  (" << (void *) dir << ")"
-		       << endl;
+		       << Qt::endl;
 	    int count = 0;
 
 	    while ( *it )
@@ -39,13 +39,13 @@ namespace Debug
 		logDebug() << "	   #" << count++ << ": "
 			   << (void *) *it
 			   << "	 " << *it
-			   << endl;
+			   << Qt::endl;
 		++it;
 	    }
 	}
 	else
 	{
-	    logDebug() << "    No children in " << dir << endl;
+	    logDebug() << "    No children in " << dir << Qt::endl;
 	}
     }
 
@@ -53,24 +53,24 @@ namespace Debug
     void dumpChildrenList( FileInfo	      * dir,
 			   const FileInfoList & children )
     {
-	logDebug() << "Children of " << dir << endl;
+	logDebug() << "Children of " << dir << Qt::endl;
 
 	for ( int i=0; i < children.size(); ++i )
 	{
-	    logDebug() << "    #" << i << ": " << children.at(i) << endl;
+	    logDebug() << "    #" << i << ": " << children.at(i) << Qt::endl;
 	}
     }
 
 
     void dumpChildrenBySize( FileInfo * dir )
     {
-	logDebug() << "Direct children of " << dir << " by size:" << endl;
+	logDebug() << "Direct children of " << dir << " by size:" << Qt::endl;
 
 	QDirStat::FileInfoSortedBySizeIterator it( dir );
 
 	while ( *it )
 	{
-	    logDebug() << "  " << formatSize( (*it)->totalSize() ) << "	 " << *it << endl;
+	    logDebug() << "  " << formatSize( (*it)->totalSize() ) << "	 " << *it << Qt::endl;
 	    ++it;
 	}
     }
@@ -86,13 +86,13 @@ namespace Debug
 	if ( data.isValid() )
 	{
 	    if ( rowCount > 0 )
-		logDebug() << indent << data.toString() << ": " << rowCount << " rows" << endl;
+		logDebug() << indent << data.toString() << ": " << rowCount << " rows" << Qt::endl;
 	    else
-		logDebug() << indent << data.toString() << endl;
+		logDebug() << indent << data.toString() << Qt::endl;
 	}
 	else
 	{
-	    logDebug() << "<No data> " << rowCount << " rows" << endl;
+	    logDebug() << "<No data> " << rowCount << " rows" << Qt::endl;
 	}
 
 	for ( int row=0; row < rowCount; row++ )
@@ -125,13 +125,13 @@ namespace Debug
     void dumpExcludeRules()
     {
 	if ( ExcludeRules::instance()->isEmpty() )
-	    logDebug() << "No exclude rules defined" << endl;
+	    logDebug() << "No exclude rules defined" << Qt::endl;
 
 	for ( ExcludeRuleListIterator it = ExcludeRules::instance()->begin();
 	      it != ExcludeRules::instance()->end();
 	      ++it )
 	{
-	    logDebug() << *it << endl;
+	    logDebug() << *it << Qt::endl;
 	}
     }
 

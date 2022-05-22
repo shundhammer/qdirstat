@@ -20,13 +20,13 @@ BucketsTableModel::BucketsTableModel( QWidget * parent, HistogramView * histogra
     QAbstractTableModel( parent ),
     _histogram( histogram )
 {
-    // logDebug() << "init" << endl;
+    // logDebug() << "init" << Qt::endl;
 }
 
 
 BucketsTableModel::~BucketsTableModel()
 {
-    // logDebug() << "destroying" << endl;
+    // logDebug() << "destroying" << Qt::endl;
 }
 
 

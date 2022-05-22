@@ -367,7 +367,7 @@ namespace QDirStat
 	void addAxes();
 	void addYAxisLabel();
 	void addXAxisLabel();
-	void addXStartEndLabels();
+    void addXStartendlabels();
 	void addQuartileText();
 	void addHistogramBars();
 	void addMarkers();

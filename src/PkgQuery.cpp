@@ -63,7 +63,7 @@ PkgQuery::~PkgQuery()
 
 void PkgQuery::checkPkgManagers()
 {
-    logInfo() << "Checking available supported package managers..." << endl;
+    logInfo() << "Checking available supported package managers..." << Qt::endl;
 
     checkPkgManager( new DpkgPkgManager()   );
     checkPkgManager( new RpmPkgManager()    );
@@ -73,7 +73,7 @@ void PkgQuery::checkPkgManagers()
     _secondaryPkgManagers.clear();
 
     if ( _pkgManagers.isEmpty() )
-        logInfo() << "No supported package manager found." << endl;
+        logInfo() << "No supported package manager found." << Qt::endl;
     else
     {
         QStringList available;
@@ -81,7 +81,7 @@ void PkgQuery::checkPkgManagers()
         foreach ( PkgManager * pkgManager, _pkgManagers )
             available << pkgManager->name();
 
-        logInfo() << "Found " << available.join( ", " )  << endl;
+        logInfo() << "Found " << available.join( ", " )  << Qt::endl;
     }
 }
 
@@ -92,12 +92,12 @@ void PkgQuery::checkPkgManager( PkgManager * pkgManager )
 
     if ( pkgManager->isPrimaryPkgManager() )
     {
-	logInfo() << "Found primary package manager " << pkgManager->name() << endl;
+	logInfo() << "Found primary package manager " << pkgManager->name() << Qt::endl;
 	_pkgManagers << pkgManager;
     }
     else if ( pkgManager->isAvailable() )
     {
-	logInfo() << "Found secondary package manager " << pkgManager->name() << endl;
+	logInfo() << "Found secondary package manager " << pkgManager->name() << Qt::endl;
 	_secondaryPkgManagers << pkgManager;
     }
     else
@@ -175,9 +175,9 @@ QString PkgQuery::getOwningPackage( const QString & path )
 
 #if VERBOSE_PKG_QUERY
     if ( pkg.isEmpty() )
-	logDebug() << foundBy << ": No package owns " << path << endl;
+	logDebug() << foundBy << ": No package owns " << path << Qt::endl;
     else
-	logDebug() << foundBy << ": Package " << pkg << " owns " << path << endl;
+	logDebug() << foundBy << ": Package " << pkg << " owns " << path << Qt::endl;
 #endif
 
     return pkg;

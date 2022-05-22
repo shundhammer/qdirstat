@@ -74,7 +74,7 @@ FileInfoSet SelectionModel::selectedItems()
 		FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
 		CHECK_MAGIC( item );
 
-		// logDebug() << "Adding " << item << " col " << index.column() << " to selected items" << endl;
+		// logDebug() << "Adding " << item << " col " << index.column() << " to selected items" << Qt::endl;
 		_selectedItems << item;
 	    }
 	}
@@ -136,7 +136,7 @@ void SelectionModel::extendSelection( FileInfo * item, bool clear )
 
 	if ( index.isValid() )
 	{
-	    logDebug() << "Selecting " << item << endl;
+	    logDebug() << "Selecting " << item << Qt::endl;
 	    SelectionFlags flags = Select | Rows;
 
 	    if ( clear )
@@ -156,7 +156,7 @@ void SelectionModel::extendSelection( FileInfo * item, bool clear )
 void SelectionModel::setSelectedItems( const FileInfoSet & selectedItems )
 {
     if ( _verbose )
-	logDebug() << "Selecting " << selectedItems.size() << " items" << endl;
+    logDebug() << "Selecting " << ((quint64)selectedItems.size()) << " items" << Qt::endl;
 
     QItemSelection sel;
 
@@ -175,7 +175,7 @@ void SelectionModel::setSelectedItems( const FileInfoSet & selectedItems )
 void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 {
     if ( _verbose )
-	logDebug() << item << " select: " << select << endl;
+	logDebug() << item << " select: " << select << Qt::endl;
 
     if ( select )
 	clear();
@@ -189,13 +189,13 @@ void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 	if ( index.isValid() )
 	{
 	    if ( _verbose )
-		logDebug() << "Setting current to " << index << endl;
+		logDebug() << "Setting current to " << index << Qt::endl;
 
 	    setCurrentIndex( index, select ? ( Current | Select | Rows ) : Current );
 	}
 	else
 	{
-	    logError() << "NOT FOUND in dir tree: " << item << endl;
+	    logError() << "NOT FOUND in dir tree: " << item << Qt::endl;
 	}
     }
     else
@@ -216,7 +216,7 @@ void SelectionModel::setCurrentItem( const QString & path )
     if ( item )
 	setCurrentItem( item, true );
     else
-	logError() << "No item with path " << path << endl;
+	logError() << "No item with path " << path << Qt::endl;
 }
 
 
@@ -252,7 +252,7 @@ void SelectionModel::prepareRefresh( const FileInfoSet & refreshSet )
     }
 
     if ( _verbose )
-	logDebug() << "Selecting " << dir << endl;
+	logDebug() << "Selecting " << dir << Qt::endl;
 
     setCurrentItem( dir, true );
     setCurrentBranch( dir );
@@ -271,12 +271,12 @@ void SelectionModel::deletingChildNotify( FileInfo * deletedChild )
 
 void SelectionModel::dumpSelectedItems()
 {
-    logDebug() << "Current item: " << _currentItem << endl;
-    logDebug() << selectedItems().size() << " items selected" << endl;
+    logDebug() << "Current item: " << _currentItem << Qt::endl;
+    logDebug() << ((quint64)selectedItems().size()) << " items selected" << Qt::endl;
 
     foreach ( FileInfo * item, selectedItems() )
     {
-	logDebug() << "	 Selected: " << item << endl;
+	logDebug() << "	 Selected: " << item << Qt::endl;
     }
 
     logNewline();

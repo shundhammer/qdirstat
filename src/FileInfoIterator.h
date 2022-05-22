@@ -28,7 +28,7 @@ namespace QDirStat
      *
      *	  while ( *it )
      *	  {
-     *	     logDebug() << *it << ":\t" << (*it)->totalSize() << endl;
+     *	     logDebug() << *it << ":\t" << (*it)->totalSize() << Qt::endl;
      *	     ++it;
      *	  }
      *

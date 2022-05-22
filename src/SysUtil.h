@@ -160,7 +160,7 @@ namespace QDirStat
         /**
          * Read the (first level) target of a symbolic link, assuming UTF-8
          * encoding of names in the filesystem.
-         * This is a more user-friendly version of readlink(2).
+         * This is a more user-friQt::endly version of readlink(2).
          *
          * This returns an empty QByteArray if 'path' is not a symlink.
          **/
@@ -171,7 +171,7 @@ namespace QDirStat
          * Unlike readLink( const QString & ) above, this does not make any
          * assumptions of name encoding in the filessytem; it just uses bytes.
          *
-         * This is a more user-friendly version of readlink(2).
+         * This is a more user-friQt::endly version of readlink(2).
          *
          * This returns an empty QByteArray if 'path' is not a symlink.
          **/

@@ -134,7 +134,7 @@ qreal HistogramView::bestBucketCount( int n )
     {
 	logInfo() << "Limiting bucket count to " << MAX_BUCKET_COUNT
 		  << " instead of " << result
-		  << endl;
+		  << Qt::endl;
 
 	// Enforcing an upper limit so each histogram bar remains wide enough
 	// to be clicked on or for tooltips etc.
@@ -234,7 +234,7 @@ void HistogramView::setEndPercentile( int index )
     {
 	logError() << "startPercentile must be less than endPercentile: "
 		   << _startPercentile << ".." << _endPercentile
-		   << endl;
+		   << Qt::endl;
     }
 }
 
@@ -320,7 +320,7 @@ void HistogramView::autoStartEndPercentiles()
 {
     if ( _percentiles.isEmpty() )
     {
-	logError() << "No percentiles set" << endl;
+	logError() << "No percentiles set" << Qt::endl;
 	return;
     }
 
@@ -352,12 +352,12 @@ void HistogramView::autoStartEndPercentiles()
 	      << "  Q3: " << formatSize( q3 )
 	      << "  minVal: " << formatSize( minVal )
 	      << "  maxVal: " << formatSize( maxVal )
-	      << endl;
+	      << Qt::endl;
     logInfo() << "startPercentile: " << _startPercentile
 	      << "  " << formatSize( percentile( _startPercentile ) )
 	      << "  endPercentile: " << _endPercentile
 	      << "  " << formatSize( percentile( _endPercentile	 ) )
-	      << endl;
+	      << Qt::endl;
 }
 
 
@@ -365,7 +365,7 @@ bool HistogramView::autoLogHeightScale()
 {
     if ( _buckets.isEmpty() )
     {
-	logError() << "No buckets set" << endl;
+	logError() << "No buckets set" << Qt::endl;
 	return false;
     }
 
@@ -393,7 +393,7 @@ bool HistogramView::autoLogHeightScale()
 		  << " bucket P" << referencePercentile
 		  << ": " << referencePercentileValue
 		  << "	 -> use log height scale: " << _useLogHeightScale
-		  << endl;
+		  << Qt::endl;
     }
 
     return _useLogHeightScale;
@@ -424,7 +424,7 @@ void HistogramView::calcGeometry( const QSize & newSize )
 #if 0
     logDebug() << "Histogram width: " << _histogramWidth
 	       << " height: " << _histogramHeight
-	       << endl;
+	       << Qt::endl;
 #endif
 }
 
@@ -443,7 +443,7 @@ void HistogramView::autoResize()
 
 void HistogramView::resizeEvent( QResizeEvent * event )
 {
-    // logDebug() << "Event size: " << event->size() << endl;
+    // logDebug() << "Event size: " << event->size() << Qt::endl;
 
     QGraphicsView::resizeEvent( event );
     calcGeometry( event->size() );
@@ -463,13 +463,13 @@ void HistogramView::fitToViewport()
     // life time with this crap.
 
     QRectF rect = scene()->sceneRect().normalized();
-    // logDebug() << "Old scene rect: " << rect << endl;
+    // logDebug() << "Old scene rect: " << rect << Qt::endl;
 
     scene()->setSceneRect( rect );
 
     rect.adjust( -_viewMargin, -_viewMargin, _viewMargin, _viewMargin );
-    // logDebug() << "New scene rect: " << rect << endl;
-    // logDebug() << "Viewport size:  " << viewport()->size() << endl;
+    // logDebug() << "New scene rect: " << rect << Qt::endl;
+    // logDebug() << "Viewport size:  " << viewport()->size() << Qt::endl;
 
     QSize visibleSize = viewport()->size();
 
@@ -478,7 +478,7 @@ void HistogramView::fitToViewport()
     {
 	logDebug() << "Histogram in " << rect.size()
 		   << " fits into visible size " << visibleSize
-		   << endl;
+		   << Qt::endl;
 
 	setTransform( QTransform() ); // Reset scaling etc.
 	ensureVisible( rect, 0, 0 );
@@ -487,7 +487,7 @@ void HistogramView::fitToViewport()
     {
 	logDebug() << "Scaling down histogram in " << rect.size()
 		   << " to fit into visible size " << visibleSize
-		   << endl;
+		   << Qt::endl;
 
 	fitInView( rect, Qt::KeepAspectRatio );
     }
@@ -502,7 +502,7 @@ void HistogramView::rebuild()
 	return;
     }
 
-    logInfo() << "Rebuilding histogram" << endl;
+    logInfo() << "Rebuilding histogram" << Qt::endl;
 
     if ( _geometryDirty )
         autoResize();
@@ -522,7 +522,7 @@ void HistogramView::rebuild()
     if ( _buckets.size() < 1 || _percentiles.size() != 101 )
     {
 	scene()->addText( "No data yet" );
-	logInfo() << "No data yet" << endl;
+	logInfo() << "No data yet" << Qt::endl;
 	return;
     }
 
@@ -540,7 +540,7 @@ qreal HistogramView::scaleValue( qreal value )
     qreal totalWidth = endVal - startVal;
     qreal result     = ( value - startVal ) / totalWidth * _histogramWidth;
 
-    // logDebug() << "Scaling " << formatSize( value ) << " to " << result << endl;
+    // logDebug() << "Scaling " << formatSize( value ) << " to " << result << Qt::endl;
 
     return result;
 }

@@ -10,6 +10,7 @@
 #include "PacManPkgManager.h"
 #include "Logger.h"
 #include "Exception.h"
+#include "QtCompat.h"
 
 
 using namespace QDirStat;
@@ -46,7 +47,7 @@ QString PacManPkgManager::owningPkg( const QString & path )
     // blank-separated section #4; let's remove the part before the package
     // name.
 
-    output.remove( QRegExp( "^.*is owned by " ) );
+    output = qregexp_removeIn( QRegExp( "^.*is owned by " ), output);
     QString pkg = output.section( " ", 0, 0 );
 
     return pkg;
@@ -77,10 +78,10 @@ PkgInfoList PacManPkgManager::parsePkgList( const QString & output )
     {
         if ( ! line.isEmpty() )
         {
-            QStringList fields = line.split( " ", QString::KeepEmptyParts );
+            QStringList fields = line.split( " ", Qt::KeepEmptyParts );
 
             if ( fields.size() != 2 )
-                logError() << "Invalid pacman -Qn output: \"" << line << "\n" << endl;
+                logError() << "Invalid pacman -Qn output: \"" << line << "\n" << Qt::endl;
             else
             {
                 QString name    = fields.takeFirst();

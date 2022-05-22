@@ -58,7 +58,7 @@ MimeCategoryConfigPage::MimeCategoryConfigPage( QWidget * parent ):
 
 MimeCategoryConfigPage::~MimeCategoryConfigPage()
 {
-    // logDebug() << "MimeCategoryConfigPage destructor" << endl;
+    // logDebug() << "MimeCategoryConfigPage destructor" << Qt::endl;
 
     _ui->treemapView->setDirTree(0);
 
@@ -78,7 +78,7 @@ void MimeCategoryConfigPage::setup()
 
 void MimeCategoryConfigPage::applyChanges()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     save( value( listWidget()->currentItem() ) );
     _categorizer->writeSettings();
@@ -87,7 +87,7 @@ void MimeCategoryConfigPage::applyChanges()
 
 void MimeCategoryConfigPage::discardChanges()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     listWidget()->clear();
     _categorizer->readSettings();
@@ -171,7 +171,7 @@ void MimeCategoryConfigPage::pickColor()
 void MimeCategoryConfigPage::save( void * value )
 {
     MimeCategory * category = CATEGORY_CAST( value );
-    // logDebug() << category << endl;
+    // logDebug() << category << Qt::endl;
 
     if ( ! category || updatesLocked() )
 	return;
@@ -188,7 +188,7 @@ void MimeCategoryConfigPage::save( void * value )
 void MimeCategoryConfigPage::load( void * value )
 {
     MimeCategory * category = CATEGORY_CAST( value );
-    // logDebug() << category << endl;
+    // logDebug() << category << Qt::endl;
 
     if ( ! category || updatesLocked() )
 	return;
@@ -321,7 +321,7 @@ void MimeCategoryConfigPage::populateTreemapView()
 
     logDebug() << "Demo tree: " << fileCount << " files with "
 	       << formatSize( topDir->totalSize() ) << " total"
-	       << endl;
+	       << Qt::endl;
 
     _ui->treemapView->setDirTree( _dirTree );
 }

@@ -62,7 +62,7 @@ DirTreeView::~DirTreeView()
 void DirTreeView::currentChanged( const QModelIndex & current,
 				  const QModelIndex & oldCurrent )
 {
-    // logDebug() << "Setting new current to " << current << endl;
+    // logDebug() << "Setting new current to " << current << Qt::endl;
     QTreeView::currentChanged( current, oldCurrent );
     scrollTo( current );
 }
@@ -74,7 +74,7 @@ void DirTreeView::contextMenu( const QPoint & pos )
 
     if ( ! index.isValid() )
     {
-	// logDebug() << "No item at this position" << endl;
+	// logDebug() << "No item at this position" << Qt::endl;
 	return;
     }
 
@@ -155,7 +155,7 @@ QModelIndexList DirTreeView::expandedIndexes() const
 
     if ( ! dirTreeModel )
     {
-	logError() << "Wrong model type to get this information" << endl;
+	logError() << "Wrong model type to get this information" << Qt::endl;
 	return QModelIndexList();
     }
 
@@ -179,7 +179,7 @@ void DirTreeView::closeAllExcept( const QModelIndex & branch )
 
     while ( index.isValid() )
     {
-	// logDebug() << "Not closing " << index << endl;
+	// logDebug() << "Not closing " << index << Qt::endl;
 	branchesToClose.removeAll( index );
 	index = index.parent();
     }
@@ -188,7 +188,7 @@ void DirTreeView::closeAllExcept( const QModelIndex & branch )
 
     foreach ( index, branchesToClose )
     {
-	// logDebug() << "Closing " << index << endl;
+	// logDebug() << "Closing " << index << Qt::endl;
 	collapse( index );
     }
 
@@ -202,7 +202,7 @@ void DirTreeView::setExpanded( FileInfo * item, bool expanded )
 
     if ( ! dirTreeModel )
     {
-	logError() << "Wrong model type" << endl;
+	logError() << "Wrong model type" << Qt::endl;
         return;
     }
 

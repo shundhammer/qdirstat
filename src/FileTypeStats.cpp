@@ -14,6 +14,7 @@
 #include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
+#include "QtCompat.h"
 
 using namespace QDirStat;
 
@@ -221,12 +222,12 @@ void FileTypeStats::removeCruft()
     }
 
 #if 1
-    logDebug() << "Merged " << cruft.size() << " suffixes to <NO SUFFIX>: "
-	       << cruft.join( ", " ) << endl;
+    logDebug() << "Merged " << (quint64)cruft.size() << " suffixes to <NO SUFFIX>: "
+	       << cruft.join( ", " ) << Qt::endl;
 #endif
     logDebug() << "Merged: " << totalMergedCount << " files "
 	       << "(" << formatSize( totalMergedSum ) << ")"
-	       << endl;
+	       << Qt::endl;
 }
 
 
@@ -242,7 +243,7 @@ void FileTypeStats::removeEmpty()
 
 	if ( remove )
 	{
-	    logDebug() << "Removing empty suffix *." << suffix << endl;
+	    logDebug() << "Removing empty suffix *." << suffix << Qt::endl;
 	    it = _suffixCount.erase( it );
 	    _suffixSum.remove( suffix );
 	}
@@ -267,7 +268,8 @@ bool FileTypeStats::isCruft( const QString & suffix ) const
 
     int count	 = _suffixCount[ suffix ];
     int len	 = suffix.size();
-    int letters	 = suffix.count( QRegExp( "[a-zA-Z]" ) );
+
+    int letters = qregexp_countIn( QRegExp( "[a-zA-Z]" ), suffix );
     float lettersPercent = len > 0 ? (100.0 * letters) / len : 0.0;
 
     if ( letters == 0 )
@@ -303,5 +305,5 @@ void FileTypeStats::sanityCheck()
     logDebug() << "Unaccounted in categories: " << formatSize( missing )
 	       << " of " << formatSize( totalSize() )
 	       << " (" << QString::number( percentage( missing ), 'f', 2 ) << "%)"
-	       << endl;
+	       << Qt::endl;
 }

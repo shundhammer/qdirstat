@@ -52,7 +52,7 @@ TreemapView::TreemapView( QWidget * parent ):
     _useFixedColor(false),
     _useDirGradient(true)
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     readSettings();
 
@@ -98,7 +98,7 @@ void TreemapView::clear()
 
 void TreemapView::setDirTree( DirTree * newTree )
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
     _tree = newTree;
 
     if ( ! _tree )
@@ -132,7 +132,7 @@ void TreemapView::setDirTree( DirTree * newTree )
 
 void TreemapView::setSelectionModel( SelectionModel * selectionModel )
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
     _selectionModel = selectionModel;
     CHECK_PTR( _selectionModel );
 
@@ -191,7 +191,7 @@ void TreemapView::readSettings()
 
 void TreemapView::writeSettings()
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     Settings settings;
     settings.beginGroup( "Treemaps" );
@@ -306,7 +306,7 @@ void TreemapView::rebuildTreemap()
 
     if ( ! _savedRootUrl.isEmpty() )
     {
-	// logDebug() << "Restoring old treemap with root " << _savedRootUrl << endl;
+	// logDebug() << "Restoring old treemap with root " << _savedRootUrl << Qt::endl;
 
 	root = _tree->locate( _savedRootUrl, true );	// node, findPseudoDirs
     }
@@ -322,7 +322,7 @@ void TreemapView::rebuildTreemap()
 void TreemapView::rebuildTreemap( FileInfo *	 newRoot,
 				  const QSizeF & newSz )
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
 
     QSizeF newSize = newSz;
 
@@ -371,7 +371,7 @@ void TreemapView::rebuildTreemap( FileInfo *	 newRoot,
     }
     else
     {
-	// logDebug() << "Too small - suppressing treemap contents" << endl;
+	// logDebug() << "Too small - suppressing treemap contents" << Qt::endl;
     }
 
     emit treemapChanged();
@@ -430,7 +430,7 @@ void TreemapView::deleteNotify( FileInfo * )
 
 void TreemapView::resizeEvent( QResizeEvent * event )
 {
-    // logDebug() << endl;
+    // logDebug() << Qt::endl;
     QGraphicsView::resizeEvent( event );
 
     if ( ! _tree )
@@ -441,20 +441,20 @@ void TreemapView::resizeEvent( QResizeEvent * event )
 
     if ( tooSmall && _rootTile )
     {
-	// logDebug() << "Suppressing treemap contents" << endl;
+	// logDebug() << "Suppressing treemap contents" << Qt::endl;
 	scheduleRebuildTreemap( _rootTile->orig() );
     }
     else if ( ! tooSmall && ! _rootTile )
     {
 	if ( _tree && _tree->firstToplevel() )
 	{
-	    // logDebug() << "Redisplaying suppressed treemap contents" << endl;
+	    // logDebug() << "Redisplaying suppressed treemap contents" << Qt::endl;
 	    scheduleRebuildTreemap( _tree->firstToplevel() );
 	}
     }
     else if ( _rootTile )
     {
-	// logDebug() << "Auto-resizing treemap" << endl;
+	// logDebug() << "Auto-resizing treemap" << Qt::endl;
 	scheduleRebuildTreemap( _rootTile->orig() );
     }
 }
@@ -462,7 +462,7 @@ void TreemapView::resizeEvent( QResizeEvent * event )
 
 void TreemapView::disable()
 {
-    // logDebug() << "Disabling treemap view" << endl;
+    // logDebug() << "Disabling treemap view" << Qt::endl;
 
     clear();
     resize( width(), 1 );
@@ -476,7 +476,7 @@ void TreemapView::enable()
 {
     if ( ! isVisible() )
     {
-	// logDebug() << "Enabling treemap view" << endl;
+	// logDebug() << "Enabling treemap view" << Qt::endl;
 	show();
 	QWidget * parentWidget = qobject_cast<QWidget *>( parent() );
 
@@ -490,7 +490,7 @@ void TreemapView::enable()
 
 void TreemapView::setCurrentItem( TreemapTile * tile )
 {
-    // logDebug() << tile << endl;
+    // logDebug() << tile << Qt::endl;
 
     TreemapTile * oldCurrent = _currentItem;
     _currentItem = tile;
@@ -514,7 +514,7 @@ void TreemapView::setCurrentItem( TreemapTile * tile )
 
     if ( oldCurrent != _currentItem && _selectionModelProxy )
     {
-	// logDebug() << "Sending currentItemChanged " << _currentItem << endl;
+	// logDebug() << "Sending currentItemChanged " << _currentItem << Qt::endl;
 
 	SignalBlocker sigBlocker( _selectionModelProxy ); // Prevent signal ping-pong
 	emit currentItemChanged( _currentItem ? _currentItem->orig() : 0 );
@@ -524,7 +524,7 @@ void TreemapView::setCurrentItem( TreemapTile * tile )
 
 void TreemapView::setCurrentItem( FileInfo * node )
 {
-    // logDebug() << node << endl;
+    // logDebug() << node << Qt::endl;
 
     if ( node && _rootTile )
     {
@@ -542,7 +542,7 @@ void TreemapView::setCurrentItem( FileInfo * node )
 
 	if ( treemapRoot != _rootTile->orig() )	  // need to zoom out?
 	{
-	    logDebug() << "Zooming out to " << treemapRoot << " to make current item visible" << endl;
+	    logDebug() << "Zooming out to " << treemapRoot << " to make current item visible" << Qt::endl;
 	    rebuildTreemap( treemapRoot );
 	}
     }
@@ -556,13 +556,13 @@ void TreemapView::updateSelection( const FileInfoSet & newSelection )
     if ( ! scene() )
 	return;
 
-    // logDebug() << newSelection.size() << " items selected" << endl;
+    // logDebug() << newSelection.size() << " items selected" << Qt::endl;
     SignalBlocker sigBlocker( this );
     scene()->clearSelection();
 
     foreach ( const FileInfo * item, newSelection )
     {
-	// logDebug() << "	 Selected: " << item << endl;
+	// logDebug() << "	 Selected: " << item << Qt::endl;
 	TreemapTile * tile = findTile( item );
 
 	if ( tile )
@@ -638,7 +638,7 @@ TreemapTile * TreemapView::findTile( const FileInfo * fileInfo )
 QSize TreemapView::visibleSize()
 {
     QSize size = viewport()->size();
-    // logDebug() << "Visible size: " << size.width() << " x " << size.height() << endl;
+    // logDebug() << "Visible size: " << size.width() << " x " << size.height() << Qt::endl;
 
     return size;
 }
@@ -860,7 +860,7 @@ SceneMask::SceneMask( TreemapTile * tile, float opacity ):
     QGraphicsPathItem(),
     _tile( tile )
 {
-    // logDebug() << "Adding scene mask for " << tile->orig() << endl;
+    // logDebug() << "Adding scene mask for " << tile->orig() << Qt::endl;
     CHECK_PTR( tile );
 
     QPainterPath path;

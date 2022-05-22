@@ -103,7 +103,7 @@ void Settings::fixFileOwner( const QString & filename )
 
         if ( homeDir.isEmpty() )
         {
-            logWarning() << "Can't get home directory for UID " << uid << endl;
+            logWarning() << "Can't get home directory for UID " << uid << Qt::endl;
             return;
         }
 
@@ -117,7 +117,7 @@ void Settings::fixFileOwner( const QString & filename )
                            << " to UID "  << uid
                            << " and GID " << gid
                            << ": " << strerror( errno )
-                           << endl;
+                           << Qt::endl;
             }
             else
             {
@@ -125,18 +125,18 @@ void Settings::fixFileOwner( const QString & filename )
                 logDebug() << "Success: chown " << filename
                            << " to UID "  << uid
                            << " and GID " << gid
-                           << endl;
+                           << Qt::endl;
 #endif
             }
         }
         else
         {
-            // logInfo() << "Not touching " << filename << endl;
+            // logInfo() << "Not touching " << filename << Qt::endl;
         }
     }
     else
     {
-        logWarning() << "$SUDO_UID / $SUDO_GID not set" << endl;
+        logWarning() << "$SUDO_UID / $SUDO_GID not set" << Qt::endl;
     }
 }
 
@@ -200,13 +200,13 @@ void Settings::moveGroups( const QString & groupPrefix,
     if ( ! hasGroup( groupPrefix ) )
     {
 #if 0
-	logInfo() << "Migrating " << groupPrefix << "* to " << to->name() << endl;
+	logInfo() << "Migrating " << groupPrefix << "* to " << to->name() << Qt::endl;
 #endif
 	QStringList groups = from->findGroups( groupPrefix );
 
 	foreach ( const QString & group, groups )
 	{
-	    // logVerbose() << "  Migrating " << group << endl;
+	    // logVerbose() << "  Migrating " << group << Qt::endl;
 
 	    from->beginGroup( group );
 	    to->beginGroup( group );
@@ -215,7 +215,7 @@ void Settings::moveGroups( const QString & groupPrefix,
 
 	    foreach( const QString & key, keys )
 	    {
-		// logVerbose() << "	Copying " << key << endl;
+		// logVerbose() << "	Copying " << key << Qt::endl;
 		to->setValue( key, from->value( key ) );
 	    }
 
@@ -229,7 +229,7 @@ void Settings::moveGroups( const QString & groupPrefix,
 	logVerbose() << "Target settings " << to->name()
 		     << " have group " << groupPrefix
 		     << " - nothing to migrate"
-		     << endl;
+		     << Qt::endl;
 #endif
     }
 

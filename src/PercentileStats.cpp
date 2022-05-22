@@ -43,13 +43,13 @@ void PercentileStats::clear()
 void PercentileStats::sort()
 {
     if ( _data.size() > VERBOSE_SORT_THRESHOLD )
-        logDebug() << "Sorting " << _data.size() << " elements" << endl;
+        logDebug() << "Sorting " << _data.size() << " elements" << Qt::endl;
 
     std::sort( _data.begin(), _data.end() );
     _sorted = true;
 
     if ( _data.size() > VERBOSE_SORT_THRESHOLD )
-        logDebug() << "Sorting done." << endl;
+        logDebug() << "Sorting done." << Qt::endl;
 }
 
 
@@ -206,7 +206,7 @@ QRealList PercentileStats::percentileSums()
 
 #if 0
     for ( int i=0; i < sums.size(); ++i )
-        logDebug() << "sum[ " << i << " ] : " << formatSize( sums[i] ) << endl;
+        logDebug() << "sum[ " << i << " ] : " << formatSize( sums[i] ) << Qt::endl;
 #endif
 
     return sums;
