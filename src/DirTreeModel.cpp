@@ -434,7 +434,7 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 	case Qt::ForegroundRole: // Text color
 	    {
 		if ( item->isIgnored() || item->isAttic() )
-		    return qAppPalette().brush( QPalette::Disabled, QPalette::Foreground );
+		    return qAppPalette().brush( QPalette::Disabled, QPalette::WindowText );
 
 		if ( item->isDir() )
 		{
