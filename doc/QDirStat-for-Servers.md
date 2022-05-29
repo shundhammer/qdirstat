@@ -11,6 +11,7 @@ machine where you can view the data with the normal QDirStat application.
 ## Server-Side System Requirements
 
 - Perl
+  - URI::Escape, install via `cpan URI::Escape`
 - Some command to copy files to your desktop machine:
   scp, ftp or whatever
 
