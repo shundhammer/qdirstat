@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2022-05-19
+Updated: 2022-05-30
 
 
 ## Screenshot
@@ -125,6 +125,16 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2022-05-30
+
+  - Improved BSD support ([GitHub issue #195](https://github.com/shundhammer/qdirstat/issues/195)):
+    If neither `/proc/mounts` nor `/etc/mtab` is available, fall back to using
+    `QStorageInfo` (if available; Qt 5.4 or later).
+
+    This returns a little less complete information; for example, only
+    rudimentary mount options which are used for some special cases.
+
+
 - 2022-05-19
 
   - Now using `xdg-open %d` in KDE Plasma for the "Open File Manager Here"
@@ -132,7 +142,7 @@ Download installable binary packages for various Linux distributions here:
     [GitHub issue #192](https://github.com/shundhammer/qdirstat/issues/192),
     yet still maintain the ability to use a powerful file manager like
     _Konqueror_ (if that is configured), falling back to the standard _Dolphin_.
-    
+
 
 - 2022-03-08
 
