@@ -17,6 +17,7 @@
 #include "Exception.h"
 
 #define LSBLK_TIMEOUT_SEC       10
+#define USE_PROC_MOUNTS         1
 
 using namespace QDirStat;
 
@@ -312,12 +313,23 @@ void MountPoints::ensurePopulated()
     if ( _isPopulated )
 	return;
 
+#if USE_PROC_MOUNTS
+
     read( "/proc/mounts" ) || read( "/etc/mtab" );
 
     if ( ! _isPopulated )
 	logError() << "Could not read either /proc/mounts or /etc/mtab" << endl;
 
-    _isPopulated = true;
+#endif
+
+#if HAVE_Q_STORAGE_INFO
+
+    if ( ! _isPopulated )
+        readStorageInfo();
+
+#endif
+
+    _isPopulated = true; // don't try more than once
     // dumpNormalMountPoints();
 }
 
@@ -332,7 +344,7 @@ bool MountPoints::read( const QString & filename )
 	return false;
     }
 
-    QStringList ntfsDevices = findNtfsDevices();
+    findNtfsDevices();
     QTextStream in( &file );
     int lineNo = 0;
     int count  = 0;
@@ -366,27 +378,14 @@ bool MountPoints::read( const QString & filename )
 
         path.replace( "\\040", " " );
 
-        if ( fsType == "fuseblk" && ntfsDevices.contains( device ) )
+        if ( fsType == "fuseblk" && _ntfsDevices.contains( device ) )
             fsType = "ntfs";
 
 	MountPoint * mountPoint = new MountPoint( device, path, fsType, mountOpts );
 	CHECK_NEW( mountPoint );
 
-	if ( ( ! mountPoint->isSystemMount() ) && isDeviceMounted( device ) )
-	{
-	    mountPoint->setDuplicate();
-	    logInfo() << "Found duplicate mount of " << device << " at " << path << endl;
-	}
-
-        if ( mountPoint->isSnapPackage() )
-        {
-            QString pkgName = path.section( "/", 1, 1, QString::SectionSkipEmpty );
-            logInfo() << "Found snap package \"" << pkgName << "\" at " << path << endl;
-        }
-
-	_mountPointList << mountPoint;
-	_mountPointMap[ path ] = mountPoint;
-	++count;
+        postProcess( mountPoint );
+        add( mountPoint );
 
 	line = in.readLine();
     }
@@ -405,6 +404,80 @@ bool MountPoints::read( const QString & filename )
 }
 
 
+void MountPoints::postProcess( MountPoint * mountPoint )
+{
+    CHECK_PTR( mountPoint );
+
+    if ( ( ! mountPoint->isSystemMount() ) && isDeviceMounted( mountPoint->device() ) )
+    {
+        mountPoint->setDuplicate();
+
+        logInfo() << "Found duplicate mount of " << mountPoint->device()
+                  << " at " << mountPoint->path()
+                  << endl;
+    }
+
+    if ( mountPoint->isSnapPackage() )
+    {
+        QString pkgName = mountPoint->path().section( "/", 1, 1, QString::SectionSkipEmpty );
+        logInfo() << "Found snap package \"" << pkgName << "\" at " << mountPoint->path() << endl;
+    }
+}
+
+
+void MountPoints::add( MountPoint * mountPoint )
+{
+    CHECK_PTR( mountPoint );
+
+    _mountPointList << mountPoint;
+    _mountPointMap[ mountPoint->path() ] = mountPoint;
+}
+
+
+#if HAVE_Q_STORAGE_INFO
+
+bool MountPoints::readStorageInfo()
+{
+    findNtfsDevices();
+
+    foreach ( QStorageInfo mount, QStorageInfo::mountedVolumes() )
+    {
+        QString device( QString::fromUtf8( mount.device() ) );
+        QString fsType( QString::fromUtf8( mount.fileSystemType() ) );
+        QString mountOptions;
+
+        if ( mount.isReadOnly() )
+            mountOptions += "ro";
+
+        if ( fsType == "fuseblk" && _ntfsDevices.contains( device ) )
+            fsType = "ntfs";
+
+        MountPoint * mountPoint = new MountPoint( device,
+                                                  mount.rootPath(),
+                                                  fsType,
+                                                  mountOptions );
+	CHECK_NEW( mountPoint );
+
+        postProcess( mountPoint );
+        add( mountPoint );
+    }
+
+    if ( _mountPointList.isEmpty() )
+    {
+	logWarning() << "Not a single mount point found with QStorageInfo" << endl;
+	return false;
+    }
+    else
+    {
+        // logDebug() << "Read " << _mountPointList.size() << " mount points from QStorageInfo" << endl;
+	_isPopulated = true;
+	return true;
+    }
+}
+
+#endif // HAVE_Q_STORAGE_INFO
+
+
 bool MountPoints::checkForBtrfs()
 {
     ensurePopulated();
@@ -419,8 +492,9 @@ bool MountPoints::checkForBtrfs()
 }
 
 
-QStringList MountPoints::findNtfsDevices()
+void MountPoints::findNtfsDevices()
 {
+    _ntfsDevices.clear();
     QString lsblkCommand = "/bin/lsblk";
 
     if ( ! SysUtil::haveCommand( lsblkCommand ) )
@@ -429,10 +503,9 @@ QStringList MountPoints::findNtfsDevices()
     {
         logInfo() << "No lsblk command available" << endl;
 
-        return QStringList();
+        return;
     }
 
-    QStringList ntfsDevices;
     int exitCode;
     QString output = SysUtil::runCommand( lsblkCommand,
                                           QStringList()
@@ -454,14 +527,12 @@ QStringList MountPoints::findNtfsDevices()
         {
             QString device = "/dev/" + line.split( QRegExp( "\\s+" ) ).first();
             logDebug() << "NTFS on " << device << endl;
-            ntfsDevices << device;
+            _ntfsDevices << device;
         }
     }
 
-    if ( ntfsDevices.isEmpty() )
+    if ( _ntfsDevices.isEmpty() )
         logDebug() << "No NTFS devices found" << endl;
-
-    return ntfsDevices;
 }
 
 

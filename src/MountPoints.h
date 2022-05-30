@@ -308,6 +308,26 @@ namespace QDirStat
 	 **/
 	bool read( const QString & filename );
 
+#if HAVE_Q_STORAGE_INFO
+
+        /**
+         * Fallback method if neither /proc/mounts nor /etc/mtab is available:
+         * Try using QStorageInfo. Return 'true' if any mount point was found.
+         **/
+        bool readStorageInfo();
+#endif
+
+        /**
+         * Post-process a mount point and add it to the internal list and map.
+         **/
+        void postProcess( MountPoint * mountPoint );
+
+        /**
+         * Add a mount point to the internal list and map.
+         **/
+        void add( MountPoint * mountPoint );
+
+
 	/**
 	 * Check if any of the mount points has filesystem type "btrfs".
 	 **/
@@ -315,9 +335,9 @@ namespace QDirStat
 
         /**
          * Try to check with the external "lsblk" command (if available) what
-         * block devices use NTFS and return those device names in a list.
+         * block devices use NTFS and populate _ntfsDevices with them.
          **/
-        QStringList findNtfsDevices();
+        void findNtfsDevices();
 
 	/**
 	 * Return 'true' if 'device' is mounted.
@@ -332,6 +352,7 @@ namespace QDirStat
 
 	QList<MountPoint *>	    _mountPointList;
 	QMap<QString, MountPoint *> _mountPointMap;
+        QStringList                 _ntfsDevices;
 	bool			    _isPopulated;
 	bool			    _hasBtrfs;
 	bool			    _checkedForBtrfs;
