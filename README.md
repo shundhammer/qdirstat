@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2022-05-30
+Updated: 2022-05-31
 
 
 ## Screenshot
@@ -124,6 +124,12 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2022-05-31
+
+  - Bug fix for the "Packages" view for .deb / APT based systems: Now also list
+    packages that are on hold. They were previously missing.
+
 
 - 2022-05-30
 

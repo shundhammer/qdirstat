@@ -124,7 +124,8 @@ PkgInfoList DpkgPkgManager::parsePkgList( const QString & output )
 		QString arch	= fields.takeFirst();
 		QString status	= fields.takeFirst();
 
-		if ( status == "install ok installed" )
+		if ( status == "install ok installed" ||
+                     status == "hold ok installed"       )
 		{
 		    PkgInfo * pkg = new PkgInfo( name, version, arch, this );
 		    CHECK_NEW( pkg );
