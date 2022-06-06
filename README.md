@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2022-05-31
+Updated: 2022-06-06
 
 
 ## Screenshot
@@ -292,7 +292,7 @@ Download installable binary packages for various Linux distributions here:
 
     TL;DR:
     - It's big and fat (113 MB)
-    - It's an outdated version (QDirStat 1.6.1 from 16 months ago)
+    - It's a very outdated version: QDirStat 1.6.1 from February 2020
     - It doesn't even tell you what version it contains
     - It still needs a fairly recent version of GLibc, so you can't run it on Ubuntu 18.04 LTS
     - It's unclear if at least the libraries inside (e.g. the Qt libs) are up to date
