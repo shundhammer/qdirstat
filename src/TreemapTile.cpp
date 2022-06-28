@@ -645,7 +645,7 @@ void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
             setSelected( ! isSelected() );
 
             _parentView->setCurrentItem( this );
-            _parentView->highlightParents( this );
+            _parentView->toggleParentsHighlight( this );
             break;
 
 

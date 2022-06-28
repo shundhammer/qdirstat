@@ -49,6 +49,7 @@ TreemapView::TreemapView( QWidget * parent ):
     _currentItemRect(0),
     _sceneMask(0),
     _newRoot(0),
+    _highlightedTile(0),
     _useFixedColor(false),
     _useDirGradient(true)
 {
@@ -685,8 +686,12 @@ QColor TreemapView::tileColor( FileInfo * file )
 void TreemapView::highlightParents( TreemapTile * tile )
 {
     if ( ! tile )
+    {
+        clearParentsHighlight();
         return;
+    }
 
+    _highlightedTile = tile;
     TreemapTile * parent = tile->parentTile();
     TreemapTile * currentHighlight = highlightedParent();
 
@@ -720,7 +725,17 @@ void TreemapView::clearParentsHighlight()
 {
     qDeleteAll( _parentHighlightList );
     _parentHighlightList.clear();
+    _highlightedTile = 0;
     clearSceneMask();
+}
+
+
+void TreemapView::toggleParentsHighlight( TreemapTile * tile )
+{
+    if ( tile == _highlightedTile )
+        clearParentsHighlight();
+    else
+        highlightParents( tile );
 }
 
 

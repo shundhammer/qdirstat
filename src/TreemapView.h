@@ -93,6 +93,12 @@ namespace QDirStat
 	 **/
 	TreemapTile * rootTile() const { return _rootTile; }
 
+        /**
+         * Returns the currently highlighted treemap tile (that was highlighted
+         * with a middle click) or 0 if there is none.
+         **/
+        TreemapTile * highlightedTile() const { return _highlightedTile; }
+
 	/**
 	 * Returns this treemap view's DirTree.
 	 **/
@@ -248,6 +254,12 @@ namespace QDirStat
          * Clear previous parent highlights.
          **/
         void clearParentsHighlight();
+
+        /**
+         * Highlight the parent tiles of item 'tile' if that tile is not
+         * currently highlighted, or clear the highlight if it is.
+         **/
+        void toggleParentsHighlight( TreemapTile * tile );
 
         /**
          * Clear the old scene mask if there is one.
@@ -484,7 +496,7 @@ namespace QDirStat
     protected slots:
 
 	/**
-	 * Rebuild the treemap if no more pendung rebuilds are scheduled.
+	 * Rebuild the treemap if no more pending rebuilds are scheduled.
 	 **/
 	void rebuildTreemapDelayed();
 
@@ -512,6 +524,7 @@ namespace QDirStat
 	HighlightRect	    * _currentItemRect;
         SceneMask           * _sceneMask;
 	FileInfo	    * _newRoot;
+        TreemapTile         * _highlightedTile;
         HighlightRectList     _parentHighlightList;
 	QString		      _savedRootUrl;
 
