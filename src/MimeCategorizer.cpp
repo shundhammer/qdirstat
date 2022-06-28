@@ -309,6 +309,8 @@ void MimeCategorizer::addDefaultCategories()
 			   << "zip"
 			   );
 
+    archives->addPattern( "pack-*.pack" );      // Git archive
+
 
     MimeCategory * uncompressedArchives = new MimeCategory( tr( "Uncompressed Archives" ), QColor( 128, 128, 0 ) );
     CHECK_NEW( uncompressedArchives );
