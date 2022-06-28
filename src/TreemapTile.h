@@ -339,7 +339,7 @@ namespace QDirStat
 	 * visually distinguish an outline at the right and bottom borders
 	 * and add a grey line there, if necessary.
 	 **/
-	void ensureContrast( QImage & image );
+	void enforceContrast( QImage & image );
 
 	/**
 	 * Returns a color that gives a reasonable contrast to 'col': Lighter

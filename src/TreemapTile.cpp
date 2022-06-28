@@ -499,14 +499,14 @@ QPixmap TreemapTile::renderCushion()
 	}
     }
 
-    if ( _parentView->ensureContrast() )
-	ensureContrast( image );
+    if ( _parentView->enforceContrast() )
+	enforceContrast( image );
 
     return QPixmap::fromImage( image );
 }
 
 
-void TreemapTile::ensureContrast( QImage & image )
+void TreemapTile::enforceContrast( QImage & image )
 {
     if ( image.width() > 5 )
     {

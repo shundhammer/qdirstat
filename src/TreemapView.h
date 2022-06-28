@@ -376,7 +376,7 @@ namespace QDirStat
 	 * Returns 'true' if tile boundary lines should be drawn for cushion
 	 * treemaps, 'false'  if not.
 	 **/
-	bool ensureContrast() const { return _ensureContrast; }
+	bool enforceContrast() const { return _enforceContrast; }
 
 	/**
 	 * Returns the minimum tile size in pixels. No treemap tiles less than
@@ -531,7 +531,7 @@ namespace QDirStat
 	bool   _squarify;
 	bool   _doCushionShading;
 	bool   _forceCushionGrid;
-	bool   _ensureContrast;
+	bool   _enforceContrast;
 	bool   _useFixedColor;
 	int    _minTileSize;
         bool   _useDirGradient;
