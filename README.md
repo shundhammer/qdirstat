@@ -129,12 +129,19 @@ Download installable binary packages for various Linux distributions here:
 - 2022-06-28
 
   - A middle click in the treemap now toggles the highlight of that tile's
-    parent and ancestors. Previously, it always kept the highlight, and you had
-    to click outside the highlighted area to get rid of the highlight again.
+    parent and ancestors on or off. Previously, it always kept the highlight,
+    and you had to click outside the highlighted area to get rid of the
+    highlight again.
 
   - Added packed Git archives ("pack-*.pack") to the "Compressed Archives" MIME
     category, i.e., they appear now in green in the treemap, no longer in the
     "I don't know what that thing is" grey.
+
+  - No longer drawing additional lines in the treemap by default if there is
+    low contrast between individual treemap tiles; that only makes the treemap
+    display uglier for little benefit. You can still switch it on with the
+    `EnforceContrast` setting in the config file
+    (`~/.config/QDirStat/QDirStat.conf`).
 
 
 - 2022-05-31
