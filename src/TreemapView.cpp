@@ -172,7 +172,7 @@ void TreemapView::readSettings()
     _heightScaleFactor	= settings.value( "HeightScaleFactor", DefaultHeightScaleFactor ).toDouble();
     _squarify		= settings.value( "Squarify"	     , true  ).toBool();
     _doCushionShading	= settings.value( "CushionShading"   , true  ).toBool();
-    _ensureContrast	= settings.value( "EnsureContrast"   , true  ).toBool();
+    _ensureContrast	= settings.value( "EnsureContrast"   , false ).toBool();
     _forceCushionGrid	= settings.value( "ForceCushionGrid" , false ).toBool();
     _useDirGradient	= settings.value( "UseDirGradient"   , true  ).toBool();
     _minTileSize	= settings.value( "MinTileSize"	     , DefaultMinTileSize ).toInt();
