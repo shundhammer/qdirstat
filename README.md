@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2022-06-06
+Updated: 2022-06-28
 
 
 ## Screenshot
@@ -124,6 +124,18 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+
+- 2022-06-28
+
+  - A middle click in the treemap now toggles the highlight of that tile's
+    parent and ancestors. Previously, it always kept the highlight, and you had
+    to click outside the highlighted area to get rid of the highlight again.
+
+  - Added packed Git archives ("pack-*.pack") to the "Compressed Archives" MIME
+    category, i.e., they appear now in green in the treemap, no longer in the
+    "I don't know what that thing is" grey.
+
 
 - 2022-05-31
 
