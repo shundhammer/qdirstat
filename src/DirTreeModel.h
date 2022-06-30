@@ -251,7 +251,7 @@ namespace QDirStat
 	Qt::SortOrder sortOrder() const { return _sortOrder; }
 
 	//
-	// Reimplented from QAbstractItemModel:
+	// Reimplemented from QAbstractItemModel:
 	//
 
 	/**

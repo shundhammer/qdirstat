@@ -471,7 +471,7 @@ protected:
      * Show an error popup that a directory could not be opened and wait until
      * the user confirmed it.
      *
-     * The relevant informatoin is all in the exception.
+     * The relevant information is all in the exception.
      **/
     void showOpenDirErrorPopup( const SysCallFailedException & ex );
 

@@ -317,7 +317,7 @@ FileInfo * DirTreeModel::itemFromIndex( const QModelIndex & index )
 
 
 //
-// Reimplented from QAbstractItemModel
+// Reimplemented from QAbstractItemModel
 //
 
 int DirTreeModel::rowCount( const QModelIndex & parentIndex ) const

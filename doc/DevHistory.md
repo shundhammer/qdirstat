@@ -72,7 +72,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     If you started QDirStat with a path on the command line, it collected the
     information about used / free / reserved disk space for all mounted
-    filesytems already. If you had a network mount that didn't respond, you
+    filesystems already. If you had a network mount that didn't respond, you
     still had to wait for a timeout before the program could continue.
 
     Now it collects that information only when it's really needed:
@@ -2726,7 +2726,7 @@ correctly when built with Qt 4.x
 
     As for migration from previous single-file configurations, QDirStat does
     that automatically: It reads the single file and moves the respective parts
-    where they belong. No need to bother with any migration scrips or anything
+    where they belong. No need to bother with any migration scripts or anything
     like that.
 
 
@@ -3104,7 +3104,7 @@ correctly when built with Qt 4.x
     give me problems for that "remove junk files" cleanup: "rm -f *.o *.bak *~"
     -- when any of the wildcards cannot be expanded because there is no such
     file, it complains. Okay, you can wrap the whole command in "/bin/bash -c",
-    but that's yet another indirection, so now you can configuare /bin/bash for
+    but that's yet another indirection, so now you can configure /bin/bash for
     that particular cleanup action. On the other hand, for some things I might
     want my original shell environment, so I do want my login shell by default.
     This is now the default behaviour: Try $SHELL (the user's login shell), and
