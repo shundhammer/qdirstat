@@ -10,6 +10,187 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
 ## QDirStat History
 
+
+- 2022-06-28
+
+  - A middle click in the treemap now toggles the highlight of that tile's
+    parent and ancestors on or off. Previously, it always kept the highlight,
+    and you had to click outside the highlighted area to get rid of the
+    highlight again.
+
+  - Added packed Git archives ("pack-*.pack") to the "Compressed Archives" MIME
+    category, i.e., they appear now in green in the treemap, no longer in the
+    "I don't know what that thing is" grey.
+
+  - No longer drawing additional lines in the treemap by default if there is
+    low contrast between individual treemap tiles; that only makes the treemap
+    display uglier for little benefit. You can still switch it on with the
+    `EnforceContrast` setting in the config file
+    (`~/.config/QDirStat/QDirStat.conf`).
+
+
+- 2022-05-31
+
+  - Bug fix for the "Packages" view for .deb / APT based systems: Now also list
+    packages that are on hold. They were previously missing.
+
+
+- 2022-05-30
+
+  - Improved BSD support ([GitHub issue #195](https://github.com/shundhammer/qdirstat/issues/195)):
+    If neither `/proc/mounts` nor `/etc/mtab` is available, fall back to using
+    `QStorageInfo` (if available; Qt 5.4 or later).
+
+    This returns a little less complete information; for example, only
+    rudimentary mount options which are used for some special cases.
+
+
+- 2022-05-19
+
+  - Now using `xdg-open %d` in KDE Plasma for the "Open File Manager Here"
+    standard cleanup action. This may help for
+    [GitHub issue #192](https://github.com/shundhammer/qdirstat/issues/192),
+    yet still maintain the ability to use a powerful file manager like
+    _Konqueror_ (if that is configured), falling back to the standard _Dolphin_.
+
+
+- 2022-03-08
+
+  - Fixed [GitHub issue #190](https://github.com/shundhammer/qdirstat/issues/190):
+    MIME categories for overlapping suffixes
+
+    Files with multiple suffixes like `.tar.gz` were wrongly sorted into the
+    same MIME category as `.gz`. It did find the category for the longer one
+    (`.tar.gz`), but then it continued looking, resulting in the shortest
+    matching one (`.gz`). Now stopping at the longest hit.
+
+
+- 2022-02-25
+
+  - Prevent a hanging Samba (CIFS) or NFS mount from blocking the program, even
+    when no information from that mount is needed at all:
+
+    If you started QDirStat with a path on the command line, it collected the
+    information about used / free / reserved disk space for all mounted
+    filesytems already. If you had a network mount that didn't respond, you
+    still had to wait for a timeout before the program could continue.
+
+    Now it collects that information only when it's really needed:
+
+    - In the "Open Directory" dialog where it displays those sizes in the
+      "Places and Mounted Filesystems" bar on the left
+
+    - In the "Mounted Filesystems" (`du`-like) window (Menu "View" -> "Show
+      Mounted Filesystems").
+
+
+- 2022-01-04
+
+  - Now cutting off insanely long generated device names of LUKS devices in the
+    "Mounted Filesystems" window: E.g. `/dev/mapper/luks-3fae43...` instead of
+    `/dev/mapper/luks-3fae4328-4294-4c77-8f98-d437c41da26c`. The long name is
+    displayed in a tooltip.
+
+
+- 2021-12-30
+
+  - Don't show inactive (unmounted) mounts managed by the automounter anymore
+    in the "Places and Mounted Filesystems" bar of the "Open Directory"
+    dialog.
+
+    Notice that those directories are still accessible from the tree at the
+    right side, but they no longer take a prominent place in the left bar.
+
+
+- 2021-12-12
+
+  - Fixed [GitHub issue #184](https://github.com/shundhammer/qdirstat/issues/184):
+    When reading a cache file, sparse files were displayed as "allocated: 0 Bytes".
+
+    About QDirStat cache files:
+    - [qdirstat-cache-writer documentation](scripts/README.md)
+    - [QDirStat for Servers](doc/QDirStat-for-Servers.md)
+
+
+- 2021-09-28
+
+  - Merged the changes for
+    [GitHub issue #176](https://github.com/shundhammer/qdirstat/issues/176)
+    to _master_:
+
+    In the treemap, a middle click now also behaves like a left click
+    (including `Ctrl`+click); but it also displays white frames indicating the
+    parent directories of that item, and everything that does not belong to
+    that directory branch is covered by a transparent overlay.
+
+    See [GitHub issue #181](https://github.com/shundhammer/qdirstat/issues/181)
+    for a screenshot and more details.
+
+
+- 2021-08-28 **New stable release: 1.8**
+
+  **Summary:**
+
+  - New view: _File Age Statistics_
+
+  - Navigation history like in a web browser (_Back_, _Forward_)
+
+  - Bug fixes
+
+  - Some small improvements
+
+
+  **Details:**
+
+  - New view: _File Age Statistics_
+
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-age-years.png"    width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-file-age-years.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-age-months.png"   width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-file-age-months.png)
+    [<img src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-age-long-ago.png" width="250">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-file-age-long-ago.png)
+
+    This shows the number of files per year and/or per month that were last
+    modified in that year or month, together with the total size of those files
+    and a percent bar for both (number and total size).
+
+  - New documentation for that view: [File Age Statistics](doc/File-Age-Stats.md)
+
+  - Navigation history for directories like in a web browser:
+
+    - New buttons _Back_ / _Forward_ in the tool bar
+
+    - Standard keyboard shortcuts `[Alt] [Cursor Left]` /
+      `[Alt] [Cursor Right]` like in all common web browsers
+
+    - Support for _Back_ / _Forward_ mouse buttons if the mouse has them
+
+    - History menu on those buttons (long press on the buttons) for the last 16
+      directories
+
+
+  - Internal restructuring and refactoring to keep the code maintainable
+
+  - Bug fixes:
+
+    - Fixed [GitHub issue #169](https://github.com/shundhammer/qdirstat/issues/169):
+      Shorten path components in the breadcrumb widget for insanely long paths.
+
+    - Now closing a left-over _Permissions error_ panel when refreshing from disk.
+      After the re-read, the permissions error may no longer be there.
+
+
+  - Small improvements:
+
+    - In the _Mounted Filesystems_ window, don't show inactive mounts managed
+      by the automounter anymore.
+
+    - In the _Open Directory_ window, automatically open the first directory
+      level if a path was clicked in the _Places_ list on the left, and scroll
+      the tree on the right so that path is at the top.
+
+    - Added a little margin to the left in the main window's tree view for the
+      _Size_ column so it looks now less cramped.
+
+
 - 2021-08-06
 
   - Lots of internal restructuring and refactoring to keep the code
