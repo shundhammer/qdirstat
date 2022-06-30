@@ -46,6 +46,8 @@ void usage( const QStringList & argList )
          << "- Exact match: \"pkg:/=mypkg\"\n"
          << "- All packages: \"pkg:/\"\n"
 	 << "\n"
+         << "See also   man qdirstat"
+	 << "\n"
 	 << std::endl;
 
     logError() << "FATAL: Bad command line args: " << argList.join( " " ) << endl;
