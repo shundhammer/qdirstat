@@ -471,7 +471,7 @@ FileInfo * FileInfo::locate( QString url, bool findPseudoDirs )
                 child = child->next();
             }
 
-            // logDebug() << "Cant find " << url << " in DotEntry" << endl;
+            // logDebug() << "Cannot find " << url << " in DotEntry" << endl;
 	}
 
 	if ( ! result && attic() )

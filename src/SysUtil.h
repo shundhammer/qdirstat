@@ -169,7 +169,7 @@ namespace QDirStat
         /**
          * Read the (first level) target of a symbolic link.
          * Unlike readLink( const QString & ) above, this does not make any
-         * assumptions of name encoding in the filessytem; it just uses bytes.
+         * assumptions of name encoding in the filesystem; it just uses bytes.
          *
          * This is a more user-friendly version of readlink(2).
          *

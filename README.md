@@ -174,7 +174,7 @@ Download installable binary packages for various Linux distributions here:
 
     If you started QDirStat with a path on the command line, it collected the
     information about used / free / reserved disk space for all mounted
-    filesytems already. If you had a network mount that didn't respond, you
+    filesystems already. If you had a network mount that didn't respond, you
     still had to wait for a timeout before the program could continue.
 
     Now it collects that information only when it's really needed:
@@ -877,7 +877,7 @@ Features ported from the old KDirStat:
 
 <details>
 
-- KPacman: That was that PacMan animation wile reading directory reading. This
+- KPacman: That was that PacMan animation while reading directory reading. This
   is gone now. KPacMan looked out of place pretty soon after it got to KDirStat
   due to Qt styles doing fancy rendering of widget backgrounds with gradients
   etc.  I know that it does have its fans, but it's unrealistic to get this
