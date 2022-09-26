@@ -177,8 +177,11 @@ bool DirReadJob::shouldCrossIntoFilesystem( const DirInfo * dir ) const
 	! mountPoint->isDuplicate()    &&	//  bind mount or multiple mounted
 	! mountPoint->isNetworkMount();		//  NFS or CIFS (Samba)
 
-    logDebug() << ( doCross ? "Reading" : "Not reading" )
-	       << " mounted filesystem " << mountPoint->path() << endl;
+    if (mountPoint)
+        logDebug() << ( doCross ? "Reading" : "Not reading" )
+           << " mounted filesystem " << mountPoint->path() << endl;
+    else
+        logError() << "Can't find mountpoint for " << dir->url() << endl;
 
     return doCross;
 }
