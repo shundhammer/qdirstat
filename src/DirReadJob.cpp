@@ -171,8 +171,14 @@ bool DirReadJob::shouldCrossIntoFilesystem( const DirInfo * dir ) const
 {
     MountPoint * mountPoint = MountPoints::findByPath( dir->url() );
 
+    if ( mountPoint )
+    {
+        logError() << "Can't find mount point for " << dir->url() << endl;
+
+        return false;
+    }
+
     bool doCross =
-        mountPoint                     &&
 	! mountPoint->isSystemMount()  &&	//  /dev, /proc, /sys, ...
 	! mountPoint->isDuplicate()    &&	//  bind mount or multiple mounted
 	! mountPoint->isNetworkMount();		//  NFS or CIFS (Samba)
