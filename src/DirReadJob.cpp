@@ -171,7 +171,7 @@ bool DirReadJob::shouldCrossIntoFilesystem( const DirInfo * dir ) const
 {
     MountPoint * mountPoint = MountPoints::findByPath( dir->url() );
 
-    if ( mountPoint )
+    if ( ! mountPoint )
     {
         logError() << "Can't find mount point for " << dir->url() << endl;
 
