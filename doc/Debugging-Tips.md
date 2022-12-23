@@ -40,7 +40,7 @@ https://unix.stackexchange.com/questions/87908/how-do-you-empty-the-buffers-and-
 
 ### Prerequisites
 
-Install valgrind and kcachgrind:
+Install valgrind and kcachegrind:
 
     sudo apt install valgrind kcachegrind
 
