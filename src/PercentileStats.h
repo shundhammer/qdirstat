@@ -161,13 +161,13 @@ namespace QDirStat
          * Return a lists (0..100) of all accumulated sizes between one percentile
          * and the previous one
          **/
-        const QRealList& individual() const { return _ind; }
+        const QRealList & individual() const { return _individual; }
 
         /**
          * Return a lists (0..100) of all accumulated sizes between one percentile
          * and the first.
          **/
-        const QRealList& cumulative() const { return _cum; }
+        const QRealList & cumulative() const { return _cumulative; }
 
     private:
         QRealList _individual;

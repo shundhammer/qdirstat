@@ -206,8 +206,12 @@ PercentileSums PercentileStats::percentileSums()
     }
 
     qreal runningTotal = 0;
-    for( int i=0; i < sums._individual.size(); i++)
-        sums._cumulative += (runningTotal += sums._individual.at(i));
+
+    for ( int i=0; i < sums._individual.size(); i++ )
+    {
+        runningTotal += sums._individual.at(i);
+        sums._cumulative += (runningTotal);
+    }
 
 #if 0
     for ( int i=0; i < sums.size(); ++i )
