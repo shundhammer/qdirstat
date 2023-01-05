@@ -184,13 +184,14 @@ QRealList PercentileStats::percentileList()
 }
 
 
-QRealList PercentileStats::percentileSums()
+PercentileSums PercentileStats::percentileSums()
 {
-    QRealList sums;
-    sums.reserve( 100 );
+    PercentileSums sums;
+    sums._ind.reserve( 100 );
+    sums._cum.reserve( 100 );
 
     for ( int i=0; i <= 100; ++i )
-        sums << 0.0;
+        sums._ind << 0.0;
 
     if ( ! _sorted )
         sort();
@@ -201,12 +202,19 @@ QRealList PercentileStats::percentileSums()
     {
         int percentile = qMax( 1, (int) ceil( i / percentileSize ) );
 
-        sums[ percentile ] += _data.at(i);
+        sums._ind[ percentile ] += _data.at(i);
     }
+
+    qreal runningTotal = 0;
+    for( int i=0; i < sums._ind.size(); i++)
+        sums._cum += (runningTotal += sums._ind.at(i));
 
 #if 0
     for ( int i=0; i < sums.size(); ++i )
-        logDebug() << "sum[ " << i << " ] : " << formatSize( sums[i] ) << endl;
+    {
+        logDebug() << "sum[ " << i << " ] : " << formatSize( sums._ind[i] ) << endl;
+        logDebug() << "cum_sum[ " << i << " ] : " << formatSize( sums._cum[i] ) << endl;
+    }
 #endif
 
     return sums;

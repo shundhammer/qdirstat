@@ -18,6 +18,8 @@ typedef QList<qreal> QRealList;
 
 namespace QDirStat
 {
+    class PercentileSums;
+
     /**
      * Base class for percentile-related statistics calculation.
      *
@@ -33,7 +35,6 @@ namespace QDirStat
     class PercentileStats
     {
     public:
-
 	/**
 	 * Constructor.
 	 **/
@@ -124,16 +125,55 @@ namespace QDirStat
         QRealList percentileList();
 
         /**
-         * Return a list (0..100) of all accumulated sizes between one
-         * percentile and the previous one.
+         * Returns both forms of percentile sums.
          **/
-        QRealList percentileSums();
+        PercentileSums percentileSums();
 
 
     protected:
 
 	QRealList _data;
-	bool	  _sorted;
+	bool	  _sorted;   
+    };
+
+    /**
+     * Container for individual and cumulative percentile sums.
+     **/
+    class PercentileSums
+    {
+    public:
+        /**
+         * Constructor.
+         **/
+        PercentileSums() {}
+
+        /**
+         * Returns the size of the sums.
+         **/
+        int size() const { return _ind.size(); }
+
+        /**
+         * Returns true if the sums are empty; otherwise, returns false.
+         **/
+        bool isEmpty() const { return _ind.isEmpty(); }
+
+        /**
+         * Return a lists (0..100) of all accumulated sizes between one percentile
+         * and the previous one
+         **/
+        const QRealList& individual() const { return _ind; }
+
+        /**
+         * Return a lists (0..100) of all accumulated sizes between one percentile
+         * and the first.
+         **/
+        const QRealList& cumulative() const { return _cum; }
+
+    private:
+        QRealList _ind;
+        QRealList _cum;
+
+        friend PercentileSums PercentileStats::percentileSums();
     };
 
 }	// namespace QDirStat
