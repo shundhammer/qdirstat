@@ -150,12 +150,12 @@ namespace QDirStat
         /**
          * Returns the size of the sums.
          **/
-        int size() const { return _ind.size(); }
+        int size() const { return _individual.size(); }
 
         /**
          * Returns true if the sums are empty; otherwise, returns false.
          **/
-        bool isEmpty() const { return _ind.isEmpty(); }
+        bool isEmpty() const { return _individual.isEmpty(); }
 
         /**
          * Return a lists (0..100) of all accumulated sizes between one percentile
@@ -170,8 +170,8 @@ namespace QDirStat
         const QRealList& cumulative() const { return _cum; }
 
     private:
-        QRealList _ind;
-        QRealList _cum;
+        QRealList _individual;
+        QRealList _cumulative;
 
         friend PercentileSums PercentileStats::percentileSums();
     };
