@@ -32,6 +32,9 @@ Columns from left to right:
 
 - The accumulated sum of all data points (of all files) between the
   previous percentile and this one.
+  
+- The accumulated sum of all data points (of all files) between
+  P0 and this one. 
 
 
 If you wonder how many data points (files) fall into any interval between the
