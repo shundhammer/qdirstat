@@ -40,10 +40,10 @@ namespace QDirStat
 	 **/
 	PercentileStats();
 
-        /**
-         * Destructor.
-         **/
-        virtual ~PercentileStats();
+	/**
+	 * Destructor.
+	 **/
+	virtual ~PercentileStats();
 
 	/**
 	 * Clear the collected data and shrink the list.
@@ -53,18 +53,18 @@ namespace QDirStat
 	/**
 	 * Sort the collected data in ascending order.
 	 * This is necessary after all collect() calls.
-         *
+	 *
 	 * The functions accessing results like min(), max(), median(),
 	 * quantile(), percentile() etc. all implicitly sort the data if they
 	 * are not sorted yet.
 	 **/
 	void sort();
 
-        /**
-         * Return the size of the collected data, i.e. the number of data
-         * points.
-         **/
-        int dataSize() const { return _data.size(); }
+	/**
+	 * Return the size of the collected data, i.e. the number of data
+	 * points.
+	 **/
+	int dataSize() const { return _data.size(); }
 
 	/**
 	 * Return a reference to the collected data.
@@ -80,14 +80,14 @@ namespace QDirStat
 	 **/
 	qreal median();
 
-        /**
-         * Calculate the arithmetic average based on the collected data.
-         *
-         * Notice that this is probably the most expensive way of doing this:
-         * The FileInfo class already collected sums and counts during
-         * directory reading that might also be used.
-         **/
-        qreal average();
+	/**
+	 * Calculate the arithmetic average based on the collected data.
+	 *
+	 * Notice that this is probably the most expensive way of doing this:
+	 * The FileInfo class already collected sums and counts during
+	 * directory reading that might also be used.
+	 **/
+	qreal average();
 
 	/**
 	 * Find the minimum value.
@@ -109,31 +109,31 @@ namespace QDirStat
 	 **/
 	qreal quantile( int order, int number );
 
-        /**
-         * Calculate a percentile.
-         **/
-        qreal percentile( int number ) { return quantile( 100, number ); }
+	/**
+	 * Calculate a percentile.
+	 **/
+	qreal percentile( int number ) { return quantile( 100, number ); }
 
-        /**
-         * Calculate a quartile.
-         **/
-        qreal quartile( int number ) { return quantile( 4, number ); }
+	/**
+	 * Calculate a quartile.
+	 **/
+	qreal quartile( int number ) { return quantile( 4, number ); }
 
-        /**
-         * Return a list of all percentiles from 0 to 100.
-         **/
-        QRealList percentileList();
+	/**
+	 * Return a list of all percentiles from 0 to 100.
+	 **/
+	QRealList percentileList();
 
-        /**
-         * Returns both forms of percentile sums.
-         **/
-        PercentileSums percentileSums();
+	/**
+	 * Returns both forms of percentile sums.
+	 **/
+	PercentileSums percentileSums();
 
 
     protected:
 
 	QRealList _data;
-	bool	  _sorted;   
+	bool	  _sorted;
     };
 
     /**
@@ -142,38 +142,38 @@ namespace QDirStat
     class PercentileSums
     {
     public:
-        /**
-         * Constructor.
-         **/
-        PercentileSums() {}
+	/**
+	 * Constructor.
+	 **/
+	PercentileSums() {}
 
-        /**
-         * Returns the size of the sums.
-         **/
-        int size() const { return _individual.size(); }
+	/**
+	 * Returns the size of the sums.
+	 **/
+	int size() const { return _individual.size(); }
 
-        /**
-         * Returns true if the sums are empty; otherwise, returns false.
-         **/
-        bool isEmpty() const { return _individual.isEmpty(); }
+	/**
+	 * Returns true if the sums are empty; otherwise, returns false.
+	 **/
+	bool isEmpty() const { return _individual.isEmpty(); }
 
-        /**
-         * Return a lists (0..100) of all accumulated sizes between one percentile
-         * and the previous one
-         **/
-        const QRealList & individual() const { return _individual; }
+	/**
+	 * Return a lists (0..100) of all accumulated sizes between one percentile
+	 * and the previous one
+	 **/
+	const QRealList & individual() const { return _individual; }
 
-        /**
-         * Return a lists (0..100) of all accumulated sizes between one percentile
-         * and the first.
-         **/
-        const QRealList & cumulative() const { return _cumulative; }
+	/**
+	 * Return a lists (0..100) of all accumulated sizes between one percentile
+	 * and the first.
+	 **/
+	const QRealList & cumulative() const { return _cumulative; }
 
     private:
-        QRealList _individual;
-        QRealList _cumulative;
+	QRealList _individual;
+	QRealList _cumulative;
 
-        friend PercentileSums PercentileStats::percentileSums();
+	friend PercentileSums PercentileStats::percentileSums();
     };
 
 }	// namespace QDirStat
