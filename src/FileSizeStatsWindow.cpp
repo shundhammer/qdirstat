@@ -137,7 +137,7 @@ void FileSizeStatsWindow::populateSharedInstance( FileInfo *	  subtree,
 						  const QString & suffix  )
 {
     if ( ! subtree )
-        return;
+	return;
 
     sharedInstance()->populate( subtree, suffix );
     sharedInstance()->show();
@@ -204,12 +204,12 @@ QStringList FileSizeStatsWindow::quantile( int order, const QString & name )
 }
 
 
-void FileSizeStatsWindow::fillQuantileTable( QTableWidget *         table,
-					     int	            order,
-					     const QString &        namePrefix,
+void FileSizeStatsWindow::fillQuantileTable( QTableWidget *	    table,
+					     int		    order,
+					     const QString &	    namePrefix,
 					     const PercentileSums & sums,
-					     int	            step,
-					     int	            extremesMargin )
+					     int		    step,
+					     int		    extremesMargin )
 {
     enum TableColumns
     {
@@ -238,8 +238,8 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *         table,
 
     if ( ! sums.isEmpty() )
     {
-        header << tr( "Sum %1(n-1)..%2(n)" ).arg( namePrefix ).arg( namePrefix );
-        header << tr( "Cumulative Sum" );
+	header << tr( "Sum %1(n-1)..%2(n)" ).arg( namePrefix ).arg( namePrefix );
+	header << tr( "Cumulative Sum" );
     }
 
     for ( int col = 0; col < header.size(); ++col )
@@ -274,8 +274,8 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *         table,
 
     if ( i > 0 && i < sums.size() )
     {
-        addItem( table, row, SumCol, formatSize( sums.individual().at( i ) ) );
-        addItem( table, row, CumulativeSumCol, formatSize( sums.cumulative().at( i ) ) );
+	addItem( table, row, SumCol, formatSize( sums.individual().at( i ) ) );
+	addItem( table, row, CumulativeSumCol, formatSize( sums.cumulative().at( i ) ) );
     }
 
 	if ( i == 0 || i == median || i == order || i == quartile_1 || i == quartile_3 )
@@ -307,7 +307,7 @@ void FileSizeStatsWindow::fillQuantileTable( QTableWidget *         table,
     setColAlignment( table, ValueCol,  Qt::AlignRight  | Qt::AlignVCenter );
     setColAlignment( table, NameCol,   Qt::AlignCenter | Qt::AlignVCenter );
     setColAlignment( table, SumCol,    Qt::AlignRight  | Qt::AlignVCenter );
-    setColAlignment( table, CumulativeSumCol,    Qt::AlignRight  | Qt::AlignVCenter );
+    setColAlignment( table, CumulativeSumCol,	 Qt::AlignRight	 | Qt::AlignVCenter );
 
     HeaderTweaker::resizeToContents( table->horizontalHeader() );
 }

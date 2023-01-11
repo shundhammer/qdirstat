@@ -53,9 +53,9 @@ namespace QDirStat
 	 **/
 	virtual ~FileSizeStatsWindow();
 
-        /**
-         * Populate with new content.
-         **/
+	/**
+	 * Populate with new content.
+	 **/
 	void populate( FileInfo * subtree, const QString & suffix = "" );
 
 	/**
@@ -63,29 +63,29 @@ namespace QDirStat
 	 **/
 	FileInfo * subtree() const { return _subtree; }
 
-        /**
-         * Return the filename suffix to filter the collected information.
-         **/
-        QString suffix() const { return _suffix; }
+	/**
+	 * Return the filename suffix to filter the collected information.
+	 **/
+	QString suffix() const { return _suffix; }
 
-        /**
-         * Static method for using one shared instance of this class between
-         * multiple parts of the application. This will create a new instance
-         * if there is none yet (or anymore).
-         *
-         * Do not hold on to this pointer; the instance destroys itself when
-         * the user closes the window, and then the pointer becomes invalid.
-         *
-         * After getting this shared instance, call populate() and show().
-         **/
-        static FileSizeStatsWindow * sharedInstance();
+	/**
+	 * Static method for using one shared instance of this class between
+	 * multiple parts of the application. This will create a new instance
+	 * if there is none yet (or anymore).
+	 *
+	 * Do not hold on to this pointer; the instance destroys itself when
+	 * the user closes the window, and then the pointer becomes invalid.
+	 *
+	 * After getting this shared instance, call populate() and show().
+	 **/
+	static FileSizeStatsWindow * sharedInstance();
 
-        /**
-         * Convenience function for creating, populating and showing the shared
-         * instance.
-         **/
-        static void populateSharedInstance( FileInfo *      subtree,
-                                            const QString & suffix = "" );
+	/**
+	 * Convenience function for creating, populating and showing the shared
+	 * instance.
+	 **/
+	static void populateSharedInstance( FileInfo *	    subtree,
+					    const QString & suffix = "" );
 
 
     public slots:
@@ -101,33 +101,33 @@ namespace QDirStat
 
     protected slots:
 
-        /**
-         * Fill the percentiles table depending on the content of the filter
-         * combo box in the same tab.
-         **/
-        void fillPercentileTable();
+	/**
+	 * Fill the percentiles table depending on the content of the filter
+	 * combo box in the same tab.
+	 **/
+	void fillPercentileTable();
 
-        /**
-         * Make the histogram options visible or invisible.
-         **/
-        void toggleOptions();
+	/**
+	 * Make the histogram options visible or invisible.
+	 **/
+	void toggleOptions();
 
-        /**
-         * Check the options widgets for any new values, apply them and rebuild
-         * the histogram.
-         **/
-        void applyOptions();
+	/**
+	 * Check the options widgets for any new values, apply them and rebuild
+	 * the histogram.
+	 **/
+	void applyOptions();
 
-        /**
-         * Calculate automatic values for the start and end percentiles, apply
-         * them and rebuild the histogram.
-         **/
-        void autoPercentiles();
+	/**
+	 * Calculate automatic values for the start and end percentiles, apply
+	 * them and rebuild the histogram.
+	 **/
+	void autoPercentiles();
 
-        /**
-         * Show help for a topic determined by the sender of this signal.
-         **/
-        void showHelp();
+	/**
+	 * Show help for a topic determined by the sender of this signal.
+	 **/
+	void showHelp();
 
 
     protected:
@@ -147,75 +147,75 @@ namespace QDirStat
 	 **/
 	void initWidgets();
 
-        /**
-         * Update the values for the option widgets from the current ones from
-         * the histogram.
-         **/
-        void updateOptions();
+	/**
+	 * Update the values for the option widgets from the current ones from
+	 * the histogram.
+	 **/
+	void updateOptions();
 
-        /**
-         * Return text for all quantiles of 'order' named 'name'.
-         **/
-        QStringList quantile( int order, const QString & name );
+	/**
+	 * Return text for all quantiles of 'order' named 'name'.
+	 **/
+	QStringList quantile( int order, const QString & name );
 
-        /**
-         * Fill a quantile table for 'order' quantiles with content.
-         *
-         * 'sums' (if non-empty) is a list of accumulated sums between one
-         * quantile and its previous one.
-         *
-         * 'step' is the step width; 'extremesMargin' specifies how far from
-         * the extremes (min, max) the step width should be 1 instead.
-         **/
-        void fillQuantileTable( QTableWidget *         table,
-                                int                    order,
-                                const QString &        namePrefix = "",
-                                const PercentileSums & sums = PercentileSums(),
-                                int                    step = 1,
-                                int                    extremesMargin = 1 );
+	/**
+	 * Fill a quantile table for 'order' quantiles with content.
+	 *
+	 * 'sums' (if non-empty) is a list of accumulated sums between one
+	 * quantile and its previous one.
+	 *
+	 * 'step' is the step width; 'extremesMargin' specifies how far from
+	 * the extremes (min, max) the step width should be 1 instead.
+	 **/
+	void fillQuantileTable( QTableWidget *	       table,
+				int		       order,
+				const QString &	       namePrefix = "",
+				const PercentileSums & sums = PercentileSums(),
+				int		       step = 1,
+				int		       extremesMargin = 1 );
 
-        /**
-         * Add an item to a table.
-         **/
-        QTableWidgetItem * addItem( QTableWidget *  table,
-                                    int             row,
-                                    int             col,
-                                    const QString & text );
+	/**
+	 * Add an item to a table.
+	 **/
+	QTableWidgetItem * addItem( QTableWidget *  table,
+				    int		    row,
+				    int		    col,
+				    const QString & text );
 
-        /**
-         * Set the font to bold for all items in a table row.
-         **/
-        void setRowBold( QTableWidget * table, int row );
+	/**
+	 * Set the font to bold for all items in a table row.
+	 **/
+	void setRowBold( QTableWidget * table, int row );
 
-        /**
-         * Set the foreground (the text color) for all items in a table row.
-         **/
-        void setRowForeground( QTableWidget * table, int row, const QBrush & brush );
+	/**
+	 * Set the foreground (the text color) for all items in a table row.
+	 **/
+	void setRowForeground( QTableWidget * table, int row, const QBrush & brush );
 
-        /**
-         * Set the background for all items in a table row.
-         **/
-        void setRowBackground( QTableWidget * table, int row, const QBrush & brush );
+	/**
+	 * Set the background for all items in a table row.
+	 **/
+	void setRowBackground( QTableWidget * table, int row, const QBrush & brush );
 
-        /**
-         * Set the text alignment for all items in a table column.
-         **/
-        void setColAlignment( QTableWidget * table, int col, int alignment );
+	/**
+	 * Set the text alignment for all items in a table column.
+	 **/
+	void setColAlignment( QTableWidget * table, int col, int alignment );
 
-        /**
-         * Fill the histogram with content.
-         **/
-        void fillHistogram();
+	/**
+	 * Fill the histogram with content.
+	 **/
+	void fillHistogram();
 
-        /**
-         * Fill the buckets table with content.
-         **/
-        void fillBucketsTable();
+	/**
+	 * Fill the buckets table with content.
+	 **/
+	void fillBucketsTable();
 
-        /**
-         * Provide data for the histogram.
-         **/
-        void fillBuckets();
+	/**
+	 * Provide data for the histogram.
+	 **/
+	void fillBuckets();
 
 
 	//
@@ -223,12 +223,12 @@ namespace QDirStat
 	//
 
 	Ui::FileSizeStatsWindow *   _ui;
-        FileInfo *                  _subtree;
-        QString                     _suffix;
+	FileInfo *		    _subtree;
+	QString			    _suffix;
 	FileSizeStats *		    _stats;
-        BucketsTableModel *         _bucketsTableModel;
+	BucketsTableModel *	    _bucketsTableModel;
 
-        static QPointer<FileSizeStatsWindow> _sharedInstance;
+	static QPointer<FileSizeStatsWindow> _sharedInstance;
     };
 
 } // namespace QDirStat
