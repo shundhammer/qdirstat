@@ -453,6 +453,41 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 		return result;
 	    }
 
+        case Qt::FontRole:
+            {
+                switch ( _sortCol )
+                {
+                    // Only if sorting by size or percent
+                    case PercentBarCol:
+                    case PercentNumCol:
+                    case SizeCol:
+                        break;
+
+                    default:
+                        return QVariant();
+                }
+
+                if ( item->isDominant() )
+                {
+                    switch ( col )
+                    {
+                        case NameCol:
+                        case PercentNumCol:
+                        case SizeCol:
+
+                            // Notice that the SizeColDelegate will override this
+                            // for tiny files or symlinks
+                            return _boldFont;
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                return QVariant();
+            }
+
 	case Qt::TextAlignmentRole:
 	    {
 		int alignment = Qt::AlignVCenter;
