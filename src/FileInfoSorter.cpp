@@ -33,9 +33,19 @@ bool FileInfoSorter::operator() ( FileInfo * a, FileInfo * b )
 		return a->name() < b->name();
 	    }
 
-	case PercentBarCol:	  return a->subtreePercent()  < b->subtreePercent();
-	case PercentNumCol:	  return a->subtreePercent()  < b->subtreePercent();
-	case SizeCol:		  return a->totalSize()	      < b->totalSize();
+	case PercentBarCol:
+	case PercentNumCol:
+	case SizeCol:
+            {
+                if ( a->totalAllocatedSize() == b->totalAllocatedSize() )
+                {
+                    // This is a common case because of cluster-wise allcation
+                    return a->totalSize() < b->totalSize();
+                }
+                else
+                    return a->totalAllocatedSize() < b->totalAllocatedSize();
+            }
+
 	case TotalItemsCol:	  return a->totalItems()      < b->totalItems();
 	case TotalFilesCol:	  return a->totalFiles()      < b->totalFiles();
 	case TotalSubDirsCol:	  return a->totalSubDirs()    < b->totalSubDirs();

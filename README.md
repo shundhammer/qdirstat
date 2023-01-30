@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2022-06-30
+Updated: 2023-01-30
 
 
 ## Screenshot
@@ -124,6 +124,10 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2023-01-30
+
+  - Fixed sorting when directories have the same total allocated size, but a different byte size.
 
 
 - 2022-06-30 **New stable release: 1.8.1**
