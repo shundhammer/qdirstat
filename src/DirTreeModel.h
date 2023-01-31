@@ -12,6 +12,7 @@
 
 #include <QAbstractItemModel>
 #include <QColor>
+#include <QFont>
 #include <QIcon>
 #include <QSet>
 #include <QTimer>
@@ -130,6 +131,16 @@ namespace QDirStat
 	 * Return 'true' if the application uses a light widget theme.
 	 **/
 	static bool usingLightTheme() { return ! usingDarkTheme(); }
+
+        /**
+         * Return the font used for bold items.
+         **/
+        QFont boldItemFont() const { return _boldItemFont; }
+
+        /**
+         * Set the font used for bold items.
+         **/
+        void setBoldItemFont( const QFont & font ) { _boldItemFont = font; }
 
 
     public slots:
@@ -497,10 +508,12 @@ namespace QDirStat
 	Qt::SortOrder	 _sortOrder;
 	bool		 _removingRows;
 
-	// Colors
+	// Colors and fonts
 
 	QColor _dirReadErrColor;
 	QColor _subtreeReadErrColor;
+
+        QFont  _boldItemFont;
 
 
 	// The various icons

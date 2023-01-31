@@ -515,6 +515,14 @@ namespace QDirStat
 	 **/
 	bool filesystemCanReportBlocks() const;
 
+        /**
+         * Return 'true' if this is a dominant item among its siblings, i.e. if
+         * its total size is much larger than the other items on the same level.
+         *
+         * This forwards the query to the parent, if there is one.
+         **/
+        bool isDominant();
+
 
 	//
 	// Tree management
@@ -534,7 +542,7 @@ namespace QDirStat
 	/**
 	 * Set the "parent" pointer.
 	 **/
-	void setParent( DirInfo *newParent ) { _parent = newParent; }
+	void setParent( DirInfo * newParent ) { _parent = newParent; }
 
 	/**
 	 * Returns a pointer to the next entry on the same level

@@ -92,6 +92,19 @@ MainWindow::MainWindow():
     _ui->treemapView->setDirTree( app()->dirTree() );
     _ui->treemapView->setSelectionModel( app()->selectionModel() );
 
+    // Set the boldItemFont for the DirTreeModel.
+    //
+    // It can't fetch that by itself from the DirTreeView;
+    // we'd get an initialization sequence problem.
+    // So this has to be done from the outside when both are created.
+
+    QFont boldItemFont = _ui->dirTreeView->font();
+    boldItemFont.setWeight( QFont::Bold );
+    app()->dirTreeModel()->setBoldItemFont( boldItemFont );
+
+
+    // Initialize cleanups
+
     app()->cleanupCollection()->addToMenu   ( _ui->menuCleanup,
                                               true ); // keepUpdated
     app()->cleanupCollection()->addToToolBar( _ui->toolBar,

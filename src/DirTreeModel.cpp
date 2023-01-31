@@ -24,6 +24,7 @@
 #include "Exception.h"
 #include "DebugHelpers.h"
 
+
 // Number of clusters up to which a file will be considered small and will also
 // display the allocated size like (4k).
 #define SMALL_FILE_CLUSTERS     2
@@ -467,6 +468,9 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
                         return QVariant();
                 }
 
+                if ( _sortOrder != Qt::DescendingOrder )
+                    return QVariant();
+
                 if ( item->isDominant() )
                 {
                     switch ( col )
@@ -477,7 +481,7 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 
                             // Notice that the SizeColDelegate will override this
                             // for tiny files or symlinks
-                            return _boldFont;
+                            return _boldItemFont;
                             break;
 
                         default:

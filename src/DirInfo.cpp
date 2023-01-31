@@ -1130,3 +1130,39 @@ void DirInfo::takeAllChildren( DirInfo * oldParent )
 	lastChild->setNext( oldFirstChild );
     }
 }
+
+
+bool DirInfo::isDominantChild( FileInfo * child )
+{
+    switch ( _lastSortCol )
+    {
+        // Only if sorting by size or percent
+        case PercentBarCol:
+        case PercentNumCol:
+        case SizeCol:
+            break;
+
+        default:
+            return false;
+    }
+
+    if ( _lastSortOrder != Qt::DescendingOrder )
+        return false;
+
+    if ( ! _sortedChildren )
+        return false;
+
+    if ( _sortedChildren->size() < 2 )
+        return false;
+
+    // DEBUG
+    // DEBUG
+    // DEBUG
+
+    int index = _sortedChildren->indexOf( child );
+    return index >= 0 && index < 3;
+
+    // DEBUG
+    // DEBUG
+    // DEBUG
+}

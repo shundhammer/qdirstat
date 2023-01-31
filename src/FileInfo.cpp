@@ -720,6 +720,13 @@ void  FileInfo::processMtime()
 }
 
 
+bool FileInfo::isDominant()
+{
+    return _parent ? _parent->isDominantChild( this ) : false;
+}
+
+
+
 
 //---------------------------------------------------------------------------
 

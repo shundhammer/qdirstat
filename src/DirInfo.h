@@ -548,6 +548,15 @@ namespace QDirStat
 	 **/
 	void recalc();
 
+        /**
+         * Return 'true' if this child is a dominant one among its siblings,
+         * i.e. if its total size is much larger than the other items on the
+         * same level.
+         *
+         * This may trigger some calculations that may be cached.
+         **/
+        bool isDominantChild( FileInfo * child );
+
 
     protected:
 
