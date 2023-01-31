@@ -21,13 +21,13 @@
 #include "DebugHelpers.h"
 
 // How many times the standard deviation from the average is considered dominant
-#define DOMINANCE_FACTOR                        1.5
+#define DOMINANCE_FACTOR                        5.0
 
 // Multiplier for the dominance factor after each iteration
 #define DOMINANCE_MULTIPLIER                    1.0
 
 // Maximum number of iterations to check for dominance
-#define DOMINANCE_ITERATIONS                    2
+#define DOMINANCE_ITERATIONS                    1
 
 #define VERBOSE_DOMINANCE_CHECK                 1
 #define DIRECT_CHILDREN_COUNT_SANITY_CHECK      0
@@ -1190,30 +1190,22 @@ void DirInfo::findDominantChildren()
 
     qreal dominanceFactor = DOMINANCE_FACTOR;
     int   iteration       = 0;
-    qreal count           = _sortedChildren->size();
+    qreal count           = qMin( _sortedChildren->size(), 30 );
     int   first           = 0;
     int   last            = count - 1;
 
     while ( count >= 2 && ++iteration <= DOMINANCE_ITERATIONS )
     {
         int   medianIndex        = count / 2 + first;
-        int   q3Index            = count / 4 + first;
-        int   q1Index            = last - ( count / 4 );
-
-        qreal median             = _sortedChildren->at( medianIndex )->totalAllocatedSize();
-        qreal quartile3          = _sortedChildren->at( q3Index     )->totalAllocatedSize();
-        qreal quartile1          = _sortedChildren->at( q1Index     )->totalAllocatedSize();
-        qreal quartileDiff       = quartile3 - quartile1;
-
-        qreal dominanceThreshold = median + quartileDiff * dominanceFactor;
+        qreal medianPercent      = _sortedChildren->at( medianIndex )->subtreeAllocatedPercent();
+        qreal dominanceThreshold = qMin( 70.0, qMax( 3.0, medianPercent * dominanceFactor ) );
         int   newDomCount        = 0;
 
 #if VERBOSE_DOMINANCE_CHECK
         logDebug() << this
                    << " " << first << ".." << last
-                   << ";  median: "             << formatSize( FileSize( median ) )
-                   << ";  quartileDiff: "       << formatSize( FileSize( quartileDiff ) )
-                   << ";  dominanceThreshold: " << formatSize( FileSize( dominanceThreshold ) )
+                   << ";  median: "             << formatPercent( medianPercent )
+                   << ";  dominanceThreshold: " << formatPercent( FileSize( dominanceThreshold ) )
                    << endl;
 #endif
 
@@ -1223,15 +1215,15 @@ void DirInfo::findDominantChildren()
         for ( int i = first; i <= last; ++i )
         {
             FileInfo * child = _sortedChildren->at( i );
-            qreal      size  = child->totalAllocatedSize();
+            qreal childPercent = child->subtreeAllocatedPercent();
 
-            if ( size < dominanceThreshold )
+            if ( childPercent < dominanceThreshold )
                 break;
 
             _dominantChildren->append( child );
 
 #if VERBOSE_DOMINANCE_CHECK
-            logDebug() << "Adding " << child->name() << "  " << formatSize( FileSize( size ) ) << endl;
+            logDebug() << "Adding " << child->name() << ":  " << formatPercent( childPercent ) << endl;
 #endif
 
             // Prepare the next iteration of the outer loop
