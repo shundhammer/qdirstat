@@ -8,6 +8,7 @@
 
 
 #include <algorithm>
+#include <math.h>       // sqrt()
 
 #include "DirInfo.h"
 #include "DirTree.h"
@@ -15,11 +16,21 @@
 #include "Attic.h"
 #include "FileInfoIterator.h"
 #include "FileInfoSorter.h"
-#include "ExcludeRules.h"
+#include "FormatUtil.h"
 #include "Exception.h"
 #include "DebugHelpers.h"
 
-#define DIRECT_CHILDREN_COUNT_SANITY_CHECK 0
+// How many times the standard deviation from the average is considered dominant
+#define DOMINANCE_FACTOR                        2.0
+
+// Multiplier for the dominance factor after each iteration
+#define DOMINANCE_MULTIPLIER                    1.0
+
+// Maximum number of iterations to check for dominance
+#define DOMINANCE_ITERATIONS                    3
+
+#define VERBOSE_DOMINANCE_CHECK                 1
+#define DIRECT_CHILDREN_COUNT_SANITY_CHECK      0
 
 using namespace QDirStat;
 
@@ -96,6 +107,7 @@ void DirInfo::init()
     _oldestFileMtime	 = 0;
     _readState		 = DirQueued;
     _sortedChildren	 = 0;
+    _dominantChildren    = 0;
     _lastSortCol	 = UndefinedCol;
     _lastSortOrder	 = Qt::AscendingOrder;
 }
@@ -1088,6 +1100,12 @@ void DirInfo::dropSortCache( bool recursive )
 		_attic->dropSortCache( recursive );
 	}
     }
+
+    if ( _dominantChildren )
+    {
+        delete _dominantChildren;
+        _dominantChildren = 0;
+    }
 }
 
 
@@ -1134,6 +1152,21 @@ void DirInfo::takeAllChildren( DirInfo * oldParent )
 
 bool DirInfo::isDominantChild( FileInfo * child )
 {
+    if ( ! _dominantChildren )
+        findDominantChildren();
+
+    if ( _dominantChildren && _dominantChildren->contains( child ) )
+        return true;
+    else
+        return false;
+}
+
+
+void DirInfo::findDominantChildren()
+{
+    if ( ! _sortedChildren )
+        return;
+
     switch ( _lastSortCol )
     {
         // Only if sorting by size or percent
@@ -1143,26 +1176,81 @@ bool DirInfo::isDominantChild( FileInfo * child )
             break;
 
         default:
-            return false;
+            return;
     }
 
     if ( _lastSortOrder != Qt::DescendingOrder )
-        return false;
+        return;
 
-    if ( ! _sortedChildren )
-        return false;
+    if ( _dominantChildren )
+        delete _dominantChildren;
 
-    if ( _sortedChildren->size() < 2 )
-        return false;
+    _dominantChildren = new FileInfoList();
+    CHECK_NEW( _dominantChildren );
 
-    // DEBUG
-    // DEBUG
-    // DEBUG
+    int   iteration = 0;
+    int   first     = 0;
+    int   last      = _sortedChildren->size() - 1;
+    qreal sum       = totalAllocatedSize() - allocatedSize();
+    qreal count     = last - first + 1;
+    qreal dominanceFactor = DOMINANCE_FACTOR;
 
-    int index = _sortedChildren->indexOf( child );
-    return index >= 0 && index < 3;
+    while ( count >= 2 && ++iteration <= DOMINANCE_ITERATIONS )
+    {
+        qreal average = (qreal) sum / count;
 
-    // DEBUG
-    // DEBUG
-    // DEBUG
+        // Calculate the standard deviation
+
+        qreal squareSum = 0.0;
+
+        for ( int i = first; i <= last; ++i )
+        {
+            qreal size = _sortedChildren->at( i )->totalAllocatedSize();
+            qreal diff = size - average;
+            squareSum += diff * diff;
+        }
+
+        qreal stdDeviation       = sqrt( squareSum / count );
+        qreal dominanceThreshold = average + stdDeviation * dominanceFactor;
+        int   newDomCount        = 0;
+
+#if VERBOSE_DOMINANCE_CHECK
+        logDebug() << this
+                   << " " << first << ".." << last
+                   << ";  average: "            << formatSize( FileSize( average ) )
+                   << ";  stdDeviation: "       << formatSize( FileSize( stdDeviation ) )
+                   << ";  dominanceThreshold: " << formatSize( FileSize( dominanceThreshold ) )
+                   << endl;
+#endif
+
+
+        // Add the children that are larger to the dominant children
+
+        for ( int i = first; i <= last; ++i )
+        {
+            FileInfo * child = _sortedChildren->at( i );
+            qreal      size  = child->totalAllocatedSize();
+
+            if ( size < dominanceThreshold )
+                break;
+
+            _dominantChildren->append( child );
+
+#if VERBOSE_DOMINANCE_CHECK
+            logDebug() << "Adding " << child->name() << "  " << formatSize( FileSize( size ) ) << endl;
+#endif
+
+            // Prepare the next iteration of the outer loop
+
+            ++newDomCount;
+            ++first;
+            --count;
+            sum -= size;
+        }
+
+        dominanceFactor *= DOMINANCE_MULTIPLIER;
+
+        if ( newDomCount < 1 )
+            break;
+    }
 }

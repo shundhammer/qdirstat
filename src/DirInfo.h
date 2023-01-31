@@ -574,6 +574,11 @@ namespace QDirStat
 	 **/
 	virtual void cleanupAttics();
 
+        /**
+         * Populate the _dominantChildren list.
+         **/
+        void findDominantChildren();
+
 
 	//
 	// Data members
@@ -609,6 +614,7 @@ namespace QDirStat
 	time_t		_oldestFileMtime;
 
 	FileInfoList *	_sortedChildren;
+        FileInfoList *  _dominantChildren;
 	DataColumn	_lastSortCol;
 	Qt::SortOrder	_lastSortOrder;
 	bool		_lastIncludeAttic;
