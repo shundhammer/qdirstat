@@ -21,13 +21,13 @@
 #include "DebugHelpers.h"
 
 // How many times the standard deviation from the average is considered dominant
-#define DOMINANCE_FACTOR                        2.0
+#define DOMINANCE_FACTOR                        1.5
 
 // Multiplier for the dominance factor after each iteration
 #define DOMINANCE_MULTIPLIER                    1.0
 
 // Maximum number of iterations to check for dominance
-#define DOMINANCE_ITERATIONS                    3
+#define DOMINANCE_ITERATIONS                    2
 
 #define VERBOSE_DOMINANCE_CHECK                 1
 #define DIRECT_CHILDREN_COUNT_SANITY_CHECK      0
@@ -1188,37 +1188,31 @@ void DirInfo::findDominantChildren()
     _dominantChildren = new FileInfoList();
     CHECK_NEW( _dominantChildren );
 
-    int   iteration = 0;
-    int   first     = 0;
-    int   last      = _sortedChildren->size() - 1;
-    qreal sum       = totalAllocatedSize() - allocatedSize();
-    qreal count     = last - first + 1;
     qreal dominanceFactor = DOMINANCE_FACTOR;
+    int   iteration       = 0;
+    qreal count           = _sortedChildren->size();
+    int   first           = 0;
+    int   last            = count - 1;
 
     while ( count >= 2 && ++iteration <= DOMINANCE_ITERATIONS )
     {
-        qreal average = (qreal) sum / count;
+        int   medianIndex        = count / 2 + first;
+        int   q3Index            = count / 4 + first;
+        int   q1Index            = last - ( count / 4 );
 
-        // Calculate the standard deviation
+        qreal median             = _sortedChildren->at( medianIndex )->totalAllocatedSize();
+        qreal quartile3          = _sortedChildren->at( q3Index     )->totalAllocatedSize();
+        qreal quartile1          = _sortedChildren->at( q1Index     )->totalAllocatedSize();
+        qreal quartileDiff       = quartile3 - quartile1;
 
-        qreal squareSum = 0.0;
-
-        for ( int i = first; i <= last; ++i )
-        {
-            qreal size = _sortedChildren->at( i )->totalAllocatedSize();
-            qreal diff = size - average;
-            squareSum += diff * diff;
-        }
-
-        qreal stdDeviation       = sqrt( squareSum / count );
-        qreal dominanceThreshold = average + stdDeviation * dominanceFactor;
+        qreal dominanceThreshold = median + quartileDiff * dominanceFactor;
         int   newDomCount        = 0;
 
 #if VERBOSE_DOMINANCE_CHECK
         logDebug() << this
                    << " " << first << ".." << last
-                   << ";  average: "            << formatSize( FileSize( average ) )
-                   << ";  stdDeviation: "       << formatSize( FileSize( stdDeviation ) )
+                   << ";  median: "             << formatSize( FileSize( median ) )
+                   << ";  quartileDiff: "       << formatSize( FileSize( quartileDiff ) )
                    << ";  dominanceThreshold: " << formatSize( FileSize( dominanceThreshold ) )
                    << endl;
 #endif
@@ -1245,7 +1239,6 @@ void DirInfo::findDominantChildren()
             ++newDomCount;
             ++first;
             --count;
-            sum -= size;
         }
 
         dominanceFactor *= DOMINANCE_MULTIPLIER;
