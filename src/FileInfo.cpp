@@ -684,7 +684,7 @@ QString FileInfo::symLinkTarget()
     if ( ! isSymLink() )
         return QString();
 
-    return SysUtil::symLinkTarget( url() );
+    return SysUtil::symLinkTarget( path() );
 }
 
 
