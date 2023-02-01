@@ -65,6 +65,13 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="useBoldForDominantCheckBox">
+         <property name="text">
+          <string>Use &amp;bold font for dominant tree items</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>

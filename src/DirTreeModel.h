@@ -132,15 +132,28 @@ namespace QDirStat
 	 **/
 	static bool usingLightTheme() { return ! usingDarkTheme(); }
 
-        /**
-         * Return the font used for bold items.
-         **/
-        QFont boldItemFont() const { return _boldItemFont; }
+	/**
+	 * Return 'true' if dominant tree items should be shown in bold font,
+	 * 'false' if not.
+	 **/
+	bool useBoldForDominantItems() const { return _useBoldForDominantItems; }
 
-        /**
-         * Set the font used for bold items.
-         **/
-        void setBoldItemFont( const QFont & font ) { _boldItemFont = font; }
+	/**
+	 * Set to 'true' if dominant tree items should be shown in bold font,
+	 * 'false' if not.
+	 **/
+	void setUseBoldForDominantItems( bool val )
+	    { _useBoldForDominantItems = val; }
+
+	/**
+	 * Return the font used for bold items.
+	 **/
+	QFont boldItemFont() const { return _boldItemFont; }
+
+	/**
+	 * Set the font used for bold items.
+	 **/
+	void setBoldItemFont( const QFont & font ) { _boldItemFont = font; }
 
 
     public slots:
@@ -445,15 +458,22 @@ namespace QDirStat
 	 **/
 	bool anyAncestorBusy( FileInfo * item ) const;
 
-	/**
-	 * Return the text for (model) column 'col' for 'item'.
-	 **/
-	QVariant columnText( FileInfo * item, int col ) const;
+
+	//
+	// Data for different roles for each item (row) and column
+	//
+
+	QVariant columnText	       ( FileInfo * item, int col ) const;
+	QVariant columnIcon	       ( FileInfo * item, int col ) const;
+	QVariant columnAlignment       ( FileInfo * item, int col ) const;
+	QVariant columnFont	       ( FileInfo * item, int col ) const;
+	QVariant dominantItemColumnFont( FileInfo * item, int col ) const;
 
 	/**
-	 * Return the icon for (model) column 'col' for 'item'.
+	 * Raw data for direct communication with our item delegates
+	 * (PercentBarDelegate, SizeColDelegate)
 	 **/
-	QVariant columnIcon( FileInfo * item, int col ) const;
+	QVariant columnRawData	       ( FileInfo * item, int col ) const;
 
 	/**
 	 * Return the number of direct children (plus the attic if there is
@@ -507,13 +527,14 @@ namespace QDirStat
 	DataColumn	 _sortCol;
 	Qt::SortOrder	 _sortOrder;
 	bool		 _removingRows;
+	bool		 _useBoldForDominantItems;
 
 	// Colors and fonts
 
 	QColor _dirReadErrColor;
 	QColor _subtreeReadErrColor;
 
-        QFont  _boldItemFont;
+	QFont  _boldItemFont;
 
 
 	// The various icons

@@ -73,8 +73,9 @@ void GeneralConfigPage::readSettings()
 
     settings.beginGroup( "DirectoryTree" );
 
-    _ui->crossFilesystemsCheckBox->setChecked( settings.value( "CrossFilesystems"    , false ).toBool() );
-    _ui->treeUpdateIntervalSpinBox->setValue ( settings.value( "UpdateTimerMillisec" ,   333 ).toInt()  );
+    _ui->crossFilesystemsCheckBox->setChecked   ( settings.value( "CrossFilesystems"    , false ).toBool() );
+    _ui->useBoldForDominantCheckBox->setChecked ( settings.value( "UseBoldForDominant"  , true  ).toBool() );
+    _ui->treeUpdateIntervalSpinBox->setValue    ( settings.value( "UpdateTimerMillisec" ,   333 ).toInt()  );
     QString treeIconDir = settings.value( "TreeIconDir", ":/icons/tree-medium/" ).toString();
 
     int index = treeIconDir.contains( "/tree-small" ) ? 1 : 0;
@@ -100,8 +101,9 @@ void GeneralConfigPage::writeSettings()
 
     settings.beginGroup( "DirectoryTree" );
 
-    settings.setValue( "CrossFilesystems"    , _ui->crossFilesystemsCheckBox->isChecked() );
-    settings.setValue( "UpdateTimerMillisec" , _ui->treeUpdateIntervalSpinBox->value()    );
+    settings.setValue( "CrossFilesystems"    , _ui->crossFilesystemsCheckBox->isChecked()   );
+    settings.setValue( "UseBoldForDominant"  , _ui->useBoldForDominantCheckBox->isChecked() );
+    settings.setValue( "UpdateTimerMillisec" , _ui->treeUpdateIntervalSpinBox->value()      );
 
     switch ( _ui->treeIconThemeComboBox->currentIndex() )
     {
