@@ -25,7 +25,7 @@
 #define DOMINANCE_MAX_PERCENT                   70.0
 #define DOMINANCE_ITEM_COUNT                    30
 
-#define VERBOSE_DOMINANCE_CHECK                 1
+#define VERBOSE_DOMINANCE_CHECK                 0
 #define DIRECT_CHILDREN_COUNT_SANITY_CHECK      0
 
 using namespace QDirStat;
