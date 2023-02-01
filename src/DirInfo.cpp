@@ -8,7 +8,6 @@
 
 
 #include <algorithm>
-#include <math.h>       // sqrt()
 
 #include "DirInfo.h"
 #include "DirTree.h"
