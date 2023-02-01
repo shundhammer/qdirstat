@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2023-01-30
+Updated: 2023-02-01
 
 
 ## Screenshot
@@ -124,6 +124,18 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2023-02-01
+
+  - New feature: Showing dominant items in the directory tree in bold font.
+    This may not sound spectacular, but it is immensely helpful to spot
+    disproportinally large directories or files. If you don't like it, you can
+    turn it off, of course.
+
+    Screenshots and more details at [GitHub issue #210](https://github.com/shundhammer/qdirstat/issues/210).
+
+  - Bug fix: Now correctly showing the target of symlinks in the packages view.
+
 
 - 2023-01-30
 
