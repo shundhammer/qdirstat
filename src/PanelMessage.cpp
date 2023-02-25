@@ -22,6 +22,8 @@ PanelMessage::PanelMessage( QWidget * parent ):
     CHECK_NEW( _ui );
 
     _ui->setupUi( this );
+    initDetailsLinkLabel();
+
     _ui->headingLabel->hide();
     _ui->msgLabel->hide();
     _ui->detailsLinkLabel->hide();
@@ -31,6 +33,20 @@ PanelMessage::PanelMessage( QWidget * parent ):
 PanelMessage::~PanelMessage()
 {
     delete _ui;
+}
+
+
+void PanelMessage::initDetailsLinkLabel()
+{
+    // Override the HTML on the "Details..." label
+    // to sanitize it from undesired styling (GitHub issue #213)
+
+    QString html = "<a href=\"details\">";
+    html += tr( "Details..." );
+    html += "</a>";
+
+    _ui->detailsLinkLabel->setTextFormat( Qt::RichText );
+    _ui->detailsLinkLabel->setText( html );
 }
 
 

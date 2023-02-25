@@ -91,6 +91,12 @@ namespace QDirStat
 
     protected:
 
+        /**
+         * Override the HTML on the "Details..." label
+         * to sanitize it from undesired styling (GitHub issue #213)
+         */
+        void initDetailsLinkLabel();
+
 	Ui::PanelMessage * _ui;
         QString            _detailsUrl;
 
