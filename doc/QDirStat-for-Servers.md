@@ -12,6 +12,7 @@ machine where you can view the data with the normal QDirStat application.
 
 - Perl
   - URI::Escape, install via `cpan URI::Escape`
+  - If installing URI::Escape fails, make sure `make` is installed (`apt install build-essential` or equivalent for your platform)
 - Some command to copy files to your desktop machine:
   scp, ftp or whatever
 
