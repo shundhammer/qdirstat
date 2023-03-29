@@ -1,4 +1,5 @@
 # QDirStat
+
 <img src="https://github.com/shundhammer/qdirstat/blob/master/src/icons/qdirstat.svg" height="64">
 
 Qt-based directory statistics: KDirStat without any KDE -- from the author of
@@ -12,13 +13,11 @@ License: GPL V2
 
 Updated: 2023-02-02
 
-
 ## Screenshot
 
 [<img width="900" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-main-win.png)
 
 _Main window screenshot - notice the multi-selection in the tree and the treemap_
-
 
 ## Overview
 
@@ -56,7 +55,6 @@ QDirStat has a number of new features compared to KDirStat. To name a few:
 
 See section [_New Features_](#new-features) for more details.
 
-
 ## Table of Contents
 
 1. [Screenshot](#screenshot)
@@ -77,9 +75,7 @@ See section [_New Features_](#new-features) for more details.
 1. [Packaging Status](#packaging-status)
 1. [Donate](#donate)
 
-
 ## More Screenshots
-
 
 [<img align="top" height="237" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-type-stats.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-file-type-stats.png)
 [<img align="top" height="169" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-cleanup-output.png" >](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-cleanup-output.png)
@@ -87,19 +83,15 @@ See section [_New Features_](#new-features) for more details.
 
 [<img width="700" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-locating-file-types.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-locating-file-types.png)
 
-
 [<img align="top" width="180" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-cleanups.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-cleanups.png)
 [<img align="top" width="180" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-mime.png"    >](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-mime.png)
 [<img align="top" width="180" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-exclude.png" >](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-exclude.png)
 [<img align="top" width="180" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-config-general.png" >](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-config-general.png)
 
-
 [<img align="top" height="220" src="https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-histogram.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-histogram.png)
 [<img align="top" height="220" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-file-age-months.png"    >](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-file-age-months.png)
 
-
 _Full-size images and descriptions on the [Screenshots Page](https://github.com/shundhammer/qdirstat/blob/master/screenshots/Screenshots.md)_
-
 
 -----------------------
 
@@ -112,7 +104,6 @@ You can donate any amount of your choice via PayPal:
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EYJXAVLGNRR5W)
 
-
 ## Latest Stable Release
 
 **QDirStat V1.8.1**
@@ -121,7 +112,6 @@ See the [release announcement](https://github.com/shundhammer/qdirstat/releases)
 
 Download installable binary packages for various Linux distributions here:
 [Ready-made packages](#ready-made-packages)
-
 
 ## Latest News
 
@@ -136,11 +126,9 @@ Download installable binary packages for various Linux distributions here:
 
   - Bug fix: Now correctly showing the target of symlinks in the packages view.
 
-
 - 2023-01-30
 
   - Fixed sorting when directories have the same total allocated size, but a different byte size.
-
 
 - 2022-06-30 **New stable release: 1.8.1**
 
@@ -155,7 +143,6 @@ Download installable binary packages for various Linux distributions here:
   - Some small improvements
 
   - Bug fixes
-
 
   **Details:**
 
@@ -215,7 +202,6 @@ Download installable binary packages for various Linux distributions here:
     to get this change; it will be regenerated with the new defaults upon the
     next program start.
 
-
   **Bug fixes:**
 
   - Fixed [GitHub issue #184](https://github.com/shundhammer/qdirstat/issues/184):
@@ -247,31 +233,25 @@ Download installable binary packages for various Linux distributions here:
   - Bug fix for the "Packages" view for .deb / APT based systems: Now also list
     packages that are on hold. They were previously missing.
 
-
 ------------
 
 - 2021-06-21 [QDirStat AppImage and why I don't like it](https://github.com/shundhammer/qdirstat/issues/168)
 
     TL;DR:
-    - It's big and fat (113 MB)
-    - It's a very outdated version: QDirStat 1.6.1 from February 2020
-    - It doesn't even tell you what version it contains
-    - It still needs a fairly recent version of GLibc, so you can't run it on Ubuntu 18.04 LTS
-    - It's unclear if at least the libraries inside (e.g. the Qt libs) are up to date
+  - It's big and fat (113 MiB)
+  - It's a very outdated version: QDirStat 1.6.1 from February 2020
+  - It doesn't even tell you what version it contains
+  - It still needs a fairly recent version of GLibc, so you can't run it on Ubuntu 18.04 LTS
+  - It's unclear if at least the libraries inside (e.g. the Qt libs) are up to date
 
 -------------
-
-
 
 _See [DevHistory.md](doc/DevHistory.md)
 for older entries._
 
-
 ## History
 
-
 This is just a rough summary. For more details, see [DevHistory.md](doc/DevHistory.md).
-
 
 - 2022-06-30 New stable release: 1.8.1
 
@@ -283,7 +263,6 @@ This is just a rough summary. For more details, see [DevHistory.md](doc/DevHisto
 
   - Bug fixes
 
-
 - 2021-08-28 New stable release: 1.8
 
   - New view: _File Age Statistics_
@@ -293,7 +272,6 @@ This is just a rough summary. For more details, see [DevHistory.md](doc/DevHisto
   - Bug fixes
 
   - Some small improvements
-
 
 - 2021-04-05 New stable release: 1.7.1
 
@@ -312,7 +290,6 @@ This is just a rough summary. For more details, see [DevHistory.md](doc/DevHisto
 
     File, Edit, View, Go To, Discover, Clean up, Help
 
-
 - 2020-07-26 New stable release: 1.7
 
   - Closing the gap between sizes reported by QDirstat and sizes reported by
@@ -325,16 +302,14 @@ This is just a rough summary. For more details, see [DevHistory.md](doc/DevHisto
 
   - New directory selection dialog showing all (real) filesystems.
 
-
 - 2020-02-13 New stable release: 1.6.1
 
   - Much better handling for "permission denied" errors while reading directories
 
-  - Now showing the exact byte size (134 495 994 Bytes instead of 128.3 MB)
+  - Now showing the exact byte size (134 495 994 Bytes instead of 128.3 MiB)
     upon mouse click
 
   - New optional tree column "Oldest File" (not enabled by default)
-
 
 - 2019-07-22 New stable release: V1.6
 
@@ -347,7 +322,6 @@ This is just a rough summary. For more details, see [DevHistory.md](doc/DevHisto
   - Vast Performance improvement for huge directories
     (100.000+ entries in a single directory)
 
-
 - 2018-11-07 New stable release: V1.5
 
   - New _details_ panel
@@ -358,13 +332,11 @@ This is just a rough summary. For more details, see [DevHistory.md](doc/DevHisto
 
   - Switchable tree layouts L1 / L2 / L3
 
-
 - 2017-06-04 New stable release: V1.4
 
   - New _file size statistics_ with histogram
 
   - Shading for empty space in the treemap for lots of very small files
-
 
 - 2017-03-05 New stable release: V1.3
 
@@ -372,18 +344,15 @@ This is just a rough summary. For more details, see [DevHistory.md](doc/DevHisto
 
   - Locate files of a certain type (filename extension) in the tree
 
-
 - 2017-01-03 New stable release: V1.2
 
   - Improved Btrfs subvolumes support
-
 
 - 2016-10-31 New stable release: V1.1-Pumpkin
 
   - Bug fixes
 
   - Split up the config file into several ones
-
 
 - 2016-05-16 First stable release: V1.0
 
@@ -408,7 +377,6 @@ This is just a rough summary. For more details, see [DevHistory.md](doc/DevHisto
 
   - 2000-01-21 KDirStat 0.86 for KDE 1 announced: First public version.
 
-
 ## Related Software
 
 ### KDirStat and QDirStat
@@ -422,7 +390,6 @@ infrastructure, so it has much fewer library and package dependencies;
 basically only the Qt 5 libs and libz, both of which most Linux / BSD machines
 have installed anyway if there is any graphical desktop installed.
 
-
 ### WinDirStat and QDirStat
 
 There are lots of articles and user forum comments about QDirStat being a "nice
@@ -433,16 +400,13 @@ So it's the other way round: **The Linux version was there first**, and
 somebody liked it so much that he wrote a Windows version based on that
 idea. That's a rare thing; usually people port Windows originals to Linux.
 
-See also https://windirstat.net/background.html and the WinDirStat "About"
+See also <https://windirstat.net/background.html> and the WinDirStat "About"
 dialog.
-
-
 
 ### QDirStat and K4DirStat
 
 K4DirStat is a port to KDE 4 / Qt 4 of the old KDE 3 / Qt 3 KDirStat. QDirStat is
 independent of that; it is based on the old KDE 3 KDirStat directly.
-
 
 ### Other
 
@@ -455,7 +419,6 @@ See
 [Disk Usage Tools Compared](https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared):
 QDirStat vs. K4DirStat vs. Baobab vs. Filelight vs. ncdu (including benchmarks)
 in the Wiki.
-
 
 ## Motivation / Rant: Why?
 
@@ -551,8 +514,6 @@ a long time (my last KDirStat release had been in mid-2006).
 QDirStat is based on that same code from the 2006 KDirStat. It's an 80% rewrite
 using a lot of newer Qt technologies. And there was a lot of cleaning up that
 old code base that had been long overdue.
-
-
 
 ## Features
 
@@ -665,14 +626,14 @@ old code base that had been long overdue.
 
 - Mouse actions in the treemap window:
 
-    - Left click:           Select item and make it the current item.
-    - Right click:          Open the context menu with cleanup actions and more.
-    - Ctrl+Left click:      Add item to selection or toggle selection.
-    - Middle click:         Like left click, but also show directory borders.
-    - Ctrl+Middle click:    Like Ctrl+left click, but also show directory borders.
-    - Double click left:    Zoom treemap in.
-    - Double click middle:  Zoom treemap out.
-    - Mouse wheel:          Zoom treemap in or out.
+  - Left click:           Select item and make it the current item.
+  - Right click:          Open the context menu with cleanup actions and more.
+  - Ctrl+Left click:      Add item to selection or toggle selection.
+  - Middle click:         Like left click, but also show directory borders.
+  - Ctrl+Middle click:    Like Ctrl+left click, but also show directory borders.
+  - Double click left:    Zoom treemap in.
+  - Double click middle:  Zoom treemap out.
+  - Mouse wheel:          Zoom treemap in or out.
 
 - You can configure what columns to display in the tree view and in which
   order. The only thing that is fixed is the "Name" column which is always
@@ -746,8 +707,6 @@ old code base that had been long overdue.
     SlowUpdateMillisec = 3000
     ```
 
-
-
 ### Old Features
 
 Features ported from the old KDirStat:
@@ -770,11 +729,11 @@ Features ported from the old KDirStat:
   together with a percent bar so you can see at a glimpse how the
   subdirectories compare with each other.
 
-- All numbers displayed human readable -- e.g., 34.4 MB instead of 36116381
+- All numbers displayed human readable -- e.g., 34.4 MiB instead of 36116381
   Bytes.
 
-- All size units are 1024-based, i.e. 1 kB = 1024 Bytes; 1 MB = 1024 kB; 1 GB =
-  1024 MB.
+- All size units are 1024-based, i.e. 1 kiB = 1024 Bytes; 1 MiB = 1024 kiB; 1 GiB =
+  1024 MiB.
 
 - In the tree, also displaying the exact byte size as the context menu (right
   click).
@@ -869,7 +828,7 @@ Features ported from the old KDirStat:
   - The KDirStat / QDirStat file format is well documented and very simple. It
     seems to be used by a number of admins and some backup software.
     See also the specification in the doc/ directory:
-    https://github.com/shundhammer/qdirstat/blob/master/doc/cache-file-format.txt
+    <https://github.com/shundhammer/qdirstat/blob/master/doc/cache-file-format.txt>
 
   - You can specify a cache file to read directly at the command line:
 
@@ -878,10 +837,10 @@ Features ported from the old KDirStat:
     ```
 
 - Other command line options: See
+
     ```
     qdirstat --help
     ```
-
 
 ### Features that are Gone
 
@@ -924,8 +883,6 @@ Features ported from the old KDirStat:
 
 </details>
 
-
-
 ## MacOS X Compatibility
 
 <summary>
@@ -962,13 +919,11 @@ environment is set up correctly.
 
 _There be dragons._ ;-)
 
-
 ### Architecture maintainer wanted for QDirStat for MacOS X
 
 If you are a developer with some prior C++ and Qt knowledge on the MacOS X
 platform and you'd like to see QDirStat working there, please consider joining
 the team.
-
 
 ## Windows Compatibility
 
@@ -993,11 +948,9 @@ liked KDirStat on Linux so much that he decided to write a Windows clone and
 called it WinDirStat.
 </details>
 
-
 ## Ready-made Packages
 
 [![Packaging status](https://repology.org/badge/tiny-repos/qdirstat.svg)](https://repology.org/metapackage/qdirstat/versions)
-
 
 ### openSUSE / SUSE Linux Enterprise
 
@@ -1012,21 +965,17 @@ QDirStat packages for openSUSE Tumbleweed / Leap (15.x, 42.x) and SLE (15, 12)
   reliable as the latest official stable release, although the QDirStat
   developers try their best to keep it as stable as possible.
 
-
 ### Ubuntu
 
-https://packages.ubuntu.com/search?keywords=qdirstat&searchon=names
-
+<https://packages.ubuntu.com/search?keywords=qdirstat&searchon=names>
 
 ### Debian
 
-https://packages.debian.org/search?keywords=qdirstat
-
+<https://packages.debian.org/search?keywords=qdirstat>
 
 ### Fedora
 
-https://apps.fedoraproject.org/packages/qdirstat/builds/
-
+<https://apps.fedoraproject.org/packages/qdirstat/builds/>
 
 ## QDirStat Docker Containers
 
@@ -1051,7 +1000,6 @@ You don't have to install that other system first and then on top of that the
 application that you really want to run. A docker container contains everything
 that is needed, and it is preconfigured for that application.
 
-
 ### How to use Docker on Windows
 
 - Download and install [Docker Desktop for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
@@ -1061,17 +1009,14 @@ that is needed, and it is preconfigured for that application.
 
 More information:
 
-- https://docs.docker.com/docker-for-windows/install/
-- https://docs.docker.com/get-started/
-
-
+- <https://docs.docker.com/docker-for-windows/install/>
+- <https://docs.docker.com/get-started/>
 
 ## Building
 
 _Notice that for most mainstream Linux or BSD distributions you don't have to
 build your own; you can simply install a ready-made package from your normal
 package manager._
-
 
 ### Build Environment
 
@@ -1085,7 +1030,6 @@ Make sure you have a working Qt 5 build environment installed. This includes:
 If anything doesn't work, first of all **make sure you can build any of the
 simple examples supplied with Qt**, e.g. the
 [calculator example](http://doc.qt.io/qt-5/qtwidgets-widgets-calculator-example.html).
-
 
 #### Ubuntu
 
@@ -1101,14 +1045,13 @@ Recommended packages for developers:
 
 See also
 
-https://askubuntu.com/questions/508503/whats-the-development-package-for-qt5-in-14-04
+<https://askubuntu.com/questions/508503/whats-the-development-package-for-qt5-in-14-04>
 
 If you also have a Qt4 development environment installed, select the desired
 one via _qtchooser_:
 
     sudo apt-get install qtchooser
     export QT_SELECT="qt5"
-
 
 #### SUSE
 
@@ -1122,7 +1065,6 @@ Qt5 version of 'qmake' is the first in your $PATH:
 
     export PATH=/usr/lib64/qt5/bin:$PATH
 
-
 ### Compiling
 
 Open a shell window, go to the QDirStat source directory, then enter these
@@ -1131,7 +1073,6 @@ commands:
     qmake
     make
 
-
 ### Installing
 
     sudo make install
@@ -1139,7 +1080,6 @@ commands:
 or
 
     su -c make install
-
 
 ### Install to a Custom Directory
 
@@ -1158,19 +1098,16 @@ environment uses somewhere in your home directory. Similar with the application
 icon used in that `.desktop` file.
 </details>
 
-
 ## Contributing
 
 See file [Contributing.md](doc/Contributing.md)
 and [GitHub-Workflow.md](doc/GitHub-Workflow.md)
-
 
 ## Troubleshooting
 
 ### Can't Move a Directory to Trash
 
 See file [Troubleshooting.md](doc/Troubleshooting.md)
-
 
 ## Further Reading
 
@@ -1183,7 +1120,6 @@ See file [Troubleshooting.md](doc/Troubleshooting.md)
 
 Of course, don't forget to check out the [doc directory](doc/).
 
-
 ## Packaging Status
 
 Repology: QDirStat versions in Linux / BSD distributions:
@@ -1191,7 +1127,6 @@ Repology: QDirStat versions in Linux / BSD distributions:
 [![Repology](https://repology.org/badge/tiny-repos/qdirstat.svg)](https://repology.org/metapackage/qdirstat/versions)
 
 (click for details)
-
 
 ## Donate
 

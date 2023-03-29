@@ -11,7 +11,7 @@ disk space used by files and directories to them.
 
 So it can easily happen (this is actually quite a common problem) that the `df`
 command (or other similar commands that rely on Btrfs reporting sizes properly)
-tells you that your Btrfs filesystem still has 15 GB of its total 30 GB
+tells you that your Btrfs filesystem still has 15 GiB of its total 30 GiB
 available, yet you get a "no space left on device" error: The remaining space
 might be taken by filesystem snapshots and/or by copy-on-write.
 
@@ -19,7 +19,6 @@ One might argue that Btrfs is blatantly lying about its free space, that it
 should really report the real free disk space to the underlying system calls
 like `statfs()`, so the tools using that system call can give the user the real
 information and not just some bogus numbers.
-
 
 ## Helpful Btrfs Commands
 
@@ -34,35 +33,34 @@ Yes, this could be done better; a **lot** better.
 Yes, this problem has been known for many years, and no progress is visible in
 that area.
 
-
 ### btrfs fi usage
 
 ```
 sudo btrfs filesystem usage /mybtrfs
 
 Overall:
-    Device size:		  40.00GiB
-    Device allocated:		  30.06GiB
-    Device unallocated:		   9.94GiB
-    Device missing:		     0.00B
-    Used:			  26.80GiB
-    Free (estimated):		  10.92GiB	(min: 5.95GiB)
-    Data ratio:			      1.00
-    Metadata ratio:		      2.00
-    Global reserve:		  63.12MiB	(used: 0.00B)
-    Multiple profiles:		        no
+    Device size:    40.00GiB
+    Device allocated:    30.06GiB
+    Device unallocated:     9.94GiB
+    Device missing:       0.00B
+    Used:     26.80GiB
+    Free (estimated):    10.92GiB (min: 5.95GiB)
+    Data ratio:         1.00
+    Metadata ratio:        2.00
+    Global reserve:    63.12MiB (used: 0.00B)
+    Multiple profiles:          no
 
 Data,single: Size:25.00GiB, Used:24.02GiB (96.07%)
-   /dev/sda2	  25.00GiB
+   /dev/sda2   25.00GiB
 
 Metadata,DUP: Size:2.50GiB, Used:1.39GiB (55.69%)
-   /dev/sda2	   5.00GiB
+   /dev/sda2    5.00GiB
 
 System,DUP: Size:32.00MiB, Used:16.00KiB (0.05%)
-   /dev/sda2	  64.00MiB
+   /dev/sda2   64.00MiB
 
 Unallocated:
-   /dev/sda2	   9.94GiB
+   /dev/sda2    9.94GiB
 
 ```
 
@@ -73,7 +71,6 @@ sudo btrfs fi usage /mybtrfs
 ```
 
 _Notice that all Btrfs commands always need the mount point as the argument, not the device._
-
 
 ### btrfs fi df
 
@@ -88,23 +85,21 @@ GlobalReserve, single: total=63.12MiB, used=0.00B
 
 Shorter: `sudo btrfs fi df /mybtrfs`
 
-
 ### btrfs fi show
 
 ```
 sudo btrfs filesystem show /mybtrfs
 
 Label: 'mybtrfs'  uuid: a0be3e1e-d127-45b8-85d6-...
-	Total devices 1 FS bytes used 25.41GiB
-	devid    1 size 40.00GiB used 30.06GiB path /dev/sda2
+ Total devices 1 FS bytes used 25.41GiB
+ devid    1 size 40.00GiB used 30.06GiB path /dev/sda2
 ```
 
 Shorter: `sudo btrfs fi show /mybtrfs`
 
-
 ### btrfs balance
 
-https://btrfs.wiki.kernel.org/index.php/FAQ#What_does_.22balance.22_do.3F
+<https://btrfs.wiki.kernel.org/index.php/FAQ#What_does_.22balance.22_do.3F>
 
 Greatly simplified, this is the Btrfs counterpart of defragmenting the
 filesystem: It cleans up metadata.
@@ -112,12 +107,10 @@ filesystem: It cleans up metadata.
 How to invoke it, however, seems to be some black magic, and there are lots of
 guides out on the web; google for "btrfs balance". Some search results:
 
-- https://www.thegeekdiary.com/how-to-re-balancing-btrfs-to-free-disk-space/
-- http://marc.merlins.org/perso/btrfs/post_2014-05-04_Fixing-Btrfs-Filesystem-Full-Problems.html
-
+- <https://www.thegeekdiary.com/how-to-re-balancing-btrfs-to-free-disk-space/>
+- <http://marc.merlins.org/perso/btrfs/post_2014-05-04_Fixing-Btrfs-Filesystem-Full-Problems.html>
 
 ## Background Information
-
 
 ### Snapshots
 
@@ -150,10 +143,9 @@ for cleaning them up.
 
 See also `man snapper`.
 
-
 ### CoW (Copy-on-Write)
 
-https://en.wikipedia.org/wiki/Copy-on-write
+<https://en.wikipedia.org/wiki/Copy-on-write>
 
 Btrfs by default uses CoW (copy-on-write) for write access: It can share disk
 blocks among different _subvolumes_ or _snapshots_ (which are technically
@@ -181,10 +173,9 @@ This is why there are _subvolumes_ with different mount options such as `noCoW`
 for certain directories; not only would it be wasteful to keep older versions
 of such files, it would also be counterproductive and endanger consistency.
 
-
 ## Further Reading
 
-- https://www.linuxlinks.com/btrfs/
-- https://btrfs.wiki.kernel.org/index.php/FAQ#How_much_free_space_do_I_have.3F
-- https://btrfs.wiki.kernel.org/index.php/SysadminGuide
-- https://en.opensuse.org/SDB:BTRFS
+- <https://www.linuxlinks.com/btrfs/>
+- <https://btrfs.wiki.kernel.org/index.php/FAQ#How_much_free_space_do_I_have.3F>
+- <https://btrfs.wiki.kernel.org/index.php/SysadminGuide>
+- <https://en.opensuse.org/SDB:BTRFS>

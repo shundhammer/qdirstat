@@ -5,11 +5,9 @@ this file.
 
 See the README.md file for the latest news:
 
-https://github.com/shundhammer/qdirstat/blob/master/README.md
-
+<https://github.com/shundhammer/qdirstat/blob/master/README.md>
 
 ## QDirStat History
-
 
 - 2022-06-28
 
@@ -28,12 +26,10 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     `EnforceContrast` setting in the config file
     (`~/.config/QDirStat/QDirStat.conf`).
 
-
 - 2022-05-31
 
   - Bug fix for the "Packages" view for .deb / APT based systems: Now also list
     packages that are on hold. They were previously missing.
-
 
 - 2022-05-30
 
@@ -44,7 +40,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     This returns a little less complete information; for example, only
     rudimentary mount options which are used for some special cases.
 
-
 - 2022-05-19
 
   - Now using `xdg-open %d` in KDE Plasma for the "Open File Manager Here"
@@ -52,7 +47,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     [GitHub issue #192](https://github.com/shundhammer/qdirstat/issues/192),
     yet still maintain the ability to use a powerful file manager like
     _Konqueror_ (if that is configured), falling back to the standard _Dolphin_.
-
 
 - 2022-03-08
 
@@ -63,7 +57,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     same MIME category as `.gz`. It did find the category for the longer one
     (`.tar.gz`), but then it continued looking, resulting in the shortest
     matching one (`.gz`). Now stopping at the longest hit.
-
 
 - 2022-02-25
 
@@ -83,14 +76,12 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     - In the "Mounted Filesystems" (`du`-like) window (Menu "View" -> "Show
       Mounted Filesystems").
 
-
 - 2022-01-04
 
   - Now cutting off insanely long generated device names of LUKS devices in the
     "Mounted Filesystems" window: E.g. `/dev/mapper/luks-3fae43...` instead of
     `/dev/mapper/luks-3fae4328-4294-4c77-8f98-d437c41da26c`. The long name is
     displayed in a tooltip.
-
 
 - 2021-12-30
 
@@ -101,7 +92,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     Notice that those directories are still accessible from the tree at the
     right side, but they no longer take a prominent place in the left bar.
 
-
 - 2021-12-12
 
   - Fixed [GitHub issue #184](https://github.com/shundhammer/qdirstat/issues/184):
@@ -110,7 +100,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     About QDirStat cache files:
     - [qdirstat-cache-writer documentation](scripts/README.md)
     - [QDirStat for Servers](doc/QDirStat-for-Servers.md)
-
 
 - 2021-09-28
 
@@ -126,7 +115,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     See [GitHub issue #181](https://github.com/shundhammer/qdirstat/issues/181)
     for a screenshot and more details.
 
-
 - 2021-08-28 **New stable release: 1.8**
 
   **Summary:**
@@ -138,7 +126,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   - Bug fixes
 
   - Some small improvements
-
 
   **Details:**
 
@@ -166,7 +153,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     - History menu on those buttons (long press on the buttons) for the last 16
       directories
 
-
   - Internal restructuring and refactoring to keep the code maintainable
 
   - Bug fixes:
@@ -176,7 +162,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     - Now closing a left-over _Permissions error_ panel when refreshing from disk.
       After the re-read, the permissions error may no longer be there.
-
 
   - Small improvements:
 
@@ -189,7 +174,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     - Added a little margin to the left in the main window's tree view for the
       _Size_ column so it looks now less cramped.
-
 
 - 2021-08-06
 
@@ -208,7 +192,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     directory tree is read or when it's re-read ("Refresh all" or "Refresh
     Selected"). That was one of those small bug fixes.
 
-
 - 2021-07-31
 
   - Now the "File Age Statistics" window also shows statistics for the months
@@ -222,8 +205,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     More details and more screenshots at [GitHub issue #172](https://github.com/shundhammer/qdirstat/issues/172).
 
-
-
 - 2021-07-29
 
   - Added a "Back" and a "Forward" button to move back and forth in the history
@@ -233,7 +214,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     It also has a history menu when you long-press the "Back" or "Forward"
     buttons, and of course it uses the same keyboard shortcuts `[Alt] [Cursor
     Left]` and `[Alt] [Cursor Right]` that all common web browsers use.
-
 
 - 2021-07-28
 
@@ -257,7 +237,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     More details and a lot more screenshots at [GitHub issue #172](https://github.com/shundhammer/qdirstat/issues/172).
 
-
 - 2021-07-02
 
   - Don't show inactive (unmounted) mounts managed by the automounter anymore
@@ -266,7 +245,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     Once they become auto-mounted by a user accessing them in the filesystem,
     they are shown there normally, of course.
-
 
 - 2021-06-26
 
@@ -278,7 +256,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     too long, but concentrating on the longest parts and shortening them one by
     one until the complete path is not too long anymore.
 
-
 - 2021-06-24
 
   - First (crude) fix for [GitHub issue #169](https://github.com/shundhammer/qdirstat/issues/169):
@@ -289,14 +266,13 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 - 2021-06-21 [QDirStat AppImage and why I don't like it](https://github.com/shundhammer/qdirstat/issues/168)
 
     TL;DR:
-    - It's big and fat (113 MB)
-    - It's an outdated version (QDirStat 1.6.1 from 16 months ago)
-    - It doesn't even tell you what version it contains
-    - It still needs a fairly recent version of GLibc, so you can't run it on Ubuntu 18.04 LTS
-    - It's unclear if at least the libraries inside (e.g. the Qt libs) are up to date
+  - It's big and fat (113 MiB)
+  - It's an outdated version (QDirStat 1.6.1 from 16 months ago)
+  - It doesn't even tell you what version it contains
+  - It still needs a fairly recent version of GLibc, so you can't run it on Ubuntu 18.04 LTS
+  - It's unclear if at least the libraries inside (e.g. the Qt libs) are up to date
 
 ------------
-
 
 - 2021-04-05 **New stable release: 1.7.1**
 
@@ -337,7 +313,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     Segfault when using a cleanup action with refresh policy _AssumeDeleted_
     after a cleanup action with _RefreshParent_ in the same directory.
 
-
   **Details:**
 
   - Added a "Discover" toplevel menu with actions to easily find
@@ -375,14 +350,12 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     otherwise they were not so easy to find (short of using the command line,
     of course).
 
-
   - Now showing the target of symbolic links in the details panel.
 
     If it's a short path, the whole path is shown; otherwise without the path
     (".../somewhere"), and the full path is shown as a pop-up upon mouse click.
 
     If the target does not exist, a **Broken Link** warning is also shown.
-
 
   - Menu reorganization: They had become a little too crowded, especially on
     the top level.
@@ -411,7 +384,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     - The former "Treemap" menu is now a submenu of "View". Most of those
       actions are available as tool bar buttons and mouse wheel operations
       anyway.
-
 
   - Enabled _Refresh Selected_ now for files as well. In that case, the parent
     directory is refreshed.
@@ -444,8 +416,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     (From a freshly installed Xubuntu 20.04 LTS)
 
-
-
   - Added links to external documents to a new "Problems and Solutions" submenu
     of the "Help" menu so they are more easily discoverable.
 
@@ -460,14 +430,12 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
 ----------
 
-
 - 2021-03-24
 
   - New document about [finding files that are shadowed by a mount](doc/Shadowed-by-Mount.md)
 
   - New script for finding files on the root filesystem that are shadowed by a
     mount (see doc link above).
-
 
 - 2021-03-19
 
@@ -476,13 +444,11 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
   - Keyboard shortcuts for cleanups now also work in the "Locate Files" window.
 
-
 - 2020-12-21
 
   - Fixed [GitHub Issue #149](https://github.com/shundhammer/qdirstat/issues/149):
     Segfault when using a cleanup action with refresh policy _AssumeDeleted_ after
     a cleanup action with _RefreshParent_ in the same directory.
-
 
 - 2020-11-23
 
@@ -544,7 +510,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     The other views open in separate windows, so they are add-on views to the
     currently loaded directory tree.
 
-
 - 2020-11-22
 
   - Added a "Discover" toplevel menu to easily find
@@ -581,7 +546,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     Files with multiple hard links or sparse files were mentioned in the log;
     otherwise they were not so easy to find (short of using the command line,
     of course).
-
 
 - 2020-10-23
 
@@ -662,7 +626,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
   - Bug fixes
 
-
   **Details:**
 
   - Closing the gap between sizes reported by QDirstat and sizes reported by
@@ -674,8 +637,8 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     In short, this is mostly due to the difference between a file's _byte size_
     and its _allocated blocks_: On most filesystem types, a file of 49 bytes
-    still consumes a minimum of 4 KB (4096 bytes); disk space is allocated in
-    _clusters_ (typically 4 KB), not byte by byte. On a typical Linux root
+    still consumes a minimum of 4 kiB (4096 bytes); disk space is allocated in
+    _clusters_ (typically 4 kiB), not byte by byte. On a typical Linux root
     filesystem with many thousands of tiny files, this difference can add up to
     a lot.
 
@@ -698,15 +661,14 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
       subtree consumes, no matter if some part of that is really wasted.
 
     - The _details_ view shows both sizes when there is a difference (in the
-      displayed numeric precision): "Size: 42.1 MB" vs. "Allocated: 42.2 MB",
-      but not "Size: 42.0 MB" vs. "Allocated: 42.0 MB".
+      displayed numeric precision): "Size: 42.1 MiB" vs. "Allocated: 42.2 MiB",
+      but not "Size: 42.0 MiB" vs. "Allocated: 42.0 MiB".
 
     - Treemap tiles now correspond to a file's _allocated_ size. This makes a
       real difference for tiny files.
 
     More details at [GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134):
     _Size Difference between QDirStat Reports and the "du" and "df" Commands_.
-
 
   - New "Mounted Filesystems" window ("View" -> "Show Mounted Filesystems" or
     Ctrl-M):
@@ -723,7 +685,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     reports after reading that complete filesystem; this can be due to
     metadata, journals or snapshots. Notice that in those cases, the `du`
     command will also display a different value than the `df` command.
-
 
   - QDirStat now has its own custom directory selection dialog; it no longer
     uses one of the simplistic Qt standard file dialogs:
@@ -752,7 +713,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     More details at [GitHub Issue #129](https://github.com/shundhammer/qdirstat/issues/129).
 
-
   - Added a workaround for wrong size sums on NTFS: Now disregarding hard links
     on NTFS.
 
@@ -769,7 +729,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     See also [GitHub Issue #88](https://github.com/shundhammer/qdirstat/issues/88).
 
-
   - <summary>
     Added a config option to ignore hard links.
     </summary>
@@ -781,10 +740,10 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
      users won't have to bother with this at all.
 
      By default, QDirStat sums up the disk space for a file with multiple hard
-     links for each hard link's share of the overall size: If a file with 1 MB
+     links for each hard link's share of the overall size: If a file with 1 MiB
      has 4 hard links, for each of those 4 links QDirStat adds 1/4 of the size
-     (i.e., 256 kB) to the parent directory. If all those 4 links are in the
-     same directory, that's very simple: They add up to 4 * 256 kB = 1 MB, so
+     (i.e., 256 kiB) to the parent directory. If all those 4 links are in the
+     same directory, that's very simple: They add up to 4 * 256 kiB = 1 MiB, so
      the sum is correct.
 
      If those hard links are all in different directories, each directory only
@@ -795,20 +754,20 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
      The trouble starts when you want to make a backup of only one of those
      directories: Even though the disk space is still shared with other
      directories, on the backup medium, you still need the disk space for that
-     complete file, i.e. the full 1 MB, not only that directory's share (256
-     kB). With a lot of hard-linked files, that can add up to a lot of
+     complete file, i.e. the full 1 MiB, not only that directory's share (256
+     kiB). With a lot of hard-linked files, that can add up to a lot of
      difference between what QDirStat displays and what disk space you actually
      need for the backup.
 
      There was a user who makes heavy use of that, and for that kind of use case
      there is now the option to ignore hard links: In that case, QDirStat sums
-     up the complete size (the full 1 MB) for each hard link of the file.
+     up the complete size (the full 1 MiB) for each hard link of the file.
 
      While that is useful for this special case, and you can now see the total
      size that you will need for your backup medium for that one directory, the
      total size higher up in the directory tree where more than one of those
      directories that share hard linked files with each other is off: That file
-     now appears 4 times with 1 MB each, so it will add up to 4 MB.
+     now appears 4 times with 1 MiB each, so it will add up to 4 MiB.
 
      There is now a new config option in `~/.config/QDirStat/QDirStat.conf`:
 
@@ -830,7 +789,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
      More details at [GitHub Issue #124](https://github.com/shundhammer/qdirstat/issues/124).
      </details>
 
-
   - There is now a new document about Btrfs free size and how different tools
     tend to show different values: [Btrfs-Free-Size.md](doc/Btrfs-Free-Size.md)
 
@@ -840,7 +798,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     and inconsistent sizes; traditional Linux / Unix command line tools like
     `du` and `df` just like GUI tools like QDirStat. Hopefully, this document
     will shed some light on that.
-
 
   **Bug Fixes:**
 
@@ -868,19 +825,17 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
 - 2020-06-14
 
-  - Now displaying the allocated size for very small files (8 kB (2 clusters)
+  - Now displaying the allocated size for very small files (8 kiB (2 clusters)
     or less) in a much more subdued way so it's still there, but less
     distracting.
-
 
   - If a file is wasting very much space (i.e. if it uses 33% or less of its
     allocated disk space), now displaying the allocated size in bold in the
     "Details" panel to draw more attention to the fact. This affects pretty
     much all tiny files with 1360 bytes or less since the cluster size of most
-    (all?) Linux filesystem is so large (4 kB for ext4, XFS, Btrfs).
+    (all?) Linux filesystem is so large (4 kiB for ext4, XFS, Btrfs).
 
   Screenshot for both changes at [GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134).
-
 
 - 2020-06-13
 
@@ -893,7 +848,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
   - Now correctly labelling a mount point as mount point in the "Details"
     panel.
-
 
 - 2020-06-12
 
@@ -913,7 +867,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     See also [GitHub Issue #88](https://github.com/shundhammer/qdirstat/issues/88).
 
-
 - 2020-06-11
 
   - Fixed [GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134):
@@ -927,12 +880,11 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     - Now using the _allocated_ size in the treemap so tiny files appear with
       their true size, no longer disappearing in the grey background: A 6 bytes
-      file is now displayed with the 4 KB that it actually consumes, not just
+      file is now displayed with the 4 kiB that it actually consumes, not just
       the 6 bytes of its content.
 
     More information and lots of screenshots at
     [GitHub Issue #134](https://github.com/shundhammer/qdirstat/issues/134).
-
 
 - 2020-06-03
 
@@ -953,8 +905,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
   - Added a document about Btrfs free size and how different tools tend to show
     different values: [Btrfs-Free-Size.md](doc/Btrfs-Free-Size.md)
-
-
 
 - 2020-05-27
 
@@ -982,7 +932,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     ("normal", see above) mounted filesystems, including network mounts (NFS,
     Samba / Cifs).
 
-
 - 2020-03-19
 
   - Added a config option to ignore hard links.
@@ -992,10 +941,10 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     users won't have to bother with this at all.
 
     By default, QDirStat sums up the disk space for a file with multiple hard
-    links for each hard link's share of the overall size: If a file with 1 MB
+    links for each hard link's share of the overall size: If a file with 1 MiB
     has 4 hard links, for each of those 4 links QDirStat adds 1/4 of the size
-    (i.e., 256 kB) to the parent directory. If all those 4 links are in the
-    same directory, that's very simple: They add up to 4 * 256 kB = 1 MB, so
+    (i.e., 256 kiB) to the parent directory. If all those 4 links are in the
+    same directory, that's very simple: They add up to 4 * 256 kiB = 1 MiB, so
     the sum is correct.
 
     If those hard links are all in different directories, each directory only
@@ -1006,20 +955,20 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     The trouble starts when you want to make a backup of only one of those
     directories: Even though the disk space is still shared with other
     directories, on the backup medium, you still need the disk space for that
-    complete file, i.e. the full 1 MB, not only that directory's share (256
-    kB). With a lot of hard-linked files, that can add up to a lot of
+    complete file, i.e. the full 1 MiB, not only that directory's share (256
+    kiB). With a lot of hard-linked files, that can add up to a lot of
     difference between what QDirStat displays and what disk space you actually
     need for the backup.
 
     There was a user who makes heavy use of that, and for that kind of use case
     there is now the option to ignore hard links: In that case, QDirStat sums
-    up the complete size (the full 1 MB) for each hard link of the file.
+    up the complete size (the full 1 MiB) for each hard link of the file.
 
     While that is useful for this special case, and you can now see the total
     size that you will need for your backup medium for that one directory, the
     total size higher up in the directory tree where more than one of those
     directories that share hard linked files with each other is off: That file
-    now appears 4 times with 1 MB each, so it will add up to 4 MB.
+    now appears 4 times with 1 MiB each, so it will add up to 4 MiB.
 
     So please use that config option only when you are aware of the
     consequences; this is a specialized option for rare, specialized use
@@ -1029,7 +978,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     If in doubt, leave this option off (which is the default).
 
     More details at [GitHub Issue #124](https://github.com/shundhammer/qdirstat/issues/124).
-
 
 - 2020-03-06
 
@@ -1045,9 +993,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   - Fixed crash when terminating with Ctrl-Q while reading directories
     [(GitHub Issue #122)](https://github.com/shundhammer/qdirstat/issues/122).
 
-
 --------------
-
 
 - 2020-02-13 **New stable release: 1.6.1**
 
@@ -1055,14 +1001,13 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
   - Much better handling for "permission denied" errors while reading directories
 
-  - Now showing the exact byte size (134 495 994 Bytes instead of 128.3 MB)
+  - Now showing the exact byte size (134 495 994 Bytes instead of 128.3 MiB)
     upon mouse click in the tree (right click) and in the details panel (left
     or right click)
 
   - New optional tree column "Oldest File" (not enabled by default)
 
   - Bug fix: Support for dark widget themes in file size histogram window
-
 
   **Details:**
 
@@ -1081,7 +1026,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     - The _Size_ field of those directories as well as other accumulated values
       (_Items_, _Files_, _Subdirs_) are now preceded with a "greater than" sign
       to indicate that there is most likely more, but that information could
-      not be retrieved: ">7.2 MB" indicating that it's at least 7.2 MB and most
+      not be retrieved: ">7.2 MiB" indicating that it's at least 7.2 MiB and most
       likely more than that, but we don't know because one or more
       subdirectories could not be read.
 
@@ -1113,14 +1058,14 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
       and the permissions are highlighted in red.
 
   - You can now see the exact size in bytes both in the tree view and in the
-    details panel: 134 495 994 Bytes instead of 128.3 MB. The field is still
+    details panel: 134 495 994 Bytes instead of 128.3 MiB. The field is still
     (somewhat) human readable with thousands separators (using blanks to avoid
     confusion with different decimal / thousands separators in different
     languages).
 
     This can make it easier to compare sizes with other tools that report them
     in bytes or that insist in using 1000-based units (QDirStat uses 1024-based
-    size units: 1 kB = 1024 Bytes; 1 MB = 1024 kB; 1 GB = 1024 MB; etc.).
+    size units: 1 kiB = 1024 Bytes; 1 MiB = 1024 kiB; 1 GiB = 1024 MiB; etc.).
 
     Not using tool tips that appear automatically was a conscious decision:
     This level of detailed information is not needed that often, and tool tips
@@ -1169,9 +1114,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   - Fixed text color in histogram in dark widget themes
     [(GitHub Issue #117)](https://github.com/shundhammer/qdirstat/issues/117).
 
-
 --------------------
-
 
 - 2020-02-12
 
@@ -1193,7 +1136,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
 - 2020-02-11
 
-  - Now also showing the exact byte size of all size fields (of 1 kB and above)
+  - Now also showing the exact byte size of all size fields (of 1 kiB and above)
     upon click in the "Details" panel. All clickable fields there are now
     underlined just like a hyperlink when the mouse hovers above them.
 
@@ -1210,8 +1153,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
    _Clicking (left or right mouse button) shows more details: In this case, the
    exact byte size._
-
-
 
 - 2019-12-22
 
@@ -1235,7 +1176,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     **QDirStat always used and always will use 1024-based units.**
 
-
 - 2019-11-02
 
   - Added a separate window to report all directories that could not be read
@@ -1255,7 +1195,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     taken into account when reporting directories with read errors. This is now
     fixed.
 
-
 - 2019-08-24
 
   - If directories could not be read (typically because of insufficient
@@ -1273,7 +1212,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     closed in any order (or not at all) as the user likes. Each message can
     have a "Details..." link (not used in these examples) to provide more
     information.
-
 
 - 2019-08-22
 
@@ -1307,7 +1245,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     indicate that there may be more. This is a hint (not only, but also) for
     color blind users.
 
-
 - 2019-08-12
 
   - Toned down over-information to reduce clutter:
@@ -1325,7 +1262,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
       subtree is useful to drill down deeper into the subtree to find it, so
       the tree view is much better suited for that; having that information in
       the details panel as well does not add any value for that procedure.
-
 
 - 2019-08-03
 
@@ -1350,7 +1286,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   - Added an entry "Oldest File" that does the same in the details panel for
     directories and packages.
 
-
 - 2019-07-22 **New stable release: V1.6**
 
   - Performance improvement while reading directories: On average 25% faster on
@@ -1359,7 +1294,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     See also this article: [Linux Disk Usage Tools Compared: QDirStat
     vs. K4DirStat vs. Baobab vs. Filelight vs. ncdu including
     benchmarks](https://github.com/shundhammer/qdirstat/issues/97)
-
 
   - Vast performance improvement for huge directories (with 100.000 entries or
     more in a single directory) in the tree view: There is now instant response
@@ -1387,7 +1321,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     More details at [Pkg-View.md](doc/Pkg-View.md).
 
-
   - New **unpackaged files view**:
 
     QDirStat can now visualize the files in system directories that are not
@@ -1404,7 +1337,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     etc.).
 
     More details at [Unpkg-View.md](doc/Unpkg-View.md).
-
 
   - New standard cleanup: _Check File Type_. This uses the `file` command to
     find out more detailed information what exactly a file is and displays it
@@ -1429,7 +1361,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
 --------------------------------------------------
 
-
 - 2019-07-18
 
   - Greatly improved the man page; see `man 1 qdirstat`.
@@ -1448,7 +1379,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     syntax and meaning of `pkg:/` and `unpkg:/` URLs, but also some general
     information what the program is (including what the treemap is) and how to
     use it.
-
 
 - 2019-07-08
 
@@ -1489,8 +1419,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   If you have a genuine problem with the new feature, please open a separate
   issue so it can be tracked properly.
 
-
-
 - 2019-06-16
 
   - Added [documentation for the _pkg-tools_ scripts](scripts/pkg-tools/README.md).
@@ -1504,7 +1432,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     _Update 2019-07-08: This real integration into the GUI is now available._
 
-
 - 2019-05-12
 
   - New standard cleanup: _Check File Type_. This uses the `file` command to
@@ -1514,7 +1441,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
     More details and screenshots at [GitHub Issue #102](https://github.com/shundhammer/qdirstat/issues/102).
     Notice that you can also add this to any older version of QDirStat.
-
 
 - 2019-05-11
 
@@ -1540,7 +1466,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     |   6.5 | a1043a20fb | Keep tree collapsed during reading                                  |
 
     (Much) more details at [GitHub Issue #101](https://github.com/shundhammer/qdirstat/issues/101).
-
 
 - 2019-05-10
 
@@ -1584,7 +1509,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   their file lists is now down to under 30 seconds from formerly 90 to 120 (it
   varied wildly).
 
-
 - 2019-05-09
 
   - Now no longer showing a directory's own size (the size of the directory
@@ -1594,13 +1518,13 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     sense to add the size of a very common directory like /usr/bin or /usr/lib
     to the total size of each package that owns a file in any of them, thus
     accounting for those directories many times. On my system, /usr/bin is
-    shared between 454 packages, so its 68 kB would be added up 454 times, thus
-    adding up to 30 MB.
+    shared between 454 packages, so its 68 kiB would be added up 454 times, thus
+    adding up to 30 MiB.
 
     In the treemap that meant that packages that install only one or two very
     small files (symlinks!) to a very common directory would show a lot of
     empty space; the 56 byte (or so) symlink would be completely dwarfed by the
-    directory it is in, even if the directory only has 4 kB. A lot of such lone
+    directory it is in, even if the directory only has 4 kiB. A lot of such lone
     small files each in a separate directory meant a whole lot of empty space
     in the treemap, thus making packages very hard to compare against each
     other.
@@ -1620,7 +1544,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     installed some other commands to /usr/bin; you don't want that latest mtime
     of the /usr/bin directory to affect the display of every package that has a
     file in /usr/bin.
-
 
 - 2019-05-04
 
@@ -1649,11 +1572,10 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   If you have a genuine problem with the new feature, please open a separate
   issue so it can be tracked properly.
 
-
 - 2019-04-12
 
   - **Performance improvement** while reading directories: **25% faster** on my
-    /work directory with an ext4 filesystem with 230 GB / 216k items on a
+    /work directory with an ext4 filesystem with 230 GiB / 216k items on a
     rotational (non-SSD) disk; with cleared caches now 24.5 sec average
     compared to previously 32.5 sec average (with filled caches down to 1.5
     from previously 2.0 sec).
@@ -1696,7 +1618,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     different height. That `uniformRowHeights` flag tells it that this is not
     the case.
 
-
 - 2019-04-06
 
   - New article _Linux Disk Usage Tools Compared: QDirStat vs. K4DirStat
@@ -1704,7 +1625,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     [GitHub Issue #97](https://github.com/shundhammer/qdirstat/issues/97)
 
     (written in the GitHub issue tracker so users can join the discussion)
-
 
 - 2019-04-05
 
@@ -1734,7 +1654,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     _Update 2019-04-12: This is now no longer an issue; using
     `uniformRowHeights` fixed that._
 
-
   - Implemented [GitHub Issue #90](https://github.com/shundhammer/qdirstat/issues/90):
     Support excluding directories containing a file with a specific name or pattern.
 
@@ -1752,9 +1671,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     (reading the directories), please watch out for possible bugs that this might
     have introduced and report it if you find something.
 
-
 --------
-
 
 - 2018-11-07 **New stable release: V1.5**
 
@@ -1783,17 +1700,14 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
   For more details, see the [full release announcement](https://github.com/shundhammer/qdirstat/releases/tag/1.5).
 
-
 - 2018-11-03
 
   Added showing release notes (in an external web browser) to the "Help" menu
   ("What's New in this Release").
 
-
 - 2018-10-26
 
   The pre-1.5 Beta is out: [QDirStat-1.4.97-Beta](https://github.com/shundhammer/qdirstat/releases/tag/1.4.97-Beta)
-
 
 - 2018-10-21
 
@@ -1802,7 +1716,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
   - Added a little left margin to the "Latest MTime" column in the tree to make
     it look less overcrowded.
-
 
 - 2018-10-20
 
@@ -1814,7 +1727,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     expensive in terms of performance now. And QDirStat does a LOT of system
     calls while reading directories: `opendir()` / `readdir()` for each
     directory in the tree and `lstat()` for every single file or directory
-    found in the tree: My 6.8 GB root filesystem has 275,000 items total and
+    found in the tree: My 6.8 GiB root filesystem has 275,000 items total and
     25,500 directories which means well over 300,000 system calls. Every single
     one of them now causes kernel page tables to be cleared and restored for
     every switch between user space and kernel space, and that means quite some
@@ -1837,7 +1750,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     (`~/.config/QDirStat/QDirStat.conf`) manually. For some settings you might
     still have to do that: Some are too exotic for general use, some others
     would confuse the average user much more than they would help.
-
 
 - 2018-10-19
 
@@ -1909,7 +1821,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     _Update 2018-10-20: This can now be changed in the new "General" page of
     the configuration dialog; no need to edit the config file manually._
 
-
 - 2018-10-18
 
   - Added support for the _pacman_ package manager for Manjaro and Arch Linux.
@@ -1930,7 +1841,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     that. So this will have to wait until there is useful support for it from
     the system side on those platforms. _BSD people, let me know!_
 
-
 - 2018-10-16
 
   - QDirStat now shows `[root]` in the window title if it is running with root
@@ -1945,7 +1855,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     This might be different depending on how `sudo` is configured on a system;
     on SUSE, it uses the root user's home directory, on Ubuntu, the home
     directory of the user who invoked `sudo`.
-
 
 - 2018-10-07
 
@@ -2005,7 +1914,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     If your system does not use _dpkg_ or _rpm_, those who can are invited to
     contribute patches for other package managers; it's really simple:
 
-    https://github.com/shundhammer/qdirstat/blob/master/src/PkgManager.cpp#L140
+    <https://github.com/shundhammer/qdirstat/blob/master/src/PkgManager.cpp#L140>
 
     The API is not final yet; there may be more regexp support in the near
     future (so it will only get simpler). But you get the idea.
@@ -2049,7 +1958,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     The view can scroll, so extremely long file names (as are common e.g. below
     `.git/objects` directories don't blow this view up to take all the screen
     space away from the tree and the treemap.
-
 
   - Unified the different size columns into one: No more "Subtree Size" and
     "Own Size" separately, but now just "Size". The reasoning used to be that
@@ -2096,13 +2004,11 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
     Panasonic). I am not completely sure yet just how useful that is; I'll need
     to experiment.
 
-
 - 2018-10-02 Implemented a _breadcrumbs_ widget to show the current path and
   for easier navigation up the directory hierarchy. See also the new
   screenshots.
 
   Of course this can be disabled (Menu _View_ -> uncheck _Show Current Path_).
-
 
 - 2018-09-27 Fixed [GitHub issue #84](https://github.com/shundhammer/qdirstat/issues/84):
   Crash if picking up a cache file in the starting directory (subtree root).
@@ -2116,7 +2022,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   nobody had noticed (or nobody bothered to write a bug report). This might be
   an indication that this cache file feature is not widely used, so only a
   small number of users seem to be affected. Anyway, this is now fixed.
-
 
 - 2018-09-23 Implemented [GitHub issue #80](https://github.com/shundhammer/qdirstat/issues/80):
   Show directory/file user (owner), group and permissions in the tree view.
@@ -2133,7 +2038,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 
   See issue #80 for a screenshot.
 
-
 - 2018-08-26 Noah Davis (noahdvs) contributed a new application icon for QDirStat:
 
   <img src="https://github.com/shundhammer/qdirstat/blob/master/src/icons/qdirstat.svg" height="64">
@@ -2142,7 +2046,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   release. I never liked it very much, but the new application just needed an
   icon. Finally somebody with more artistic talent than myself made one that
   looks a lot more professional. Thank you, Noah!
-
 
 - 2018-04-26 Implemented [GitHub issue #77](https://github.com/shundhammer/qdirstat/issues/77):
   Show the current URL in the window title. This is disabled by default.
@@ -2155,7 +2058,6 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
   Some day this will be configurable in a new tab in the configuration dialog,
   but right now there are only so few options that would go to such a "General"
   or "Misc" tab that it would look pretty lost and unorganized.
-
 
 - 2018-02-08 Fixed [GitHub issue #74](https://github.com/shundhammer/qdirstat/issues/74):
 Crash deleting folder while scan is in progress
@@ -2177,7 +2079,6 @@ Allow to specify install prefix
   You can now install to another location like `/usr/local` if desired.
   The default remains `/usr`. See section _Install to a Custom Directory_.
 
-
 - 2018-01-12 Some small fixes:
 
   - Fixed duplicate keyboard shortcut for actions "Stop Reading" (now: Ctrl-S)
@@ -2194,9 +2095,7 @@ Allow to specify install prefix
   - Fixed some minor issues in the exclude rule configuration dialog with some
     widgets not being correctly disabled if they made no sense to use.
 
-
 ----------------------------
-
 
 - 2017-06-04 **New stable release: V1.4**
 
@@ -2256,7 +2155,6 @@ correctly when built with Qt 4.x
   then open the file type statistics window (F3), then the file size statistics
   window (F2) from there.
 
-
 - 2017-04-14 _Let's do some real statistics_
 
   It's been a while since the last official news here, but I wasn't idle during
@@ -2267,7 +2165,7 @@ correctly when built with Qt 4.x
   This is a whole new kind of statistics in QDirStat showing how file sizes are
   distributed. You can start that for any selected directory (menu _View_ ->
   _File Size Statistics_ or F2) or from the _File Type Statistics" window if
-  you select any filename suffix (extension) there and then _File Type_ ->
+you select any filename suffix (extension) there and then_File Type_->
   _Size Statistics_ (or F2). In the latter case, you can see how large all your
   photos (.jpg), your videos (.mp4) or whatever are.
 
@@ -2292,7 +2190,6 @@ correctly when built with Qt 4.x
   I also opened a
   [GitHub issue to discuss this](https://github.com/shundhammer/qdirstat/issues/60);
   comments are welcome.
-
 
 - 2017-03-10 Filling the gaps in the treemap
 
@@ -2369,7 +2266,6 @@ correctly when built with Qt 4.x
       -rw-rw-r-- 1 sh sh 2067 Feb 24 18:07 qdirstat-02.old
       -rw-rw-r-- 1 sh sh 2067 Feb 24 18:29 qdirstat.log
 
-
   For anybody regularly watching the log file this means they will now have to
   use `tail -F qdirstat.log` rather than `tail -f` since the latter does not
   realize when the file it watches is renamed and a new one is created under
@@ -2399,7 +2295,6 @@ correctly when built with Qt 4.x
    not allow the user to sort at all during directory reading, and that is
    certainly a lot less desirable.
 
-
 - 2017-02-22
 
   - @flurbius contributed a patch to switch the main window layout from tree
@@ -2415,21 +2310,20 @@ correctly when built with Qt 4.x
 
   You can now locate files with a specific filename extension directly:
 
-  - You select a file type (a filename extension) in the "File Type Statistics" window.
+- You select a file type (a filename extension) in the "File Type Statistics" window.
 
-  - You click "Locate" or you double-click the item.
+- You click "Locate" or you double-click the item.
 
-  - The "Locate Files" window opens.
+- The "Locate Files" window opens.
 
-  - You click a directory there.
+- You click a directory there.
 
-  - In the main window, the branch for that directory opens, and all matching
+- In the main window, the branch for that directory opens, and all matching
     files are selected in the tree view and in the treemap.
 
-  - You can now directly start cleanup actions for those files.
+- You can now directly start cleanup actions for those files.
 
   See also [GitHub issue #48](https://github.com/shundhammer/qdirstat/issues/48).
-
 
 - 2017-02-18 New document: [QDirStat for Servers](https://github.com/shundhammer/qdirstat/blob/master/doc/QDirStat-for-Servers.md)
   describing how to use QDirStat and the `qdirstat-cache-writer` script on
@@ -2455,7 +2349,6 @@ correctly when built with Qt 4.x
   Next thing to come: Locating files with a specific suffix from there.
   See [GitHub issue #48](https://github.com/shundhammer/qdirstat/issues/48).
 
-
 - 2017-02-12 Working on a _File Type Statistics_ window
 
   People who know WinDirStat inevitably want that _File Type_ view in QDirStat,
@@ -2479,10 +2372,8 @@ correctly when built with Qt 4.x
   branch, but I think it will stabilize in the next one or two weeks, so I will
   merge it to Git master.
 
-
   See the whole discussion with more screenshots at
   [GitHub issue #45](https://github.com/shundhammer/qdirstat/issues/45)
-
 
 - 2017-01-03 **New stable release: V1.2**
 
@@ -2494,8 +2385,8 @@ correctly when built with Qt 4.x
 
   Btrfs subvolumes were treated just like ordinary mount points (which, to all
   intents and purposes, they are). So you might have wondered why the _df_
-  command shows your 40 GB root filesystem as 97% full, yet QDirStat shows only
-  about 7 GB. The rest might be hidden in subvolumes.
+  command shows your 40 GiB root filesystem as 97% full, yet QDirStat shows only
+  about 7 GiB. The rest might be hidden in subvolumes.
 
   QDirStat stops reading at mount points - which only makes sense because
   normally you want to know what eats up the disk space on that one partition
@@ -2512,7 +2403,6 @@ correctly when built with Qt 4.x
   available, /etc/mtab) to find this out.
 
   This is fixed in the _qdirstat-cache-writer_ script, too.
-
 
 - 2016-12-11 Bernhard Walle contributed some patches for MacOS X support.
   Thanks, Bernhard!
@@ -2531,7 +2421,6 @@ correctly when built with Qt 4.x
   (which at that point is already known to have a different device major/minor
   number than its parent) is considered a filesystem boundary, and that branch
   is not scanned.
-
 
 - 2016-12-08 Fixed C++ (QDirStat binary) part of
   [GitHub issue #39](https://github.com/shundhammer/qdirstat/issues/39):
@@ -2553,7 +2442,6 @@ correctly when built with Qt 4.x
   The Perl _qdirstat-cache-writer_ still has the old behaviour, i.e. it still
   stops at a subvolume mount point. This will be addressed next.
 
-
 - 2016-12-07 Fixed [GitHub issue #40](https://github.com/shundhammer/qdirstat/issues/40):
   Crash without useful error message when no display available
 
@@ -2567,15 +2455,14 @@ correctly when built with Qt 4.x
   ("Could not connect to display"), it does not dump core anymore, but just
   exits with error code 1.
 
-
 - 2016-12-06 **Warning to Btrfs users** (Fixed as of 2012-12-09)
 
   If you use QDirStat to scan a Btrfs partition,
   [any subvolumes of that partition are not scanned](https://github.com/shundhammer/qdirstat/issues/39):
   Btrfs subvolumes are treated just like ordinary
   mount points (which, to all intents and purposes, they are). So you might
-  wonder why the _df_ command shows your 40 GB root filesystem as 97% full, yet
-  QDirStat shows only about 7 GB. The rest might be hidden in subvolumes.
+  wonder why the _df_ command shows your 40 GiB root filesystem as 97% full, yet
+  QDirStat shows only about 7 GiB. The rest might be hidden in subvolumes.
 
   QDirStat stops reading at mount points - which only makes sense because
   normally you want to know what eats up the disk space on that one partition
@@ -2595,7 +2482,6 @@ correctly when built with Qt 4.x
   and not use it anymore). **This is broken by design.** A simple info command
   like that should not require root privileges.
 
-
 - 2016-10-31 (Halloween) **New stable release: V1.1-Pumpkin**
 
   It's about time for another official release to get the accumulated fixes and
@@ -2608,7 +2494,6 @@ correctly when built with Qt 4.x
   independent parts so admins can provide presets to their users without
   overwriting the complete configuration), all described in greater detail
   below.
-
 
 - 2016-10-23
 
@@ -2649,7 +2534,6 @@ correctly when built with Qt 4.x
   - Fixed [GitHub issue #33](https://github.com/shundhammer/qdirstat/issues/33):
     Added command line option `--slow-update` (or `-s`) for slow remote X connections.
 
-
 - 2016-08-12
 
   - Fixed [GitHub issue #23](https://github.com/shundhammer/qdirstat/issues/23):
@@ -2662,7 +2546,6 @@ correctly when built with Qt 4.x
     One of these days I'm going to throw out all that QUrl stuff and replace the
     few things that I need with something that actually works consistently and
     not just under optimum conditions.
-
 
 - 2016-08-10
 
@@ -2678,7 +2561,6 @@ correctly when built with Qt 4.x
     web browsers that I found myself missing that more and more. And re-reading
     is not that expensive on today's mainstream PCs.
 
-
 - 2016-07-02
 
   - Fixed [GitHub issue #21](https://github.com/shundhammer/qdirstat/issues/21):
@@ -2691,7 +2573,6 @@ correctly when built with Qt 4.x
     line: It now no longer just throws an exception right after starting the
     program (which looks like a crash to the unwary user), but posts an error
     popup instead and then asks for a directory to read.
-
 
 - 2016-06-29
 
@@ -2708,7 +2589,7 @@ correctly when built with Qt 4.x
     own site-wide cleanup actions, exclude rules, or MIME categories. I did
     this with this in mind:
 
-      http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html
+      <http://moo.nac.uci.edu/~hjm/kdirstat/kdirstat-for-clusters.html>
 
     Here, they describe how users should overwrite their KDirStat config file
     with one provided by the site admin so all users have those carefully
@@ -2729,7 +2610,6 @@ correctly when built with Qt 4.x
     where they belong. No need to bother with any migration scripts or anything
     like that.
 
-
 - 2016-05-16 **First stable release: V1.0**
 
   After 3 months of Beta phase and 3 Beta releases, here is finally the
@@ -2741,7 +2621,6 @@ correctly when built with Qt 4.x
   considered stable in the truest sense of the word. It was not rushed out the
   door, and there were no hectic last minute changes. It is well tested, and
   the community had ample opportunity to report any problems.
-
 
 - 2016-04-11
 
@@ -2801,7 +2680,6 @@ correctly when built with Qt 4.x
     He also made a PPA repository available for various Ubuntu versions - see
     [Ubuntu packages](https://github.com/shundhammer/qdirstat#ubuntu) below.
 
-
 - 2016-02-06
 
   - Added tab for exclude rules configuration to the config dialog (see
@@ -2810,7 +2688,6 @@ correctly when built with Qt 4.x
     **I hereby declare QDirStat to be Beta.**
 
     _Please use the GitHub issue tracker for any bug reports._
-
 
   - Exclude rules can now optionally match against the full path again. I had
     changed this for just the directory name without the path by default, which
@@ -2916,7 +2793,6 @@ correctly when built with Qt 4.x
     Yet another day of development completely wasted due to insufficiencies of
     underlying tools. Just great. I am getting fed up with this.
 
-
 - 2016-01-22
 
   - Improved usability of refreshing the tree after cleanup actions: They used
@@ -2942,7 +2818,6 @@ correctly when built with Qt 4.x
     class cannot provide that kind of elementary information to its derived
     classes, it's poorly designed. Period.
 
-
 - 2016-01-18
 
   - Applied Qt4 compatibility patches from Michael Matz. The only nontrivial
@@ -2952,14 +2827,14 @@ correctly when built with Qt 4.x
 
 - 2016-01-16
 
-   - The MIME categories and the corresponding treemap colors can now be
+  - The MIME categories and the corresponding treemap colors can now be
      configured - see screenshot above. Yes, this is a real treemap widget as a
      preview for the colors, complete with a demo directory tree with a random
      number of files with random sizes (i.e. it looks different for each
      invocation). That part was the last major feature that was missing; now
      it's only little stuff that's left (still quite a number of it, though).
 
-   - Treemap colors are now no longer fixed; there is now a rules engine called
+  - Treemap colors are now no longer fixed; there is now a rules engine called
      MimeCategorizer. It uses a new class MimeCategory that groups MIME types
      (by filename, not by magic numbers in the file) into broad categories like
      "Documents", "Videos", "Music", "Images". Each of these categories has a
@@ -2968,7 +2843,7 @@ correctly when built with Qt 4.x
      map for the vast majority of the rules (simple file extensions), but it
      can also use more powerful wildcards wherever you like them.
 
-   - The log file is now created per user: It's now /tmp/qdirstat-$UID.log,
+  - The log file is now created per user: It's now /tmp/qdirstat-$UID.log,
      which for most Linux home users (with only one user account on the
      machine) is typically /tmp/qdirstat-1000.log .
 
@@ -2999,20 +2874,20 @@ correctly when built with Qt 4.x
 
   - %terminal : Terminal window application of the current desktop; one of
 
-      - konsole
-      - gnome-terminal
-      - xfce4-terminal
-      - lxterminal
-      - eterm
-      - xterm  (fallback)
+    - konsole
+    - gnome-terminal
+    - xfce4-terminal
+    - lxterminal
+    - eterm
+    - xterm  (fallback)
 
   - %filemanager : File manager application of the current desktop; one of
 
-      - konqueror
-      - nautilus
-      - thunar
-      - pcmanfm
-      - xdg-open (fallback)
+    - konqueror
+    - nautilus
+    - thunar
+    - pcmanfm
+    - xdg-open (fallback)
 
   - Which desktop is used is determined by the _$XDG_CURRENT_DESKTOP_
     environment variable. Currently supported:
@@ -3060,14 +2935,13 @@ correctly when built with Qt 4.x
     only some of the predefined actions have an icon. There is currently no way
     for the user to specify an icon for a cleanup action.
 
-
 - 2016-01-13 Added "move to trash", this time as a normal action in the "Edit"
   menu, the toolbar and the context menus. This is a real implementation of the
   XDG Trash specification. It does not rely on outside tools that might or
   might not be available.
 
 - 2016-01-12 We have a first MacOS X port! Sonja Krause-Harder volunteered to
-  install a Qt development environment (11 GB! Yikes!) on her MacBook. I would
+  install a Qt development environment (11 GiB! Yikes!) on her MacBook. I would
   have expected some changes, but a simple "qmake; make" just did the
   job. Amazing! -- The major challenge was to find where "qmake" gets installed
   in that MacOS Qt environment.
@@ -3101,7 +2975,7 @@ correctly when built with Qt 4.x
     always using either /bin/sh or the user's login shell, and I found that
     there is no killer argument in favour or against either option. For
     example, I use the _zsh_, and while it's a great interactive shell, it did
-    give me problems for that "remove junk files" cleanup: "rm -f *.o *.bak *~"
+    give me problems for that "remove junk files" cleanup: "rm -f _.o_.bak *~"
     -- when any of the wildcards cannot be expanded because there is no such
     file, it complains. Okay, you can wrap the whole command in "/bin/bash -c",
     but that's yet another indirection, so now you can configure /bin/bash for
@@ -3192,24 +3066,24 @@ correctly when built with Qt 4.x
   - Added "about" dialogs for the program and the used Qt version.
 
 - 2015-12-30  Treemap rendering now works as expected, and selecting items
-	      (including multi-selection with shift-click and ctrl-click in the
-	      tree view and ctrl-click in the treemap view) works. It was a bit
-	      of a challenge to avoid Qt signal ping-pong between the selection
-	      model object and the two views.
+       (including multi-selection with shift-click and ctrl-click in the
+       tree view and ctrl-click in the treemap view) works. It was a bit
+       of a challenge to avoid Qt signal ping-pong between the selection
+       model object and the two views.
 
 - 2015-12-28  Treemaps are back. It's not perfect yet, but the basic rendering
-	      works. I admit I was somewhat scared of that part, but the
-	      transition from Qt3 QCanvas to QGraphicsScene / QGraphicsView
-	      went much smoother than I had expected. I am very glad I don't
-	      have to dig deep into the math again with those cushioned
-	      treemaps; that part worked completely unchanged. :-)
+       works. I admit I was somewhat scared of that part, but the
+       transition from Qt3 QCanvas to QGraphicsScene / QGraphicsView
+       went much smoother than I had expected. I am very glad I don't
+       have to dig deep into the math again with those cushioned
+       treemaps; that part worked completely unchanged. :-)
 
 - 2015-12-27  The tree view now supports _extended_ selection, i.e. you can
-	      shift-click to select a range of items or ctrl-click to select or
-	      deselect individual items. This was the most requested feature
-	      for the last KDirStat. This means you can now select more than
-	      one item at once to move it to the trash can etc. (once cleanup
-	      actions are back).
+       shift-click to select a range of items or ctrl-click to select or
+       deselect individual items. This was the most requested feature
+       for the last KDirStat. This means you can now select more than
+       one item at once to move it to the trash can etc. (once cleanup
+       actions are back).
 
 - 2015-12-25  Christmas release
 
@@ -3234,35 +3108,34 @@ correctly when built with Qt 4.x
     ported to Qt5 now.
 
 - 2015-12-20  First usable preview version - see screenshot above. It's still
-	      pretty rough, and sorting via the QSortProxyModel seems to be
-	      awfully slow once a number of tree branches were ever
-	      opened. Looks like I'll have to do that myself, too.
+       pretty rough, and sorting via the QSortProxyModel seems to be
+       awfully slow once a number of tree branches were ever
+       opened. Looks like I'll have to do that myself, too.
 
 - 2015-12-18  Found the crippling bugs that made the DirTreeModel do crazy
-	      things. None of the Qt classes proved to be helpful to find that
-	      - they just happily do the crazy things. That's what I call poor
-	      design. Now there is a first working QDirStat with a useful
-	      display tree, including icons (but no percentage bar graph yet).
+       things. None of the Qt classes proved to be helpful to find that
+       - they just happily do the crazy things. That's what I call poor
+       design. Now there is a first working QDirStat with a useful
+       display tree, including icons (but no percentage bar graph yet).
 
 - 2015-12-07  First working DirTreeModel -- still minimalistic, but working.
 
 - 2015-12-06  Created tree model based on QAbstractItemModel.
-	      Compiles, but dumps core so far.
+       Compiles, but dumps core so far.
 
 - 2015-12-05  Imported and ported directory tree data classes.
-	      Hammered through the compiler, but nothing usable so far.
+       Hammered through the compiler, but nothing usable so far.
 
 - 2015-11-28  QDirStat project is being set up. Nothing usable so far.
-
 
 ## KDirStat
 
 KDirStat is the predecessor to QDirStat. QDirStat is an 80% rewrite of the KDE3
 based KDirStat.
 
-KDirStat home page: http://kdirstat.sourceforge.net/
+KDirStat home page: <http://kdirstat.sourceforge.net/>
 
-Sources: https://github.com/shundhammer/kdirstat
+Sources: <https://github.com/shundhammer/kdirstat>
 
 ### KDirStat History
 

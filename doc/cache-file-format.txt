@@ -174,9 +174,9 @@ children!
 This size is given in bytes. It may also have a trailing unit (directly
 following the number, without whitespace):
 
-- "K" for kB (1024 bytes)
-- "M" for MB (1024 kB)
-- "G" for GB (1024 MB)
+- "K" for kiB (1024 bytes)
+- "M" for MiB (1024 kiB)
+- "G" for GiB (1024 MiB)
 
 The size is always specified in integer numbers, never in fractional
 numbers. So if it cannot be divided by a bigger unit without a fractional

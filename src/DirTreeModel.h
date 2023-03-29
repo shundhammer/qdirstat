@@ -328,8 +328,8 @@ namespace QDirStat
 
 	/**
 	 * For plain files that have multiple hard links or that are sparse
-	 * files or both, return a text describing the size: "20.0 MB / 4
-	 * Links", "1 GB (allocated: 2 kB)". For everything else, return an
+	 * files or both, return a text describing the size: "20.0 MiB / 4
+	 * Links", "1 GiB (allocated: 2 kiB)". For everything else, return an
 	 * empty string.
 	 *
 	 * 'fmtSz' is a pointer to a formatting function that takes a FileSize

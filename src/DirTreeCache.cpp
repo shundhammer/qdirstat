@@ -19,10 +19,10 @@
 #include "Logger.h"
 #include "Exception.h"
 
-#define KB 1024LL
-#define MB (1024LL*1024)
-#define GB (1024LL*1024*1024)
-#define TB (1024LL*1024*1024*1024)
+#define kiB 1024LL
+#define MiB (1024LL*1024)
+#define GiB (1024LL*1024*1024)
+#define TiB (1024LL*1024*1024*1024)
 
 #define MAX_ERROR_COUNT			1000
 
@@ -183,17 +183,17 @@ QByteArray CacheWriter::urlEncoded( const QString & path )
 
 QString CacheWriter::formatSize( FileSize size )
 {
-    if ( size >= TB && size % TB == 0 )
-        return QString( "%1T" ).arg( size / TB );
+    if ( size >= TiB && size % TiB == 0 )
+        return QString( "%1T" ).arg( size / TiB );
 
-    if ( size >= GB && size % GB == 0 )
-        return QString( "%1G" ).arg( size / GB );
+    if ( size >= GiB && size % GiB == 0 )
+        return QString( "%1G" ).arg( size / GiB );
 
-    if ( size >= MB && size % MB == 0 )
-        return QString( "%1M" ).arg( size / MB );
+    if ( size >= MiB && size % MiB == 0 )
+        return QString( "%1M" ).arg( size / MiB );
 
-    if ( size >= KB && size % KB == 0 )
-        return QString( "%1K" ).arg( size / KB );
+    if ( size >= kiB && size % kiB == 0 )
+        return QString( "%1k" ).arg( size / kiB );
 
     return QString( "%1" ).arg( size );
 }
@@ -347,10 +347,10 @@ void CacheReader::addItem()
     {
 	switch ( *end )
 	{
-	    case 'K':	size *= KB; break;
-	    case 'M':	size *= MB; break;
-	    case 'G':	size *= GB; break;
-	    case 'T':	size *= TB; break;
+	    case 'k':	size *= kiB; break;
+	    case 'M':	size *= MiB; break;
+	    case 'G':	size *= GiB; break;
+	    case 'T':	size *= TiB; break;
 	    default: break;
 	}
     }

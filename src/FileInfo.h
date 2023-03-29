@@ -899,11 +899,11 @@ namespace QDirStat
 	/**
 	 * Set the policy how hard links are handled: By default, for files
 	 * with multiple hard links, the size is distributed among each
-	 * individual hard link for that file. So a file with a size of 4 kB
-	 * and 4 hard links reports 1 kB to its parent directory.
+	 * individual hard link for that file. So a file with a size of 4 kiB
+	 * and 4 hard links reports 1 kiB to its parent directory.
 	 *
-	 * When this flag is set to 'true', it will report the full 4 kB each
-	 * time, so all 4 hard links together will now add up to 16 kB. While
+	 * When this flag is set to 'true', it will report the full 4 kiB each
+	 * time, so all 4 hard links together will now add up to 16 kiB. While
 	 * this is probably a very bad idea if those links are all in the same
 	 * directory (or subtree), it might even be useful if there are several
 	 * separate subtrees that all share hard links between each other, but
@@ -1011,4 +1011,3 @@ namespace QDirStat
 
 
 #endif // ifndef FileInfo_h
-

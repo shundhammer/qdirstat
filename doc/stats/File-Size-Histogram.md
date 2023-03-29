@@ -20,13 +20,11 @@ and the histogram options in
 
 _Histogram showing only .jpg files in that directory_
 
-
 ## Histogram Panel Content
 
 This histogram displays the distribution of file sizes in the selected
 directory (see window heading). If a filename suffix ("*.jpg" or similar) is
 displayed, it is restricted to files of that type.
-
 
 ### The Colored Heading Values
 
@@ -45,7 +43,6 @@ If the terms _median_, _quartile_, _percentile_ don't mean anything to you, you
 might want to read the
 [intro document where they are explained](https://github.com/shundhammer/qdirstat/blob/master/doc/stats/Median-Percentiles.md).
 
-
 ### The Histogram
 
 The horizontal (x) axis shows the file sizes, the vertical axis the bucket
@@ -62,7 +59,6 @@ The same principle still applies: The higher a bar, the more files are in a
 bucket. But it's no longer a linear relationship between the bars; a bar that
 is just slightly higher might have double the data points if a logarithmic
 scale is used. Use tooltips to find out the true numbers.
-
 
 ### What is it Good For?
 
@@ -86,7 +82,6 @@ scale is used. Use tooltips to find out the true numbers.
 
 - Information is power. Use your imagination what to do with it.
 
-
 ### Tooltips
 
 You can get a tooltip for each histogram item (bars or percentile marker) if
@@ -97,11 +92,10 @@ A tooltip looks like this:
 
     Bucket #20:
     707 Files
-    1.6 MB .. 1.7 MB
+    1.6 MiB .. 1.7 MiB
 
 You can get the same information for all buckets at once by switching to the
 _Buckets_ page in that dialog.
-
 
 ### The Markers
 
@@ -115,12 +109,11 @@ percentiles are spaced out in that area. Typically, the last few percentiles
 are very wide, i.e. the data points in that area are very widely spaced. You
 could say "the air gets thinner" the more you get away from the center part.
 
-
 ### Histogram Boundaries
 
 It is very common for file sizes on a real life filesystem to be vastly
 different: You might have a large number of tiny files, and you might also have
-a couple of ISOs or videos of 2 GB each. Put into the same histogram, this
+a couple of ISOs or videos of 2 GiB each. Put into the same histogram, this
 looks like this:
 
 ![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-P100.png)
@@ -129,7 +122,7 @@ This histogram does not really give away any useful information: You can see
 that the vast majority of files is at the left side, and then there are wide
 stretches of file sizes that don't appear anywhere in that directory tree
 (where all the gaps are), and then there are some very large files in the 2.5
-GB area. This is not very useful.
+GiB area. This is not very useful.
 
 This is why QDirStat by default uses some heuristics to determine useful
 boundaries for the histogram: It uses the _interquartile distance_ (Q3 - Q1)
@@ -146,7 +139,7 @@ much more useful:
 
 ![File Size Histogram Screenshot](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-histogram-P99.png)
 
-As you can see, the right boundary is still at 10.7 MB, and the "interesting"
+As you can see, the right boundary is still at 10.7 MiB, and the "interesting"
 area between Q1 and Q3 is still pretty much crammed together at the left, but
 now at least we can make some sense of it all (notice that it's using a
 logarithmic vertical scale, so it's not nearly as evenly distributed as you
@@ -155,7 +148,6 @@ might think).
 Percentile data for reference:
 
 ![Extreme Percentiles](https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-percentiles-extreme.png)
-
 
 ### Why Not Use a Logarithmic Scale There, Too?
 
@@ -172,7 +164,6 @@ that we are comparing ranges of some few bytes with gigabytes; that's a factor
 1024\*1024\*1024 difference. It's just not feasible to display that.
 
 So the more pragmatic approach is to cut off at a sensible limit.
-
 
 ----------------------------------
 

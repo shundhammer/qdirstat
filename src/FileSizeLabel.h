@@ -19,7 +19,7 @@ class QMouseEvent;
 namespace QDirStat
 {
     /**
-     * Widget to display a file size in human readable form (i.e. "123.4 MB")
+     * Widget to display a file size in human readable form (i.e. "123.4 MiB")
      * and with a context menu that displays the exact byte size.
      *
      * This is just a thin wrapper around PopupLabel / QLabel.
@@ -42,7 +42,7 @@ namespace QDirStat
 
 	/**
 	 * Set the value. This will also format the value and display it in
-	 * human-readable format, i.e. something like "123.4 MB".
+	 * human-readable format, i.e. something like "123.4 MiB".
 	 *
 	 * 'prefix' is an optional text prefix like "> " to indicate that the
 	 * exact value is unknown (e.g. because of insuficcient permissions in

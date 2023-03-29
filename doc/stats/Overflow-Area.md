@@ -18,7 +18,7 @@ the histogram).
 The upper pie chart shows that information graphically. It's no big deal,
 really.
 
-But P98..P100 in this case means cutting off from 5.3 MB to 31.1 MB, so it's a
+But P98..P100 in this case means cutting off from 5.3 MiB to 31.1 MiB, so it's a
 really wide part of the x axis that gets cut off; to show that all, it would
 need to be more than 6 times as wide. If scaled to the same window width, that
 would mean that the meaningful part of the histogram would only be 1/6 of the
@@ -26,11 +26,10 @@ total width with vast areas of emptiness to its right. That's _why_ that part
 was cut off.
 
 But even though it's only 2% of all files, those files together account for
-14.3% of the disk space in that directory tree: 7.4 GB total. This is what the
+14.3% of the disk space in that directory tree: 7.4 GiB total. This is what the
 lower pie chart shows. Again, this is not really significant, much less for the
 purpose of file size distribution which this window is all about. But it's a
 reminder not to just disregard those few files - because they are **big**.
-
 
 ## A More Extreme Example
 
@@ -48,7 +47,7 @@ P0 to P86. This does make sense in order to have the most important part of the
 distribution between Q1 (P25) and Q3 (P75) in view.
 
 But on the other hand, it cuts off 14% of all files (14 percentiles), the range
-between 1.6 MB and 2.5 GB. That's three magnitudes (1024) of difference in file
+between 1.6 MiB and 2.5 GiB. That's three magnitudes (1024) of difference in file
 size. The red slice of the upper pie chart is considerably bigger than in the
 previous example.
 
@@ -68,8 +67,8 @@ Moving the _End Percentile_ slider to P99 in this case gets you this:
 
 OK, that did put things a bit more into proportion - at the price that the most
 important part of the data, Q1 .. Q3, has now become a lot less visible: It now
-has 1/4 of its previous display size (since the right boundary is now at 10.7 MB
-from the previous 1.6 MB).
+has 1/4 of its previous display size (since the right boundary is now at 10.7 MiB
+from the previous 1.6 MiB).
 
 Still, the remaining 1% of the files that were cut off contribute to 64.7% of
 the total disk space: The red slice is still the dominant one, albeit no longer
@@ -82,16 +81,13 @@ is not helpful, either:
 
 Duh. There is no longer an overflow panel since now nothing is cut off, but the
 histogram is pretty worthless: We can now see that there are some files in the
-2.5 GB range, but the core of the histogram (Q1..Q3) has now degenerated to
+2.5 GiB range, but the core of the histogram (Q1..Q3) has now degenerated to
 some 5 pixels wide with colored lines. All we can see in this histogram is that
 there is a lot of little stuff on the left, then it peters out for a wide
 stretch, and there is another peak on the right. Notice, though, that due to
 the logarithmic vertical scale that peak is not nearly as high as it appears:
 It's just 18 files (!) in comparison to bucket #1 (the peak at the very left)
 with 98206 files.
-
-
-
 
 -----------------------------
 

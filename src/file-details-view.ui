@@ -127,7 +127,7 @@
         <item row="4" column="1">
          <widget class="QDirStat::FileSizeLabel" name="fileSizeLabel">
           <property name="text">
-           <string>42.0 kB</string>
+           <string>42.0 kiB</string>
           </property>
          </widget>
         </item>
@@ -272,7 +272,7 @@
         <item row="5" column="1">
          <widget class="QDirStat::FileSizeLabel" name="fileAllocatedLabel">
           <property name="text">
-           <string>42.0 kB</string>
+           <string>42.0 kiB</string>
           </property>
          </widget>
         </item>
@@ -878,7 +878,7 @@ Installed Files</string>
         <item row="4" column="1">
          <widget class="QDirStat::FileSizeLabel" name="pkgTotalSizeLabel">
           <property name="text">
-           <string>240.0 MB</string>
+           <string>240.0 MiB</string>
           </property>
          </widget>
         </item>
@@ -973,7 +973,7 @@ Installed Files</string>
         <item row="5" column="1">
          <widget class="QDirStat::FileSizeLabel" name="pkgAllocatedLabel">
           <property name="text">
-           <string>240.0 MB</string>
+           <string>240.0 MiB</string>
           </property>
          </widget>
         </item>
@@ -1094,7 +1094,7 @@ Installed Files</string>
         <item row="2" column="1">
          <widget class="QDirStat::FileSizeLabel" name="pkgSummaryTotalSizeLabel">
           <property name="text">
-           <string>240.0 MB</string>
+           <string>240.0 MiB</string>
           </property>
          </widget>
         </item>
@@ -1189,7 +1189,7 @@ Installed Files</string>
         <item row="3" column="1">
          <widget class="QDirStat::FileSizeLabel" name="pkgSummaryAllocatedLabel">
           <property name="text">
-           <string>240.0 MB</string>
+           <string>240.0 MiB</string>
           </property>
          </widget>
         </item>
@@ -1327,7 +1327,7 @@ Installed Files</string>
         <item row="0" column="1">
          <widget class="QDirStat::FileSizeLabel" name="selTotalSizeLabel">
           <property name="text">
-           <string>512.0 MB</string>
+           <string>512.0 MiB</string>
           </property>
          </widget>
         </item>
@@ -1389,7 +1389,7 @@ Installed Files</string>
         <item row="1" column="1">
          <widget class="QDirStat::FileSizeLabel" name="selAllocatedLabel">
           <property name="text">
-           <string>512.0 MB</string>
+           <string>512.0 MiB</string>
           </property>
          </widget>
         </item>

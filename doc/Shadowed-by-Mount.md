@@ -4,16 +4,15 @@
 
 License: GNU Free Documentation License
 
-
 ## Problem
 
 If files are _shadowed_ by a mount, they are invisible, yet they still occupy
 disk space.
 
 For example, if your root filesystem contains an existing directory
-`/home/kilroy` with 2 GB worth of files, but you also have a separate `/home`
+`/home/kilroy` with 2 GiB worth of files, but you also have a separate `/home`
 filesystem that has an `/etc/fstab` entry, that separate `/home` filesystem is
-mounted _over_ those files in `/home/kilroy`, making those 2 GB invisible and
+mounted _over_ those files in `/home/kilroy`, making those 2 GiB invisible and
 unaccessible, no matter if the separate `/home` also has a `/home/kilroy`
 directory. Of course those _shadowed_ files still occupy disk space; you just
 can't see them.
@@ -23,7 +22,7 @@ What `QDirStat` or `du` report will be different from what `df` reports as
 
 _Notice: If it's Btrfs, that is commonly caused by snapshots, subvolumes, CoW
 and other Btrfs weirdness, so don't worry. See also
-https://github.com/shundhammer/qdirstat/blob/master/doc/Btrfs-Free-Size.md._
+<https://github.com/shundhammer/qdirstat/blob/master/doc/Btrfs-Free-Size.md>._
 
 ## Low-tech Solution
 
@@ -71,7 +70,6 @@ Why? **_Because we can!_**
 casually by hand; if you have full disk encryption or LVM or RAID or any
 combination of those.
 
-
 ## General Idea
 
 - Bind-mount the filesystem to have it accessible a second time, but without
@@ -82,7 +80,6 @@ combination of those.
   easier to see all shadowed files (and only them) at once.
 
 - Examine that tree, e.g. with QDirStat.
-
 
 ## WARNING
 
@@ -110,12 +107,10 @@ name appears; you may be surprised. **Then** make your decision.
 Whatever you do with the instructions and script(s) presented here, **use at
 your own risk**.
 
-
 ## Steps and Useful Commands
 
 This is the manual solution. Scroll down for a simple script that does this for
 the root filesystem and its direct mount points.
-
 
 ### 1. Bind-mount the Root Directory
 
@@ -228,7 +223,6 @@ tux@linux:~> grep -v "^$ROOT_DEVICE" /proc/mounts | egrep -v " /(sys|proc|dev|ru
 
 That's the list we need.
 
-
 ### 3. Bind-mount those Real Mounts
 
 - Bind-mount one of those mount points:
@@ -252,7 +246,6 @@ example uses `/mnt/shadowed/win_app` and `/mnt/shadowed/win_boot`, not
 `/mnt/shadowed/win/app` and `/mnt/shadowed/win/boot`. Use a flat list of target
 mount points, not a tree. It's not a problem here, but it might be a problem if
 there is more nesting, e.g. `/mnt/shadowed/var` and `/mnt/shadow/var/log`.
-
 
 ### 4. Check for Shadowed Files
 
@@ -299,7 +292,6 @@ not shadowed).
 _Notice that you cannot delete, rename or move any of the bind mount points as
 long as a mount is active on them: You will get an error "Device or resource
 busy" if you try._
-
 
 ### Misc
 
@@ -450,7 +442,6 @@ punishment, so you have to do it manually._ ;-)
 
 But it supports a Btrfs root filesystem (including handling the subvolumes).
 
-
 ## Fetch the Latest Version
 
 ```console
@@ -458,7 +449,7 @@ tux@linux:~/tmp> wget https://raw.githubusercontent.com/shundhammer/qdirstat/mas
 ```
 
 or use `curl` if you prefer that. Or use your web browser: Go to
-https://github.com/shundhammer/qdirstat/tree/master/scripts/shadowed
+<https://github.com/shundhammer/qdirstat/tree/master/scripts/shadowed>
 and use "Save linked content as..." from the browser's context menu (right
 click).
 
@@ -500,7 +491,6 @@ It did not execute any of the `mount` of `mkdir` commands; it just shows you
 what it would do. This gives you the chance to copy & paste them to a file and
 execute them one by one if you prefer that.
 
-
 ## Execute the Commands
 
 Start the script without the `-n` (dry run) command line option, but with root
@@ -512,7 +502,6 @@ unshadow-mount-points: FATAL: This needs root privileges.
 ```
 
 _Nope, this doesn't work. Use `sudo` or `su`._
-
 
 ```console
 tux@linux:~/tmp> sudo ./unshadow-mount-points
@@ -532,10 +521,10 @@ mount -o bind /mnt/root/home /mnt/shadowed/home
 
 === Disk space in shadowed directories:
 
-0	/mnt/shadowed/home
-0	/mnt/shadowed/tmp
-0	/mnt/shadowed/work_src
-49M	/mnt/shadowed/work_tmp
+0 /mnt/shadowed/home
+0 /mnt/shadowed/tmp
+0 /mnt/shadowed/work_src
+49M /mnt/shadowed/work_tmp
 
 Now run    qdirstat /mnt/shadowed.
 
@@ -596,38 +585,37 @@ tux@linux:~/tmp> tree -d /work/tmp
 
 ```console
 tux@linux:~/tmp> du -h /mnt/shadowed/
-0	/mnt/shadowed/tmp
-4.0K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/.github
-4.0K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/debian/source
-24K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/debian
-100K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/doc/stats
-344K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/doc
-64K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/man
-8.0M	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/screenshots
-40K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/scripts/pkg-tools
-8.0K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/scripts/shadowed
-112K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/scripts
-420K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/src/.moc
-56K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/src/icons/tree-medium
-56K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/src/icons/tree-small
-232K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/src/icons
-41M	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/src
-28K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/test/data
-4.0K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/test/util
-32K	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat/test
-49M	/mnt/shadowed/work_tmp/hidden-treasure/qdirstat
-49M	/mnt/shadowed/work_tmp/hidden-treasure
-49M	/mnt/shadowed/work_tmp
-0	/mnt/shadowed/work_src
-0	/mnt/shadowed/home
-49M	/mnt/shadowed/
+0 /mnt/shadowed/tmp
+4.0K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/.github
+4.0K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/debian/source
+24K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/debian
+100K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/doc/stats
+344K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/doc
+64K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/man
+8.0M /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/screenshots
+40K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/scripts/pkg-tools
+8.0K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/scripts/shadowed
+112K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/scripts
+420K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/src/.moc
+56K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/src/icons/tree-medium
+56K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/src/icons/tree-small
+232K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/src/icons
+41M /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/src
+28K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/test/data
+4.0K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/test/util
+32K /mnt/shadowed/work_tmp/hidden-treasure/qdirstat/test
+49M /mnt/shadowed/work_tmp/hidden-treasure/qdirstat
+49M /mnt/shadowed/work_tmp/hidden-treasure
+49M /mnt/shadowed/work_tmp
+0 /mnt/shadowed/work_src
+0 /mnt/shadowed/home
+49M /mnt/shadowed/
 ```
 
 ```console
 tux@linux:~/tmp> find /mnt/shadowed -type f | wc -l
 447
 ```
-
 
 ## Delete or Move the Shadowed Files
 
@@ -654,7 +642,6 @@ rm: cannot remove '/mnt/shadowed/work_tmp': Device or resource busy
 tux@linux:~/tmp> sudo mv /mnt/shadowed/work_tmp .
 mv: cannot remove '/mnt/shadowed/work_tmp': Device or resource busy
 ```
-
 
 ## Clean Up: Unmount all those Bind Mounts
 

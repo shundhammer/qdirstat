@@ -230,7 +230,7 @@ void FileDetailsView::setFileSizeLabel( FileSizeLabel * label,
 			.arg( formatSize( file->rawByteSize() ) )
 			.arg( file->links() ) );
 
-	if ( file->rawByteSize() >= 1024 ) // Not useful below 1 kB
+	if ( file->rawByteSize() >= 1024 ) // Not useful below 1 kiB
 	{
 	    label->setContextText( tr( "%1 / %2 Links" )
 				   .arg( formatByteSize( file->rawByteSize() ) )
@@ -716,4 +716,3 @@ void FileDetailsView::writeSettings()
 
     settings.endGroup();
 }
-

@@ -32,14 +32,14 @@ QString QDirStat::formatSize( FileSize lSize, int precision )
     if ( units.isEmpty() )
     {
 	units << QObject::tr( "Bytes" )
-	      << QObject::tr( "kB" )
-	      << QObject::tr( "MB" )
-	      << QObject::tr( "GB" )
-	      << QObject::tr( "TB" )
-	      << QObject::tr( "PB" )
-	      << QObject::tr( "EB" )
-	      << QObject::tr( "ZB" )
-	      << QObject::tr( "YB" );
+	      << QObject::tr( "kiB" )
+	      << QObject::tr( "MiB" )
+	      << QObject::tr( "GiB" )
+	      << QObject::tr( "TiB" )
+	      << QObject::tr( "PiB" )
+	      << QObject::tr( "EiB" )
+	      << QObject::tr( "ZiB" )
+	      << QObject::tr( "YiB" );
     }
 
     if ( lSize < 1024 )

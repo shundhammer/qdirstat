@@ -913,8 +913,8 @@ QString DirTreeModel::smallSizeText( FileInfo * item )
 
     if ( allocated >= 1024 )			// at least 1k so the (?k) makes sense
     {
-	if ( allocated % 1024 == 0   &&		// if it's really even kB
-	     allocated < 1024 * 1024   )	// and below 1 MB
+	if ( allocated % 1024 == 0   &&		// if it's really even kiB
+	     allocated < 1024 * 1024   )	// and below 1 MiB
 	     // && item->usedPercent() < SMALL_FILE_SHOW_ALLOC_THRESHOLD &&
 	{
 	    if ( size < 1024 )
@@ -1372,4 +1372,3 @@ void DirTreeModel::refreshSelected()
 	logWarning() << "NOT refreshing " << sel << endl;
     }
 }
-

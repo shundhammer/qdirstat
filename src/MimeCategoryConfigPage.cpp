@@ -296,7 +296,7 @@ void MimeCategoryConfigPage::populateTreemapView()
 
     srandom( (unsigned) time(0) ); // Seed random number generator
     int	     fileCount = random() % 30 + 12;
-    FileSize maxSize   = 100*1024*1024;	// 100 MB
+    FileSize maxSize   = 100*1024*1024;	// 100 MiB
 
 
     // Generate a random number of files with random sizes
@@ -325,4 +325,3 @@ void MimeCategoryConfigPage::populateTreemapView()
 
     _ui->treemapView->setDirTree( _dirTree );
 }
-

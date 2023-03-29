@@ -22,7 +22,7 @@
 namespace QDirStat
 {
     /**
-     * Format a file / subtree size human readable, i.e. in "GB" / "MB"
+     * Format a file / subtree size human readable, i.e. in "GiB" / "MiB"
      * etc. rather than huge numbers of digits. 'precision' is the number of
      * digits after the decimal point.
      *

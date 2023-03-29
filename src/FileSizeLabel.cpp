@@ -69,7 +69,7 @@ bool FileSizeLabel::haveContextMenu() const
     if ( ! _contextText.isEmpty() )
 	return true;
 
-    return _value >= 1024; // Doesn't make sense below 1 kB
+    return _value >= 1024; // Doesn't make sense below 1 kiB
 }
 
 
