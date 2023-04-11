@@ -1025,7 +1025,7 @@ https://packages.debian.org/search?keywords=qdirstat
 
 ### Fedora
 
-https://apps.fedoraproject.org/packages/qdirstat/builds/
+https://packages.fedoraproject.org/pkgs/qdirstat/qdirstat/
 
 
 ## QDirStat Docker Containers
