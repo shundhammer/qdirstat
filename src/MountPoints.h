@@ -60,7 +60,7 @@ namespace QDirStat
 	QString path() const { return _path; }
 
 	/**
-	 * Return the filesystem type as string ("ext4", "btrfs", "none".
+	 * Return the filesystem type as string ("ext4", "btrfs", "none").
 	 **/
 	QString filesystemType() const { return _filesystemType; }
 
