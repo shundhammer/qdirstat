@@ -18,10 +18,10 @@
 namespace QDirStat
 {
     /**
-     * Helper class for extended file mtime statistics.
+     * Helper class for extended file mtime (modification time) statistics.
      * This is very similar to FileSizeStats.
      *
-     * This collects file size data for trees or subtrees for later use for
+     * This collects file mtime data for trees or subtrees for later use for
      * calculating a median or quantiles or histograms.
      *
      * Notice that one data item (one qreal, i.e. one 64 bit double) is
