@@ -28,6 +28,12 @@ namespace QDirStat
      * directory tree; this class fills those stubs with life.
      *
      * @short directory item within a DirTree.
+     *
+     * Important derived classes:
+     *
+     * - DotEntry  to collect direct file children of a directory
+     * - Attic     to collect ignored children
+     * - PkgInfo   for a software package
      **/
     class DirInfo: public FileInfo
     {

@@ -43,6 +43,8 @@ namespace QDirStat
      * invisible root item to support multiple toplevel items.
      *
      * @short Directory tree global data and infrastructure
+     *
+     * See also FileInfo, DirInfo.
      **/
     class DirTree: public QObject
     {

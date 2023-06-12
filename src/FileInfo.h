@@ -62,10 +62,10 @@ namespace QDirStat
      * The most basic building block of a DirTree:
      *
      * Information about one single directory entry. This is the type of info
-     * typically obtained by stat() / lstat() or similar calls.
+     * typically obtained by stat() / lstat() or similar system calls.
      *
      * This class is tuned for size rather than speed: A typical Linux system
-     * easily has 150,000+ filesystem objects, and at least one entry of this
+     * easily has 500,000+ filesystem objects, and at least one entry of this
      * sort is required for each of them.
      *
      * This class provides stubs for children management, yet those stubs all
@@ -73,6 +73,13 @@ namespace QDirStat
      * Derived classes need to take care of that.
      *
      * @short Basic file information (like obtained by the lstat() sys call)
+     *
+     * Important derived classes:
+     *
+     * - DirInfo     for a directory
+     *   - DotEntry  to collect direct file children of a directory
+     *   - Attic     to collect ignored children
+     *   - PkgInfo   for a software package
      **/
     class FileInfo
     {
