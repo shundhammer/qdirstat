@@ -511,7 +511,10 @@ private:
 
 
 /**
- * Helper class for the different layouts of the tree view layout.
+ * Helper class for the different layouts of the tree view layout that
+ * correspond to the [L1], [L2], [L3] buttons in the tool bar where you can
+ * switch what columns are displayed, and whether or not to display the
+ * breadcrumbs widget (the path) and/or the details panel.
  *
  * Notice that the column layouts are handled in the HeaderTweaker and its
  * ColumnLayout helper class; see also HeaderTweaker.h and HeaderTweaker.cpp.
