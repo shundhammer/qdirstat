@@ -260,7 +260,7 @@ QByteArray SysUtil::readLink( const QByteArray & path )
         // Buffer overflow. Yes, this can actually happen:
         //   http://insanecoding.blogspot.com/2007/11/pathmax-simply-isnt.html
         //
-        // Since this is a very pathological case, we won't attempty any crazy
+        // Since this is a very pathological case, we won't attempt any crazy
         // workarounds and simply fail with an error in the log.
 
         logError() << "Symlink target of " << QString::fromUtf8( path )
