@@ -10,9 +10,8 @@
 #ifndef Trash_h
 #define Trash_h
 
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include <sys/types.h>  // dev_t
+
 #include <QObject>
 #include <QMap>
 

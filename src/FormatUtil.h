@@ -10,8 +10,8 @@
 #define FormatUtil_h
 
 
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <time.h>       // time_t
+#include <sys/types.h>  // mode_t
 
 #include <QString>
 #include <QTextStream>

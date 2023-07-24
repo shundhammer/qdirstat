@@ -11,7 +11,6 @@
 #define SystemFileChecker_h
 
 
-#include <sys/types.h>
 #include <QString>
 
 

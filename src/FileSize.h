@@ -10,7 +10,7 @@
 #ifndef FileSize_h
 #define FileSize_h
 
-#include <limits.h>
+#include <limits.h>     // LLONG_MAX
 
 
 #define FileSizeMax   LLONG_MAX

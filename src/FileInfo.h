@@ -11,8 +11,8 @@
 #define FileInfo_h
 
 
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <sys/types.h>  // dev_t, mode_t, nlink_t
+#include <sys/stat.h>   // S_ISDIR() etc.
 
 #include <QTextStream>
 #include <QList>

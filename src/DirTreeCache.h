@@ -11,9 +11,9 @@
 #define DirTreeCache_h
 
 
-#include <stdio.h>
-#include <zlib.h>
+#include <zlib.h>    // gzFile
 #include "DirTree.h"
+
 
 #define DEFAULT_CACHE_NAME	".qdirstat.cache.gz"
 #define CACHE_FORMAT_VERSION	"1.0"
