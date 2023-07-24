@@ -7,20 +7,16 @@
  */
 
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
+#include <dirent.h>     // struct dirent
 #include <fcntl.h>	// AT_ constants (fstatat() flags)
-#include <unistd.h>
-#include <stdio.h>
 
 #include <QMutableListIterator>
 #include <QMultiMap>
 
 #include "DirReadJob.h"
 #include "DirTree.h"
+#include "DirInfo.h"
 #include "DirTreeCache.h"
-#include "Attic.h"
 #include "ExcludeRules.h"
 #include "MountPoints.h"
 #include "Exception.h"

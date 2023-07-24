@@ -7,7 +7,7 @@
  */
 
 
-#include <ctype.h>
+#include <ctype.h>      // isspace()
 #include <QUrl>
 
 #include "DirTreeCache.h"

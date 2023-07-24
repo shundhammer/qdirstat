@@ -7,7 +7,7 @@
  */
 
 
-#include <algorithm>
+#include <algorithm>    // std::stable_sort()
 
 #include "FileInfoIterator.h"
 #include "FileInfoSorter.h"

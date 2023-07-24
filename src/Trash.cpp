@@ -7,7 +7,10 @@
  */
 
 
-#include <errno.h>
+#include <sys/stat.h>   // struct stat
+#include <unistd.h>     // getuid()
+#include <errno.h>      // ENOENT
+
 #include <QDir>
 #include <QDateTime>
 #include <QFile>

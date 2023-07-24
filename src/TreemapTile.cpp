@@ -7,7 +7,7 @@
  */
 
 
-#include <math.h>
+#include <math.h>    // sqrt()
 
 #include <QImage>
 #include <QPainter>

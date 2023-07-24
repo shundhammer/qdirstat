@@ -7,7 +7,6 @@
  */
 
 
-#include <algorithm>
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QCommandLinkButton>

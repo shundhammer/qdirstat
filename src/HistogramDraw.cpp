@@ -7,7 +7,7 @@
  */
 
 
-#include <math.h>
+#include <math.h>       // log2()
 
 #include "HistogramView.h"
 #include "HistogramItems.h"

@@ -7,7 +7,7 @@
  */
 
 
-#include <algorithm>
+#include <algorithm>    // std::sort()
 
 #include <QMenu>
 

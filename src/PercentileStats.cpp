@@ -8,7 +8,7 @@
 
 
 #include <math.h>	// ceil()
-#include <algorithm>
+#include <algorithm>    // std::sort()
 
 #include "PercentileStats.h"
 #include "Exception.h"

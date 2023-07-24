@@ -7,12 +7,9 @@
  */
 
 
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <pwd.h>	// getpwuid()
 #include <grp.h>	// getgrgid()
 #include <time.h>       // gmtime()
-#include <unistd.h>
 
 #include <QDateTime>
 

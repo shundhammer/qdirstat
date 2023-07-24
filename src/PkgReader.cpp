@@ -6,9 +6,6 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 #include "PkgReader.h"
 #include "PkgQuery.h"

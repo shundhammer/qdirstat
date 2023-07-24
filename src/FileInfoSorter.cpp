@@ -7,7 +7,7 @@
  */
 
 
-#include <algorithm>
+#include <algorithm>    // std::swap()
 #include "FileInfoSorter.h"
 
 using namespace QDirStat;

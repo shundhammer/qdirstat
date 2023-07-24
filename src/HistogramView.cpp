@@ -7,8 +7,8 @@
  */
 
 
-#include <math.h>
-#include <algorithm>
+#include <math.h>       // pow()
+#include <algorithm>    // std::sort()
 
 #include <QResizeEvent>
 

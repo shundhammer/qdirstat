@@ -7,8 +7,6 @@
  */
 
 
-#include <algorithm>
-
 #include "LocateFileTypeWindow.h"
 #include "QDirStatApp.h"        // SelectionModel
 #include "DirTree.h"

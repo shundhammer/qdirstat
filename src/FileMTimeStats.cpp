@@ -7,9 +7,6 @@
  */
 
 
-#include <math.h>       // ceil()
-#include <algorithm>
-
 #include "FileMTimeStats.h"
 #include "FileInfoIterator.h"
 #include "DirTree.h"

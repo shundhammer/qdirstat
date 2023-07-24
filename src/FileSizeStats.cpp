@@ -7,9 +7,6 @@
  */
 
 
-#include <math.h>       // ceil()
-#include <algorithm>
-
 #include "FileSizeStats.h"
 #include "FileInfoIterator.h"
 #include "FormatUtil.h"
