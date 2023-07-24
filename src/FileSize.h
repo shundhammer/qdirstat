@@ -10,6 +10,8 @@
 #ifndef FileSize_h
 #define FileSize_h
 
+#include <limits.h>
+
 
 #define FileSizeMax   LLONG_MAX
 // 0x7FFFFFFFFFFFFFFFLL == 9223372036854775807LL

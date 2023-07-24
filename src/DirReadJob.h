@@ -11,7 +11,6 @@
 #define DirReadJob_h
 
 
-#include <dirent.h>
 #include <QTimer>
 
 #include "FileInfo.h"

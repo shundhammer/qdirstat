@@ -13,7 +13,6 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <limits.h>
 
 #include <QTextStream>
 #include <QList>

@@ -9,6 +9,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <dirent.h>
 #include <fcntl.h>	// AT_ constants (fstatat() flags)
 #include <unistd.h>
 #include <stdio.h>

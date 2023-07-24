@@ -11,11 +11,6 @@
 #define DirTree_h
 
 
-#include <sys/types.h>
-#include <limits.h>
-#include <dirent.h>
-#include <stdlib.h>
-
 #include <QList>
 
 #include "DirReadJob.h"

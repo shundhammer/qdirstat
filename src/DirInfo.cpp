@@ -8,6 +8,8 @@
 
 
 #include <algorithm>
+#include <sys/stat.h>
+
 
 #include "DirInfo.h"
 #include "DirTree.h"
