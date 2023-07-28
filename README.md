@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2023-07-24
+Updated: 2023-07-28
 
 
 ## Screenshot
@@ -124,6 +124,22 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2023-07-28
+
+  - **User poll:** Have you been limited by the RAM requirements of QDirStat?
+
+    Since QDirStat keeps the whole directory tree that it reads in RAM, your
+    RAM size limits how large the directory tree is that you can read before
+    you get an OOM (out of memory) error. There was a user with a really large
+    (28 TB) RAID who had that problem: He ran out of memory despite having 32
+    GB RAM after reading 26 million (!) files and directories (the projected
+    total would be 143 million).
+
+    Is that a totally exceptional scenario, just an outlier? Or did more of you
+    experience this problem? If so, please add a "thumbs up" at the "Poll"
+    section of [GitHub issue #219](https://github.com/shundhammer/qdirstat/issues/219).
+
 
 - 2023-02-01
 
