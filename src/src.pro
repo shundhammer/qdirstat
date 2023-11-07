@@ -135,6 +135,7 @@ SOURCES	  = main.cpp			\
 	    ProcessStarter.cpp		\
 	    Refresher.cpp		\
 	    RpmPkgManager.cpp		\
+	    SearchFilter.cpp		\
 	    SelectionModel.cpp		\
 	    Settings.cpp		\
 	    SettingsHelpers.cpp		\
@@ -232,6 +233,7 @@ HEADERS	  =				\
 	    Qt4Compat.h			\
 	    Refresher.h			\
 	    RpmPkgManager.h		\
+	    SearchFilter.h              \
 	    SelectionModel.h		\
 	    Settings.h			\
 	    SettingsHelpers.h		\

@@ -13,26 +13,17 @@
 #include <QRegExp>
 #include <QTextStream>
 
+#include "SearchFilter.h"
+
 
 namespace QDirStat
 {
     /**
      * Class to select packages from the complete set of installed packages.
      **/
-    class PkgFilter
+    class PkgFilter: public SearchFilter
     {
     public:
-
-        enum FilterMode
-        {
-            Auto,       // Guess from pattern (see below)
-            Contains,   // Fixed string
-            StartsWith, // Fixed string
-            ExactMatch, // Fixed string
-            Wildcard,
-            RegExp,
-            SelectAll   // Pattern is irrelevant
-        };
 
         /**
          * Constructor: Create a package filter with the specified pattern and
@@ -58,21 +49,6 @@ namespace QDirStat
                    FilterMode      filterMode = Auto );
 
         /**
-         * Constructor: Create a package filter with the specified regexp
-         * pattern and set the filter mode according to the regexp's mode
-         * (RegExp or Wildcard).
-         *
-         * Notice that this does NOT remove any leading "Pkg:" or "Pkg:/" part
-         * or any part after a slash; it uses the pattern literally.
-         **/
-        PkgFilter( const QRegExp & pattern );
-
-        /**
-         * Check if a string matches this filter.
-         **/
-        bool matches( const QString & str ) const;
-
-        /**
          * Check if a URL is a package URL, i.e. if it starts with "Pkg:" or
          * "pkg:".
          **/
@@ -88,22 +64,6 @@ namespace QDirStat
          **/
         QString url() const;
 
-        /**
-         * Return the regexp. This is only meaningful in filter modes RegExp
-         * and Wildcard.
-         **/
-        const QRegExp & regexp() const { return _regexp; }
-
-        /**
-         * Return the filter mode.
-         **/
-        FilterMode filterMode() const { return _filterMode; }
-
-        /**
-         * Convert a filter mode to a string.
-         **/
-        static QString toString( FilterMode filterMode );
-
 
     protected:
 
@@ -112,18 +72,6 @@ namespace QDirStat
          * any trailing part after any slashes.
          **/
         void normalizePattern();
-
-        /**
-         * Guess the filter mode from the pattern if "Auto" was selected.
-         **/
-        void guessFilterMode();
-
-
-        // Data members
-
-        QString         _pattern;
-        QRegExp         _regexp;
-        FilterMode      _filterMode;
 
     };  // class PkgFilter
 
