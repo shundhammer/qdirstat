@@ -13,7 +13,6 @@
 #include "QDirStatApp.h"
 #include "MainWindow.h"
 #include "DirTreeModel.h"
-#include "PkgFilter.h"
 #include "Settings.h"
 #include "Logger.h"
 #include "Exception.h"
