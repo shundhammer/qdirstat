@@ -345,6 +345,8 @@ bool MountPoints::read( const QString & filename )
     }
 
     findNtfsDevices();
+    logDebug() << "Reading " << filename << endl;
+
     QTextStream in( &file );
     int lineNo = 0;
     int count  = 0;
@@ -386,6 +388,9 @@ bool MountPoints::read( const QString & filename )
 
         postProcess( mountPoint );
         add( mountPoint );
+
+        if ( ! mountPoint->isDuplicate() )
+            ++count;
 
 	line = in.readLine();
     }
