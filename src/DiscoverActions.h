@@ -19,6 +19,7 @@ namespace QDirStat
 {
     class TreeWalker;
     class LocateFilesWindow;
+    class FileSearchFilter;
 
     /**
      * Class to keep QDirStat's "discover" actions self-contained.
@@ -69,6 +70,13 @@ namespace QDirStat
         void discoverFilesFromYear ( const QString & path, short year );
         void discoverFilesFromMonth( const QString & path, short year, short month );
 
+
+        //
+        // Other actions
+        //
+
+        void findFiles( const FileSearchFilter & filter );
+
     public:
 
         /**
@@ -81,9 +89,15 @@ namespace QDirStat
          * 'path' can optionally (if non-empty) override the current selection of
          * the tree as the starting directory.
          **/
-        void discoverFiles( QDirStat::TreeWalker * treeWalker,
-                            const QString &        headingText,
-                            const QString &        path = "" );
+        void discoverFiles( TreeWalker    * treeWalker,
+                            const QString & headingText,
+                            const QString & path = "" );
+
+        /**
+         * Create the LocateFilesWindow if needed or reuse the existing one.
+         * In either case, set its TreeWalker.
+         **/
+        void ensureLocateFilesWindow( TreeWalker * treeWalker );
 
     protected:
 

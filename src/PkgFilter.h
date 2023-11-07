@@ -77,10 +77,10 @@ namespace QDirStat
 
 
     inline QTextStream & operator<< ( QTextStream     & stream,
-                                      const PkgFilter & pkgFilter )
+                                      const PkgFilter & filter )
     {
-        stream << pkgFilter.url() << " filter mode \""
-               << PkgFilter::toString( pkgFilter.filterMode() ) << "\"";
+        stream << filter.url() << " filter mode \""
+               << PkgFilter::toString( filter.filterMode() ) << "\"";
 
         return stream;
     }

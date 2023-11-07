@@ -10,6 +10,8 @@
 #include "DiscoverActions.h"
 #include "TreeWalker.h"
 #include "LocateFilesWindow.h"
+#include "FileSearchFilter.h"
+#include "DirInfo.h"
 #include "BusyPopup.h"
 #include "QDirStatApp.h"
 #include "Logger.h"
@@ -106,19 +108,7 @@ void DiscoverActions::discoverFiles( TreeWalker *    treeWalker,
                                      const QString & headingText,
                                      const QString & path         )
 {
-    if ( ! _locateFilesWindow )
-    {
-	// This deletes itself when the user closes it. The associated QPointer
-	// keeps track of that and sets the pointer to 0 when it happens.
-
-	_locateFilesWindow = new LocateFilesWindow( treeWalker,
-                                                    app()->findMainWindow() ); // parent
-    }
-    else
-    {
-        _locateFilesWindow->setTreeWalker( treeWalker );
-    }
-
+    ensureLocateFilesWindow( treeWalker );
     FileInfo * sel = 0;
 
     if ( ! path.isEmpty() )
@@ -140,3 +130,39 @@ void DiscoverActions::discoverFiles( TreeWalker *    treeWalker,
     }
 }
 
+
+void DiscoverActions::ensureLocateFilesWindow( TreeWalker * treeWalker )
+{
+    if ( ! _locateFilesWindow )
+    {
+	// This deletes itself when the user closes it. The associated QPointer
+	// keeps track of that and sets the pointer to 0 when it happens.
+
+	_locateFilesWindow = new LocateFilesWindow( treeWalker,
+                                                    app()->findMainWindow() ); // parent
+    }
+    else
+    {
+        _locateFilesWindow->setTreeWalker( treeWalker );
+    }
+}
+
+
+void DiscoverActions::findFiles( const FileSearchFilter & filter )
+{
+    
+    ensureLocateFilesWindow( new FindFilesTreeWalker( filter ) );
+    FileInfo * sel = filter.subtree();
+
+    if ( ! sel )
+        sel = app()->selectedDirOrRoot();
+
+    if ( sel )
+    {
+        QString headingText = tr( "Search Results" );
+
+        _locateFilesWindow->setHeading( headingText.arg( sel->url() ) );
+        _locateFilesWindow->populate( sel );
+        _locateFilesWindow->show();
+    }
+}

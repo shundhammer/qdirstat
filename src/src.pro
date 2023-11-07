@@ -78,7 +78,7 @@ SOURCES	  = main.cpp			\
 	    ExcludeRules.cpp		\
 	    ExcludeRulesConfigPage.cpp	\
 	    ExistingDirCompleter.cpp	\
-	    ExistingDirValidator.cpp	\
+            ExistingDirValidator.cpp	\
 	    FileAgeStats.cpp		\
 	    FileAgeStatsWindow.cpp	\
 	    FileDetailsView.cpp		\
@@ -86,13 +86,15 @@ SOURCES	  = main.cpp			\
 	    FileInfoIterator.cpp	\
 	    FileInfoSet.cpp		\
 	    FileInfoSorter.cpp		\
-	    FileMTimeStats.cpp		\
+            FileMTimeStats.cpp		\
+            FileSearchFilter.cpp        \
 	    FileSizeLabel.cpp		\
 	    FileSizeStats.cpp		\
 	    FileSizeStatsWindow.cpp	\
 	    FileSystemsWindow.cpp	\
 	    FileTypeStats.cpp		\
 	    FileTypeStatsWindow.cpp	\
+            FindFilesDialog.cpp         \
 	    FormatUtil.cpp		\
 	    GeneralConfigPage.cpp	\
 	    HeaderTweaker.cpp		\
@@ -193,6 +195,7 @@ HEADERS	  =				\
 	    FileInfoSet.h		\
 	    FileInfoSorter.h		\
 	    FileMTimeStats.h		\
+            FileSearchFilter.h          \
 	    FileSizeLabel.h		\
 	    FileSizeStats.h		\
 	    FileSizeStatsWindow.h	\
@@ -252,6 +255,7 @@ HEADERS	  =				\
 	    FileAgeStatsWindow.h	\
 	    FileSize.h			\
 	    FileTypeStatsWindow.h	\
+            FindFilesDialog.h           \
 	    FormatUtil.h		\
 	    History.h			\
 	    HistoryButtons.h		\
@@ -265,10 +269,11 @@ FORMS	  = main-window.ui		   \
 	    cleanup-config-page.ui	   \
 	    config-dialog.ui		   \
 	    exclude-rules-config-page.ui   \
+            find-files-dialog.ui           \
 	    file-age-stats-window.ui	   \
 	    file-details-view.ui	   \
 	    file-size-stats-window.ui	   \
-	    file-type-stats-window.ui	   \
+            file-type-stats-window.ui	   \
 	    filesystems-window.ui	   \
 	    general-config-page.ui	   \
 	    locate-file-type-window.ui	   \

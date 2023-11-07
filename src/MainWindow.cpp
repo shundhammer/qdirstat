@@ -27,8 +27,10 @@
 #include "Exception.h"
 #include "ExcludeRules.h"
 #include "FileDetailsView.h"
+#include "FileSearchFilter.h"
 #include "FileSizeStatsWindow.h"
 #include "FileTypeStatsWindow.h"
+#include "FindFilesDialog.h"
 #include "Logger.h"
 #include "MimeCategorizer.h"
 #include "OpenDirDialog.h"
@@ -607,6 +609,18 @@ void MainWindow::askOpenPkg()
     {
 	app()->dirTree()->reset();
 	readPkg( pkgFilter );
+    }
+}
+
+
+void MainWindow::askFindFiles()
+{
+    bool canceled;
+    FileSearchFilter filter = FindFilesDialog::askFindFiles( &canceled );
+
+    if ( ! canceled )
+    {
+	_discoverActions->findFiles( filter );
     }
 }
 

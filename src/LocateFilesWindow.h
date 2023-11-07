@@ -60,7 +60,6 @@ namespace QDirStat
 	 **/
 	virtual ~LocateFilesWindow();
 
-
         /**
          * Obtain the subtree from the last used URL or 0 if none was found.
          **/

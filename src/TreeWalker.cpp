@@ -14,7 +14,8 @@
 #include "Logger.h"
 #include "Exception.h"
 
-#define MAX_RESULTS  200
+#define MAX_RESULTS              200
+#define MAX_FIND_FILES_RESULTS  1000
 
 
 using namespace QDirStat;
@@ -103,4 +104,31 @@ bool BrokenSymLinksTreeWalker::check( FileInfo * item )
     return item &&
         item->isSymLink() &&
         SysUtil::isBrokenSymLink( item->url() );
+}
+
+
+bool FindFilesTreeWalker::check( FileInfo * item )
+{
+    if ( _count >= MAX_FIND_FILES_RESULTS )
+        return false;
+
+    if ( ! item )
+        return false;
+
+    bool match = false;
+
+    if ( _filter.findDirs() && item->isDir() )
+    {
+        match = _filter.matches( item->name() );
+    }
+    else if ( _filter.findFiles() &&
+              ( item->isFile() || item->isSymLink() ) )
+    {
+        match = _filter.matches( item->name() );
+    }
+
+    if ( match )
+        ++_count;
+
+    return match;
 }

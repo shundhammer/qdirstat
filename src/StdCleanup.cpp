@@ -45,7 +45,7 @@ CleanupList StdCleanup::stdCleanups( QObject * parent )
 Cleanup * StdCleanup::openFileManagerHere( QObject * parent )
 {
     Cleanup *cleanup = new Cleanup( "%filemanager %d &",
-				    QObject::tr( "Open &File Manager Here" ),
+				    QObject::tr( "Open File Mana&ger Here" ),
 				    parent );
     CHECK_NEW( cleanup );
     cleanup->setWorksForDir	( true );
@@ -53,7 +53,7 @@ Cleanup * StdCleanup::openFileManagerHere( QObject * parent )
     cleanup->setWorksForDotEntry( true );
     cleanup->setRefreshPolicy( Cleanup::NoRefresh );
     cleanup->setIcon( ":/icons/file-manager.png" );
-    cleanup->setShortcut( Qt::CTRL + Qt::Key_F );
+    cleanup->setShortcut( Qt::CTRL + Qt::Key_G );
     cleanup->setOutputWindowPolicy( Cleanup::ShowNever );
 
     return cleanup;

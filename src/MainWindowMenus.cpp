@@ -66,6 +66,7 @@ void MainWindow::connectEditMenu()
 
     CONNECT_ACTION( _ui->actionCopyPathToClipboard, this, copyCurrentPathToClipboard() );
     CONNECT_ACTION( _ui->actionMoveToTrash,	    this, moveToTrash()                );
+    CONNECT_ACTION( _ui->actionFindFiles,	    this, askFindFiles()               );
     CONNECT_ACTION( _ui->actionConfigure,           this, openConfigDialog()           );
 }
 

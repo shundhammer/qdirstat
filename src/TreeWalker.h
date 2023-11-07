@@ -11,6 +11,7 @@
 #define TreeWalker_h
 
 #include "FileInfo.h"
+#include "FileSearchFilter.h"
 
 
 namespace QDirStat
@@ -219,6 +220,27 @@ namespace QDirStat
 
         short _year;
         short _month;
+    };
+
+
+    /**
+     * TreeWalker to find files and/or directories that match a pattern.
+     **/
+    class FindFilesTreeWalker: public TreeWalker
+    {
+    public:
+        FindFilesTreeWalker( const FileSearchFilter & filter ):
+            TreeWalker(),
+            _filter( filter ),
+            _count( 0 )
+            {}
+
+        virtual bool check( FileInfo * item );
+
+    protected:
+        
+        FileSearchFilter _filter;
+        int              _count;
     };
 
 }       // namespace QDirStat

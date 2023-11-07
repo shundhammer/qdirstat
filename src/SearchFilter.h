@@ -95,10 +95,10 @@ namespace QDirStat
 
 
     inline QTextStream & operator<< ( QTextStream        & stream,
-                                      const SearchFilter & searchFilter )
+                                      const SearchFilter & filter )
     {
-        stream << searchFilter.pattern() << " filter mode \""
-               << SearchFilter::toString( searchFilter.filterMode() ) << "\"";
+        stream << filter.pattern() << " filter mode \""
+               << SearchFilter::toString( filter.filterMode() ) << "\"";
 
         return stream;
     }

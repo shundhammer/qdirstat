@@ -118,8 +118,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>68</width>
-           <height>288</height>
+           <width>63</width>
+           <height>292</height>
           </rect>
          </property>
         </widget>
@@ -205,6 +205,7 @@
     </property>
     <addaction name="actionCopyPathToClipboard"/>
     <addaction name="actionMoveToTrash"/>
+    <addaction name="actionFindFiles"/>
     <addaction name="separator"/>
     <addaction name="actionConfigure"/>
    </widget>
@@ -1056,6 +1057,17 @@
    </property>
    <property name="statusTip">
     <string>https://github.com/shundhammer/qdirstat/blob/master/doc/File-Age-Stats.md</string>
+   </property>
+  </action>
+  <action name="actionFindFiles">
+   <property name="text">
+    <string>&amp;Find...</string>
+   </property>
+   <property name="toolTip">
+    <string>Find Files or Directories in the Scanned Tree</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
  </widget>

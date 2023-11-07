@@ -546,7 +546,22 @@ void CleanupCollection::readSettings()
 		    cleanup->setIcon( iconName );
 
 		if ( ! hotkey.isEmpty() )
+                {
+                    if ( hotkey == "Ctrl+F" )
+                    {
+                        // Crude workaround for the "Open File Manager Here" Ctrl+F shortcut
+                        // clasing with Ctrl+F for "Find..." in the "Edit" menu.
+                        // Yes, that's ugly; sorry. But Ctrl+F for "Find has become an established
+                        // standard.
+
+                        hotkey = "Ctrl+G";
+                        logError() << "The Ctrl+F hotkey for '" << title
+                                   << "' is now taken by 'Edit' -> 'Find...'." << endl;
+                        logError() << "Changing to " << hotkey << "." << endl;
+                    }
+
 		    cleanup->setShortcut( hotkey );
+                }
 
 		// if ( ! shell.isEmpty() )
 		//    logDebug() << "Using custom shell " << shell << " for " << cleanup << endl;

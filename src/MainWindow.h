@@ -190,6 +190,11 @@ public slots:
     void moveToTrash();
 
     /**
+     * Open the "Find Files" dialog and display the results.
+     **/
+    void askFindFiles();
+
+    /**
      * Navigate one directory level up.
      **/
     void navigateUp();
@@ -522,6 +527,7 @@ private:
 class TreeLayout
 {
 public:
+
     TreeLayout( const QString & name ):
 	name( name ),
 	showCurrentPath( true ),
