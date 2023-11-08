@@ -61,7 +61,30 @@
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer">
+      <spacer name="hStretch2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Minimum</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>25</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="resultsLabel">
+       <property name="text">
+        <string>42 Results</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="hStretch1">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

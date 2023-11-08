@@ -101,6 +101,7 @@ void LocateFilesWindow::initWidgets()
 				      << tr( "Path" )  );
     _ui->treeWidget->header()->setStretchLastSection( false );
     HeaderTweaker::resizeToContents( _ui->treeWidget->header() );
+    _ui->resultsLabel->setText( "" );
     addCleanupHotkeys();
 }
 
@@ -123,7 +124,7 @@ void LocateFilesWindow::populate( FileInfo * newSubtree )
     _ui->treeWidget->setSortingEnabled( false );
 
     populateRecursive( newSubtree ? newSubtree : _subtree() );
-    // logDebug() << "Results count: " << _ui->treeWidget->topLevelItemCount() << endl;
+    showResultsCount();
 
     _ui->treeWidget->setSortingEnabled( true );
     _ui->treeWidget->sortByColumn( _sortCol, _sortOrder );
@@ -156,6 +157,25 @@ void LocateFilesWindow::populateRecursive( FileInfo * dir )
 
         ++it;
     }
+}
+
+
+void LocateFilesWindow::showResultsCount()
+{
+    QString text;
+    int     count = _ui->treeWidget->topLevelItemCount();
+
+    if ( _treeWalker->overflow() )
+    {
+        text = tr( "Limited to %1 Results" ).arg( count );
+    }
+    else
+    {
+        text = tr( "%1 Results" ).arg( count );
+    }
+
+    _ui->resultsLabel->setText( text );
+
 }
 
 
@@ -247,7 +267,7 @@ LocateListItem::LocateListItem( FileInfo * item ):
     CHECK_PTR( item );
 
     _path  = item->url();
-    _size  = item->size();
+    _size  = item->totalSize();
     _mtime = item->mtime();
 
     QIcon icon = app()->dirTreeModel()->itemTypeIcon( item );

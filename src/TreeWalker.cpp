@@ -110,7 +110,11 @@ bool BrokenSymLinksTreeWalker::check( FileInfo * item )
 bool FindFilesTreeWalker::check( FileInfo * item )
 {
     if ( _count >= MAX_FIND_FILES_RESULTS )
+    {
+        _overflow = true;
+
         return false;
+    }
 
     if ( ! item )
         return false;

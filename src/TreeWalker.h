@@ -37,7 +37,10 @@ namespace QDirStat
     {
     public:
 
-        TreeWalker() {}
+        TreeWalker():
+            _overflow( false )
+            {}
+
         virtual ~TreeWalker() {}
 
         /**
@@ -60,6 +63,15 @@ namespace QDirStat
          **/
         virtual bool check( FileInfo * item ) = 0;
 
+        /**
+         * Flag: Results overflow while walking the tree?
+         *
+         * Derived classes can use this to indicate that the number of results
+         * was limited.
+         **/
+        bool overflow() const { return _overflow; }
+
+
     protected:
 
         /**
@@ -73,6 +85,13 @@ namespace QDirStat
          * an the minimum value (P0) to a lower percentile.
          **/
         qreal lowerPercentileThreshold( PercentileStats & stats );
+
+
+        //
+        // Data members
+        //
+
+        bool _overflow;
 
     };  // class TreeWalker
 
@@ -238,7 +257,7 @@ namespace QDirStat
         virtual bool check( FileInfo * item );
 
     protected:
-        
+
         FileSearchFilter _filter;
         int              _count;
     };
