@@ -12,14 +12,20 @@
 #include "FindFilesDialog.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
+#include "QDirStatApp.h"
+#include "DirTree.h"
+#include "DirInfo.h"
 #include "Logger.h"
 #include "Exception.h"
 
 
 using namespace QDirStat;
 
-// Storing this here instead of writing it to file with writeSettings()
+// Values that should be persistent for one program run,
+// but not written to the settings / config file
+
 static QString lastPattern;
+static QString lastPath;
 
 
 FindFilesDialog::FindFilesDialog( QWidget * parent ):
@@ -34,9 +40,9 @@ FindFilesDialog::FindFilesDialog( QWidget * parent ):
     _ui->patternField->setFocus();
 
     connect( this, SIGNAL( accepted()	   ),
-	     this, SLOT	 ( writeSettings() ) );
+	     this, SLOT	 ( saveValues() ) );
 
-    readSettings();
+    loadValues();
 }
 
 
@@ -48,17 +54,21 @@ FindFilesDialog::~FindFilesDialog()
 
 FileSearchFilter FindFilesDialog::fileSearchFilter()
 {
-    DirInfo * subtree = 0;
+    FileInfo * subtree = 0;
 
     if ( _ui->wholeTreeRadioButton->isChecked() )
-        subtree = 0;
+    {
+        subtree = app()->root();
+    }
     else if ( _ui->currentSubtreeRadioButton->isChecked() )
-        subtree = 0;
+    {
+        subtree = currentSubtree();
+    }
 
     int mode        = _ui->filterModeComboBox->currentIndex();
     QString pattern = _ui->patternField->text();
 
-    FileSearchFilter filter( subtree,
+    FileSearchFilter filter( subtree ? subtree->toDirInfo() : 0,
                              pattern,
                              (SearchFilter::FilterMode) mode );
 
@@ -76,6 +86,20 @@ FileSearchFilter FindFilesDialog::fileSearchFilter()
 }
 
 
+DirInfo * FindFilesDialog::currentSubtree()
+{
+    FileInfo * subtree = app()->selectedDir();
+
+    if ( subtree )
+        lastPath = subtree->url();
+    else
+        subtree = app()->dirTree()->locate( lastPath,
+                                            true     ); // findPseudoDirs
+
+    return subtree ? subtree->toDirInfo() : 0;
+}
+
+
 FileSearchFilter FindFilesDialog::askFindFiles( bool    * canceled_ret,
                                                 QWidget * parent )
 {
@@ -83,7 +107,7 @@ FileSearchFilter FindFilesDialog::askFindFiles( bool    * canceled_ret,
     int result = dialog.exec();
 
     FileSearchFilter filter( 0, "" );
-    bool canceled = (result == QDialog::Rejected );
+    bool canceled = ( result == QDialog::Rejected );
 
     if ( ! canceled )
         filter = dialog.fileSearchFilter();
@@ -95,6 +119,51 @@ FileSearchFilter FindFilesDialog::askFindFiles( bool    * canceled_ret,
 }
 
 
+void FindFilesDialog::loadValues()
+{
+    readSettings();
+
+    //
+    // Restore those values from static variables
+    //
+
+    _ui->patternField->setText( lastPattern );
+
+    QString    path = lastPath;
+    FileInfo * sel  = currentSubtree();
+
+    if ( sel )
+    {
+        path     = sel->url();
+        lastPath = path;
+    }
+
+    _ui->currentSubtreePathLabel->setText( path );
+    _ui->currentSubtreeRadioButton->setEnabled( ! path.isEmpty() );
+
+#if 0
+    if ( ! _ui->currentSubtreeRadioButton->isEnabled() )
+        _ui->wholeTreeRadioButton->setChecked( true );
+#endif
+}
+
+
+void FindFilesDialog::saveValues()
+{
+    writeSettings();
+
+    //
+    // Values that should not be written to the settings / the config file:
+    // Save to static variables just for the duration of this program run as
+    // the dialog is created, destroyed and created every time the user starts
+    // the "Find Files" action (Ctrl-F).
+    //
+
+    lastPattern = _ui->patternField->text();
+    lastPath    = _ui->currentSubtreePathLabel->text();
+}
+
+
 void FindFilesDialog::readSettings()
 {
     // logDebug() << endl;
@@ -102,8 +171,6 @@ void FindFilesDialog::readSettings()
     QDirStat::Settings settings;
 
     settings.beginGroup( "FindFilesDialog" );
-
-    _ui->patternField->setText( lastPattern );
 
     _ui->filterModeComboBox->setCurrentText     ( settings.value( "filterMode",     "Auto" ).toString() );
     _ui->caseSensitiveCheckBox->setChecked      ( settings.value( "caseSensitive",  false  ).toBool()   );
@@ -114,10 +181,13 @@ void FindFilesDialog::readSettings()
 
     _ui->wholeTreeRadioButton->setChecked       ( settings.value( "wholeTree",      true   ).toBool() );
     _ui->currentSubtreeRadioButton->setChecked  ( settings.value( "currentSubtree", false  ).toBool() );
-    _ui->currentSubtreePathLabel->setText( "" );
 
     settings.endGroup();
 
+    // Intentionally NOT reading from the settings / the config file:
+    //
+    // _ui->patternField->setText(...);
+    // _ui->currentSubtreePathLabel->setText(...);
 
     readWindowSettings( this, "FindFilesDialog" );
 }
@@ -131,9 +201,6 @@ void FindFilesDialog::writeSettings()
 
     settings.beginGroup( "FindFilesDialog" );
 
-    // not writing _ui->patternField->text() to the settings, i.e. to file
-    lastPattern = _ui->patternField->text();
-
     settings.setValue( "filterMode",     _ui->filterModeComboBox->currentText()       );
     settings.setValue( "caseSensitive",  _ui->caseSensitiveCheckBox->isChecked()      );
 
@@ -144,9 +211,12 @@ void FindFilesDialog::writeSettings()
     settings.setValue( "wholeTree",      _ui->wholeTreeRadioButton->isChecked()       );
     settings.setValue( "currentSubtree", _ui->currentSubtreeRadioButton->isChecked()  );
 
-    // not writing _ui->currentSubtreePathLabel->text()
-
     settings.endGroup();
+
+    // Intentionally NOT writing to the settings / the config file:
+    //
+    // _ui->patternField->text();
+    // _ui->currentSubtreePathLabel->text();
 
     writeWindowSettings( this, "FindFilesDialog" );
 }

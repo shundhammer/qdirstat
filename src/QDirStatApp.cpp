@@ -107,18 +107,27 @@ QWidget * QDirStatApp::findMainWindow() const
 }
 
 
-FileInfo * QDirStatApp::selectedDirOrRoot() const
+FileInfo * QDirStatApp::root() const
 {
-    FileInfoSet selectedItems = app()->selectionModel()->selectedItems();
-    FileInfo * sel = selectedItems.first();
-
-    if ( ! sel || ! sel->isDir() )
-	sel = app()->dirTree()->firstToplevel();
-
-    return sel;
+    return dirTree() ? dirTree()->firstToplevel() : 0;
 }
 
 
+FileInfo * QDirStatApp::selectedDir() const
+{
+    FileInfoSet selectedItems = selectionModel()->selectedItems();
+    FileInfo * sel = selectedItems.first();
+
+    return sel && sel->isDir() ? sel : 0;
+}
+
+
+FileInfo * QDirStatApp::selectedDirOrRoot() const
+{
+    FileInfo * sel = selectedDir();
+
+    return sel ? sel : root();
+}
 
 
 QDirStatApp * QDirStat::app()

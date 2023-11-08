@@ -56,6 +56,21 @@ namespace QDirStat
 
     public slots:
 
+        /**
+         * Load values for all widgets from the settings / the config file or
+         * from internal static variables
+         **/
+        void loadValues();
+
+        /**
+         * Save the values of the widgets to the settings / the config file or
+         * to internal static variables.
+         **/
+        void saveValues();
+
+
+    protected:
+
 	/**
 	 * Read settings from the config file
 	 **/
@@ -66,8 +81,16 @@ namespace QDirStat
 	 **/
 	void writeSettings();
 
+        /**
+         * Return the currently selected subtree if a directory is selected
+         * or 0 if not.
+         **/
+        DirInfo * currentSubtree();
 
-    protected:
+
+        //
+        // Data members
+        //
 
 	Ui::FindFilesDialog * _ui;
 

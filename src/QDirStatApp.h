@@ -135,6 +135,19 @@ namespace QDirStat
         QWidget * findMainWindow() const;
 
         /**
+         * Return the DirTree's root directory (the first real toplevel
+         * directory, not the invisible pseudo root) or 0 if the tree is
+         * completely empty.
+         **/
+        FileInfo * root() const;
+
+        /**
+         * Return the first selected directory from the SelectionModel or 0 if
+         * no directory is selected.
+         **/
+        FileInfo * selectedDir() const;
+
+        /**
          * Return the first selected directory from the SelectionModel or, if
          * none is selected, the DirTree's root directory.
          *
