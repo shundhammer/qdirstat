@@ -159,7 +159,7 @@ void DiscoverActions::findFiles( const FileSearchFilter & filter )
 
     if ( sel )
     {
-        QString headingText = tr( "Search Results" );
+        QString headingText = tr( "Search Results for \"%1\"" ).arg( filter.pattern() );
 
         _locateFilesWindow->setHeading( headingText );
         _locateFilesWindow->populate( sel );
