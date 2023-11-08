@@ -208,9 +208,8 @@ namespace QDirStat
 	/**
 	 * Constructor.
 	 **/
-	LocateListItem( const QString & path,
-                        FileSize	size,
-                        time_t          mtime );
+	LocateListItem( FileInfo * item );
+
 
 	//
 	// Getters

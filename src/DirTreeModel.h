@@ -155,6 +155,12 @@ namespace QDirStat
 	 **/
 	void setBoldItemFont( const QFont & font ) { _boldItemFont = font; }
 
+        /**
+         * Return the icon indicate an item's type (file, directory etc.)
+         * or a null icon if the type cannot be determined.
+         **/
+        QIcon itemTypeIcon( FileInfo * item ) const;
+
 
     public slots:
 	/**
@@ -421,7 +427,6 @@ namespace QDirStat
 	 **/
 	void invalidatePersistent( FileInfo * subtree,
 				   bool	      includeParent );
-
 
     protected:
 	/**

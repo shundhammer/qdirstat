@@ -998,7 +998,25 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
     if ( col != NameCol )
 	return QVariant();
 
+    QIcon icon = itemTypeIcon( item );
+
+    if ( icon.isNull() )
+	return QVariant();
+
+    bool  useDisabled = item->isIgnored() || item->isAttic();
+    QSize iconSize( icon.actualSize( QSize( 1024, 1024 ) ) );
+
+    return icon.pixmap( iconSize, useDisabled ?
+			QIcon::Disabled : QIcon::Normal );
+}
+
+
+QIcon DirTreeModel::itemTypeIcon( FileInfo * item ) const
+{
     QIcon icon;
+
+    if ( ! item )
+        return icon;
 
     if	    ( item->isDotEntry() )  icon = _dotEntryIcon;
     else if ( item->isAttic() )	    icon = _atticIcon;
@@ -1022,14 +1040,7 @@ QVariant DirTreeModel::columnIcon( FileInfo * item, int col ) const
 	else if ( item->isSpecial()		  )   icon = _specialIcon;
     }
 
-    if ( icon.isNull() )
-	return QVariant();
-
-    bool  useDisabled = item->isIgnored() || item->isAttic();
-    QSize iconSize( icon.actualSize( QSize( 1024, 1024 ) ) );
-
-    return icon.pixmap( iconSize, useDisabled ?
-			QIcon::Disabled : QIcon::Normal );
+    return icon;
 }
 
 

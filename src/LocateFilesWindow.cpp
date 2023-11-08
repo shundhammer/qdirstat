@@ -18,6 +18,8 @@
 #include "CleanupCollection.h"
 #include "SettingsHelpers.h"
 #include "HeaderTweaker.h"
+#include "QDirStatApp.h"        // dirTreeModel()
+#include "DirTreeModel.h"       // itemTypeIcon()
 #include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -141,8 +143,7 @@ void LocateFilesWindow::populateRecursive( FileInfo * dir )
 
         if ( _treeWalker->check( item ) )
         {
-            LocateListItem * locateListItem =
-                new LocateListItem( item->url(), item->size(), item->mtime() );
+            LocateListItem * locateListItem = new LocateListItem( item );
             CHECK_NEW( locateListItem );
 
             _ui->treeWidget->addTopLevelItem( locateListItem );
@@ -240,17 +241,21 @@ void LocateFilesWindow::sortByColumn( int col, Qt::SortOrder order )
 
 
 
-LocateListItem::LocateListItem( const QString & path,
-                                FileSize	size,
-                                time_t          mtime ):
-    QTreeWidgetItem( QTreeWidgetItem::UserType ),
-    _path( path ),
-    _size( size ),
-    _mtime( mtime )
+LocateListItem::LocateListItem( FileInfo * item ):
+    QTreeWidgetItem( QTreeWidgetItem::UserType )
 {
+    CHECK_PTR( item );
+
+    _path  = item->url();
+    _size  = item->size();
+    _mtime = item->mtime();
+
+    QIcon icon = app()->dirTreeModel()->itemTypeIcon( item );
+
     setText( LocateListSizeCol,	 formatSize( _size )  + " " );
     setText( LocateListMTimeCol, formatTime( _mtime ) + " " );
-    setText( LocateListPathCol,	 path                 + " " );
+    setText( LocateListPathCol,	 _path                + " " );
+    setIcon( LocateListPathCol,  icon );
 
     setTextAlignment( LocateListSizeCol,	 Qt::AlignRight );
     setTextAlignment( LocateListMTimeCol,	 Qt::AlignLeft  );
