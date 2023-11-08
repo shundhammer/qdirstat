@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>306</width>
+    <width>338</width>
     <height>419</height>
    </rect>
   </property>
@@ -201,7 +201,7 @@
      <item row="2" column="1">
       <widget class="QCheckBox" name="caseSensitiveCheckBox">
        <property name="text">
-        <string>Case Sens&amp;itive</string>
+        <string>Case &amp;Sensitive</string>
        </property>
        <property name="checked">
         <bool>false</bool>
@@ -303,7 +303,7 @@
       <item>
        <widget class="QRadioButton" name="currentSubtreeRadioButton">
         <property name="text">
-         <string>In the Current &amp;Subtree</string>
+         <string>In the Current S&amp;ubtree</string>
         </property>
         <property name="checked">
          <bool>true</bool>

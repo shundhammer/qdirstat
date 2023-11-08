@@ -53,6 +53,20 @@ namespace QDirStat
 	 **/
 	FileSearchFilter fileSearchFilter();
 
+
+    public slots:
+
+	/**
+	 * Read settings from the config file
+	 **/
+	void readSettings();
+
+	/**
+	 * Write settings to the config file
+	 **/
+	void writeSettings();
+
+
     protected:
 
 	Ui::FindFilesDialog * _ui;
