@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2023-08-09
+Updated: 2023-11-08
 
 
 ## Screenshot
@@ -124,6 +124,54 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2023-11-08
+
+  - It's SUSE Hack Week again where my employer SUSE sponsors a whole week of
+    innovative hacking for the whole company: Everybody can work on a favorite
+    project. To the surprise of absolutely nobody, my favorite project during
+    that time has almost always been QDirStat since I started it back in 2015.
+
+    Changes this time:
+
+    - A "find files" function in the in-memory tree. You can search for files
+      or directories or both with various options.
+
+      [<img width=300 src="https://user-images.githubusercontent.com/11538225/281489418-677302e2-50f6-4fae-9307-682e9ad22856.png">](https://user-images.githubusercontent.com/11538225/281489418-677302e2-50f6-4fae-9307-682e9ad22856.png)
+
+      More screenshots at [GitHub issue #222](https://github.com/shundhammer/qdirstat/issues/222).
+
+      The search results are presented in the same window that you might know
+      from the "Discover" actions (largest files, oldest files, broken symlinks
+      etc.). That means that you can move this results window out of the way
+      and select each of the results to see it in the main window with all
+      details.
+
+      Some time ago, that window also got support for cleanup options, so you
+      can use them there directly from the context menu or with keyboard
+      shortcuts.
+
+      Searching in the in-memory directory tree is lightning fast, and it's
+      flexible with all the search modes:
+
+      - Contains
+      - Starts with
+      - Ends with
+      - Wildcard
+      - Regexp
+
+      With just a tiny bit of customizing, that makes for a very flexible media
+      browser: I configured 'VLC' as one of the cleanup actions, and now I can
+      search through my video or music collection easily to find media files
+      where I only know a fraction of the title and start playing it right
+      away, directly from within QDirStat. Or open a file manager there. Or a
+      shell window. Or whatever else might come to mind.
+
+      This opens a lot of new possibilities. Use your imagination!
+
+      This is all still a bit rough around the edges, but it's already quite
+      workable.
+
 
 - 2023-02-01
 
