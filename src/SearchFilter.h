@@ -41,14 +41,15 @@ namespace QDirStat
          * Filter mode "Auto" tries to guess a useful mode from the pattern:
          *
          * - If it's a fixed string without any wildcards, it uses
-         *   "StartsWith".
+         *   'defaultFilterMode'.
          * - If it contains "*" wildcard characters, it uses "Wildcard".
          * - If it contains ".*" or "^" or "$", it uses "RegExp".
          * - If it starts with "=", it uses "ExactMatch".
          * - If it's empty, it uses "SelectAll".
          **/
         SearchFilter( const QString & pattern,
-                      FilterMode      filterMode = Auto );
+                      FilterMode      filterMode        = Auto,
+                      FilterMode      defaultFilterMode = StartsWith );
 
         /**
          * Check if a string matches this filter.
@@ -72,6 +73,18 @@ namespace QDirStat
         FilterMode filterMode() const { return _filterMode; }
 
         /**
+         * Return 'true' if the matching is case sensitive, 'false if not.
+         **/
+        bool isCaseSensitive() const
+            { return _regexp.caseSensitivity() == Qt::CaseSensitive; }
+
+        /**
+         * Set the match to case sensitive ('true') or case insensitive
+         * ('false'). The default is case insensitive.
+         **/
+        void setCaseSensitive( bool sensitive = true );
+
+        /**
          * Convert a filter mode to a string.
          **/
         static QString toString( FilterMode filterMode );
@@ -90,6 +103,7 @@ namespace QDirStat
         QString         _pattern;
         QRegExp         _regexp;
         FilterMode      _filterMode;
+        FilterMode      _defaultFilterMode;
 
     };  // class SearchFilter
 
@@ -97,8 +111,12 @@ namespace QDirStat
     inline QTextStream & operator<< ( QTextStream        & stream,
                                       const SearchFilter & filter )
     {
-        stream << filter.pattern() << " filter mode \""
-               << SearchFilter::toString( filter.filterMode() ) << "\"";
+        stream << "<SearchFilter \""
+               << filter.pattern()
+               << "\" mode \""
+               << SearchFilter::toString( filter.filterMode() ) << "\" "
+               <<( filter.isCaseSensitive()? " case sensitive" : "" )
+               << ">";
 
         return stream;
     }

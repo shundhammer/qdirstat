@@ -16,7 +16,9 @@ using namespace QDirStat;
 
 PkgFilter::PkgFilter( const QString & pattern,
                       FilterMode      filterMode ):
-    SearchFilter( pattern, filterMode )
+    SearchFilter( pattern,
+                  filterMode,
+                  StartsWith )  // defaultFilterMode
 {
     normalizePattern();
 
@@ -26,7 +28,7 @@ PkgFilter::PkgFilter( const QString & pattern,
     if ( _filterMode == Wildcard )
         _regexp.setPatternSyntax( QRegExp::Wildcard );
 
-    _regexp.setCaseSensitivity( Qt::CaseInsensitive );
+    setCaseSensitive( _filterMode == ExactMatch );
 }
 
 

@@ -79,8 +79,12 @@ namespace QDirStat
     inline QTextStream & operator<< ( QTextStream     & stream,
                                       const PkgFilter & filter )
     {
-        stream << filter.url() << " filter mode \""
-               << PkgFilter::toString( filter.filterMode() ) << "\"";
+        stream << "<PkgFilter \""
+               << filter.pattern()
+               << "\" mode \""
+               << SearchFilter::toString( filter.filterMode() ) << "\" "
+               <<( filter.isCaseSensitive()? " case sensitive" : "" )
+               << ">";
 
         return stream;
     }

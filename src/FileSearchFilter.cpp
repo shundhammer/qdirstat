@@ -17,7 +17,9 @@ using namespace QDirStat;
 FileSearchFilter::FileSearchFilter( DirInfo *       subtree,
                                     const QString & pattern,
                                     FilterMode      filterMode ):
-    SearchFilter( pattern, filterMode ),
+    SearchFilter( pattern,
+                  filterMode,
+                  Contains ),   // defaultFilterMode
     _subtree( subtree ),
     _findFiles( true ),
     _findDirs( true )

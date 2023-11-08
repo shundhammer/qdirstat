@@ -47,6 +47,7 @@ FileSearchFilter FindFilesDialog::fileSearchFilter()
 
     int mode        = _ui->filterModeComboBox->currentIndex();
     QString pattern = _ui->patternField->text();
+
     FileSearchFilter filter( subtree,
                              pattern,
                              (SearchFilter::FilterMode) mode );
@@ -56,6 +57,8 @@ FileSearchFilter FindFilesDialog::fileSearchFilter()
 
     filter.setFindDirs ( _ui->findDirectoriesRadioButton->isChecked() ||
                          _ui->findBothRadioButton->isChecked()          );
+
+    filter.setCaseSensitive ( _ui->caseSensitiveCheckBox->isChecked() );
 
     logDebug() << filter << endl;
 
