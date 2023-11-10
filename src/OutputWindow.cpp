@@ -530,6 +530,8 @@ void OutputWindow::readSettings()
     settings.endGroup();
 
     _ui->terminal->setFont( _terminalDefaultFont );
+
+    QDirStat::readWindowSettings( this, "OutputWindow" );
 }
 
 
@@ -546,4 +548,6 @@ void OutputWindow::writeSettings()
     settings.setValue( "DefaultShowTimeoutMillisec", _defaultShowTimeout  );
 
     settings.endGroup();
+
+    QDirStat::writeWindowSettings( this, "OutputWindow" );
 }
