@@ -44,6 +44,10 @@ void SearchFilter::guessFilterMode()
         _pattern.remove( QRegExp( "^=" ) );
         _regexp.setPattern( _pattern );
     }
+    else if ( _pattern.contains( "*.*" ) )
+    {
+        _filterMode = Wildcard;
+    }
     else if ( _pattern.contains( ".*" ) ||
               _pattern.contains( "^"  ) ||
               _pattern.contains( "$"  ) ||
