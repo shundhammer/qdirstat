@@ -195,24 +195,31 @@ void TreemapTile::createSquarifiedChildren( const QRectF & rect )
     FileInfoSortedBySizeIterator it( _orig, minSize );
     QRectF childrenRect = rect;
 
+    FileSize remainingTotal = 0;
+    for (FileInfoSortedBySizeIterator item=it; *item; ++item)
+	remainingTotal += (*item)->totalAllocatedSize();
+
     while ( *it )
     {
-	FileInfoList row = squarify( childrenRect, scale, it );
-	childrenRect = layoutRow( childrenRect, scale, row );
+	FileInfoList row = squarify( childrenRect, remainingTotal, it );
+	childrenRect = layoutRow( childrenRect, remainingTotal, row );
+	foreach ( FileInfo * item, row )
+	    remainingTotal -= item->totalAllocatedSize();
     }
 }
 
 
 FileInfoList TreemapTile::squarify( const QRectF & rect,
-				    double	  scale,
+				    FileSize  remainingTotal,
 				    FileInfoSortedBySizeIterator & it )
 {
     // logDebug() << "squarify() " << this << " " << rect << endl;
 
     FileInfoList row;
-    int length = qMax( rect.width(), rect.height() );
+    const double rectLength = qMin( rect.width(), rect.height() );
+    const double rectHeight = qMax( rect.width(), rect.height() );
 
-    if ( length == 0 )	// Sanity check
+    if ( rectLength == 0 || rectHeight == 0 )	// Sanity check
     {
 	logWarning()  << "Zero length" << endl;
 
@@ -224,31 +231,25 @@ FileInfoList TreemapTile::squarify( const QRectF & rect,
 
 
     bool   improvingAspectRatio = true;
-    double lastWorstAspectRatio = -1.0;
+    double bestAspectRatio = 0;
     double sum			= 0;
-
-    // This is a bit ugly, but doing all calculations in the 'size' dimension
-    // is more efficient here since that requires only one scaling before
-    // doing all other calculations in the loop.
-    const double scaledLengthSquare = length * (double) length / scale;
-
+    FileSize firstScale = (*it)->totalAllocatedSize() * rectLength;
     while ( *it && improvingAspectRatio )
     {
-	sum += (*it)->totalAllocatedSize();
+	const FileSize size = (*it)->totalAllocatedSize();
+	sum += size;
 
-	if ( ! row.isEmpty() && sum != 0 && (*it)->totalAllocatedSize() != 0 )
+	if ( size != 0 )
 	{
-	    double sumSquare	    = sum * sum;
-	    double worstAspectRatio = qMax( scaledLengthSquare * row.first()->totalAllocatedSize() / sumSquare,
-                                            sumSquare / ( scaledLengthSquare * (*it)->totalAllocatedSize() ) );
+	    const double height = rectHeight * sum / remainingTotal;
+	    const double firstWidth = firstScale / sum;
+	    const double lastWidth = rectLength * size / sum;
+	    const double aspectRatio = qMin(height / firstWidth, lastWidth / height);
 
-	    if ( lastWorstAspectRatio >= 0.0 &&
-		 worstAspectRatio > lastWorstAspectRatio )
-	    {
-		improvingAspectRatio = false;
-	    }
+	    if ( aspectRatio < bestAspectRatio )
+		break;
 
-	    lastWorstAspectRatio = worstAspectRatio;
+	    bestAspectRatio = aspectRatio;
 	}
 
 	if ( improvingAspectRatio )
@@ -268,7 +269,7 @@ FileInfoList TreemapTile::squarify( const QRectF & rect,
 
 
 QRectF TreemapTile::layoutRow( const QRectF & rect,
-			       double	      scale,
+			       FileSize remainingTotal,
 			       FileInfoList & row )
 {
     if ( row.isEmpty() )
@@ -276,10 +277,10 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
 
     // Determine the direction in which to subdivide.
     // We always use the longer side of the rectangle.
-    Orientation dir = rect.width() > rect.height() ? TreemapHorizontal : TreemapVertical;
+    Orientation dir = rect.width() < rect.height() ? TreemapHorizontal : TreemapVertical;
 
-    // This row's primary length is the longer one.
-    int primary = qMax( rect.width(), rect.height() );
+    // This row's primary length is the shorter one.
+    int primary = qMin( rect.width(), rect.height() );
 
     // This row's secondary length is determined by the area (the number of
     // pixels) to be allocated for all of the row's items.
@@ -289,7 +290,7 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
     foreach ( FileInfo * item, row )
 	sum += item->totalAllocatedSize();
 
-    int secondary = (int) ( sum * scale / primary );
+    int secondary = (int) ( sum * qMax(rect.width(), rect.height()) / remainingTotal + 0.5 );
 
     if ( sum == 0 )	// Prevent division by zero.
 	return rect;
@@ -302,20 +303,27 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
     // Add another ridge perpendicular to the row's direction
     // that optically groups this row's tiles together.
 
+    const double heightScaleFactor = _cushionSurface.height() * _parentView->heightScaleFactor();
     CushionSurface rowCushionSurface = _cushionSurface;
+    if (dir == TreemapHorizontal)
+    {
+	QRectF rowRect = QRectF(rect.x(), rect.y(), primary, secondary);
+	rowCushionSurface.addRidge(TreemapVertical, heightScaleFactor, rowRect);
+    }
+    else
+    {
+	QRectF rowRect = QRectF(rect.x(), rect.y(), secondary, primary);
+	rowCushionSurface.addRidge(TreemapHorizontal, heightScaleFactor, rowRect);
+    }
 
-    rowCushionSurface.addRidge( dir == TreemapHorizontal ? TreemapVertical : TreemapHorizontal,
-				_cushionSurface.height() * _parentView->heightScaleFactor(),
-				rect );
-
-    int offset = 0;
-    int remaining = primary;
+    double offset = 0;
+    double remaining = primary;
     FileInfoList::const_iterator it  = row.constBegin();
     FileInfoList::const_iterator end = row.constEnd();
 
     while ( it != end )
     {
-	int childSize = (int) ( (*it)->totalAllocatedSize() / (double) sum * primary + 0.5 );
+	double childSize =  (*it)->totalAllocatedSize() / (double) sum * primary;
 
 	if ( childSize > remaining )	// Prevent overflow because of accumulated rounding errors
 	    childSize = remaining;
@@ -327,9 +335,9 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
 	    QRectF childRect;
 
 	    if ( dir == TreemapHorizontal )
-		childRect = QRectF( rect.x() + offset, rect.y(), childSize, secondary );
+		childRect = QRectF( rect.x() + round(offset), rect.y(), ceil(childSize), secondary );
 	    else
-		childRect = QRectF( rect.x(), rect.y() + offset, secondary, childSize );
+		childRect = QRectF( rect.x(), rect.y() + round(offset), secondary, ceil(childSize) );
 
 	    TreemapTile * tile = new TreemapTile( _parentView, this, *it, childRect, rowCushionSurface );
 	    CHECK_NEW( tile );
@@ -445,59 +453,38 @@ QPixmap TreemapTile::renderCushion()
 
     // logDebug() << endl;
 
-    double nx;
-    double ny;
-    double cosa;
-    int	   x, y;
-    int	   red, green, blue;
+	const double Ia = (double)parentView()->ambientLight() / 255;
+	const double Is = 1 - Ia;
+	const double lightX = Is * parentView()->lightX();
+	const double lightY = Is * parentView()->lightY();
+	const double lightZ = Is * parentView()->lightZ();
+	QColor color = parentView()->tileColor(_orig);
+	const int pixelHeight = rect.height();
+	const int pixelWidth = rect.width();
+	QImage image(pixelWidth, pixelHeight, QImage::Format_RGB32);
 
+	const double xx1 = cushionSurface().xx1();
+	const double xx22 = cushionSurface().xx2() * 2;
+	const double yy1 = cushionSurface().yy1();
+	const double yy22 = cushionSurface().yy2() * 2;
 
-    // Cache some values. They are used for each loop iteration, so let's try
-    // to keep multiple indirect references down.
-
-    int		ambientLight = parentView()->ambientLight();
-    double	lightX	     = parentView()->lightX();
-    double	lightY	     = parentView()->lightY();
-    double	lightZ	     = parentView()->lightZ();
-
-    double	xx2	     = cushionSurface().xx2();
-    double	xx1	     = cushionSurface().xx1();
-    double	yy2	     = cushionSurface().yy2();
-    double	yy1	     = cushionSurface().yy1();
-
-    int		x0	     = rect.x();
-    int		y0	     = rect.y();
-
-    QColor	color	     = parentView()->tileColor( _orig );
-    int		maxRed	     = qMax( 0, color.red()   - ambientLight );
-    int		maxGreen     = qMax( 0, color.green() - ambientLight );
-    int		maxBlue	     = qMax( 0, color.blue()  - ambientLight );
-
-    QImage image( qRound( rect.width() ), qRound( rect.height() ), QImage::Format_RGB32 );
-
-    for ( y = 0; y < rect.height(); y++ )
-    {
-	for ( x = 0; x < rect.width(); x++ )
+	for (double y = 0, y0 = rect.y() + 0.5; y < pixelHeight; y++, y0++)
 	{
-	    nx = 2.0 * xx2 * (x+x0) + xx1;
-	    ny = 2.0 * yy2 * (y+y0) + yy1;
-	    cosa  = ( nx * lightX + ny * lightY + lightZ ) / sqrt( nx*nx + ny*ny + 1.0 );
+		for (double x = 0, x0 = rect.x() + 0.5; x < pixelWidth; x++, x0++)
+		{
+			const double nx = xx22 * x0 + xx1;
+			const double ny = yy22 * y0 + yy1;
+			double cosa  = (lightZ - ny*lightY - nx*lightX) / sqrt(nx*nx + ny*ny + 1.0);
+			if (cosa < 0)
+				cosa = 0;
+			cosa += Ia;
 
-	    red	  = (int) ( maxRed   * cosa + 0.5 );
-	    green = (int) ( maxGreen * cosa + 0.5 );
-	    blue  = (int) ( maxBlue  * cosa + 0.5 );
-
-	    if ( red   < 0 )	red   = 0;
-	    if ( green < 0 )	green = 0;
-	    if ( blue  < 0 )	blue  = 0;
-
-	    red	  += ambientLight;
-	    green += ambientLight;
-	    blue  += ambientLight;
-
-	    image.setPixel( x, y, qRgb( red, green, blue) );
+			const int red = cosa * color.red() + 0.5;
+			const int green = cosa * color.green() + 0.5;
+			const int blue = cosa * color.blue() + 0.5;
+			image.setPixel(x, y, qRgb(red, green, blue));
+		}
 	}
-    }
 
     if ( _parentView->enforceContrast() )
 	enforceContrast( image );
@@ -837,5 +824,3 @@ double CushionSurface::linearRidge( double linearCoefficient, double height, int
 
     return linearCoefficient;
 }
-
-
