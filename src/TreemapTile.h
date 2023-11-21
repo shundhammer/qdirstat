@@ -247,7 +247,7 @@ namespace QDirStat
 	 * 'scale' is the scaling factor between file sizes and pixels.
 	 **/
 	FileInfoList squarify( const QRectF & rect,
-			       double	     scale,
+			       FileSize remainingTotal,
 			       FileInfoSortedBySizeIterator & it   );
 
 	/**
@@ -255,7 +255,9 @@ namespace QDirStat
 	 * Returns the new rectangle with the layouted area subtracted.
 	 **/
 	QRectF layoutRow( const QRectF	& rect,
-			  double	  scale,
+//			  double		scale,
+//			  FileSize	  rowTotal,
+			  FileSize	  remainingTotal,
 			  FileInfoList	& row );
 
 	/**
