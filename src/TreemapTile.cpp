@@ -198,6 +198,8 @@ void TreemapTile::createSquarifiedChildren( const QRectF & rect )
     FileSize remainingTotal = 0;
     for (FileInfoSortedBySizeIterator item=it; *item; ++item)
 	remainingTotal += (*item)->totalAllocatedSize();
+    if (minSize > 0)
+	remainingTotal = _orig->totalAllocatedSize();
 
     while ( *it )
     {
