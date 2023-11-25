@@ -196,9 +196,11 @@ void TreemapTile::createSquarifiedChildren( const QRectF & rect )
     QRectF childrenRect = rect;
 
     FileSize remainingTotal = 0;
-    for (FileInfoSortedBySizeIterator item=it; *item; ++item)
+
+    for ( FileInfoSortedBySizeIterator item = it; *item; ++item )
 	remainingTotal += (*item)->totalAllocatedSize();
-    if (minSize > 0)
+
+    if ( minSize > 0 )
 	remainingTotal = _orig->totalAllocatedSize();
 
     while ( *it )
@@ -212,7 +214,7 @@ void TreemapTile::createSquarifiedChildren( const QRectF & rect )
 
 
 FileInfoList TreemapTile::squarify( const QRectF & rect,
-				    FileSize  remainingTotal,
+				    FileSize       remainingTotal,
 				    FileInfoSortedBySizeIterator & it )
 {
     // logDebug() << "squarify() " << this << " " << rect << endl;
@@ -233,20 +235,24 @@ FileInfoList TreemapTile::squarify( const QRectF & rect,
 
 
     bool   improvingAspectRatio = true;
-    double bestAspectRatio = 0;
+    double bestAspectRatio      = 0;
     double sum			= 0;
+
     FileSize firstScale = (*it)->totalAllocatedSize() * rectLength;
+
     while ( *it && improvingAspectRatio )
     {
 	const FileSize size = (*it)->totalAllocatedSize();
 	sum += size;
 
-	if ( size != 0 )
+	if ( size != 0 && sum != 0 )
 	{
-	    const double height = rectHeight * sum / remainingTotal;
-	    const double firstWidth = firstScale / sum;
-	    const double lastWidth = rectLength * size / sum;
-	    const double aspectRatio = qMin(height / firstWidth, lastWidth / height);
+            // FIXME: Lots of potential for division by zero here.
+
+	    const double height      = rectHeight * sum / remainingTotal;
+	    const double firstWidth  = firstScale / sum;
+	    const double lastWidth   = rectLength * size / sum;
+	    const double aspectRatio = qMin( height / firstWidth, lastWidth / height );
 
 	    if ( aspectRatio < bestAspectRatio )
 		break;
@@ -271,7 +277,7 @@ FileInfoList TreemapTile::squarify( const QRectF & rect,
 
 
 QRectF TreemapTile::layoutRow( const QRectF & rect,
-			       FileSize remainingTotal,
+			       FileSize       remainingTotal,
 			       FileInfoList & row )
 {
     if ( row.isEmpty() )
@@ -305,9 +311,10 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
     // Add another ridge perpendicular to the row's direction
     // that optically groups this row's tiles together.
 
-    const double heightScaleFactor = _cushionSurface.height() * _parentView->heightScaleFactor();
+    const double heightScaleFactor   = _cushionSurface.height() * _parentView->heightScaleFactor();
     CushionSurface rowCushionSurface = _cushionSurface;
-    if (dir == TreemapHorizontal)
+
+    if ( dir == TreemapHorizontal )
     {
 	QRectF rowRect = QRectF(rect.x(), rect.y(), primary, secondary);
 	rowCushionSurface.addRidge(TreemapVertical, heightScaleFactor, rowRect);
@@ -337,9 +344,9 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
 	    QRectF childRect;
 
 	    if ( dir == TreemapHorizontal )
-		childRect = QRectF( rect.x() + round(offset), rect.y(), ceil(childSize), secondary );
+		childRect = QRectF( rect.x() + round( offset ), rect.y(), ceil( childSize ), secondary );
 	    else
-		childRect = QRectF( rect.x(), rect.y() + round(offset), secondary, ceil(childSize) );
+		childRect = QRectF( rect.x(), rect.y() + round( offset ), secondary, ceil( childSize ) );
 
 	    TreemapTile * tile = new TreemapTile( _parentView, this, *it, childRect, rowCushionSurface );
 	    CHECK_NEW( tile );
@@ -455,38 +462,51 @@ QPixmap TreemapTile::renderCushion()
 
     // logDebug() << endl;
 
-	const double Ia = (double)parentView()->ambientLight() / 255;
-	const double Is = 1 - Ia;
-	const double lightX = Is * parentView()->lightX();
-	const double lightY = Is * parentView()->lightY();
-	const double lightZ = Is * parentView()->lightZ();
-	QColor color = parentView()->tileColor(_orig);
-	const int pixelHeight = rect.height();
-	const int pixelWidth = rect.width();
-	QImage image(pixelWidth, pixelHeight, QImage::Format_RGB32);
+    // FIXME: 'Ia' and 'Is' are poor variable names;
+    // they do not give a hint what they are all about,
+    // and variable names should not start with a captital letter.
 
-	const double xx1 = cushionSurface().xx1();
-	const double xx22 = cushionSurface().xx2() * 2;
-	const double yy1 = cushionSurface().yy1();
-	const double yy22 = cushionSurface().yy2() * 2;
+    const double Ia          = (double) parentView()->ambientLight() / 255;
+    const double Is          = 1 - Ia;
+    const double lightX      = Is * parentView()->lightX();
+    const double lightY      = Is * parentView()->lightY();
+    const double lightZ      = Is * parentView()->lightZ();
 
-	for (double y = 0, y0 = rect.y() + 0.5; y < pixelHeight; y++, y0++)
-	{
-		for (double x = 0, x0 = rect.x() + 0.5; x < pixelWidth; x++, x0++)
-		{
-			const double nx = xx22 * x0 + xx1;
-			const double ny = yy22 * y0 + yy1;
-			double cosa  = (lightZ - ny*lightY - nx*lightX) / sqrt(nx*nx + ny*ny + 1.0);
-			if (cosa < 0)
-				cosa = 0;
-			cosa += Ia;
+    QColor       color       = parentView()->tileColor( _orig );
+    const int    pixelHeight = rect.height();
+    const int    pixelWidth  = rect.width();
 
-			const int red = cosa * color.red() + 0.5;
-			const int green = cosa * color.green() + 0.5;
-			const int blue = cosa * color.blue() + 0.5;
-			image.setPixel(x, y, qRgb(red, green, blue));
-		}
-	}
+    QImage image( pixelWidth, pixelHeight, QImage::Format_RGB32 );
+
+    const double xx1  = cushionSurface().xx1();
+    const double xx22 = cushionSurface().xx2() * 2;
+    const double yy1  = cushionSurface().yy1();
+    const double yy22 = cushionSurface().yy2() * 2;
+
+    for ( double y = 0, y0 = rect.y() + 0.5;
+          y < pixelHeight;
+          y++, y0++ )
+    {
+        for ( double x = 0, x0 = rect.x() + 0.5;
+              x < pixelWidth;
+              x++, x0++ )
+        {
+            const double nx = xx22 * x0 + xx1;
+            const double ny = yy22 * y0 + yy1;
+            double cosa  = ( lightZ - ny*lightY - nx*lightX ) / sqrt( nx*nx + ny*ny + 1.0 );
+
+            if (cosa < 0)
+                cosa = 0;
+
+            cosa += Ia;
+
+            const int red   = cosa * color.red()   + 0.5;
+            const int green = cosa * color.green() + 0.5;
+            const int blue  = cosa * color.blue()  + 0.5;
+
+            image.setPixel( x, y, qRgb( red, green, blue ) );
+        }
+    }
 
     if ( _parentView->enforceContrast() )
 	enforceContrast( image );
