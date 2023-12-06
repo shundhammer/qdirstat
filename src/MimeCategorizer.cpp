@@ -6,7 +6,6 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
-
 #include "MimeCategorizer.h"
 #include "FileInfo.h"
 #include "Settings.h"
@@ -61,10 +60,22 @@ MimeCategory * MimeCategorizer::category( FileInfo * item )
     CHECK_PTR  ( item );
     CHECK_MAGIC( item );
 
-    if ( item->isDir() || item->isDirInfo() )
-	return 0;
+    if ( item->isSymLink() )
+    {
+	return matchCategoryName( CATEGORY_SYMLINK );
+    }
+    else if ( item->isFile() )
+    {
+	MimeCategory *matchedCategory = category( item->name() );
+	if ( !matchedCategory && ( item->mode() & S_IXUSR  ) == S_IXUSR )
+	    return matchCategoryName( CATEGORY_EXECUTABLE );
+
+	return matchedCategory;
+    }
     else
-	return category( item->name() );
+    {
+	return 0;
+    }
 }
 
 
@@ -138,6 +149,18 @@ MimeCategory * MimeCategorizer::matchPatterns( const QString & filename ) const
 		    return category;
 	    }
 	}
+    }
+
+    return 0; // No match
+}
+
+
+MimeCategory * MimeCategorizer::matchCategoryName( const QString & categoryName ) const
+{
+    foreach ( MimeCategory * category, _categories )
+    {
+	if ( category && category->name() == categoryName )
+	    return category;
     }
 
     return 0; // No match
@@ -228,6 +251,8 @@ void MimeCategorizer::readSettings()
 	settings.endGroup(); // [MimeCategory_01], [MimeCategory_02], ...
     }
 
+    ensureMandatoryCategories();
+
     if ( _categories.isEmpty() )
 	addDefaultCategories();
 }
@@ -266,6 +291,26 @@ void MimeCategorizer::writeSettings()
 	settings.setValue( "PatternsCaseSensitive", patterns );
 
 	settings.endGroup(); // [MimeCategory_01], [MimeCategory_02], ...
+    }
+}
+
+
+void MimeCategorizer::ensureMandatoryCategories()
+{
+    if ( !matchCategoryName( CATEGORY_EXECUTABLE ) )
+    {
+	// Special catchall category for files that don't match anything else, cannot be deleted
+	MimeCategory * executable = new MimeCategory( tr( CATEGORY_EXECUTABLE ), Qt::magenta );
+	CHECK_NEW( executable );
+	add( executable );
+    }
+
+    // Special category for symlinks regardless of the filename, cannot be deleted
+    if ( !matchCategoryName( CATEGORY_SYMLINK ) )
+    {
+	MimeCategory * symlink = new MimeCategory( tr( CATEGORY_SYMLINK ), Qt::blue );
+	CHECK_NEW( symlink );
+	add( symlink );
     }
 }
 

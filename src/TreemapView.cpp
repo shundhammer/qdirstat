@@ -354,11 +354,13 @@ void TreemapView::rebuildTreemap( FileInfo *	 newRoot,
 
 	if ( newRoot )
 	{
+	    _stopwatch.start();
 	    _rootTile = new TreemapTile( this,		// parentView
 					 0,		// parentTile
 					 newRoot,	// orig
 					 rect,
 					 TreemapAuto );
+		logDebug() << _stopwatch.restart() << endl;
 	}
 
 
@@ -655,31 +657,10 @@ void TreemapView::setFixedColor( const QColor & color )
 QColor TreemapView::tileColor( FileInfo * file )
 {
     if ( _useFixedColor )
-	return _fixedColor;
+        return _fixedColor;
 
-    if ( file )
-    {
-	if ( file->isFile() )
-	{
-	    MimeCategory * category = MimeCategorizer::instance()->category( file );
-
-	    if ( category )
-		return category->color();
-	    else
-	    {
-		// Special case: Executables
-		if ( ( file->mode() & S_IXUSR  ) == S_IXUSR )
-		    return Qt::magenta;		// TO DO: Configurable
-	    }
-	}
-	else // Directories
-	{
-	    // TO DO
-	    return Qt::blue;
-	}
-    }
-
-    return Qt::white;
+    MimeCategory * category = MimeCategorizer::instance()->category( file );
+    return category ? category->color() : Qt::white;
 }
 
 
