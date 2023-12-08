@@ -23,8 +23,6 @@
 #define MaxAmbientLight		   200
 #define DefaultAmbientLight	   40
 
-#define MinHeightScalePercent	   10
-#define MaxHeightScalePercent	   200
 #define DefaultHeightScalePercent  100
 #define DefaultHeightScaleFactor   ( DefaultHeightScalePercent / 100.0 )
 

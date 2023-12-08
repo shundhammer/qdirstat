@@ -311,18 +311,18 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
     // Add another ridge perpendicular to the row's direction
     // that optically groups this row's tiles together.
 
-    const double heightScaleFactor   = _cushionSurface.height() * _parentView->heightScaleFactor();
+    const double   heightScaleFactor = _cushionSurface.height() * _parentView->heightScaleFactor();
     CushionSurface rowCushionSurface = _cushionSurface;
 
     if ( dir == TreemapHorizontal )
     {
 	QRectF rowRect = QRectF(rect.x(), rect.y(), primary, secondary);
-	rowCushionSurface.addRidge(TreemapVertical, heightScaleFactor, rowRect);
+	rowCushionSurface.addRidge( TreemapVertical, heightScaleFactor, rowRect );
     }
     else
     {
 	QRectF rowRect = QRectF(rect.x(), rect.y(), secondary, primary);
-	rowCushionSurface.addRidge(TreemapHorizontal, heightScaleFactor, rowRect);
+	rowCushionSurface.addRidge( TreemapHorizontal, heightScaleFactor, rowRect );
     }
 
     double offset = 0;
@@ -805,17 +805,19 @@ void TreemapTile::hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
 
 CushionSurface::CushionSurface()
 {
-    _xx2    = 0.0;
-    _xx1    = 0.0;
-    _yy2    = 0.0;
-    _yy1    = 0.0;
-    _height = CushionHeight;
+    _xx2        = 0.0;
+    _xx1        = 0.0;
+    _yy2        = 0.0;
+    _yy1        = 0.0;
+    _height     = CushionHeight;
+    _ridgeCount = 0;
 }
 
 
 void CushionSurface::addRidge( Orientation dim, double height, const QRectF & rect )
 {
     _height = height;
+    _ridgeCount++;
 
     if ( dim == TreemapHorizontal )
     {
@@ -830,19 +832,43 @@ void CushionSurface::addRidge( Orientation dim, double height, const QRectF & re
 }
 
 
-double CushionSurface::squareRidge( double squareCoefficient, double height, int x1, int x2 )
+double CushionSurface::squareRidge( double squareCoefficient, double height, int x1, int x2 ) const
 {
     if ( x2 != x1 ) // Avoid division by zero
-	squareCoefficient -= 4.0 * height / ( x2 - x1 );
+	squareCoefficient -= ridgeCoefficient() * height / ( x2 - x1 );
 
     return squareCoefficient;
 }
 
 
-double CushionSurface::linearRidge( double linearCoefficient, double height, int x1, int x2 )
+double CushionSurface::linearRidge( double linearCoefficient, double height, int x1, int x2 ) const
 {
     if ( x2 != x1 ) // Avoid division by zero
-	linearCoefficient += 4.0 * height * ( x2 + x1 ) / ( x2 - x1 );
+	linearCoefficient += ridgeCoefficient() * height * ( x2 + x1 ) / ( x2 - x1 );
 
     return linearCoefficient;
+}
+
+
+double CushionSurface::ridgeCoefficient() const
+{
+    switch ( _ridgeCount )
+    {
+        // Regressive factors found out by experimenting with different nesting
+        // depths.
+        //
+        // In the original code before 11/2023, this was a constant 4.0, but
+        // that turned out much too dark to identify individual tiles for
+        // nontrivial directory trees after the code change to be closer to the
+        // proposed algorithm in the TU Eindhoven papers. A smaller constant
+        // number turned out to lead to much too light tiles in shallower
+        // trees, so now the factors are at least a bit dynamic.
+
+        case 0:  // fallthru
+        case 1:  return 2.6;
+        case 2:  return 2.0;
+        case 3:  return 1.5;
+        case 4:  return 1.3;
+        default: return 1.1;
+    }
 }

@@ -99,6 +99,11 @@ namespace QDirStat
 	 **/
 	double yy1() const { return _yy1; }
 
+        /**
+         * Return the number of ridge pairs (square and linear)  on this level.
+         **/
+        int ridgeCount() const { return _ridgeCount; }
+
 
     protected:
 
@@ -106,13 +111,19 @@ namespace QDirStat
 	 * Calculate a new square polynomal coefficient for adding a ridge of
 	 * specified height between x1 and x2.
 	 **/
-	double squareRidge( double squareCoefficient, double height, int x1, int x2 );
+	double squareRidge( double squareCoefficient, double height, int x1, int x2 ) const;
 
 	/**
 	 * Calculate a new linear polynomal coefficient for adding a ridge of
 	 * specified height between x1 and x2.
 	 **/
-	double linearRidge( double linearCoefficient, double height, int x1, int x2 );
+	double linearRidge( double linearCoefficient, double height, int x1, int x2 ) const;
+
+        /**
+         * Return a multiplication factor for both square and linear ridges,
+         * depending on the ridge count.
+         **/
+        double ridgeCoefficient() const;
 
 
 	// Data members
@@ -120,6 +131,7 @@ namespace QDirStat
 	double _xx2, _xx1;
 	double _yy2, _yy1;
 	double _height;
+        int    _ridgeCount;
 
     }; // class CushionSurface
 
