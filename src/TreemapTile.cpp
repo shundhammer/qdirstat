@@ -225,7 +225,7 @@ FileInfoList TreemapTile::squarify( const QRectF & rect,
 
     if ( rectLength == 0 || rectHeight == 0 )	// Sanity check
     {
-	logWarning()  << "Zero length" << endl;
+	// logWarning()  << "Zero length" << endl;
 
 	if ( *it )	// Prevent endless loop in case of error:
 	    ++it;	// Advance iterator.
