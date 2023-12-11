@@ -750,17 +750,6 @@
     <string>F2</string>
    </property>
   </action>
-  <action name="actionShowCurrentPath">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Show Current &amp;Path</string>
-   </property>
-  </action>
   <action name="actionShowDetailsPanel">
    <property name="checkable">
     <bool>true</bool>

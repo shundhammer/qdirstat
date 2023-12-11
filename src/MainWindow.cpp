@@ -492,6 +492,16 @@ void MainWindow::updateFileDetailsView()
 }
 
 
+void MainWindow::setDetailsPanelVisible( bool visible )
+{
+    logDebug() << endl;
+    _ui->fileDetailsPanel->setVisible( visible );
+
+    if ( visible )
+        updateFileDetailsView();
+}
+
+
 void MainWindow::startingReading()
 {
     _stopWatch.start();

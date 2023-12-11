@@ -76,11 +76,8 @@ void MainWindow::connectViewMenu()
     connectViewExpandMenu();
     connectViewTreemapMenu();
 
-    connect( _ui->actionShowCurrentPath,  SIGNAL( toggled   ( bool ) ),
-	     _ui->breadcrumbNavigator,	  SLOT	( setVisible( bool ) ) );
-
-    connect( _ui->actionShowDetailsPanel, SIGNAL( toggled   ( bool ) ),
-	     _ui->fileDetailsPanel,	  SLOT	( setVisible( bool ) ) );
+    connect( _ui->actionShowDetailsPanel, SIGNAL( toggled                       ( bool ) ),
+             this,                        SLOT	( setDetailsPanelVisible        ( bool ) ) );
 
     CONNECT_ACTION( _ui->actionLayout1,		   this, changeLayout() );
     CONNECT_ACTION( _ui->actionLayout2,		   this, changeLayout() );

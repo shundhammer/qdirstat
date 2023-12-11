@@ -179,6 +179,11 @@ public slots:
     void updateFileDetailsView();
 
     /**
+     * Show or hide the details view.
+     **/
+    void setDetailsPanelVisible( bool visible );
+
+    /**
      * Copy the path of the current item (if there is one) to the system
      * clipboard for use in other applications.
      **/
@@ -519,7 +524,7 @@ private:
  * Helper class for the different layouts of the tree view layout that
  * correspond to the [L1], [L2], [L3] buttons in the tool bar where you can
  * switch what columns are displayed, and whether or not to display the
- * breadcrumbs widget (the path) and/or the details panel.
+ * details panel.
  *
  * Notice that the column layouts are handled in the HeaderTweaker and its
  * ColumnLayout helper class; see also HeaderTweaker.h and HeaderTweaker.cpp.
@@ -530,12 +535,10 @@ public:
 
     TreeLayout( const QString & name ):
 	name( name ),
-	showCurrentPath( true ),
 	showDetailsPanel( true )
 	{}
 
     QString name;
-    bool    showCurrentPath;
     bool    showDetailsPanel;
 
 }; // class TreeLayout

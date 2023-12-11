@@ -98,7 +98,6 @@ void MainWindow::saveLayout( TreeLayout * layout )
 {
     CHECK_PTR( layout );
 
-    layout->showCurrentPath  = _ui->actionShowCurrentPath->isChecked();
     layout->showDetailsPanel = _ui->actionShowDetailsPanel->isChecked();
 }
 
@@ -107,7 +106,6 @@ void MainWindow::applyLayout( TreeLayout * layout )
 {
     CHECK_PTR( layout );
 
-    _ui->actionShowCurrentPath->setChecked ( layout->showCurrentPath  );
     _ui->actionShowDetailsPanel->setChecked( layout->showDetailsPanel );
 }
 
@@ -118,10 +116,7 @@ void MainWindow::readLayoutSettings( TreeLayout * layout )
 
     Settings settings;
     settings.beginGroup( QString( "TreeViewLayout_%1" ).arg( layout->name ) );
-
-    layout->showCurrentPath  = settings.value( "ShowCurrentPath" , layout->showCurrentPath  ).toBool();
     layout->showDetailsPanel = settings.value( "ShowDetailsPanel", layout->showDetailsPanel ).toBool();
-
     settings.endGroup();
 }
 
@@ -132,10 +127,7 @@ void MainWindow::writeLayoutSettings( TreeLayout * layout )
 
     Settings settings;
     settings.beginGroup( QString( "TreeViewLayout_%1" ).arg( layout->name ) );
-
-    settings.setValue( "ShowCurrentPath" , layout->showCurrentPath  );
     settings.setValue( "ShowDetailsPanel", layout->showDetailsPanel );
-
     settings.endGroup();
 }
 
