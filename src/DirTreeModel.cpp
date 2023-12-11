@@ -585,10 +585,11 @@ QModelIndex DirTreeModel::parent( const QModelIndex & index ) const
 	return QModelIndex();
 
     FileInfo * child = static_cast<FileInfo*>( index.internalPointer() );
-    CHECK_MAGIC( child );
+
+    if ( ! child || ! child->checkMagicNumber() )
+	return QModelIndex();
 
     FileInfo * parent = child->parent();
-    CHECK_PTR( parent );
 
     if ( ! parent || parent == _tree->root() )
 	return QModelIndex();
