@@ -158,6 +158,9 @@ void MainWindow::connectGoMenu()
     CONNECT_ACTION( _ui->actionGoForward,    _historyButtons,   historyGoForward()   );
     CONNECT_ACTION( _ui->actionGoUp,	     this,              navigateUp()         );
     CONNECT_ACTION( _ui->actionGoToToplevel, this,              navigateToToplevel() );
+
+    _ui->actionGoUp->setShortcutContext        ( Qt::ApplicationShortcut );
+    _ui->actionGoToToplevel->setShortcutContext( Qt::ApplicationShortcut );
 }
 
 
