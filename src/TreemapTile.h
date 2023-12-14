@@ -269,6 +269,11 @@ namespace QDirStat
 			    const QStyleOptionGraphicsItem * option,
 			    QWidget			   * widget = 0) Q_DECL_OVERRIDE;
 
+        /**
+         * Paint a (yellow) selection rectangle for this tile.
+         **/
+        void paintSelectionRect( QPainter * painter );
+
 	/**
 	 * Notification that item attributes (such as the 'selected' state)
 	 * have changed.

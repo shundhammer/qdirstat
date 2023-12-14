@@ -392,6 +392,9 @@ void TreemapTile::paint( QPainter			* painter,
 	if ( _orig->isDir() || _orig->isDotEntry() )
 	{
 	    QGraphicsRectItem::paint( painter, option, widget );
+
+	    if ( isSelected() )
+                paintSelectionRect( painter );
 	}
 	else
 	{
@@ -413,11 +416,7 @@ void TreemapTile::paint( QPainter			* painter,
 		// we don't do that for every tile, so we draw that highlight
 		// frame manually if this is a leaf tile.
 
-		QRectF selectionRect = rect;
-		selectionRect.setSize( rect.size() - QSize( 1.0, 1.0 ) );
-		painter->setBrush( Qt::NoBrush );
-		painter->setPen( QPen( _parentView->selectedItemsColor(), 1 ) );
-		painter->drawRect( selectionRect );
+                paintSelectionRect( painter );
 	    }
 
 	    if ( _parentView->forceCushionGrid() )
@@ -450,6 +449,16 @@ void TreemapTile::paint( QPainter			* painter,
 
 	QGraphicsRectItem::paint( painter, option, widget );
     }
+}
+
+
+void TreemapTile::paintSelectionRect( QPainter * painter )
+{
+    QRectF selectionRect = QGraphicsRectItem::rect();
+    selectionRect.setSize( selectionRect.size() - QSize( 1.0, 1.0 ) );
+    painter->setBrush( Qt::NoBrush );
+    painter->setPen( QPen( _parentView->selectedItemsColor(), 1 ) );
+    painter->drawRect( selectionRect );
 }
 
 
