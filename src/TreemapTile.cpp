@@ -22,8 +22,6 @@
 #include "Exception.h"
 #include "Logger.h"
 
-#define CushionHeight   1.0
-
 using namespace QDirStat;
 
 
@@ -686,11 +684,14 @@ void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 		_parentView->setCurrentItem( this );
 		// logDebug() << this << " clicked; selected: " << isSelected() << endl;
 
-                logDebug() << "*** xx1: "  << _cushionSurface.xx1()
-                           << "  xx2: "    << _cushionSurface.xx2()
-                           << "  yy1: "    << _cushionSurface.yy1()
-                           << "  yy2: "    << _cushionSurface.yy2()
+#if 1
+                logDebug() << "ridges: " << _cushionSurface.ridgeCount()
+                           << "  xx1: "  << _cushionSurface.xx1()
+                           << "  xx2: "  << _cushionSurface.xx2()
+                           << "  yy1: "  << _cushionSurface.yy1()
+                           << "  yy2: "  << _cushionSurface.yy2()
                            << endl;
+#endif
 	    }
 	    break;
 
@@ -841,7 +842,7 @@ void CushionSurface::addRidge( Orientation dim, const QRectF & rect )
 double CushionSurface::squareRidge( double squareCoefficient, int x1, int x2 ) const
 {
     if ( x2 != x1 ) // Avoid division by zero
-	squareCoefficient -= ridgeCoefficient() * CushionHeight / ( x2 - x1 );
+	squareCoefficient -= ridgeCoefficient() / ( x2 - x1 );
 
     return squareCoefficient;
 }
@@ -850,7 +851,7 @@ double CushionSurface::squareRidge( double squareCoefficient, int x1, int x2 ) c
 double CushionSurface::linearRidge( double linearCoefficient, int x1, int x2 ) const
 {
     if ( x2 != x1 ) // Avoid division by zero
-	linearCoefficient += ridgeCoefficient() * CushionHeight * ( x2 + x1 ) / ( x2 - x1 );
+	linearCoefficient += ridgeCoefficient() * ( x2 + x1 ) / ( x2 - x1 );
 
     return linearCoefficient;
 }
@@ -870,11 +871,16 @@ double CushionSurface::ridgeCoefficient() const
         // number turned out to lead to much too light tiles in shallower
         // trees, so now the factors are at least a bit dynamic.
 
-        case 0:  // fallthru
-        case 1:  return 1.5;
-        case 2:  return 1.3;
-        case 3:  return 1.1;
-        default: return 1.0;
+        case 0:
+        case 1:
+        case 2:  return 1.5;
+        case 3:
+        case 4:  return 1.3;
+        case 5:
+        case 6:
+        case 7:  return 1.2;
+
+        default: return 1.1;
     }
 }
 
