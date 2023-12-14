@@ -95,6 +95,12 @@ namespace QDirStat
          **/
         int ridgeCount() const { return _ridgeCount; }
 
+        /**
+         * Return a multiplication factor for both square and linear ridges,
+         * depending on the ridge count.
+         **/
+        double ridgeCoefficient() const;
+
 
     protected:
 
@@ -109,12 +115,6 @@ namespace QDirStat
 	 * specified height between x1 and x2.
 	 **/
 	double linearRidge( double linearCoefficient, int x1, int x2 ) const;
-
-        /**
-         * Return a multiplication factor for both square and linear ridges,
-         * depending on the ridge count.
-         **/
-        double ridgeCoefficient() const;
 
 
 	// Data members

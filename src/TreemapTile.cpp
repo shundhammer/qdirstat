@@ -685,12 +685,13 @@ void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 		// logDebug() << this << " clicked; selected: " << isSelected() << endl;
 
 #if 1
-                logDebug() << "ridges: " << _cushionSurface.ridgeCount()
-                           << "  xx1: "  << _cushionSurface.xx1()
-                           << "  xx2: "  << _cushionSurface.xx2()
-                           << "  yy1: "  << _cushionSurface.yy1()
-                           << "  yy2: "  << _cushionSurface.yy2()
-                           << endl;
+                logVerbose() << "ridges: "        << _cushionSurface.ridgeCount()
+                             << "  coefficient: " << _cushionSurface.ridgeCoefficient()
+                             << "  xx1: "         << _cushionSurface.xx1()
+                             << "  xx2: "         << _cushionSurface.xx2()
+                             << "  yy1: "         << _cushionSurface.yy1()
+                             << "  yy2: "         << _cushionSurface.yy2()
+                             << endl;
 #endif
 	    }
 	    break;
