@@ -471,15 +471,14 @@ QPixmap TreemapTile::renderCushion()
 
     // logDebug() << endl;
 
-    // FIXME: 'Ia' and 'Is' are poor variable names;
-    // they do not give a hint what they are all about,
-    // and variable names should not start with a captital letter.
+    // FIXME: 'ia' and 'is' are poor variable names;
+    // they do not give a hint what they are all about.
 
-    const double Ia          = (double) parentView()->ambientLight() / 255;
-    const double Is          = 1 - Ia;
-    const double lightX      = Is * parentView()->lightX();
-    const double lightY      = Is * parentView()->lightY();
-    const double lightZ      = Is * parentView()->lightZ();
+    const double ia          = (double) parentView()->ambientLight() / 255;
+    const double is          = 1 - ia;
+    const double lightX      = is * parentView()->lightX();
+    const double lightY      = is * parentView()->lightY();
+    const double lightZ      = is * parentView()->lightZ();
 
     QColor       color       = parentView()->tileColor( _orig );
     const int    pixelHeight = rect.height();
@@ -507,7 +506,7 @@ QPixmap TreemapTile::renderCushion()
             if (cosa < 0)
                 cosa = 0;
 
-            cosa += Ia;
+            cosa += ia;
 
             const int red   = cosa * color.red()   + 0.5;
             const int green = cosa * color.green() + 0.5;
