@@ -27,7 +27,6 @@
 #define DefaultHeightScaleFactor   ( DefaultHeightScalePercent / 100.0 )
 
 #define DefaultMinTileSize	   3
-#define CushionHeight		   1.0
 
 
 class QMouseEvent;
@@ -447,12 +446,6 @@ namespace QDirStat
 	 **/
 	double lightZ() const { return _lightZ; }
 
-	/**
-	 * Returns cushion ridge height degradation factor (0 .. 1.0) for each
-	 * level of subdivision.
-	 **/
-	double heightScaleFactor() const { return _heightScaleFactor; }
-
 
     signals:
 
@@ -549,8 +542,6 @@ namespace QDirStat
 	double _lightX;
 	double _lightY;
 	double _lightZ;
-
-	double _heightScaleFactor;
 
     }; // class TreemapView
 

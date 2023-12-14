@@ -169,7 +169,6 @@ void TreemapView::readSettings()
     settings.beginGroup( "Treemaps" );
 
     _ambientLight	= settings.value( "AmbientLight"     , DefaultAmbientLight ).toInt();
-    _heightScaleFactor	= settings.value( "HeightScaleFactor", DefaultHeightScaleFactor ).toDouble();
     _squarify		= settings.value( "Squarify"	     , true  ).toBool();
     _doCushionShading	= settings.value( "CushionShading"   , true  ).toBool();
     _enforceContrast	= settings.value( "EnforceContrast"  , false ).toBool();
@@ -198,7 +197,6 @@ void TreemapView::writeSettings()
     settings.beginGroup( "Treemaps" );
 
     settings.setValue( "AmbientLight"	   , _ambientLight	 );
-    settings.setValue( "HeightScaleFactor" , _heightScaleFactor	 );
     settings.setValue( "Squarify"	   , _squarify		 );
     settings.setValue( "CushionShading"	   , _doCushionShading	 );
     settings.setValue( "EnforceContrast"   , _enforceContrast	 );

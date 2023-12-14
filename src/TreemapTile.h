@@ -55,52 +55,43 @@ namespace QDirStat
 	CushionSurface();
 
 	/**
-	 * Adds a ridge of the specified height in dimension 'dim' within
-	 * rectangle 'rect' to this surface. It's real voodo magic.
+	 * Adds a ridge in dimension 'dim' within rectangle 'rect' to this
+	 * surface.
 	 *
-	 * Just kidding - read the paper about "cushion treemaps" by Jarke
-	 * J. van Wiik and Huub van de Wetering from the TU Eindhoven, NL for
-	 * more details.
+	 * See the paper about "cushion treemaps" by Jarke J. van Wiik and Huub
+	 * van de Wetering from the TU Eindhoven, NL for more details.
 	 *
 	 * If you don't want to get all that involved: The coefficients are
 	 * changed in some way.
 	 **/
-	void addRidge( Orientation dim, double height, const QRectF & rect );
+	void addRidge( Orientation dim, const QRectF & rect );
 
 	/**
-	 * Set the cushion's height.
-	 **/
-	void setHeight( double newHeight ) { _height = newHeight; }
-
-	/**
-	 * Returns the cushion's height.
-	 **/
-	double height() const { return _height; }
-
-	/**
-	 * Returns the polynomal coefficient of the second order for X
+	 * Returns the polynomal coefficient of the second order for the X
 	 * direction.
 	 **/
 	double xx2() const { return _xx2; }
 
 	/**
-	 * Returns the polynomal coefficient of the first order for X direction.
+	 * Returns the polynomal coefficient of the first order for the X
+	 * direction.
 	 **/
 	double xx1() const { return _xx1; }
 
 	/**
-	 * Returns the polynomal coefficient of the second order for Y
+	 * Returns the polynomal coefficient of the second order for the Y
 	 * direction.
 	 **/
 	double yy2() const { return _yy2; }
 
 	/**
-	 * Returns the polynomal coefficient of the first order for Y direction.
+	 * Returns the polynomal coefficient of the first order for the Y
+	 * direction.
 	 **/
 	double yy1() const { return _yy1; }
 
         /**
-         * Return the number of ridge pairs (square and linear)  on this level.
+         * Return the number of ridge pairs (square and linear) on this level.
          **/
         int ridgeCount() const { return _ridgeCount; }
 
@@ -111,13 +102,13 @@ namespace QDirStat
 	 * Calculate a new square polynomal coefficient for adding a ridge of
 	 * specified height between x1 and x2.
 	 **/
-	double squareRidge( double squareCoefficient, double height, int x1, int x2 ) const;
+	double squareRidge( double squareCoefficient, int x1, int x2 ) const;
 
 	/**
 	 * Calculate a new linear polynomal coefficient for adding a ridge of
 	 * specified height between x1 and x2.
 	 **/
-	double linearRidge( double linearCoefficient, double height, int x1, int x2 ) const;
+	double linearRidge( double linearCoefficient, int x1, int x2 ) const;
 
         /**
          * Return a multiplication factor for both square and linear ridges,
@@ -130,7 +121,6 @@ namespace QDirStat
 
 	double _xx2, _xx1;
 	double _yy2, _yy1;
-	double _height;
         int    _ridgeCount;
 
     }; // class CushionSurface

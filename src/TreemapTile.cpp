@@ -22,6 +22,8 @@
 #include "Exception.h"
 #include "Logger.h"
 
+#define CushionHeight   1.0
+
 using namespace QDirStat;
 
 
@@ -35,6 +37,9 @@ TreemapTile::TreemapTile( TreemapView *	 parentView,
     _parentTile( parentTile ),
     _orig( orig )
 {
+    // This constructor is used for non-squarified treemaps or for the root
+    // tile of a squarified treemap.
+
     // logDebug() << "Creating tile without cushion for " << orig << "	" << rect << endl;
     init();
 
@@ -57,6 +62,8 @@ TreemapTile::TreemapTile( TreemapView *		 parentView,
     _orig( orig ),
     _cushionSurface( cushionSurface )
 {
+    // This constructor is used for non-root tiles of a squarified treemap.
+
     // logDebug() << "Creating cushioned tile for " << orig << "  " << rect << endl;
     init();
 
@@ -146,7 +153,7 @@ void TreemapTile::createChildrenSimple( const QRectF & rect,
     int count	 = 0;
     double scale = (double) size / (double) _orig->totalAllocatedSize();
 
-    _cushionSurface.addRidge( childDir, _cushionSurface.height(), rect );
+    _cushionSurface.addRidge( childDir, rect );
     FileSize minSize = (FileSize) ( _parentView->minTileSize() / scale );
     FileInfoSortedBySizeIterator it( _orig, minSize );
 
@@ -168,9 +175,7 @@ void TreemapTile::createChildrenSimple( const QRectF & rect,
 	    TreemapTile * tile = new TreemapTile( _parentView, this, *it, childRect, childDir );
 	    CHECK_NEW( tile );
 
-	    tile->cushionSurface().addRidge( dir,
-					     _cushionSurface.height() * _parentView->heightScaleFactor(),
-					     childRect );
+	    tile->cushionSurface().addRidge( dir, childRect );
 
 	    offset += childSize;
 	}
@@ -311,18 +316,17 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
     // Add another ridge perpendicular to the row's direction
     // that optically groups this row's tiles together.
 
-    const double   heightScaleFactor = _cushionSurface.height() * _parentView->heightScaleFactor();
     CushionSurface rowCushionSurface = _cushionSurface;
 
     if ( dir == TreemapHorizontal )
     {
 	QRectF rowRect = QRectF(rect.x(), rect.y(), primary, secondary);
-	rowCushionSurface.addRidge( TreemapVertical, heightScaleFactor, rowRect );
+	rowCushionSurface.addRidge( TreemapVertical, rowRect );
     }
     else
     {
 	QRectF rowRect = QRectF(rect.x(), rect.y(), secondary, primary);
-	rowCushionSurface.addRidge( TreemapHorizontal, heightScaleFactor, rowRect );
+	rowCushionSurface.addRidge( TreemapHorizontal, rowRect );
     }
 
     double offset = 0;
@@ -351,9 +355,7 @@ QRectF TreemapTile::layoutRow( const QRectF & rect,
 	    TreemapTile * tile = new TreemapTile( _parentView, this, *it, childRect, rowCushionSurface );
 	    CHECK_NEW( tile );
 
-	    tile->cushionSurface().addRidge( dir,
-					     rowCushionSurface.height() * _parentView->heightScaleFactor(),
-					     childRect );
+	    tile->cushionSurface().addRidge( dir, childRect );
 	    offset += childSize;
 	}
 
@@ -683,6 +685,12 @@ void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 		QGraphicsRectItem::mouseReleaseEvent( event );
 		_parentView->setCurrentItem( this );
 		// logDebug() << this << " clicked; selected: " << isSelected() << endl;
+
+                logDebug() << "*** xx1: "  << _cushionSurface.xx1()
+                           << "  xx2: "    << _cushionSurface.xx2()
+                           << "  yy1: "    << _cushionSurface.yy1()
+                           << "  yy2: "    << _cushionSurface.yy2()
+                           << endl;
 	    }
 	    break;
 
@@ -809,42 +817,40 @@ CushionSurface::CushionSurface()
     _xx1        = 0.0;
     _yy2        = 0.0;
     _yy1        = 0.0;
-    _height     = CushionHeight;
     _ridgeCount = 0;
 }
 
 
-void CushionSurface::addRidge( Orientation dim, double height, const QRectF & rect )
+void CushionSurface::addRidge( Orientation dim, const QRectF & rect )
 {
-    _height = height;
     _ridgeCount++;
 
     if ( dim == TreemapHorizontal )
     {
-	_xx2 = squareRidge( _xx2, _height, rect.left(), rect.right() );
-	_xx1 = linearRidge( _xx1, _height, rect.left(), rect.right() );
+	_xx2 = squareRidge( _xx2, rect.left(), rect.right() );
+	_xx1 = linearRidge( _xx1, rect.left(), rect.right() );
     }
     else
     {
-	_yy2 = squareRidge( _yy2, _height, rect.top(), rect.bottom() );
-	_yy1 = linearRidge( _yy1, _height, rect.top(), rect.bottom() );
+	_yy2 = squareRidge( _yy2, rect.top(), rect.bottom() );
+	_yy1 = linearRidge( _yy1, rect.top(), rect.bottom() );
     }
 }
 
 
-double CushionSurface::squareRidge( double squareCoefficient, double height, int x1, int x2 ) const
+double CushionSurface::squareRidge( double squareCoefficient, int x1, int x2 ) const
 {
     if ( x2 != x1 ) // Avoid division by zero
-	squareCoefficient -= ridgeCoefficient() * height / ( x2 - x1 );
+	squareCoefficient -= ridgeCoefficient() * CushionHeight / ( x2 - x1 );
 
     return squareCoefficient;
 }
 
 
-double CushionSurface::linearRidge( double linearCoefficient, double height, int x1, int x2 ) const
+double CushionSurface::linearRidge( double linearCoefficient, int x1, int x2 ) const
 {
     if ( x2 != x1 ) // Avoid division by zero
-	linearCoefficient += ridgeCoefficient() * height * ( x2 + x1 ) / ( x2 - x1 );
+	linearCoefficient += ridgeCoefficient() * CushionHeight * ( x2 + x1 ) / ( x2 - x1 );
 
     return linearCoefficient;
 }
@@ -865,10 +871,10 @@ double CushionSurface::ridgeCoefficient() const
         // trees, so now the factors are at least a bit dynamic.
 
         case 0:  // fallthru
-        case 1:  return 2.6;
-        case 2:  return 2.0;
-        case 3:  return 1.5;
-        case 4:  return 1.3;
-        default: return 1.1;
+        case 1:  return 1.5;
+        case 2:  return 1.3;
+        case 3:  return 1.1;
+        default: return 1.0;
     }
 }
+
