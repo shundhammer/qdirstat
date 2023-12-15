@@ -392,7 +392,14 @@ void PkgReadJob::addFile( const QString & fileListPath )
 
 	    if ( ! newParent )
 	    {
-		parent->setReadState( DirError );
+                // Don't report a directory read error here:
+                // A file that belongs to the package should be there, but is not.
+                // The user might intentionally have deleted it for some reason;
+                // just report that in the log.
+                //
+		// parent->setReadState( DirError );
+
+                logWarning() << _pkg << ": missing: " << fileListPath << endl;
 		return;
 	    }
 
