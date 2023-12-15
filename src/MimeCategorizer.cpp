@@ -251,10 +251,10 @@ void MimeCategorizer::readSettings()
 	settings.endGroup(); // [MimeCategory_01], [MimeCategory_02], ...
     }
 
-    ensureMandatoryCategories();
-
     if ( _categories.isEmpty() )
 	addDefaultCategories();
+
+    ensureMandatoryCategories();
 }
 
 
