@@ -22,6 +22,12 @@
 #include "Exception.h"
 #include "Logger.h"
 
+
+// Log cushion parameters upon click on tile?
+
+#define VERBOSE_CUSHIONS        0
+
+
 using namespace QDirStat;
 
 
@@ -692,7 +698,7 @@ void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 		_parentView->setCurrentItem( this );
 		// logDebug() << this << " clicked; selected: " << isSelected() << endl;
 
-#if 1
+#if VERBOSE_CUSHIONS
                 logVerbose() << "ridges: "        << _cushionSurface.ridgeCount()
                              << "  coefficient: " << _cushionSurface.ridgeCoefficient()
                              << "  xx1: "         << _cushionSurface.xx1()
