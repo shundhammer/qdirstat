@@ -74,6 +74,11 @@ namespace QDirStat
 	 **/
 	void setPath( FileInfo * item );
 
+        /**
+         * Explicitly clear the path.
+         **/
+        void clear() { setPath( 0 ); }
+
     signals:
 
 	/**

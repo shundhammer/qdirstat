@@ -641,16 +641,14 @@ void MainWindow::readPkg( const PkgFilter & pkgFilter )
     logInfo() << "URL: " << pkgFilter.url() << endl;
 
     updateWindowTitle( pkgFilter.url() );
-    _ui->breadcrumbNavigator->setPath( 0 );
+    _ui->breadcrumbNavigator->clear();
+    _ui->fileDetailsView->clear();
     app()->dirTreeModel()->clear();
 
     BusyPopup msg( tr( "Reading package database..." ), this );
 
-    logDebug() << "Collapsing all tree items" << endl;
-    expandTreeToLevel( 0 );   // Performance boost: Down from 25 to 6 sec.
-
-    logDebug() << "Reading packages" << endl;
     app()->dirTreeModel()->readPkg( pkgFilter );
+    app()->selectionModel()->setCurrentItem( app()->dirTree()->firstToplevel() );
 }
 
 
