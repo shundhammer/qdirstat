@@ -21,7 +21,7 @@ using namespace QDirStat;
 BusyPopup::BusyPopup( const QString & text,
 		      QWidget *	      parent,
 		      bool	      autoPost ):
-    QLabel( text, parent, Qt::Popup ),
+    QLabel( text, parent, Qt::SplashScreen ),
     _posted( false )
 {
     setMargin( 15 );
