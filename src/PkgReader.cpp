@@ -17,6 +17,7 @@
 #include "Logger.h"
 #include "Exception.h"
 
+#define VERBOSE_MISSING_PACKAGED_FILES  0
 
 using namespace QDirStat;
 
@@ -392,6 +393,7 @@ void PkgReadJob::addFile( const QString & fileListPath )
 
 	    if ( ! newParent )
 	    {
+#if VERBOSE_MISSING_PACKAGED_FILES
                 // Don't report a directory read error here:
                 // A file that belongs to the package should be there, but is not.
                 // The user might intentionally have deleted it for some reason;
@@ -400,6 +402,7 @@ void PkgReadJob::addFile( const QString & fileListPath )
 		// parent->setReadState( DirError );
 
                 logWarning() << _pkg << ": missing: " << fileListPath << endl;
+#endif
 		return;
 	    }
 
