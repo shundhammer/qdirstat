@@ -16,6 +16,7 @@
 
 #include "MainWindow.h"
 #include "ActionManager.h"
+#include "BusyPopup.h"
 #include "CleanupCollection.h"
 #include "CleanupConfigPage.h"
 #include "ConfigDialog.h"
@@ -640,6 +641,9 @@ void MainWindow::readPkg( const PkgFilter & pkgFilter )
     // logInfo() << "URL: " << pkgFilter.url() << endl;
 
     updateWindowTitle( pkgFilter.url() );
+    // app()->dirTreeModel()->clear(); // For instant feedback
+    BusyPopup msg( tr( "Reading package database..." ), this );
+
     expandTreeToLevel( 0 );   // Performance boost: Down from 25 to 6 sec.
     app()->dirTreeModel()->readPkg( pkgFilter );
 }
