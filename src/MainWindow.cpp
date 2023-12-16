@@ -638,13 +638,18 @@ void MainWindow::askFindFiles()
 
 void MainWindow::readPkg( const PkgFilter & pkgFilter )
 {
-    // logInfo() << "URL: " << pkgFilter.url() << endl;
+    logInfo() << "URL: " << pkgFilter.url() << endl;
 
     updateWindowTitle( pkgFilter.url() );
-    // app()->dirTreeModel()->clear(); // For instant feedback
+    _ui->breadcrumbNavigator->setPath( 0 );
+    app()->dirTreeModel()->clear();
+
     BusyPopup msg( tr( "Reading package database..." ), this );
 
+    logDebug() << "Collapsing all tree items" << endl;
     expandTreeToLevel( 0 );   // Performance boost: Down from 25 to 6 sec.
+
+    logDebug() << "Reading packages" << endl;
     app()->dirTreeModel()->readPkg( pkgFilter );
 }
 
