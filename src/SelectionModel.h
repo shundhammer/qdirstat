@@ -203,6 +203,7 @@ namespace QDirStat
 	 * Clear all old contents.
 	 **/
 	void clear();
+
 	/**
 	 * Notification that a child is about to be deleted.
 	 **/

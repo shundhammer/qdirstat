@@ -52,7 +52,7 @@ void SelectionModel::clear()
 {
     _selectedItems.clear();
     _selectedItemsDirty = true;
-    _currentItem = 0;
+    _currentItem   = 0;
     _currentBranch = 0;
 
     clearSelection();
