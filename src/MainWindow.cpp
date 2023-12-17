@@ -278,7 +278,7 @@ void MainWindow::updateActions()
 
     _ui->actionCopyPathToClipboard->setEnabled( currentItem );
     _ui->actionGoUp->setEnabled( currentItem && currentItem->treeLevel() > 1 );
-    _ui->actionGoToToplevel->setEnabled( firstToplevel && ( ! currentItem || currentItem->treeLevel() > 1 ));
+    _ui->actionGoToToplevel->setEnabled( firstToplevel );
 
     FileInfoSet selectedItems = app()->selectionModel()->selectedItems();
     FileInfo * sel	      = selectedItems.first();
