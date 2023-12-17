@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>338</width>
-    <height>419</height>
+    <width>412</width>
+    <height>594</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -126,7 +126,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Match &amp;Mode:</string>
+        <string>Ma&amp;tch Mode:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -201,7 +201,7 @@
      <item row="2" column="1">
       <widget class="QCheckBox" name="caseSensitiveCheckBox">
        <property name="text">
-        <string>Case &amp;Sensitive</string>
+        <string>Case Sensiti&amp;ve</string>
        </property>
        <property name="checked">
         <bool>false</bool>
@@ -265,6 +265,26 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QFrame" name="frame_3">
+        <property name="frameShape">
+         <enum>QFrame::HLine</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="findSymLinksCheckBox">
+        <property name="text">
+         <string>Find Symbolic &amp;Links</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -296,7 +316,7 @@
       <item>
        <widget class="QRadioButton" name="wholeTreeRadioButton">
         <property name="text">
-         <string>In the &amp;Whole Tree</string>
+         <string>In the Whole &amp;Tree</string>
         </property>
        </widget>
       </item>

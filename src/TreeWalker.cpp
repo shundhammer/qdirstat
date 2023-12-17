@@ -121,12 +121,9 @@ bool FindFilesTreeWalker::check( FileInfo * item )
 
     bool match = false;
 
-    if ( _filter.findDirs() && item->isDir() )
-    {
-        match = _filter.matches( item->name() );
-    }
-    else if ( _filter.findFiles() &&
-              ( item->isFile() || item->isSymLink() ) )
+    if ( ( _filter.findDirs()     && item->isDir()     ) ||
+         ( _filter.findFiles()    && item->isFile()    ) ||
+         ( _filter.findSymLinks() && item->isSymLink() )    )
     {
         match = _filter.matches( item->name() );
     }

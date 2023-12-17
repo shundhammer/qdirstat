@@ -22,7 +22,8 @@ FileSearchFilter::FileSearchFilter( DirInfo *       subtree,
                   Contains ),   // defaultFilterMode
     _subtree( subtree ),
     _findFiles( true ),
-    _findDirs( true )
+    _findDirs( true ),
+    _findSymLinks( true )
 {
     if ( _filterMode == Auto )
         guessFilterMode();

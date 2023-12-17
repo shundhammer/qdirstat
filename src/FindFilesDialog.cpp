@@ -75,8 +75,10 @@ FileSearchFilter FindFilesDialog::fileSearchFilter()
     filter.setFindFiles( _ui->findFilesRadioButton->isChecked() ||
                          _ui->findBothRadioButton->isChecked()    );
 
-    filter.setFindDirs ( _ui->findDirectoriesRadioButton->isChecked() ||
-                         _ui->findBothRadioButton->isChecked()          );
+    filter.setFindDirs( _ui->findDirectoriesRadioButton->isChecked() ||
+                        _ui->findBothRadioButton->isChecked()          );
+
+    filter.setFindSymLinks( _ui->findSymLinksCheckBox->isChecked() );
 
     filter.setCaseSensitive ( _ui->caseSensitiveCheckBox->isChecked() );
 
@@ -178,6 +180,7 @@ void FindFilesDialog::readSettings()
     _ui->findFilesRadioButton->setChecked       ( settings.value( "findFiles",      false  ).toBool() );
     _ui->findDirectoriesRadioButton->setChecked ( settings.value( "findDirs",       false  ).toBool() );
     _ui->findBothRadioButton->setChecked        ( settings.value( "findBoth",       true   ).toBool() );
+    _ui->findSymLinksCheckBox->setChecked       ( settings.value( "findSymLinks",   true   ).toBool() );
 
     _ui->wholeTreeRadioButton->setChecked       ( settings.value( "wholeTree",      true   ).toBool() );
     _ui->currentSubtreeRadioButton->setChecked  ( settings.value( "currentSubtree", false  ).toBool() );
@@ -207,6 +210,7 @@ void FindFilesDialog::writeSettings()
     settings.setValue( "findFiles",      _ui->findFilesRadioButton->isChecked()       );
     settings.setValue( "findDirs",       _ui->findDirectoriesRadioButton->isChecked() );
     settings.setValue( "findBoth",       _ui->findBothRadioButton->isChecked()        );
+    settings.setValue( "findSymLinks",   _ui->findSymLinksCheckBox->isChecked()       );
 
     settings.setValue( "wholeTree",      _ui->wholeTreeRadioButton->isChecked()       );
     settings.setValue( "currentSubtree", _ui->currentSubtreeRadioButton->isChecked()  );

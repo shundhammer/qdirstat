@@ -49,11 +49,13 @@ namespace QDirStat
         /**
          * Flags which node types to find
          **/
-        bool findFiles() const { return _findFiles; }
-        bool findDirs()  const { return _findDirs;  }
+        bool findFiles()    const { return _findFiles;    }
+        bool findDirs()     const { return _findDirs;     }
+        bool findSymLinks() const { return _findSymLinks; }
 
-        void setFindFiles( bool value ) { _findFiles = value; }
-        void setFindDirs ( bool value ) { _findDirs  = value; }
+        void setFindFiles   ( bool value ) { _findFiles    = value; }
+        void setFindDirs    ( bool value ) { _findDirs     = value; }
+        void setFindSymLinks( bool value ) { _findSymLinks = value; }
 
         /**
          * Subtree to start the search from
@@ -67,6 +69,7 @@ namespace QDirStat
         DirInfo * _subtree;
         bool      _findFiles;
         bool      _findDirs;
+        bool      _findSymLinks;
 
     };  // class FileSearchFilter
 
@@ -83,6 +86,9 @@ namespace QDirStat
 
             findType += "dirs";
         }
+
+        if ( filter.findSymLinks() )
+            findType += " + symlinks";
 
         stream << "<FileSearchFilter \""
                << filter.pattern()
