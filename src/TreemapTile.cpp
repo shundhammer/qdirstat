@@ -395,7 +395,7 @@ void TreemapTile::paint( QPainter			* painter,
 
     if ( _parentView->doCushionShading() )
     {
-	if ( _orig->isDir() || _orig->isDotEntry() )
+	if ( _orig->isDir() || _orig->isDotEntry() || _orig->isPkgInfo() )
 	{
 	    QGraphicsRectItem::paint( painter, option, widget );
 
