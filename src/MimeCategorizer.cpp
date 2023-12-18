@@ -297,20 +297,24 @@ void MimeCategorizer::writeSettings()
 
 void MimeCategorizer::ensureMandatoryCategories()
 {
-    if ( !matchCategoryName( CATEGORY_EXECUTABLE ) )
+    // Remember this category so we don't have to search for it every time
+    _executableCategory = matchCategoryName( CATEGORY_EXECUTABLE );
+    if ( !_executableCategory )
     {
 	// Special catchall category for files that don't match anything else, cannot be deleted
-	MimeCategory * executable = new MimeCategory( tr( CATEGORY_EXECUTABLE ), Qt::magenta );
-	CHECK_NEW( executable );
-	add( executable );
+	_executableCategory = new MimeCategory( tr( CATEGORY_EXECUTABLE ), Qt::magenta );
+	CHECK_NEW( _executableCategory );
+	add( _executableCategory );
     }
 
-    // Special category for symlinks regardless of the filename, cannot be deleted
-    if ( !matchCategoryName( CATEGORY_SYMLINK ) )
+    // Remember this category so we don't have to search for it every time
+    _symlinkCategory = matchCategoryName( CATEGORY_SYMLINK );
+    if ( !_symlinkCategory )
     {
-	MimeCategory * symlink = new MimeCategory( tr( CATEGORY_SYMLINK ), Qt::blue );
-	CHECK_NEW( symlink );
-	add( symlink );
+	// Special category for symlinks regardless of the filename, cannot be deleted
+	_symlinkCategory = new MimeCategory( tr( CATEGORY_SYMLINK ), Qt::blue );
+	CHECK_NEW( _symlinkCategory );
+	add( _symlinkCategory );
     }
 }
 

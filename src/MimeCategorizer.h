@@ -166,6 +166,9 @@ namespace QDirStat
 	QMap<QString, MimeCategory *>	_caseInsensitiveSuffixMap;
 	QMap<QString, MimeCategory *>	_caseSensitiveSuffixMap;
 
+	MimeCategory *_executableCategory;
+	MimeCategory *_symlinkCategory;
+
     };	// class MimeCategorizer
 
 }	// namespace QDirStat
