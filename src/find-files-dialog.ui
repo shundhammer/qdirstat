@@ -316,7 +316,7 @@
       <item>
        <widget class="QRadioButton" name="wholeTreeRadioButton">
         <property name="text">
-         <string>In the Whole &amp;Tree</string>
+         <string>In the &amp;Whole Tree</string>
         </property>
        </widget>
       </item>

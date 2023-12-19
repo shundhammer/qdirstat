@@ -36,6 +36,10 @@ FindFilesDialog::FindFilesDialog( QWidget * parent ):
 
     CHECK_NEW( _ui );
     _ui->setupUi( this );
+
+    if ( lastPath.isEmpty() && app()->root() )
+        lastPath = app()->root()->url();
+
     qEnableClearButton( _ui->patternField );
     _ui->patternField->setFocus();
 
@@ -114,6 +118,9 @@ FileSearchFilter FindFilesDialog::askFindFiles( bool    * canceled_ret,
     if ( ! canceled )
         filter = dialog.fileSearchFilter();
 
+    if ( filter.pattern().isEmpty() )
+        canceled = true;
+
     if ( canceled_ret )
         *canceled_ret = canceled;
 
@@ -142,11 +149,6 @@ void FindFilesDialog::loadValues()
 
     _ui->currentSubtreePathLabel->setText( path );
     _ui->currentSubtreeRadioButton->setEnabled( ! path.isEmpty() );
-
-#if 0
-    if ( ! _ui->currentSubtreeRadioButton->isEnabled() )
-        _ui->wholeTreeRadioButton->setChecked( true );
-#endif
 }
 
 
