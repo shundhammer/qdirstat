@@ -15,7 +15,9 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsPathItem>
 #include <QList>
+#include <QElapsedTimer>
 
+#include "MimeCategorizer.h"
 #include "FileInfo.h"
 
 
@@ -59,6 +61,8 @@ namespace QDirStat
 	Q_OBJECT
 
     public:
+	QElapsedTimer _stopwatch;
+
 	/**
 	 * Constructor. Remember to set the directory tree with setDirTree()
 	 * and the selection model with setSelectionModel() after creating this
@@ -140,7 +144,8 @@ namespace QDirStat
 	 * Returns a suitable color for 'file' based on a set of internal rules
 	 * (according to filename extension, MIME type or permissions).
 	 **/
-	QColor tileColor( FileInfo * file );
+	QColor tileColor( FileInfo * file ) const
+		{ return _useFixedColor ? _fixedColor : MimeCategorizer::instance()->color( file ); }
 
 	/**
 	 * Use a fixed color for all tiles. To undo this, set an invalid QColor

@@ -19,7 +19,6 @@
 #include "SettingsHelpers.h"
 #include "SignalBlocker.h"
 #include "TreemapTile.h"
-#include "MimeCategorizer.h"
 #include "DelayedRebuilder.h"
 #include "Exception.h"
 #include "Logger.h"
@@ -626,7 +625,7 @@ TreemapTile * TreemapView::findTile( const FileInfo * fileInfo )
     if ( ! fileInfo || ! scene() )
 	return 0;
 
-    foreach ( QGraphicsItem * graphicsItem, scene()->items() )
+    foreach ( QGraphicsItem *graphicsItem, scene()->items() )
     {
 	TreemapTile * tile = dynamic_cast<TreemapTile *>(graphicsItem);
 
@@ -651,16 +650,6 @@ void TreemapView::setFixedColor( const QColor & color )
 {
     _fixedColor	   = color;
     _useFixedColor = _fixedColor.isValid();
-}
-
-
-QColor TreemapView::tileColor( FileInfo * file )
-{
-    if ( _useFixedColor )
-        return _fixedColor;
-
-    MimeCategory * category = MimeCategorizer::instance()->category( file );
-    return category ? category->color() : Qt::white;
 }
 
 

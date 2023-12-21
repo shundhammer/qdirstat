@@ -55,6 +55,14 @@ void MimeCategorizer::clear()
 }
 
 
+QColor MimeCategorizer::color( FileInfo * item )
+{
+    MimeCategory *mimeCategory = category( item );
+
+    return mimeCategory ? mimeCategory->color() : Qt::white;
+}
+
+
 MimeCategory * MimeCategorizer::category( FileInfo * item )
 {
     CHECK_PTR  ( item );

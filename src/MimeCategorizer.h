@@ -60,6 +60,12 @@ namespace QDirStat
 	static MimeCategorizer * instance();
 
 	/**
+	 * Return the color for a FileInfo item or white if it doesn't fit
+	 * into any of the available categories.
+	 **/
+	QColor color( FileInfo * item );
+
+	/**
 	 * Return the MimeCategory for a FileInfo item or 0 if it doesn't fit
 	 * into any of the available categories.
 	 **/
