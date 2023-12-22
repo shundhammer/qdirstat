@@ -390,9 +390,7 @@ void OutputWindow::killAll()
 #if 0
 void OutputWindow::setTerminalBackground( const QColor & newColor )
 {
-    // TO DO
-    // TO DO
-    // TO DO
+    // Not implemented
 }
 #endif
 

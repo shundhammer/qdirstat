@@ -205,9 +205,7 @@ bool Trash::restore( const QString & path )
 {
     Q_UNUSED( path )
 
-    // TO DO
-    // TO DO
-    // TO DO
+    // Not implemented
 
     return true;
 }
@@ -215,9 +213,7 @@ bool Trash::restore( const QString & path )
 
 void Trash::empty()
 {
-    // TO DO
-    // TO DO
-    // TO DO
+    // Not implemented
 }
 
 
