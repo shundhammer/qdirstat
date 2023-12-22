@@ -14,8 +14,8 @@
 
 #include "MimeCategory.h"
 
-#define CATEGORY_EXECUTABLE "Executable"
-#define CATEGORY_SYMLINK "Symlink"
+#define CATEGORY_EXECUTABLES "Executables"
+#define CATEGORY_SYMLINKS    "Symlinks"
 
 
 namespace QDirStat
