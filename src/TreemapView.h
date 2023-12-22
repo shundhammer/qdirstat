@@ -15,7 +15,6 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsPathItem>
 #include <QList>
-#include <QElapsedTimer>
 
 #include "MimeCategorizer.h"
 #include "FileInfo.h"
@@ -58,7 +57,6 @@ namespace QDirStat
 	Q_OBJECT
 
     public:
-	QElapsedTimer _stopwatch;
 
 	/**
 	 * Constructor. Remember to set the directory tree with setDirTree()

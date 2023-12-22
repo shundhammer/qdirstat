@@ -7,6 +7,7 @@
  */
 
 
+#include <QElapsedTimer>
 #include <QResizeEvent>
 #include <QRegExp>
 #include <QTimer>
@@ -14,6 +15,7 @@
 #include "TreemapView.h"
 #include "DirTree.h"
 #include "DirInfo.h"
+#include "FormatUtil.h"
 #include "SelectionModel.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
@@ -23,7 +25,8 @@
 #include "Exception.h"
 #include "Logger.h"
 
-#define UpdateMinSize	      20
+#define REBUILD_STOPWATCH       1
+#define UpdateMinSize	        20
 
 using namespace QDirStat;
 
@@ -351,13 +354,22 @@ void TreemapView::rebuildTreemap( FileInfo *	 newRoot,
 
 	if ( newRoot )
 	{
-	    _stopwatch.start();
+#if REBUILD_STOPWATCH
+            QElapsedTimer stopwatch;
+	    stopwatch.start();
+#endif
+
 	    _rootTile = new TreemapTile( this,		// parentView
 					 0,		// parentTile
 					 newRoot,	// orig
 					 rect,
 					 TreemapAuto );
-		logDebug() << _stopwatch.restart() << endl;
+
+#if REBUILD_STOPWATCH
+            logDebug() << "Treemap finished after "
+                       << formatMillisec( stopwatch.elapsed() )
+                       << endl;
+#endif
 	}
 
 

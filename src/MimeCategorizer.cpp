@@ -75,7 +75,7 @@ MimeCategory * MimeCategorizer::category( FileInfo * item )
     else if ( item->isFile() )
     {
 	MimeCategory *matchedCategory = category( item->name() );
-	if ( !matchedCategory && ( item->mode() & S_IXUSR  ) == S_IXUSR )
+	if ( ! matchedCategory && ( item->mode() & S_IXUSR  ) == S_IXUSR )
 	    return matchCategoryName( CATEGORY_EXECUTABLES );
 
 	return matchedCategory;
@@ -306,10 +306,13 @@ void MimeCategorizer::writeSettings()
 void MimeCategorizer::ensureMandatoryCategories()
 {
     // Remember this category so we don't have to search for it every time
+
     _executableCategory = matchCategoryName( CATEGORY_EXECUTABLES );
     if ( !_executableCategory )
     {
-	// Special catchall category for files that don't match anything else, cannot be deleted
+	// Special catch-all category for files that don't match anything else.
+        // This category cannot be deleted.
+
 	_executableCategory = new MimeCategory( tr( CATEGORY_EXECUTABLES ), Qt::magenta );
 	CHECK_NEW( _executableCategory );
 	add( _executableCategory );
@@ -317,9 +320,12 @@ void MimeCategorizer::ensureMandatoryCategories()
 
     // Remember this category so we don't have to search for it every time
     _symlinkCategory = matchCategoryName( CATEGORY_SYMLINKS );
+
     if ( !_symlinkCategory )
     {
-	// Special category for symlinks regardless of the filename, cannot be deleted
+	// Special category for symlinks regardless of the filename.
+        // This category cannot be deleted.
+
 	_symlinkCategory = new MimeCategory( tr( CATEGORY_SYMLINKS ), Qt::blue );
 	CHECK_NEW( _symlinkCategory );
 	add( _symlinkCategory );

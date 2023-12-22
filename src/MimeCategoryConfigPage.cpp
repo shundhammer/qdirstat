@@ -335,8 +335,9 @@ void MimeCategoryConfigPage::currentItemChanged( QListWidgetItem * current,
     const QString name = _ui->nameLineEdit->text();
 
     const bool isSymlink = name == CATEGORY_SYMLINKS;
-    _ui->patternsTopWidget->setEnabled( !isSymlink );
-    _ui->patternsBottomWidget->setEnabled( !isSymlink );
+
+    _ui->patternsTopWidget->setEnabled   ( ! isSymlink );
+    _ui->patternsBottomWidget->setEnabled( ! isSymlink );
 
     const bool editable = !( isSymlink || name == CATEGORY_EXECUTABLES );
     enableButton( _ui->removeButton, editable );
