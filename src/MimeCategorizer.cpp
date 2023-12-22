@@ -6,7 +6,6 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
-
 #include "MimeCategorizer.h"
 #include "FileInfo.h"
 #include "Settings.h"
@@ -56,15 +55,35 @@ void MimeCategorizer::clear()
 }
 
 
+QColor MimeCategorizer::color( FileInfo * item )
+{
+    MimeCategory *mimeCategory = category( item );
+
+    return mimeCategory ? mimeCategory->color() : Qt::white;
+}
+
+
 MimeCategory * MimeCategorizer::category( FileInfo * item )
 {
     CHECK_PTR  ( item );
     CHECK_MAGIC( item );
 
-    if ( item->isDir() || item->isDirInfo() )
-	return 0;
+    if ( item->isSymLink() )
+    {
+	return matchCategoryName( CATEGORY_SYMLINK );
+    }
+    else if ( item->isFile() )
+    {
+	MimeCategory *matchedCategory = category( item->name() );
+	if ( !matchedCategory && ( item->mode() & S_IXUSR  ) == S_IXUSR )
+	    return matchCategoryName( CATEGORY_EXECUTABLE );
+
+	return matchedCategory;
+    }
     else
-	return category( item->name() );
+    {
+	return 0;
+    }
 }
 
 
@@ -138,6 +157,18 @@ MimeCategory * MimeCategorizer::matchPatterns( const QString & filename ) const
 		    return category;
 	    }
 	}
+    }
+
+    return 0; // No match
+}
+
+
+MimeCategory * MimeCategorizer::matchCategoryName( const QString & categoryName ) const
+{
+    foreach ( MimeCategory * category, _categories )
+    {
+	if ( category && category->name() == categoryName )
+	    return category;
     }
 
     return 0; // No match
@@ -230,6 +261,8 @@ void MimeCategorizer::readSettings()
 
     if ( _categories.isEmpty() )
 	addDefaultCategories();
+
+    ensureMandatoryCategories();
 }
 
 
@@ -266,6 +299,30 @@ void MimeCategorizer::writeSettings()
 	settings.setValue( "PatternsCaseSensitive", patterns );
 
 	settings.endGroup(); // [MimeCategory_01], [MimeCategory_02], ...
+    }
+}
+
+
+void MimeCategorizer::ensureMandatoryCategories()
+{
+    // Remember this category so we don't have to search for it every time
+    _executableCategory = matchCategoryName( CATEGORY_EXECUTABLE );
+    if ( !_executableCategory )
+    {
+	// Special catchall category for files that don't match anything else, cannot be deleted
+	_executableCategory = new MimeCategory( tr( CATEGORY_EXECUTABLE ), Qt::magenta );
+	CHECK_NEW( _executableCategory );
+	add( _executableCategory );
+    }
+
+    // Remember this category so we don't have to search for it every time
+    _symlinkCategory = matchCategoryName( CATEGORY_SYMLINK );
+    if ( !_symlinkCategory )
+    {
+	// Special category for symlinks regardless of the filename, cannot be deleted
+	_symlinkCategory = new MimeCategory( tr( CATEGORY_SYMLINK ), Qt::blue );
+	CHECK_NEW( _symlinkCategory );
+	add( _symlinkCategory );
     }
 }
 

@@ -19,7 +19,6 @@
 #include "SettingsHelpers.h"
 #include "SignalBlocker.h"
 #include "TreemapTile.h"
-#include "MimeCategorizer.h"
 #include "DelayedRebuilder.h"
 #include "Exception.h"
 #include "Logger.h"
@@ -352,11 +351,13 @@ void TreemapView::rebuildTreemap( FileInfo *	 newRoot,
 
 	if ( newRoot )
 	{
+	    _stopwatch.start();
 	    _rootTile = new TreemapTile( this,		// parentView
 					 0,		// parentTile
 					 newRoot,	// orig
 					 rect,
 					 TreemapAuto );
+		logDebug() << _stopwatch.restart() << endl;
 	}
 
 
@@ -622,7 +623,7 @@ TreemapTile * TreemapView::findTile( const FileInfo * fileInfo )
     if ( ! fileInfo || ! scene() )
 	return 0;
 
-    foreach ( QGraphicsItem * graphicsItem, scene()->items() )
+    foreach ( QGraphicsItem *graphicsItem, scene()->items() )
     {
 	TreemapTile * tile = dynamic_cast<TreemapTile *>(graphicsItem);
 
@@ -647,37 +648,6 @@ void TreemapView::setFixedColor( const QColor & color )
 {
     _fixedColor	   = color;
     _useFixedColor = _fixedColor.isValid();
-}
-
-
-QColor TreemapView::tileColor( FileInfo * file )
-{
-    if ( _useFixedColor )
-	return _fixedColor;
-
-    if ( file )
-    {
-	if ( file->isFile() )
-	{
-	    MimeCategory * category = MimeCategorizer::instance()->category( file );
-
-	    if ( category )
-		return category->color();
-	    else
-	    {
-		// Special case: Executables
-		if ( ( file->mode() & S_IXUSR  ) == S_IXUSR )
-		    return Qt::magenta;		// TO DO: Configurable
-	    }
-	}
-	else // Directories
-	{
-	    // TO DO
-	    return Qt::blue;
-	}
-    }
-
-    return Qt::white;
 }
 
 

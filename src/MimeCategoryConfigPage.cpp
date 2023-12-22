@@ -326,3 +326,19 @@ void MimeCategoryConfigPage::populateTreemapView()
     _ui->treemapView->setDirTree( _dirTree );
 }
 
+
+void MimeCategoryConfigPage::currentItemChanged( QListWidgetItem * current,
+                                                 QListWidgetItem * previous)
+{
+    ListEditor::currentItemChanged( current, previous );
+
+    const QString name = _ui->nameLineEdit->text();
+
+    const bool isSymlink = name == CATEGORY_SYMLINK;
+    _ui->patternsTopWidget->setEnabled( !isSymlink );
+    _ui->patternsBottomWidget->setEnabled( !isSymlink );
+
+    const bool editable = !( isSymlink || name == CATEGORY_EXECUTABLE );
+    enableButton( _ui->removeButton, editable );
+    _ui->nameLineEdit->setEnabled( editable );
+}

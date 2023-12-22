@@ -14,6 +14,9 @@
 
 #include "MimeCategory.h"
 
+#define CATEGORY_EXECUTABLE "Executable"
+#define CATEGORY_SYMLINK "Symlink"
+
 
 namespace QDirStat
 {
@@ -55,6 +58,12 @@ namespace QDirStat
 	 * it.
 	 **/
 	static MimeCategorizer * instance();
+
+	/**
+	 * Return the color for a FileInfo item or white if it doesn't fit
+	 * into any of the available categories.
+	 **/
+	QColor color( FileInfo * item );
 
 	/**
 	 * Return the MimeCategory for a FileInfo item or 0 if it doesn't fit
@@ -130,10 +139,21 @@ namespace QDirStat
 			  const QStringList		& suffixList  );
 
 	/**
+	 * Iterate over all categories to find categories by name.
+	 **/
+	MimeCategory * matchCategoryName( const QString & categoryName ) const;
+
+	/**
 	 * Iterate over all categories and try all patterns until the first
 	 * match. Return the matched category or 0 if none matched.
 	 **/
 	MimeCategory * matchPatterns( const QString & filename ) const;
+
+	/**
+	 * Make sure that the Executable and Symlink categories exist, in case
+	 * they have been manually removed from the configuration file.
+	 **/
+	void ensureMandatoryCategories();
 
 	/**
 	 * Add default categories in case none were read from the settings.
@@ -151,6 +171,9 @@ namespace QDirStat
 
 	QMap<QString, MimeCategory *>	_caseInsensitiveSuffixMap;
 	QMap<QString, MimeCategory *>	_caseSensitiveSuffixMap;
+
+	MimeCategory *_executableCategory;
+	MimeCategory *_symlinkCategory;
 
     };	// class MimeCategorizer
 
