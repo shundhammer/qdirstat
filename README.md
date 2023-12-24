@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2023-11-08
+Updated: 2023-12-24
 
 
 ## Screenshot
@@ -124,6 +124,17 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2023-12-25
+
+  - @Lithopsian contributed some very visible improvements to the treemap.
+    See [GitHub issue #236](https://github.com/shundhammer/qdirstat/issues/236)
+    for details and lots of screenshots.
+
+  - The "Find Files" dialog now has a separate checkbox for symlinks.
+
+  - A new release is upcoming in the near future. It will be QDirStat 1.9.
+
 
 - 2023-11-08
 
