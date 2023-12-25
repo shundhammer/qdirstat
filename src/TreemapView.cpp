@@ -25,7 +25,7 @@
 #include "Exception.h"
 #include "Logger.h"
 
-#define REBUILD_STOPWATCH       1
+#define REBUILD_STOPWATCH       0
 #define UpdateMinSize	        20
 
 using namespace QDirStat;
