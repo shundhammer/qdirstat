@@ -57,23 +57,31 @@ QAction * ActionManager::action( const QString & actionName )
 }
 
 
-bool ActionManager::addActions( QMenu * menu, const QStringList & actionNames )
+bool ActionManager::addActions( QWidget * widget, const QStringList & actionNames )
 {
-    bool foundAll = true;
-    CHECK_PTR( menu );
+    CHECK_PTR( widget );
+
+    bool    foundAll = true;
+    QMenu * menu     = qobject_cast<QMenu *>( widget );
 
     foreach ( const QString & actionName, actionNames )
     {
 	if ( actionName.startsWith( "---" ) )
-	    menu->addSeparator();
+        {
+            if ( menu )
+                menu->addSeparator();
+        }
 	else
 	{
 	    QAction * act = action( actionName );
 
 	    if ( act )
-		menu->addAction( act );
+		widget->addAction( act );
 	    else
+            {
+                // ActionManager::action() already logs an error if not found
 		foundAll = false;
+            }
 	}
     }
 

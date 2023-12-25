@@ -50,13 +50,14 @@ namespace QDirStat
 	QAction * action( const QString & actionName );
 
 	/**
-	 * Add all the actions in 'actionNames' to a menu. Return 'true' if
-	 * success, 'false' if any of the actions were not found.
+	 * Add all the actions in 'actionNames' to a widget (typically a
+	 * menu). Return 'true' if success, 'false' if any of the actions were
+	 * not found.
 	 *
-	 * If an action name in actionNames starts with "---", a separator is
-	 * added to the menu instead of an action.
+	 * If the widget is a menu, and an action name in actionNames starts
+	 * with "---", a separator is added to the menu instead of an action.
 	 **/
-	bool addActions( QMenu * menu, const QStringList & actionNames );
+	bool addActions( QWidget * widget, const QStringList & actionNames );
 
 
     protected:
