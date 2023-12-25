@@ -227,10 +227,10 @@ void LocateFilesWindow::itemContextMenu( const QPoint & pos )
 
 void LocateFilesWindow::addCleanupHotkeys()
 {
-    QAction * moveToTrash = ActionManager::instance()->action( "actionMoveToTrash" );
-
-    if ( moveToTrash )
-        addAction( moveToTrash );
+    ActionManager::instance()->addActions( this,
+                                           QStringList()
+                                           << "actionMoveToTrash"
+                                           << "actionFindFiles"   );
 
     if ( app()->cleanupCollection() )
     {
