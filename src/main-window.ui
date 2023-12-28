@@ -59,14 +59,42 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QDirStat::BreadcrumbNavigator" name="breadcrumbNavigator">
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;/work/src/&lt;a href=&quot;/work/src/qdirstat&quot;&gt;qdirstat&lt;/a&gt;/&lt;a href=&quot;/work/src/qdirstat/src&quot;&gt;src&lt;/a&gt;/&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <layout class="QHBoxLayout" name="breadcrumbHBox">
+           <property name="spacing">
+            <number>0</number>
            </property>
-           <property name="indent">
-            <number>2</number>
-           </property>
-          </widget>
+           <item>
+            <widget class="QToolButton" name="bookmarkButton">
+             <property name="text">
+              <string notr="true">...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="icons.qrc">
+               <normaloff>:/icons/bookmark-off.png</normaloff>
+               <normalon>:/icons/bookmark.png</normalon>:/icons/bookmark-off.png</iconset>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDirStat::BreadcrumbNavigator" name="breadcrumbNavigator">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;/work/src/&lt;a href=&quot;/work/src/qdirstat&quot;&gt;qdirstat&lt;/a&gt;/&lt;a href=&quot;/work/src/qdirstat/src&quot;&gt;src&lt;/a&gt;/&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+             </property>
+             <property name="indent">
+              <number>2</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <spacer name="breadcrumbVSpacer">
@@ -213,8 +241,23 @@
     <property name="title">
      <string>&amp;Go</string>
     </property>
+    <widget class="QMenu" name="menuBookmark">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>&amp;Bookmark</string>
+     </property>
+     <property name="icon">
+      <iconset resource="icons.qrc">
+       <normaloff>:/icons/bookmark.png</normaloff>:/icons/bookmark.png</iconset>
+     </property>
+     <addaction name="separator"/>
+     <addaction name="actionSelectAllBookmarks"/>
+    </widget>
     <addaction name="actionGoUp"/>
     <addaction name="actionGoToToplevel"/>
+    <addaction name="menuBookmark"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -1057,6 +1100,42 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionBookmarkCurrent">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/bookmark-off.png</normaloff>
+     <normalon>:/icons/bookmark.png</normalon>:/icons/bookmark-off.png</iconset>
+   </property>
+   <property name="text">
+    <string>Bookmark</string>
+   </property>
+   <property name="toolTip">
+    <string>Bookmark on/off</string>
+   </property>
+  </action>
+  <action name="actionSelectAllBookmarks">
+   <property name="text">
+    <string>Select &amp;All</string>
+   </property>
+   <property name="toolTip">
+    <string>Select all Bookmarks in the Tree</string>
+   </property>
+  </action>
+  <action name="actionactionGoToBookmark">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/bookmark.png</normaloff>:/icons/bookmark.png</iconset>
+   </property>
+   <property name="text">
+    <string>actionGoToBookmark</string>
+   </property>
+   <property name="toolTip">
+    <string>Go to Bookmark</string>
    </property>
   </action>
  </widget>
