@@ -3,6 +3,8 @@
 	<file>icons/qdirstat.svg</file>
 	<file>icons/qdirstat.png</file>
 	<file>icons/add.png</file>
+	<file>icons/bookmark.png</file>
+	<file>icons/bookmark-off.png</file>
 	<file>icons/delete.png</file>
 	<file>icons/dialog-information.png</file>
 	<file>icons/dialog-warning.png</file>
