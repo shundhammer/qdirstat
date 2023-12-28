@@ -447,7 +447,6 @@ void MimeCategorizer::addDefaultCategories()
 			 << "m4v"
 			 << "mk3d"
 			 << "mkv"
-			 << "mng"
 			 << "mov"
 			 << "mp2"
 			 << "mp4"
