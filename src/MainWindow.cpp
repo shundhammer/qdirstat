@@ -80,7 +80,6 @@ MainWindow::MainWindow():
     _updateTimer.setInterval( UPDATE_MILLISEC );
     _treeExpandTimer.setSingleShot( true );
     _dUrl = _ui->actionDonate->iconText();
-    _futureSelection.setUseRootFallback( false );
     _ui->menubar->setCornerWidget( new QLabel( MENUBAR_VERSION ) );
 
     // The first call to app() creates the QDirStatApp and with it
@@ -94,6 +93,9 @@ MainWindow::MainWindow():
 
     _ui->treemapView->setDirTree( app()->dirTree() );
     _ui->treemapView->setSelectionModel( app()->selectionModel() );
+
+    _futureSelection.setTree( app()->dirTree() );
+
 
     // Set the boldItemFont for the DirTreeModel.
     //
@@ -458,8 +460,9 @@ void MainWindow::idleDisplay()
     int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::PercentNumCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
 
-    if ( ! _futureSelection.isEmpty() )
+    if ( _futureSelection.subtree() )
     {
+        // logDebug() << "Using future selection " << _futureSelection.subtree() << endl;
         _treeExpandTimer.stop();
         applyFutureSelection();
     }
@@ -656,6 +659,7 @@ void MainWindow::refreshAll()
 {
     _enableDirPermissionsWarning = true;
     QString url = app()->dirTree()->url();
+    _futureSelection.set( app()->selectionModel()->selectedItems().first() );
 
     if ( ! url.isEmpty() )
     {
@@ -701,9 +705,11 @@ void MainWindow::applyFutureSelection()
     {
         _treeExpandTimer.stop();
         _futureSelection.clear();
+
+        app()->selectionModel()->setCurrentItem  ( sel );
         app()->selectionModel()->setCurrentBranch( sel );
 
-        if ( sel->isMountPoint() )
+        if ( sel->isMountPoint() || app()->dirTree()->isTopLevel( sel ) )
             _ui->dirTreeView->setExpanded( sel, true );
     }
 }

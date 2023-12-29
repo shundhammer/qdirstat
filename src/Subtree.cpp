@@ -18,7 +18,7 @@ FileInfo * Subtree::subtree()
     FileInfo * dir = locate();
 
     if ( ! dir && _useRootFallback && _tree )
-	dir = _tree->root();
+	dir = _tree->firstToplevel();
 
     return dir;
 }
