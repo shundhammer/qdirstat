@@ -51,7 +51,8 @@ SOURCES	  = main.cpp			\
             QDirStatApp.cpp             \
 	    ActionManager.cpp		\
 	    AdaptiveTimer.cpp		\
-	    Attic.cpp			\
+            Attic.cpp			\
+            BookmarksManager.cpp        \
 	    BreadcrumbNavigator.cpp	\
 	    BucketsTableModel.cpp	\
 	    BusyPopup.cpp		\
@@ -160,6 +161,7 @@ HEADERS	  =				\
 	    ActionManager.h		\
 	    AdaptiveTimer.h		\
 	    Attic.h			\
+            BookmarksManager.h          \
             BreadcrumbNavigator.h	\
             BrokenLibc.h                \
 	    BucketsTableModel.h		\
