@@ -15,10 +15,29 @@ using namespace QDirStat;
 
 FileInfo * Subtree::subtree()
 {
-    FileInfo * dir = locate();
+    FileInfo * item = locate();
 
-    if ( ! dir && _useRootFallback && _tree )
-	dir = _tree->firstToplevel();
+    if ( ! item && _useRootFallback && _tree )
+	item = _tree->firstToplevel();
+
+    return item;
+}
+
+
+DirInfo * Subtree::dir()
+{
+    FileInfo * item = subtree();
+
+    if ( ! item )
+        return 0;
+
+    DirInfo * dir = item->toDirInfo();
+
+    if ( ! dir && item->parent() )
+        dir = item->parent();
+
+    if ( dir && _tree && dir == _tree->root() )
+        dir = 0;
 
     return dir;
 }
@@ -30,6 +49,16 @@ QString Subtree::url() const
 	return _tree->url();
     else
 	return _url;
+}
+
+
+void Subtree::setUrl( const QString & newUrl )
+{
+    logDebug() << "URL: " << newUrl << endl;
+    _url = newUrl;
+
+    if ( ! _tree )
+        logWarning() << "NULL tree!" << endl;
 }
 
 
