@@ -460,7 +460,7 @@ void MainWindow::idleDisplay()
     int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::PercentNumCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
 
-    if ( _futureSelection.subtree() )
+    if ( ! _futureSelection.isEmpty() )
     {
         // logDebug() << "Using future selection " << _futureSelection.subtree() << endl;
         _treeExpandTimer.stop();
@@ -562,6 +562,7 @@ void MainWindow::openDir( const QString & url )
 {
     try
     {
+        _futureSelection.setUrl( url );
 	app()->dirTreeModel()->openUrl( url );
 	updateWindowTitle( app()->dirTree()->url() );
     }
@@ -643,6 +644,7 @@ void MainWindow::readPkg( const PkgFilter & pkgFilter )
 {
     logInfo() << "URL: " << pkgFilter.url() << endl;
 
+    _futureSelection.setUrl( "Pkg:/" );
     updateWindowTitle( pkgFilter.url() );
     _ui->breadcrumbNavigator->clear();
     _ui->fileDetailsView->clear();
@@ -659,11 +661,11 @@ void MainWindow::refreshAll()
 {
     _enableDirPermissionsWarning = true;
     QString url = app()->dirTree()->url();
-    _futureSelection.set( app()->selectionModel()->selectedItems().first() );
 
     if ( ! url.isEmpty() )
     {
 	logDebug() << "Refreshing " << url << endl;
+        _futureSelection.setUrl( url );
 
 	if ( PkgFilter::isPkgUrl( url ) )
 	    app()->dirTreeModel()->readPkg( url );
@@ -690,7 +692,7 @@ void MainWindow::refreshSelected()
 {
     busyDisplay();
     _futureSelection.set( app()->selectionModel()->selectedItems().first() );
-    // logDebug() << "Setting future selection: " << _futureSelection.subtree() << endl;
+    // logDebug() << "Setting future selection: " << _futureSelection.url() << endl;
     app()->dirTreeModel()->refreshSelected();
     updateActions();
 }
@@ -698,16 +700,24 @@ void MainWindow::refreshSelected()
 
 void MainWindow::applyFutureSelection()
 {
-    FileInfo * sel = _futureSelection.subtree();
-    // logDebug() << "Using future selection: " << sel << endl;
+    FileInfo * sel    = _futureSelection.subtree();
+    DirInfo  * branch = _futureSelection.dir();
+
+#if 0
+    logDebug() << "Using future selection: " << sel << endl;
+    logDebug() << "Branch: " << branch << endl;
+#endif
 
     if ( sel )
     {
         _treeExpandTimer.stop();
         _futureSelection.clear();
 
-        app()->selectionModel()->setCurrentItem  ( sel );
-        app()->selectionModel()->setCurrentBranch( sel );
+        if ( branch )
+            app()->selectionModel()->setCurrentBranch( branch );
+
+        app()->selectionModel()->setCurrentItem( sel,
+                                                 true);  // select
 
         if ( sel->isMountPoint() || app()->dirTree()->isToplevel( sel ) )
             _ui->dirTreeView->setExpanded( sel, true );
@@ -898,7 +908,7 @@ void MainWindow::navigateUp()
 	 currentItem->parent() != app()->dirTree()->root() )
     {
 	app()->selectionModel()->setCurrentItem( currentItem->parent(),
-					 true ); // select
+                                                 true ); // select
     }
 }
 
