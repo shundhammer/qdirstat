@@ -468,7 +468,7 @@ bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
 	DirTree * tree = _tree;	 // Copy data members to local variables:
 	DirInfo * dir  = _dir;	 // This object might be deleted soon by killAll()
 
-	if ( _tree->isTopLevel( _dir ) )
+	if ( _tree->isToplevel( _dir ) )
 	{
 	    logDebug() << "Clearing complete tree" << endl;
 
@@ -585,7 +585,7 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
 		parent->insertChild( dir );
 
 	    if ( dir && parent &&
-		 ! tree->isTopLevel( dir ) &&
+		 ! tree->isToplevel( dir ) &&
 		 ! parent->isPkgInfo() &&
 		 dir->device() != parent->device() )
 	    {

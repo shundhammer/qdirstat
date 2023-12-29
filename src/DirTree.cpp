@@ -85,7 +85,7 @@ FileInfo * DirTree::firstToplevel() const
 }
 
 
-bool DirTree::isTopLevel( FileInfo *item ) const
+bool DirTree::isToplevel( FileInfo *item ) const
 {
     return item && item->parent() && ! item->parent()->parent();
 }

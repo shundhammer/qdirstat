@@ -142,7 +142,7 @@ namespace QDirStat
 	 * Return 'true' if 'item' is a toplevel item, i.e. a direct child of
 	 * the root item.
 	 **/
-	bool isTopLevel( FileInfo *item ) const;
+	bool isToplevel( FileInfo *item ) const;
 
 	/**
 	 * Return the device of this tree's root item ("/dev/sda3" etc.).

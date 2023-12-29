@@ -709,7 +709,7 @@ void MainWindow::applyFutureSelection()
         app()->selectionModel()->setCurrentItem  ( sel );
         app()->selectionModel()->setCurrentBranch( sel );
 
-        if ( sel->isMountPoint() || app()->dirTree()->isTopLevel( sel ) )
+        if ( sel->isMountPoint() || app()->dirTree()->isToplevel( sel ) )
             _ui->dirTreeView->setExpanded( sel, true );
     }
 }
