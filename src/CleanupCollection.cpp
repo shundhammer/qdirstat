@@ -550,9 +550,10 @@ void CleanupCollection::readSettings()
                     if ( hotkey == "Ctrl+F" )
                     {
                         // Crude workaround for the "Open File Manager Here" Ctrl+F shortcut
-                        // clasing with Ctrl+F for "Find..." in the "Edit" menu.
-                        // Yes, that's ugly; sorry. But Ctrl+F for "Find has become an established
-                        // standard.
+                        // clashing with Ctrl+F for "Find..." in the "Edit" menu.
+
+                        // Yes, that's ugly; sorry. But Ctrl+F for "Find" has become an
+                        // established standard.
 
                         hotkey = "Ctrl+G";
                         logError() << "The Ctrl+F hotkey for '" << title
