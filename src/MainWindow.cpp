@@ -95,6 +95,8 @@ MainWindow::MainWindow():
     _ui->treemapView->setSelectionModel( app()->selectionModel() );
 
     _futureSelection.setTree( app()->dirTree() );
+    _futureSelection.setUseRootFallback( false );
+    _futureSelection.setUseParentFallback( true );
 
 
     // Set the boldItemFont for the DirTreeModel.
@@ -247,7 +249,7 @@ void MainWindow::connectSignals()
 	     this,			 SLOT  ( showElapsedTime() ) );
 
     connect( &_treeExpandTimer,		  SIGNAL( timeout() ),
-	     _ui->actionExpandTreeLevel1, SLOT( trigger()   ) );
+	     _ui->actionExpandTreeLevel1, SLOT  ( trigger()   ) );
 
     if ( _useTreemapHover )
     {
@@ -460,7 +462,7 @@ void MainWindow::idleDisplay()
     int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::PercentNumCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
 
-    if ( ! _futureSelection.isEmpty() )
+    if ( _futureSelection.subtree() )
     {
         // logDebug() << "Using future selection " << _futureSelection.subtree() << endl;
         _treeExpandTimer.stop();
@@ -498,7 +500,6 @@ void MainWindow::updateFileDetailsView()
 
 void MainWindow::setDetailsPanelVisible( bool visible )
 {
-    logDebug() << endl;
     _ui->fileDetailsPanel->setVisible( visible );
 
     if ( visible )
@@ -562,7 +563,11 @@ void MainWindow::openDir( const QString & url )
 {
     try
     {
-        _futureSelection.setUrl( url );
+        if ( url.startsWith( "/" ) )
+            _futureSelection.setUrl( url );
+        else
+            _futureSelection.clear();
+
 	app()->dirTreeModel()->openUrl( url );
 	updateWindowTitle( app()->dirTree()->url() );
     }
@@ -702,6 +707,7 @@ void MainWindow::applyFutureSelection()
 {
     FileInfo * sel    = _futureSelection.subtree();
     DirInfo  * branch = _futureSelection.dir();
+    _futureSelection.clear();
 
 #if 0
     logDebug() << "Using future selection: " << sel << endl;
@@ -711,7 +717,6 @@ void MainWindow::applyFutureSelection()
     if ( sel )
     {
         _treeExpandTimer.stop();
-        _futureSelection.clear();
 
         if ( branch )
             app()->selectionModel()->setCurrentBranch( branch );
@@ -719,7 +724,7 @@ void MainWindow::applyFutureSelection()
         app()->selectionModel()->setCurrentItem( sel,
                                                  true);  // select
 
-        if ( sel->isMountPoint() || app()->dirTree()->isToplevel( sel ) )
+        if ( sel->isMountPoint() || sel->isDirInfo() )  // || app()->dirTree()->isToplevel( sel ) )
             _ui->dirTreeView->setExpanded( sel, true );
     }
 }
@@ -850,12 +855,21 @@ void MainWindow::showSummary()
 
 void MainWindow::startingCleanup( const QString & cleanupName )
 {
+    // Notice that this is not called for actions that are not owned by the
+    // CleanupCollection such as _ui->actionMoveToTrash().
+
+    FileInfo * sel = app()->selectionModel()->selectedItems().first();
+    _futureSelection.set( sel );
+    logDebug() << "Storing future selection " << sel << endl;
     showProgress( tr( "Starting cleanup action %1" ).arg( cleanupName ) );
 }
 
 
 void MainWindow::cleanupFinished( int errorCount )
 {
+    // Notice that this is not called for actions that are not owned by the
+    // CleanupCollection such as _ui->actionMoveToTrash().
+
     logDebug() << "Error count: " << errorCount << endl;
 
     if ( errorCount == 0 )
@@ -948,7 +962,16 @@ void MainWindow::navigateToUrl( const QString & url )
 
 void MainWindow::moveToTrash()
 {
+    // _ui->actionMoveToTrash() is not a subclass of Cleanup and not owned by
+    // CleanupCollection, so this has to replicate some of its functionality.
+
     FileInfoSet selectedItems = app()->selectionModel()->selectedItems().normalized();
+
+    // Save the selection - at least the first selected item
+
+    FileInfo * sel = selectedItems.first();
+    _futureSelection.set( sel );
+    logDebug() << "Storing future selection " << sel << endl;
 
     // Prepare output window
 

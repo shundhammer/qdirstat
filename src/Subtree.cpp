@@ -17,9 +17,24 @@ FileInfo * Subtree::subtree()
 {
     FileInfo * item = locate();
 
-    if ( ! item && _useRootFallback && _tree )
-	item = _tree->firstToplevel();
+    if ( ! item && _useParentFallback && _tree )
+    {
+        // logDebug() << "Trying parent URL: " << _parentUrl << endl;
 
+        if ( ! _parentUrl.isEmpty() )
+        {
+            item = _tree->locate( _parentUrl,
+                                  true ); // findPseudoDirs
+        }
+    }
+
+    if ( ! item && _useRootFallback && _tree )
+    {
+	item = _tree->firstToplevel();
+        // logDebug() << "Falling back to first toplevel item: " << item << endl;
+    }
+
+    // logDebug() << "Result: " << item << endl;
     return item;
 }
 
@@ -54,7 +69,6 @@ QString Subtree::url() const
 
 void Subtree::setUrl( const QString & newUrl )
 {
-    logDebug() << "URL: " << newUrl << endl;
     _url = newUrl;
 
     if ( ! _tree )
@@ -64,10 +78,15 @@ void Subtree::setUrl( const QString & newUrl )
 
 void Subtree::set( FileInfo * subtree )
 {
+    _parentUrl.clear();
+
     if ( subtree )
     {
 	_tree = subtree->tree();
 	_url  = subtree->debugUrl();
+
+        if ( subtree->parent() )
+            _parentUrl = subtree->parent()->debugUrl();
     }
     else
     {

@@ -45,7 +45,8 @@ namespace QDirStat
          **/
         Subtree( DirTree * tree = 0 ):
             _tree( tree ),
-            _useRootFallback( true )
+            _useRootFallback( true ),
+            _useParentFallback( false )
             {}
 
         /**
@@ -69,6 +70,17 @@ namespace QDirStat
          * Enable or disable using the tree's root as a fallback.
          **/
         void setUseRootFallback( bool val ) { _useRootFallback = val; }
+
+        /**
+         * Return 'true if the item's parent should be used as a fallback if no
+         * item with that URL can be located. The default is 'false'.
+         **/
+        bool useParentFallback() const { return _useParentFallback; }
+
+        /**
+         * Enable or disable using the item's parent URL as a fallback.
+         **/
+        void setUseParentFallback( bool val ) { _useParentFallback = val; }
 
         /**
          * Get the corresponding subtree item from the DirTree via the URL.
@@ -176,8 +188,10 @@ namespace QDirStat
 
         DirTree * _tree;
         QString   _url;
+        QString   _parentUrl;
 
         bool      _useRootFallback;
+        bool      _useParentFallback;
 
     };	// class Subtree
 
