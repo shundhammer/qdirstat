@@ -8,12 +8,16 @@
 
 #include <QMenu>
 #include <QAction>
+#include <QDir>
 #include <QFile>
 #include <QTextStream>
 
 #include "BookmarksManager.h"
 #include "DirTree.h"
 #include "Logger.h"
+
+#define BOOKMARKS_FILE  ".config/QDirStat/bookmarks.txt"
+
 
 using namespace QDirStat;
 
@@ -23,9 +27,9 @@ BookmarksManager::BookmarksManager( QObject * parent ):
     _bookmarksMenu( 0 ),
     _dirty( false )
 {
-    
+
 }
-    
+
 
 BookmarksManager::~BookmarksManager()
 {
@@ -52,7 +56,6 @@ void BookmarksManager::add( const QString & bookmark, bool update )
         sort();
         rebuildBookmarksMenu();
     }
-    
 }
 
 
@@ -63,7 +66,7 @@ void BookmarksManager::remove( const QString & bookmark, bool update )
 
     _bookmarks.removeAll( bookmark );
     _dirty = true;
-    
+
     if ( update )
         rebuildBookmarksMenu();
 }
@@ -82,10 +85,10 @@ void BookmarksManager::rebuildBookmarksMenu()
     foreach( const QString & bookmark, _bookmarks )
     {
         QAction * action = _bookmarksMenu->addAction( bookmark,
-                                                      this, SLOT( menuActionTriggered ) );
+                                                      this, SLOT( menuActionTriggered() ) );
         if ( action && ! _basePath.isEmpty() )
         {
-            if ( ! bookmark.startsWith( _basePath ) ) 
+            if ( ! bookmark.startsWith( _basePath ) )
                 action->setEnabled( false );
         }
     }
@@ -114,7 +117,7 @@ void BookmarksManager::menuActionTriggered()
         if ( ! bookmark.isEmpty() )
         {
             logDebug() << "Bookmark activated: " << bookmark << endl;
-            emit bookmarkActivated( bookmark );
+            emit navigateToUrl( bookmark );
         }
         else
         {
@@ -127,6 +130,9 @@ void BookmarksManager::menuActionTriggered()
 void BookmarksManager::setBasePath( const QString & newBasePath )
 {
     _basePath = newBasePath;
+    logDebug() << "Base path: \"" << _basePath << "\"" << endl;
+
+    rebuildBookmarksMenu();
 }
 
 
@@ -138,36 +144,44 @@ void BookmarksManager::sort()
 
 void BookmarksManager::read()
 {
-    QFile bookmarksFile( BOOKMARKS_FILE );
+    QFile bookmarksFile( bookmarksFileName() );
+
+    if ( ! bookmarksFile.exists() )
+    {
+        logInfo() << "Bookmarks file " << bookmarksFileName()
+                  << " does not exist" << endl;
+
+        return;
+    }
 
     if ( ! bookmarksFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
-	logWarning() << "Can't open " << BOOKMARKS_FILE << endl;
+	logError() << "Can't open " << bookmarksFileName() << endl;
 	return;
     }
 
     _bookmarks.clear();
     QTextStream in( &bookmarksFile );
     QString line = in.readLine();
-    
+
     while ( ! in.atEnd() )
     {
         line = line.trimmed();
 
-        if ( ! line.isEmpty() || line.startsWith( "#" ) )
+        if ( ! line.isEmpty() && ! line.startsWith( "#" ) )
             _bookmarks << line;
-        
+
 	line = in.readLine();
     }
 
     sort();
     logInfo() << "Read " << _bookmarks.size() << " bookmarks" << endl;
-    
+
 #if 1
-    
+
     foreach( const QString & bookmark, _bookmarks )
     {
-        logDebug() << "Read bookmark " << bookmark << endl;
+        logDebug() << "Read bookmark \"" << bookmark << "\"" << endl;
     }
 #endif
 }
@@ -178,18 +192,24 @@ void BookmarksManager::write()
     if ( ! _dirty )
         return;
 
-    QFile bookmarksFile( BOOKMARKS_FILE );
+    QFile bookmarksFile( bookmarksFileName() );
 
     if ( ! bookmarksFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
     {
-	logWarning() << "Can't open " << BOOKMARKS_FILE << endl;
+	logError() << "Can't open " << bookmarksFileName() << endl;
 	return;
     }
-    
+
     QTextStream out( &bookmarksFile );
 
     foreach( const QString & bookmark, _bookmarks )
     {
         out << bookmark << "\n";
     }
+}
+
+
+QString BookmarksManager::bookmarksFileName()
+{
+    return QDir::homePath() + "/" + BOOKMARKS_FILE;
 }

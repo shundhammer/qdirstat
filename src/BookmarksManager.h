@@ -13,8 +13,6 @@
 #include <QString>
 #include <QStringList>
 
-#define BOOKMARKS_FILE  "~/.config/QDirStat/bookmarks.txt"
-
 class QMenu;
 
 
@@ -85,11 +83,11 @@ namespace QDirStat
          * This should be connected to an action that navigates to that path,
          * i.e. which makes that path the current path.
          **/
-        void bookmarkActivated( const QString & path );
+	void navigateToUrl( const QString & url );
 
 
     public:
-        
+
         /**
          * Return the complete list of bookmarks as a const reference.
          **/
@@ -105,6 +103,11 @@ namespace QDirStat
          * bookmarks.
          **/
         int size() const { return _bookmarks.size(); }
+
+        /**
+         * Return 'true' if the bookmarks contain the specified path.
+         **/
+        bool contains( const QString & path ) { return _bookmarks.contains( path ); }
 
         /**
          * Add a bookmark to the collection, unless it's already there.
@@ -124,7 +127,8 @@ namespace QDirStat
 
         /**
          * Notification that the base path of the current DirTree has changed,
-         * i.e. that a new directory tree is being read.
+         * i.e. that a new directory tree is being read. This rebuilds the
+         * bookmarks menu.
          **/
         void setBasePath( const QString & newBasePath );
 
@@ -153,6 +157,15 @@ namespace QDirStat
          **/
         void rebuildBookmarksMenu();
 
+        /**
+         * Return the full path of the bookmarks file.
+         *
+         * Unfortunately, Qt's QFile does not understand standard
+         * Linux paths like "~/.config/QDirStat/bookmarks.txt",
+         * it needs a full path for "~".
+         **/
+        static QString bookmarksFileName();
+
 
     protected slots:
 
@@ -161,7 +174,7 @@ namespace QDirStat
          **/
         void menuActionTriggered();
 
-        
+
     protected:
 
         /**

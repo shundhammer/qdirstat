@@ -96,7 +96,6 @@ MainWindow::MainWindow():
     _ui->treemapView->setSelectionModel( app()->selectionModel() );
 
     _futureSelection.setTree( app()->dirTree() );
-    _futureSelection.setUseRootFallback( false );
     _futureSelection.setUseParentFallback( true );
 
     app()->bookmarksManager()->setBookmarksMenu( _ui->menuBookmark );
@@ -238,6 +237,9 @@ void MainWindow::connectSignals()
 
     connect( _historyButtons,		 SIGNAL( navigateToUrl( QString ) ),
 	     this,			 SLOT  ( navigateToUrl( QString ) ) );
+
+    connect( app()->bookmarksManager(),  SIGNAL( navigateToUrl( QString ) ),
+             this,                       SLOT  ( navigateToUrl( QString ) ) );
 
     connect( _ui->breadcrumbNavigator,	 SIGNAL( pathClicked   ( QString ) ),
 	     app()->selectionModel(),	 SLOT  ( setCurrentItem( QString ) ) );
@@ -576,6 +578,7 @@ void MainWindow::openDir( const QString & url )
 
 	app()->dirTreeModel()->openUrl( url );
 	updateWindowTitle( app()->dirTree()->url() );
+        app()->bookmarksManager()->setBasePath( app()->dirTree()->url() );
     }
     catch ( const SysCallFailedException & ex )
     {

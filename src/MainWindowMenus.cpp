@@ -12,6 +12,7 @@
 #include "MainWindow.h"
 #include "QDirStatApp.h"
 #include "SelectionModel.h"
+#include "BookmarksManager.h"
 #include "Version.h"
 #include "Exception.h"
 #include "Logger.h"
