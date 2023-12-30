@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2023-12-24
+Updated: 2023-12-30
 
 
 ## Screenshot
@@ -124,6 +124,68 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2023-12-30
+
+  - Added bookmarks, very much like in an Internet browser.
+
+    There is now a star icon to the left of the current path to show you if
+    it's a bookmark / favorite, and you can click on it (or use `Ctrl`+`D` like
+    in all major browsers) to bookmark or un-bookmark it.
+
+    The "Go" menu now has a "To Bookmarks" submenu where the bookmarks
+    appear. Selecting one of them will go to that location in the
+    tree. Bookmarks that are not in the current tree are disabled, but still
+    there.
+
+    As with the "Cleanups" menu, you can "tear off" the bookmarks menu and
+    leave it open at a convenient place on your screen for instant access.
+
+    The bookmarks are stored in a simple text file at
+    `~/.config/QDirStat/bookmarks.txt` so you can easily edit, add or delete
+    them in bulk.
+
+    A use case are all those Internet browser cache directories somewhere deep
+    below `~/.cache` and `~/.config` that keep filling up with Gigabytes of
+    stuff, and that are never emptied even when you tell your browser to clear
+    browsing data.
+
+    Use the new "Find" function to search for "cache" and "thumbnails"
+    directories and bookmark them so you can easily revisit them: Tear off both
+    the "Bookmarks" and the "Cleanups" menu, move them to the side and go
+    through the bookmarks one by one and decide for which ones you want to use
+    the "Clear Directory Contents" cleanup action. Cleaning up browser cruft
+    becomes very easy.
+
+    ...and yes, they dump tons of cruft not only into the `~/.cache` directory
+    which has the express purpose of just that, they also do it in `~/.config`
+    which is intended for configuration data, not for random junk that can be
+    easily restored. Chrome / Chromium, Firefox, Opera, even Thunderbird - they
+    all do it.
+
+    When you've cleaned up often enough like that to get a feeling where it's
+    worthwhile, you can even use the bookmarks file as a starting point for a
+    simple script to automate the task.
+
+  - A new stable release QDirStat V1.9 is getting nearer. It still needs some
+    more testing with all the changes recently.
+
+
+- 2023-12-29
+
+  - Much improved initial selection: After reading a directory tree from disk,
+    sometimes nothing was selected, so the details panel on the right remained
+    empty. A click on the toplevel item would resolve this, but it should
+    really be automatic. Now it does.
+
+  - Much improved selection after a destructive cleanup and refreshing that
+    part of the directory tree: If you deleted a file ("move to trash" etc.),
+    that directory was read again from disk. But since the previously selected
+    item was now gone, that couldn't be selected anymore, and you were thrown
+    out of context. Now the parent directory is selected and its branch opened
+    again so you have a much better idea where you are, and you see the summary
+    of that directory in the details panel.
+
 
 - 2023-12-25
 
