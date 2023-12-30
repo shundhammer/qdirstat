@@ -317,7 +317,7 @@ protected slots:
     /**
      * Bookmark or un-bookmark the current directory.
      **/
-    void bookmarkCurrentPath( bool on );
+    void bookmarkCurrentPath( bool isChecked );
 
     /**
      * Open the config dialog.

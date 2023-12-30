@@ -16,7 +16,8 @@
 #include "DirTree.h"
 #include "Logger.h"
 
-#define BOOKMARKS_FILE  ".config/QDirStat/bookmarks.txt"
+#define BookmarksFile           ".config/QDirStat/bookmarks.txt"
+#define BookmarksManagerAction  "bookmarksManagerAction"
 
 
 using namespace QDirStat;
@@ -84,16 +85,22 @@ void BookmarksManager::rebuildBookmarksMenu()
         return;
     }
 
-    _bookmarksMenu->clear();
+    clearMenu();
 
-    foreach( const QString & bookmark, _bookmarks )
+    foreach ( const QString & bookmark, _bookmarks )
     {
         QAction * action = _bookmarksMenu->addAction( bookmark,
                                                       this, SLOT( menuActionTriggered() ) );
-        if ( action && ! _baseUrl.isEmpty() )
+        if ( action )
         {
-            if ( ! bookmark.startsWith( _baseUrl ) )
-                action->setEnabled( false );
+            action->setObjectName( BookmarksManagerAction );
+            action->setData( bookmark );
+
+            if ( ! _baseUrl.isEmpty() )
+            {
+                if ( ! bookmark.startsWith( _baseUrl ) )
+                    action->setEnabled( false );
+            }
         }
     }
 
@@ -102,8 +109,24 @@ void BookmarksManager::rebuildBookmarksMenu()
         QAction * action = _bookmarksMenu->addAction( tr( "No Bookmarks" ) );
 
         if ( action )
+        {
+            action->setObjectName( BookmarksManagerAction );
             action->setEnabled( false );
+        }
     }
+}
+
+
+void BookmarksManager::clearMenu()
+{
+    if ( ! _bookmarksMenu )
+        return;
+
+    QList<QAction *> actions =
+        _bookmarksMenu->findChildren<QAction *>( BookmarksManagerAction );
+
+    foreach ( QAction * action, actions )
+        _bookmarksMenu->removeAction( action );
 }
 
 
@@ -182,7 +205,7 @@ void BookmarksManager::read()
     logInfo() << _bookmarks.size() << " bookmarks read from " << bookmarksFileName() << endl;
 
 #if 0
-    foreach( const QString & bookmark, _bookmarks )
+    foreach ( const QString & bookmark, _bookmarks )
         logDebug() << "Read bookmark \"" << bookmark << "\"" << endl;
 #endif
 }
@@ -206,7 +229,7 @@ void BookmarksManager::write()
 
     QTextStream out( &bookmarksFile );
 
-    foreach( const QString & bookmark, _bookmarks )
+    foreach ( const QString & bookmark, _bookmarks )
     {
         out << bookmark << "\n";
     }
@@ -218,5 +241,5 @@ void BookmarksManager::write()
 
 QString BookmarksManager::bookmarksFileName()
 {
-    return QDir::homePath() + "/" + BOOKMARKS_FILE;
+    return QDir::homePath() + "/" + BookmarksFile;
 }

@@ -264,8 +264,6 @@
      <property name="toolTipsVisible">
       <bool>false</bool>
      </property>
-     <addaction name="separator"/>
-     <addaction name="actionSelectAllBookmarks"/>
     </widget>
     <addaction name="actionGoUp"/>
     <addaction name="actionGoToToplevel"/>

@@ -178,6 +178,12 @@ namespace QDirStat
     protected:
 
         /**
+         * Clear the bookmarks menu from all actions added by this class, but
+         * leave everything else alone.
+         **/
+        void clearMenu();
+
+        /**
          * Sort the bookmarks alphabetically ascending.
          **/
         void sort();
