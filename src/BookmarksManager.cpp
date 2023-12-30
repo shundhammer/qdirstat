@@ -48,6 +48,8 @@ void BookmarksManager::add( const QString & bookmark, bool update )
     if ( _bookmarks.contains( bookmark, Qt::CaseSensitive ) )
         return;
 
+    logInfo() << "Adding bookmark \"" << bookmark << "\"" << endl;
+
     _bookmarks << bookmark;
     _dirty = true;
 
@@ -63,6 +65,8 @@ void BookmarksManager::remove( const QString & bookmark, bool update )
 {
     if ( ! _bookmarks.contains( bookmark, Qt::CaseSensitive ) )
         return;
+
+    logInfo() << "Removing bookmark \"" << bookmark << "\"" << endl;
 
     _bookmarks.removeAll( bookmark );
     _dirty = true;
@@ -130,7 +134,7 @@ void BookmarksManager::menuActionTriggered()
 void BookmarksManager::setBaseUrl( const QString & newBaseUrl )
 {
     _baseUrl = newBaseUrl;
-    logDebug() << "Base URL: \"" << _baseUrl << "\"" << endl;
+    // logDebug() << "Base URL: \"" << _baseUrl << "\"" << endl;
 
     rebuildBookmarksMenu();
 }
@@ -175,14 +179,11 @@ void BookmarksManager::read()
     }
 
     sort();
-    logInfo() << "Read " << _bookmarks.size() << " bookmarks" << endl;
+    logInfo() << _bookmarks.size() << " bookmarks read from " << bookmarksFileName() << endl;
 
-#if 1
-
+#if 0
     foreach( const QString & bookmark, _bookmarks )
-    {
         logDebug() << "Read bookmark \"" << bookmark << "\"" << endl;
-    }
 #endif
 }
 
@@ -190,7 +191,10 @@ void BookmarksManager::read()
 void BookmarksManager::write()
 {
     if ( ! _dirty )
+    {
+        logDebug() << "No changes to write to " << bookmarksFileName() << endl;
         return;
+    }
 
     QFile bookmarksFile( bookmarksFileName() );
 
@@ -206,6 +210,9 @@ void BookmarksManager::write()
     {
         out << bookmark << "\n";
     }
+
+    logInfo() << _bookmarks.size() << " bookmarks written to " << bookmarksFileName() << endl;
+    _dirty = false;
 }
 
 

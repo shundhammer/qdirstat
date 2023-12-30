@@ -46,6 +46,7 @@
 #include "SelectionModel.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
+#include "SignalBlocker.h"
 #include "SysUtil.h"
 #include "Trash.h"
 #include "UnreadableDirsWindow.h"
@@ -98,7 +99,7 @@ MainWindow::MainWindow():
     _futureSelection.setTree( app()->dirTree() );
     _futureSelection.setUseParentFallback( true );
 
-    app()->bookmarksManager()->setBookmarksMenu( _ui->menuBookmark );
+    app()->bookmarksManager()->setBookmarksMenu( _ui->menuBookmarks );
     app()->bookmarksManager()->read();
     app()->bookmarksManager()->rebuildBookmarksMenu();
 
@@ -235,11 +236,17 @@ void MainWindow::connectSignals()
     connect( app()->selectionModel(),	 SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
 	     _historyButtons,		 SLOT  ( addToHistory	   ( FileInfo *		    ) ) );
 
+    connect( app()->selectionModel(),	 SIGNAL( currentItemChanged  ( FileInfo *, FileInfo * ) ),
+	     this,      		 SLOT  ( updateBookmarkButton( FileInfo *             ) ) );
+
     connect( _historyButtons,		 SIGNAL( navigateToUrl( QString ) ),
 	     this,			 SLOT  ( navigateToUrl( QString ) ) );
 
     connect( app()->bookmarksManager(),  SIGNAL( navigateToUrl( QString ) ),
              this,                       SLOT  ( navigateToUrl( QString ) ) );
+
+    connect( _ui->bookmarkButton,        SIGNAL( toggled            ( bool ) ),
+             this,                       SLOT  ( bookmarkCurrentPath( bool ) ) );
 
     connect( _ui->breadcrumbNavigator,	 SIGNAL( pathClicked   ( QString ) ),
 	     app()->selectionModel(),	 SLOT  ( setCurrentItem( QString ) ) );
@@ -965,6 +972,75 @@ void MainWindow::navigateToUrl( const QString & url )
             app()->selectionModel()->setCurrentItem( sel,
                                                      true ); // select
             _ui->dirTreeView->setExpanded( sel, true );
+        }
+    }
+}
+
+
+void MainWindow::updateBookmarkButton( FileInfo * newCurrent )
+{
+    SignalBlocker sigBlocker( _ui->bookmarkButton );  // Prevent signal ping-pong
+
+    if ( ! newCurrent )  // No selection / no current item
+    {
+        // logDebug() << "No current item" << endl;
+        _ui->bookmarkButton->setChecked( false );
+    }
+    else
+    {
+        DirInfo * currentDir = newCurrent->toDirInfo();
+
+        if ( ! currentDir && newCurrent->parent() )
+            currentDir = newCurrent->parent();
+
+        if ( currentDir )
+        {
+            QString url = currentDir->debugUrl();
+            bool isBookmarked = app()->bookmarksManager()->contains( url );
+            _ui->bookmarkButton->setChecked( isBookmarked );
+#if 0
+            if ( isBookmarked )
+                logDebug() << url << " is bookmarked" << endl;
+#endif
+        }
+    }
+}
+
+
+void MainWindow::bookmarkCurrentPath( bool isChecked )
+{
+    //
+    // Find out the current item and directory
+    //
+
+    FileInfo * currentItem = app()->selectionModel()->currentItem();
+
+    if ( ! currentItem )
+        return;
+
+    DirInfo * currentDir = currentItem->toDirInfo();
+
+    if ( ! currentDir && currentItem->parent() )  // Not a directory?
+        currentDir = currentItem-> parent();      // Move up one level
+
+    if ( currentDir )
+    {
+        //
+        // Add or remove it from the bookmarks
+        //
+
+        // debugUrl() because we want the <Files> DotEntry if there is one
+        QString url = currentDir->debugUrl();
+
+        if ( isChecked )
+        {
+            app()->bookmarksManager()->add( url );
+            // The BookmarksManager is already logging this
+        }
+        else
+        {
+            app()->bookmarksManager()->remove( url );
+            // The BookmarksManager is already logging this
         }
     }
 }

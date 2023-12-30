@@ -308,6 +308,18 @@ protected slots:
     void navigateToUrl( const QString & url );
 
     /**
+     * Notification that the current item changed: Find out the new current
+     * directory, check if that is in the bookmarks collection, and change the
+     * on/off status (i.e. the icon) of the bookmarksButton accordingly.
+     **/
+    void updateBookmarkButton( FileInfo * newCurrent );
+
+    /**
+     * Bookmark or un-bookmark the current directory.
+     **/
+    void bookmarkCurrentPath( bool on );
+
+    /**
      * Open the config dialog.
      **/
     void openConfigDialog();

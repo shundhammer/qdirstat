@@ -65,6 +65,12 @@
            </property>
            <item>
             <widget class="QToolButton" name="bookmarkButton">
+             <property name="toolTip">
+              <string>Bookmark / Un-Bookmark</string>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
              <property name="text">
               <string notr="true">...</string>
              </property>
@@ -72,6 +78,9 @@
               <iconset resource="icons.qrc">
                <normaloff>:/icons/bookmark-off.png</normaloff>
                <normalon>:/icons/bookmark.png</normalon>:/icons/bookmark-off.png</iconset>
+             </property>
+             <property name="shortcut">
+              <string>Ctrl+D</string>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -146,8 +155,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>63</width>
-           <height>292</height>
+           <width>88</width>
+           <height>282</height>
           </rect>
          </property>
         </widget>
@@ -164,7 +173,7 @@
      <x>0</x>
      <y>0</y>
      <width>1157</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -241,23 +250,26 @@
     <property name="title">
      <string>&amp;Go</string>
     </property>
-    <widget class="QMenu" name="menuBookmark">
+    <widget class="QMenu" name="menuBookmarks">
      <property name="tearOffEnabled">
       <bool>true</bool>
      </property>
      <property name="title">
-      <string>&amp;Bookmark</string>
+      <string>To &amp;Bookmark</string>
      </property>
      <property name="icon">
       <iconset resource="icons.qrc">
        <normaloff>:/icons/bookmark.png</normaloff>:/icons/bookmark.png</iconset>
+     </property>
+     <property name="toolTipsVisible">
+      <bool>false</bool>
      </property>
      <addaction name="separator"/>
      <addaction name="actionSelectAllBookmarks"/>
     </widget>
     <addaction name="actionGoUp"/>
     <addaction name="actionGoToToplevel"/>
-    <addaction name="menuBookmark"/>
+    <addaction name="menuBookmarks"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -1085,7 +1097,7 @@
   </action>
   <action name="actionFileAgeStatsHelp">
    <property name="text">
-    <string>The File Age Statistics...</string>
+    <string>&amp;The File Age Statistics...</string>
    </property>
    <property name="statusTip">
     <string>https://github.com/shundhammer/qdirstat/blob/master/doc/File-Age-Stats.md</string>
@@ -1102,40 +1114,12 @@
     <string>Ctrl+F</string>
    </property>
   </action>
-  <action name="actionBookmarkCurrent">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/icons/bookmark-off.png</normaloff>
-     <normalon>:/icons/bookmark.png</normalon>:/icons/bookmark-off.png</iconset>
-   </property>
-   <property name="text">
-    <string>Bookmark</string>
-   </property>
-   <property name="toolTip">
-    <string>Bookmark on/off</string>
-   </property>
-  </action>
   <action name="actionSelectAllBookmarks">
    <property name="text">
     <string>Select &amp;All</string>
    </property>
    <property name="toolTip">
     <string>Select all Bookmarks in the Tree</string>
-   </property>
-  </action>
-  <action name="actionactionGoToBookmark">
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/icons/bookmark.png</normaloff>:/icons/bookmark.png</iconset>
-   </property>
-   <property name="text">
-    <string>actionGoToBookmark</string>
-   </property>
-   <property name="toolTip">
-    <string>Go to Bookmark</string>
    </property>
   </action>
  </widget>
