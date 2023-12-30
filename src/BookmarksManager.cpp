@@ -83,11 +83,19 @@ void BookmarksManager::rebuildBookmarksMenu()
     {
         QAction * action = _bookmarksMenu->addAction( bookmark,
                                                       this, SLOT( menuActionTriggered ) );
-        if ( action )
+        if ( action && ! _basePath.isEmpty() )
         {
             if ( ! bookmark.startsWith( _basePath ) ) 
                 action->setEnabled( false );
         }
+    }
+
+    if ( _bookmarksMenu->isEmpty() )
+    {
+        QAction * action = _bookmarksMenu->addAction( tr( "No Bookmarks" ) );
+
+        if ( action )
+            action->setEnabled( false );
     }
 }
 
@@ -153,7 +161,6 @@ void BookmarksManager::read()
     }
 
     sort();
-
     logInfo() << "Read " << _bookmarks.size() << " bookmarks" << endl;
     
 #if 1

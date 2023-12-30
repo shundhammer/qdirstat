@@ -16,6 +16,7 @@
 #include "FileInfoSet.h"
 #include "SelectionModel.h"
 #include "CleanupCollection.h"
+#include "BookmarksManager.h"
 #include "MainWindow.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -73,6 +74,9 @@ QDirStatApp::QDirStatApp()
 
     _cleanupCollection = new CleanupCollection( _selectionModel );
     CHECK_NEW( _cleanupCollection );
+
+    _bookmarksManager = new BookmarksManager();
+    CHECK_NEW( _bookmarksManager );
 }
 
 
@@ -80,6 +84,7 @@ QDirStatApp::~QDirStatApp()
 {
     // logDebug() << "Destroying app" << endl;
 
+    delete _bookmarksManager;
     delete _cleanupCollection;
     delete _selectionModel;
     delete _dirTreeModel;

@@ -16,6 +16,7 @@
 
 #include "MainWindow.h"
 #include "ActionManager.h"
+#include "BookmarksManager.h"
 #include "BusyPopup.h"
 #include "CleanupCollection.h"
 #include "CleanupConfigPage.h"
@@ -98,6 +99,10 @@ MainWindow::MainWindow():
     _futureSelection.setUseRootFallback( false );
     _futureSelection.setUseParentFallback( true );
 
+    app()->bookmarksManager()->setBookmarksMenu( _ui->menuBookmark );
+    app()->bookmarksManager()->read();
+    app()->bookmarksManager()->rebuildBookmarksMenu();
+
 
     // Set the boldItemFont for the DirTreeModel.
     //
@@ -160,6 +165,7 @@ MainWindow::~MainWindow()
     writeSettings();
     ExcludeRules::instance()->writeSettings();
     MimeCategorizer::instance()->writeSettings();
+    app()->bookmarksManager()->write();
 
     // Relying on the QObject hierarchy to properly clean this up resulted in a
     //	segfault; there was probably a problem in the deletion order.
