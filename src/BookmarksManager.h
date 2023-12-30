@@ -172,7 +172,7 @@ namespace QDirStat
         /**
          * Notification that the user triggered a bookmark action.
          **/
-        void menuActionTriggered();
+        void navigateToBookmark();
 
 
     protected:

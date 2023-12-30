@@ -90,7 +90,7 @@ void BookmarksManager::rebuildBookmarksMenu()
     foreach ( const QString & bookmark, _bookmarks )
     {
         QAction * action = _bookmarksMenu->addAction( bookmark,
-                                                      this, SLOT( menuActionTriggered() ) );
+                                                      this, SLOT( navigateToBookmark() ) );
         if ( action )
         {
             action->setObjectName( BookmarksManagerAction );
@@ -130,25 +130,34 @@ void BookmarksManager::clearMenu()
 }
 
 
-void BookmarksManager::menuActionTriggered()
+void BookmarksManager::navigateToBookmark()
 {
+    // Since we use the same slot for all bookmark menu entries, use the sender
+    // of the signal to get more information.
+    //
+    // Notice that this wouldn't work if this were a normal function call, not
+    // sent via a Qt signal / slot connection.
+
     QAction * action = qobject_cast<QAction *>( sender() );
 
     if ( action )
     {
+        // The bookmark actions all contain the URL to go to in the action's
+        // data() (a QVariant).
+
         QString bookmark = action->data().toString();
+
+        // If data() was empty, try the menu text. This may or may not be the
+        // same as the URL; future versions may shorten this or replace things
+        // like the user's home directory with "~/" for brevity.
 
         if ( bookmark.isEmpty() )
             bookmark = action->text();
 
         if ( ! bookmark.isEmpty() )
         {
-            logDebug() << "Bookmark activated: " << bookmark << endl;
+            logDebug() << bookmark << endl;
             emit navigateToUrl( bookmark );
-        }
-        else
-        {
-            logError() << "Empty bookmark activated" << endl;
         }
     }
 }
