@@ -22,7 +22,7 @@ namespace QDirStat
      * Manager class for a collection of bookmarks that each point to a
      * directory in the filesystem.
      *
-     * A bookmark is just a string with the path. It can be used to navigate
+     * A bookmark is just a string with the URL. It can be used to navigate
      * quickly to that location in the tree, or to select a number of
      * directories for a cleanup action such as clearing the contents of each
      * one of them.
@@ -38,8 +38,8 @@ namespace QDirStat
      *
      * It also has a number of signals and slots to use them from menus and
      * widgets like the bookmarksButton next to the BreadcrumbNavigator where
-     * the user can toggle the bookmark status (on/off) of the current path,
-     * and to indicate the status of the current path as it changes in the
+     * the user can toggle the bookmark status (on/off) of the current URL,
+     * and to indicate the status of the current URL as it changes in the
      * SelectionModel.
      *
      * The bookmarks are always kept in alphabetical order. Adding or removing
@@ -68,7 +68,7 @@ namespace QDirStat
          *
          * That menu will then be managed by this class: The menu will contain
          * a list of bookmarks that the user can activate to navigate to that
-         * path.
+         * URL.
          *
          * See also 'rebuildBookmarksMenu()'.
          **/
@@ -80,8 +80,8 @@ namespace QDirStat
 
         /**
          * Sent when the user clicks on a bookmark in the bookmark menu.
-         * This should be connected to an action that navigates to that path,
-         * i.e. which makes that path the current path.
+         * This should be connected to an action that navigates to that URL,
+         * i.e. which makes that URL the current URL.
          **/
 	void navigateToUrl( const QString & url );
 
@@ -105,9 +105,9 @@ namespace QDirStat
         int size() const { return _bookmarks.size(); }
 
         /**
-         * Return 'true' if the bookmarks contain the specified path.
+         * Return 'true' if the bookmarks contain the specified URL.
          **/
-        bool contains( const QString & path ) { return _bookmarks.contains( path ); }
+        bool contains( const QString & url ) { return _bookmarks.contains( url ); }
 
         /**
          * Add a bookmark to the collection, unless it's already there.
@@ -126,11 +126,11 @@ namespace QDirStat
         void remove( const QString & bookmark, bool update = true );
 
         /**
-         * Notification that the base path of the current DirTree has changed,
+         * Notification that the base URL of the current DirTree has changed,
          * i.e. that a new directory tree is being read. This rebuilds the
          * bookmarks menu.
          **/
-        void setBasePath( const QString & newBasePath );
+        void setBaseUrl( const QString & newBaseUrl );
 
         /**
          * Clear the bookmarks collection.
@@ -188,7 +188,7 @@ namespace QDirStat
         //
 
         QStringList _bookmarks;
-        QString     _basePath;
+        QString     _baseUrl;
         QMenu *     _bookmarksMenu;
         bool        _dirty;
     };

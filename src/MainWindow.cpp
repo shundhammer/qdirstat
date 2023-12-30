@@ -578,7 +578,7 @@ void MainWindow::openDir( const QString & url )
 
 	app()->dirTreeModel()->openUrl( url );
 	updateWindowTitle( app()->dirTree()->url() );
-        app()->bookmarksManager()->setBasePath( app()->dirTree()->url() );
+        app()->bookmarksManager()->setBaseUrl( app()->dirTree()->url() );
     }
     catch ( const SysCallFailedException & ex )
     {
@@ -667,6 +667,7 @@ void MainWindow::readPkg( const PkgFilter & pkgFilter )
     BusyPopup msg( tr( "Reading package database..." ), this );
 
     app()->dirTreeModel()->readPkg( pkgFilter );
+    app()->bookmarksManager()->setBaseUrl( app()->dirTree()->url() );
     app()->selectionModel()->setCurrentItem( app()->dirTree()->firstToplevel() );
 }
 

@@ -86,9 +86,9 @@ void BookmarksManager::rebuildBookmarksMenu()
     {
         QAction * action = _bookmarksMenu->addAction( bookmark,
                                                       this, SLOT( menuActionTriggered() ) );
-        if ( action && ! _basePath.isEmpty() )
+        if ( action && ! _baseUrl.isEmpty() )
         {
-            if ( ! bookmark.startsWith( _basePath ) )
+            if ( ! bookmark.startsWith( _baseUrl ) )
                 action->setEnabled( false );
         }
     }
@@ -127,10 +127,10 @@ void BookmarksManager::menuActionTriggered()
 }
 
 
-void BookmarksManager::setBasePath( const QString & newBasePath )
+void BookmarksManager::setBaseUrl( const QString & newBaseUrl )
 {
-    _basePath = newBasePath;
-    logDebug() << "Base path: \"" << _basePath << "\"" << endl;
+    _baseUrl = newBaseUrl;
+    logDebug() << "Base URL: \"" << _baseUrl << "\"" << endl;
 
     rebuildBookmarksMenu();
 }
