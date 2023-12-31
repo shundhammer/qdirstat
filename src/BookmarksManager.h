@@ -166,6 +166,18 @@ namespace QDirStat
          **/
         static QString bookmarksFileName();
 
+        /**
+         * Expand "~", "$HOME", "${HOME}" in a path and return the expanded
+         * path.
+         **/
+        static QString expandedPath( const QString & origPath );
+
+        /**
+         * Shorten a path that starts with the user's home directory to use "~"
+         * instead.
+         **/
+        static QString shortenedPath( const QString & origPath );
+
 
     protected slots:
 

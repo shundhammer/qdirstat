@@ -16,7 +16,7 @@
 #include "DirTree.h"
 #include "Logger.h"
 
-#define BookmarksFile           ".config/QDirStat/bookmarks.txt"
+#define BookmarksFile           "~/.config/QDirStat/bookmarks.txt"
 #define BookmarksManagerAction  "bookmarksManagerAction"
 
 
@@ -89,12 +89,12 @@ void BookmarksManager::rebuildBookmarksMenu()
 
     foreach ( const QString & bookmark, _bookmarks )
     {
-        QAction * action = _bookmarksMenu->addAction( bookmark,
+        QAction * action = _bookmarksMenu->addAction( shortenedPath( bookmark ),
                                                       this, SLOT( navigateToBookmark() ) );
         if ( action )
         {
             action->setObjectName( BookmarksManagerAction );
-            action->setData( bookmark );
+            action->setData( expandedPath( bookmark ) );
 
             if ( ! _baseUrl.isEmpty() )
             {
@@ -157,7 +157,7 @@ void BookmarksManager::navigateToBookmark()
         if ( ! bookmark.isEmpty() )
         {
             logDebug() << bookmark << endl;
-            emit navigateToUrl( bookmark );
+            emit navigateToUrl( expandedPath( bookmark ) );
         }
     }
 }
@@ -184,7 +184,7 @@ void BookmarksManager::read()
 
     if ( ! bookmarksFile.exists() )
     {
-        logInfo() << "Bookmarks file " << bookmarksFileName()
+        logInfo() << "Bookmarks file " << BookmarksFile
                   << " does not exist" << endl;
 
         return;
@@ -205,13 +205,13 @@ void BookmarksManager::read()
         line = line.trimmed();
 
         if ( ! line.isEmpty() && ! line.startsWith( "#" ) )
-            _bookmarks << line;
+            _bookmarks << expandedPath( line );
 
 	line = in.readLine();
     }
 
     sort();
-    logInfo() << _bookmarks.size() << " bookmarks read from " << bookmarksFileName() << endl;
+    logInfo() << _bookmarks.size() << " bookmarks read from " << BookmarksFile << endl;
 
 #if 0
     foreach ( const QString & bookmark, _bookmarks )
@@ -224,7 +224,7 @@ void BookmarksManager::write()
 {
     if ( ! _dirty )
     {
-        logDebug() << "No changes to write to " << bookmarksFileName() << endl;
+        logDebug() << "No changes to write to " << BookmarksFile << endl;
         return;
     }
 
@@ -240,15 +240,40 @@ void BookmarksManager::write()
 
     foreach ( const QString & bookmark, _bookmarks )
     {
-        out << bookmark << "\n";
+        out << shortenedPath( bookmark ) << "\n";
     }
 
-    logInfo() << _bookmarks.size() << " bookmarks written to " << bookmarksFileName() << endl;
+    logInfo() << _bookmarks.size() << " bookmarks written to " << BookmarksFile << endl;
     _dirty = false;
 }
 
 
 QString BookmarksManager::bookmarksFileName()
 {
-    return QDir::homePath() + "/" + BookmarksFile;
+    return expandedPath( BookmarksFile );
+}
+
+
+QString BookmarksManager::expandedPath( const QString & origPath )
+{
+    QString home = QDir::homePath();
+    QString path = origPath;
+
+    path.replace( "~",       home );
+    path.replace( "$HOME",   home );
+    path.replace( "${HOME}", home );
+
+    return path;
+}
+
+
+QString BookmarksManager::shortenedPath( const QString & origPath )
+{
+    QString home = QDir::homePath();
+    QString path = origPath;
+
+    if ( ! home.isEmpty() && path.startsWith( home ) )
+        path.replace( 0, home.size(), "~" );
+
+    return path;
 }
