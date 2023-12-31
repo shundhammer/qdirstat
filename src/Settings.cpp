@@ -213,7 +213,7 @@ void Settings::moveGroups( const QString & groupPrefix,
 
 	    QStringList keys = from->allKeys();
 
-	    foreach( const QString & key, keys )
+	    foreach ( const QString & key, keys )
 	    {
 		// logVerbose() << "	Copying " << key << endl;
 		to->setValue( key, from->value( key ) );
