@@ -62,8 +62,8 @@ TreemapView::TreemapView( QWidget * parent ):
     // Default values for light sources taken from Wiik / Wetering's paper
     // about "cushion treemaps".
 
-    _lightX = 0.09759;
-    _lightY = 0.19518;
+    _lightX = -0.09759;
+    _lightY = -0.19518;
     _lightZ = 0.9759;
 
     setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
