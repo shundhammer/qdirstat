@@ -781,24 +781,30 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 
     QMenu menu;
     QStringList actions;
-    actions << "actionGoUp"
-	    << "actionCopyPathToClipboard"
-	    << "---"
+
+    // Most commonly used menu options first
+    actions << "actionMoveToTrash";
+
+    ActionManager::instance()->addActions( &menu, actions );
+
+    // User-defined cleanups
+
+    if ( _parentView->cleanupCollection() )
+	_parentView->cleanupCollection()->addToMenu( &menu );
+
+    // Less commonly used menu options
+    actions.clear();
+    actions << "---"
 	    << "actionTreemapZoomIn"
 	    << "actionTreemapZoomOut"
 	    << "actionResetTreemapZoom"
 	    << "---"
-	    << "actionMoveToTrash"
-	;
+	    << "actionGoToToplevel"
+	    << "actionGoUp"
+        ;
 
     ActionManager::instance()->addActions( &menu, actions );
 
-    if ( _parentView->cleanupCollection() &&
-	 ! _parentView->cleanupCollection()->isEmpty() )
-    {
-	menu.addSeparator();
-	_parentView->cleanupCollection()->addToMenu( &menu );
-    }
 
     menu.exec( event->screenPos() );
 }

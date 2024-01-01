@@ -210,10 +210,8 @@ void LocateFilesWindow::itemContextMenu( const QPoint & pos )
 
     ActionManager::instance()->addActions( &menu, actions );
 
-    if ( app()->cleanupCollection() && ! app()->cleanupCollection()->isEmpty() )
+    if ( app()->cleanupCollection() )
     {
-	menu.addSeparator();
-
         foreach ( Cleanup * cleanup, app()->cleanupCollection()->cleanupList() )
         {
             if ( cleanup->worksForFile() )

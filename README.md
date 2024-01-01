@@ -125,6 +125,23 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2024-01-01
+
+  - Cleaned up the context menus in the tree view and in the treemap view:
+
+    - Removed some less commonly used options like "Copy to clipboard" (also
+      available from the main menu and via the `Ctrl`+`C` keyboard shortcut)
+
+    - Moved very common actions ("Move to Trash" and the other cleanups) to the
+      top
+
+    - Moved other actions to the bottom. Many of those are only in the context
+      menu to raise awareness that they even exist, like starting other views
+      from a subdirectory (file size, file type, file age statistics) or the
+      treemap zoom actions (typically used via mouse wheel if there is one).
+
+
+
 - 2023-12-30
 
   - Added bookmarks, very much like in an Internet browser.

@@ -91,26 +91,33 @@ void DirTreeView::actionContextMenu( const QPoint & pos )
 {
     QMenu menu;
     QStringList actions;
-    actions << "actionGoUp"
-	    << "actionCopyPathToClipboard"
-	    << "---"
+
+    // Most commonly used menu options first
+    actions << "actionMoveToTrash";
+
+    ActionManager::instance()->addActions( &menu, actions );
+
+    // User-defined cleanups
+
+    if ( _cleanupCollection )
+	_cleanupCollection->addToMenu( &menu );
+
+    // Less commonly used menu options
+    actions.clear();
+    actions << "---"
 	    << "actionRefreshSelected"
 	    << "actionReadExcludedDirectory"
 	    << "actionContinueReadingAtMountPoint"
 	    << "---"
 	    << "actionFileSizeStats"
 	    << "actionFileTypeStats"
+	    << "actionFileAgeStats"
 	    << "---"
-	    << "actionMoveToTrash"
-	;
+            << "actionGoToToplevel"
+	    << "actionGoUp"
+        ;
 
     ActionManager::instance()->addActions( &menu, actions );
-
-    if ( _cleanupCollection && ! _cleanupCollection->isEmpty() )
-    {
-	menu.addSeparator();
-	_cleanupCollection->addToMenu( &menu );
-    }
 
     menu.exec( mapToGlobal( pos ) );
 }
