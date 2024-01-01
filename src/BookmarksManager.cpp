@@ -101,6 +101,10 @@ void BookmarksManager::rebuildBookmarksMenu()
                 if ( ! bookmark.startsWith( _baseUrl ) )
                     action->setEnabled( false );
             }
+            else // No base URL set -> probably no DirTree read yet
+            {
+                action->setEnabled( false );
+            }
         }
     }
 
