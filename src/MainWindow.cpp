@@ -1036,11 +1036,13 @@ void MainWindow::bookmarkCurrentPath( bool isChecked )
         {
             app()->bookmarksManager()->add( url );
             // The BookmarksManager is already logging this
+            showProgress( tr( "Bookmarked %1" ).arg( url ) );
         }
         else
         {
             app()->bookmarksManager()->remove( url );
             // The BookmarksManager is already logging this
+            showProgress( tr( "Un-bookmarked %1" ).arg( url ) );
         }
     }
 }
