@@ -150,7 +150,7 @@ void DiscoverActions::ensureLocateFilesWindow( TreeWalker * treeWalker )
 
 void DiscoverActions::findFiles( const FileSearchFilter & filter )
 {
-    
+
     ensureLocateFilesWindow( new FindFilesTreeWalker( filter ) );
     FileInfo * sel = filter.subtree();
 
