@@ -603,6 +603,9 @@ QModelIndex DirTreeModel::parent( const QModelIndex & index ) const
 
 void DirTreeModel::sort( int column, Qt::SortOrder order )
 {
+    if ( column == _sortCol && order == _sortOrder )
+        return;
+
     logDebug() << "Sorting by " << static_cast<DataColumn>( column )
 	       << ( order == Qt::AscendingOrder ? " ascending" : " descending" )
 	       << endl;
@@ -612,7 +615,7 @@ void DirTreeModel::sort( int column, Qt::SortOrder order )
 
     emit layoutAboutToBeChanged();
 
-    _sortCol = DataColumns::fromViewCol( column );
+    _sortCol   = DataColumns::fromViewCol( column );
     _sortOrder = order;
 
     updatePersistentIndexes();
