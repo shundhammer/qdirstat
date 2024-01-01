@@ -40,6 +40,10 @@ enum LogSeverity
 //
 // These macros all use the default logger. Create similar macros to use your
 // own class-specific logger.
+//
+// Usage example:
+//
+//   logDebug() << "Result: " << result << endl;
 
 #define logVerbose()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityVerbose   )
 #define logDebug()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityDebug     )
@@ -47,6 +51,33 @@ enum LogSeverity
 #define logWarning()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityWarning   )
 #define logError()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityError     )
 #define logNewline()	Logger::newline( 0 )
+
+
+/**
+ * Log the signal sender of a QObject.
+ *
+ * This is done as a macro to properly log the source code location.
+ * Usage:
+ *
+ *   logSender();
+ *
+ * The do..while() loop is used because it syntactically allows to put a
+ * semicolon (without nasty side effects) after the macro when it is used.
+ **/
+#define logSender()                                                      \
+    do                                                                   \
+    {                                                                    \
+        QObject * obj = sender();                                        \
+                                                                         \
+        if ( obj )                                                       \
+            logDebug() << "sender(): " << obj->metaObject()->className() \
+                       << " " << obj->objectName()                       \
+                       << endl;                                          \
+        else                                                             \
+            logDebug() << "No sender" << endl;                           \
+                                                                         \
+    } while( 0 )
+
 
 
 /**
