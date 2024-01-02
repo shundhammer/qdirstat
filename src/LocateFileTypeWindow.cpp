@@ -248,6 +248,7 @@ SuffixSearchResultItem::SuffixSearchResultItem( const QString & path,
     setText( SSR_CountCol,	QString( "%1" ).arg( count ) );
     setText( SSR_TotalSizeCol,	formatSize( totalSize ) );
     setText( SSR_PathCol,	path );
+    setIcon( SSR_PathCol,       QIcon( ":/icons/tree-medium/dir.png" ) );
 
     setTextAlignment( SSR_CountCol,	 Qt::AlignRight );
     setTextAlignment( SSR_TotalSizeCol,	 Qt::AlignRight );
