@@ -86,6 +86,7 @@ void BookmarksManager::rebuildBookmarksMenu()
     }
 
     clearMenu();
+    QIcon bookmarkIcon( ":/icons/tree-medium/dir.png" );
 
     foreach ( const QString & bookmark, _bookmarks )
     {
@@ -95,6 +96,7 @@ void BookmarksManager::rebuildBookmarksMenu()
         {
             action->setObjectName( BookmarksManagerAction );
             action->setData( expandedPath( bookmark ) );
+            action->setIcon( bookmarkIcon );
 
             if ( ! _baseUrl.isEmpty() )
             {
