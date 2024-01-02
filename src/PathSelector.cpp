@@ -58,7 +58,8 @@ PathSelectorItem * PathSelector::addPath( const QString & path,
 
 PathSelectorItem * PathSelector::addHomeDir()
 {
-    QIcon icon = _iconProvider.icon( QFileIconProvider::Folder );
+    // QIcon icon = _iconProvider.icon( QFileIconProvider::Folder );
+    QIcon icon( ":/icons/48x48/home-dir.png" );
     PathSelectorItem * item = addPath( QDir::homePath(), icon );
     item->setToolTip( tr( "Your home directory" ) );
 
