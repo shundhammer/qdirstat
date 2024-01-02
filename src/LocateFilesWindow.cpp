@@ -213,10 +213,7 @@ void LocateFilesWindow::itemContextMenu( const QPoint & pos )
     if ( app()->cleanupCollection() )
     {
         foreach ( Cleanup * cleanup, app()->cleanupCollection()->cleanupList() )
-        {
-            if ( cleanup->worksForFile() )
-                menu.addAction( cleanup );
-        }
+            menu.addAction( cleanup );
     }
 
     menu.exec( _ui->treeWidget->mapToGlobal( pos ) );
