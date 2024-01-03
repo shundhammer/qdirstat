@@ -130,17 +130,15 @@ void MimeCategoryConfigPage::colorChanged( const QString & newColor )
 {
     QListWidgetItem * currentItem = listWidget()->currentItem();
 
+    // Always set the new colour, even if empty or invalid, for the mini-treemap to rebuild
+    QColor color( newColor );
+    _ui->treemapView->setFixedColor( color );
+    _ui->treemapView->rebuildTreemap();
+
     if ( currentItem )
     {
-	QColor color( newColor );
-
-	if ( color.isValid() )
-	{
-	    MimeCategory * category = CATEGORY_CAST( value( currentItem ) );
-	    category->setColor( color );
-	    _ui->treemapView->setFixedColor( color );
-	    _ui->treemapView->rebuildTreemap();
-	}
+	MimeCategory * category = CATEGORY_CAST( value( currentItem ) );
+	category->setColor( color );
     }
 }
 
@@ -187,25 +185,25 @@ void MimeCategoryConfigPage::save( void * value )
 
 void MimeCategoryConfigPage::load( void * value )
 {
-    MimeCategory * category = CATEGORY_CAST( value );
-    // logDebug() << category << endl;
-
-    if ( ! category || updatesLocked() )
+     if ( updatesLocked() )
 	return;
 
-    _ui->nameLineEdit->setText( category->name() );
-    QColor color = category->color();
-    _ui->colorLineEdit->setText( color.isValid() ?
-				 category->color().name() : "" );
+    MimeCategory * category = CATEGORY_CAST( value );
 
-    setPatternList( _ui->caseInsensitivePatternsTextEdit,
-		    category->humanReadablePatternList( Qt::CaseInsensitive ) );
+    // Populate the name and patterns from this category
+    _ui->nameLineEdit->setText( category ? category->name() : "" );
 
-    setPatternList( _ui->caseSensitivePatternsTextEdit,
-		    category->humanReadablePatternList( Qt::CaseSensitive ) );
+    QStringList patternList = category ? category->humanReadablePatternList( Qt::CaseSensitive ) : QStringList();
+    setPatternList( _ui->caseSensitivePatternsTextEdit, patternList );
 
-    _ui->treemapView->setFixedColor( color.isValid() ? color : Qt::red );
-    _ui->treemapView->rebuildTreemap();
+    patternList = category ? category->humanReadablePatternList( Qt::CaseInsensitive ) : QStringList();
+    setPatternList( _ui->caseInsensitivePatternsTextEdit, patternList );
+
+    // Set this category colour in the form and mini-treemap
+    QColor color = category ? category->color() : QColor();
+    _ui->colorLineEdit->setText( color.isValid() ? category->color().name() : "" );
+    _ui->treemapView->setFixedColor( color );
+//    _ui->treemapView->rebuildTreemap(); // it rebuilds itself when the colour is set
 }
 
 
@@ -327,19 +325,41 @@ void MimeCategoryConfigPage::populateTreemapView()
 }
 
 
+void MimeCategoryConfigPage::updateActions()
+{
+    ListEditor::updateActions();
+
+    setActions( listWidget()->currentItem() );
+}
+
+
 void MimeCategoryConfigPage::currentItemChanged( QListWidgetItem * current,
                                                  QListWidgetItem * previous)
 {
+    //logDebug() << current << ", " << previous << endl;
+
     ListEditor::currentItemChanged( current, previous );
 
-    const QString name = _ui->nameLineEdit->text();
+    setActions( current );
+}
 
-    const bool isSymlink = name == CATEGORY_SYMLINKS;
 
-    _ui->patternsTopWidget->setEnabled   ( ! isSymlink );
-    _ui->patternsBottomWidget->setEnabled( ! isSymlink );
+void MimeCategoryConfigPage::setActions( const QListWidgetItem * currentItem )
+{
+    const bool isSymlink = currentItem && currentItem->text() == CATEGORY_SYMLINK;
+    const bool isExecutable = currentItem && currentItem->text() == CATEGORY_EXECUTABLE;
 
-    const bool editable = !( isSymlink || name == CATEGORY_EXECUTABLES );
-    enableButton( _ui->removeButton, editable );
-    _ui->nameLineEdit->setEnabled( editable );
+    // Name can't be changed for symlinks and executables
+    _ui->nameLineEdit->setEnabled( currentItem && !isSymlink && !isExecutable );
+
+    // Patterns can't be changed for symlinks
+    _ui->patternsTopWidget->setEnabled( currentItem && !isSymlink );
+    _ui->patternsBottomWidget->setEnabled( currentItem && !isSymlink );
+
+    // Symlinks and executables can't be removed
+    enableButton( _ui->removeButton, currentItem && !isSymlink && !isExecutable );
+
+    // Colour can be edited for any item
+    _ui->colorLineEdit->setEnabled( currentItem );
+    enableButton( _ui->colorButton, currentItem );
 }
