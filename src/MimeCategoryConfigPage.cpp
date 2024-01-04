@@ -185,7 +185,7 @@ void MimeCategoryConfigPage::save( void * value )
 
 void MimeCategoryConfigPage::load( void * value )
 {
-     if ( updatesLocked() )
+    if ( updatesLocked() )
 	return;
 
     MimeCategory * category = CATEGORY_CAST( value );
@@ -203,7 +203,7 @@ void MimeCategoryConfigPage::load( void * value )
     QColor color = category ? category->color() : QColor();
     _ui->colorLineEdit->setText( color.isValid() ? category->color().name() : "" );
     _ui->treemapView->setFixedColor( color );
-//    _ui->treemapView->rebuildTreemap(); // it rebuilds itself when the colour is set
+   // _ui->treemapView->rebuildTreemap(); // it rebuilds itself when the colour is set
 }
 
 
