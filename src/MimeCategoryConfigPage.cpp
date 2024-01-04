@@ -346,8 +346,8 @@ void MimeCategoryConfigPage::currentItemChanged( QListWidgetItem * current,
 
 void MimeCategoryConfigPage::setActions( const QListWidgetItem * currentItem )
 {
-    const bool isSymlink = currentItem && currentItem->text() == CATEGORY_SYMLINK;
-    const bool isExecutable = currentItem && currentItem->text() == CATEGORY_EXECUTABLE;
+    const bool isSymlink = currentItem && currentItem->text() == CATEGORY_SYMLINKS;
+    const bool isExecutable = currentItem && currentItem->text() == CATEGORY_EXECUTABLES;
 
     // Name can't be changed for symlinks and executables
     _ui->nameLineEdit->setEnabled( currentItem && !isSymlink && !isExecutable );
