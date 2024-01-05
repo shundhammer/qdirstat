@@ -208,13 +208,10 @@ void LocateFilesWindow::itemContextMenu( const QPoint & pos )
     QStringList actions;
     actions << "actionMoveToTrash";
 
-    ActionManager::instance()->addActions( &menu, actions );
+    ActionManager::instance()->addEnabledActions( &menu, actions );
 
     if ( app()->cleanupCollection() )
-    {
-        foreach ( Cleanup * cleanup, app()->cleanupCollection()->cleanupList() )
-            menu.addAction( cleanup );
-    }
+        app()->cleanupCollection()->addEnabledToMenu( &menu );
 
     menu.exec( _ui->treeWidget->mapToGlobal( pos ) );
 }

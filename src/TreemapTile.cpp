@@ -785,12 +785,12 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
     // Most commonly used menu options first
     actions << "actionMoveToTrash";
 
-    ActionManager::instance()->addActions( &menu, actions );
+    ActionManager::instance()->addEnabledActions( &menu, actions );
 
     // User-defined cleanups
 
     if ( _parentView->cleanupCollection() )
-	_parentView->cleanupCollection()->addToMenu( &menu );
+	_parentView->cleanupCollection()->addEnabledToMenu( &menu );
 
     // Less commonly used menu options
     actions.clear();
@@ -803,7 +803,7 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	    << "actionGoUp"
         ;
 
-    ActionManager::instance()->addActions( &menu, actions );
+    ActionManager::instance()->addEnabledActions( &menu, actions );
 
 
     menu.exec( event->screenPos() );

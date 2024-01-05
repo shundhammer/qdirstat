@@ -53,11 +53,26 @@ namespace QDirStat
 	 * Add all the actions in 'actionNames' to a widget (typically a
 	 * menu). Return 'true' if success, 'false' if any of the actions were
 	 * not found.
+         *
+         * If 'enabledOnly' is 'true', only those actions that are currently
+         * enabled are added.
 	 *
 	 * If the widget is a menu, and an action name in actionNames starts
 	 * with "---", a separator is added to the menu instead of an action.
+         *
+         * Notice that this class already logs an error for action names that
+         * were not found.
 	 **/
-	bool addActions( QWidget * widget, const QStringList & actionNames );
+	bool addActions( QWidget *           widget,
+                         const QStringList & actionNames,
+                         bool                enabledOnly = false);
+
+        /**
+         * Add only the enabled actions in 'actionNames' to a widget.
+         **/
+        bool addEnabledActions( QWidget *           widget,
+                                const QStringList & actionNames )
+            { return addActions( widget, actionNames, true ); }
 
 
     protected:

@@ -95,12 +95,12 @@ void DirTreeView::actionContextMenu( const QPoint & pos )
     // Most commonly used menu options first
     actions << "actionMoveToTrash";
 
-    ActionManager::instance()->addActions( &menu, actions );
+    ActionManager::instance()->addEnabledActions( &menu, actions );
 
     // User-defined cleanups
 
     if ( _cleanupCollection )
-	_cleanupCollection->addToMenu( &menu );
+	_cleanupCollection->addEnabledToMenu( &menu );
 
     // Less commonly used menu options
     actions.clear();
@@ -117,7 +117,7 @@ void DirTreeView::actionContextMenu( const QPoint & pos )
 	    << "actionGoUp"
         ;
 
-    ActionManager::instance()->addActions( &menu, actions );
+    ActionManager::instance()->addEnabledActions( &menu, actions );
 
     menu.exec( mapToGlobal( pos ) );
 }

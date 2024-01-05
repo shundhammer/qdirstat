@@ -435,6 +435,18 @@ void CleanupCollection::addToMenu( QMenu * menu, bool keepUpdated )
 }
 
 
+void CleanupCollection::addEnabledToMenu( QMenu * menu )
+{
+    CHECK_PTR( menu );
+
+    foreach ( Cleanup * cleanup, _cleanupList )
+    {
+	if ( cleanup->active() && cleanup->isEnabled() )
+	    menu->addAction( cleanup );
+    }
+}
+
+
 void CleanupCollection::addToToolBar( QToolBar * toolBar, bool keepUpdated )
 {
     CHECK_PTR( toolBar );

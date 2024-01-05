@@ -57,7 +57,9 @@ QAction * ActionManager::action( const QString & actionName )
 }
 
 
-bool ActionManager::addActions( QWidget * widget, const QStringList & actionNames )
+bool ActionManager::addActions( QWidget *           widget,
+                                const QStringList & actionNames,
+                                bool                enabledOnly  )
 {
     CHECK_PTR( widget );
 
@@ -76,7 +78,10 @@ bool ActionManager::addActions( QWidget * widget, const QStringList & actionName
 	    QAction * act = action( actionName );
 
 	    if ( act )
-		widget->addAction( act );
+            {
+                if ( act->isEnabled() || ! enabledOnly )
+                    widget->addAction( act );
+            }
 	    else
             {
                 // ActionManager::action() already logs an error if not found

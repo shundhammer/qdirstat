@@ -76,6 +76,16 @@ namespace QDirStat
 	 **/
 	void addToMenu( QMenu * menu, bool keepUpdated = false );
 
+        /**
+         * Add all currently enabled actions to a menu.
+         *
+         * Unlike addToMenu(), this does not do any bookkeeping to update and
+         * rearrange menu items as they are changed in the cleanup
+         * configuration. This method is intended for context menus that are
+         * created for just one menu selection and then immediately discarded.
+         **/
+	void addEnabledToMenu( QMenu * menu );
+
 	/**
 	 * Add all actions that have an icon to the specified tool bar.
 	 * The semantics of 'keepUpdated' are analog to addToMenu().
