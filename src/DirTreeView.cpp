@@ -92,10 +92,19 @@ void DirTreeView::actionContextMenu( const QPoint & pos )
     QMenu menu;
     QStringList actions;
 
-    // Most commonly used menu options first
-    actions << "actionMoveToTrash";
+    // The first action should not be a destructive one like "move to trash":
+    // It's just too easy to select and execute the first action accidentially,
+    // especially on a laptop touchpad.
 
-    ActionManager::instance()->addEnabledActions( &menu, actions );
+    actions << "actionGoUp"
+            << "actionGoToToplevel"
+            << "---"
+            << "actionMoveToTrash"
+        ;
+
+    // Intentionally adding unconditionally, even if disabled
+    ActionManager::instance()->addActions( &menu, actions );
+
 
     // User-defined cleanups
 
@@ -112,7 +121,7 @@ void DirTreeView::actionContextMenu( const QPoint & pos )
 
     ActionManager::instance()->addEnabledActions( &menu, actions );
 
-    // Submenu for the auxiliary views.
+    // Submenu for the auxiliary views to keep the context menu short.
     //
     // Those actions are strictly speaking irrelevant in most cases, and so
     // they should be omitted from a context menu. But here this serves for
@@ -133,13 +142,6 @@ void DirTreeView::actionContextMenu( const QPoint & pos )
 
     ActionManager::instance()->addActions( subMenu, actions );
 
-    actions.clear();
-    actions << "---"
-            << "actionGoToToplevel"
-	    << "actionGoUp"
-        ;
-
-    ActionManager::instance()->addEnabledActions( &menu, actions );
 
     menu.exec( mapToGlobal( pos ) );
 }

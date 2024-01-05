@@ -782,10 +782,20 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
     QMenu menu;
     QStringList actions;
 
-    // Most commonly used menu options first
-    actions << "actionMoveToTrash";
+    // The first action should not be a destructive one like "move to trash":
+    // It's just too easy to select and execute the first action accidentially,
+    // especially on a laptop touchpad.
 
-    ActionManager::instance()->addEnabledActions( &menu, actions );
+    actions << "actionGoUp"
+            << "actionGoToToplevel"
+            << "---"
+            << "actionMoveToTrash"
+        ;
+
+    // Intentionally adding unconditionally, even if disabled
+    ActionManager::instance()->addActions( &menu, actions );
+
+
 
     // User-defined cleanups
 
@@ -798,13 +808,9 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	    << "actionTreemapZoomIn"
 	    << "actionTreemapZoomOut"
 	    << "actionResetTreemapZoom"
-	    << "---"
-	    << "actionGoToToplevel"
-	    << "actionGoUp"
         ;
 
     ActionManager::instance()->addEnabledActions( &menu, actions );
-
 
     menu.exec( event->screenPos() );
 }
