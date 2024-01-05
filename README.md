@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2024-01-01
+Updated: 2024-01-05
 
 
 ## Screenshot
@@ -125,6 +125,31 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2024-01-05
+
+  - The release is getting nearer.
+
+  - Re-worked the context menus again.
+
+    Now disabled actions are no longer added which shortens them considerably:
+    Some actions work only for directories, some others only for files. Since
+    context menus are contextual, as the name implies, they should generally
+    not contain every possible action, and no disabled actions (usability
+    guidelines differ in this aspect).
+
+    Some context menu entries were only there to make certain actions
+    discoverable; like the "File Size / Type / Age Statistics". It might not be
+    so obvious to users that any of those can also be started for just a
+    subtree of the current directory tree, limiting those views to only that
+    subtree.
+
+    Those menu entries are now in a "View in" submenu, so they are still there,
+    but they no longer take so much screen space in the context menu.
+
+  - Lots of small improvements in many places like some more icons where they
+    made sense; and many more.
+
+
 - 2024-01-01
 
   - Cleaned up the context menus in the tree view and in the treemap view:
@@ -132,8 +157,14 @@ Download installable binary packages for various Linux distributions here:
     - Removed some less commonly used options like "Copy to clipboard" (also
       available from the main menu and via the `Ctrl`+`C` keyboard shortcut)
 
-    - Moved very common actions ("Move to Trash" and the other cleanups) to the
-      top
+    - ~~Moved very common actions ("Move to Trash" and the other cleanups) to
+      the top~~
+
+      _It turned out this was a bad idea: The first action is easily executed
+      accidentially, especially on a laptop with a touchpad. It happened to me,
+      but I was aware what happened and how to undo it. Now non-destrucive
+      actions like "move up" and "move to top" are back on the top of the
+      context menu._
 
     - Moved other actions to the bottom. Many of those are only in the context
       menu to raise awareness that they even exist, like starting other views
