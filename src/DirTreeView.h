@@ -109,16 +109,18 @@ namespace QDirStat
     protected:
 
 	/**
-	 * Post the common context menu with actions (cleanup and other) for an item.
+	 * Post the common context menu with actions (cleanup and other) for
+	 * 'item' at 'pos'.
 	 **/
-	void actionContextMenu( const QPoint & pos );
+	void actionContextMenu( const QPoint & pos, FileInfo * item );
 
 	/**
-	 * Post the context menu for the size column for the item with model
-	 * index 'index'.
+	 * Post the context menu for the size column for 'item' at 'pos'.
+         *
+         * This displays the exact byte size for that item (the column shows a
+         * human-readable size like "4.31 MB").
 	 **/
-	void sizeContextMenu( const QPoint & pos, const QModelIndex & index );
-
+	void sizeContextMenu( const QPoint & pos, FileInfo * item );
 
 	/**
 	 * Change the current item. Overwritten from QTreeView to make sure

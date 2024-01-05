@@ -79,15 +79,17 @@ void DirTreeView::contextMenu( const QPoint & pos )
     }
 
     DataColumn col  = DataColumns::fromViewCol( index.column() );
+    FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+    CHECK_MAGIC( item );
 
     if ( col == SizeCol )
-	sizeContextMenu( pos, index );
+	sizeContextMenu( pos, item );
     else
-	actionContextMenu( pos );
+	actionContextMenu( pos, item );
 }
 
 
-void DirTreeView::actionContextMenu( const QPoint & pos )
+void DirTreeView::actionContextMenu( const QPoint & pos, FileInfo * item )
 {
     QMenu menu;
     QStringList actions;
@@ -132,26 +134,25 @@ void DirTreeView::actionContextMenu( const QPoint & pos )
     // also discouraged, but here discoverability of these features is more
     // important.
 
-    QMenu * subMenu = menu.addMenu( tr( "View in" ) );
+    if ( item->isDirInfo() )    // Not for files, symlinks etc.
+    {
+        QMenu * subMenu = menu.addMenu( tr( "View in" ) );
 
-    actions.clear();
-    actions << "actionFileSizeStats"
-	    << "actionFileTypeStats"
-	    << "actionFileAgeStats"
-        ;
+        actions.clear();
+        actions << "actionFileSizeStats"
+                << "actionFileTypeStats"
+                << "actionFileAgeStats"
+            ;
 
-    ActionManager::instance()->addActions( subMenu, actions );
-
+        ActionManager::instance()->addActions( subMenu, actions );
+    }
 
     menu.exec( mapToGlobal( pos ) );
 }
 
 
-void DirTreeView::sizeContextMenu( const QPoint & pos, const QModelIndex & index )
+void DirTreeView::sizeContextMenu( const QPoint & pos, FileInfo * item )
 {
-    FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-    CHECK_MAGIC( item );
-
     if ( item->totalSize() >= 1024 ||
          item->totalAllocatedSize() > item->totalSize() )
     {
