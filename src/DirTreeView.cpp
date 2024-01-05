@@ -108,11 +108,33 @@ void DirTreeView::actionContextMenu( const QPoint & pos )
 	    << "actionRefreshSelected"
 	    << "actionReadExcludedDirectory"
 	    << "actionContinueReadingAtMountPoint"
-	    << "---"
-	    << "actionFileSizeStats"
+        ;
+
+    ActionManager::instance()->addEnabledActions( &menu, actions );
+
+    // Submenu for the auxiliary views.
+    //
+    // Those actions are strictly speaking irrelevant in most cases, and so
+    // they should be omitted from a context menu. But here this serves for
+    // discoverability: Most users don't even know that it is an option to
+    // start any of those views from a subdirectory in the tree. As a
+    // compromise to keep the context menu short, those auxiliary views go to a
+    // submenu of the context menu. Submenus in context menus are generally
+    // also discouraged, but here discoverability of these features is more
+    // important.
+
+    QMenu * subMenu = menu.addMenu( tr( "View in" ) );
+
+    actions.clear();
+    actions << "actionFileSizeStats"
 	    << "actionFileTypeStats"
 	    << "actionFileAgeStats"
-	    << "---"
+        ;
+
+    ActionManager::instance()->addActions( subMenu, actions );
+
+    actions.clear();
+    actions << "---"
             << "actionGoToToplevel"
 	    << "actionGoUp"
         ;
