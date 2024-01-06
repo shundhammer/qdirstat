@@ -498,6 +498,15 @@ protected:
     void showOpenDirErrorPopup( const SysCallFailedException & ex );
 
     /**
+     * Handle a symlink as an argument to reading a new directory tree
+     * e.g. in openDir(): Follow the symlink and return the target URL.
+     *
+     * If it is a valid symlink, post a PanelMessage to inform the user about
+     * it. If it's a broken symlink, post an error as a PanelMessage.
+     **/
+    QString handleSymLink( const QString & origUrl ) const;
+
+    /**
      * Handle mouse buttons: Activate history actions actionGoBack and
      * actionGoForward with the "back" and "forward" mouse buttons as well.
      **/

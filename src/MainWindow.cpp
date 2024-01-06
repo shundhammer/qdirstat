@@ -8,11 +8,12 @@
 
 
 #include <QApplication>
-#include <QCloseEvent>
-#include <QMouseEvent>
-#include <QMessageBox>
-#include <QFileDialog>
 #include <QClipboard>
+#include <QCloseEvent>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QMessageBox>
+#include <QMouseEvent>
 
 #include "MainWindow.h"
 #include "ActionManager.h"
@@ -574,8 +575,10 @@ void MainWindow::openUrl( const QString & url )
 }
 
 
-void MainWindow::openDir( const QString & url )
+void MainWindow::openDir( const QString & origUrl )
 {
+    QString url = handleSymLink( origUrl );
+
     try
     {
         if ( url.startsWith( "/" ) )
@@ -611,6 +614,53 @@ void MainWindow::showOpenDirErrorPopup( const SysCallFailedException & ex )
                             this );			// parent
     errorPopup.setDetailedText( ex.what() );
     errorPopup.exec();
+}
+
+
+QString MainWindow::handleSymLink( const QString & origUrl ) const
+{
+    QString   url( origUrl );
+    QFileInfo urlInfo( url );
+
+    if ( urlInfo.isSymLink() )
+    {
+        PanelMessage * msg = 0;
+
+        if ( urlInfo.exists() )
+        {
+            QString target = urlInfo.canonicalFilePath();
+
+            logInfo() << "Following symlink \"" << url
+                      <<"\" to target \"" << target << "\"" << endl;
+
+            msg = new PanelMessage( _ui->messagePanel );
+            CHECK_NEW( msg );
+
+            msg->setHeading( tr( "Following symbolic link" ) );
+            msg->setText( tr( "%1 is a symbolic link to %2" )
+                          .arg( url ).arg( target ) );
+            _ui->messagePanel->add( msg );
+
+            url = target;
+        }
+        else
+        {
+            logError() << "Broken symlink";
+
+            msg = new PanelMessage( _ui->messagePanel );
+            CHECK_NEW( msg );
+
+            msg->setHeading( tr( "Broken symbolic link" ) );
+            msg->setText( tr( "%1 is a broken symbolic link to %2" )
+                          .arg( url ).arg( urlInfo.symLinkTarget() ) );
+            msg->setIcon( QPixmap( ":/icons/dialog-warning.png" ) );
+        }
+
+        if ( msg )
+            _ui->messagePanel->add( msg );
+    }
+
+    return url;
 }
 
 
