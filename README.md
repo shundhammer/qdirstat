@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2024-01-05
+Updated: 2024-01-06
 
 
 ## Screenshot
@@ -124,6 +124,16 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2024-01-06
+
+  - Now following a symlink target passed as a command line argument
+    [GitHub issue #240](https://github.com/shundhammer/qdirstat/issues/240).
+
+    This is is useful both when starting QDirStat from the command line and
+    when starting it from a file manager (right-click -> "Start with QDirStat"
+    on an item that turns out to be a symlink).
+
 
 - 2024-01-05
 
