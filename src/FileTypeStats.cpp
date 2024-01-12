@@ -140,36 +140,48 @@ void FileTypeStats::collect( FileInfo * dir )
 
 	    MimeCategory * category = _mimeCategorizer->category( item->name(), &suffix );
 
-	    if ( ! category )
-		category = _otherCategory;
+            if ( category )
+            {
+                _categorySum[ category ] += item->size();
+                ++_categoryCount[ category ];
+            }
+            else // ! category
+            {
+                _categorySum[ _otherCategory ] += item->size();
+                ++_categoryCount[ _otherCategory ];
 
-	    _categorySum[ category ] += item->size();
-	    ++_categoryCount[ category ];
+                if ( suffix.isEmpty() )
+                {
+                    if ( item->name().contains( '.' ) && ! item->name().startsWith( '.' ) )
+                    {
+                        // Fall back to the last (i.e. the shortest) suffix if the
+                        // MIME categorizer didn't know it: Use section -1 (the
+                        // last one, ignoring any trailing '.' separator).
+                        //
+                        // The downside is that this would not find a ".tar.bz",
+                        // but just the ".bz" for a compressed tarball. But it's
+                        // much better than getting a ".eab7d88df-git.deb" rather
+                        // than a ".deb".
 
-	    if ( suffix.isEmpty() )
-	    {
-		if ( item->name().contains( '.' ) && ! item->name().startsWith( '.' ) )
-		{
-		    // Fall back to the last (i.e. the shortest) suffix if the
-		    // MIME categorizer didn't know it: Use section -1 (the
-		    // last one, ignoring any trailing '.' separator).
-		    //
-		    // The downside is that this would not find a ".tar.bz",
-		    // but just the ".bz" for a compressed tarball. But it's
-		    // much better than getting a ".eab7d88df-git.deb" rather
-		    // than a ".deb".
+                        suffix = item->name().section( '.', -1 );
+                    }
+                }
 
-		    suffix = item->name().section( '.', -1 );
-		}
-	    }
+                suffix = suffix.toLower();
 
-	    suffix = suffix.toLower();
+                if ( suffix.isEmpty() )
+                    suffix = NO_SUFFIX;
 
-	    if ( suffix.isEmpty() )
-		suffix = NO_SUFFIX;
+            }
 
-	    _suffixSum[ suffix ] += item->size();
-	    ++_suffixCount[ suffix ];
+            if ( ! suffix.isEmpty() )
+            {
+                // The suffix may stil be empty if this was found via a
+                // non-suffix rule by the MimeCategorizer.
+
+                _suffixSum[ suffix ] += item->size();
+                ++_suffixCount[ suffix ];
+            }
 	}
 	// Disregard symlinks, block devices and other special files
 
