@@ -155,24 +155,16 @@ void FileTypeStats::collect( FileInfo * dir )
 
             if ( category )
             {
-                _categorySum[ category ] += item->size();
-                ++_categoryCount[ category ];
+                addCategorySum( category, item );
 
                 if ( suffix.isEmpty() )
-                {
-                    _categoryNonSuffixRuleSum[ category ] += item->size();
-                    ++_categoryNonSuffixRuleCount[ category ];
-                }
+                    addNonSuffixRuleSum( category, item );
                 else
-                {
-                    _suffixSum[ suffix ] += item->size();
-                    ++_suffixCount[ suffix ];
-                }
+                    addSuffixSum( suffix, item );
             }
             else // ! category
             {
-                _categorySum[ _otherCategory ] += item->size();
-                ++_categoryCount[ _otherCategory ];
+                addCategorySum( _otherCategory, item );
 
                 if ( suffix.isEmpty() )
                 {
@@ -196,14 +188,34 @@ void FileTypeStats::collect( FileInfo * dir )
                 if ( suffix.isEmpty() )
                     suffix = NO_SUFFIX;
 
-                _suffixSum[ suffix ] += item->size();
-                ++_suffixCount[ suffix ];
+                addSuffixSum( suffix, item );
             }
             // Disregard symlinks, block devices and other special files
         }
 
 	++it;
     }
+}
+
+
+void FileTypeStats::addCategorySum( MimeCategory * category, FileInfo * item )
+{
+    _categorySum[ category ] += item->size();
+    ++_categoryCount[ category ];
+}
+
+
+void FileTypeStats::addSuffixSum( const QString & suffix, FileInfo * item )
+{
+    _suffixSum[ suffix ] += item->size();
+    ++_suffixCount[ suffix ];
+}
+
+
+void FileTypeStats::addNonSuffixRuleSum( MimeCategory * category, FileInfo * item )
+{
+    _categoryNonSuffixRuleSum[ category ] += item->size();
+    ++_categoryNonSuffixRuleCount[ category ];
 }
 
 

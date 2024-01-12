@@ -162,6 +162,14 @@ namespace QDirStat
 	 **/
 	void collect( FileInfo * dir );
 
+        //
+        // Add the various sums
+        //
+
+        void addCategorySum     ( MimeCategory * category, FileInfo * item );
+        void addNonSuffixRuleSum( MimeCategory * category, FileInfo * item );
+        void addSuffixSum       ( const QString & suffix,  FileInfo * item );
+
 	/**
 	 * Remove useless content from the maps. On a Linux system, there tend
 	 * to be a lot of files that have a '.' in the name, but it's not a
