@@ -162,20 +162,42 @@ void FileTypeStatsWindow::populate( FileInfo * newSubtree )
 
 	if ( category )
 	{
+            //
+            // Add a category item
+            //
+
 	    FileSize sum	= it.value();
 	    int	     count	= _stats->categoryCount( category );
 	    double   percentage = _stats->percentage( sum );
 
-	    CategoryFileTypeItem * item =
+	    CategoryFileTypeItem * catItem =
 		new CategoryFileTypeItem( category, count, sum, percentage );
-	    CHECK_NEW( item );
+	    CHECK_NEW( catItem );
 
-	    _ui->treeWidget->addTopLevelItem( item );
-	    item->setBold();
-	    categoryItem[ category ] = item;
+	    _ui->treeWidget->addTopLevelItem( catItem );
+	    catItem->setBold();
+	    categoryItem[ category ] = catItem;
 
 	    if ( category == _stats->otherCategory() )
-		otherCategoryItem = item;
+		otherCategoryItem = catItem;
+            else
+            {
+                if ( _stats->categoryNonSuffixRuleCount( category ) > 0 )
+                {
+                    // Add an <Other> item below the category for files
+                    // matching any non-suffix rules
+
+                    QString  suffix	= NON_SUFFIX_RULE;
+                    FileSize sum	= _stats->categoryNonSuffixRuleSum  ( category );
+                    int	     count	= _stats->categoryNonSuffixRuleCount( category );
+                    double   percentage = _stats->percentage( sum );
+
+                    SuffixFileTypeItem * item = new SuffixFileTypeItem( suffix, count, sum, percentage );
+                    CHECK_NEW( item );
+
+                    catItem->addChild( item );
+                }
+            }
 	}
     }
 
@@ -347,6 +369,12 @@ QString FileTypeStatsWindow::currentSuffix() const
 
 	return QString();
     }
+    if ( current->suffix() == NON_SUFFIX_RULE )
+    {
+	logWarning() << "NON_SUFFIX_RULE selected" << endl;
+
+	return QString();
+    }
 
     return current->suffix();
 }
@@ -361,7 +389,9 @@ void FileTypeStatsWindow::enableActions( QTreeWidgetItem * currentItem )
 	SuffixFileTypeItem * suffixItem =
 	    dynamic_cast<SuffixFileTypeItem *>( currentItem );
 
-	enabled = suffixItem && suffixItem->suffix() != NO_SUFFIX;
+	enabled = suffixItem &&
+            suffixItem->suffix() != NO_SUFFIX &&
+            suffixItem->suffix() != NON_SUFFIX_RULE;
     }
 
     _ui->actionLocate->setEnabled( enabled );
@@ -404,6 +434,8 @@ SuffixFileTypeItem::SuffixFileTypeItem( const QString & suffix,
 {
 	if ( suffix == NO_SUFFIX )
 	    setText( FT_NameCol,  QObject::tr( "<No Extension>" ) );
+	else if ( suffix == NON_SUFFIX_RULE )
+	    setText( FT_NameCol,  QObject::tr( "<Other>" ) );
 	else
 	    _suffix = "*." + suffix;
 }

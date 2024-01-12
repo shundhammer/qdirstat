@@ -16,7 +16,10 @@
 #include "ui_file-type-stats-window.h"
 #include "DirInfo.h"
 
-#define NO_SUFFIX "//<No Suffix>" // A slash is illegal in Linux/Unix filenames
+// Using a suffix that can never occur: A slash is illegal in Linux/Unix
+// filenames.
+#define NO_SUFFIX        "//<No Suffix>"
+#define NON_SUFFIX_RULE  "//<Other>"
 
 
 namespace QDirStat
@@ -100,6 +103,18 @@ namespace QDirStat
 	 * category.
 	 **/
 	FileSize categorySum( MimeCategory * category ) const;
+
+	/**
+	 * Return the number of files in the tree matched by a non-suffix rule
+	 * with the specified category.
+	 **/
+	int categoryNonSuffixRuleCount( MimeCategory * category ) const;
+
+	/**
+	 * Return the total file size of files in the tree matched by a
+	 * non-suffix rule with the specified category.
+	 **/
+	FileSize categoryNonSuffixRuleSum( MimeCategory * category ) const;
 
 	/**
 	 * Return the category for the specified suffix or 0 if there is none.
@@ -188,6 +203,8 @@ namespace QDirStat
 	StringIntMap		_suffixCount;
 	CategoryFileSizeMap	_categorySum;
 	CategoryIntMap		_categoryCount;
+	CategoryFileSizeMap	_categoryNonSuffixRuleSum;
+	CategoryIntMap		_categoryNonSuffixRuleCount;
 
         FileSize                _totalSize;
     };

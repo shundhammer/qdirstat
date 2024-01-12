@@ -71,6 +71,19 @@ FileSize FileTypeStats::categorySum( MimeCategory * category ) const
 }
 
 
+int FileTypeStats::categoryNonSuffixRuleCount( MimeCategory * category ) const
+{
+    return _categoryNonSuffixRuleCount.value( category, 0 );
+
+}
+
+
+FileSize FileTypeStats::categoryNonSuffixRuleSum( MimeCategory * category ) const
+{
+    return _categoryNonSuffixRuleSum.value( category, 0LL );
+}
+
+
 MimeCategory * FileTypeStats::category( const QString & suffix ) const
 {
     return _mimeCategorizer->category( "x." + suffix );
@@ -144,6 +157,17 @@ void FileTypeStats::collect( FileInfo * dir )
             {
                 _categorySum[ category ] += item->size();
                 ++_categoryCount[ category ];
+
+                if ( suffix.isEmpty() )
+                {
+                    _categoryNonSuffixRuleSum[ category ] += item->size();
+                    ++_categoryNonSuffixRuleCount[ category ];
+                }
+                else
+                {
+                    _suffixSum[ suffix ] += item->size();
+                    ++_suffixCount[ suffix ];
+                }
             }
             else // ! category
             {
@@ -172,18 +196,11 @@ void FileTypeStats::collect( FileInfo * dir )
                 if ( suffix.isEmpty() )
                     suffix = NO_SUFFIX;
 
-            }
-
-            if ( ! suffix.isEmpty() )
-            {
-                // The suffix may stil be empty if this was found via a
-                // non-suffix rule by the MimeCategorizer.
-
                 _suffixSum[ suffix ] += item->size();
                 ++_suffixCount[ suffix ];
             }
-	}
-	// Disregard symlinks, block devices and other special files
+            // Disregard symlinks, block devices and other special files
+        }
 
 	++it;
     }
