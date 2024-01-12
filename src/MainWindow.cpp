@@ -985,11 +985,23 @@ void MainWindow::navigateUp()
 {
     FileInfo * currentItem = app()->selectionModel()->currentItem();
 
-    if ( currentItem && currentItem->parent() &&
-	 currentItem->parent() != app()->dirTree()->root() )
+    if ( currentItem )
     {
-	app()->selectionModel()->setCurrentItem( currentItem->parent(),
-                                                 true ); // select
+        FileInfo * parent = currentItem->parent();
+
+        if ( parent && parent != app()->dirTree()->root() )
+        {
+
+            // Close and re-open the parent to enforce a screen update:
+            // Sometimes the bold font is not taken into account when moving
+            // upwards, and so every column is cut off (probably a Qt bug)
+            _ui->dirTreeView->setExpanded( parent, false );
+
+            app()->selectionModel()->setCurrentItem( parent,
+                                                     true ); // select
+            // Re-open the parent
+            _ui->dirTreeView->setExpanded( parent, true );
+        }
     }
 }
 
