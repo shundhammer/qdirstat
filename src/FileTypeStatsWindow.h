@@ -25,7 +25,9 @@ namespace QDirStat
     class FileTypeStats;
     class MimeCategory;
     class LocateFileTypeWindow;
-
+    class FileTypeItem;
+    class CategoryFileTypeItem;
+    class SuffixFileTypeItem;
 
     /**
      * Modeless dialog to display file type statistics, such as how much disk
@@ -132,6 +134,42 @@ namespace QDirStat
 	 * One-time initialization of the widgets in this window.
 	 **/
 	void initWidgets();
+
+        //
+        // Add items of various types in the TreeWidget
+        //
+
+        /**
+         * Create a tree item for a category and add it to the tree.
+         **/
+        CategoryFileTypeItem * addCategoryItem( MimeCategory * category,
+                                                int            count,
+                                                FileSize       sum      );
+
+        /**
+         * Create a file type item for files matching a non-suffix rule of a
+         * category. This does not yet add it to the category parent item.
+         **/
+        SuffixFileTypeItem * addNonSuffixRuleItem( MimeCategory * category );
+
+        /**
+         * Create a file type item. This does not yet add it to a category
+         * item.
+         *
+         * This is important for file type items below the "Other" category:
+         * Those are created and collected first, but only the top X of them
+         * are actually added to the other category, the others are deleted.
+         **/
+        SuffixFileTypeItem * addSuffixFileTypeItem( const QString & suffix,
+                                                    int             count,
+                                                    FileSize        sum    );
+
+        /**
+         * Add the top X of 'otherItems' to 'otherCategory' and delete the
+         * rest.
+         **/
+        void addTopXOtherItems( CategoryFileTypeItem  * otherCategoryItem,
+                                QList<FileTypeItem *> & otherItems        );
 
         /**
          * Return the suffix of the currently selected file type or an empty
