@@ -261,7 +261,7 @@ from a near earth orbit) with a treemap.
 
 - [SequoiaView @ TU Eindhoven, NL](https://www.win.tue.nl/sequoiaview/) (for Windows)
 
-- TU Eindhoven, NL [PDF Download](https://www.win.tue.nl/~vanwijk/ctm.pdf)
+- [PDF Download](https://www.win.tue.nl/~vanwijk/ctm.pdf)
   "Cushioned Treemaps" paper by van Wijk, van de Wetering @ TU Eindhoven, NL from 10/1999
 
 - [PDF Download](https://www.win.tue.nl/~vanwijk/stm.pdf)
