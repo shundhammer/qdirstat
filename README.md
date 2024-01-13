@@ -134,6 +134,21 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2024-01-13
+
+  - Improved the description of what QDirStat is here in the
+    [overview](#overview) section this document.
+
+  - New comprehensive [documentation about treemaps](doc/Treemap.md).
+
+
+- 2024-01-12
+
+  - Clarified "File Type Statistics" that don't seem to add up and changed the
+    code to make more obvious what's going on there
+    ([GitHub issue #241](https://github.com/shundhammer/qdirstat/issues/241)).
+
+
 - 2024-01-06
 
   - Now following a symlink target passed as a command line argument
