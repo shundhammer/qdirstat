@@ -286,6 +286,7 @@
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
     <addaction name="separator"/>
+    <addaction name="actionTreemapHelp"/>
     <addaction name="actionPkgViewHelp"/>
     <addaction name="actionUnpkgViewHelp"/>
     <addaction name="actionFileAgeStatsHelp"/>
@@ -670,7 +671,7 @@
      <normaloff>:/icons/qdirstat.png</normaloff>:/icons/qdirstat.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;About QDirStat...</string>
+    <string>A&amp;bout QDirStat...</string>
    </property>
    <property name="toolTip">
     <string>About QDirStat</string>
@@ -1095,7 +1096,7 @@
   </action>
   <action name="actionFileAgeStatsHelp">
    <property name="text">
-    <string>&amp;The File Age Statistics...</string>
+    <string>The File &amp;Age Statistics...</string>
    </property>
    <property name="statusTip">
     <string>https://github.com/shundhammer/qdirstat/blob/master/doc/File-Age-Stats.md</string>
@@ -1118,6 +1119,17 @@
    </property>
    <property name="toolTip">
     <string>Select all Bookmarks in the Tree</string>
+   </property>
+  </action>
+  <action name="actionTreemapHelp">
+   <property name="text">
+    <string>The &amp;Treemap Graphics...</string>
+   </property>
+   <property name="toolTip">
+    <string>The colored graphics in the main window explained</string>
+   </property>
+   <property name="statusTip">
+    <string>https://github.com/shundhammer/qdirstat/blob/master/doc/Treemap.md</string>
    </property>
   </action>
  </widget>

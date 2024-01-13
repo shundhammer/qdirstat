@@ -182,7 +182,11 @@ void MainWindow::connectHelpMenu()
 
     _ui->actionWhatsNew->setStatusTip( RELEASE_URL ); // defined in Version.h
 
+    // openActionUrl() uses the QAction::statusTip() for the URL.
+    // Set the URL by editing main-window.ui in Qt Designer.
+
     CONNECT_ACTION( _ui->actionHelp,		 this, openActionUrl()    );
+    CONNECT_ACTION( _ui->actionTreemapHelp,	 this, openActionUrl()    );
     CONNECT_ACTION( _ui->actionPkgViewHelp,	 this, openActionUrl()    );
     CONNECT_ACTION( _ui->actionUnpkgViewHelp,	 this, openActionUrl()    );
     CONNECT_ACTION( _ui->actionFileAgeStatsHelp, this, openActionUrl()    );
