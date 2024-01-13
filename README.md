@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2024-01-06
+Updated: 2024-01-13
 
 
 ## Screenshot
@@ -25,10 +25,17 @@ _Main window screenshot - notice the multi-selection in the tree and the treemap
 QDirStat is a graphical application to show where your disk space has gone and
 to help you to clean it up.
 
+It shows the total size of directories and of their files both in a traditional
+tree view and in a colored treemap graphics where a large file is shown as a
+large rectangle, and small files are shown as small rectangles. Click on it,
+and you will see where in the tree the file is, and you can instantly move it
+to the trash if you like. The color corresponds to the file type: Images,
+videos or whatever.
+
 This is a Qt-only port of the old Qt3/KDE3-based KDirStat, now based on the
 latest Qt 5. It does not need any KDE libs or infrastructure. It runs on every
-X11-based desktop on Linux, BSD and other Unix-like systems and of course in a
-Docker container.
+X11-based desktop on Linux, BSD and other Unix-like systems, and in a Docker
+container.
 
 QDirStat has a number of new features compared to KDirStat. To name a few:
 
