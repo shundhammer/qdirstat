@@ -106,7 +106,7 @@ opening the context menu, otherwise the previous selection may be gone.
 
 ## Showing the Hierarchy
 
-In a deeply nested directory tree, it' sometimes interesting to see in the
+In a deeply nested directory tree, it's sometimes interesting to see in the
 treemap what belongs to the directory of the currently selected item, and what
 does not.
 
