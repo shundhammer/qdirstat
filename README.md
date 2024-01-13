@@ -28,11 +28,11 @@ QDirStat is a graphical application to show where your disk space has gone and
 to help you to clean it up.
 
 It shows the total size of directories and of their files both in a traditional
-tree view and in a colored treemap graphics where a large file is shown as a
-large rectangle, and small files are shown as small rectangles. Click on it,
-and you will see where in the tree the file is, and you can instantly move it
-to the trash if you like. The color corresponds to the file type: Images,
-videos or whatever.
+tree view and in a colored [treemap graphics](doc/Treemap.md) where a large
+file is shown as a large rectangle, and small files are shown as small
+rectangles. Click on it, and you will see where in the tree the file is, and
+you can instantly move it to the trash if you like. The color corresponds to
+the file type: Images, videos or whatever.
 
 This is a Qt-only port of the old Qt3/KDE3-based KDirStat, now based on the
 latest Qt 5. It does not need any KDE libs or infrastructure. It runs on every
@@ -602,8 +602,9 @@ This is just a rough summary. For more details, see [DevHistory.md](doc/DevHisto
 ### KDirStat and QDirStat
 
 KDirStat was the first program of this kind (combining a traditional tree view
-with a treemap), also written by the same author as QDirStat. It was made for
-KDE 1 back in early 2000; later ported to KDE 2, then KDE 3.
+with a [treemap](doc/Treemap.md)), also written by the same author as
+QDirStat. It was made for KDE 1 back in early 2000; later ported to KDE 2, then
+KDE 3.
 
 QDirStat is based on that code, but made independent of any KDE libraries or
 infrastructure, so it has much fewer library and package dependencies;
@@ -757,7 +758,7 @@ old code base that had been long overdue.
     - Shift-click: Select a range of items.
     - Ctrl-Click:  Select an additional item or deselect a selected one.
 
-  - Treemap:
+  - {Treemap](doc/Treemap.md):
     - Ctrl-Click:  Select an additional item or deselect a selected one.
 
     - The current item is highlighted with a red rectangle, all other selected
