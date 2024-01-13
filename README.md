@@ -17,7 +17,9 @@ Updated: 2024-01-13
 
 [<img width="900" src="https://github.com/shundhammer/qdirstat/blob/master/screenshots/QDirStat-main-win.png">](https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-main-win.png)
 
-_Main window screenshot - notice the multi-selection in the tree and the treemap_
+_Main window screenshot: Tree view (upper half), treemap (below), details panel (right)._
+
+_Notice the multi-selection in the tree and the treemap._
 
 
 ## Overview
