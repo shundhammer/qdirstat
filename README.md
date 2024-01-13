@@ -878,6 +878,12 @@ old code base that had been long overdue.
 
 - Configuration dialog for exclude rules -- see screenshots.
 
+- "Find" function for files, directories and symlinks: Search the scanned tree
+  for them by name with wildcards, regular expressions or fixed strings
+  ("begins with", "ends with", "contains").
+
+- Bookmarks for directories that you visit often.
+
 - Subvolume detection for Btrfs. Btrfs subvolumes are just ordinary mount
   points, so normally QDirStat would stop scanning there, leaving a large part
   of a Btrfs partition unaccounted for. But for each mount point found while
