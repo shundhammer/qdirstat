@@ -11,6 +11,344 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 ## QDirStat History
 
 
+- 2023-01-14 **New stable release: 1.9**
+
+  **Summary:**
+
+  - Greatly improved the visual appearance of the treemap thanks to @Lithopsian
+
+  - Dominant (very large) items are now highlighted in bold font in the tree view
+
+  - New "Find" function in the scanned directory tree
+
+  - Added support for bookmarks
+
+  - New documentation to explain the treemap
+
+  - Some small improvements
+
+  - Bug fixes
+
+  See also the [release announcement](https://github.com/shundhammer/qdirstat/releases/tag/1.9).
+
+
+- 2024-01-13
+
+  - Improved the description of what QDirStat is here in the
+    [overview](#overview) section this document.
+
+  - New comprehensive [documentation about treemaps](doc/Treemap.md).
+
+
+- 2024-01-12
+
+  - Clarified "File Type Statistics" that don't seem to add up and changed the
+    code to make more obvious what's going on there
+    ([GitHub issue #241](https://github.com/shundhammer/qdirstat/issues/241)).
+
+
+- 2024-01-06
+
+  - Now following a symlink target passed as a command line argument
+    [GitHub issue #240](https://github.com/shundhammer/qdirstat/issues/240).
+
+    This is is useful both when starting QDirStat from the command line and
+    when starting it from a file manager (right-click -> "Start with QDirStat"
+    on an item that turns out to be a symlink).
+
+
+- 2024-01-05
+
+  - The release is getting nearer.
+
+  - Re-worked the context menus again.
+
+    Now disabled actions are no longer added which shortens them considerably:
+    Some actions work only for directories, some others only for files. Since
+    context menus are contextual, as the name implies, they should generally
+    not contain every possible action, and no disabled actions (usability
+    guidelines differ in this aspect).
+
+    Some context menu entries were only there to make certain actions
+    discoverable; like the "File Size / Type / Age Statistics". It might not be
+    so obvious to users that any of those can also be started for just a
+    subtree of the current directory tree, limiting those views to only that
+    subtree.
+
+    Those menu entries are now in a "View in" submenu, so they are still there,
+    but they no longer take so much screen space in the context menu.
+
+  - Lots of small improvements in many places like some more icons where they
+    made sense; and many more.
+
+
+- 2024-01-01
+
+  - Cleaned up the context menus in the tree view and in the treemap view:
+
+    - Removed some less commonly used options like "Copy to clipboard" (also
+      available from the main menu and via the `Ctrl`+`C` keyboard shortcut)
+
+    - ~~Moved very common actions ("Move to Trash" and the other cleanups) to
+      the top~~
+
+      _It turned out this was a bad idea: The first action is easily executed
+      accidentially, especially on a laptop with a touchpad. It happened to me,
+      but I was aware what happened and how to undo it. Now non-destrucive
+      actions like "move up" and "move to top" are back on the top of the
+      context menu._
+
+    - Moved other actions to the bottom. Many of those are only in the context
+      menu to raise awareness that they even exist, like starting other views
+      from a subdirectory (file size, file type, file age statistics) or the
+      treemap zoom actions (typically used via mouse wheel if there is one).
+
+
+
+- 2023-12-30
+
+  - Added bookmarks, very much like in an Internet browser.
+
+    There is now a star icon to the left of the current path to show you if
+    it's a bookmark / favorite, and you can click on it (or use `Ctrl`+`D` like
+    in all major browsers) to bookmark or un-bookmark it.
+
+    The "Go" menu now has a "To Bookmarks" submenu where the bookmarks
+    appear. Selecting one of them will go to that location in the
+    tree. Bookmarks that are not in the current tree are disabled, but still
+    there.
+
+    As with the "Cleanups" menu, you can "tear off" the bookmarks menu and
+    leave it open at a convenient place on your screen for instant access.
+
+    The bookmarks are stored in a simple text file at
+    `~/.config/QDirStat/bookmarks.txt` so you can easily edit, add or delete
+    them in bulk.
+
+    A use case are all those Internet browser cache directories somewhere deep
+    below `~/.cache` and `~/.config` that keep filling up with Gigabytes of
+    stuff, and that are never emptied even when you tell your browser to clear
+    browsing data.
+
+    Use the new "Find" function to search for "cache" and "thumbnails"
+    directories and bookmark them so you can easily revisit them: Tear off both
+    the "Bookmarks" and the "Cleanups" menu, move them to the side and go
+    through the bookmarks one by one and decide for which ones you want to use
+    the "Clear Directory Contents" cleanup action. Cleaning up browser cruft
+    becomes very easy.
+
+    ...and yes, they dump tons of cruft not only into the `~/.cache` directory
+    which has the express purpose of just that, they also do it in `~/.config`
+    which is intended for configuration data, not for random junk that can be
+    easily restored. Chrome / Chromium, Firefox, Opera, even Thunderbird - they
+    all do it.
+
+    When you've cleaned up often enough like that to get a feeling where it's
+    worthwhile, you can even use the bookmarks file as a starting point for a
+    simple script to automate the task.
+
+  - A new stable release QDirStat V1.9 is getting nearer. It still needs some
+    more testing with all the changes recently.
+
+
+- 2023-12-29
+
+  - Much improved initial selection: After reading a directory tree from disk,
+    sometimes nothing was selected, so the details panel on the right remained
+    empty. A click on the toplevel item would resolve this, but it should
+    really be automatic. Now it does.
+
+  - Much improved selection after a destructive cleanup and refreshing that
+    part of the directory tree: If you deleted a file ("move to trash" etc.),
+    that directory was read again from disk. But since the previously selected
+    item was now gone, that couldn't be selected anymore, and you were thrown
+    out of context. Now the parent directory is selected and its branch opened
+    again so you have a much better idea where you are, and you see the summary
+    of that directory in the details panel.
+
+
+- 2023-12-25
+
+  - @Lithopsian contributed some very visible improvements to the treemap.
+    See [GitHub issue #236](https://github.com/shundhammer/qdirstat/issues/236)
+    for details and lots of screenshots.
+
+  - The "Find Files" dialog now has a separate checkbox for symlinks.
+
+  - A new release is upcoming in the near future. It will be QDirStat 1.9.
+
+
+- 2023-11-08
+
+  - It's SUSE Hack Week again where my employer SUSE sponsors a whole week of
+    innovative hacking for the whole company: Everybody can work on a favorite
+    project. To the surprise of absolutely nobody, my favorite project during
+    that time has almost always been QDirStat since I started it back in 2015.
+
+    Changes this time:
+
+    - A "find files" function in the in-memory tree. You can search for files
+      or directories or both with various options.
+
+      [<img width=300 src="https://user-images.githubusercontent.com/11538225/281489418-677302e2-50f6-4fae-9307-682e9ad22856.png">](https://user-images.githubusercontent.com/11538225/281489418-677302e2-50f6-4fae-9307-682e9ad22856.png)
+
+      More screenshots at [GitHub issue #222](https://github.com/shundhammer/qdirstat/issues/222).
+
+      The search results are presented in the same window that you might know
+      from the "Discover" actions (largest files, oldest files, broken symlinks
+      etc.). That means that you can move this results window out of the way
+      and select each of the results to see it in the main window with all
+      details.
+
+      Some time ago, that window also got support for cleanup options, so you
+      can use them there directly from the context menu or with keyboard
+      shortcuts.
+
+      Searching in the in-memory directory tree is lightning fast, and it's
+      flexible with all the search modes:
+
+      - Contains
+      - Starts with
+      - Ends with
+      - Wildcard
+      - Regexp
+
+      With just a tiny bit of customizing, that makes for a very flexible media
+      browser: I configured 'VLC' as one of the cleanup actions, and now I can
+      search through my video or music collection easily to find media files
+      where I only know a fraction of the title and start playing it right
+      away, directly from within QDirStat. Or open a file manager there. Or a
+      shell window. Or whatever else might come to mind.
+
+      This opens a lot of new possibilities. Use your imagination!
+
+      This is all still a bit rough around the edges, but it's already quite
+      workable.
+
+
+- 2023-02-01
+
+  - New feature: Showing dominant items in the directory tree in bold font.
+    This may not sound spectacular, but it is immensely helpful to spot
+    disproportinally large directories or files. If you don't like it, you can
+    turn it off, of course.
+
+    Screenshots and more details at [GitHub issue #210](https://github.com/shundhammer/qdirstat/issues/210).
+
+  - Bug fix: Now correctly showing the target of symlinks in the packages view.
+
+
+- 2023-01-30
+
+  - Fixed sorting when directories have the same total allocated size, but a different byte size.
+
+
+- 2022-06-30 **New stable release: 1.8.1**
+
+  **Summary:**
+
+  - New treemap interaction: Middle click in the treemap now highlights the
+    parent directories of the clicked item, and everything outside that branch
+    is dimmed.
+
+    [<img width=300 src="https://user-images.githubusercontent.com/11538225/135117590-8a410ea7-847a-4b59-8c36-a2656aa63743.png">](https://user-images.githubusercontent.com/11538225/135117590-8a410ea7-847a-4b59-8c36-a2656aa63743.png)
+
+  - Some small improvements
+
+  - Bug fixes
+
+
+  **Details:**
+
+  - A middle click now outlines an item's parent, grandparent etc. directories
+    in the treemap.
+
+    Middle-click it again or click outside the highlighted area to remove the
+    highlight.
+
+    You can use the middle click pretty much like a left click, including
+    Shift- and Ctrl-click to extend the selection.
+
+    See [GitHub issue #181](https://github.com/shundhammer/qdirstat/issues/181)
+    for a screenshot and more details.
+
+  - No longer drawing additional lines in the treemap by default if there is
+    low contrast between individual treemap tiles; that only makes the treemap
+    display uglier for little benefit.
+
+    You can still switch it on with the `EnforceContrast` setting in the config
+    file (`~/.config/QDirStat/QDirStat.conf`).
+
+  - Don't show inactive (unmounted) mounts managed by the automounter anymore
+    in the "Places and Mounted Filesystems" bar of the "Open Directory"
+    dialog.
+
+    Notice that those directories are still accessible from the tree at the
+    right side, but they no longer take a prominent place in the left bar.
+
+  - Prevent a hanging Samba (CIFS) or NFS mount from blocking the program, even
+    when no information from that mount is needed at all:
+
+    If you started QDirStat with a path on the command line, it collected the
+    information about used / free / reserved disk space for all mounted
+    filesystems already. If you had a network mount that didn't respond, you
+    still had to wait for a timeout before the program could continue.
+
+    Now it collects that information only when it's really needed:
+
+    - In the "Open Directory" dialog where it displays those sizes in the
+      "Places and Mounted Filesystems" bar on the left
+
+    - In the "Mounted Filesystems" (`du`-like) window (Menu "View" -> "Show
+      Mounted Filesystems").
+
+  - Now cutting off insanely long generated device names of LUKS devices in the
+    "Mounted Filesystems" window: E.g. `/dev/mapper/luks-3fae43...` instead of
+    `/dev/mapper/luks-3fae4328-4294-4c77-8f98-d437c41da26c`. The long name is
+    displayed in a tooltip.
+
+  - Added packed Git archives ("pack-*.pack") to the "Compressed Archives" MIME
+    category, i.e., they appear now in green in the treemap, no longer in the
+    "I don't know what that thing is" grey.
+
+    If you never changed your MIME type configuration, simply delete
+    `~/.config/QDirStat/QDirStat-mime.conf` (while QDirStat is _not_ running!)
+    to get this change; it will be regenerated with the new defaults upon the
+    next program start.
+
+
+  **Bug fixes:**
+
+  - Fixed [GitHub issue #184](https://github.com/shundhammer/qdirstat/issues/184):
+    When reading a cache file, sparse files were displayed as "allocated: 0
+    Bytes".
+
+  - Fixed [GitHub issue #190](https://github.com/shundhammer/qdirstat/issues/190):
+    MIME categories for overlapping suffixes
+
+    Files with multiple suffixes like `.tar.gz` were wrongly sorted into the
+    same MIME category as `.gz`. It did find the category for the longer one
+    (`.tar.gz`), but then it continued looking, resulting in the shortest
+    matching one (`.gz`). Now stopping at the longest hit.
+
+  - Now using `xdg-open %d` in KDE Plasma for the "Open File Manager Here"
+    standard cleanup action. This may help for
+    [GitHub issue #192](https://github.com/shundhammer/qdirstat/issues/192),
+    yet still maintain the ability to use a powerful file manager like
+    _Konqueror_ (if that is configured), falling back to the standard
+    _Dolphin_.
+
+  - Improved BSD support ([GitHub issue #195](https://github.com/shundhammer/qdirstat/issues/195)):
+    If neither `/proc/mounts` nor `/etc/mtab` is available, fall back to
+    using `QStorageInfo` (if available; Qt 5.4 or later).
+
+    This returns a little less complete information; for example, only
+    rudimentary mount options which are used for some special cases.
+
+  - Bug fix for the "Packages" view for .deb / APT based systems: Now also list
+    packages that are on hold. They were previously missing.
+
+
 - 2022-06-28
 
   - A middle click in the treemap now toggles the highlight of that tile's
