@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems
 
 License: GPL V2
 
-Updated: 2024-01-14
+Updated: 2024-01-15
 
 
 ## Screenshot
@@ -133,6 +133,25 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2023-01-15
+
+  - Just one day after the stable release, pull requests for missing include
+    files keep trickling in.
+
+    Some time ago, I cleaned up includes, throwing out the ones that I was sure
+    were unneeded; of course recompiling after every step. They were all
+    unneeded on Linux with GCC, but it turns out that at least some of them
+    were indeed needed on other platforms. Probably recursive includes are
+    different on those platforms.
+
+    I am collecting all those pull requests and merging (cherry-picking) them
+    to the `stable-1.9` branch. So if V1.9 does not build on your platform with
+    the official release tagged `1.9`, please use that `stable-1.9` branch. If
+    that still doesn't help - more pull requests are welcome.
+
+    Sorry for the inconvenience.
+
 
 - 2023-01-14 **New stable release: 1.9**
 
