@@ -9,6 +9,7 @@
 
 #include <dirent.h>     // struct dirent
 #include <fcntl.h>	// AT_ constants (fstatat() flags)
+#include <unistd.h>
 
 #include <QMutableListIterator>
 #include <QMultiMap>
