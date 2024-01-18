@@ -313,11 +313,12 @@ void MainWindow::updateActions()
     _ui->actionContinueReadingAtMountPoint->setEnabled( oneDirSelected && sel->isMountPoint() );
     _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
 
-    bool nothingOrOneDir = selectedItems.isEmpty() || oneDirSelected;
+    bool nothingOrOneDirInfo = selectedItems.isEmpty() || ( selSize == 1 && sel->isDirInfo() );
+    // Notice that DotEntry, PkgInfo, Attic also inherit DirInfo
 
-    _ui->actionFileSizeStats->setEnabled( ! reading && nothingOrOneDir );
-    _ui->actionFileTypeStats->setEnabled( ! reading && nothingOrOneDir );
-    _ui->actionFileAgeStats->setEnabled ( ! reading && nothingOrOneDir );
+    _ui->actionFileSizeStats->setEnabled( ! reading && nothingOrOneDirInfo );
+    _ui->actionFileTypeStats->setEnabled( ! reading && nothingOrOneDirInfo );
+    _ui->actionFileAgeStats->setEnabled ( ! reading && nothingOrOneDirInfo );
 
     bool showingTreemap = _ui->treemapView->isVisible();
 
