@@ -7,9 +7,10 @@
  */
 
 
-#include <dirent.h>     // struct dirent
+#include <unistd>	// access()
+#include <dirent.h>	// struct dirent
 #include <fcntl.h>	// AT_ constants (fstatat() flags)
-#include <unistd.h>     // R_OK, X_OK
+#include <unistd.h>	// R_OK, X_OK
 
 #include <QMutableListIterator>
 #include <QMultiMap>
