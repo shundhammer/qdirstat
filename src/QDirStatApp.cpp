@@ -127,6 +127,15 @@ FileInfo * QDirStatApp::selectedDir() const
 }
 
 
+FileInfo * QDirStatApp::selectedDirInfo() const
+{
+    FileInfoSet selectedItems = selectionModel()->selectedItems();
+    FileInfo * sel = selectedItems.first();
+
+    return sel && sel->isDirInfo() ? sel : 0;
+}
+
+
 FileInfo * QDirStatApp::selectedDirOrRoot() const
 {
     FileInfo * sel = selectedDir();

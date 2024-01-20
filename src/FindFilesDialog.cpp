@@ -94,7 +94,7 @@ FileSearchFilter FindFilesDialog::fileSearchFilter()
 
 DirInfo * FindFilesDialog::currentSubtree()
 {
-    FileInfo * subtree = app()->selectedDir();
+    FileInfo * subtree = app()->selectedDirInfo();
 
     if ( subtree )
         lastPath = subtree->url();

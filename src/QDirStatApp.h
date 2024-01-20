@@ -161,6 +161,13 @@ namespace QDirStat
         FileInfo * selectedDir() const;
 
         /**
+         * Return the first selected DirInfo (which may also be a PkgInfo,
+         * Attic or DotEntry) from the SelectionModel or 0 if no DirInfo is
+         * selected.
+         **/
+        FileInfo * selectedDirInfo() const;
+
+        /**
          * Return the first selected directory from the SelectionModel or, if
          * none is selected, the DirTree's root directory.
          *
