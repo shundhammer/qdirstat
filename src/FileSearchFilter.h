@@ -52,10 +52,12 @@ namespace QDirStat
         bool findFiles()    const { return _findFiles;    }
         bool findDirs()     const { return _findDirs;     }
         bool findSymLinks() const { return _findSymLinks; }
+        bool findPkg()      const { return _findPkg;      }
 
         void setFindFiles   ( bool value ) { _findFiles    = value; }
         void setFindDirs    ( bool value ) { _findDirs     = value; }
         void setFindSymLinks( bool value ) { _findSymLinks = value; }
+        void setFindPkg     ( bool value ) { _findPkg      = value; }
 
         /**
          * Subtree to start the search from
@@ -70,6 +72,7 @@ namespace QDirStat
         bool      _findFiles;
         bool      _findDirs;
         bool      _findSymLinks;
+        bool      _findPkg;
 
     };  // class FileSearchFilter
 

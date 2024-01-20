@@ -23,7 +23,8 @@ FileSearchFilter::FileSearchFilter( DirInfo *       subtree,
     _subtree( subtree ),
     _findFiles( true ),
     _findDirs( true ),
-    _findSymLinks( true )
+    _findSymLinks( true ),
+    _findPkg( true )
 {
     if ( _filterMode == Auto )
         guessFilterMode();

@@ -84,6 +84,7 @@ FileSearchFilter FindFilesDialog::fileSearchFilter()
 
     filter.setFindSymLinks( _ui->findSymLinksCheckBox->isChecked() );
 
+    filter.setFindPkg( filter.findDirs() );
     filter.setCaseSensitive ( _ui->caseSensitiveCheckBox->isChecked() );
 
     logDebug() << filter << endl;

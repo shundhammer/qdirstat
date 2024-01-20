@@ -123,7 +123,8 @@ bool FindFilesTreeWalker::check( FileInfo * item )
 
     if ( ( _filter.findDirs()     && item->isDir()     ) ||
          ( _filter.findFiles()    && item->isFile()    ) ||
-         ( _filter.findSymLinks() && item->isSymLink() )    )
+         ( _filter.findSymLinks() && item->isSymLink() ) ||
+         ( _filter.findPkg()      && item->isPkgInfo() )   )
     {
         match = _filter.matches( item->name() );
     }
