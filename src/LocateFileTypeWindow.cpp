@@ -171,7 +171,7 @@ void LocateFileTypeWindow::populateRecursive( FileInfo * dir )
 
     while ( child )
     {
-	if ( child->isDir() )
+	if ( child->isDirInfo() )
 	    populateRecursive( child );
 
 	child = child->next();
