@@ -100,8 +100,23 @@ DirInfo * FindFilesDialog::currentSubtree()
     if ( subtree )
         lastPath = subtree->url();
     else
+    {
         subtree = app()->dirTree()->locate( lastPath,
                                             true     ); // findPseudoDirs
+
+        if ( ! subtree ) // lastPath outside of this tree?
+        {
+            if ( app()->root() )
+            {
+                subtree  = app()->root();
+                lastPath = subtree->url();
+            }
+            else
+            {
+                lastPath.clear();
+            }
+        }
+    }
 
     return subtree ? subtree->toDirInfo() : 0;
 }
