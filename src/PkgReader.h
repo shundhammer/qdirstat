@@ -70,6 +70,14 @@ namespace QDirStat
 	 **/
 	void writeSettings();
 
+        /**
+         * Return 'true' if packaged files that are missing should be logged.
+         *
+         * This can be set manually in the [Pkg] section of the config file at
+         * ~/.config/QDirStat/QDirStat.config.
+         **/
+        static bool verboseMissingPkgFiles() { return _verboseMissingPkgFiles; }
+
 
     protected:
 
@@ -125,6 +133,7 @@ namespace QDirStat
 	QMultiMap<QString, PkgInfo *>	_multiPkg;
         int                             _maxParallelProcesses;
         int                             _minCachePkgListSize;
+        static bool                     _verboseMissingPkgFiles;
 
     };	// class PkgReader
 
