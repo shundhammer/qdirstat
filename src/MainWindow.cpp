@@ -1187,13 +1187,13 @@ void MainWindow::openConfigDialog()
 
 void MainWindow::showFileTypeStats()
 {
-    FileTypeStatsWindow::populateSharedInstance( app()->selectedDirOrRoot() );
+    FileTypeStatsWindow::populateSharedInstance( app()->selectedDirInfoOrRoot() );
 }
 
 
 void MainWindow::showFileSizeStats()
 {
-    FileSizeStatsWindow::populateSharedInstance( app()->selectedDirOrRoot() );
+    FileSizeStatsWindow::populateSharedInstance( app()->selectedDirInfoOrRoot() );
 }
 
 
@@ -1216,7 +1216,7 @@ void MainWindow::showFileAgeStats()
                  _discoverActions,        SLOT  ( discoverFilesFromMonth( QString, short, short ) ) );
     }
 
-    _fileAgeStatsWindow->populate( app()->selectedDirOrRoot() );
+    _fileAgeStatsWindow->populate( app()->selectedDirInfoOrRoot() );
     _fileAgeStatsWindow->show();
 }
 

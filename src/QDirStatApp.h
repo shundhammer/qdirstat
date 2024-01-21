@@ -155,12 +155,6 @@ namespace QDirStat
         FileInfo * root() const;
 
         /**
-         * Return the first selected directory from the SelectionModel or 0 if
-         * no directory is selected.
-         **/
-        FileInfo * selectedDir() const;
-
-        /**
          * Return the first selected DirInfo (which may also be a PkgInfo,
          * Attic or DotEntry) from the SelectionModel or 0 if no DirInfo is
          * selected.
@@ -168,13 +162,14 @@ namespace QDirStat
         FileInfo * selectedDirInfo() const;
 
         /**
-         * Return the first selected directory from the SelectionModel or, if
-         * none is selected, the DirTree's root directory.
+         * Return the first selected (which may also be a PkgInfo, Attic or
+         * DotEntry) from the SelectionModel or, if none is selected, the
+         * DirTree's root directory.
          *
          * Notice that this might still return 0 if the tree is completely
          * empty.
          **/
-        FileInfo * selectedDirOrRoot() const;
+        FileInfo * selectedDirInfoOrRoot() const;
 
 
     protected:

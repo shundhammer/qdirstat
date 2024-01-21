@@ -118,15 +118,6 @@ FileInfo * QDirStatApp::root() const
 }
 
 
-FileInfo * QDirStatApp::selectedDir() const
-{
-    FileInfoSet selectedItems = selectionModel()->selectedItems();
-    FileInfo * sel = selectedItems.first();
-
-    return sel && sel->isDir() ? sel : 0;
-}
-
-
 FileInfo * QDirStatApp::selectedDirInfo() const
 {
     FileInfoSet selectedItems = selectionModel()->selectedItems();
@@ -136,9 +127,9 @@ FileInfo * QDirStatApp::selectedDirInfo() const
 }
 
 
-FileInfo * QDirStatApp::selectedDirOrRoot() const
+FileInfo * QDirStatApp::selectedDirInfoOrRoot() const
 {
-    FileInfo * sel = selectedDir();
+    FileInfo * sel = selectedDirInfo();
 
     return sel ? sel : root();
 }

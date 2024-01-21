@@ -118,7 +118,7 @@ void DiscoverActions::discoverFiles( TreeWalker *    treeWalker,
     }
 
     if ( ! sel )
-        sel = app()->selectedDirOrRoot();
+        sel = app()->selectedDirInfoOrRoot();
 
     if ( sel )
     {
@@ -155,7 +155,7 @@ void DiscoverActions::findFiles( const FileSearchFilter & filter )
     FileInfo * sel = filter.subtree();
 
     if ( ! sel )
-        sel = app()->selectedDirOrRoot();
+        sel = app()->selectedDirInfoOrRoot();
 
     if ( sel )
     {
