@@ -79,7 +79,7 @@ qreal TreeWalker::lowerPercentileThreshold( PercentileStats & stats )
 
 void LargestFilesTreeWalker::prepare( FileInfo * subtree )
 {
-
+    TreeWalker::prepare( subtree );
     FileSizeStats stats( subtree );
     _threshold = (FileSize) upperPercentileThreshold( stats );
 }
@@ -87,6 +87,7 @@ void LargestFilesTreeWalker::prepare( FileInfo * subtree )
 
 void NewFilesTreeWalker::prepare( FileInfo * subtree )
 {
+    TreeWalker::prepare( subtree );
     FileMTimeStats stats( subtree );
     _threshold = (time_t) upperPercentileThreshold( stats );
 }
@@ -94,6 +95,7 @@ void NewFilesTreeWalker::prepare( FileInfo * subtree )
 
 void OldFilesTreeWalker::prepare( FileInfo * subtree )
 {
+    TreeWalker::prepare( subtree );
     FileMTimeStats stats( subtree );
     _threshold = (time_t) lowerPercentileThreshold( stats );
 }
@@ -104,6 +106,15 @@ bool BrokenSymLinksTreeWalker::check( FileInfo * item )
     return item &&
         item->isSymLink() &&
         SysUtil::isBrokenSymLink( item->url() );
+}
+
+
+
+
+void FindFilesTreeWalker::prepare( FileInfo * subtree )
+{
+    TreeWalker::prepare( subtree );
+    _count = 0;
 }
 
 

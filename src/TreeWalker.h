@@ -51,9 +51,10 @@ namespace QDirStat
          * adding all appropriate items to an internal list that is sorted so
          * the value of the nth first or last element is used.
          *
-         * This default implementation does nothing.
+         * Derived classes can reimplement this, but the new implementation
+         * should call this base class method in the new implementation.
          **/
-        virtual void prepare( FileInfo * /* subtree */ ) {}
+        virtual void prepare( FileInfo * /* subtree */ ) { _overflow = false; }
 
         /**
          * Check if 'item' fits into the category (largest / newest / oldest
@@ -253,6 +254,8 @@ namespace QDirStat
             _filter( filter ),
             _count( 0 )
             {}
+
+        virtual void prepare( FileInfo * subtree );
 
         virtual bool check( FileInfo * item );
 
