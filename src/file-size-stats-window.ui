@@ -366,7 +366,7 @@
      </widget>
      <widget class="QWidget" name="helpPage">
       <attribute name="title">
-       <string>&amp;Help</string>
+       <string>H&amp;elp</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
