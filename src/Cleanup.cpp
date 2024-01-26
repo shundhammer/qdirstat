@@ -95,26 +95,37 @@ void Cleanup::executeRecursive( FileInfo *item, OutputWindow * outputWindow )
     {
 	if ( _recurse )
 	{
-	    // Recurse into all subdirectories.
+            if ( _refreshPolicy == Cleanup::AssumeDeleted )
+            {
+                // See issue #251
 
-	    FileInfo * subdir = item->firstChild();
+                logError() << this << ": Recursive operation is not supported "
+                           << "for \"Assume Deleted\" refresh policy."
+                           << endl;
+            }
+            else
+            {
+                // Recurse into all subdirectories.
 
-	    while ( subdir )
-	    {
-		if ( subdir->isDir() )
-		{
-		    /**
-		     * Recursively execute in this subdirectory, but only if it
-		     * really is a directory: File children might have been
-		     * reparented to the directory (normally, they reside in
-		     * the dot entry) if there are no real subdirectories on
-		     * this directory level.
-		     **/
-		    executeRecursive( subdir, outputWindow );
-		}
+                FileInfo * subdir = item->firstChild();
 
-		subdir = subdir->next();
-	    }
+                while ( subdir )
+                {
+                    if ( subdir->isDir() )
+                    {
+                        /**
+                         * Recursively execute in this subdirectory, but only if it
+                         * really is a directory: File children might have been
+                         * reparented to the directory (normally, they reside in
+                         * the dot entry) if there are no real subdirectories on
+                         * this directory level.
+                         **/
+                        executeRecursive( subdir, outputWindow );
+                    }
+
+                    subdir = subdir->next();
+                }
+            }
 	}
 
 
