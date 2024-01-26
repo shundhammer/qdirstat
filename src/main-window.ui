@@ -656,7 +656,7 @@
      <normaloff>:/icons/go-top.png</normaloff>:/icons/go-top.png</iconset>
    </property>
    <property name="text">
-    <string>To &amp;Toplevel</string>
+    <string>To Tople&amp;vel</string>
    </property>
    <property name="toolTip">
     <string>Navigate to the toplevel directory of this tree.</string>
@@ -751,7 +751,7 @@
      <normaloff>:/icons/trashcan.png</normaloff>:/icons/trashcan.png</iconset>
    </property>
    <property name="text">
-    <string>Move to &amp;Trash</string>
+    <string>Move to T&amp;rash</string>
    </property>
    <property name="toolTip">
     <string>Move the selected items to the trash bin.</string>
