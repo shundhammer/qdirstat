@@ -185,7 +185,7 @@ You can create as many as you like.</string>
        <item>
         <widget class="QGroupBox" name="syntaxRadioBox">
          <property name="title">
-          <string>Pattern &amp;Syntax</string>
+          <string>P&amp;attern Syntax</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
