@@ -7,6 +7,8 @@
  */
 
 
+#include <QMessageBox>
+
 #include "CleanupConfigPage.h"
 #include "CleanupCollection.h"
 #include "Cleanup.h"
@@ -41,8 +43,11 @@ CleanupConfigPage::CleanupConfigPage( QWidget * parent ):
     setAddButton	 ( _ui->addButton	   );
     setRemoveButton	 ( _ui->removeButton	   );
 
-    connect( _ui->titleLineEdit, SIGNAL( textChanged ( QString ) ),
-	     this,		 SLOT  ( titleChanged( QString ) ) );
+    connect( _ui->titleLineEdit,         SIGNAL( textChanged ( QString ) ),
+	     this,		         SLOT  ( titleChanged( QString ) ) );
+
+    connect( _ui->refreshPolicyComboBox, SIGNAL( currentIndexChanged ( int ) ),
+             this,                       SLOT  ( refreshPolicyChanged( int ) ) );
 }
 
 
@@ -115,6 +120,23 @@ void CleanupConfigPage::titleChanged( const QString & newTitle )
 	Cleanup * cleanup = CLEANUP_CAST( value( currentItem ) );
 	cleanup->setTitle( newTitle );
 	currentItem->setText( cleanup->cleanTitle() );
+    }
+}
+
+
+void CleanupConfigPage::refreshPolicyChanged( int index )
+{
+    _ui->recurseCheckBox->setEnabled( index != Cleanup::AssumeDeleted );
+
+    if ( index == Cleanup::AssumeDeleted && _ui->recurseCheckBox->isChecked() )
+    {
+        // See issue #251
+
+        QMessageBox::warning( this, tr( "Error" ),
+                              tr( "Recursive operation cannot be used with\n"
+                                  "refresh policy \"Assume Deleted\"." ) );
+
+        _ui->recurseCheckBox->setChecked( false );
     }
 }
 

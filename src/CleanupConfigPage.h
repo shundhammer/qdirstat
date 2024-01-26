@@ -69,6 +69,11 @@ namespace QDirStat
 	 **/
 	void titleChanged( const QString & newTitle );
 
+        /**
+         * Enable / disable widgets based on the current refresh policy.
+         **/
+        void refreshPolicyChanged( int index );
+
 
     protected:
 
