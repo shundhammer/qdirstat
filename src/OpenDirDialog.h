@@ -142,6 +142,7 @@ namespace QDirStat
         QString                 _lastPath;
 
         static bool             _crossFilesystems;
+        static bool             _firstRun;
 
     };	// class OpenDirDialog
 
