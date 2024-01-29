@@ -264,7 +264,7 @@ void SelectionModel::deletingChildNotify( FileInfo * deletedChild )
     _selectedItemsDirty = true;
     _selectedItems.clear();
 
-    if ( _currentItem->isInSubtree( deletedChild ) )
+    if ( _currentItem && _currentItem->isInSubtree( deletedChild ) )
 	setCurrentItem( 0 );
 }
 
