@@ -39,7 +39,7 @@ bool FileInfoSorter::operator() ( FileInfo * a, FileInfo * b )
             {
                 if ( a->totalAllocatedSize() == b->totalAllocatedSize() )
                 {
-                    // This is a common case because of cluster-wise allcation
+                    // This is a common case because of cluster-wise allocation
                     return a->totalSize() < b->totalSize();
                 }
                 else
