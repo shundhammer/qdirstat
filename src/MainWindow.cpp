@@ -814,7 +814,16 @@ void MainWindow::readCache( const QString & cacheFileName )
     _historyButtons->clearHistory();
 
     if ( ! cacheFileName.isEmpty() )
-	app()->dirTree()->readCache( cacheFileName );
+    {
+	bool success = app()->dirTree()->readCache( cacheFileName );
+
+        if ( ! success )
+        {
+	    QMessageBox::warning( this,
+                                  tr( "Error" ), // Title
+                                  tr( "Can't read cache file \"%1\"").arg( cacheFileName ) );
+        }
+    }
 }
 
 
@@ -845,9 +854,9 @@ void MainWindow::askWriteCache()
 	}
 	else
 	{
-	    QMessageBox::critical( this,
+	    QMessageBox::warning( this,
 				   tr( "Error" ), // Title
-				   tr( "ERROR writing cache file %1").arg( fileName ) );
+				   tr( "ERROR writing cache file \"%1\"").arg( fileName ) );
 	}
     }
 }

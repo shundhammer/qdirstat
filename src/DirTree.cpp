@@ -444,11 +444,19 @@ bool DirTree::writeCache( const QString & cacheFileName )
 }
 
 
-void DirTree::readCache( const QString & cacheFileName )
+bool DirTree::readCache( const QString & cacheFileName )
 {
+    CacheReader * reader = new CacheReader( cacheFileName, this, 0 );
+    CHECK_NEW( reader );
+
+    if ( ! reader->ok() )
+        return false;
+
     _isBusy = true;
     emit startingReading();
     addJob( new CacheReadJob( this, 0, cacheFileName ) );
+
+    return true;
 }
 
 

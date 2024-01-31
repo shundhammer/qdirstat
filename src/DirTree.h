@@ -269,8 +269,10 @@ namespace QDirStat
 
 	/**
 	 * Read a cache file.
+	 *
+	 * Returns true if OK, false upon error.
 	 **/
-	void readCache( const QString & cacheFileName );
+	bool readCache( const QString & cacheFileName );
 
 	/**
 	 * Clear the tree and read a cache file.
