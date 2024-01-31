@@ -697,7 +697,10 @@ void CacheReadJob::read()
      */
 
     if ( ! _reader )
+    {
 	finished();
+        return;
+    }
 
     // logDebug() << "Reading 1000 cache lines" << endl;
     _reader->read( 1000 );
