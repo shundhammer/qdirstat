@@ -689,8 +689,7 @@ CacheReadJob::~CacheReadJob()
 }
 
 
-void
-CacheReadJob::read()
+void CacheReadJob::read()
 {
     /*
      * This will be called repeatedly from DirTree::timeSlicedRead() until
@@ -837,7 +836,9 @@ void DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 
 void DirReadJobQueue::timeSlicedRead()
 {
-    if ( ! _queue.isEmpty() )
+    if ( _queue.isEmpty() )
+	_timer.stop();
+    else
 	_queue.first()->read();
 }
 
@@ -854,14 +855,8 @@ void DirReadJobQueue::jobFinishedNotify( DirReadJob *job )
 
     // The timer will start a new job when it fires.
 
-    if ( _queue.isEmpty() )	// No new job available - we're done.
-    {
-	_timer.stop();
-	// logDebug() << "No more jobs - finishing" << endl;
-
-	if ( _blocked.isEmpty() )
-	    emit finished();
-    }
+    if ( _queue.isEmpty() && _blocked.isEmpty() )	// No new job available - we're done.
+	emit finished();
 }
 
 
