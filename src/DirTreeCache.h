@@ -121,7 +121,7 @@ namespace QDirStat
 	bool eof();
 
 	/**
-	 * Returns true if writing the cache file went OK.
+	 * Returns true if reading the cache file went OK.
 	 **/
 	bool ok() const { return _ok; }
 
