@@ -592,7 +592,7 @@ void FileDetailsView::showSelectionSummary( const FileInfoSet & selectedItems )
 
     foreach ( FileInfo * item, sel )
     {
-	if ( item->isDir() )
+	if ( item->isDirInfo() )
 	{
 	    ++dirCount;
 	    subtreeFileCount += item->totalFiles();
