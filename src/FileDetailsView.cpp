@@ -146,6 +146,7 @@ void FileDetailsView::showDetails( FileInfo * file )
 
 	    setSystemFileWarningVisibility( true );
 	    setFilePkgBlockVisibility( true );
+            _ui->filePackageCaption->setEnabled( true );
 	    _ui->filePackageLabel->setText( pkg->name() );
 	}
 	else
