@@ -145,7 +145,7 @@ void FileDetailsView::showDetails( FileInfo * file )
 	    // since it belongs to a package.
 
 	    setSystemFileWarningVisibility( true );
-	    _ui->filePackageLabel->setEnabled( true );
+	    setFilePkgBlockVisibility( true );
 	    _ui->filePackageLabel->setText( pkg->name() );
 	}
 	else
