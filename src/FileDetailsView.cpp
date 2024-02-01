@@ -281,14 +281,14 @@ void FileDetailsView::showFilePkgInfo( FileInfo * file )
     {
 	setFilePkgBlockVisibility( isSystemFile );
 
-	    if ( isSystemFile )
-	    {
-		QString delayHint = QString( _pkgUpdateTimer->delayStage(), '.' );
-		_ui->filePackageLabel->setText( delayHint );
+        if ( isSystemFile )
+        {
+            QString delayHint = QString( _pkgUpdateTimer->delayStage(), '.' );
+            _ui->filePackageLabel->setText( delayHint );
 
-		_ui->filePackageCaption->setEnabled( true );
-		_pkgUpdateTimer->delayedRequest( file->url() );
-	    }
+            _ui->filePackageCaption->setEnabled( true );
+            _pkgUpdateTimer->delayedRequest( file->url() );
+        }
     }
     else // No supported package manager found
     {
