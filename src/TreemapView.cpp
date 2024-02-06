@@ -94,6 +94,7 @@ void TreemapView::clear()
     _currentItem     = 0;
     _currentItemRect = 0;
     _rootTile	     = 0;
+    _newRoot         = 0;
     _sceneMask       = 0;
     _parentHighlightList.clear();
 }
@@ -399,7 +400,11 @@ void TreemapView::scheduleRebuildTreemap( FileInfo * newRoot )
 
 void TreemapView::rebuildTreemapDelayed()
 {
-    rebuildTreemap( _newRoot );
+    if ( ! _newRoot )
+        _newRoot = _tree->firstToplevel();
+
+    if ( _newRoot )
+        rebuildTreemap( _newRoot );
 }
 
 
