@@ -148,6 +148,7 @@ Download installable binary packages for various Linux distributions here:
 
     So here is his new GitHub repo for those binaries:
     https://github.com/jesusha123/qdirstat-macos
+    Go to _Releases_ on the right side panel.
 
     Also expect them on Homebrew (work in progress).
 
@@ -915,7 +916,9 @@ Features ported from the old KDirStat:
 
 **New 2024-02-13:** Platform binaries built by
 Jesus Herrera Arroyo [<chuy.max@gmail.com>](<chuy.max@gmail.com>) at
-https://github.com/jesusha123/qdirstat-macos and via Homebrew.
+https://github.com/jesusha123/qdirstat-macos
+(go to _Releases_ on the right side panel)
+and via Homebrew.
 
 
 ### Building on macOS
