@@ -138,9 +138,9 @@ Download installable binary packages for various Linux distributions here:
 
   - **New: macOS binaries for QDirStat**
 
-    Jesus Herrera Arroyo [<chuy.max@gmail.com>](<chuy.max@gmail.com>) contacted
-    me to ask for my approval to provide binaries of QDirStat for macOS. I
-    answered:
+    [Jesus Herrera Arroyo](mailto:chuy.max@gmail.com?subject=QDirStat%20on%20 macOS)
+    contacted me to ask for my approval to provide binaries of QDirStat for
+    macOS. I answered:
 
     > Sure, go ahead! But since I have no clue about macOS X, I'll have to
     > redirect any users having macOS-specific problems to your repo's issue
@@ -915,8 +915,8 @@ Features ported from the old KDirStat:
 ### Ready-made Binaries for macOS
 
 **New 2024-02-13:** Platform binaries built by
-Jesus Herrera Arroyo [<chuy.max@gmail.com>](<chuy.max@gmail.com>) at
-https://github.com/jesusha123/qdirstat-macos
+[Jesus Herrera Arroyo](mailto:chuy.max@gmail.com?subject=QDirStat%20on%20 macOS)
+at https://github.com/jesusha123/qdirstat-macos
 (go to _Releases_ on the right side panel)
 and via Homebrew.
 
