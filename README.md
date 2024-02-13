@@ -165,7 +165,7 @@ Download installable binary packages for various Linux distributions here:
     If you don't have that trust, by all means go ahead and build it yourself
     from the sources, even if that is considerably more work, and it needs some
     technical expertise about how to build software in general, and about the
-    target platform (macOS in this case).
+    target platform (macOS in this case) in particular.
 
 
 - 2023-01-15
@@ -955,13 +955,6 @@ environment is set up correctly.
 </details>
 
 _There be dragons._ ;-)
-
-
-### Architecture maintainer wanted for QDirStat for macOS
-
-If you are a developer with some prior C++ and Qt knowledge on the macOS
-platform and you'd like to see QDirStat working there, please consider joining
-the team.
 
 
 ## Windows Compatibility
