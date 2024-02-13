@@ -6,11 +6,11 @@ the original KDirStat.
 
 (c) 2015-2024 Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
 
-Target Platforms: Linux, BSD, Unix-like systems
+Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2024-01-15
+Updated: 2024-02-13
 
 
 ## Screenshot
@@ -75,7 +75,7 @@ See section [_New Features_](#new-features) for more details.
 1. [Related Software](#related-software): KDirStat, WinDirStat, K4DirStat and more
 1. [Motivation / Rant: Why?](#motivation--rant-why)
 1. [Features](#features)
-1. [MacOS X Compatibility](#macos-x-compatibility)
+1. [macOS Compatibility](#macos-compatibility)
 1. [Windows Compatibility](#windows-compatibility)
 1. [Ready-made Packages](#ready-made-packages)
 1. [QDirStat Docker Containers](#qdirstat-docker-containers)
@@ -133,6 +133,40 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2023-02-13
+
+  - **New: macOS binaries for QDirStat**
+
+    Jesus Herrera Arroyo [<chuy.max@gmail.com>](<chuy.max@gmail.com>) contacted
+    me to ask for my approval to provide binaries of QDirStat for macOS. I
+    answered:
+
+    > Sure, go ahead! But since I have no clue about macOS X, I'll have to
+    > redirect any users having macOS-specific problems to your repo's issue
+    > tracker.
+
+    So here is his new GitHub repo for those binaries:
+    https://github.com/jesusha123/qdirstat-macos
+
+    Also expect them on Homebrew (work in progress).
+
+    I welcome this very much; there have been some tech-savvy users who built
+    their own QDirStat for macOS since the project started in late 2015, but
+    they were always very few, and it's not something for a casual user to do
+    that. The situation should greatly improve with pre-built platform binaries
+    for macOS, making QDirStat much more approachable on that platform.
+
+    As usual with all binary distributions, caveats apply: You need to have
+    trust in the distributor; no matter if it's a Linux distribution like SUSE,
+    Ubuntu, Fedora / Red Hat or all the others out there, or an enthusiastic
+    individual like Jesus Herrera. I am optimistic that he deserves that trust.
+
+    If you don't have that trust, by all means go ahead and build it yourself
+    from the sources, even if that is considerably more work, and it needs some
+    technical expertise about how to build software in general, and about the
+    target platform (macOS in this case).
+
 
 - 2023-01-15
 
@@ -875,21 +909,32 @@ Features ported from the old KDirStat:
 
 
 
-## MacOS X Compatibility
+## macOS Compatibility
+
+### Ready-made Binaries for macOS
+
+**New 2024-02-13:** Platform binaries built by
+Jesus Herrera Arroyo [<chuy.max@gmail.com>](<chuy.max@gmail.com>) at
+https://github.com/jesusha123/qdirstat-macos and via Homebrew.
+
+
+### Building on macOS
+
+_This section might be slightly dated._
 
 <summary>
-There is some experimental support for MacOS X, but it's really only that: Experimental.
+There is some experimental support for macOS, but it's really only that: Experimental.
 </summary>
 <details>
 
 I was amazed to find that it doesn't take more than the normal "qmake" and then
-"make" to build QDirStat for MacOS X. We (Sonja Krause-Harder and I) did some
+"make" to build QDirStat for macOS. We (Sonja Krause-Harder and I) did some
 basic testing, and it seems to work.
 
 The cleanups may need some adaptation, but this is something that might even be
 configured by the user.
 
-If anybody wants to give it a try, download Qt for MacOS X, install it, open a
+If anybody wants to give it a try, download Qt for macOS, install it, open a
 shell window, search the _qmake_ command:
 
     find . -name qmake
@@ -901,7 +946,7 @@ Add this to your $PATH, then do the normal
 
 Not sure how well "make install" works, though.
 
-**_Be advised that QDirStat on MacOS X is purely experimental at this stage._**
+**_Be advised that QDirStat on macOS is purely experimental at this stage._**
 
 There is no support. If you try this, you are on your own. Even more so than
 with the other platforms, you will have to make sure that your Qt build
@@ -912,9 +957,9 @@ environment is set up correctly.
 _There be dragons._ ;-)
 
 
-### Architecture maintainer wanted for QDirStat for MacOS X
+### Architecture maintainer wanted for QDirStat for macOS
 
-If you are a developer with some prior C++ and Qt knowledge on the MacOS X
+If you are a developer with some prior C++ and Qt knowledge on the macOS
 platform and you'd like to see QDirStat working there, please consider joining
 the team.
 
@@ -990,7 +1035,7 @@ There are currently two publicly available docker containers for QDirStat:
 QDirStat version they provide)
 
 Those containers make QDirStat usable even on non-Linux / non-Unix systems such
-as Windows or MacOS X.
+as Windows or macOS.
 
 Docker is basically a virtualized environment to run software that was designed
 for a different operating system.
