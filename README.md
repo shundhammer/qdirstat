@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2024-02-13
+Updated: 2024-02-14
 
 
 ## Screenshot
@@ -929,41 +929,11 @@ and via Homebrew.
 
 ### Building on macOS
 
-_This section might be slightly dated._
+See Jesus Herrera's build instructions
+[here](https://github.com/jesusha123/qdirstat-macos/blob/main/BUILD.md).
 
-<summary>
-There is some experimental support for macOS, but it's really only that: Experimental.
-</summary>
-<details>
-
-I was amazed to find that it doesn't take more than the normal "qmake" and then
-"make" to build QDirStat for macOS. We (Sonja Krause-Harder and I) did some
-basic testing, and it seems to work.
-
-The cleanups may need some adaptation, but this is something that might even be
-configured by the user.
-
-If anybody wants to give it a try, download Qt for macOS, install it, open a
-shell window, search the _qmake_ command:
-
-    find . -name qmake
-
-Add this to your $PATH, then do the normal
-
-    qmake
-    make
-
-Not sure how well "make install" works, though.
-
-**_Be advised that QDirStat on macOS is purely experimental at this stage._**
-
-There is no support. If you try this, you are on your own. Even more so than
-with the other platforms, you will have to make sure that your Qt build
-environment is set up correctly.
-
-</details>
-
-_There be dragons._ ;-)
+Notice that those instructions are also based on using the original QDirStat
+sources from here, so you are not putting anything at risk.
 
 
 ## Windows Compatibility
