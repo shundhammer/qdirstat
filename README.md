@@ -929,8 +929,8 @@ and via Homebrew.
 
 ### Building on macOS
 
-See Jesus Herrera's build instructions
-[here](https://github.com/jesusha123/qdirstat-macos/blob/main/BUILD.md).
+See Jesus Herrera's
+[build instructions]https://github.com/jesusha123/qdirstat-macos/blob/main/BUILD.md).
 
 Notice that those instructions are also based on using the original QDirStat
 sources from here, so you are not putting anything at risk.
