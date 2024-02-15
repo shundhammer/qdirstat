@@ -50,6 +50,7 @@ use English;
 use Getopt::Std;
 use Fcntl ':mode';
 use Encode;
+use Cwd;
 use URI::Escape qw(uri_escape);
 use vars qw( $opt_l $opt_m $opt_v $opt_d $opt_h );
 
@@ -104,7 +105,7 @@ sub main()
     usage() if $#ARGV < 0 || $#ARGV > 1;
 
     my $toplevel_dir = shift @ARGV;
-    $toplevel_dir = absolute_path( $toplevel_dir );
+    $toplevel_dir = Cwd::abs_path( $toplevel_dir );
 
     my $cache_file_name;
 
@@ -451,33 +452,6 @@ sub write_file_entry()
     print CACHE "\tlinks: $links"	if $links > 1;
 
     print CACHE "\n";
-}
-
-
-#-----------------------------------------------------------------------------
-
-
-# Make an absolute path of a possible relative path.
-#
-# Parameters:
-#	$dir	relative or absolute path
-#
-# Return value:
-#	absolute path
-
-sub absolute_path()
-{
-    my ( $dir ) = @_;
-
-    return $dir if ( $dir =~ '^/' );
-
-    my $save_dir = $ENV{'PWD'};
-    chdir( $dir );
-    $dir = $ENV{'PWD'};
-
-    chdir $save_dir;
-
-    return $dir;
 }
 
 
