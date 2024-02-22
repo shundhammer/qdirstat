@@ -66,6 +66,10 @@ void BreadcrumbNavigator::fillBreadcrumbs( FileInfo * item )
     QString basePath;
 
     FileInfo * toplevel = item->tree()->firstToplevel();
+
+    if ( ! toplevel )
+        return;
+
     splitBasePath( toplevel->name(), basePath, name );
 
     if ( ! basePath.isEmpty() )

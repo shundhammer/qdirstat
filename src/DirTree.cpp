@@ -81,7 +81,18 @@ void DirTree::setRoot( DirInfo *newRoot )
 
 FileInfo * DirTree::firstToplevel() const
 {
-    return _root ? _root->firstChild() : 0;
+    if ( ! _root )
+        return 0;
+
+    FileInfo * result = _root->firstChild();
+
+    if ( ! result )
+        result = _root->attic();
+
+    if ( ! result )
+        result = _root->dotEntry();
+
+    return result;
 }
 
 
