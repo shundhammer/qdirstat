@@ -190,6 +190,8 @@ void DirInfo::deleteEmptyDotEntry()
 {
     if ( ! _dotEntry->firstChild() && ! _dotEntry->hasAtticChildren() )
     {
+        // logDebug() << "Deleting dot entry for " << this << endl;
+
 	delete _dotEntry;
 	_dotEntry = 0;
 
@@ -216,6 +218,8 @@ void DirInfo::deleteEmptyAttic()
 {
     if ( _attic && ! _attic->firstChild() )
     {
+        // logDebug() << "Deleting attic for " << this << endl;
+
 	delete _attic;
 	_attic = 0;
     }

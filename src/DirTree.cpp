@@ -264,7 +264,10 @@ void DirTree::finalizeTree()
 	recalc( _root );
 	ignoreEmptyDirs( _root );
 	recalc( _root );
-	moveIgnoredToAttic( _root );
+
+        if ( _root->firstChild() )
+            moveIgnoredToAttic( _root->firstChild()->toDirInfo() );
+
 	recalc( _root );
     }
 }
@@ -544,7 +547,8 @@ bool DirTree::checkIgnoreFilters( const QString & path )
 
 void DirTree::moveIgnoredToAttic( DirInfo * dir )
 {
-    CHECK_PTR( dir );
+    if ( ! dir )
+        return;
 
     if ( dir->totalIgnoredItems() == 0 && dir->totalUnignoredItems() > 0 )
 	return;
@@ -564,8 +568,7 @@ void DirTree::moveIgnoredToAttic( DirInfo * dir )
 	}
 	else
 	{
-	    if ( child->isDirInfo() )
-		moveIgnoredToAttic( child->toDirInfo() );
+            moveIgnoredToAttic( child->toDirInfo() );
 	}
 
 	child = child->next();

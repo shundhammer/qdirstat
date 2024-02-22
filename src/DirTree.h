@@ -446,7 +446,6 @@ namespace QDirStat
 	 * Recurse through the tree from 'dir' on and move any ignored items to
 	 * the attic on the same level.
 	 **/
-
 	void moveIgnoredToAttic( DirInfo * dir );
 
 	/**
