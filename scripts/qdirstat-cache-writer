@@ -490,7 +490,7 @@ sub write_uid_gid_perm()
     return unless $with_uid_gid_perm;
 
     my ( $uid, $gid, $mode ) = @_;
-    my $perm = $mode & 0777;
+    my $perm = $mode & 07777;
 
     printf CACHE "\t%d  %d  0%3o", $uid, $gid, $perm;
 }
