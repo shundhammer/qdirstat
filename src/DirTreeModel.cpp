@@ -677,7 +677,7 @@ QVariant DirTreeModel::columnText( FileInfo * item, int col ) const
     if ( col == _readJobsCol && item->isBusy() )
 	return tr( "[%1 Read Jobs]" ).arg( item->pendingReadJobs() );
 
-    bool limitedInfo = item->isPseudoDir() || item->readState() == DirCached || item->isPkgInfo();
+    bool limitedInfo = item->isPseudoDir() || item->isPkgInfo();
 
     if ( item->isAttic() && col == PercentNumCol )
 	return QVariant();

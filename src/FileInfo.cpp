@@ -588,6 +588,9 @@ QString FileInfo::groupName() const
 
 QString FileInfo::symbolicPermissions() const
 {
+    if ( ! hasPermissions() )
+        return "";
+
     return symbolicMode( _mode,
 			 true ); // omitTypeForRegularFiles
 }
@@ -595,6 +598,9 @@ QString FileInfo::symbolicPermissions() const
 
 QString FileInfo::octalPermissions() const
 {
+    if ( ! hasPermissions() )
+        return "";
+
     return formatOctal( ALLPERMS & _mode );
 }
 
