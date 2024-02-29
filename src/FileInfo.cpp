@@ -52,6 +52,7 @@ FileInfo::FileInfo( DirTree    * tree,
     _isLocalFile   = true;
     _isSparseFile  = false;
     _isIgnored	   = false;
+    _hasUidGidPerm = false;
     _name	   = name ? name : "";
     _device	   = 0;
     _mode	   = 0;
@@ -85,6 +86,7 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
 
     _isLocalFile   = true;
     _isIgnored	   = false;
+    _hasUidGidPerm = true;
     _name	   = filenameWithoutPath;
 
     _device	   = statInfo->st_dev;
@@ -158,6 +160,9 @@ FileInfo::FileInfo( DirTree *	    tree,
 		    const QString & filenameWithoutPath,
 		    mode_t	    mode,
 		    FileSize	    size,
+                    bool            withUidGidPerm,
+                    uid_t           uid,
+                    gid_t           gid,
 		    time_t	    mtime,
 		    FileSize	    blocks,
 		    nlink_t	    links )
@@ -173,6 +178,7 @@ FileInfo::FileInfo( DirTree *	    tree,
     _name	   = filenameWithoutPath;
     _isLocalFile   = true;
     _isIgnored	   = false;
+    _hasUidGidPerm = withUidGidPerm;
     _device	   = 0;
     _mode	   = mode;
     _size	   = size;
@@ -181,8 +187,8 @@ FileInfo::FileInfo( DirTree *	    tree,
     _mtimeMonth    = -1;
     _allocatedSize = 0;
     _links	   = links;
-    _uid	   = 0;
-    _gid	   = 0;
+    _uid	   = uid;
+    _gid	   = gid;
     _magic	   = FileInfoMagic;
 
     if ( blocks < 0 )
@@ -530,13 +536,25 @@ bool FileInfo::isCached() const
 
 bool FileInfo::hasUid() const
 {
+    if ( _hasUidGidPerm )
+        return true;
+
     return ! isPkgInfo() && ! isCached();
 }
 
 
 bool FileInfo::hasGid() const
 {
+    if ( _hasUidGidPerm )
+        return true;
+
     return ! isPkgInfo() && ! isCached();
+}
+
+
+bool FileInfo::hasPermissions() const
+{
+    return _hasUidGidPerm;
 }
 
 

@@ -541,6 +541,7 @@ void LocalDirReadJob::handleLstatError( const QString & entryName )
     DirInfo *child = new DirInfo( _tree, _dir, entryName,
 				  0,   // mode
 				  0,   // size
+                                  false, 0, 0,  // withUidGid, uid, gid
 				  0 ); // mtime
     CHECK_NEW( child );
     child->finalizeLocal();

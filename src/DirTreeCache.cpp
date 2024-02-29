@@ -283,10 +283,13 @@ bool CacheReader::read( int maxLines )
 
 void CacheReader::addItem()
 {
-    if ( fieldsCount() < 4 )
+    int expectedFields = _withUidGidPerm ? 7 : 4;
+
+    if ( fieldsCount() < expectedFields )
     {
 	logError() << "Syntax error in " << _fileName << ":" << _lineNo
-		   << ": Expected at least 4 fields, saw only " << fieldsCount()
+		   << ": Expected at least " << expectedFields
+                   << " fields, saw only " << fieldsCount()
 		   << endl;
 
 	setReadError( _lastDir );
@@ -305,6 +308,11 @@ void CacheReader::addItem()
     char * type		= field( n++ );
     char * raw_path	= field( n++ );
     char * size_str	= field( n++ );
+
+    char * uid_str      = _withUidGidPerm ? field( n++ ) : 0;
+    char * gid_str      = _withUidGidPerm ? field( n++ ) : 0;
+    char * perm_str     = _withUidGidPerm ? field( n++ ) : 0;
+
     char * mtime_str	= field( n++ );
     char * blocks_str	= 0;
     char * links_str	= 0;
@@ -354,6 +362,15 @@ void CacheReader::addItem()
 	    default: break;
 	}
     }
+
+
+    // UID, GID, permissions
+
+    uid_t  uid  = uid_str  ? strtol( uid_str,  0, 10 ) : 0;
+    gid_t  gid  = gid_str  ? strtol( gid_str,  0, 10 ) : 0;
+    mode_t perm = perm_str ? strtol( perm_str, 0,  8 ) : 0;
+
+    mode |= perm;
 
 
     // MTime
@@ -448,7 +465,9 @@ void CacheReader::addItem()
 	logDebug() << "Creating DirInfo for " << url << " with parent " << parent << endl;
 #endif
 	DirInfo * dir = new DirInfo( _tree, parent, url,
-				     mode, size, mtime );
+				     mode, size,
+                                     _withUidGidPerm, uid, gid,
+                                     mtime );
 	dir->setReadState( DirReading );
 	_lastDir = dir;
 
@@ -492,8 +511,10 @@ void CacheReader::addItem()
 #endif
 
 	    FileInfo * item = new FileInfo( _tree, parent, name,
-					    mode, size, mtime,
-					    blocks, links );
+					    mode, size,
+                                            _withUidGidPerm, uid, gid,
+                                            mtime,
+                                            blocks, links );
 	    parent->insertChild( item );
 	    _tree->childAddedNotify( item );
 	}
@@ -568,10 +589,9 @@ bool CacheReader::checkHeader()
 
     if ( _ok )
     {
-	QString version = field( 1 );
-
-	// currently not checking version number
-	// for future use
+	QString versionStr = field( 1 );
+        float   version    = versionStr.toFloat( &_ok );
+        _withUidGidPerm    = _ok && version > 1.99;
 
 	if ( ! _ok )
 	    logError() << _fileName << ":" << _lineNo

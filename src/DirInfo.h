@@ -56,6 +56,9 @@ namespace QDirStat
 		 const QString & filenameWithoutPath,
 		 mode_t		 mode,
 		 FileSize	 size,
+                 bool            withUidGidPerm,
+                 uid_t           uid,
+                 gid_t           gid,
 		 time_t		 mtime );
 
 	/**

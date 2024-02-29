@@ -109,6 +109,9 @@ namespace QDirStat
 		  const QString & filenameWithoutPath,
 		  mode_t	  mode,
 		  FileSize	  size,
+                  bool            withUidGidPerm,
+                  uid_t           uid,
+                  gid_t           gid,
 		  time_t	  mtime,
 		  FileSize	  blocks = -1,
 		  nlink_t	  links	 = 1 );
@@ -255,6 +258,14 @@ namespace QDirStat
 	 * file.
 	 **/
 	bool hasGid() const;
+
+	/**
+	 * Return 'true' if this FileInfo has known permissions.
+	 *
+	 * It might not have that information e.g. if it was read from a cache
+	 * file.
+	 **/
+        bool hasPermissions() const;
 
 	/**
 	 * File permissions formatted like in "ls -l", i.e. "-rwxrwxrwx",
@@ -946,9 +957,10 @@ namespace QDirStat
 
 	short		_magic;			// magic number to detect if this object is valid
 	QString		_name;			// the file name (without path!)
-	bool		_isLocalFile  :1;	// flag: local or remote file?
-	bool		_isSparseFile :1;	// (cache) flag: sparse file (file with "holes")?
-	bool		_isIgnored    :1;	// flag: ignored by rule?
+	bool		_isLocalFile   :1;	// flag: local or remote file?
+	bool		_isSparseFile  :1;	// (cache) flag: sparse file (file with "holes")?
+	bool		_isIgnored     :1;	// flag: ignored by rule?
+        bool            _hasUidGidPerm :1;      // flag: has UID / GID / permissions?
 	dev_t		_device;		// device this object resides on
 	mode_t		_mode;			// file permissions + object type
 	nlink_t		_links;			// number of links

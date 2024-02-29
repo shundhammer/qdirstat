@@ -271,19 +271,19 @@ void MimeCategoryConfigPage::populateTreemapView()
     //	   dir2
     //	     dir21
 
-    DirInfo * topDir = new DirInfo( _dirTree, root, "demo", mode, dirSize, mtime );
+    DirInfo * topDir = new DirInfo( _dirTree, root, "demo", mode, dirSize, false, 0, 0, mtime );
     CHECK_NEW( topDir );
     root->insertChild( topDir );
 
-    DirInfo * dir1 = new DirInfo( _dirTree, topDir, "dir1", mode, dirSize, mtime );
+    DirInfo * dir1 = new DirInfo( _dirTree, topDir, "dir1", mode, dirSize, false, 0, 0, mtime );
     CHECK_NEW( dir1 );
     topDir->insertChild( dir1 );
 
-    DirInfo * dir2 = new DirInfo( _dirTree, topDir, "dir2", mode, dirSize, mtime );
+    DirInfo * dir2 = new DirInfo( _dirTree, topDir, "dir2", mode, dirSize, false, 0, 0, mtime );
     CHECK_NEW( dir2 );
     topDir->insertChild( dir2 );
 
-    DirInfo * dir21 = new DirInfo( _dirTree, dir2, "dir21", mode, dirSize, mtime );
+    DirInfo * dir21 = new DirInfo( _dirTree, dir2, "dir21", mode, dirSize, false, 0, 0, mtime );
     CHECK_NEW( dir21 );
     dir2->insertChild( dir21 );
 
@@ -312,7 +312,9 @@ void MimeCategoryConfigPage::populateTreemapView()
 	// Create a FileInfo item and add it to the parent
 	FileInfo * file = new FileInfo( _dirTree, parent,
 					QString( "File_%1" ).arg( i ),
-					mode, fileSize, mtime );
+					mode,
+                                        false, 0, 0, // withUidGid, uid, gid
+                                        fileSize, mtime );
 	CHECK_NEW( file );
 	parent->insertChild( file );
     }

@@ -61,12 +61,18 @@ DirInfo::DirInfo( DirTree *	  tree,
 		  const QString & filenameWithoutPath,
 		  mode_t	  mode,
 		  FileSize	  size,
+                  bool            withUidGidPerm,
+                  uid_t           uid,
+                  gid_t           gid,
 		  time_t	  mtime )
     : FileInfo( tree,
 		parent,
 		filenameWithoutPath,
 		mode,
 		size,
+                withUidGidPerm,
+                uid,
+                gid,
 		mtime )
 {
     init();

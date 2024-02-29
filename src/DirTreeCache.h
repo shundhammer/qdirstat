@@ -150,6 +150,12 @@ namespace QDirStat
 	 **/
 	DirTree * tree() const { return _tree; }
 
+        /**
+         * Return 'true' if the cache file format has UID, GID, permissions
+         * (cache file format 2.0 or later), 'false' otherwise.
+         **/
+        bool withUidGidPerm() const { return _withUidGidPerm; }
+
 	/**
 	 * Skip leading whitespace from a string.
 	 * Returns a pointer to the first character that is non-whitespace.
@@ -289,6 +295,7 @@ namespace QDirStat
 	DirInfo *	_lastExcludedDir;
 	QString		_lastExcludedDirUrl;
         QRegExp         _multiSlash;
+        bool            _withUidGidPerm;
     };
 
 }	// namespace QDirStat

@@ -18,12 +18,15 @@ PkgInfo::PkgInfo( const QString & name,
                   const QString & version,
                   const QString & arch,
                   PkgManager    * pkgManager ):
-    DirInfo( 0,   // tree,
-             0,   // parent
+    DirInfo( 0,     // tree,
+             0,     // parent
              name,
-             0,   // mode
-             0,   // size
-             0 ), // mtime
+             0,     // mode
+             0,     // size
+             false, // withUidGidPerm
+             0,     // uid
+             0,     // gid
+             0 ),   // mtime
     _baseName( name ),
     _version( version ),
     _arch( arch ),
@@ -42,9 +45,12 @@ PkgInfo::PkgInfo( DirTree *       tree,
     DirInfo( tree,
              parent,
              name,
-             0,   // mode
-             0,   // size
-             0 ), // mtime
+             0,     // mode
+             0,     // size
+             false, // withUidGid
+             0,     // uid
+             0,     // gid
+             0 ),   // mtime
     _baseName( name ),
     _pkgManager( pkgManager ),
     _multiVersion( false ),
