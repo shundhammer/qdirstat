@@ -35,6 +35,7 @@ using namespace QDirStat;
 
 
 CacheWriter::CacheWriter( const QString & fileName, DirTree *tree )
+    : _withUidGuidPerm( true )
 {
     _ok = writeCache( fileName, tree );
 }
@@ -48,8 +49,13 @@ CacheWriter::~CacheWriter()
 
 bool CacheWriter::writeCache( const QString & fileName, DirTree *tree )
 {
-    if ( ! tree || ! tree->root() )
+    if ( ! tree )
 	return false;
+
+    FileInfo * firstToplevel = tree->firstToplevel();
+
+    if ( ! firstToplevel )
+        return false;
 
     gzFile cache = gzopen( (const char *) fileName.toUtf8(), "w" );
 
@@ -59,12 +65,26 @@ bool CacheWriter::writeCache( const QString & fileName, DirTree *tree )
 	return false;
     }
 
-    gzprintf( cache, "[qdirstat %s cache file]\n", CACHE_FORMAT_VERSION );
+    _withUidGuidPerm = firstToplevel->hasUid();
+    QString version = _withUidGuidPerm ? "2.0" : "1.0";
+
+    gzprintf( cache, "[qdirstat %s cache file]\n", version );
     gzprintf( cache,
-	     "# Do not edit!\n"
-	     "#\n"
-	     "# Type\tpath\t\tsize\tmtime\t\t<optional fields>\n"
-	     "\n" );
+              "# Do not edit!\n"
+              "#\n" );
+
+    if ( _withUidGuidPerm )
+    {
+        gzprintf( cache,
+                  "# Type  path                            size     uid   gid  perm.       mtime      <optional fields>\n"
+                  "#\n" );
+    }
+    else
+    {
+        gzprintf( cache,
+                  "# Type  path                            size    mtime      <optional fields>\n"
+                  "#\n" );
+    }
 
     writeTree( cache, tree->root()->firstChild() );
     gzclose( cache );
@@ -130,19 +150,30 @@ void CacheWriter::writeItem( gzFile cache, FileInfo * item )
     {
 	// Use absolute path
 
-	gzprintf( cache, " %s", urlEncoded( item->url() ).data() );
+	gzprintf( cache, " %-30s", urlEncoded( item->url() ).data() );
     }
     else
     {
 	// Use relative path
 
-	gzprintf( cache, "\t%s", urlEncoded( item->name() ).data() );
+	gzprintf( cache, "\t%-24s", urlEncoded( item->name() ).data() );
     }
 
 
     // Write size
 
     gzprintf( cache, "\t%s", formatSize( item->rawByteSize() ).toUtf8().data() );
+
+
+    // Format 2.0 only: UID, GID, permissions
+
+    if ( _withUidGuidPerm )
+    {
+        gzprintf( cache, "\t%d  %d  0%3o",
+                  item->uid(),
+                  item->gid(),
+                  item->mode() & ALLPERMS );
+    }
 
 
     // Write mtime

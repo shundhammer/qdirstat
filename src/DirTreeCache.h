@@ -16,7 +16,6 @@
 
 
 #define DEFAULT_CACHE_NAME	".qdirstat.cache.gz"
-#define CACHE_FORMAT_VERSION	"1.0"
 #define MAX_CACHE_LINE_LEN	1024
 #define MAX_FIELDS_PER_LINE	32
 
@@ -82,6 +81,7 @@ namespace QDirStat
 	// Data members
 	//
 
+        bool _withUidGuidPerm;
 	bool _ok;
     };
 
