@@ -2,7 +2,7 @@
                       ===================================
 
 Author:  Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
-Updated: 2024-02-29
+Updated: 2024-03-01
 
 
 QDirStat can read cache files in either gzip or plain text (uncompressed)
@@ -30,8 +30,6 @@ D /work/home/sh/src/qdirstat            4096    1000  1000  0775        0x65e0ce
 F       .qmake.stash                    739     1000  1000  0664        0x65915c05
 F       .gitignore                      22      1000  1000  0664        0x5fb9043d
 F       LICENSE                         18092   1000  1000  0664        0x4ba94fed
-F       src-qdirstat-v2-cache.gz        248     1000  1000  0664        0x65e0ce9c
-F       src-qdirstat-v1-cache.gz        13030   1000  1000  0664        0x65e0ce47
 F       qdirstat.pro.user               20372   1000  1000  0664        0x622b43a9
 F       qdirstat.pro                    832     1000  1000  0664        0x6151907d
 F       README.md                       45874   1000  1000  0664        0x65ce5618
