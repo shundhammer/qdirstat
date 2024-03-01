@@ -66,7 +66,7 @@ bool CacheWriter::writeCache( const QString & fileName, DirTree *tree )
     }
 
     _withUidGuidPerm = firstToplevel->hasUid();
-    QString version = _withUidGuidPerm ? "2.0" : "1.0";
+    const char * version = _withUidGuidPerm ? "2.0" : "1.0";
 
     gzprintf( cache, "[qdirstat %s cache file]\n", version );
     gzprintf( cache,
