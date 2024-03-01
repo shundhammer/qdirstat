@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2024-02-14
+Updated: 2024-03-01
 
 
 ## Screenshot
@@ -134,6 +134,21 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2023-03-01
+
+  - Extended the cache file format to also include UID, GID and permissions,
+    and also improved the formatting to make it better human readable.
+
+    See also [GitHub issue #265](https://github.com/shundhammer/qdirstat/issues/265).
+
+    This new cache file format 2.0 is now the default, but the Perl
+    `qdirstat-cache-writer` still supports writing the old format without those
+    new fields to make the cache files a bit smaller: Use the `-1` command line
+    option.
+
+    Cache files in the old format 1.0 can still be read, of course.
+
+
 - 2023-02-13
 
   - **New: macOS binaries for QDirStat**
@@ -147,9 +162,9 @@ Download installable binary packages for various Linux distributions here:
     > tracker.
 
     So here is his new GitHub repo for those binaries:
-    
+
     https://github.com/jesusha123/qdirstat-macos
-    
+
     Go to _Releases_ at the right side panel.
 
     Also expect them on Homebrew (work in progress).
