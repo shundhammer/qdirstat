@@ -458,7 +458,7 @@ sub write_file_entry()
         my $full_path = $dir . "/" . $name;
         $full_path =~ s://+:/:g; # Replace multiple // with one
 
-	printf CACHE "%-30s", $full_path;
+	printf CACHE "\t%-30s", $full_path;
     }
     else
     {
