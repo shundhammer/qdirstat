@@ -292,9 +292,9 @@ void MainWindow::updateActions()
     bool pkgView	     = firstToplevel && firstToplevel->isPkgInfo();
 
     _ui->actionStopReading->setEnabled( reading );
-    _ui->actionRefreshAll->setEnabled	( ! reading );
+    _ui->actionRefreshAll->setEnabled	( ! reading && firstToplevel );
     _ui->actionAskReadCache->setEnabled ( ! reading );
-    _ui->actionAskWriteCache->setEnabled( ! reading );
+    _ui->actionAskWriteCache->setEnabled( ! reading && ! pkgView && firstToplevel );
 
     _ui->actionCopyPathToClipboard->setEnabled( currentItem );
     _ui->actionGoUp->setEnabled( currentItem && currentItem->treeLevel() > 1 );
