@@ -585,8 +585,6 @@ QString Logger::expandVariables( const QString & unexpanded )
 }
 
 
-
-
 QTextStream & operator<<( QTextStream & str, bool val )
 {
     str << ( val ? "true" : "false" );

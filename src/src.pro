@@ -44,7 +44,7 @@ INSTALLS	+= TARGET desktop icons
 #
 # So there is only one solution: STFU, Qt!
 
-QMAKE_CXXFLAGS	+=  -Wno-deprecated -Wno-deprecated-declarations
+# QMAKE_CXXFLAGS	+=  -Wno-deprecated -Wno-deprecated-declarations
 
 
 SOURCES	  = main.cpp			\

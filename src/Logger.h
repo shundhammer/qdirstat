@@ -33,6 +33,29 @@ enum LogSeverity
 };
 
 
+typedef QTextStream & (* LogStreamFunc ) ( QTextStream & str, int dummy );
+
+namespace QDirStat
+{
+    QTextStream & endl( QTextStream & str, int dummy )
+    {
+        Q_UNUSED( dummy );
+        return Qt::endl( str );
+    }
+};
+
+
+inline QTextStream & operator<< ( QTextStream & str, LogStreamFunc func )
+{
+    return (*func)( str, 42 );
+}
+
+
+#ifndef NO_DEFAULT_LOGGER_ENDL
+  using QDirStat::endl;
+#endif
+
+
 // Log macros for stream (QTextStream) output.
 //
 // Unlike qDebug() etc., they also record the location in the source code that
