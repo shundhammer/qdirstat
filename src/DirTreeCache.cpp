@@ -18,6 +18,7 @@
 #include "FormatUtil.h"
 #include "Logger.h"
 #include "Exception.h"
+#include "BrokenLibc.h"     // ALLPERMS
 
 #define KB 1024LL
 #define MB (1024LL*1024)

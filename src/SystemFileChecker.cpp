@@ -7,6 +7,8 @@
  */
 
 
+#include <sys/types.h>          // uid_t
+
 #include "SystemFileChecker.h"
 #include "DirInfo.h"
 
