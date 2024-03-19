@@ -7,6 +7,8 @@
  */
 
 
+#include <sys/types.h>
+
 #include "SystemFileChecker.h"
 #include "DirInfo.h"
 
