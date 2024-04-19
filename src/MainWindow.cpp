@@ -322,7 +322,6 @@ void MainWindow::updateActions()
 
     bool showingTreemap = _ui->treemapView->isVisible();
 
-    _ui->actionTreemapAsSidePanel->setEnabled( showingTreemap );
     _ui->actionTreemapZoomIn->setEnabled   ( showingTreemap && _ui->treemapView->canZoomIn() );
     _ui->actionTreemapZoomOut->setEnabled  ( showingTreemap && _ui->treemapView->canZoomOut() );
     _ui->actionResetTreemapZoom->setEnabled( showingTreemap && _ui->treemapView->canZoomOut() );
@@ -339,7 +338,6 @@ void MainWindow::readSettings()
 
     _statusBarTimeout	  = settings.value( "StatusBarTimeoutMillisec", 3000  ).toInt();
     bool showTreemap	  = settings.value( "ShowTreemap"	      , true  ).toBool();
-    bool treemapOnSide	  = settings.value( "TreemapOnSide"	      , false ).toBool();
 
     _verboseSelection	  = settings.value( "VerboseSelection"	      , false ).toBool();
     _urlInWindowTitle	  = settings.value( "UrlInWindowTitle"	      , false ).toBool();
@@ -354,9 +352,6 @@ void MainWindow::readSettings()
     settings.endGroup();
 
     _ui->actionShowTreemap->setChecked( showTreemap );
-    _ui->actionTreemapAsSidePanel->setChecked( treemapOnSide );
-    treemapAsSidePanel();
-
     _ui->actionVerboseSelection->setChecked( _verboseSelection );
 
     foreach ( QAction * action, _layoutActionGroup->actions() )
@@ -395,7 +390,6 @@ void MainWindow::writeSettings()
     settings.beginGroup( "MainWindow" );
 
     settings.setValue( "ShowTreemap"	 , _ui->actionShowTreemap->isChecked() );
-    settings.setValue( "TreemapOnSide"	 , _ui->actionTreemapAsSidePanel->isChecked() );
     settings.setValue( "VerboseSelection", _verboseSelection );
     settings.setValue( "Layout"		 , _layoutName );
 
@@ -425,15 +419,6 @@ void MainWindow::showTreemapView()
 	_ui->treemapView->enable();
     else
 	_ui->treemapView->disable();
-}
-
-
-void MainWindow::treemapAsSidePanel()
-{
-    if ( _ui->actionTreemapAsSidePanel->isChecked() )
-	_ui->mainWinSplitter->setOrientation( Qt::Horizontal );
-    else
-	_ui->mainWinSplitter->setOrientation( Qt::Vertical );
 }
 
 

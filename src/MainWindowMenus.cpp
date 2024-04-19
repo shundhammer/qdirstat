@@ -143,9 +143,6 @@ void MainWindow::connectViewTreemapMenu()
     connect( _ui->actionShowTreemap, SIGNAL( toggled( bool )   ),
 	     this,		     SLOT  ( showTreemapView() ) );
 
-    connect( _ui->actionTreemapAsSidePanel, SIGNAL( toggled( bool )	 ),
-	     this,			    SLOT  ( treemapAsSidePanel() ) );
-
     CONNECT_ACTION( _ui->actionTreemapZoomIn,	 _ui->treemapView, zoomIn()	    );
     CONNECT_ACTION( _ui->actionTreemapZoomOut,	 _ui->treemapView, zoomOut()	    );
     CONNECT_ACTION( _ui->actionResetTreemapZoom, _ui->treemapView, resetZoom()	    );

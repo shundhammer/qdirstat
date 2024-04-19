@@ -155,8 +155,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>88</width>
-           <height>282</height>
+           <width>63</width>
+           <height>296</height>
           </rect>
          </property>
         </widget>
@@ -173,7 +173,7 @@
      <x>0</x>
      <y>0</y>
      <width>1157</width>
-     <height>27</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1035,20 +1035,6 @@
    </property>
    <property name="statusTip">
     <string>https://github.com/shundhammer/qdirstat/blob/master/doc/Troubleshooting.md#cant-move-a-directory-to-trash</string>
-   </property>
-  </action>
-  <action name="actionTreemapAsSidePanel">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>&amp;Treemap as side panel</string>
-   </property>
-   <property name="toolTip">
-    <string>Show the Treeemap beside the directory tree, otherwise it will be shown beneath.</string>
    </property>
   </action>
   <action name="actionFileAgeStats">
