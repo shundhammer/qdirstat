@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2024-03-01
+Updated: 2024-04-25
 
 
 ## Screenshot
@@ -134,7 +134,8 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
-- 2023-03-01
+- 2024-
+- 2024-03-01
 
   - Extended the cache file format to also include UID, GID and permissions,
     and also improved the formatting to make it better human readable.
@@ -149,7 +150,7 @@ Download installable binary packages for various Linux distributions here:
     Cache files in the old format 1.0 can still be read, of course.
 
 
-- 2023-02-13
+- 2024-02-13
 
   - **New: macOS binaries for QDirStat**
 
@@ -186,7 +187,7 @@ Download installable binary packages for various Linux distributions here:
     target platform (macOS in this case) in particular.
 
 
-- 2023-01-15
+- 2024-01-15
 
   - Just one day after the stable release, pull requests for missing include
     files keep trickling in.
@@ -205,7 +206,7 @@ Download installable binary packages for various Linux distributions here:
     Sorry for the inconvenience.
 
 
-- 2023-01-14 **New stable release: 1.9**
+- 2024-01-14 **New stable release: 1.9**
 
   **Summary:**
 
@@ -250,7 +251,7 @@ for older entries._
 This is just a rough summary. For more details, see [DevHistory.md](doc/DevHistory.md).
 
 
-- 2023-01-14 New stable release: 1.9
+- 2024-01-14 New stable release: 1.9
 
   - Greatly improved the visual appearance of the treemap thanks to @Lithopsian
 

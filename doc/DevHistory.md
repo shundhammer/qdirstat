@@ -11,7 +11,7 @@ https://github.com/shundhammer/qdirstat/blob/master/README.md
 ## QDirStat History
 
 
-- 2023-01-14 **New stable release: 1.9**
+- 2024-01-14 **New stable release: 1.9**
 
   **Summary:**
 
