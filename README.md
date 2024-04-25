@@ -134,7 +134,11 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
-- 2024-
+- 2024-04-25
+
+  - Added a new article on [QDirStat Font Size](https://github.com/shundhammer/qdirstat/issues/268).
+
+
 - 2024-03-01
 
   - Extended the cache file format to also include UID, GID and permissions,
