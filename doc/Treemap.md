@@ -164,8 +164,9 @@ scaling will make some treemap tiles very small; a 4k file doesn't get much
 visibility in a 1.2 GB home directory.
 
 QDirStat's treemap layout algorithm "cuts off" treemap tiles below a certain
-size: `MinTileSize` in the config file, by default 3. There is not anything
-useful to render in a tile that small; it would only become pixel mush.
+pixel size: `MinTileSize` in the config file, by default 3 pixels. There is not
+anything useful to render in a tile that small; it would only become pixel
+mush.
 
 So some directories contain a partly grey area to their bottom right: That is
 where those tiny tiles would go, but it would be useless to render them; they
@@ -207,7 +208,7 @@ of it, move it to a better location, compress it or whatever.
 
 ## Where did my Download Go?
 
-We've all been there... You click on something in your Inernet browser, and it
+We've all been there... You click on something in your Internet browser, and it
 starts to download something; a movie or whatever. OK, so let's watch
 it. But... where did it go? Why doesn't the browser _ask_ me where to store it?
 
@@ -227,7 +228,7 @@ also just another incarnation of Mozilla, just like Firefox.
 
 And every single one of them insisits on creating its own cache directories,
 and every single one of them consumes at least 50 MB, sometimes 500 MB. And
-none of them is content with only one cache directories: They have several
+none of them is content with only one cache directory: They have several
 caches for web pages, for images, for Javascript code, for their startup, for
 thumbnails. And they are spread all over the place; not only in `~/.cache/`
 which is designed for that exact purpose, no, they also pollute `~/.config/`,
@@ -241,7 +242,9 @@ your carefully crafted `rsync` command actually does; its output will always be
 polluted by a gazillion lines about all the cruft in those cache directories.
 
 What you can do is to start collecting bookmarks of such directories and then
-go to each one and clear its content.
+go to each one and clear its content. To bookmark the current path, click the
+star icon to the left of the path (the _breadcrumbs_ widget) just below the
+tool bar.
 
 You can identify cache directories by a name containing "Cache", and by the
 visual appearance in the treemap: If you found a very large area with a large
