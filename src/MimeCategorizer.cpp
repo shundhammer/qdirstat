@@ -342,6 +342,8 @@ void MimeCategorizer::addDefaultCategories()
     junk->addSuffix( "~"   );
     junk->addSuffix( "bak" );
     junk->addPattern( "core", Qt::CaseSensitive );
+    junk->addSuffix( "old" );
+    junk->addSuffix( "orig" );
 
 
     MimeCategory * archives = new MimeCategory( tr( "Compressed Archives" ), Qt::green );
@@ -370,6 +372,7 @@ void MimeCategorizer::addDefaultCategories()
 			   << "tz2"
 			   << "tzst"
 			   << "zip"
+			   << "zpaq"
 			   );
 
     archives->addPattern( "pack-*.pack" );      // Git archive
@@ -440,6 +443,7 @@ void MimeCategorizer::addDefaultCategories()
 			 << "asf"
 			 << "avi"
 			 << "divx"
+			 << "dv"
 			 << "flc"
 			 << "fli"
 			 << "flv"
@@ -452,6 +456,7 @@ void MimeCategorizer::addDefaultCategories()
 			 << "mp4"
 			 << "mpeg"
 			 << "mpg"
+			 << "mts"
 			 << "ogm"
 			 << "ogv"
 			 << "rm"
@@ -469,7 +474,11 @@ void MimeCategorizer::addDefaultCategories()
 
     music->addSuffixes( QStringList()
 			<< "aac"
+			<< "aif"
 			<< "ape"
+			<< "caf"
+			<< "dff"
+			<< "dsf"
 			<< "f4a"
 			<< "f4b"
 			<< "flac"
@@ -483,8 +492,11 @@ void MimeCategorizer::addDefaultCategories()
 			<< "opus"
 			<< "ra"
 			<< "rax"
+			<< "w64"
 			<< "wav"
 			<< "wma"
+			<< "wv"
+			<< "wvc"
 			);
 
 
@@ -501,6 +513,7 @@ void MimeCategorizer::addDefaultCategories()
 		      << "epub"
 		      << "htm"
 		      << "html"
+		      << "ly"
 		      << "md"
 		      << "odb"
 		      << "odc"
