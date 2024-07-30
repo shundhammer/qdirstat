@@ -34,7 +34,7 @@ DirTree::DirTree():
     _excludeRules( 0 ),
     _beingDestroyed( false ),
     _haveClusterSize( false ),
-    _blocksPerCluster( 0 )
+    _blocksPerCluster( 1 )
 {
     _isBusy	      = false;
     _crossFilesystems = false;
@@ -120,7 +120,7 @@ void DirTree::clear()
 
     _isBusy	      = false;
     _haveClusterSize  = false;
-    _blocksPerCluster = 0;
+    _blocksPerCluster = 1;
     _device.clear();
 }
 
