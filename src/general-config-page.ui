@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>564</width>
+    <width>624</width>
     <height>548</height>
    </rect>
   </property>
@@ -69,6 +69,13 @@
         <widget class="QCheckBox" name="useBoldForDominantCheckBox">
          <property name="text">
           <string>Use &amp;bold font for dominant tree items</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="useIsoDateCheckBox">
+         <property name="text">
+          <string>Use &amp;ISO date and time format (&quot;2024-12-28  17:38&quot;)</string>
          </property>
         </widget>
        </item>

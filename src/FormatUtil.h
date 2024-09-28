@@ -41,6 +41,15 @@ namespace QDirStat
          **/
         static FormatOptions * instance();
 
+        /**
+         * Read settings from the config file.
+         **/
+        void readSettings();
+
+        //
+        // Data members
+        //
+
         bool useIsoDate;        // "2024-12-28  17:38"
 
     protected:

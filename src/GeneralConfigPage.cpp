@@ -9,6 +9,7 @@
 
 #include "GeneralConfigPage.h"
 #include "Settings.h"
+#include "FormatUtil.h" // FormatOptions
 #include "Logger.h"
 #include "Exception.h"
 
@@ -82,6 +83,11 @@ void GeneralConfigPage::readSettings()
     _ui->treeIconThemeComboBox->setCurrentIndex( index );
 
     settings.endGroup();
+
+
+    settings.beginGroup( "FormatOptions" );
+    _ui->useIsoDateCheckBox->setChecked( settings.value( "UseIsoDate", false ).toBool() );
+    settings.endGroup();
 }
 
 
@@ -111,6 +117,14 @@ void GeneralConfigPage::writeSettings()
         case 0:  settings.setValue( "TreeIconDir", ":/icons/tree-medium/" ); break;
         case 1:  settings.setValue( "TreeIconDir", ":/icons/tree-small/"  ); break;
     }
+
+    settings.endGroup();
+
+
+    settings.beginGroup( "FormatOptions" );
+
+    settings.setValue( "UseIsoDate", _ui->useIsoDateCheckBox->isChecked() );
+    FormatOptions::instance()->readSettings();
 
     settings.endGroup();
 }

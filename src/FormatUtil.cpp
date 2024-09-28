@@ -13,6 +13,8 @@
 #include "FormatUtil.h"
 #include "Exception.h"
 #include "BrokenLibc.h"     // ALLPERMS
+#include "Settings.h"
+#include "SettingsHelpers.h"
 
 using namespace QDirStat;
 
@@ -34,7 +36,22 @@ FormatOptions * FormatOptions::instance()
 FormatOptions::FormatOptions()
 {
     useIsoDate = false;
+
+    readSettings();
 }
+
+
+void FormatOptions::readSettings()
+{
+    Settings settings;
+    settings.beginGroup( "FormatOptions" );
+
+    useIsoDate = settings.value( "UseIsoDate", false ).toBool();
+
+    settings.endGroup();
+}
+
+
 
 
 QString QDirStat::formatSize( FileSize lSize )
