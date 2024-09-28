@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2024-04-25
+Updated: 2024-09-28
 
 
 ## Screenshot
@@ -133,6 +133,29 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2024-09-28
+
+  - You can now select the ISO date and time format: "2024-12-28  17:38" instead
+    of the current locale settings. There is now a checkbox in the "General"
+    tab for that.
+
+    Every time I have to endure that insane US date and time format, I tend to
+    scream at my screen: "Dec 28, 2024 5:38 PM"? **Really?** And that's the
+    default (especially for the _root_ account) unless you configured all those
+    locale settings manually; for both your own user account and for _root_,
+    because you need to run QDirStat as _root_ to get access to system
+    directories with restrictive permissions.
+
+    From now on, simply use "Edit" -> "Configure QDirStat" -> tab "General"
+    and check "Use ISO date and time".
+
+    And yes, I know that the original ISO date and time format is
+    "2024-12-28T17:38" which also does not pass the sanity test. A capital "T"
+    as the delimiter? Really? What were they thinking? Easy to parse, but
+    really hard to read. Whoever designed this did it for lazy scripting, not
+    for humans.
+
 
 - 2024-04-25
 
