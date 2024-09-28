@@ -22,6 +22,34 @@
 namespace QDirStat
 {
     /**
+     * Singleton class to hold some options for the formatting methods.
+     **/
+    class FormatOptions
+    {
+    protected:
+
+        /**
+         * Constructor. Use the static instance() method instead.
+         **/
+        FormatOptions();
+
+
+    public:
+
+        /**
+         * Access the instance of this singleton class.
+         **/
+        static FormatOptions * instance();
+
+        bool useIsoDate;        // "2024-12-28  17:38"
+
+    protected:
+
+        static FormatOptions * _instance;
+    };
+
+
+    /**
      * Format a file / subtree size human readable, i.e. in "GB" / "MB"
      * etc. rather than huge numbers of digits. 'precision' is the number of
      * digits after the decimal point.

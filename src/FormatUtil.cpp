@@ -11,9 +11,30 @@
 #include <QTextStream>
 
 #include "FormatUtil.h"
+#include "Exception.h"
 #include "BrokenLibc.h"     // ALLPERMS
 
 using namespace QDirStat;
+
+
+FormatOptions * FormatOptions::_instance = 0;
+
+FormatOptions * FormatOptions::instance()
+{
+    if ( ! _instance )
+    {
+        _instance = new FormatOptions();
+        CHECK_NEW( _instance );
+    }
+
+    return _instance;
+}
+
+
+FormatOptions::FormatOptions()
+{
+    useIsoDate = false;
+}
 
 
 QString QDirStat::formatSize( FileSize lSize )
@@ -109,7 +130,23 @@ QString QDirStat::formatTime( time_t rawTime )
 	return "";
 
     QDateTime time = QDateTime::fromTime_t( rawTime );
-    return time.toString( Qt::DefaultLocaleShortDate );
+
+    QString ret;
+
+    if ( FormatOptions::instance()->useIsoDate )
+    {
+        // "2024-12-28T17:38"
+        ret = time.toString( Qt::ISODate );
+
+        // Get rid of that moronic 'T' to get "2024-12-28  17:38"
+        ret.replace( "T", "  " );
+    }
+    else
+    {
+        ret = time.toString( Qt::DefaultLocaleShortDate );
+    }
+
+    return ret;
 }
 
 
