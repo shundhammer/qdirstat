@@ -547,7 +547,7 @@ void MountPoints::findNtfsDevices()
 
     _hasNtfs = ! _ntfsDevices.isEmpty();
 
-    if ( _hasNtfs )
+    if ( ! _hasNtfs )
         logDebug() << "No NTFS devices found" << endl;
 }
 
