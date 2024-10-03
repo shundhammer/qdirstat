@@ -106,43 +106,35 @@ void DirReadJob::deletingChild( FileInfo *deletedChild )
 
 bool DirReadJob::crossingFilesystems( DirInfo * parent, DirInfo * child )
 {
+    // Simple (and most common) case: Compare the device numbers (dev_t)
+
     if ( parent->device() == child->device() )
-	return false;
+	return false; // Not crossing filesystems
 
-    QString childDevice	 = device( child );
-    QString parentDevice = device( parent->findNearestMountPoint() );
+    // Less common case: Different device numbers. So let's also find the
+    // nearest mount point from /proc/mounts and compare the device names
+    // (/dev/sda2 etc.).
+    //
+    // This is important both for Btrfs subvolumes that all have the same
+    // device name, and for a directory tree that was originally read from a
+    // cache file, but now a subtree is being read from disk (F6 key).
+    //
+    // See also https://github.com/shundhammer/qdirstat/issues/273
 
-    if ( childDevice.isEmpty() && parent->readState() == DirCached )
-    {
-	// A DirInfo from a cache file always has device number 0, so the
-	// initial check failed because of that. The child might still be a
-	// mount point, but since that path was not found in the list of known
-	// mount points from /proc/mounts or /etc/mtab, we assume that this was
-	// not the case.
-	//
-	// See also https://github.com/shundhammer/qdirstat/issues/114
+    QString parentDevice = device( parent );
+    QString childDevice  = device( child  );
 
-	return false;
-    }
-
-    if ( parentDevice.isEmpty() )
-	parentDevice = _tree->device();
-
-    bool crossing = true;
-
-    if ( ! parentDevice.isEmpty() && ! childDevice.isEmpty() )
-	crossing = parentDevice != childDevice;
+    bool crossing = ( parentDevice != childDevice );
 
     if ( crossing )
     {
-	logInfo() << "Filesystem boundary at mount point " << child
-		  << " on device " << ( childDevice.isEmpty() ? "<unknown>" : childDevice )
-		  << endl;
+        logInfo() << "Filesystem boundary at mount point " << child
+                  << " on device " << ( childDevice.isEmpty() ? "<unknown>" : childDevice )
+                  << endl;
     }
     else
     {
-	logInfo() << "Mount point " << child
-		  << " is still on the same device " << childDevice << endl;
+        logInfo() << child << " is still on the same device " << childDevice << endl;
     }
 
     return crossing;
@@ -157,8 +149,15 @@ QString DirReadJob::device( const DirInfo * dir ) const
     {
 	MountPoint * mountPoint = MountPoints::findByPath( dir->url() );
 
+        if ( ! mountPoint )
+            mountPoint = MountPoints::findNearestMountPoint( dir->url() );
+
 	if ( mountPoint )
+        {
 	    device = mountPoint->device();
+
+            // logDebug() << "Found " << mountPoint << " for " << dir << endl;
+        }
     }
 
     return device;
@@ -620,6 +619,9 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
 
 bool LocalDirReadJob::isNtfs()
 {
+    if ( ! MountPoints::hasNtfs() )
+        return false;
+
     if ( ! _checkedForNtfs )
     {
         _isNtfs         = false;

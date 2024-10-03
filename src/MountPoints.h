@@ -242,6 +242,11 @@ namespace QDirStat
 	 **/
 	static bool hasBtrfs();
 
+        /**
+	 * Return 'true' if any mount point has filesystem type "ntfs".
+         **/
+        static bool hasNtfs();
+
 	/**
 	 * Ensure the mount points are populated with the content of
 	 * /proc/mounts, falling back to /etc/mtab if /proc/mounts cannot be
@@ -354,8 +359,9 @@ namespace QDirStat
 	QMap<QString, MountPoint *> _mountPointMap;
         QStringList                 _ntfsDevices;
 	bool			    _isPopulated;
-	bool			    _hasBtrfs;
 	bool			    _checkedForBtrfs;
+	bool			    _hasBtrfs;
+        bool                        _hasNtfs;
 
     }; // class MountPoints
 

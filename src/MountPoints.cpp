@@ -221,8 +221,9 @@ void MountPoints::init()
     _mountPointList.clear();
     _mountPointMap.clear();
     _isPopulated     = false;
-    _hasBtrfs	     = false;
     _checkedForBtrfs = false;
+    _hasBtrfs	     = false;
+    _hasNtfs         = false;
 }
 
 
@@ -305,6 +306,14 @@ bool MountPoints::hasBtrfs()
     }
 
     return _instance->_hasBtrfs;
+}
+
+
+bool MountPoints::hasNtfs()
+{
+    instance()->ensurePopulated();
+
+    return _instance->_hasNtfs;
 }
 
 
@@ -536,7 +545,9 @@ void MountPoints::findNtfsDevices()
         }
     }
 
-    if ( _ntfsDevices.isEmpty() )
+    _hasNtfs = ! _ntfsDevices.isEmpty();
+
+    if ( _hasNtfs )
         logDebug() << "No NTFS devices found" << endl;
 }
 
