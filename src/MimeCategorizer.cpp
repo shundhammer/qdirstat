@@ -342,8 +342,6 @@ void MimeCategorizer::addDefaultCategories()
     junk->addSuffix( "~"   );
     junk->addSuffix( "bak" );
     junk->addPattern( "core", Qt::CaseSensitive );
-    junk->addSuffix( "old" );
-    junk->addSuffix( "orig" );
 
 
     MimeCategory * archives = new MimeCategory( tr( "Compressed Archives" ), Qt::green );
