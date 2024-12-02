@@ -420,6 +420,12 @@ static void qt_logger( QtMsgType msgType,
 	    abort(); // Exit with core dump (it might contain a useful backtrace)
         }
     }
+
+    if ( msgType == QtWarningMsg && msg.contains( "QObject::connect" ) )
+    {
+        // Duplicate this on stderr
+        fprintf( stderr, "Qt Warning: %s\n", qPrintable( msg ) );
+    }
 }
 
 #endif // Qt 5.x
