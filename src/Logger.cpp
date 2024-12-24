@@ -421,7 +421,9 @@ static void qt_logger( QtMsgType msgType,
         }
     }
 
-    if ( msgType == QtWarningMsg && msg.contains( "QObject::connect" ) )
+    if ( msgType == QtWarningMsg &&
+         ( msg.contains( "QObject::connect"    ) ||
+           msg.contains( "QObject::disconnect" )    ) )
     {
         // Duplicate this on stderr
         fprintf( stderr, "Qt Warning: %s\n", qPrintable( msg ) );
