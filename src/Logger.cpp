@@ -335,8 +335,6 @@ static void qt_logger( QtMsgType msgType,
 		       const QMessageLogContext & context,
 		       const QString & msg )
 {
-    QStringList lines = msg.split("\n");
-
     foreach ( QString line, msg.split( "\n" ) )
     {
         // Remove utterly misleading message that will just dump a ton of bug
