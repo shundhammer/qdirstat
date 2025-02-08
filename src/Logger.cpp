@@ -1,9 +1,9 @@
 /*
  *   File name: Logger.cpp
- *   Summary:	Logger class for QDirstat
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   Logger class for QDirstat
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
@@ -20,12 +20,12 @@
 #include <QSize>
 #include <QStringList>
 
-#include <stdio.h>	// stderr, fprintf()
-#include <stdlib.h>	// abort(), mkdtemp()
-#include <unistd.h>	// getpid()
+#include <stdio.h>      // stderr, fprintf()
+#include <stdlib.h>     // abort(), mkdtemp()
+#include <unistd.h>     // getpid()
 #include <errno.h>
-#include <pwd.h>	// getpwuid()
-#include <sys/types.h>	// pid_t, getpwuid()
+#include <pwd.h>        // getpwuid()
+#include <sys/types.h>  // pid_t, getpwuid()
 
 
 #define VERBOSE_ROTATE 0
@@ -37,8 +37,8 @@ static LogSeverity toLogSeverity( QtMsgType msgType );
 static void qt_logger( QtMsgType msgType, const char *msg);
 #else
 static void qt_logger( QtMsgType msgType,
-		       const QMessageLogContext & context,
-		       const QString & msg );
+                       const QMessageLogContext & context,
+                       const QString & msg );
 #endif
 
 
@@ -56,9 +56,9 @@ Logger::Logger( const QString &filename ):
 
 
 Logger::Logger( const QString & rawLogDir,
-		const QString & rawFilename,
-		bool		doRotate,
-		int		logRotateCount ):
+                const QString & rawFilename,
+                bool            doRotate,
+                int             logRotateCount ):
     _logStream( stderr, QIODevice::WriteOnly ),
     _nullStream( stderr, QIODevice::WriteOnly )
 {
@@ -71,7 +71,7 @@ Logger::Logger( const QString & rawLogDir,
     logDir = createLogDir( logDir );
 
     if ( doRotate )
-	logRotate( logDir, filename, logRotateCount );
+        logRotate( logDir, filename, logRotateCount );
 
     openLogFile( logDir + "/" + filename );
 }
@@ -81,17 +81,17 @@ Logger::~Logger()
 {
     if ( _logFile.isOpen() )
     {
-	logInfo() << "-- Log End --\n" << endl;
-	_logFile.close();
+        logInfo() << "-- Log End --\n" << endl;
+        _logFile.close();
     }
 
     if ( this == _defaultLogger )
     {
-	_defaultLogger = 0;
+        _defaultLogger = 0;
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-	qInstallMsgHandler(0);
+        qInstallMsgHandler(0);
 #else
-	qInstallMessageHandler(0); // Restore default message handler
+        qInstallMessageHandler(0); // Restore default message handler
 #endif
     }
 }
@@ -115,11 +115,11 @@ void Logger::createNullStream()
 
     if ( _nullDevice.open( QIODevice::WriteOnly | QIODevice::Text ) )
     {
-	_nullStream.setDevice( &_nullDevice );
+        _nullStream.setDevice( &_nullDevice );
     }
     else
     {
-	fprintf( stderr, "ERROR: Can't open /dev/null to suppress log output\n" );
+        fprintf( stderr, "ERROR: Can't open /dev/null to suppress log output\n" );
     }
 }
 
@@ -128,25 +128,25 @@ void Logger::openLogFile( const QString & filename )
 {
     if ( ! _logFile.isOpen() || _logFile.fileName() != filename )
     {
-	_logFile.setFileName( filename );
+        _logFile.setFileName( filename );
 
-	if ( _logFile.open( QIODevice::WriteOnly |
-			    QIODevice::Text	 |
-			    QIODevice::Append	   ) )
-	{
-	    if ( ! _defaultLogger )
-		setDefaultLogger();
+        if ( _logFile.open( QIODevice::WriteOnly |
+                            QIODevice::Text      |
+                            QIODevice::Append      ) )
+        {
+            if ( ! _defaultLogger )
+                setDefaultLogger();
 
-	    fprintf( stderr, "Logging to %s\n", qPrintable( filename ) );
-	    _logStream.setDevice( &_logFile );
-	    _logStream << "\n\n";
-	    log( __FILE__, __LINE__, __FUNCTION__, LogSeverityInfo )
-		<< "-- Log Start --" << endl;
-	}
-	else
-	{
-	    fprintf( stderr, "ERROR: Can't open log file %s\n", qPrintable( filename ) );
-	}
+            fprintf( stderr, "Logging to %s\n", qPrintable( filename ) );
+            _logStream.setDevice( &_logFile );
+            _logStream << "\n\n";
+            log( __FILE__, __LINE__, __FUNCTION__, LogSeverityInfo )
+                << "-- Log Start --" << endl;
+        }
+        else
+        {
+            fprintf( stderr, "ERROR: Can't open log file %s\n", qPrintable( filename ) );
+        }
     }
 }
 
@@ -162,60 +162,60 @@ void Logger::setDefaultLogger()
 }
 
 
-QTextStream & Logger::log( Logger *	  logger,
-			   const QString &srcFile,
-			   int		  srcLine,
-			   const QString &srcFunction,
-			   LogSeverity	  severity )
+QTextStream & Logger::log( Logger *       logger,
+                           const QString &srcFile,
+                           int            srcLine,
+                           const QString &srcFunction,
+                           LogSeverity    severity )
 {
     static QTextStream stderrStream( stderr, QIODevice::WriteOnly );
 
     if ( ! logger )
-	logger = Logger::defaultLogger();
+        logger = Logger::defaultLogger();
 
     if ( logger )
-	return logger->log( srcFile, srcLine, srcFunction, severity );
+        return logger->log( srcFile, srcLine, srcFunction, severity );
     else
-	return stderrStream;
+        return stderrStream;
 }
 
 
 QTextStream & Logger::log( const QString &srcFile,
-			   int		  srcLine,
-			   const QString &srcFunction,
-			   LogSeverity	  severity )
+                           int            srcLine,
+                           const QString &srcFunction,
+                           LogSeverity    severity )
 {
     if ( severity < _logLevel )
-	return _nullStream;
+        return _nullStream;
 
     QString sev;
 
     switch ( severity )
     {
-	case LogSeverityVerbose:   sev = "<Verbose>"; break;
-	case LogSeverityDebug:	   sev = "<Debug>  "; break;
-	case LogSeverityInfo:	   sev = "<Info>   "; break;
-	case LogSeverityWarning:   sev = "<WARNING>"; break;
-	case LogSeverityError:	   sev = "<ERROR>  "; break;
-	    // Intentionally omitting 'default' branch so the compiler can
-	    // complain about unhandled enum values
+        case LogSeverityVerbose:   sev = "<Verbose>"; break;
+        case LogSeverityDebug:     sev = "<Debug>  "; break;
+        case LogSeverityInfo:      sev = "<Info>   "; break;
+        case LogSeverityWarning:   sev = "<WARNING>"; break;
+        case LogSeverityError:     sev = "<ERROR>  "; break;
+            // Intentionally omitting 'default' branch so the compiler can
+            // complain about unhandled enum values
     }
 
     _logStream << Logger::timeStamp() << " "
-	       << "[" << (int) getpid() << "] "
-	       << sev << " ";
+               << "[" << (int) getpid() << "] "
+               << sev << " ";
 
     if ( ! srcFile.isEmpty() )
     {
-	_logStream << srcFile;
+        _logStream << srcFile;
 
-	if ( srcLine > 0 )
-	    _logStream << ":" << srcLine;
+        if ( srcLine > 0 )
+            _logStream << ":" << srcLine;
 
-	_logStream << " ";
+        _logStream << " ";
 
-	if ( ! srcFunction.isEmpty() )
-	_logStream << srcFunction << "():  ";
+        if ( ! srcFunction.isEmpty() )
+        _logStream << srcFunction << "():  ";
     }
 
     return _logStream;
@@ -225,32 +225,32 @@ QTextStream & Logger::log( const QString &srcFile,
 void Logger::newline( Logger *logger )
 {
     if ( ! logger )
-	logger = Logger::defaultLogger();
+        logger = Logger::defaultLogger();
 
     if ( logger )
-	logger->newline();
+        logger->newline();
 }
 
 
 LogSeverity Logger::logLevel( Logger *logger )
 {
     if ( ! logger )
-	logger = Logger::defaultLogger();
+        logger = Logger::defaultLogger();
 
     if ( logger )
-	return logger->logLevel();
+        return logger->logLevel();
     else
-	return LogSeverityVerbose;
+        return LogSeverityVerbose;
 }
 
 
 void Logger::setLogLevel( Logger *logger, LogSeverity newLevel )
 {
     if ( ! logger )
-	logger = Logger::defaultLogger();
+        logger = Logger::defaultLogger();
 
     if ( logger )
-	logger->setLogLevel( newLevel );
+        logger->setLogLevel( newLevel );
 }
 
 
@@ -267,7 +267,7 @@ QString Logger::timeStamp()
 
 
 QString Logger::prefixLines( const QString &prefix,
-			     const QString &multiLineText )
+                             const QString &multiLineText )
 {
     QStringList lines = multiLineText.split( "\n" );
     QString result = lines.isEmpty() ? QString() : prefix;
@@ -278,7 +278,7 @@ QString Logger::prefixLines( const QString &prefix,
 
 
 QString Logger::indentLines( int indentWidth,
-			     const QString &multiLineText )
+                             const QString &multiLineText )
 {
     QString prefix( indentWidth, ' ' );
 
@@ -293,12 +293,12 @@ static LogSeverity toLogSeverity( QtMsgType msgType )
 
     switch ( msgType )
     {
-	case QtDebugMsg:    severity = LogSeverityVerbose; break;
-	case QtWarningMsg:  severity = LogSeverityWarning; break;
-	case QtCriticalMsg: severity = LogSeverityError;   break;
-	case QtFatalMsg:    severity = LogSeverityError;   break;
+        case QtDebugMsg:    severity = LogSeverityVerbose; break;
+        case QtWarningMsg:  severity = LogSeverityWarning; break;
+        case QtCriticalMsg: severity = LogSeverityError;   break;
+        case QtFatalMsg:    severity = LogSeverityError;   break;
 #if QT_VERSION >= 0x050500
-	case QtInfoMsg:	    severity = LogSeverityInfo;	   break;
+        case QtInfoMsg:     severity = LogSeverityInfo;    break;
 #endif
     }
 
@@ -311,29 +311,29 @@ static LogSeverity toLogSeverity( QtMsgType msgType )
 static void qt_logger( QtMsgType msgType, const char *msg)
 {
     Logger::log( 0, // use default logger
-		 "[Qt]", 0, "", // file, line, function
-		 toLogSeverity( msgType ) )
-	<< msg << endl;
+                 "[Qt]", 0, "", // file, line, function
+                 toLogSeverity( msgType ) )
+        << msg << endl;
 
     if ( msgType == QtFatalMsg )
     {
-	fprintf( stderr, "FATAL: %s\n", msg );
-	abort();
+        fprintf( stderr, "FATAL: %s\n", msg );
+        abort();
     }
 
     if ( msgType == QtWarningMsg &&
-	 QString( msg ).contains( "cannot connect to X server" ) )
+         QString( msg ).contains( "cannot connect to X server" ) )
     {
-	fprintf( stderr, "FATAL: %s\n", msg );
-	exit( 1 );
+        fprintf( stderr, "FATAL: %s\n", msg );
+        exit( 1 );
     }
 }
 
 #else // Qt 5.x
 
 static void qt_logger( QtMsgType msgType,
-		       const QMessageLogContext & context,
-		       const QString & msg )
+                       const QMessageLogContext & context,
+                       const QString & msg )
 {
     foreach ( QString line, msg.split( "\n" ) )
     {
@@ -354,7 +354,7 @@ static void qt_logger( QtMsgType msgType,
 
     if ( msgType == QtFatalMsg )
     {
-	if ( msg.contains( "Could not connect to display" ) ||
+        if ( msg.contains( "Could not connect to display" ) ||
              msg.contains( "failed to start because no Qt platform plugin" ) )
         {
             if ( msg.contains( "Reinstalling the application may fix this problem" ) )
@@ -409,13 +409,13 @@ static void qt_logger( QtMsgType msgType,
             }
 
             logInfo() << "-- Exiting --\n" << endl;
-	    exit( 1 ); // Don't dump core, just exit
+            exit( 1 ); // Don't dump core, just exit
         }
-	else
+        else
         {
             fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
             logInfo() << "-- Aborting with core dump --\n" << endl;
-	    abort(); // Exit with core dump (it might contain a useful backtrace)
+            abort(); // Exit with core dump (it might contain a useful backtrace)
         }
     }
 
@@ -438,14 +438,14 @@ QString Logger::userName()
     //
     // - There might not be a controlling terminal at all.
     // - The user owning the controlling terminal may or may not be the one
-    //	 starting this program.
+    //   starting this program.
 
     struct passwd * pw = getpwuid( getuid() );
 
     if ( pw )
-	return pw->pw_name;
+        return pw->pw_name;
     else
-	return QString::number( getuid() );
+        return QString::number( getuid() );
 }
 
 
@@ -457,42 +457,42 @@ QString Logger::createLogDir( const QString & rawLogDir )
 
     if ( ! rootDir.exists( logDir ) )
     {
-	rootDir.mkpath( logDir );
-	created = true;
+        rootDir.mkpath( logDir );
+        created = true;
     }
 
     QFileInfo dirInfo( logDir );
 
     if ( (uid_t) dirInfo.ownerId()  != getuid() )
     {
-	logError() << "ERROR: Directory " << logDir
-		   << " is not owned by " << userName() << endl;
+        logError() << "ERROR: Directory " << logDir
+                   << " is not owned by " << userName() << endl;
 
-	QByteArray nameTemplate( QString( logDir + "-XXXXXX" ).toUtf8() );
-	char * result = mkdtemp( nameTemplate.data() );
+        QByteArray nameTemplate( QString( logDir + "-XXXXXX" ).toUtf8() );
+        char * result = mkdtemp( nameTemplate.data() );
 
-	if ( result )
-	{
-	    created = true;
-	    logDir = QString::fromUtf8( result );
-	}
-	else
-	{
-	    logError() << "Could not create log dir " << nameTemplate
-		       << ": " << formatErrno() << endl;
+        if ( result )
+        {
+            created = true;
+            logDir = QString::fromUtf8( result );
+        }
+        else
+        {
+            logError() << "Could not create log dir " << nameTemplate
+                       << ": " << formatErrno() << endl;
 
-	    logDir = "/";
-	    // No permissions to write to /,
-	    // i.e. the log will go to stderr instead
-	}
+            logDir = "/";
+            // No permissions to write to /,
+            // i.e. the log will go to stderr instead
+        }
     }
 
     if ( created )
     {
-	QFile dir( logDir );
-	dir.setPermissions( QFile::ReadOwner  |
-			    QFile::WriteOwner |
-			    QFile::ExeOwner    );
+        QFile dir( logDir );
+        dir.setPermissions( QFile::ReadOwner  |
+                            QFile::WriteOwner |
+                            QFile::ExeOwner    );
     }
 
     return logDir;
@@ -504,7 +504,7 @@ QString Logger::oldName( const QString & filename, int no )
     QString oldName = filename;
 
     if ( oldName.endsWith( ".log" ) )
-	oldName.remove( QRegExp( "\\.log$" ) );
+        oldName.remove( QRegExp( "\\.log$" ) );
 
     oldName += QString( "-%1.old" ).arg( no, 2, 10, QChar( '0' ) );
 
@@ -517,7 +517,7 @@ QString Logger::oldNamePattern( const QString & filename )
     QString pattern = filename;
 
     if ( pattern.endsWith( ".log" ) )
-	pattern.remove( QRegExp( "\\.log$" ) );
+        pattern.remove( QRegExp( "\\.log$" ) );
 
     pattern += "-??.old";
 
@@ -526,8 +526,8 @@ QString Logger::oldNamePattern( const QString & filename )
 
 
 void Logger::logRotate( const QString & logDir,
-			const QString & filename,
-			int		logRotateCount )
+                        const QString & filename,
+                        int             logRotateCount )
 {
     QDir dir( logDir );
     QStringList keepers;
@@ -535,48 +535,48 @@ void Logger::logRotate( const QString & logDir,
 
     for ( int i = logRotateCount - 1; i >= 0; --i )
     {
-	QString currentName = i > 0 ? oldName( filename, i-1 ) : filename;
-	QString newName	    = oldName( filename, i );
+        QString currentName = i > 0 ? oldName( filename, i-1 ) : filename;
+        QString newName     = oldName( filename, i );
 
-	if ( dir.exists( newName ) )
-	{
-	    bool success = dir.remove( newName );
+        if ( dir.exists( newName ) )
+        {
+            bool success = dir.remove( newName );
 #if VERBOSE_ROTATE
-	    logDebug() << "Removing " << newName << ( success ? "" : " FAILED" ) << endl;
+            logDebug() << "Removing " << newName << ( success ? "" : " FAILED" ) << endl;
 #else
-	    Q_UNUSED( success );
+            Q_UNUSED( success );
 #endif
-	}
+        }
 
-	if ( dir.exists( currentName ) )
-	{
-	    bool success = dir.rename( currentName, newName );
+        if ( dir.exists( currentName ) )
+        {
+            bool success = dir.rename( currentName, newName );
 #if VERBOSE_ROTATE
-	    logDebug() << "Renaming " << currentName << " to " << newName
-		       << ( success ? "" : " FAILED" )
-		       << endl;
+            logDebug() << "Renaming " << currentName << " to " << newName
+                       << ( success ? "" : " FAILED" )
+                       << endl;
 #else
-	    Q_UNUSED( success );
+            Q_UNUSED( success );
 #endif
 
-	    keepers << newName;
-	}
+            keepers << newName;
+        }
     }
 
     QStringList matches = dir.entryList( QStringList() << oldNamePattern( filename ),
-					 QDir::Files );
+                                         QDir::Files );
 
     foreach ( const QString & match, matches )
     {
-	if ( ! keepers.contains( match ) )
-	{
-	    bool success = dir.remove( match );
+        if ( ! keepers.contains( match ) )
+        {
+            bool success = dir.remove( match );
 #if VERBOSE_ROTATE
-	    logDebug() << "Removing leftover " << match << ( success ? "" : " FAILED" ) << endl;
+            logDebug() << "Removing leftover " << match << ( success ? "" : " FAILED" ) << endl;
 #else
-	    Q_UNUSED( success );
+            Q_UNUSED( success );
 #endif
-	}
+        }
     }
 }
 

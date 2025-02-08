@@ -1,9 +1,9 @@
 /*
  *   File name: Logger.h
- *   Summary:	Logger class for QDirstat
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   Logger class for QDirstat
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
@@ -45,12 +45,12 @@ enum LogSeverity
 //
 //   logDebug() << "Result: " << result << endl;
 
-#define logVerbose()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityVerbose   )
-#define logDebug()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityDebug     )
-#define logInfo()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityInfo      )
-#define logWarning()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityWarning   )
-#define logError()	Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityError     )
-#define logNewline()	Logger::newline( 0 )
+#define logVerbose()    Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityVerbose   )
+#define logDebug()      Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityDebug     )
+#define logInfo()       Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityInfo      )
+#define logWarning()    Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityWarning   )
+#define logError()      Logger::log( 0, __FILE__, __LINE__, __FUNCTION__, LogSeverityError     )
+#define logNewline()    Logger::newline( 0 )
 
 
 /**
@@ -131,9 +131,9 @@ public:
      * logWarning() etc. macros instead.
      */
     QTextStream & log( const QString & srcFile,
-		       int	       srcLine,
-		       const QString & srcFunction,
-		       LogSeverity     severity );
+                       int             srcLine,
+                       const QString & srcFunction,
+                       LogSeverity     severity );
 
     /**
      * Static version of the internal logging function.
@@ -141,11 +141,11 @@ public:
      *
      * If 'logger' is 0, the default logger is used.
      */
-    static QTextStream & log( Logger	    * logger,
-			      const QString & srcFile,
-			      int	      srcLine,
-			      const QString & srcFunction,
-			      LogSeverity     severity );
+    static QTextStream & log( Logger        * logger,
+                              const QString & srcFile,
+                              int             srcLine,
+                              const QString & srcFunction,
+                              LogSeverity     severity );
 
     /**
      * Log a plain newline without any prefix (timestamp, source file name,
@@ -201,14 +201,14 @@ public:
      * Notice that due to the way C++ evaluates expressions, the runtime cost
      * will not change significantly, only the log file size:
      *
-     *	   logDebug() << "Result: " << myObj->result() << endl;
+     *     logDebug() << "Result: " << myObj->result() << endl;
      *
      * Even if the log level is higher than logDebug(), this will still call
      * myObj->result() and its operator<<(). If you want to avoid that, use
      * your own 'if' around the log output:
      *
      * if ( logLevel() >= LogSeverityDebug )
-     *	   logDebug() ...
+     *     logDebug() ...
      */
     LogSeverity logLevel() const { return _logLevel; }
 
@@ -295,11 +295,11 @@ protected:
 private:
 
     static Logger * _defaultLogger;
-    QFile	    _logFile;
-    QTextStream	    _logStream;
-    QFile	    _nullDevice;
-    QTextStream	    _nullStream;
-    LogSeverity	    _logLevel;
+    QFile           _logFile;
+    QTextStream     _logStream;
+    QFile           _nullDevice;
+    QTextStream     _nullStream;
+    LogSeverity     _logLevel;
 };
 
 
