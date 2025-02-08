@@ -1,6 +1,6 @@
 /*
  *   File name: Exception.h
- *   Summary:	Exception classes for QDirstat
+ *   Summary:	Exception classes for QDirStat
  *   License:	GPL V2 - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
