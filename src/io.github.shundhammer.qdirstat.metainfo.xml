@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component type="desktop-application">
+  <!--Created with jdAppStreamEdit 9.2-->
+  <id>io.github.shundhammer.qdirstat</id>
+  <name>QDirStat</name>
+  <summary>File System Directory Statistics</summary>
+  <developer id="io.github.shundhammer">
+    <name>Stefan Hundhammer</name>
+  </developer>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0-only</project_license>
+  <description>
+    <p>QDirStat is a graphical application to show where your disk space has gone and to help you to clean it up.</p>
+    <p>It shows the total size of directories and of their files both in a traditional tree view and in a colored treemap graphics where a large file is shown as a large rectangle, and small files are shown as small rectangles. Click on it, and you will see where in the tree the file is, and you can instantly move it to the trash if you like. The color corresponds to the file type: Images, videos or whatever.</p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">https://raw.githubusercontent.com/shundhammer/qdirstat/master/screenshots/QDirStat-main-win.png</image>
+    </screenshot>
+  </screenshots>
+  <releases>
+    <release version="1.9" date="2024-01-14" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.9</url>
+    </release>
+    <release version="1.8.1" date="2022-06-30" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.8.1</url>
+    </release>
+    <release version="1.8" date="2021-08-28" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.8</url>
+    </release>
+    <release version="1.7.1" date="2021-04-05" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.7.1</url>
+    </release>
+    <release version="1.7" date="2020-07-26" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.7</url>
+    </release>
+    <release version="1.6.1" date="2020-02-13" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.6.1</url>
+    </release>
+    <release version="1.6" date="2019-07-22" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.6</url>
+    </release>
+    <release version="1.5" date="2018-11-07" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.5</url>
+    </release>
+    <release version="1.4.97-Beta" date="2018-10-26" type="development">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.4.97-Beta</url>
+    </release>
+    <release version="1.4" date="2017-06-04" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.4</url>
+    </release>
+    <release version="1.3" date="2017-03-05" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.3</url>
+    </release>
+    <release version="1.2" date="2017-01-03" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.2</url>
+    </release>
+    <release version="1.1" date="2016-10-31" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.1</url>
+    </release>
+    <release version="1.0" date="2016-05-16" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/1.0</url>
+    </release>
+    <release version="0.98-Beta3" date="2016-04-08" type="development">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/0.98-Beta3</url>
+    </release>
+    <release version="0.92-Beta2" date="2016-03-20" type="development">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/0.92-Beta2</url>
+    </release>
+    <release version="0.86-Beta1" date="2016-02-13" type="development">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/0.86-Beta1</url>
+    </release>
+  </releases>
+  <url type="homepage">https://github.com/shundhammer/qdirstat</url>
+  <url type="bugtracker">https://github.com/shundhammer/qdirstat/issues</url>
+  <url type="faq">https://github.com/shundhammer/qdirstat/blob/master/doc/Troubleshooting.md</url>
+  <url type="donation">https://www.paypal.me/shundhammer</url>
+  <url type="vcs-browser">https://github.com/shundhammer/qdirstat/</url>
+  <content_rating type="oars-1.1"/>
+  <launchable type="desktop-id">qdirstat.desktop</launchable>
+</component>
