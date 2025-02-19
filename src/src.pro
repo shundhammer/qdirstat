@@ -26,7 +26,7 @@ isEmpty(INSTALL_PREFIX):INSTALL_PREFIX = /usr
 TARGET		 = qdirstat
 TARGET.files	 = qdirstat
 TARGET.path	 = $$INSTALL_PREFIX/bin
-INSTALLS	+= TARGET desktop icons appstream
+INSTALLS	+= TARGET desktop icons
 
 
 # Fix the train wreck that Qt 5.15 is.
@@ -295,9 +295,6 @@ RESOURCES = icons.qrc
 
 desktop.files	= *.desktop
 desktop.path	= $$INSTALL_PREFIX/share/applications
-
-appstream.files	= *.metainfo.xml
-appstream.path	= $$INSTALL_PREFIX/share/metainfo
 
 icons.files	= icons/qdirstat.svg
 icons.path	= $$INSTALL_PREFIX/share/icons/hicolor/scalable/apps

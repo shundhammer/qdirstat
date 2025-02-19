@@ -20,6 +20,10 @@ CONFIG  += ordered
 
 SUBDIRS  = src scripts doc doc/stats man
 
+# Not used by default
+#
+# SUBDIRS += metainfo
+
 macx {
     # FIXME: Prevent build failure because of missing main() (issue #131)
     # This is a pretty radical approach, and you won't get any of the scripts
