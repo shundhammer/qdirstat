@@ -204,16 +204,13 @@ void BookmarksManager::read()
 
     _bookmarks.clear();
     QTextStream in( &bookmarksFile );
-    QString line = in.readLine();
 
     while ( ! in.atEnd() )
     {
-        line = line.trimmed();
+        QString line = in.readLine().trimmed();
 
         if ( ! line.isEmpty() && ! line.startsWith( "#" ) )
             _bookmarks << expandedPath( line );
-
-	line = in.readLine();
     }
 
     sort();
