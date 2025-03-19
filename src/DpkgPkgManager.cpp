@@ -113,7 +113,7 @@ PkgInfoList DpkgPkgManager::parsePkgList( const QString & output )
     {
 	if ( ! line.isEmpty() )
 	{
-	    QStringList fields = line.split( " | ", QString::KeepEmptyParts );
+	    QStringList fields = line.split( " | ", KEEPEMPTYPARTS );
 
 	    if ( fields.size() != 4 )
 		logError() << "Invalid dpkg-query output: \"" << line << "\n" << ENDL;

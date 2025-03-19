@@ -77,7 +77,7 @@ PkgInfoList PacManPkgManager::parsePkgList( const QString & output )
     {
         if ( ! line.isEmpty() )
         {
-            QStringList fields = line.split( " ", QString::KeepEmptyParts );
+            QStringList fields = line.split( " ", KEEPEMPTYPARTS );
 
             if ( fields.size() != 2 )
                 logError() << "Invalid pacman -Qn output: \"" << line << "\n" << ENDL;
