@@ -127,7 +127,7 @@ QRealList FileSizeStats::fillBuckets( int bucketCount,
                << " startVal: " << formatSize( startVal )
                << " endVal: " << formatSize( endVal )
                << " bucketWidth: " << formatSize( bucketWidth )
-               << endl;
+               << ENDL;
 #endif
 
     for ( int i=0; i < _data.size(); ++i )

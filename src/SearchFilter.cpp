@@ -73,7 +73,7 @@ void SearchFilter::guessFilterMode()
 #if 0
     logDebug() << "using filter mode " << toString( _filterMode )
                << " from \"" << _pattern << "\""
-               << endl;
+               << ENDL;
 #endif
 }
 
@@ -91,11 +91,11 @@ bool SearchFilter::matches( const QString & str ) const
         case RegExp:     return qregexp_containedIn(_regexp, str);
         case SelectAll:  return true;
         case Auto:
-            logWarning() << "Unexpected filter mode 'Auto' - assuming 'Contains'" << endl;
+            logWarning() << "Unexpected filter mode 'Auto' - assuming 'Contains'" << ENDL;
             return str.contains( _pattern );
     }
 
-    logError() << "Undefined filter mode " << (int) _filterMode << endl;
+    logError() << "Undefined filter mode " << (int) _filterMode << ENDL;
     return false;
 }
 

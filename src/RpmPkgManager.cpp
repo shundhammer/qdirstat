@@ -115,7 +115,7 @@ PkgInfoList RpmPkgManager::parsePkgList( const QString & output )
 	    QStringList fields = line.split( " | ", QString::KeepEmptyParts );
 
 	    if ( fields.size() != 3 )
-		logError() << "Invalid rpm -qa output: " << line << "\n" << endl;
+		logError() << "Invalid rpm -qa output: " << line << "\n" << ENDL;
 	    else
 	    {
 		QString name	= fields.takeFirst();
@@ -187,7 +187,7 @@ PkgFileListCache * RpmPkgManager::createFileListCache( PkgFileListCache::LookupT
 
     QStringList lines = output.split( "\n" );
     output.clear(); // Free all that text ASAP
-    logDebug() << lines.size() << " output lines" << endl;
+    logDebug() << lines.size() << " output lines" << ENDL;
 
     PkgFileListCache * cache = new PkgFileListCache( this, lookupType );
     CHECK_NEW( cache );
@@ -207,7 +207,7 @@ PkgFileListCache * RpmPkgManager::createFileListCache( PkgFileListCache::LookupT
 
 	if ( fields.size() != 2 )
 	{
-	    logError() << "Unexpected file list line: \"" << line << "\"" << endl;
+	    logError() << "Unexpected file list line: \"" << line << "\"" << ENDL;
 	}
 	else
 	{
@@ -219,7 +219,7 @@ PkgFileListCache * RpmPkgManager::createFileListCache( PkgFileListCache::LookupT
 	}
     }
 
-    logDebug() << "file list cache finished." << endl;
+    logDebug() << "file list cache finished." << ENDL;
 
     return cache;
 }
@@ -246,8 +246,8 @@ void RpmPkgManager::rebuildRpmDbWarning()
 
     if ( ! issuedWarning )
     {
-	cerr << "WARNING: rpm is very slow. Run	  sudo rpm --rebuilddb\n" << endl;
-	logWarning()  << "rpm is very slow. Run	  sudo rpm --rebuilddb"	  << endl;
+	cerr << "WARNING: rpm is very slow. Run	  sudo rpm --rebuilddb\n" << ENDL;
+	logWarning()  << "rpm is very slow. Run	  sudo rpm --rebuilddb"	  << ENDL;
     }
 
     // Add a panel message so the user is sure to see this message.

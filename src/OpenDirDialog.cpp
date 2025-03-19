@@ -12,8 +12,6 @@
 #include <QFileSystemModel>
 #include <QTimer>
 
-#include "QtCompat.h"
-
 #include "OpenDirDialog.h"
 #include "MountPoints.h"
 #include "ExistingDirCompleter.h"
@@ -143,7 +141,7 @@ void OpenDirDialog::initialSelection()
     QString path = QDir::currentPath();
 
 #if VERBOSE_SELECTION
-    logDebug() << "Selecting " << path << endl;
+    logDebug() << "Selecting " << path << ENDL;
 #endif
 
     setPath( path );
@@ -179,7 +177,7 @@ void OpenDirDialog::setPath( const QString & path )
     _settingPath = true;
 
 #if VERBOSE_SELECTION
-    logDebug() << "Selecting " << path << endl;
+    logDebug() << "Selecting " << path << ENDL;
 #endif
 
     SignalBlocker sigBlockerPathSelector( _ui->pathSelector );
@@ -233,7 +231,7 @@ void OpenDirDialog::pathEdited( bool ok )
     if ( path != _lastPath )
     {
 #if VERBOSE_SELECTION
-        logDebug() << "New path:" << path << endl;
+        logDebug() << "New path:" << path << ENDL;
 #endif
         setPath( path );
     }
@@ -249,7 +247,7 @@ void OpenDirDialog::treeSelection( const QModelIndex & newCurrentItem,
     if ( path != _lastPath )
     {
 #if VERBOSE_SELECTION
-        logDebug() << "Selecting " << path << endl;
+        logDebug() << "Selecting " << path << ENDL;
 #endif
         setPath( path );
     }
@@ -284,7 +282,7 @@ void OpenDirDialog::goUp()
     if ( path != _lastPath )
     {
 #if VERBOSE_SELECTION
-        logDebug() << "Navigating up to " << path << endl;
+        logDebug() << "Navigating up to " << path << ENDL;
 #endif
         setPath( path );
     }
@@ -342,11 +340,11 @@ QString OpenDirDialog::askOpenDir( bool *    crossFilesystems_ret,
     OpenDirDialog dialog( parent );
     dialog.pathSelector()->addHomeDir();
     dialog.pathSelector()->addMountPoints( MountPoints::normalMountPoints() );
-    logDebug() << "Waiting for user selection" << endl;
+    logDebug() << "Waiting for user selection" << ENDL;
 
     if ( dialog.exec() == QDialog::Rejected )
     {
-        logInfo() << "[Cancel]" << endl;
+        logInfo() << "[Cancel]" << ENDL;
 	return QString();
     }
 
@@ -356,7 +354,7 @@ QString OpenDirDialog::askOpenDir( bool *    crossFilesystems_ret,
 	*crossFilesystems_ret = _crossFilesystems;
 
     QString path = dialog.selectedPath();
-    logInfo() << "User selected path " << path << endl;
+    logInfo() << "User selected path " << path << ENDL;
 
     return path;
 }

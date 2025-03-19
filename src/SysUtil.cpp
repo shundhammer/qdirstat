@@ -62,7 +62,7 @@ QString SysUtil::runCommand( const QString & commandLine,
 
     if ( args.size() < 1 )
     {
-	logError() << "Bad command line: \"" << commandLine << "\"" << endl;
+	logError() << "Bad command line: \"" << commandLine << "\"" << ENDL;
 	return "ERROR: Bad command line";
     }
 
@@ -86,7 +86,7 @@ QString SysUtil::runCommand( const QString &	 command,
 
     if ( ! haveCommand( command ) )
     {
-	logInfo() << "Command not found: " << command << endl;
+	logInfo() << "Command not found: " << command << ENDL;
 	return "ERROR: Command not found";
     }
 
@@ -100,7 +100,7 @@ QString SysUtil::runCommand( const QString &	 command,
     process.setProcessChannelMode( QProcess::MergedChannels ); // combine stdout and stderr
 
     if ( logCommand )
-	logDebug() << command << " " << args.join( " " ) << endl;
+	logDebug() << command << " " << args.join( " " ) << ENDL;
 
     process.start();
     bool success = process.waitForFinished( timeout_sec * 1000 );
@@ -118,18 +118,18 @@ QString SysUtil::runCommand( const QString &	 command,
 		logError() << "Command exited with exit code "
 			   << process.exitCode() << ": "
 			   << command << "\" args: " << args
-			   << endl;
+			   << ENDL;
 	    }
 	}
 	else
 	{
-	    logError() << "Command crashed: \"" << command << "\" args: " << args << endl;
+	    logError() << "Command crashed: \"" << command << "\" args: " << args << ENDL;
 	    output = "ERROR: Command crashed\n\n" + output;
 	}
     }
     else
     {
-	logError() << "Timeout or crash: \"" << command << "\" args: " << args << endl;
+	logError() << "Timeout or crash: \"" << command << "\" args: " << args << ENDL;
 	output = "ERROR: Timeout or crash\n\n" + output;
     }
 
@@ -138,9 +138,9 @@ QString SysUtil::runCommand( const QString &	 command,
         QString logOutput = output.trimmed();
 
         if ( logOutput.contains( '\n' ) )
-            logDebug() << "Output: \n" << output << endl;
+            logDebug() << "Output: \n" << output << ENDL;
         else
-            logDebug() << "Output: \"" << logOutput << "\"" << endl;
+            logDebug() << "Output: \"" << logOutput << "\"" << ENDL;
     }
 
     return output;
@@ -149,7 +149,7 @@ QString SysUtil::runCommand( const QString &	 command,
 
 void SysUtil::openInBrowser( const QString & url )
 {
-    logDebug() << "Opening URL " << url << endl;
+    logDebug() << "Opening URL " << url << ENDL;
 
     Process::startDetached( "/usr/bin/xdg-open", QStringList() << url );
 }
@@ -225,7 +225,7 @@ bool SysUtil::isBrokenSymLink( const QString & path )
             logWarning() << "Permission denied for one of the directories"
                          << " in symlink target " << QString::fromUtf8( target )
                          << " of symlink " << path
-                         << endl;
+                         << ENDL;
 
             return false;       // We don't know if the symlink is broken
         }
@@ -233,7 +233,7 @@ bool SysUtil::isBrokenSymLink( const QString & path )
         {
             logWarning() << "Broken symlink " << path
                          << " errno: " << strerror( errno )
-                         << endl;
+                         << ENDL;
             return true;
         }
     }
@@ -253,7 +253,7 @@ QByteArray SysUtil::readLink( const QByteArray & path )
 
     if ( len == 0 )
     {
-        logWarning() << QString::fromUtf8( path ) << " is not a symlink" << endl;
+        logWarning() << QString::fromUtf8( path ) << " is not a symlink" << ENDL;
     }
     else if ( len == targetBuf.size() )
     {
@@ -264,7 +264,7 @@ QByteArray SysUtil::readLink( const QByteArray & path )
         // workarounds and simply fail with an error in the log.
 
         logError() << "Symlink target of " << QString::fromUtf8( path )
-                   << " is longer than " << PATH_MAX << " bytes" << endl;
+                   << " is longer than " << PATH_MAX << " bytes" << ENDL;
         targetBuf.clear();
     }
     else

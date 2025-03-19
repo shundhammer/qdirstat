@@ -101,7 +101,7 @@ void Cleanup::executeRecursive( FileInfo *item, OutputWindow * outputWindow )
 
                 logError() << this << ": Recursive operation is not supported "
                            << "for \"Assume Deleted\" refresh policy."
-                           << endl;
+                           << ENDL;
             }
             else
             {
@@ -225,7 +225,7 @@ QString Cleanup::chooseShell( OutputWindow * outputWindow ) const
 
     if ( ! shell.isEmpty() )
     {
-	logDebug() << "Using custom shell " << shell << endl;
+	logDebug() << "Using custom shell " << shell << ENDL;
 
 	if ( ! isExecutable( shell ) )
 	{
@@ -240,7 +240,7 @@ QString Cleanup::chooseShell( OutputWindow * outputWindow ) const
     if ( shell.isEmpty() )
     {
 	shell = defaultShell();
-	logDebug() << "No custom shell configured - using " << shell << endl;
+	logDebug() << "No custom shell configured - using " << shell << ENDL;
     }
 
     if ( ! errMsg.isEmpty() )
@@ -263,7 +263,7 @@ void Cleanup::runCommand( const FileInfo * item,
     {
 	outputWindow->show(); // Regardless of user settings
 	outputWindow->addStderr( tr( "No usable shell - aborting cleanup action" ) );
-	logError() << "ERROR: No usable shell" << endl;
+	logError() << "ERROR: No usable shell" << ENDL;
 	return;
     }
 
@@ -332,7 +332,7 @@ QString Cleanup::loginShell()
 
 	if ( ! isExecutable( shell ) )
 	{
-	    logError() << "ERROR: Shell \"" << shell << "\" is not executable" << endl;
+	    logError() << "ERROR: Shell \"" << shell << "\" is not executable" << ENDL;
 	    shell = "";
 	}
     }
@@ -358,16 +358,16 @@ const QStringList & Cleanup::defaultShells()
 		 shells << shell;
 	    else if ( ! shell.isEmpty() )
 	    {
-		logWarning() << "Shell " << shell << " is not executable" << endl;
+		logWarning() << "Shell " << shell << " is not executable" << ENDL;
 	    }
 	}
 
 	if ( ! shells.isEmpty() )
-	    logDebug() << "Default shell: " << shells.first() << endl;
+	    logDebug() << "Default shell: " << shells.first() << ENDL;
     }
 
     if ( shells.isEmpty() )
-	logError() << "ERROR: No usable shell" << endl;
+	logError() << "ERROR: No usable shell" << ENDL;
 
     return shells;
 }
@@ -392,17 +392,17 @@ const QMap<QString, QString> & Cleanup::desktopSpecificApps()
 	else
 	{
 	    logDebug() << "Overriding $XDG_CURRENT_DESKTOP with $QDIRSTAT_DESKTOP (\""
-		       << desktop << "\")" << endl;
+		       << desktop << "\")" << ENDL;
 	}
 
 	if ( desktop.isEmpty() )
 	{
-	    logWarning() << "$XDG_CURRENT_DESKTOP is not set - using fallback apps" << endl;
+	    logWarning() << "$XDG_CURRENT_DESKTOP is not set - using fallback apps" << ENDL;
 	    apps = fallbackApps();
 	}
 	else
 	{
-	    logInfo() << "Detected desktop \"" << desktop << "\"" << endl;
+	    logInfo() << "Detected desktop \"" << desktop << "\"" << ENDL;
 	    desktop = desktop.toLower();
 
 	    if ( desktop == "kde" )
@@ -450,7 +450,7 @@ const QMap<QString, QString> & Cleanup::desktopSpecificApps()
 
 	    if ( apps.isEmpty() )
 	    {
-		logWarning() << "No mapping available for this desktop - using fallback apps" << endl;
+		logWarning() << "No mapping available for this desktop - using fallback apps" << ENDL;
 		apps = fallbackApps();
 	    }
 	}
@@ -459,7 +459,7 @@ const QMap<QString, QString> & Cleanup::desktopSpecificApps()
 	      it != apps.constEnd();
 	      ++it )
 	{
-	    logInfo() << it.key() << " => \"" << it.value() << "\"" << endl;
+	    logInfo() << it.key() << " => \"" << it.value() << "\"" << ENDL;
 	}
     }
 

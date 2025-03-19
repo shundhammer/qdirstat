@@ -76,7 +76,7 @@ void CleanupCollection::remove( Cleanup * cleanup )
 
     if ( index == -1 )
     {
-	logError() << "No such cleanup: " << cleanup << endl;
+	logError() << "No such cleanup: " << cleanup << ENDL;
 	return;
     }
 
@@ -102,7 +102,7 @@ int CleanupCollection::indexOf( Cleanup * cleanup ) const
     int index = _cleanupList.indexOf( cleanup );
 
     if ( index == -1 )
-	logError() << "Cleanup " << cleanup << " is not in this collection" << endl;
+	logError() << "Cleanup " << cleanup << " is not in this collection" << ENDL;
 
     return index;
 }
@@ -231,7 +231,7 @@ void CleanupCollection::execute()
     if ( ! cleanup )
     {
 	logError() << "Wrong sender type: "
-		   << sender()->metaObject()->className() << endl;
+		   << sender()->metaObject()->className() << ENDL;
 	return;
     }
 
@@ -239,13 +239,13 @@ void CleanupCollection::execute()
 
     if ( selection.isEmpty() )
     {
-	logWarning() << "Nothing selected" << endl;
+	logWarning() << "Nothing selected" << ENDL;
 	return;
     }
 
     if ( cleanup->askForConfirmation() && ! confirmation( cleanup, selection ) )
     {
-	logDebug() << "User declined confirmation" << endl;
+	logDebug() << "User declined confirmation" << ENDL;
 	return;
     }
 
@@ -306,7 +306,7 @@ void CleanupCollection::execute()
 	else
 	{
 	    logWarning() << "Cleanup " << cleanup
-			 << " does not work for " << item << endl;
+			 << " does not work for " << item << ENDL;
 	}
     }
 
@@ -322,7 +322,7 @@ void CleanupCollection::execute()
             DirTree * tree = item->tree();
 
             if ( tree->isBusy() )
-                logWarning() << "Ignoring AssumeDeleted: DirTree is being read" << endl;
+                logWarning() << "Ignoring AssumeDeleted: DirTree is being read" << ENDL;
             else
                 tree->deleteSubtree( item );
         }
@@ -569,8 +569,8 @@ void CleanupCollection::readSettings()
 
                         hotkey = "Ctrl+G";
                         logError() << "The Ctrl+F hotkey for '" << title
-                                   << "' is now taken by 'Edit' -> 'Find...'." << endl;
-                        logError() << "Changing to " << hotkey << "." << endl;
+                                   << "' is now taken by 'Edit' -> 'Find...'." << ENDL;
+                        logError() << "Changing to " << hotkey << "." << ENDL;
                     }
 
 		    cleanup->setShortcut( hotkey );
@@ -581,7 +581,7 @@ void CleanupCollection::readSettings()
 	    }
 	    else
 	    {
-		logError() << "Need at least Command and Title for a cleanup" << endl;
+		logError() << "Need at least Command and Title for a cleanup" << ENDL;
 	    }
 
 	    settings.endGroup(); // [Cleanup_01], [Cleanup_02], ...

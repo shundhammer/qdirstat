@@ -70,9 +70,9 @@ void UnpkgSettings::write()
 
 void UnpkgSettings::dump() const
 {
-    logDebug() << "startingDir:    " << startingDir << endl;
-    logDebug() << "excludeDirs:    " << excludeDirs << endl;
-    logDebug() << "ignorePatterns: " << ignorePatterns << endl;
+    logDebug() << "startingDir:    " << startingDir << ENDL;
+    logDebug() << "excludeDirs:    " << excludeDirs << ENDL;
+    logDebug() << "ignorePatterns: " << ignorePatterns << ENDL;
 }
 
 

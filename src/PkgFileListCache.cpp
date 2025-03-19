@@ -34,7 +34,7 @@ PkgFileListCache::PkgFileListCache( PkgManager * pkgManager,
 
 PkgFileListCache::~PkgFileListCache()
 {
-    logDebug() << "Destroying the file list cache." << endl;
+    logDebug() << "Destroying the file list cache." << ENDL;
 }
 
 

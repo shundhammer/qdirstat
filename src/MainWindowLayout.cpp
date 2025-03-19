@@ -75,7 +75,7 @@ void MainWindow::changeLayout( const QString & name )
 	    action->data().toString() : "L2";
     }
 
-    logDebug() << "Changing to layout " << _layoutName << endl;
+    logDebug() << "Changing to layout " << _layoutName << ENDL;
 
     _ui->dirTreeView->headerTweaker()->changeLayout( _layoutName );
 
@@ -89,7 +89,7 @@ void MainWindow::changeLayout( const QString & name )
     }
     else
     {
-	logError() << "No layout " << _layoutName << endl;
+	logError() << "No layout " << _layoutName << ENDL;
     }
 }
 

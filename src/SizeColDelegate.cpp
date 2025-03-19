@@ -12,7 +12,6 @@
 
 #include "SizeColDelegate.h"
 #include "DirTreeModel.h"
-#include "QtCompat.h"
 #include "Exception.h"
 #include "FileInfo.h"
 #include "Logger.h"
@@ -147,7 +146,7 @@ QSize SizeColDelegate::sizeHint( const QStyleOptionViewItem & option,
                             height + MARGIN_TOP   + MARGIN_BOTTOM );
 #if 0
                 logDebug() << "size hint for \"" << text << "\": "
-                           << size.width() << ", " << size.height() << endl;
+                           << size.width() << ", " << size.height() << ENDL;
 #endif
                 return size;
             }
@@ -194,7 +193,7 @@ void SizeColDelegate::ensureModel( const QModelIndex & index ) const
             _model = const_cast<DirTreeModel *>( constModel );
 
         if ( ! _model )
-            logError() << "WRONG_MODEL TYPE" << endl;
+            logError() << "WRONG_MODEL TYPE" << ENDL;
     }
 }
 

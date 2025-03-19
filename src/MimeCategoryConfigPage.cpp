@@ -321,7 +321,7 @@ void MimeCategoryConfigPage::populateTreemapView()
 
     logDebug() << "Demo tree: " << fileCount << " files with "
 	       << formatSize( topDir->totalSize() ) << " total"
-	       << endl;
+	       << ENDL;
 
     _ui->treemapView->setDirTree( _dirTree );
 }

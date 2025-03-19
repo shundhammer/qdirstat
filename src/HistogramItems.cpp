@@ -80,7 +80,7 @@ void HistogramBar::mousePressEvent( QGraphicsSceneMouseEvent * event )
 			   << ": " << _parentView->bucket( _number ) << " items;"
 			   << " range: " << formatSize( _startVal )
 			   << " .. " << formatSize( _endVal )
-			   << endl;
+			   << ENDL;
 	    }
 	    break;
 
@@ -148,7 +148,7 @@ void PercentileMarker::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	    logDebug() << "Percentile marker #" << _percentileIndex
 		       << ": " << _name
 		       << ": " << formatSize( _parentView->percentile( _percentileIndex ) )
-		       << endl;
+		       << ENDL;
 	    break;
 
 	default:

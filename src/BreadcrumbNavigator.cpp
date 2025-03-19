@@ -7,8 +7,6 @@
  */
 
 
-#include "QtCompat.h" // qHtmlEscape()
-
 #include "BreadcrumbNavigator.h"
 #include "DirInfo.h"
 #include "Logger.h"
@@ -152,7 +150,7 @@ void BreadcrumbNavigator::shortenBreadcrumbs()
                    << " from " << crumb.pathComponent.length()
                    << " to " <<  crumb.displayName.length()
                    << ": " << crumb.pathComponent
-                   << endl;
+                   << ENDL;
 #endif
     }
 }
@@ -237,7 +235,7 @@ void BreadcrumbNavigator::splitBasePath( const QString & path,
 
 void BreadcrumbNavigator::logPathClicked( const QString & path )
 {
-    logInfo() << "Clicked path " << path << endl;
+    logInfo() << "Clicked path " << path << ENDL;
 }
 
 
@@ -253,7 +251,7 @@ void BreadcrumbNavigator::logBreadcrumbs() const
                    << " pathComponent: \"" << crumb.pathComponent
                    << "\" displayName: \"" << crumb.displayName
                    << "\" url: " << crumb.url << "\""
-                   << endl;
+                   << ENDL;
     }
 
     logNewline();

@@ -138,10 +138,10 @@ void DirTree::startReading( const QString & rawUrl )
     QFileInfo fileInfo( rawUrl );
     _url = fileInfo.absoluteFilePath();
     // logDebug() << "rawUrl: \"" << rawUrl << "\"" << endl;
-    logInfo() << "   url: \"" << _url	 << "\"" << endl;
+    logInfo() << "   url: \"" << _url	 << "\"" << ENDL;
     MountPoint * mountPoint = MountPoints::findNearestMountPoint( _url );
     _device = mountPoint ? mountPoint->device() : "";
-    logInfo() << "device: " << _device << endl;
+    logInfo() << "device: " << _device << ENDL;
 
     if ( _root->hasChildren() )
 	clear();
@@ -171,7 +171,7 @@ void DirTree::startReading( const QString & rawUrl )
     }
     else	// stat() failed
     {
-	logWarning() << "stat(" << _url << ") failed" << endl;
+	logWarning() << "stat(" << _url << ") failed" << ENDL;
 	_isBusy = false;
 	emit finished();
     }
@@ -210,7 +210,7 @@ void DirTree::refresh( DirInfo * subtree )
 	// if one selected item is in the subtree of another, and that parent
 	// was already refreshed.
 
-	logWarning() << "Item is no longer valid - not refreshing subtree" << endl;
+	logWarning() << "Item is no longer valid - not refreshing subtree" << ENDL;
 	return;
     }
 
@@ -295,7 +295,7 @@ void DirTree::childAddedNotify( FileInfo * newChild )
 
 void DirTree::deletingChildNotify( FileInfo * deletedChild )
 {
-    logDebug() << "Deleting child " << deletedChild << endl;
+    logDebug() << "Deleting child " << deletedChild << ENDL;
     emit deletingChild( deletedChild );
 
     if ( deletedChild == _root )
@@ -328,7 +328,7 @@ void DirTree::deleteSubtree( FileInfo *subtree )
 	    {
 		if ( parent->parent()->isFinished() )
 		{
-		    // logDebug() << "Removing empty dot entry " << parent << endl;
+		    // logDebug() << "Removing empty dot entry " << parent << ENDL;
 
 		    deletingChildNotify( parent );
 		    parent->parent()->deleteEmptyDotEntry();
@@ -339,7 +339,7 @@ void DirTree::deleteSubtree( FileInfo *subtree )
 	    }
 	    else	// no parent - this should never happen (?)
 	    {
-		logError() << "Internal error: Killing dot entry without parent " << parent << endl;
+		logError() << "Internal error: Killing dot entry without parent " << parent << ENDL;
 
 		// Better leave that dot entry alone - we shouldn't have come
 		// here in the first place. Who knows what will happen if this
@@ -502,16 +502,16 @@ void DirTree::setExcludeRules( ExcludeRules * newRules )
 #if VERBOSE_EXCLUDE_RULES
     if ( newRules )
     {
-	logDebug() << "New tmp exclude rules:" << endl;
+	logDebug() << "New tmp exclude rules:" << ENDL;
 
 	for ( ExcludeRuleListIterator it = newRules->begin(); it != newRules->end(); ++it )
 	{
-	    logDebug() << *it << endl;
+	    logDebug() << *it << ENDL;
 	}
     }
     else
     {
-	logDebug() << "Clearing tmp exclude rules" << endl;
+	logDebug() << "Clearing tmp exclude rules" << ENDL;
     }
 #endif
 
@@ -683,9 +683,9 @@ void DirTree::detectClusterSize( FileInfo * item )
         _haveClusterSize  = true;
 
         logInfo() << "Cluster size: " << _blocksPerCluster << " blocks ("
-                  << formatSize( clusterSize() ) << ")" << endl;
+                  << formatSize( clusterSize() ) << ")" << ENDL;
         logDebug() << "Derived from " << item << " " << formatSize( item->rawByteSize() )
                    << " (allocated: " << formatSize( item->rawAllocatedSize() ) << ")"
-                   << endl;
+                   << ENDL;
     }
 }

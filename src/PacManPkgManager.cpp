@@ -80,7 +80,7 @@ PkgInfoList PacManPkgManager::parsePkgList( const QString & output )
             QStringList fields = line.split( " ", QString::KeepEmptyParts );
 
             if ( fields.size() != 2 )
-                logError() << "Invalid pacman -Qn output: \"" << line << "\n" << endl;
+                logError() << "Invalid pacman -Qn output: \"" << line << "\n" << ENDL;
             else
             {
                 QString name    = fields.takeFirst();

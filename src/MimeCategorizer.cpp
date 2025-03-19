@@ -138,7 +138,7 @@ MimeCategory * MimeCategorizer::category( const QString & filename,
 
 #if 0
     if ( category )
-	logVerbose() << "Found " << category << " for " << filename << endl;
+	logVerbose() << "Found " << category << " for " << filename << ENDL;
 #endif
 
     return category;
@@ -221,7 +221,7 @@ void MimeCategorizer::addSuffixes( QMap<QString, MimeCategory *> & suffixMap,
 	{
 	    logError() << "Duplicate suffix: " << suffix << " for "
 		       << suffixMap.value( suffix ) << " and " << category
-		       << endl;
+		       << ENDL;
 	}
 	else
 	{

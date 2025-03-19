@@ -15,6 +15,7 @@
 #include <QFile>
 #include <QTextStream>
 
+#include "QtCompat.h"
 
 // Intentionally not using LogDebug, LogMilestone etc. to avoid confusion
 // because of simple typos: logDebug() vs. LogDebug()
@@ -72,9 +73,9 @@ enum LogSeverity
         if ( obj )                                                       \
             logDebug() << "sender(): " << obj->metaObject()->className() \
                        << " " << obj->objectName()                       \
-                       << endl;                                          \
+                       << ENDL;                                          \
         else                                                             \
-            logDebug() << "No sender" << endl;                           \
+            logDebug() << "No sender" << ENDL;                           \
                                                                          \
     } while( 0 )
 
@@ -83,8 +84,8 @@ enum LogSeverity
 /**
  * Logging class. Use one of the macros above for stream output:
  *
- *     logDebug() << "Debug logging demo " << myString << ": " << 42 << endl;
- *     logError() << "Can't open file " << filename << ": " << errno << endl;
+ *     logDebug() << "Debug logging demo " << myString << ": " << 42 << ENDL;
+ *     logError() << "Can't open file " << filename << ": " << errno << ENDL;
  *
  * Remember to terminate each log line with 'endl'.
  * Unlike qDebug() etc., this class does NOT add spaces or quotes.
@@ -201,7 +202,7 @@ public:
      * Notice that due to the way C++ evaluates expressions, the runtime cost
      * will not change significantly, only the log file size:
      *
-     *     logDebug() << "Result: " << myObj->result() << endl;
+     *     logDebug() << "Result: " << myObj->result() << ENDL;
      *
      * Even if the log level is higher than logDebug(), this will still call
      * myObj->result() and its operator<<(). If you want to avoid that, use

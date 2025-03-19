@@ -70,7 +70,7 @@ dev_t Trash::device( const QString & path )
     if ( result < 0 )
     {
 	logError() << "stat( " << path << " ) failed: "
-		   << formatErrno() << endl;
+		   << formatErrno() << ENDL;
 
 	dev = static_cast<dev_t>( -1 );
     }
@@ -125,9 +125,9 @@ TrashDir * Trash::trashDir( const QString & path )
 	{
 	    // No $TOPDIR/.Trash: Use $TOPDIR/.Trash-$UID
 
-	    logInfo() << "No " << trashPath << endl;
+	    logInfo() << "No " << trashPath << ENDL;
 	    trashPath = topDir + QString( "/.Trash-%1" ).arg( getuid() );
-	    logInfo() << "Using " << trashPath << endl;
+	    logInfo() << "Using " << trashPath << ENDL;
 	}
 	else if ( result < 0 )
 	{
@@ -146,7 +146,7 @@ TrashDir * Trash::trashDir( const QString & path )
 		// Use $TOPDIR/.Trash/$UID
 
 		trashPath += QString( "/%1" ).arg( getuid() );
-		logInfo() << "Using " << trashPath << endl;
+		logInfo() << "Using " << trashPath << ENDL;
 	    }
 	    else // Not a directory or sticky bit not set
 	    {
@@ -167,7 +167,7 @@ TrashDir * Trash::trashDir( const QString & path )
     {
 	CAUGHT( ex );
 	logWarning() << "Falling back to home trash dir: "
-		     << _homeTrashDir->path() << endl;
+		     << _homeTrashDir->path() << ENDL;
 
 	return _homeTrashDir;
     }
@@ -190,12 +190,12 @@ bool Trash::trash( const QString & path )
     catch ( const FileException & ex )
     {
 	CAUGHT( ex );
-	logError() << "Move to trash failed for " << path << endl;
+	logError() << "Move to trash failed for " << path << ENDL;
 
 	return false;
     }
 
-    logInfo() << "Successfully moved to trash: " << path << endl;
+    logInfo() << "Successfully moved to trash: " << path << ENDL;
 
     return true;
 }
@@ -271,7 +271,7 @@ bool TrashDir::ensureDirExists( const QString & path,
     if ( dir.exists() )
 	return true;
 
-    logInfo() << "mkdir " << path << endl;
+    logInfo() << "mkdir " << path << ENDL;
     int result = mkdir( path.toUtf8(), mode );
 
     if ( result < 0 && doThrow )
@@ -294,9 +294,9 @@ void TrashDir::createTrashInfo( const QString & path,
 	THROW( FileException( trashInfo.fileName(), "Can't open " + trashInfo.fileName() ) );
 
     QTextStream str( &trashInfo );
-    str << "[Trash Info]" << endl;
-    str << "Path=" << path << endl;
-    str << "DeletionDate=" << QDateTime::currentDateTime().toString( Qt::ISODate ) << endl;
+    str << "[Trash Info]" << ENDL;
+    str << "Path=" << path << ENDL;
+    str << "DeletionDate=" << QDateTime::currentDateTime().toString( Qt::ISODate ) << ENDL;
 }
 
 

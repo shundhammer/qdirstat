@@ -27,8 +27,8 @@ ProcessStarter::ProcessStarter( QObject * parent ):
 
 void ProcessStarter::start()
 {
-    logDebug() << "Starting. Processes in queue: " << _waiting.count() << endl;
-    logDebug() << "Maximum parallel processes: " << _maxParallel << endl;
+    logDebug() << "Starting. Processes in queue: " << _waiting.count() << ENDL;
+    logDebug() << "Maximum parallel processes: " << _maxParallel << ENDL;
 
     _started = true;
     startProcesses();
@@ -75,7 +75,7 @@ void ProcessStarter::processFinished( int                  exitCode,
 
     if ( ! process )
     {
-        logError() << "Ignoring non-process QObject " << (void *) sender() << endl;
+        logError() << "Ignoring non-process QObject " << (void *) sender() << ENDL;
         return;
     }
 
