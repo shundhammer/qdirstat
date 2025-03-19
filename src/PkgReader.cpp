@@ -378,7 +378,7 @@ void PkgReadJob::addFile( const QString & fileListPath )
 
     // logDebug() << "Adding " << fileListPath << " to " << _pkg << endl;
 
-    QStringList remaining = fileListPath.split( "/", QString::SkipEmptyParts );
+    QStringList remaining = fileListPath.split( "/", SKIPEMPTYPARTS );
     QStringList currentPath;
     DirInfo *	parent = _pkg;
 

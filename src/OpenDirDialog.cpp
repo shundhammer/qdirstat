@@ -256,7 +256,7 @@ void OpenDirDialog::treeSelection( const QModelIndex & newCurrentItem,
 
 void OpenDirDialog::populatePathComboBox( const QString & fullPath )
 {
-    QStringList pathComponents = fullPath.split( "/", QString::SkipEmptyParts );
+    QStringList pathComponents = fullPath.split( "/", SKIPEMPTYPARTS );
 
     _ui->pathComboBox->clear();
     _ui->pathComboBox->addItem( "/" );
@@ -272,7 +272,7 @@ void OpenDirDialog::populatePathComboBox( const QString & fullPath )
 
 void OpenDirDialog::goUp()
 {
-    QStringList pathComponents = selectedPath().split( "/", QString::SkipEmptyParts );
+    QStringList pathComponents = selectedPath().split( "/", SKIPEMPTYPARTS );
 
     if ( ! pathComponents.isEmpty() )
         pathComponents.removeLast();

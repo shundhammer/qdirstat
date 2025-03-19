@@ -89,7 +89,7 @@ QStringList ShowUnpkgFilesDialog::ignorePatterns() const
 QStringList ShowUnpkgFilesDialog::cleanedLines( QPlainTextEdit *widget ) const
 {
     QString	text  = widget->toPlainText();
-    QStringList lines = text.split( '\n', QString::SkipEmptyParts );
+    QStringList lines = text.split( '\n', SKIPEMPTYPARTS );
     QStringList result;
 
     foreach ( QString line, lines )
