@@ -113,10 +113,10 @@ PkgInfoList DpkgPkgManager::parsePkgList( const QString & output )
     {
 	if ( ! line.isEmpty() )
 	{
-	    QStringList fields = line.split( " | ", QString::KeepEmptyParts );
+	    QStringList fields = line.split( " | ", KEEPEMPTYPARTS );
 
 	    if ( fields.size() != 4 )
-		logError() << "Invalid dpkg-query output: \"" << line << "\n" << endl;
+		logError() << "Invalid dpkg-query output: \"" << line << "\n" << ENDL;
 	    else
 	    {
 		QString name	= fields.takeFirst();
@@ -134,7 +134,7 @@ PkgInfoList DpkgPkgManager::parsePkgList( const QString & output )
 		}
 		else
 		{
-		    // logDebug() << "Ignoring " << line << endl;
+		    // logDebug() << "Ignoring " << line << ENDL;
 		}
 	    }
 	}
@@ -196,7 +196,7 @@ PkgFileListCache * DpkgPkgManager::createFileListCache( PkgFileListCache::Lookup
 
     QStringList lines = output.split( "\n" );
     output.clear(); // Free all that text ASAP
-    logDebug() << lines.size() << " output lines" << endl;
+    logDebug() << lines.size() << " output lines" << ENDL;
 
     PkgFileListCache * cache = new PkgFileListCache( this, lookupType );
     CHECK_NEW( cache );
@@ -216,7 +216,7 @@ PkgFileListCache * DpkgPkgManager::createFileListCache( PkgFileListCache::Lookup
 
 	if ( fields.size() != 2 )
 	{
-	    logError() << "Unexpected file list line: \"" << line << "\"" << endl;
+	    logError() << "Unexpected file list line: \"" << line << "\"" << ENDL;
 	}
 	else
 	{
@@ -234,7 +234,7 @@ PkgFileListCache * DpkgPkgManager::createFileListCache( PkgFileListCache::Lookup
 	}
     }
 
-    logDebug() << "file list cache finished." << endl;
+    logDebug() << "file list cache finished." << ENDL;
 
     return cache;
 }

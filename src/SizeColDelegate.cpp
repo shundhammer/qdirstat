@@ -12,7 +12,6 @@
 
 #include "SizeColDelegate.h"
 #include "DirTreeModel.h"
-#include "Qt4Compat.h"
 #include "Exception.h"
 #include "FileInfo.h"
 #include "Logger.h"
@@ -93,7 +92,7 @@ void SizeColDelegate::paint( QPainter		        * painter,
                     // to reserve some space for the allocated size.
 
                     QFontMetrics fontMetrics( option.font );
-                    int allocWidth = fontMetrics.width( allocText );
+                    int allocWidth = fontMetrics.horizontalAdvance( allocText );
                     rect.setWidth( rect.width() - allocWidth );
 
                     painter->setPen( textColor );
@@ -141,13 +140,13 @@ QSize SizeColDelegate::sizeHint( const QStyleOptionViewItem & option,
             {
                 QString text = _model->data( index, Qt::DisplayRole ).toString();
                 QFontMetrics fontMetrics( option.font );
-                int width  = fontMetrics.width( text );
+                int width  = fontMetrics.horizontalAdvance( text );
                 int height = fontMetrics.height();
                 QSize size( width  + MARGIN_RIGHT + MARGIN_LEFT,
                             height + MARGIN_TOP   + MARGIN_BOTTOM );
 #if 0
                 logDebug() << "size hint for \"" << text << "\": "
-                           << size.width() << ", " << size.height() << endl;
+                           << size.width() << ", " << size.height() << ENDL;
 #endif
                 return size;
             }
@@ -194,7 +193,7 @@ void SizeColDelegate::ensureModel( const QModelIndex & index ) const
             _model = const_cast<DirTreeModel *>( constModel );
 
         if ( ! _model )
-            logError() << "WRONG_MODEL TYPE" << endl;
+            logError() << "WRONG_MODEL TYPE" << ENDL;
     }
 }
 

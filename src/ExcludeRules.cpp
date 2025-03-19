@@ -202,7 +202,7 @@ bool ExcludeRules::match( const QString & fullPath, const QString & fileName )
 	    _lastMatchingRule = rule;
 #if VERBOSE_EXCLUDE_MATCHES
 
-	    logDebug() << fullPath << " matches " << rule << endl;
+	    logDebug() << fullPath << " matches " << rule << ENDL;
 
 #endif
 	    return true;
@@ -226,7 +226,7 @@ bool ExcludeRules::matchDirectChildren( DirInfo * dir )
 	    _lastMatchingRule = rule;
 #if VERBOSE_EXCLUDE_MATCHES
 
-	    logDebug() << dir << " matches " << rule << endl;
+	    logDebug() << dir << " matches " << rule << ENDL;
 
 #endif
 	    return true;
@@ -279,7 +279,7 @@ void ExcludeRules::moveToBottom( ExcludeRule * rule )
 
 void ExcludeRules::addDefaultRules()
 {
-    logInfo() << "Adding default exclude rules" << endl;
+    logInfo() << "Adding default exclude rules" << ENDL;
 
     QRegExp regexp( ".snapshot", Qt::CaseSensitive, QRegExp::FixedString );
     ExcludeRule * rule = new ExcludeRule( regexp );
@@ -287,7 +287,7 @@ void ExcludeRules::addDefaultRules()
     add( rule );
     _defaultRulesAdded = true;
 
-    logInfo() << "Added " << rule << endl;
+    logInfo() << "Added " << rule << ENDL;
 }
 
 
@@ -326,7 +326,7 @@ void ExcludeRules::readSettings()
 	    {
 		logError() << "Invalid regexp: \"" << regexp.pattern()
 			   << "\": " << regexp.errorString()
-			   << endl;
+			   << ENDL;
 	    }
 
 	    settings.endGroup(); // [ExcludeRule_01], [ExcludeRule_02], ...

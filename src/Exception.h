@@ -402,7 +402,7 @@ void _throw_helper( const EX_t	  &exception,
 	<< "THROW "
 	<< exception.className() << ": "
 	<< exception.what()
-	<< endl;
+	<< ENDL;
 
     throw( exception );
 }
@@ -419,7 +419,7 @@ void _caught_helper( const EX_t	   &exception,
 	<< "CAUGHT "
 	<< exception.className() << ": "
 	<< exception.what()
-	<< endl;
+	<< ENDL;
 }
 
 
@@ -436,7 +436,7 @@ void _rethrow_helper( const EX_t    &exception,
 	<< "RETHROW "
 	<< exception.className() << ": "
 	<< exception.what()
-	<< endl;
+	<< ENDL;
 
     throw;
 }

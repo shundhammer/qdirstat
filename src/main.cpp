@@ -49,7 +49,7 @@ void usage( const QStringList & argList )
 	 << "\n"
 	 << std::endl;
 
-    logError() << "FATAL: Bad command line args: " << argList.join( " " ) << endl;
+    logError() << "FATAL: Bad command line args: " << argList.join( " " ) << ENDL;
     // Simply exit(1) here results in a segfault (?).
     fatal = true;
 }
@@ -59,12 +59,12 @@ void logVersion()
 {
     logInfo() << "QDirStat-" << QDIRSTAT_VERSION
               << " built with Qt " << QT_VERSION_STR
-              << endl;
+              << ENDL;
 
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 2, 0 ))
     logWarning() << "WARNING: You are using Qt " << QT_VERSION_STR
-                 << ". This may or may not work." << endl;
-    logWarning() << "The supported Qt version for QDirStat is Qt 5.2 or newer." << endl;
+                 << ". This may or may not work." << ENDL;
+    logWarning() << "The supported Qt version for QDirStat is Qt 5.2 or newer." << ENDL;
 #endif
 }
 
@@ -82,7 +82,7 @@ bool commandLineSwitch( const QString & longName,
     {
 	argList.removeAll( longName  );
 	argList.removeAll( shortName );
-        logDebug() << "Found " << longName << endl;
+        logDebug() << "Found " << longName << ENDL;
 	return true;
     }
     else
@@ -129,7 +129,7 @@ int main( int argc, char *argv[] )
 	    if ( argList.size() == 2 )
 	    {
 		QString cacheFileName = argList.at(1);
-		logDebug() << "Reading cache file " << cacheFileName << endl;
+		logDebug() << "Reading cache file " << cacheFileName << ENDL;
 		mainWin->readCache( cacheFileName );
 	    }
 	    else
