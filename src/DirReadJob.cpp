@@ -573,7 +573,7 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
 
 	if ( parent && parent != tree->root() )
 	{
-	    QStringList components = url.split( "/", QString::SkipEmptyParts );
+	    QStringList components = url.split( "/", SKIPEMPTYPARTS );
 	    name = components.last();
 	}
 

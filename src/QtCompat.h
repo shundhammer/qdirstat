@@ -176,8 +176,10 @@ inline void qEnableClearButton( QLineEdit * lineEdit )
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 #define ENDL Qt::endl
+#define SKIPEMPTYPARTS Qt::SkipEmptyParts
 #else
 #define ENDL endl
+#define SKIPEMPTYPARTS QString::SkipEmptyParts
 #endif
 
 #endif // QtCompat_h

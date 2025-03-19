@@ -756,7 +756,7 @@ bool FileInfo::isDominant()
 
 QString QDirStat::baseName( const QString & fileName )
 {
-    QStringList segments = fileName.split( '/', QString::SkipEmptyParts );
+    QStringList segments = fileName.split( '/', SKIPEMPTYPARTS );
     return segments.isEmpty() ? "" : segments.last();
 }
 
