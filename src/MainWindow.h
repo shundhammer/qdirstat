@@ -10,6 +10,7 @@
 #ifndef MainWindow_h
 #define MainWindow_h
 
+#include <QActionGroup>
 #include <QMainWindow>
 #include <QString>
 #include <QElapsedTimer>
