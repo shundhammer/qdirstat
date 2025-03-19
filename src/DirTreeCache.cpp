@@ -62,7 +62,7 @@ bool CacheWriter::writeCache( const QString & fileName, DirTree *tree )
 
     if ( cache == 0 )
     {
-	logError() << "Can't open " << fileName << ": " << formatErrno() << endl;
+	logError() << "Can't open " << fileName << ": " << formatErrno() << ENDL;
 	return false;
     }
 
@@ -205,7 +205,7 @@ QByteArray CacheWriter::urlEncoded( const QString & path )
 
     if ( encoded.isEmpty() )
     {
-        logError() << "Invalid file/dir name: " << path << endl;
+        logError() << "Invalid file/dir name: " << path << ENDL;
     }
 
     return encoded;
@@ -258,7 +258,7 @@ CacheReader::CacheReader( const QString & fileName,
 
     if ( _cache == 0 )
     {
-	logError() << "Can't open " << fileName << ": " << formatErrno() << endl;
+	logError() << "Can't open " << fileName << ": " << formatErrno() << ENDL;
 	_ok = false;
 	emit error();
 	return;
@@ -274,7 +274,7 @@ CacheReader::~CacheReader()
     if ( _cache )
 	gzclose( _cache );
 
-    logDebug() << "Cache reading finished" << endl;
+    logDebug() << "Cache reading finished" << ENDL;
 
     if ( _toplevel && ! _aborted )
     {
@@ -323,13 +323,13 @@ void CacheReader::addItem()
 	logError() << "Syntax error in " << _fileName << ":" << _lineNo
 		   << ": Expected at least " << expectedFields
                    << " fields, saw only " << fieldsCount()
-		   << endl;
+		   << ENDL;
 
 	setReadError( _lastDir );
 
 	if ( ++_errorCount > MAX_ERROR_COUNT )
 	{
-	    logError() << "Too many syntax errors. Giving up." << endl;
+	    logError() << "Too many syntax errors. Giving up." << ENDL;
 	    _ok = false;
 	    emit error();
 	}
@@ -434,7 +434,7 @@ void CacheReader::addItem()
     {
 	if ( path.startsWith( _lastExcludedDirUrl ) )
 	{
-	    // logDebug() << "Excluding " << path << "/" << name << endl;
+	    // logDebug() << "Excluding " << path << "/" << name << ENDL;
 	    return;
 	}
     }
@@ -455,7 +455,7 @@ void CacheReader::addItem()
 
 #if DEBUG_LOCATE_PARENT
 	if ( parent )
-	    logDebug() << "Using cache starting point as parent for " << fullPath << endl;
+	    logDebug() << "Using cache starting point as parent for " << fullPath << ENDL;
 #endif
 
 
@@ -467,7 +467,7 @@ void CacheReader::addItem()
 
 #if DEBUG_LOCATE_PARENT
 	    if ( parent )
-		logDebug() << "Located parent " << path << " in tree" << endl;
+		logDebug() << "Located parent " << path << " in tree" << ENDL;
 #endif
 	}
 
@@ -475,11 +475,11 @@ void CacheReader::addItem()
 	{
 	    logError() << _fileName << ":" << _lineNo << ": "
 		       << "Could not locate parent \"" << path << "\" for "
-		       << name << endl;
+		       << name << ENDL;
 
             if ( ++_errorCount > MAX_ERROR_COUNT )
             {
-                logError() << "Too many consistency errors. Giving up." << endl;
+                logError() << "Too many consistency errors. Giving up." << ENDL;
                 _ok = false;
                 emit error();
             }
@@ -495,7 +495,7 @@ void CacheReader::addItem()
     {
 	QString url = ( parent == _tree->root() ) ? buildPath( path, name ) : name;
 #if VERBOSE_CACHE_DIRS
-	logDebug() << "Creating DirInfo for " << url << " with parent " << parent << endl;
+	logDebug() << "Creating DirInfo for " << url << " with parent " << parent << ENDL;
 #endif
 	DirInfo * dir = new DirInfo( _tree, parent, url,
 				     mode, size,
@@ -522,7 +522,7 @@ void CacheReader::addItem()
 	{
 	    if ( ExcludeRules::instance()->match( dir->url(), dir->name() ) )
 	    {
-		logDebug() << "Excluding " << name << endl;
+		logDebug() << "Excluding " << name << ENDL;
 		dir->setExcluded();
 		dir->setReadState( DirOnRequestOnly );
 		dir->finalizeLocal();
@@ -540,7 +540,7 @@ void CacheReader::addItem()
 	{
 #if VERBOSE_CACHE_FILE_INFOS
 	    logDebug() << "Creating FileInfo for "
-		       << buildPath( parent->debugUrl(), name ) << endl;
+		       << buildPath( parent->debugUrl(), name ) << ENDL;
 #endif
 
 	    FileInfo * item = new FileInfo( _tree, parent, name,
@@ -554,7 +554,7 @@ void CacheReader::addItem()
 	else
 	{
 	    logError() << _fileName << ":" << _lineNo << ": "
-		       << "No parent for item " << name << endl;
+		       << "No parent for item " << name << ENDL;
 	}
     }
 }
@@ -616,7 +616,7 @@ bool CacheReader::checkHeader()
 	{
 	    _ok = false;
 	    logError() << _fileName << ":" << _lineNo
-		      << ": Unknown file format" << endl;
+		      << ": Unknown file format" << ENDL;
 	}
     }
 
@@ -628,7 +628,7 @@ bool CacheReader::checkHeader()
 
 	if ( ! _ok )
 	    logError() << _fileName << ":" << _lineNo
-		      << ": Incompatible cache file version" << endl;
+		      << ": Incompatible cache file version" << ENDL;
     }
 
     // logDebug() << "Cache file header check OK: " << _ok << endl;
@@ -659,7 +659,7 @@ bool CacheReader::readLine()
 	    if ( ! gzeof( _cache ) )
 	    {
 		_ok = false;
-		logError() << _fileName << ":" << _lineNo << ": Read error" << endl;
+		logError() << _fileName << ":" << _lineNo << ": Read error" << ENDL;
 		emit error();
 	    }
 
@@ -835,7 +835,7 @@ void CacheReader::finalizeRecursive( DirInfo * dir )
 
 void CacheReader::setReadError( DirInfo * dir )
 {
-    logDebug() << "Setting read error for " << dir << endl;
+    logDebug() << "Setting read error for " << dir << ENDL;
 
     while ( dir )
     {

@@ -136,7 +136,7 @@ void SelectionModel::extendSelection( FileInfo * item, bool clear )
 
 	if ( index.isValid() )
 	{
-	    logDebug() << "Selecting " << item << endl;
+	    logDebug() << "Selecting " << item << ENDL;
 	    SelectionFlags flags = Select | Rows;
 
 	    if ( clear )
@@ -156,7 +156,7 @@ void SelectionModel::extendSelection( FileInfo * item, bool clear )
 void SelectionModel::setSelectedItems( const FileInfoSet & selectedItems )
 {
     if ( _verbose )
-	logDebug() << "Selecting " << selectedItems.size() << " items" << endl;
+	logDebug() << "Selecting " << selectedItems.size() << " items" << ENDL;
 
     QItemSelection sel;
 
@@ -175,7 +175,7 @@ void SelectionModel::setSelectedItems( const FileInfoSet & selectedItems )
 void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 {
     if ( _verbose )
-	logDebug() << item << " select: " << select << endl;
+	logDebug() << item << " select: " << select << ENDL;
 
     if ( select )
 	clear();
@@ -189,13 +189,13 @@ void SelectionModel::setCurrentItem( FileInfo * item, bool select )
 	if ( index.isValid() )
 	{
 	    if ( _verbose )
-		logDebug() << "Setting current to " << index << endl;
+		logDebug() << "Setting current to " << index << ENDL;
 
 	    setCurrentIndex( index, select ? ( Current | Select | Rows ) : Current );
 	}
 	else
 	{
-	    logError() << "NOT FOUND in dir tree: " << item << endl;
+	    logError() << "NOT FOUND in dir tree: " << item << ENDL;
 	}
     }
     else
@@ -216,7 +216,7 @@ void SelectionModel::setCurrentItem( const QString & path )
     if ( item )
 	setCurrentItem( item, true );
     else
-	logError() << "No item with path " << path << endl;
+	logError() << "No item with path " << path << ENDL;
 }
 
 
@@ -252,7 +252,7 @@ void SelectionModel::prepareRefresh( const FileInfoSet & refreshSet )
     }
 
     if ( _verbose )
-	logDebug() << "Selecting " << dir << endl;
+	logDebug() << "Selecting " << dir << ENDL;
 
     setCurrentItem( dir, true );
     setCurrentBranch( dir );
@@ -271,12 +271,12 @@ void SelectionModel::deletingChildNotify( FileInfo * deletedChild )
 
 void SelectionModel::dumpSelectedItems()
 {
-    logDebug() << "Current item: " << _currentItem << endl;
-    logDebug() << selectedItems().size() << " items selected" << endl;
+    logDebug() << "Current item: " << _currentItem << ENDL;
+    logDebug() << selectedItems().size() << " items selected" << ENDL;
 
     foreach ( FileInfo * item, selectedItems() )
     {
-	logDebug() << "	 Selected: " << item << endl;
+	logDebug() << "	 Selected: " << item << ENDL;
     }
 
     logNewline();

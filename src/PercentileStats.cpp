@@ -43,13 +43,13 @@ void PercentileStats::clear()
 void PercentileStats::sort()
 {
     if ( _data.size() > VERBOSE_SORT_THRESHOLD )
-	logDebug() << "Sorting " << _data.size() << " elements" << endl;
+	logDebug() << "Sorting " << _data.size() << " elements" << ENDL;
 
     std::sort( _data.begin(), _data.end() );
     _sorted = true;
 
     if ( _data.size() > VERBOSE_SORT_THRESHOLD )
-	logDebug() << "Sorting done." << endl;
+	logDebug() << "Sorting done." << ENDL;
 }
 
 
@@ -216,8 +216,8 @@ PercentileSums PercentileStats::percentileSums()
 #if 0
     for ( int i=0; i < sums.size(); ++i )
     {
-	logDebug() << "sum[ "	  << i << " ] : " << formatSize( sums._individual[i] ) << endl;
-	logDebug() << "cum_sum[ " << i << " ] : " << formatSize( sums._cumulative[i] ) << endl;
+	logDebug() << "sum[ "	  << i << " ] : " << formatSize( sums._individual[i] ) << ENDL;
+	logDebug() << "cum_sum[ " << i << " ] : " << formatSize( sums._cumulative[i] ) << ENDL;
     }
 #endif
 

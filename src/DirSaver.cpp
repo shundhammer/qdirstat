@@ -29,7 +29,7 @@ void DirSaver::cd( const QString & newPath )
 {
     if ( newPath.isEmpty() )
     {
-	logWarning() << "Empty path" << endl;
+	logWarning() << "Empty path" << ENDL;
 	return;
     }
 
@@ -37,7 +37,7 @@ void DirSaver::cd( const QString & newPath )
     int result = chdir( newPath.toUtf8() );
 
     if ( result != 0 )
-        logWarning() << "chdir( " << newPath << " ) failed" << endl;
+        logWarning() << "chdir( " << newPath << " ) failed" << ENDL;
 }
 
 

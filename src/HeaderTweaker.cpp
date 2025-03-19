@@ -10,8 +10,6 @@
 #include <QMenu>
 #include <QAction>
 
-#include "QtCompat.h"
-
 #include "HeaderTweaker.h"
 #include "DirTreeView.h"
 #include "Settings.h"
@@ -216,7 +214,7 @@ QString HeaderTweaker::colName( int section ) const
 						   Qt::Horizontal,
 						   Qt::DisplayRole ).toString();
     if ( col == UndefinedCol )
-	logError() << "No column at section " << section << endl;
+	logError() << "No column at section " << section << ENDL;
 
     return name;
 }
@@ -232,7 +230,7 @@ void HeaderTweaker::hideCurrentCol()
 {
     if ( _currentSection >= 0 )
     {
-	logDebug() << "Hiding column \"" << colName( _currentSection ) << "\"" << endl;
+	logDebug() << "Hiding column \"" << colName( _currentSection ) << "\"" << ENDL;
 	_header->setSectionHidden( _currentSection, true );
     }
 
@@ -250,7 +248,7 @@ void HeaderTweaker::autoSizeCurrentCol()
 		       QHeaderView::Interactive );
     }
     else
-	logWarning() << "No current section" << endl;
+	logWarning() << "No current section" << ENDL;
 
     _currentSection = -1;
 }
@@ -282,7 +280,7 @@ void HeaderTweaker::showHiddenCol()
     if ( ! action )
     {
 	logError() << "Wrong sender type: "
-		   << sender()->metaObject()->className() << endl;
+		   << sender()->metaObject()->className() << ENDL;
 	return;
     }
 
@@ -292,15 +290,15 @@ void HeaderTweaker::showHiddenCol()
 
 	if ( section >= 0 && section < _header->count() )
 	{
-	    logDebug() << "Showing column \"" << colName( section ) << "\"" << endl;
+	    logDebug() << "Showing column \"" << colName( section ) << "\"" << ENDL;
 	    _header->setSectionHidden( section, false );
 	}
 	else
-	    logError() << "Section index out of range: " << section << endl;
+	    logError() << "Section index out of range: " << section << ENDL;
     }
     else
     {
-	logError() << "No data() set for this QAction" << endl;
+	logError() << "No data() set for this QAction" << ENDL;
     }
 }
 
@@ -311,7 +309,7 @@ void HeaderTweaker::showAllHiddenColumns()
     {
 	if ( _header->isSectionHidden( section ) )
 	{
-	    logDebug() << "Showing column \"" << colName( section ) << "\"" << endl;
+	    logDebug() << "Showing column \"" << colName( section ) << "\"" << ENDL;
 	    _header->setSectionHidden( section, false );
 	}
     }
@@ -339,11 +337,11 @@ void HeaderTweaker::setColumnOrder( const DataColumnList & columns )
     {
 	if ( visualIndex < _header->count() )
 	{
-	    // logDebug() << "Moving " << col << " to position " << visualIndex << endl;
+	    // logDebug() << "Moving " << col << " to position " << visualIndex << ENDL;
 	    _header->moveSection( _header->visualIndex( col ), visualIndex++ );
 	}
 	else
-	    logWarning() << "More columns than header sections" << endl;
+	    logWarning() << "More columns than header sections" << ENDL;
     }
 }
 
@@ -471,7 +469,7 @@ void HeaderTweaker::changeLayout( const QString & name )
 {
     if ( ! _layouts.contains( name ) )
     {
-	logError() << "No layout " << name << endl;
+	logError() << "No layout " << name << ENDL;
 	return;
     }
 
@@ -518,7 +516,7 @@ void HeaderTweaker::fixupLayout( ColumnLayout * layout )
 
     if ( layout->columns.isEmpty() )
     {
-	logDebug() << "Falling back to default visible columns" << endl;
+	logDebug() << "Falling back to default visible columns" << ENDL;
 	layout->columns = layout->defaultColumns;
     }
 

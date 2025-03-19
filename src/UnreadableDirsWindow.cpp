@@ -117,14 +117,14 @@ void UnreadableDirsWindow::populate( FileInfo * newSubtree )
     clear();
     _subtree = newSubtree;
 
-    logDebug() << "Locating all unreadable dirs below " << _subtree.url() << endl;
+    logDebug() << "Locating all unreadable dirs below " << _subtree.url() << ENDL;
 
     populateRecursive( newSubtree ? newSubtree : _subtree() );
     _ui->treeWidget->sortByColumn( 0, Qt::AscendingOrder );
 
     int count = _ui->treeWidget->topLevelItemCount();
     _ui->totalLabel->setText( QString( "Total: %1" ).arg( count ) );
-    logDebug() << count << " directories" << endl;
+    logDebug() << count << " directories" << ENDL;
 
     // Make sure something is selected, even if this window is not the active
     // one (for example because the user just clicked on another suffix in the

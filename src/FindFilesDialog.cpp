@@ -7,8 +7,6 @@
  */
 
 
-#include "Qt4Compat.h"       // qEnableClearButton()
-
 #include "FindFilesDialog.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
@@ -87,7 +85,7 @@ FileSearchFilter FindFilesDialog::fileSearchFilter()
     filter.setFindPkg( filter.findDirs() );
     filter.setCaseSensitive ( _ui->caseSensitiveCheckBox->isChecked() );
 
-    logDebug() << filter << endl;
+    logDebug() << filter << ENDL;
 
     return filter;
 }

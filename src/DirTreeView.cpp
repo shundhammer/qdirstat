@@ -187,7 +187,7 @@ QModelIndexList DirTreeView::expandedIndexes() const
 
     if ( ! dirTreeModel )
     {
-	logError() << "Wrong model type to get this information" << endl;
+	logError() << "Wrong model type to get this information" << ENDL;
 	return QModelIndexList();
     }
 
@@ -234,7 +234,7 @@ void DirTreeView::setExpanded( FileInfo * item, bool expanded )
 
     if ( ! dirTreeModel )
     {
-	logError() << "Wrong model type" << endl;
+	logError() << "Wrong model type" << ENDL;
         return;
     }
 

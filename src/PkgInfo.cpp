@@ -107,7 +107,7 @@ FileInfo * PkgInfo::locate( const QString & path )
 
         if ( pkgName != _name )
         {
-            logError() << "Path " << path << " does not belong to " << this << endl;
+            logError() << "Path " << path << " does not belong to " << this << ENDL;
             return 0;
         }
 

@@ -43,7 +43,7 @@ PkgReader::~PkgReader()
 
 void PkgReader::read( const PkgFilter & filter )
 {
-    logInfo() << "Reading " << filter << endl;
+    logInfo() << "Reading " << filter << ENDL;
 
     _pkgList = PkgQuery::installedPkg();
     filterPkgList( filter );
@@ -88,7 +88,7 @@ void PkgReader::filterPkgList( const PkgFilter & filter )
     {
 	if ( filter.matches( pkg->baseName() ) )
 	{
-	    // logDebug() << "Selecting pkg " << pkg << endl;
+	    // logDebug() << "Selecting pkg " << pkg << ENDL;
 	    matches << pkg;
 	}
     }
@@ -139,7 +139,7 @@ void PkgReader::createDisplayName( const QString & pkgName )
     {
 	logDebug() << "Found multi version pkg " << pkgName
 		   << " same arch: " << sameArch
-		   << endl;
+		   << ENDL;
     }
 
     foreach ( PkgInfo * pkg, pkgList )
@@ -195,7 +195,7 @@ void PkgReader::createCachePkgReadJobs()
 
     if ( ! fileListCache )
     {
-	logError() << "Creating the file list cache failed" << endl;
+	logError() << "Creating the file list cache failed" << ENDL;
 	return;
     }
 
@@ -210,7 +210,7 @@ void PkgReader::createCachePkgReadJobs()
 
 void PkgReader::createAsyncPkgReadJobs()
 {
-    logDebug() << endl;
+    logDebug() << ENDL;
 
     ProcessStarter * processStarter = new ProcessStarter;
     CHECK_NEW( processStarter );
@@ -243,7 +243,7 @@ Process * PkgReader::createReadFileListProcess( PkgInfo * pkg )
 
     if ( command.isEmpty() )
     {
-	logError() << "Empty file list command for " << pkg << endl;
+	logError() << "Empty file list command for " << pkg << ENDL;
 	return 0;
     }
 
@@ -337,9 +337,9 @@ void PkgReadJob::reportCacheStats()
     if ( _lstatCalls > 0 )
         hitPercent = ( 100.0 * _cacheHits ) /_lstatCalls;
 
-    logDebug() << _lstatCalls << " lstat() calls" << endl;
+    logDebug() << _lstatCalls << " lstat() calls" << ENDL;
     logDebug() << _cacheHits << " stat cache hits ("
-               << qRound( hitPercent ) << "%)" << endl;
+               << qRound( hitPercent ) << "%)" << ENDL;
 }
 
 
@@ -365,7 +365,7 @@ void PkgReadJob::startReading()
 
 QStringList PkgReadJob::fileList()
 {
-    logDebug() << "Using default PkgQuery::fileList() for " << _pkg << endl;
+    logDebug() << "Using default PkgQuery::fileList() for " << _pkg << ENDL;
 
     return PkgQuery::fileList( _pkg );
 }
@@ -404,13 +404,13 @@ void PkgReadJob::addFile( const QString & fileListPath )
                     //
                     // parent->setReadState( DirError );
 
-                    logWarning() << _pkg << ": missing: " << fileListPath << endl;
+                    logWarning() << _pkg << ": missing: " << fileListPath << ENDL;
                 }
 
 		return;
 	    }
 
-	    // logDebug() << "Created " << newParent << endl;
+	    // logDebug() << "Created " << newParent << ENDL;
 	}
 
 	if ( ! remaining.isEmpty() )
@@ -419,7 +419,7 @@ void PkgReadJob::addFile( const QString & fileListPath )
 
 	    if ( ! parent )
 	    {
-		logWarning() << newParent << " should be a directory, but is not" << endl;
+		logWarning() << newParent << " should be a directory, but is not" << ENDL;
 		return;
 	    }
 	}
@@ -554,14 +554,14 @@ void AsyncPkgReadJob::readFileListFinished( int			 exitCode,
     if ( exitStatus != QProcess::NormalExit )
     {
 	ok = false;
-	logError() << "Get file list command crashed for " << _pkg << endl;
+	logError() << "Get file list command crashed for " << _pkg << ENDL;
     }
 
     if ( ok && exitCode != 0 )
     {
 	ok = false;
 	logError() << "Get file list command exited with "
-		   << exitStatus << " for " << _pkg << endl;
+		   << exitStatus << " for " << _pkg << ENDL;
     }
 
     if ( ok )
@@ -624,7 +624,7 @@ QStringList CachePkgReadJob::fileList()
         return fileList;
     }
 
-    logDebug() << "Falling back to the simple PkgQuery::fileList() for " << _pkg << endl;
+    logDebug() << "Falling back to the simple PkgQuery::fileList() for " << _pkg << ENDL;
 
     return PkgQuery::fileList( _pkg );
 }

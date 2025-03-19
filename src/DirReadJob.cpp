@@ -88,7 +88,7 @@ void DirReadJob::finished()
     if ( _queue )
 	_queue->jobFinishedNotify( this );
     else
-	logError() << "No job queue for " << _dir << endl;
+	logError() << "No job queue for " << _dir << ENDL;
 }
 
 
@@ -130,11 +130,11 @@ bool DirReadJob::crossingFilesystems( DirInfo * parent, DirInfo * child )
     {
         logInfo() << "Filesystem boundary at mount point " << child
                   << " on device " << ( childDevice.isEmpty() ? "<unknown>" : childDevice )
-                  << endl;
+                  << ENDL;
     }
     else
     {
-        logInfo() << child << " is still on the same device " << childDevice << endl;
+        logInfo() << child << " is still on the same device " << childDevice << ENDL;
     }
 
     return crossing;
@@ -170,7 +170,7 @@ bool DirReadJob::shouldCrossIntoFilesystem( const DirInfo * dir ) const
 
     if ( ! mountPoint )
     {
-        logError() << "Can't find mount point for " << dir->url() << endl;
+        logError() << "Can't find mount point for " << dir->url() << ENDL;
 
         return false;
     }
@@ -181,7 +181,7 @@ bool DirReadJob::shouldCrossIntoFilesystem( const DirInfo * dir ) const
 	! mountPoint->isNetworkMount();		//  NFS or CIFS (Samba)
 
     logDebug() << ( doCross ? "Reading" : "Not reading" )
-	       << " mounted filesystem " << mountPoint->path() << endl;
+	       << " mounted filesystem " << mountPoint->path() << ENDL;
 
     return doCross;
 }
@@ -225,7 +225,7 @@ void LocalDirReadJob::startReading()
     if ( access( _dirName.toUtf8(), X_OK | R_OK ) != 0 )
     {
 	ok = false;
-	logWarning() << "No permission to read directory " << _dirName << endl;
+	logWarning() << "No permission to read directory " << _dirName << ENDL;
 	finishReading( _dir, DirPermissionDenied );
     }
 
@@ -235,7 +235,7 @@ void LocalDirReadJob::startReading()
 
 	if ( ! diskDir )
 	{
-	    logWarning() << "opendir(" << _dirName << ") failed" << endl;
+	    logWarning() << "opendir(" << _dirName << ") failed" << ENDL;
 	    ok = false;
 	    // opendir() doesn't set 'errno' according to POSIX	 :-(
 	    finishReading( _dir, DirError );
@@ -291,7 +291,7 @@ void LocalDirReadJob::startReading()
 		{
 		    if ( entryName == defaultCacheName )	// .qdirstat.cache.gz found?
 		    {
-			logDebug() << "Found cache file " << defaultCacheName << endl;
+			logDebug() << "Found cache file " << defaultCacheName << ENDL;
 
 			// Try to read the cache file. If that was successful and the toplevel
 			// path in that cache file matches the path of the directory we are
@@ -318,7 +318,7 @@ void LocalDirReadJob::startReading()
                                          << _dir->url() << "/" << entryName
                                          << "\" links: " << statInfo.st_nlink
                                          << " -> resetting to 1"
-                                         << endl;
+                                         << ENDL;
                             _warnedAboutNtfsHardLinks = true;
                         }
 
@@ -463,14 +463,14 @@ bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
 
     if ( firstDirInCache == _dirName )	 // Does this cache file match this directory?
     {
-	logDebug() << "Using cache file " << cacheFullName << " for " << _dirName << endl;
+	logDebug() << "Using cache file " << cacheFullName << " for " << _dirName << ENDL;
 
 	DirTree * tree = _tree;	 // Copy data members to local variables:
 	DirInfo * dir  = _dir;	 // This object might be deleted soon by killAll()
 
 	if ( _tree->isToplevel( _dir ) )
 	{
-	    logDebug() << "Clearing complete tree" << endl;
+	    logDebug() << "Clearing complete tree" << ENDL;
 
 	    _tree->clearAndReadCache( cacheFullName );
 
@@ -496,7 +496,7 @@ bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
 	    _queue->killAll( _dir, cacheReadJob );	// Will delete this job as well!
 	    // All data members of this object are invalid from here on!
 
-	    logDebug() << "Deleting subtree " << dir << endl;
+	    logDebug() << "Deleting subtree " << dir << ENDL;
 	    tree->deleteSubtree( dir );
 	}
 
@@ -507,7 +507,7 @@ bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
 	logWarning() << "NOT using cache file " << cacheFullName
 		     << " with dir " << firstDirInCache
 		     << " for " << _dirName
-		     << endl;
+		     << ENDL;
 
         cacheReadJob->reader()->setAborted();
 	delete cacheReadJob;
@@ -519,7 +519,7 @@ bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
 
 void LocalDirReadJob::excludeDirLate()
 {
-    logDebug() << "Excluding dir " << _dir << endl;
+    logDebug() << "Excluding dir " << _dir << ENDL;
 
     // Kill all queued jobs for this dir except this one
     _queue->killAll( _dir, this );
@@ -532,7 +532,7 @@ void LocalDirReadJob::excludeDirLate()
 void LocalDirReadJob::handleLstatError( const QString & entryName )
 {
     logWarning() << "lstat(" << fullName( entryName ) << ") failed: "
-		 << formatErrno() << endl;
+		 << formatErrno() << ENDL;
 
     /*
      * Not much we can do when lstat() didn't work; let's at
@@ -591,7 +591,7 @@ FileInfo * LocalDirReadJob::stat( const QString & url,
 		 ! parent->isPkgInfo() &&
 		 dir->device() != parent->device() )
 	    {
-		logDebug() << dir << " is a mount point" << endl;
+		logDebug() << dir << " is a mount point" << ENDL;
 		dir->setMountPoint();
 	    }
 
@@ -803,7 +803,7 @@ void DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 
 	if ( exceptJob && job == exceptJob )
 	{
-	    logDebug() << "NOT killing " << job << endl;
+	    logDebug() << "NOT killing " << job << ENDL;
 	    continue;
 	}
 
@@ -824,7 +824,7 @@ void DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 
 	if ( exceptJob && job == exceptJob )
 	{
-	    logDebug() << "NOT killing " << job << endl;
+	    logDebug() << "NOT killing " << job << ENDL;
 	    continue;
 	}
 
@@ -837,7 +837,7 @@ void DirReadJobQueue::killAll( DirInfo * subtree, DirReadJob * exceptJob )
 	}
     }
 
-    logDebug() << "Killed " << count << " read jobs for " << subtree << endl;
+    logDebug() << "Killed " << count << " read jobs for " << subtree << ENDL;
 }
 
 
@@ -871,7 +871,7 @@ void DirReadJobQueue::deletingChildNotify( FileInfo * child )
 {
     if ( child && child->isDirInfo() )
     {
-	logDebug() << "Killing all pending read jobs for " << child << endl;
+	logDebug() << "Killing all pending read jobs for " << child << ENDL;
 	killAll( child->toDirInfo() );
     }
 }
@@ -889,5 +889,5 @@ void DirReadJobQueue::unblock( DirReadJob * job )
     enqueue( job );
 
     if ( _blocked.isEmpty() )
-	logDebug() << "No more jobs waiting for external processes" << endl;
+	logDebug() << "No more jobs waiting for external processes" << ENDL;
 }

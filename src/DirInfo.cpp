@@ -697,7 +697,7 @@ void DirInfo::unlinkChild( FileInfo * deletedChild )
     if ( deletedChild->parent() != this )
     {
 	logError() << deletedChild << " is not a child of " << this
-		   << " - cannot unlink from children list!" << endl;
+		   << " - cannot unlink from children list!" << ENDL;
 	return;
     }
 
@@ -727,7 +727,7 @@ void DirInfo::unlinkChild( FileInfo * deletedChild )
     }
 
     logError() << "Couldn't unlink " << deletedChild << " from "
-	       << this << " children list" << endl;
+	       << this << " children list" << ENDL;
 }
 
 
@@ -1208,7 +1208,7 @@ void DirInfo::findDominantChildren()
     logDebug() << this
                << "  median: "    << formatPercent( medianPercent )
                << "  threshold: " << formatPercent( FileSize( dominanceThreshold ) )
-               << endl;
+               << ENDL;
 #endif
 
 

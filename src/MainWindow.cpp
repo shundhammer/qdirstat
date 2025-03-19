@@ -192,7 +192,7 @@ void MainWindow::checkPkgManagerSupport()
     {
 	logInfo() << "No package manager support "
 		  << "for getting installed packages or file lists"
-		  << endl;
+		  << ENDL;
 
 	_ui->actionOpenPkg->setEnabled( false );
     }
@@ -203,7 +203,7 @@ void MainWindow::checkPkgManagerSupport()
     {
 	logInfo() << "No package manager support "
 		  << "for getting a file lists cache"
-		  << endl;
+		  << ENDL;
 
 	_ui->actionShowUnpkgFiles->setEnabled( false );
     }
@@ -456,7 +456,7 @@ void MainWindow::busyDisplay()
 
 void MainWindow::idleDisplay()
 {
-    logInfo() << endl;
+    logInfo() << ENDL;
 
     updateActions();
     _updateTimer.stop();
@@ -471,7 +471,7 @@ void MainWindow::idleDisplay()
     }
     else if ( ! app()->selectionModel()->currentBranch() )
     {
-	logDebug() << "No current branch - expanding tree to level 1" << endl;
+	logDebug() << "No current branch - expanding tree to level 1" << ENDL;
 	expandTreeToLevel( 1 );
     }
 
@@ -517,13 +517,13 @@ void MainWindow::startingReading()
 
 void MainWindow::readingFinished()
 {
-    logInfo() << endl;
+    logInfo() << ENDL;
 
     idleDisplay();
 
     QString elapsedTime = formatMillisec( _stopWatch.elapsed() );
     _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );
-    logInfo() << "Reading finished after " << elapsedTime << endl;
+    logInfo() << "Reading finished after " << elapsedTime << ENDL;
 
     if ( app()->dirTree()->firstToplevel() &&
 	 app()->dirTree()->firstToplevel()->errSubDirCount() > 0 )
@@ -537,12 +537,12 @@ void MainWindow::readingFinished()
 
 void MainWindow::readingAborted()
 {
-    logInfo() << endl;
+    logInfo() << ENDL;
 
     idleDisplay();
     QString elapsedTime = formatMillisec( _stopWatch.elapsed() );
     _ui->statusBar->showMessage( tr( "Aborted. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );
-    logInfo() << "Reading aborted after " << elapsedTime << endl;
+    logInfo() << "Reading aborted after " << elapsedTime << ENDL;
 }
 
 
@@ -616,7 +616,7 @@ QString MainWindow::handleSymLink( const QString & origUrl ) const
             QString target = urlInfo.canonicalFilePath();
 
             logInfo() << "Following symlink \"" << url
-                      <<"\" to target \"" << target << "\"" << endl;
+                      <<"\" to target \"" << target << "\"" << ENDL;
 
             msg = new PanelMessage( _ui->messagePanel );
             CHECK_NEW( msg );
@@ -698,7 +698,7 @@ void MainWindow::askFindFiles()
 
 void MainWindow::readPkg( const PkgFilter & pkgFilter )
 {
-    logInfo() << "URL: " << pkgFilter.url() << endl;
+    logInfo() << "URL: " << pkgFilter.url() << ENDL;
 
     _futureSelection.setUrl( "Pkg:/" );
     updateWindowTitle( pkgFilter.url() );
@@ -721,7 +721,7 @@ void MainWindow::refreshAll()
 
     if ( ! url.isEmpty() )
     {
-	logDebug() << "Refreshing " << url << endl;
+	logDebug() << "Refreshing " << url << ENDL;
         _futureSelection.setUrl( url );
 
 	if ( PkgFilter::isPkgUrl( url ) )
@@ -762,8 +762,8 @@ void MainWindow::applyFutureSelection()
     _futureSelection.clear();
 
 #if 0
-    logDebug() << "Using future selection: " << sel << endl;
-    logDebug() << "Branch: " << branch << endl;
+    logDebug() << "Using future selection: " << sel << ENDL;
+    logDebug() << "Branch: " << branch << ENDL;
 #endif
 
     if ( sel )
@@ -921,7 +921,7 @@ void MainWindow::startingCleanup( const QString & cleanupName )
 
     FileInfo * sel = app()->selectionModel()->selectedItems().first();
     _futureSelection.set( sel );
-    logDebug() << "Storing future selection " << sel << endl;
+    logDebug() << "Storing future selection " << sel << ENDL;
     showProgress( tr( "Starting cleanup action %1" ).arg( cleanupName ) );
 }
 
@@ -931,7 +931,7 @@ void MainWindow::cleanupFinished( int errorCount )
     // Notice that this is not called for actions that are not owned by the
     // CleanupCollection such as _ui->actionMoveToTrash().
 
-    logDebug() << "Error count: " << errorCount << endl;
+    logDebug() << "Error count: " << errorCount << ENDL;
 
     if ( errorCount == 0 )
 	showProgress( tr( "Cleanup action finished successfully." ) );
@@ -966,7 +966,7 @@ void MainWindow::copyCurrentPathToClipboard()
 
 void MainWindow::expandTreeToLevel( int level )
 {
-    logDebug() << "Expanding tree to level " << level << endl;
+    logDebug() << "Expanding tree to level " << level << ENDL;
 
     if ( level < 1 )
 	_ui->dirTreeView->collapseAll();
@@ -1056,7 +1056,7 @@ void MainWindow::updateBookmarkButton( FileInfo * newCurrent )
             _ui->bookmarkButton->setChecked( isBookmarked );
 #if 0
             if ( isBookmarked )
-                logDebug() << url << " is bookmarked" << endl;
+                logDebug() << url << " is bookmarked" << ENDL;
 #endif
         }
     }
@@ -1115,7 +1115,7 @@ void MainWindow::moveToTrash()
 
     FileInfo * sel = selectedItems.first();
     _futureSelection.set( sel );
-    logDebug() << "Storing future selection " << sel << endl;
+    logDebug() << "Storing future selection " << sel << ENDL;
 
     // Prepare output window
 
@@ -1280,8 +1280,8 @@ void MainWindow::currentItemChanged( FileInfo * newCurrent, FileInfo * oldCurren
 
     if ( _verboseSelection )
     {
-	logDebug() << "new current: " << newCurrent << endl;
-	logDebug() << "old current: " << oldCurrent << endl;
+	logDebug() << "new current: " << newCurrent << ENDL;
+	logDebug() << "old current: " << oldCurrent << ENDL;
 	app()->selectionModel()->dumpSelectedItems();
     }
 }
@@ -1339,7 +1339,7 @@ void MainWindow::toggleVerboseSelection()
 	app()->selectionModel()->setVerbose( _verboseSelection );
 
     logInfo() << "Verbose selection is now " << ( _verboseSelection ? "on" : "off" )
-	      << ". Change this with Shift-F7." << endl;
+	      << ". Change this with Shift-F7." << ENDL;
 }
 
 
@@ -1356,13 +1356,13 @@ void MainWindow::itemClicked( const QModelIndex & index )
 		   << " col " << index.column()
 		   << " (" << QDirStat::DataColumns::fromViewCol( index.column() ) << ")"
 		   << "\t" << item
-		   << endl;
+		   << ENDL;
 	// << " data(0): " << index.model()->data( index, 0 ).toString()
 	// logDebug() << "Ancestors: " << Debug::modelTreeAncestors( index ).join( " -> " ) << endl;
     }
     else
     {
-	logDebug() << "Invalid model index" << endl;
+	logDebug() << "Invalid model index" << ENDL;
     }
 
     // app()->dirTreeModel()->dumpPersistentIndexList();

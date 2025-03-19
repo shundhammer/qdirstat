@@ -7,8 +7,6 @@
  */
 
 
-#include "QtCompat.h"
-
 #include "FileDetailsView.h"
 #include "AdaptiveTimer.h"
 #include "DirInfo.h"
@@ -501,7 +499,7 @@ void FileDetailsView::showDetails( PkgInfo * pkg )
 
 	case DirCached:
 	case DirOnRequestOnly:
-	    logError() << "Invalid readState for a Pkg" << endl;
+	    logError() << "Invalid readState for a Pkg" << ENDL;
 	    break;
     }
 
@@ -666,7 +664,7 @@ QString FileDetailsView::limitText( const QString & longText )
     limited += "...";
     limited += longText.right( _labelLimit / 2 - 1 );
 
-    logDebug() << "Limiting \"" << longText << "\"" << endl;
+    logDebug() << "Limiting \"" << longText << "\"" << ENDL;
 
     return limited;
 }

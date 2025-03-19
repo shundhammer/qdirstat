@@ -40,7 +40,7 @@ void PkgFilter::normalizePattern()
 
     if ( _pattern != oldPattern )
     {
-        logInfo() << "Normalizing pkg pattern to \"" << _pattern << "\"" << endl;
+        logInfo() << "Normalizing pkg pattern to \"" << _pattern << "\"" << ENDL;
         _regexp.setPattern( _pattern );
     }
 }

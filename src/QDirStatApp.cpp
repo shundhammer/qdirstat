@@ -106,7 +106,7 @@ QWidget * QDirStatApp::findMainWindow() const
     }
 
     if ( ! mainWin )
-        logWarning() << "NULL mainWin for shared instance" << endl;
+        logWarning() << "NULL mainWin for shared instance" << ENDL;
 
     return mainWin;
 }

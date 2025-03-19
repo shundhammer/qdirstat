@@ -103,7 +103,7 @@ void Settings::fixFileOwner( const QString & filename )
 
         if ( homeDir.isEmpty() )
         {
-            logWarning() << "Can't get home directory for UID " << uid << endl;
+            logWarning() << "Can't get home directory for UID " << uid << ENDL;
             return;
         }
 
@@ -117,7 +117,7 @@ void Settings::fixFileOwner( const QString & filename )
                            << " to UID "  << uid
                            << " and GID " << gid
                            << ": " << strerror( errno )
-                           << endl;
+                           << ENDL;
             }
             else
             {
@@ -125,7 +125,7 @@ void Settings::fixFileOwner( const QString & filename )
                 logDebug() << "Success: chown " << filename
                            << " to UID "  << uid
                            << " and GID " << gid
-                           << endl;
+                           << ENDL;
 #endif
             }
         }
@@ -136,7 +136,7 @@ void Settings::fixFileOwner( const QString & filename )
     }
     else
     {
-        logWarning() << "$SUDO_UID / $SUDO_GID not set" << endl;
+        logWarning() << "$SUDO_UID / $SUDO_GID not set" << ENDL;
     }
 }
 
@@ -200,13 +200,13 @@ void Settings::moveGroups( const QString & groupPrefix,
     if ( ! hasGroup( groupPrefix ) )
     {
 #if 0
-	logInfo() << "Migrating " << groupPrefix << "* to " << to->name() << endl;
+	logInfo() << "Migrating " << groupPrefix << "* to " << to->name() << ENDL;
 #endif
 	QStringList groups = from->findGroups( groupPrefix );
 
 	foreach ( const QString & group, groups )
 	{
-	    // logVerbose() << "  Migrating " << group << endl;
+	    // logVerbose() << "  Migrating " << group << ENDL;
 
 	    from->beginGroup( group );
 	    to->beginGroup( group );
@@ -229,7 +229,7 @@ void Settings::moveGroups( const QString & groupPrefix,
 	logVerbose() << "Target settings " << to->name()
 		     << " have group " << groupPrefix
 		     << " - nothing to migrate"
-		     << endl;
+		     << ENDL;
 #endif
     }
 

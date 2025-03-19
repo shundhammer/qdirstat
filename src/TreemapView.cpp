@@ -369,7 +369,7 @@ void TreemapView::rebuildTreemap( FileInfo *	 newRoot,
 #if REBUILD_STOPWATCH
             logDebug() << "Treemap finished after "
                        << formatMillisec( stopwatch.elapsed() )
-                       << endl;
+                       << ENDL;
 #endif
 	}
 
@@ -559,7 +559,7 @@ void TreemapView::setCurrentItem( FileInfo * node )
 
 	if ( treemapRoot != _rootTile->orig() )	  // need to zoom out?
 	{
-	    logDebug() << "Zooming out to " << treemapRoot << " to make current item visible" << endl;
+	    logDebug() << "Zooming out to " << treemapRoot << " to make current item visible" << ENDL;
 	    rebuildTreemap( treemapRoot );
 	}
     }

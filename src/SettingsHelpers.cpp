@@ -32,7 +32,7 @@ namespace QDirStat
 	    color = fallback;
 #if 0
 	    logDebug() << "Using fallback for " << entryName
-		       << ": " << color.name() << endl;
+		       << ": " << color.name() << ENDL;
 #endif
 	}
 
@@ -66,7 +66,7 @@ namespace QDirStat
 	    else
 	    {
 		logError() << "ERROR in " << entryName << ": \""
-			   << rgb << "\" is not a valid color" << endl;
+			   << rgb << "\" is not a valid color" << ENDL;
 	    }
 	}
 
@@ -138,7 +138,7 @@ namespace QDirStat
 	}
 
 	logError() << "Invalid value for " << entryName
-		   << ": \"" << str << "\"" << endl;
+		   << ": \"" << str << "\"" << ENDL;
 
 	return fallback;
     }
@@ -151,7 +151,7 @@ namespace QDirStat
     {
 	if ( ! enumMapping.contains( enumValue ) )
 	{
-	    logError() << "No string for enum value " << enumValue << endl;
+	    logError() << "No string for enum value " << enumValue << ENDL;
 	    return;
 	}
 

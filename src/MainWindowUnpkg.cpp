@@ -27,7 +27,7 @@ void MainWindow::askShowUnpkgFiles()
 
     if ( ! pkgManager )
     {
-	logError() << "No supported primary package manager" << endl;
+	logError() << "No supported primary package manager" << ENDL;
 	return;
     }
 
@@ -49,14 +49,14 @@ void MainWindow::showUnpkgFiles( const QString & url )
 
 void MainWindow::showUnpkgFiles( const UnpkgSettings & unpkgSettings )
 {
-    logDebug() << "Settings:" << endl;
+    logDebug() << "Settings:" << ENDL;
     unpkgSettings.dump();
 
     PkgManager * pkgManager = PkgQuery::primaryPkgManager();
 
     if ( ! pkgManager )
     {
-	logError() << "No supported primary package manager" << endl;
+	logError() << "No supported primary package manager" << ENDL;
 	return;
     }
 
@@ -124,7 +124,7 @@ QString MainWindow::parseUnpkgStartingDir( const UnpkgSettings & unpkgSettings )
     dir = qregexp_replaceIn( QRegExp( "^unpkg:" ), dir, "" );
 
     if ( dir != unpkgSettings.startingDir )
-	logInfo() << "Parsed starting dir: " << dir << endl;
+	logInfo() << "Parsed starting dir: " << dir << ENDL;
 
     return dir;
 }

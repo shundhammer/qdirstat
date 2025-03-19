@@ -108,7 +108,7 @@ void LocateFileTypeWindow::populate( const QString & suffix, FileInfo * newSubtr
                            .arg( _subtree.url() ) );
 
     logDebug() << "Locating all files ending with \""
-	       << _searchSuffix << "\" below " << _subtree.url() << endl;
+	       << _searchSuffix << "\" below " << _subtree.url() << ENDL;
 
     // For better Performance: Disable sorting while inserting many items
     _ui->treeWidget->setSortingEnabled( false );
@@ -117,7 +117,7 @@ void LocateFileTypeWindow::populate( const QString & suffix, FileInfo * newSubtr
 
     _ui->treeWidget->setSortingEnabled( true );
     _ui->treeWidget->sortByColumn( SSR_PathCol, Qt::AscendingOrder );
-    logDebug() << _ui->treeWidget->topLevelItemCount() << " directories" << endl;
+    logDebug() << _ui->treeWidget->topLevelItemCount() << " directories" << ENDL;
 
     // Make sure something is selected, even if this window is not the active
     // one (for example because the user just clicked on another suffix in the

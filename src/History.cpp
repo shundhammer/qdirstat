@@ -109,7 +109,7 @@ bool History::setCurrentIndex( int index )
     }
     else
     {
-        logWarning() << "Index " << index << " out of range" << endl;
+        logWarning() << "Index " << index << " out of range" << ENDL;
         dump();
 
         return false;
@@ -155,7 +155,7 @@ void History::dump() const
 {
     if ( _items.isEmpty() )
     {
-        logDebug() << "Empty history" << endl;
+        logDebug() << "Empty history" << ENDL;
         return;
     }
 
@@ -170,7 +170,7 @@ void History::dump() const
 
         logDebug() << prefix
                    << "#" << i
-                   << ": \"" << _items.at( i ) << "\"" << endl;
+                   << ": \"" << _items.at( i ) << "\"" << ENDL;
     }
 
     logNewline();

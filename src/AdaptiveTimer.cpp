@@ -105,7 +105,7 @@ void AdaptiveTimer::increaseDelay()
 #if VERBOSE_DELAY
         logDebug() << "Increasing delay to stage " << _delayStage
                    << ": " << delay << " millisec"
-                   << endl;
+                   << ENDL;
 #endif
 
         _deliveryTimer.setInterval( delay );
@@ -124,7 +124,7 @@ void AdaptiveTimer::decreaseDelay()
 #if VERBOSE_DELAY
         logDebug() << "Decreasing delay to stage " << _delayStage
                    << ": " << delay << " millisec"
-                   << endl;
+                   << ENDL;
 #endif
 
         _deliveryTimer.setInterval( delay );
@@ -147,7 +147,7 @@ void AdaptiveTimer::heatUp()
 #if VERBOSE_STAGES
         logDebug() << "Heating up to cooldown stage " << _coolDownStage
                    << ": " << coolDownInterval << " millisec"
-                   << endl;
+                   << ENDL;
 #endif
 
         _coolDownTimer.setInterval( coolDownInterval );
@@ -171,7 +171,7 @@ void AdaptiveTimer::coolDown()
 #if VERBOSE_STAGES
         logDebug() << "Cooling down to stage " << _coolDownStage
                    << ": " << coolDownInterval << " millisec"
-                   << endl;
+                   << ENDL;
 #endif
 
         _coolDownTimer.setInterval( coolDownInterval );

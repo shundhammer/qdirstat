@@ -65,7 +65,7 @@ namespace QDirStat
      *
      * Note: For logDebug() etc., operator<< is overwritten to do exactly that:
      *
-     *	   logDebug() << "Size: " << x->totalSize() << endl;
+     *	   logDebug() << "Size: " << x->totalSize() << ENDL;
      **/
     QString formatSize( FileSize size );
 

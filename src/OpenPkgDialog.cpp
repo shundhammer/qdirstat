@@ -7,8 +7,6 @@
  */
 
 
-#include "QtCompat.h"
-
 #include "OpenPkgDialog.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -40,7 +38,7 @@ PkgFilter OpenPkgDialog::pkgFilter()
 {
     if ( _ui->allPkgRadioButton->isChecked() )
     {
-        logDebug() << "SelectAll" << endl;
+        logDebug() << "SelectAll" << ENDL;
         return PkgFilter( "", PkgFilter::SelectAll );
     }
     else

@@ -192,7 +192,7 @@ void TreemapTile::createSquarifiedChildren( const QRectF & rect )
 {
     if ( _orig->totalAllocatedSize() == 0 )
     {
-	logError()  << "Zero totalAllocatedSize()" << endl;
+	logError()  << "Zero totalAllocatedSize()" << ENDL;
 	return;
     }
 
@@ -703,7 +703,7 @@ void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
                              << "  xx2: "         << _cushionSurface.xx2()
                              << "  yy1: "         << _cushionSurface.yy1()
                              << "  yy2: "         << _cushionSurface.yy2()
-                             << endl;
+                             << ENDL;
 #endif
 	    }
 	    break;
@@ -722,12 +722,12 @@ void TreemapTile::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event )
     switch ( event->button() )
     {
 	case Qt::LeftButton:
-	    logDebug() << "Zooming treemap in" << endl;
+	    logDebug() << "Zooming treemap in" << ENDL;
 	    _parentView->zoomIn();
 	    break;
 
 	case Qt::MidButton:
-	    logDebug() << "Zooming treemap out" << endl;
+	    logDebug() << "Zooming treemap out" << ENDL;
 	    _parentView->zoomOut();
 	    break;
 
@@ -767,7 +767,7 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 
     if ( ! selectedItems.contains( _orig ) )
     {
-	logDebug() << "Abandoning old selection" << endl;
+	logDebug() << "Abandoning old selection" << ENDL;
 	_parentView->selectionModel()->setCurrentItem( _orig, true );
 	selectedItems = _parentView->selectionModel()->selectedItems();
     }
@@ -775,7 +775,7 @@ void TreemapTile::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
     if ( _parentView->selectionModel()->verbose() )
 	_parentView->selectionModel()->dumpSelectedItems();
 
-    logDebug() << "Context menu for " << this << endl;
+    logDebug() << "Context menu for " << this << ENDL;
 
     QMenu menu;
     QStringList actions;
