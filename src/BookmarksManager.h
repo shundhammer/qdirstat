@@ -9,6 +9,7 @@
 #ifndef BookmarksManager_h
 #define BookmarksManager_h
 
+
 #include <QObject>
 #include <QString>
 #include <QStringList>

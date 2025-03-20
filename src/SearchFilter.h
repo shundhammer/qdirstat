@@ -11,7 +11,8 @@
 
 #include <QString>
 #include <QRegExp>
-#include <QTextStream>
+
+#include "Logger.h"
 
 
 namespace QDirStat
@@ -108,18 +109,8 @@ namespace QDirStat
     };  // class SearchFilter
 
 
-    inline QTextStream & operator<< ( QTextStream        & stream,
-                                      const SearchFilter & filter )
-    {
-        stream << "<SearchFilter \""
-               << filter.pattern()
-               << "\" mode \""
-               << SearchFilter::toString( filter.filterMode() ) << "\" "
-               <<( filter.isCaseSensitive()? " case sensitive" : "" )
-               << ">";
-
-        return stream;
-    }
+    LogStream & operator<< ( LogStream          & stream,
+                             const SearchFilter & filter );
 }
 
 #endif  // SearchFilter_h

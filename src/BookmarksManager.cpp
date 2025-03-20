@@ -6,14 +6,14 @@
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
-#include <QMenu>
+
 #include <QAction>
 #include <QDir>
 #include <QFile>
-#include <QTextStream>
+// #include <QTextStream>
 
-#include "BookmarksManager.h"
 #include "DirTree.h"
+#include "BookmarksManager.h"
 #include "Logger.h"
 
 #define BookmarksFile           "~/.config/QDirStat/bookmarks.txt"
@@ -21,6 +21,9 @@
 
 
 using namespace QDirStat;
+
+#define BROKEN_COMPILER_QSTRING(QSTR)  ( QSTR.toUtf8().constData() )
+LogStream & operator<<( LogStream & str, const QString & text );
 
 
 BookmarksManager::BookmarksManager( QObject * parent ):
@@ -49,7 +52,7 @@ void BookmarksManager::add( const QString & bookmark, bool update )
     if ( _bookmarks.contains( bookmark, Qt::CaseSensitive ) )
         return;
 
-    logInfo() << "Adding bookmark \"" << bookmark << "\"" << endl;
+    logInfo() << "Adding bookmark " << bookmark << endl;
 
     _bookmarks << bookmark;
     _dirty = true;
@@ -67,7 +70,7 @@ void BookmarksManager::remove( const QString & bookmark, bool update )
     if ( ! _bookmarks.contains( bookmark, Qt::CaseSensitive ) )
         return;
 
-    logInfo() << "Removing bookmark \"" << bookmark << "\"" << endl;
+    logInfo() << "Removing bookmark \"" << BROKEN_COMPILER_QSTRING( bookmark ) << "\"" << endl;
 
     _bookmarks.removeAll( bookmark );
     _dirty = true;
@@ -162,7 +165,7 @@ void BookmarksManager::navigateToBookmark()
 
         if ( ! bookmark.isEmpty() )
         {
-            logDebug() << bookmark << endl;
+            logDebug() << BROKEN_COMPILER_QSTRING( bookmark ) << endl;
             emit navigateToUrl( expandedPath( bookmark ) );
         }
     }
@@ -198,11 +201,12 @@ void BookmarksManager::read()
 
     if ( ! bookmarksFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
-	logError() << "Can't open " << bookmarksFileName() << endl;
+	logError() << "Can't open " << BROKEN_COMPILER_QSTRING( bookmarksFileName() ) << endl;
 	return;
     }
 
     _bookmarks.clear();
+
     QTextStream in( &bookmarksFile );
 
     while ( ! in.atEnd() )
@@ -235,7 +239,7 @@ void BookmarksManager::write()
 
     if ( ! bookmarksFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
     {
-	logError() << "Can't open " << bookmarksFileName() << endl;
+	logError() << "Can't open " << BROKEN_COMPILER_QSTRING( bookmarksFileName() ) << endl;
 	return;
     }
 

@@ -14,7 +14,8 @@
 #include <QString>
 #include <QStringList>
 #include <QObject>
-#include <QTextStream>
+
+#include "Logger.h"
 
 
 namespace QDirStat
@@ -197,30 +198,11 @@ namespace QDirStat
     };	// class DataColumns
 
 
-    /**
-     * Print a DataColumn in text form to a debug stream.
-     **/
-    inline QTextStream & operator<< ( QTextStream & stream, DataColumn col )
-    {
-	stream << DataColumns::toString( col );
+    LogStream & operator<< ( LogStream &            stream,
+                             DataColumn             col     );
 
-	return stream;
-    }
-
-
-    /**
-     * Print a DataColumn in text form to a debug stream.
-     **/
-    inline QTextStream & operator<< ( QTextStream &          stream,
-                                      const DataColumnList & colList )
-    {
-	stream << "[ "
-               << DataColumns::toStringList( colList ).join( ", " )
-               << " ]";
-
-	return stream;
-    }
-
+    LogStream & operator<< ( LogStream &            stream,
+                             const DataColumnList & colList );
 
 }	// namespace QDirStat
 

@@ -911,3 +911,15 @@ double CushionSurface::ridgeCoefficient() const
     }
 }
 
+
+
+
+LogStream & operator<< ( LogStream & stream, TreemapTile * tile )
+{
+    if ( tile )
+        stream << tile->orig();
+    else
+        stream << "<NULL TreemapTile *>";
+
+    return stream;
+}

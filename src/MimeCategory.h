@@ -15,7 +15,8 @@
 #include <QStringList>
 #include <QColor>
 #include <QRegExp>
-#include <QTextStream>
+
+#include "Logger.h"
 
 
 namespace QDirStat
@@ -177,19 +178,7 @@ namespace QDirStat
     typedef QList<MimeCategory *> MimeCategoryList;
 
 
-    /**
-     * Human-readable output of a MimeCategory in a debug stream.
-     **/
-    inline QTextStream & operator<< ( QTextStream & str, MimeCategory * category )
-    {
-        if ( category )
-            str << "<MimeCategory " << category->name() << ">";
-        else
-            str << "<NULL MimeCategory *>";
-
-	return str;
-    }
-
+    LogStream & operator<< ( LogStream & str, MimeCategory * category );
 
 }	// namespace QDirStat
 

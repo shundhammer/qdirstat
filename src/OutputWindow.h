@@ -11,10 +11,10 @@
 
 #include <QDialog>
 #include <QList>
-#include <QTextStream>
 #include <QStringList>
 
 #include "ui_output-window.h"
+#include "Logger.h"
 #include "Process.h"
 
 class QCloseEvent;
@@ -353,16 +353,7 @@ protected:
 };	// class OutputWindow
 
 
-inline QTextStream & operator<< ( QTextStream & stream, Process * process )
-{
-    if ( process )
-	stream << OutputWindow::command( process );
-    else
-	stream << "<NULL QProcess>";
-
-    return stream;
-}
-
+LogStream & operator<< ( LogStream & stream, Process * process )
 
 
 #endif	// OutputWindow_h

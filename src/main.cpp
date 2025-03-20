@@ -10,11 +10,12 @@
 #include <iostream>	// cerr
 
 #include <QApplication>
+
+#include "Logger.h"
 #include "QDirStatApp.h"
 #include "MainWindow.h"
 #include "DirTreeModel.h"
 #include "Settings.h"
-#include "Logger.h"
 #include "Exception.h"
 #include "Version.h"
 

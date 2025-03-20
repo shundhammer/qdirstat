@@ -14,7 +14,9 @@
 #include <QStringList>
 #include <QList>
 #include <QMap>
-#include <QTextStream>
+
+#include "Logger.h"
+
 
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 4, 0 ))
 #  define HAVE_Q_STORAGE_INFO 0
@@ -366,20 +368,7 @@ namespace QDirStat
     }; // class MountPoints
 
 
-    inline QTextStream & operator<< ( QTextStream & stream, MountPoint * mp )
-    {
-	if ( mp )
-	{
-	    stream << "<mount point for " << mp->device()
-		   << " at " << mp->path()
-		   << " type " << mp->filesystemType()
-		   << ">";
-	}
-	else
-	    stream << "<NULL MountPoint*>";
-
-	return stream;
-    }
+    LogStream & operator<< ( LogStream & stream, MountPoint * mp );
 
 } // namespace QDirStat
 

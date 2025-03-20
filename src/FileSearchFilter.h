@@ -11,8 +11,8 @@
 
 #include <QString>
 #include <QRegExp>
-#include <QTextStream>
 
+#include "Logger.h"
 #include "SearchFilter.h"
 
 
@@ -77,33 +77,8 @@ namespace QDirStat
     };  // class FileSearchFilter
 
 
-    inline QTextStream & operator<< ( QTextStream            & stream,
-                                      const FileSearchFilter & filter )
-    {
-        QString findType = filter.findFiles() ? "files" : "";
-
-        if ( filter.findDirs() )
-        {
-            if ( ! findType.isEmpty() )
-                findType += " + ";
-
-            findType += "dirs";
-        }
-
-        if ( filter.findSymLinks() )
-            findType += " + symlinks";
-
-        stream << "<FileSearchFilter \""
-               << filter.pattern()
-               << "\" mode \""
-               << SearchFilter::toString( filter.filterMode() )
-               << "\" for "
-               << findType
-               <<( filter.isCaseSensitive()? " case sensitive" : "" )
-               << ">";
-
-        return stream;
-    }
+    LogStream & operator<< ( LogStream              & stream,
+                             const FileSearchFilter & filter );
 }
 
 #endif  // FileSearchFilter_h

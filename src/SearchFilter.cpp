@@ -122,3 +122,19 @@ QString SearchFilter::toString( FilterMode filterMode )
 
     return QString( "<Unknown FilterMode %1" ).arg( (int) filterMode );
 }
+
+
+
+
+LogStream & operator<< ( LogStream          & stream,
+                         const SearchFilter & filter )
+{
+    stream << "<SearchFilter \""
+           << filter.pattern()
+           << "\" mode \""
+           << SearchFilter::toString( filter.filterMode() ) << "\" "
+           <<( filter.isCaseSensitive()? " case sensitive" : "" )
+           << ">";
+
+    return stream;
+}

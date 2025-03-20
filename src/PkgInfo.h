@@ -13,6 +13,7 @@
 #include <QList>
 
 #include "DirInfo.h"
+#include "Logger.h"
 
 
 namespace QDirStat
@@ -169,23 +170,7 @@ namespace QDirStat
     typedef QList<PkgInfo *> PkgInfoList;
 
 
-    /**
-     * Print the debugUrl() of a PkgInfo in a debug stream.
-     **/
-    inline QTextStream & operator<< ( QTextStream & stream, const PkgInfo * info )
-    {
-	if ( info )
-	{
-	    if ( info->checkMagicNumber() )
-		stream << "<Pkg " << info->name() << ">";
-	    else
-		stream << "<INVALID PkgInfo *>";
-	}
-	else
-	    stream << "<NULL PkgInfo *>";
-
-	return stream;
-    }
+    LogStream & operator<< ( LogStream & stream, const PkgInfo * info );
 
 }       // namespace QDirStat
 

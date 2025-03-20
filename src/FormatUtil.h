@@ -14,9 +14,9 @@
 #include <sys/types.h>  // mode_t
 
 #include <QString>
-#include <QTextStream>
 
 #include "FileSize.h"
+#include "Logger.h"
 
 
 namespace QDirStat
@@ -130,15 +130,7 @@ namespace QDirStat
     QString formatFilesystemObjectType( mode_t mode );
 
 
-    /**
-     * Human-readable output of a file size in a debug stream.
-     **/
-    inline QTextStream & operator<< ( QTextStream & stream, FileSize lSize )
-    {
-	stream << formatSize( lSize );
-
-	return stream;
-    }
+    LogStream & operator<< ( LogStream & stream, FileSize lSize );
 
 }       // namespace QDirStat
 

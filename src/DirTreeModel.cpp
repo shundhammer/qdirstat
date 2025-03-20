@@ -1388,3 +1388,26 @@ void DirTreeModel::refreshSelected()
     }
 }
 
+
+
+LogStream & operator<< ( LogStream & stream, const QModelIndex & index )
+{
+    if ( ! index.isValid() )
+        stream << "<Invalid QModelIndex>";
+    else
+    {
+        FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
+        stream << "<QModelIndex row: " << index.row()
+               << " col: " << index.column();
+
+        if ( item && ! item->checkMagicNumber() )
+            stream << " <INVALID FileInfo *>";
+        else
+            stream << " " << item;
+
+        stream << " >";
+    }
+
+    return stream;
+}
+

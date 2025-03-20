@@ -14,11 +14,11 @@
 #include <sys/types.h>  // dev_t, mode_t, nlink_t
 #include <sys/stat.h>   // S_ISDIR() etc.
 
-#include <QTextStream>
 #include <QList>
 
 #include "FileSize.h"
 #include "Logger.h"
+
 
 // The size of a standard disk block.
 //
@@ -1007,23 +1007,7 @@ namespace QDirStat
     QString baseName( const QString & fileName );
 
 
-    /**
-     * Print the debugUrl() of a FileInfo in a debug stream.
-     **/
-    inline QTextStream & operator<< ( QTextStream & stream, const FileInfo * info )
-    {
-	if ( info )
-	{
-	    if ( info->checkMagicNumber() )
-		stream << info->debugUrl();
-	    else
-		stream << "<INVALID FileInfo *>";
-	}
-	else
-	    stream << "<NULL FileInfo *>";
-
-	return stream;
-    }
+    LogStream & operator<< ( LogStream & stream, const FileInfo * info );
 
 }	// namespace QDirStat
 

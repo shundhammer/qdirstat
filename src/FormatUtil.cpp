@@ -8,7 +8,6 @@
 
 #include <QObject>
 #include <QDateTime>
-#include <QTextStream>
 
 #include "FormatUtil.h"
 #include "Exception.h"
@@ -125,6 +124,14 @@ QString QDirStat::formatByteSize( FileSize size )
     sizeString = QObject::tr( "%1 Bytes" ).arg( sizeString );
 
     return sizeString;
+}
+
+
+LogStream & operator<< ( LogStream & stream, FileSize lSize )
+{
+    stream << formatSize( lSize );
+
+    return stream;
 }
 
 

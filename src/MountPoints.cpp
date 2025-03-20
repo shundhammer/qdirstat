@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QRegExp>
 #include <QFileInfo>
+#include <QTextStream>
 
 #include "MountPoints.h"
 #include "SysUtil.h"
@@ -600,3 +601,21 @@ void MountPoints::reload()
 #else
   bool MountPoints::hasSizeInfo() { return false; }
 #endif
+
+
+
+
+LogStream & operator<< ( LogStream & stream, MountPoint * mp )
+{
+    if ( mp )
+    {
+        stream << "<mount point for " << mp->device()
+               << " at " << mp->path()
+               << " type " << mp->filesystemType()
+               << ">";
+    }
+    else
+        stream << "<NULL MountPoint*>";
+
+    return stream;
+}

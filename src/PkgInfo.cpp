@@ -163,3 +163,21 @@ FileInfo * PkgInfo::locate( DirInfo *           subtree,
 
     return 0;
 }
+
+
+
+
+LogStream & operator<< ( LogStream & stream, const PkgInfo * info )
+{
+    if ( info )
+    {
+        if ( info->checkMagicNumber() )
+            stream << "<Pkg " << info->name() << ">";
+        else
+            stream << "<INVALID PkgInfo *>";
+    }
+    else
+        stream << "<NULL PkgInfo *>";
+
+    return stream;
+}

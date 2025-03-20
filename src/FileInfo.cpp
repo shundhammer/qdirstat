@@ -760,3 +760,18 @@ QString QDirStat::baseName( const QString & fileName )
     return segments.isEmpty() ? "" : segments.last();
 }
 
+
+LogStream & operator<< ( LogStream & stream, const FileInfo * info )
+{
+    if ( info )
+    {
+        if ( info->checkMagicNumber() )
+            stream << info->debugUrl();
+        else
+            stream << "<INVALID FileInfo *>";
+    }
+    else
+        stream << "<NULL FileInfo *>";
+
+    return stream;
+}

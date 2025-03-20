@@ -11,9 +11,9 @@
 
 #include <QString>
 #include <QRegExp>
-#include <QTextStream>
 
 #include "SearchFilter.h"
+#include "Logger.h"
 
 
 namespace QDirStat
@@ -76,18 +76,8 @@ namespace QDirStat
     };  // class PkgFilter
 
 
-    inline QTextStream & operator<< ( QTextStream     & stream,
-                                      const PkgFilter & filter )
-    {
-        stream << "<PkgFilter \""
-               << filter.pattern()
-               << "\" mode \""
-               << SearchFilter::toString( filter.filterMode() ) << "\" "
-               <<( filter.isCaseSensitive()? " case sensitive" : "" )
-               << ">";
-
-        return stream;
-    }
+    LogStream & operator<< ( LogStream       & stream,
+                             const PkgFilter & filter );
 }
 
 #endif  // PkgFilter_h

@@ -15,6 +15,7 @@
 #include <QRectF>
 
 #include "FileInfoIterator.h"
+#include "Logger.h"
 
 
 class QGraphicsSceneMouseEvent;
@@ -377,15 +378,7 @@ namespace QDirStat
 
 
 
-    inline QTextStream & operator<< ( QTextStream & stream, TreemapTile * tile )
-    {
-	if ( tile )
-	    stream << tile->orig();
-	else
-	    stream << "<NULL TreemapTile *>";
-
-	return stream;
-    }
+    LogStream & operator<< ( LogStream & stream, TreemapTile * tile );
 
 }	// namespace QDirStat
 

@@ -890,3 +890,20 @@ void DirReadJobQueue::unblock( DirReadJob * job )
     if ( _blocked.isEmpty() )
 	logDebug() << "No more jobs waiting for external processes" << endl;
 }
+
+
+
+
+LogStream & operator<< ( LogStream & str, DirReadJob * job )
+{
+    if ( job )
+    {
+        CacheReadJob * cacheReadJob = dynamic_cast<CacheReadJob *>( job );
+        QString jobType = cacheReadJob ? "CacheReadJob" : "DirReadJob";
+        str << "<" << jobType << " " << job->dir() << ">";
+    }
+    else
+        str << "<NULL DirReadJob *>";
+
+    return str;
+}

@@ -28,6 +28,9 @@ TARGET.files	 = qdirstat
 TARGET.path	 = $$INSTALL_PREFIX/bin
 INSTALLS	+= TARGET desktop icons
 
+### QMAKE_C          = gcc-13
+### QMAKE_CXX        = g++-13
+
 
 # Fix the train wreck that Qt 5.15 is.
 #

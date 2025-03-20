@@ -166,3 +166,16 @@ QStringList MimeCategory::humanReadablePatternList( const QRegExpList & patternL
 
     return result;
 }
+
+
+
+
+LogStream & operator<< ( LogStream & str, MimeCategory * category )
+{
+    if ( category )
+        str << "<MimeCategory " << category->name() << ">";
+    else
+        str << "<NULL MimeCategory *>";
+
+    return str;
+}

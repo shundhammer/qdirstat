@@ -214,3 +214,24 @@ void DataColumns::ensureNameColFirst( DataColumnList & colList )
 	logError() << "Fixed column list: " << toStringList( colList ) << endl;
     }
 }
+
+
+
+
+LogStream & operator<< ( LogStream & stream, DataColumn col )
+{
+    stream << DataColumns::toString( col );
+
+    return stream;
+}
+
+
+LogStream & operator<< ( LogStream &            stream,
+                         const DataColumnList & colList )
+{
+    stream << "[ "
+           << DataColumns::toStringList( colList ).join( ", " )
+           << " ]";
+
+    return stream;
+}

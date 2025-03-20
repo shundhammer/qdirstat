@@ -549,3 +549,16 @@ void OutputWindow::writeSettings()
 
     QDirStat::writeWindowSettings( this, "OutputWindow" );
 }
+
+
+
+
+LogStream & operator<< ( LogStream & stream, Process * process )
+{
+    if ( process )
+	stream << OutputWindow::command( process );
+    else
+	stream << "<NULL QProcess>";
+
+    return stream;
+}

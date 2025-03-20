@@ -16,12 +16,12 @@
 #include <QIcon>
 #include <QSet>
 #include <QTimer>
-#include <QTextStream>
 
 #include "DataColumns.h"
 #include "FileInfo.h"
 #include "PkgFilter.h"
 #include "FormatUtil.h"
+#include "Logger.h"
 
 
 namespace QDirStat
@@ -561,30 +561,7 @@ namespace QDirStat
     };	// class DirTreeModel
 
 
-    /**
-     * Print a QModelIndex of this model in text form to a debug stream.
-     **/
-    inline QTextStream & operator<< ( QTextStream & stream, const QModelIndex & index )
-    {
-	if ( ! index.isValid() )
-	    stream << "<Invalid QModelIndex>";
-	else
-	{
-	    FileInfo * item = static_cast<FileInfo *>( index.internalPointer() );
-	    stream << "<QModelIndex row: " << index.row()
-		   << " col: " << index.column();
-
-	    if ( item && ! item->checkMagicNumber() )
-		stream << " <INVALID FileInfo *>";
-	    else
-		stream << " " << item;
-
-	    stream << " >";
-	}
-
-	return stream;
-    }
-
+    LogStream & operator<< ( LogStream & stream, const QModelIndex & index );
 
 }	// namespace QDirStat
 

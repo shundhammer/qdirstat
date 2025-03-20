@@ -500,3 +500,16 @@ QString Cleanup::expandDesktopSpecificApps( const QString & unexpanded ) const
 
     return expanded;
 }
+
+
+
+
+LogStream & operator<< ( LogStream & stream, const Cleanup * cleanup )
+{
+    if ( cleanup )
+        stream << cleanup->cleanTitle();
+    else
+        stream << "<NULL Cleanup *>";
+
+    return stream;
+}

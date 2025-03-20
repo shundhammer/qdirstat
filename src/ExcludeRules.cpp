@@ -375,3 +375,18 @@ void ExcludeRules::writeSettings()
     if ( _defaultRulesAdded )
         settings.setValue( "DefaultExcludeRulesAdded", true );
 }
+
+
+
+
+LogStream & operator<< ( LogStream & stream, const ExcludeRule * rule )
+{
+    if ( rule )
+        stream << "<ExcludeRule \"" << rule->regexp().pattern() << "\""
+               << ( rule->useFullPath() ? " (full path)" : "" )
+               << ">";
+    else
+        stream << "<NULL ExcludeRule *>";
+
+    return stream;
+}

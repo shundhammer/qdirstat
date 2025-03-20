@@ -56,3 +56,19 @@ QString PkgFilter::url() const
 {
     return QString( "Pkg:/%1" ).arg( _pattern );
 }
+
+
+
+
+LogStream & operator<< ( LogStream       & stream,
+                         const PkgFilter & filter )
+{
+    stream << "<PkgFilter \""
+           << filter.pattern()
+           << "\" mode \""
+           << SearchFilter::toString( filter.filterMode() ) << "\" "
+           <<( filter.isCaseSensitive()? " case sensitive" : "" )
+           << ">";
+
+    return stream;
+}
