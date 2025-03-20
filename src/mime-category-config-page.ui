@@ -155,7 +155,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QDirStat::TreemapView" name="treemapView">
+      <widget class="TreemapView" name="treemapView">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -254,7 +254,7 @@ Use * or ? as wildcards.</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QDirStat::TreemapView</class>
+   <class>TreemapView</class>
    <extends>QFrame</extends>
    <header>TreemapView.h</header>
    <container>1</container>

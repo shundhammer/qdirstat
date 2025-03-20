@@ -11,7 +11,6 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
 
 
 PkgFilter::PkgFilter( const QString & pattern,

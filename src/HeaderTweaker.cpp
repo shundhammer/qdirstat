@@ -19,7 +19,6 @@
 #include "Exception.h"
 #include "SignalBlocker.h"
 
-using namespace QDirStat;
 
 
 HeaderTweaker::HeaderTweaker( QHeaderView * header, DirTreeView * parent ):

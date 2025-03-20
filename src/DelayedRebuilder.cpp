@@ -14,7 +14,6 @@
 
 #define DefaultRebuildDelayMillisec 200
 
-using namespace QDirStat;
 
 
 DelayedRebuilder::DelayedRebuilder( QObject * parent ):

@@ -14,7 +14,6 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
 
 
 OpenPkgDialog::OpenPkgDialog( QWidget * parent ):

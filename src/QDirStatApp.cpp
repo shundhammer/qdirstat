@@ -22,7 +22,6 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
 
 
 QDirStatApp * QDirStatApp::_instance = 0;
@@ -135,7 +134,7 @@ FileInfo * QDirStatApp::selectedDirInfoOrRoot() const
 }
 
 
-QDirStatApp * QDirStat::app()
+QDirStatApp * app()
 {
     return QDirStatApp::instance();
 }

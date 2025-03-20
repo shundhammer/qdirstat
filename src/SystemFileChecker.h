@@ -11,47 +11,44 @@
 #define SystemFileChecker_h
 
 #include <sys/types.h> // uid_t
-
 #include <QString>
 
+class FileInfo;
 
-namespace QDirStat
+
+/**
+ * Check functions to find out if a file is a system file.
+ *
+ * This might be a bit Linux-centric. It will work on other Unix-type
+ * system, but it might not be too reliable on other systems like MacOS X.
+ **/
+class SystemFileChecker
 {
-    class FileInfo;
+public:
+    /**
+     * Return 'true' if a file is clearly a system file.
+     **/
+    static bool isSystemFile( FileInfo * file );
 
     /**
-     * Check functions to find out if a file is a system file.
-     *
-     * This might be a bit Linux-centric. It will work on other Unix-type
-     * system, but it might not be too reliable on other systems like MacOS X.
+     * Return 'true' if a user ID is a system user.
      **/
-    class SystemFileChecker
-    {
-    public:
-        /**
-         * Return 'true' if a file is clearly a system file.
-         **/
-        static bool isSystemFile( FileInfo * file );
+    static bool isSystemUid( uid_t uid );
 
-        /**
-         * Return 'true' if a user ID is a system user.
-         **/
-        static bool isSystemUid( uid_t uid );
+    /**
+     * Return 'true' if a path is a known system path.
+     **/
+    static bool isSystemPath( const QString & path );
 
-        /**
-         * Return 'true' if a path is a known system path.
-         **/
-        static bool isSystemPath( const QString & path );
+    /**
+     * Return 'true' if a path might be a known system path.
+     *
+     * Check with isSystemPath() first and use this only if isSystemPath()
+     * returns false.
+     **/
+    static bool mightBeSystemPath( const QString & path );
 
-        /**
-         * Return 'true' if a path might be a known system path.
-         *
-         * Check with isSystemPath() first and use this only if isSystemPath()
-         * returns false.
-         **/
-        static bool mightBeSystemPath( const QString & path );
+}; // class SystemFileChecker
 
-    }; // class SystemFileChecker
-}
 
 #endif // SystemFileChecker_h

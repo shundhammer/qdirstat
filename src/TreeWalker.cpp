@@ -18,7 +18,6 @@
 #define MAX_FIND_FILES_RESULTS  1000
 
 
-using namespace QDirStat;
 
 
 qreal TreeWalker::upperPercentileThreshold( PercentileStats & stats )

@@ -20,9 +20,6 @@ class QAbstractItemModel;
 
 namespace Debug
 {
-    using QDirStat::FileInfo;
-    using QDirStat::FileInfoList;
-
     /**
      * Dump the direct children of 'dir' to the log.
      **/

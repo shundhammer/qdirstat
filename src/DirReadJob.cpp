@@ -25,7 +25,6 @@
 #define DONT_TRUST_NTFS_HARD_LINKS      1
 #define VERBOSE_NTFS_HARD_LINKS         0
 
-using namespace QDirStat;
 
 
 DirReadJob::DirReadJob( DirTree * tree,

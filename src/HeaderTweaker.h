@@ -1,9 +1,9 @@
 /*
  *   File name: HeaderTweaker.h
- *   Summary:	Helper class for DirTreeView
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   Helper class for DirTreeView
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 #ifndef HeaderTweaker_h
@@ -18,228 +18,225 @@ class QHeaderView;
 class QAction;
 class QMenu;
 
+class DirTreeView;
+class ColumnLayout;
 
-namespace QDirStat
+
+/**
+ * Decorator class for a DirTreeView's QHeaderView that takes care about
+ * the header's context menu and the corresponding actions and saving and
+ * restoring state.
+ **/
+class HeaderTweaker: public QObject
 {
-    class DirTreeView;
-    class ColumnLayout;
+    Q_OBJECT
+
+public:
 
     /**
-     * Decorator class for a DirTreeView's QHeaderView that takes care about
-     * the header's context menu and the corresponding actions and saving and
-     * restoring state.
+     * Constructor.
      **/
-    class HeaderTweaker: public QObject
-    {
-	Q_OBJECT
+    HeaderTweaker( QHeaderView * header, DirTreeView * parent );
 
-    public:
+    /**
+     * Destructor.
+     **/
+    virtual ~HeaderTweaker();
 
-	/**
-	 * Constructor.
-	 **/
-	HeaderTweaker( QHeaderView * header, DirTreeView * parent );
+    /**
+     * Order the columns according to 'colOrderList'.
+     **/
+    void setColumnOrder( const DataColumnList & colOrderList);
 
-	/**
-	 * Destructor.
-	 **/
-	virtual ~HeaderTweaker();
+    /**
+     * Resize a header view to contents.
+     **/
+    static void resizeToContents( QHeaderView * header );
 
-	/**
-	 * Order the columns according to 'colOrderList'.
-	 **/
-	void setColumnOrder( const DataColumnList & colOrderList);
+public slots:
 
-	/**
-	 * Resize a header view to contents.
-	 **/
-	static void resizeToContents( QHeaderView * header );
+    /**
+     * Set auto size mode for all columns on or off.
+     **/
+    void setAllColumnsAutoSize( bool autoSize = true );
 
-    public slots:
+    /**
+     * Set interactive size mode (i.e. auto size mode off) for all columns.
+     **/
+    void setAllColumnsInteractiveSize();
 
-	/**
-	 * Set auto size mode for all columns on or off.
-	 **/
-	void setAllColumnsAutoSize( bool autoSize = true );
+    /**
+     * Make all hidden columns visible again.
+     **/
+    void showAllHiddenColumns();
 
-	/**
-	 * Set interactive size mode (i.e. auto size mode off) for all columns.
-	 **/
-	void setAllColumnsInteractiveSize();
+    /**
+     * Reset all columns to defaults: Column order, visibility, auto size.
+     **/
+    void resetToDefaults();
 
-	/**
-	 * Make all hidden columns visible again.
-	 **/
-	void showAllHiddenColumns();
+    /**
+     * Read parameters from the settings file.
+     **/
+    void readSettings();
 
-	/**
-	 * Reset all columns to defaults: Column order, visibility, auto size.
-	 **/
-	void resetToDefaults();
+    /**
+     * Write parameters to the settings file.
+     **/
+    void writeSettings();
 
-	/**
-	 * Read parameters from the settings file.
-	 **/
-	void readSettings();
-
-	/**
-	 * Write parameters to the settings file.
-	 **/
-	void writeSettings();
-
-	/**
-	 * Switch the layout to the one with the specified name.
-	 **/
-	void changeLayout( const QString & name );
+    /**
+     * Switch the layout to the one with the specified name.
+     **/
+    void changeLayout( const QString & name );
 
 
-    protected slots:
+protected slots:
 
-	/**
-	 * Initialize the header view. This makes sense only when it has
-	 * columns, i.e. when the model is set, and the parent QTreeView
-	 * requested header data. It makes most sense to connect this slot with
-	 * the header's sectionCountChanged() signal.
-	 **/
-	void initHeader();
+    /**
+     * Initialize the header view. This makes sense only when it has
+     * columns, i.e. when the model is set, and the parent QTreeView
+     * requested header data. It makes most sense to connect this slot with
+     * the header's sectionCountChanged() signal.
+     **/
+    void initHeader();
 
-	/**
-	 * Post a context menu for the header at 'pos'.
-	 **/
-	void contextMenu( const QPoint & pos );
+    /**
+     * Post a context menu for the header at 'pos'.
+     **/
+    void contextMenu( const QPoint & pos );
 
-	/**
-	 * Hide the current column.
-	 **/
-	void hideCurrentCol();
+    /**
+     * Hide the current column.
+     **/
+    void hideCurrentCol();
 
-	/**
-	 * Show the hidden column from sender()->data().
-	 **/
-	void showHiddenCol();
+    /**
+     * Show the hidden column from sender()->data().
+     **/
+    void showHiddenCol();
 
-	/**
-	 * Toggle auto size of the current column.
-	 **/
-	void autoSizeCurrentCol();
+    /**
+     * Toggle auto size of the current column.
+     **/
+    void autoSizeCurrentCol();
 
-	/**
-	 * Read the settings for a layout.
-	 **/
-	void readLayoutSettings( ColumnLayout * layout );
+    /**
+     * Read the settings for a layout.
+     **/
+    void readLayoutSettings( ColumnLayout * layout );
 
-	/**
-	 * Write the settings for a layout.
-	 **/
-	void writeLayoutSettings( ColumnLayout * layout );
-
-
-    protected:
-
-	/**
-	 * Create internally used actions and connect them to the appropriate
-	 * slots.
-	 **/
-	void createActions();
-
-	/**
-	 * Create the column layouts.
-	 **/
-	void createColumnLayouts();
-
-	/**
-	 * Update all actions for a context menu for logical section
-	 * 'section'.
-	 **/
-	void updateActions( int section );
-
-	/**
-	 * Create a submenu for the currently hidden columns.
-	 **/
-	QMenu * createHiddenColMenu( QWidget * parent );
-
-	/**
-	 * Save the current status in 'layout'.
-	 **/
-	void saveLayout( ColumnLayout * layout );
-
-	/**
-	 * Apply the settings from 'layout'.
-	 **/
-	void applyLayout( ColumnLayout * layout );
-
-	/**
-	 * Ensure consistency of a layout.
-	 **/
-	void fixupLayout( ColumnLayout * layout );
-
-	/**
-	 * Show the columns that are in 'columns'.
-	 **/
-	void setColumnVisibility( const DataColumnList & columns );
-
-	/**
-	 * Return the column name for the specified logical section number.
-	 **/
-	QString colName( int section ) const;
-
-	/**
-	 * Return 'true' if logical section no. 'section' has auto resize mode.
-	 **/
-	bool autoSizeCol( int section ) const;
-
-	/**
-	 * Add any columns that are missing from the default columns to
-	 * 'colList'.
-	 **/
-	void addMissingColumns( DataColumnList & colList );
-
-	/**
-	 * Return the resize mode for the specified section.
-	 **/
-	QHeaderView::ResizeMode resizeMode( int section ) const;
-
-	/**
-	 * Set the resize mode for the specified section.
-	 **/
-	void setResizeMode( int section, QHeaderView::ResizeMode resizeMode );
+    /**
+     * Write the settings for a layout.
+     **/
+    void writeLayoutSettings( ColumnLayout * layout );
 
 
-	//
-	// Data members
-	//
+protected:
 
-	DirTreeView		      * _treeView;
-	QHeaderView		      * _header;
-	QAction			      * _actionAllColumnsAutoSize;
-	QAction			      * _actionAllColumnsInteractiveSize;
-	QAction			      * _actionAutoSizeCurrentCol;
-	QAction			      * _actionHideCurrentCol;
-	QAction			      * _actionShowAllHiddenColumns;
-	QAction			      * _actionResetToDefaults;
-	int				_currentSection;
-	QMap<QString, ColumnLayout *>	_layouts;
-	ColumnLayout *			_currentLayout;
+    /**
+     * Create internally used actions and connect them to the appropriate
+     * slots.
+     **/
+    void createActions();
 
-    };	// class HeaderTweaker
+    /**
+     * Create the column layouts.
+     **/
+    void createColumnLayouts();
+
+    /**
+     * Update all actions for a context menu for logical section
+     * 'section'.
+     **/
+    void updateActions( int section );
+
+    /**
+     * Create a submenu for the currently hidden columns.
+     **/
+    QMenu * createHiddenColMenu( QWidget * parent );
+
+    /**
+     * Save the current status in 'layout'.
+     **/
+    void saveLayout( ColumnLayout * layout );
+
+    /**
+     * Apply the settings from 'layout'.
+     **/
+    void applyLayout( ColumnLayout * layout );
+
+    /**
+     * Ensure consistency of a layout.
+     **/
+    void fixupLayout( ColumnLayout * layout );
+
+    /**
+     * Show the columns that are in 'columns'.
+     **/
+    void setColumnVisibility( const DataColumnList & columns );
+
+    /**
+     * Return the column name for the specified logical section number.
+     **/
+    QString colName( int section ) const;
+
+    /**
+     * Return 'true' if logical section no. 'section' has auto resize mode.
+     **/
+    bool autoSizeCol( int section ) const;
+
+    /**
+     * Add any columns that are missing from the default columns to
+     * 'colList'.
+     **/
+    void addMissingColumns( DataColumnList & colList );
+
+    /**
+     * Return the resize mode for the specified section.
+     **/
+    QHeaderView::ResizeMode resizeMode( int section ) const;
+
+    /**
+     * Set the resize mode for the specified section.
+     **/
+    void setResizeMode( int section, QHeaderView::ResizeMode resizeMode );
+
+
+    //
+    // Data members
+    //
+
+    DirTreeView                   * _treeView;
+    QHeaderView                   * _header;
+    QAction                       * _actionAllColumnsAutoSize;
+    QAction                       * _actionAllColumnsInteractiveSize;
+    QAction                       * _actionAutoSizeCurrentCol;
+    QAction                       * _actionHideCurrentCol;
+    QAction                       * _actionShowAllHiddenColumns;
+    QAction                       * _actionResetToDefaults;
+    int                             _currentSection;
+    QMap<QString, ColumnLayout *>   _layouts;
+    ColumnLayout *                  _currentLayout;
+
+};  // class HeaderTweaker
 
 
     /**
      * Helper class to store information about different column layouts.
      **/
-    class ColumnLayout
-    {
-    public:
-	ColumnLayout( const QString name ):
-	    name( name )
-	    {}
+class ColumnLayout
+{
+public:
+    ColumnLayout( const QString name ):
+        name( name )
+        {}
 
-	QString	       name;
-	DataColumnList columns;
-	DataColumnList defaultColumns;
+    QString        name;
+    DataColumnList columns;
+    DataColumnList defaultColumns;
 
-    };	// class ColumnLayout
+};  // class ColumnLayout
 
-}	// namespace QDirStat
 
-#endif	// HeaderTweaker_h
+#endif  // HeaderTweaker_h

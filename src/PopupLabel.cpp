@@ -13,7 +13,6 @@
 #include "PopupLabel.h"
 #include "Logger.h"
 
-using namespace QDirStat;
 
 
 PopupLabel::PopupLabel( QWidget * parent ):

@@ -17,7 +17,6 @@
 #define VERBOSE_DELAY           1
 
 
-using namespace QDirStat;
 
 
 AdaptiveTimer::AdaptiveTimer( QObject * parent ):

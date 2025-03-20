@@ -1,9 +1,9 @@
 /*
  *   File name: AdaptiveTimer.h
- *   Summary:	Support classes for QDirStat
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   Support classes for QDirStat
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
@@ -19,130 +19,127 @@
 typedef QList<int> IntList;
 
 
-namespace QDirStat
+/**
+ * Timer for delivering events that each obsolete each previous one, for
+ * example for updating a widget's data.
+ *
+ * If events are delivered only sparingly, this acts like a zero timer,
+ * i.e. each event is delivered immediately as soon as Qt returns to its
+ * main loop. This causes very little (if any) delay.
+ *
+ * When things heat up and events are coming in rapidly, this timer
+ * increases the delay of event delivery while always only delivering the
+ * latest event and discarding all others that would only contain outdated
+ * information anyway.
+ *
+ * The intention behind this is to reduce very expensive operations to a
+ * minimum and only show the latest and up-to-date data.
+ **/
+class AdaptiveTimer: public QObject
 {
+    Q_OBJECT
+
+public:
+
     /**
-     * Timer for delivering events that each obsolete each previous one, for
-     * example for updating a widget's data.
-     *
-     * If events are delivered only sparingly, this acts like a zero timer,
-     * i.e. each event is delivered immediately as soon as Qt returns to its
-     * main loop. This causes very little (if any) delay.
-     *
-     * When things heat up and events are coming in rapidly, this timer
-     * increases the delay of event delivery while always only delivering the
-     * latest event and discarding all others that would only contain outdated
-     * information anyway.
-     *
-     * The intention behind this is to reduce very expensive operations to a
-     * minimum and only show the latest and up-to-date data.
+     * Constructor.
      **/
-    class AdaptiveTimer: public QObject
-    {
-        Q_OBJECT
+    AdaptiveTimer( QObject * parent = 0 );
 
-    public:
+    /**
+     * Destructor.
+     **/
+    virtual ~AdaptiveTimer();
 
-        /**
-         * Constructor.
-         **/
-        AdaptiveTimer( QObject * parent = 0 );
+    /**
+     * Add another stage for increased event delivery delays.
+     * If not set, there is only one stage with a zero delay.
+     **/
+    void addDelayStage( int delayMillisec );
 
-        /**
-         * Destructor.
-         **/
-        virtual ~AdaptiveTimer();
+    /**
+     * Add another period for cooling down.
+     * If nothing is set, the period defaults to 3 sec.
+     **/
+    void addCoolDownPeriod( int coolDownMillisec );
 
-        /**
-         * Add another stage for increased event delivery delays.
-         * If not set, there is only one stage with a zero delay.
-         **/
-        void addDelayStage( int delayMillisec );
+    /**
+     * Clear all internal data, including all defined delays and intervals.
+     **/
+    void clear();
 
-        /**
-         * Add another period for cooling down.
-         * If nothing is set, the period defaults to 3 sec.
-         **/
-        void addCoolDownPeriod( int coolDownMillisec );
+    /**
+     * Return the current delay stage.
+     **/
+    int delayStage() const { return _delayStage; }
 
-        /**
-         * Clear all internal data, including all defined delays and intervals.
-         **/
-        void clear();
+    /**
+     * Return the current cool down stage.
+     **/
+    int coolDownStage() const { return _coolDownStage; }
 
-        /**
-         * Return the current delay stage.
-         **/
-        int delayStage() const { return _delayStage; }
+public slots:
 
-        /**
-         * Return the current cool down stage.
-         **/
-        int coolDownStage() const { return _coolDownStage; }
+    /**
+     * Incoming request with optional user-defined payload. The payload
+     * will be delivered in the deliverRequest() signal.
+     *
+     * If requests arrive very rapidly, only the latest one will be
+     * delivered, all others will be discarded.
+     **/
+    void delayedRequest( const QVariant & payload = QVariant() );
 
-    public slots:
+signals:
 
-        /**
-         * Incoming request with optional user-defined payload. The payload
-         * will be delivered in the deliverRequest() signal.
-         *
-         * If requests arrive very rapidly, only the latest one will be
-         * delivered, all others will be discarded.
-         **/
-        void delayedRequest( const QVariant & payload = QVariant() );
+    /**
+     * Outgoing request with the latest payload from the latest
+     * receiveRequest() call.
+     **/
+    void deliverRequest( const QVariant & payload );
 
-    signals:
+protected slots:
 
-        /**
-         * Outgoing request with the latest payload from the latest
-         * receiveRequest() call.
-         **/
-        void deliverRequest( const QVariant & payload );
+    /**
+     * Timeout for the delivery timer.
+     **/
+    void deliveryTimeout();
 
-    protected slots:
-
-        /**
-         * Timeout for the delivery timer.
-         **/
-        void deliveryTimeout();
-
-        /**
-         * Timeout for the cool down timer.
-         **/
-        void coolDown();
+    /**
+     * Timeout for the cool down timer.
+     **/
+    void coolDown();
 
 
-    protected:
+protected:
 
-        /**
-         * Use the next higher cooldown stage if there is any.
-         **/
-        void heatUp();
+    /**
+     * Use the next higher cooldown stage if there is any.
+     **/
+    void heatUp();
 
-        /**
-         * Increase the delivery delay.
-         **/
-        void increaseDelay();
+    /**
+     * Increase the delivery delay.
+     **/
+    void increaseDelay();
 
-        /**
-         * Decrease the delivery delay.
-         **/
-        void decreaseDelay();
+    /**
+     * Decrease the delivery delay.
+     **/
+    void decreaseDelay();
 
 
-        // Data members
+    // Data members
 
-        QVariant _payload;
-        int      _delayStage;
-        IntList  _delays;
-        QTimer   _deliveryTimer;
+    QVariant _payload;
+    int      _delayStage;
+    IntList  _delays;
+    QTimer   _deliveryTimer;
 
-        int      _coolDownStage;
-        IntList  _coolDownPeriods;
-        QTimer   _coolDownTimer;
+    int      _coolDownStage;
+    IntList  _coolDownPeriods;
+    QTimer   _coolDownTimer;
 
-    }; // class AdaptiveTimer
+}; // class AdaptiveTimer
 
-} // namespace QDirStat
 
 #endif // AdaptiveTimer_h

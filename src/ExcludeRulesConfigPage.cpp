@@ -16,7 +16,6 @@
 // classes. Yes, this is ugly.
 #define EXCLUDE_RULE_CAST(VOID_PTR) (static_cast<ExcludeRule *>(VOID_PTR))
 
-using namespace QDirStat;
 
 
 ExcludeRulesConfigPage::ExcludeRulesConfigPage( QWidget * parent ):

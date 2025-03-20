@@ -33,7 +33,6 @@
 // like (4k)
 #define SMALL_FILE_SHOW_ALLOC_THRESHOLD		75
 
-using namespace QDirStat;
 
 
 DirTreeModel::DirTreeModel( QObject * parent ):

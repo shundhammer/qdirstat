@@ -25,7 +25,6 @@
 
 using std::cerr;
 using std::endl;
-using namespace QDirStat;
 
 
 RpmPkgManager::RpmPkgManager():

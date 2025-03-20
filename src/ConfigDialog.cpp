@@ -15,7 +15,6 @@
 #include "Logger.h"
 #include "Exception.h"
 
-using namespace QDirStat;
 
 #define CONNECT_CONFIG_PAGE(PAGE)			\
 							\

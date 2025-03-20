@@ -28,7 +28,6 @@
 #define REBUILD_STOPWATCH       0
 #define UpdateMinSize	        20
 
-using namespace QDirStat;
 
 
 // Treemap layers (Z values)

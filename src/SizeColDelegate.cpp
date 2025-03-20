@@ -25,7 +25,6 @@
 #define MARGIN_TOP      2
 #define MARGIN_BOTTOM   2
 
-using namespace QDirStat;
 
 
 SizeColDelegate::SizeColDelegate( QTreeView * treeView ):

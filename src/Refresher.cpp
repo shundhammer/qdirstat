@@ -13,7 +13,6 @@
 #include "FileInfoSet.h"
 #include "Logger.h"
 
-using namespace QDirStat;
 
 
 Refresher::Refresher( const FileInfoSet items, QObject * parent ):

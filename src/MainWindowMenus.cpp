@@ -25,7 +25,6 @@
 #  define HAVE_SIGNAL_MAPPER	  0
 #endif
 
-using namespace QDirStat;
 
 
 #define CONNECT_ACTION(ACTION, RECEIVER, RCVR_SLOT) \

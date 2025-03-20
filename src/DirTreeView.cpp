@@ -23,7 +23,6 @@
 #include "Exception.h"
 #include "Logger.h"
 
-using namespace QDirStat;
 
 
 DirTreeView::DirTreeView( QWidget * parent ):

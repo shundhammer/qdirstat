@@ -18,7 +18,6 @@
 #include "Process.h"
 
 class QCloseEvent;
-using QDirStat::Process;
 
 
 /**

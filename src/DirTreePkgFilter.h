@@ -1,9 +1,9 @@
 /*
  *   File name: DirTreePkgFilter.h
- *   Summary:	Package manager support classes for QDirStat
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   Package manager support classes for QDirStat
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
@@ -12,45 +12,42 @@
 
 #include "DirTreeFilter.h"
 
+class PkgManager;
+class PkgFileListCache;
 
-namespace QDirStat
+
+/**
+ * Concrete DirTreeFilter class to ignore files that belong to any
+ * installed package during directory reading.
+ **/
+class DirTreePkgFilter: public DirTreeFilter
 {
-    class PkgManager;
-    class PkgFileListCache;
+public:
 
     /**
-     * Concrete DirTreeFilter class to ignore files that belong to any
-     * installed package during directory reading.
+     * Constructor.
      **/
-    class DirTreePkgFilter: public DirTreeFilter
-    {
-    public:
+    DirTreePkgFilter( PkgManager * pkgManager );
 
-	/**
-	 * Constructor.
-	 **/
-	DirTreePkgFilter( PkgManager * pkgManager );
+    /**
+     * Destructor.
+     **/
+    virtual ~DirTreePkgFilter();
 
-	/**
-	 * Destructor.
-	 **/
-	virtual ~DirTreePkgFilter();
-
-	/**
-	 * Return 'true' if the filesystem object specified by 'path' should
-	 * be ignored, 'false' if not.
-	 *
-	 * Implemented from DirTreeFilter.
-	 **/
-	virtual bool ignore( const QString & path ) const Q_DECL_OVERRIDE;
+    /**
+     * Return 'true' if the filesystem object specified by 'path' should
+     * be ignored, 'false' if not.
+     *
+     * Implemented from DirTreeFilter.
+     **/
+    virtual bool ignore( const QString & path ) const Q_DECL_OVERRIDE;
 
 
-    protected:
+protected:
 
-	PkgFileListCache * _fileListCache;
+    PkgFileListCache * _fileListCache;
 
-    };	// class DirTreeFilter
+};  // class DirTreeFilter
 
-}	// namespace QDirStat
 
-#endif	// DirTreePkgFilter_h
+#endif  // DirTreePkgFilter_h

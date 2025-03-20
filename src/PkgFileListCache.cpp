@@ -11,7 +11,6 @@
 #include "Logger.h"
 
 
-using namespace QDirStat;
 
 
 #define CHECK_LOOKUP_TYPE(wanted)					  \

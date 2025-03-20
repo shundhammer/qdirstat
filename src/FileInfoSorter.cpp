@@ -10,7 +10,6 @@
 #include <algorithm>    // std::swap()
 #include "FileInfoSorter.h"
 
-using namespace QDirStat;
 
 
 bool FileInfoSorter::operator() ( FileInfo * a, FileInfo * b )

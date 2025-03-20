@@ -24,7 +24,6 @@
 #define SIMULATE_COMMAND	1
 #define WAIT_TIMEOUT_MILLISEC	30000
 
-using namespace QDirStat;
 
 
 Cleanup::Cleanup( QString   command,

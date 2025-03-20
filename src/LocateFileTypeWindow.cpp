@@ -18,7 +18,6 @@
 #include "Logger.h"
 #include "Exception.h"
 
-using namespace QDirStat;
 
 
 LocateFileTypeWindow::LocateFileTypeWindow( QWidget * parent ):

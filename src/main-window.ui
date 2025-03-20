@@ -91,7 +91,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QDirStat::BreadcrumbNavigator" name="breadcrumbNavigator">
+            <widget class="BreadcrumbNavigator" name="breadcrumbNavigator">
              <property name="text">
               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;/work/src/&lt;a href=&quot;/work/src/qdirstat&quot;&gt;qdirstat&lt;/a&gt;/&lt;a href=&quot;/work/src/qdirstat/src&quot;&gt;src&lt;/a&gt;/&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
@@ -122,7 +122,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QDirStat::DirTreeView" name="dirTreeView">
+          <widget class="DirTreeView" name="dirTreeView">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>1</horstretch>
@@ -132,7 +132,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QDirStat::MessagePanel" name="messagePanel" native="true">
+          <widget class="MessagePanel" name="messagePanel" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -150,7 +150,7 @@
         <property name="widgetResizable">
          <bool>true</bool>
         </property>
-        <widget class="QDirStat::FileDetailsView" name="fileDetailsView">
+        <widget class="FileDetailsView" name="fileDetailsView">
          <property name="geometry">
           <rect>
            <x>0</x>
@@ -162,7 +162,7 @@
         </widget>
        </widget>
       </widget>
-      <widget class="QDirStat::TreemapView" name="treemapView"/>
+      <widget class="TreemapView" name="treemapView"/>
      </widget>
     </item>
    </layout>
@@ -1121,28 +1121,28 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QDirStat::DirTreeView</class>
+   <class>DirTreeView</class>
    <extends>QTreeView</extends>
    <header>DirTreeView.h</header>
   </customwidget>
   <customwidget>
-   <class>QDirStat::TreemapView</class>
+   <class>TreemapView</class>
    <extends>QGraphicsView</extends>
    <header>TreemapView.h</header>
   </customwidget>
   <customwidget>
-   <class>QDirStat::BreadcrumbNavigator</class>
+   <class>BreadcrumbNavigator</class>
    <extends>QLabel</extends>
    <header>BreadcrumbNavigator.h</header>
   </customwidget>
   <customwidget>
-   <class>QDirStat::FileDetailsView</class>
+   <class>FileDetailsView</class>
    <extends>QWidget</extends>
    <header>FileDetailsView.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QDirStat::MessagePanel</class>
+   <class>MessagePanel</class>
    <extends>QWidget</extends>
    <header>MessagePanel.h</header>
    <container>1</container>

@@ -11,7 +11,6 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
 
 
 SearchFilter::SearchFilter( const QString & pattern,

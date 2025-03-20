@@ -20,7 +20,6 @@
 #define LSBLK_TIMEOUT_SEC       10
 #define USE_PROC_MOUNTS         1
 
-using namespace QDirStat;
 
 
 MountPoint::MountPoint( const QString & device,

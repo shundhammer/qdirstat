@@ -20,7 +20,6 @@
 #define BookmarksFile           "~/.config/QDirStat/bookmarks.txt"
 #define BookmarksManagerAction  "bookmarksManagerAction"
 
-using namespace QDirStat;
 using ::operator<<;
 
 

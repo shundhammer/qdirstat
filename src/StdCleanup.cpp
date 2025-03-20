@@ -12,7 +12,6 @@
 #include "Exception.h"
 #include "Logger.h"
 
-using namespace QDirStat;
 
 
 CleanupList StdCleanup::stdCleanups( QObject * parent )

@@ -14,7 +14,6 @@
 #include "FormatUtil.h"
 #include "Logger.h"
 
-using namespace QDirStat;
 
 
 FileSizeLabel::FileSizeLabel( QWidget * parent ):

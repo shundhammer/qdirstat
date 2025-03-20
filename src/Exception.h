@@ -10,9 +10,9 @@
 #ifndef Exception_h
 #define Exception_h
 
-#include "Logger.h"
-
 #include <QString>
+
+#include "Logger.h"
 
 
 /**

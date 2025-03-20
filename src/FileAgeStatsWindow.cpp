@@ -21,7 +21,6 @@
 
 #define MAX_LOCATE_FILES        1000
 
-using namespace QDirStat;
 
 
 FileAgeStatsWindow::FileAgeStatsWindow( QWidget * parent ):

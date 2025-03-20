@@ -17,7 +17,6 @@
 
 #define VERBOSE_SELECTION	0
 
-using namespace QDirStat;
 
 
 SelectionModel::SelectionModel( DirTreeModel * dirTreeModel, QObject * parent ):

@@ -23,77 +23,72 @@
  * that tree to this class; the ActionManager uses Qt's introspection to find
  * the matching QActions.
  **/
-namespace QDirStat
+class ActionManager
 {
+public:
 
-    class ActionManager
-    {
-    public:
+    /**
+     * Return the singleton instance of this class.
+     **/
+    static ActionManager * instance();
 
-	/**
-	 * Return the singleton instance of this class.
-	 **/
-	static ActionManager * instance();
+    /**
+     * Add a widget tree. This does not transfer ownership of that widget
+     * tree. The ActionManager will keep the pointer of this tree (with a
+     * guarded pointer so it doesn't matter if it is destroyed) to search
+     * for QActions when requested.
+     **/
+    void addWidgetTree( QObject * tree );
 
-	/**
-	 * Add a widget tree. This does not transfer ownership of that widget
-	 * tree. The ActionManager will keep the pointer of this tree (with a
-	 * guarded pointer so it doesn't matter if it is destroyed) to search
-	 * for QActions when requested.
-	 **/
-	void addWidgetTree( QObject * tree );
+    /**
+     * Search the known widget trees for the first QAction with the Qt
+     * object name 'actionName'. Return 0 if there is no such QAction.
+     **/
+    QAction * action( const QString & actionName );
 
-	/**
-	 * Search the known widget trees for the first QAction with the Qt
-	 * object name 'actionName'. Return 0 if there is no such QAction.
-	 **/
-	QAction * action( const QString & actionName );
+    /**
+     * Add all the actions in 'actionNames' to a widget (typically a
+     * menu). Return 'true' if success, 'false' if any of the actions were
+     * not found.
+     *
+     * If 'enabledOnly' is 'true', only those actions that are currently
+     * enabled are added.
+     *
+     * If the widget is a menu, and an action name in actionNames starts
+     * with "---", a separator is added to the menu instead of an action.
+     *
+     * Notice that this class already logs an error for action names that
+     * were not found.
+     **/
+    bool addActions( QWidget *           widget,
+                     const QStringList & actionNames,
+                     bool                enabledOnly = false);
 
-	/**
-	 * Add all the actions in 'actionNames' to a widget (typically a
-	 * menu). Return 'true' if success, 'false' if any of the actions were
-	 * not found.
-         *
-         * If 'enabledOnly' is 'true', only those actions that are currently
-         * enabled are added.
-	 *
-	 * If the widget is a menu, and an action name in actionNames starts
-	 * with "---", a separator is added to the menu instead of an action.
-         *
-         * Notice that this class already logs an error for action names that
-         * were not found.
-	 **/
-	bool addActions( QWidget *           widget,
-                         const QStringList & actionNames,
-                         bool                enabledOnly = false);
-
-        /**
-         * Add only the enabled actions in 'actionNames' to a widget.
-         **/
-        bool addEnabledActions( QWidget *           widget,
-                                const QStringList & actionNames )
-            { return addActions( widget, actionNames, true ); }
+    /**
+     * Add only the enabled actions in 'actionNames' to a widget.
+     **/
+    bool addEnabledActions( QWidget *           widget,
+                            const QStringList & actionNames )
+        { return addActions( widget, actionNames, true ); }
 
 
-    protected:
+protected:
 
-	/**
-	 * Constructor. Protected because this is a singleton class.
-	 * Use instance() instead.
-	 **/
-	ActionManager() {}
+    /**
+     * Constructor. Protected because this is a singleton class.
+     * Use instance() instead.
+     **/
+    ActionManager() {}
 
 
-	//
-	// Data members
-	//
+    //
+    // Data members
+    //
 
-	static ActionManager *	   _instance;
-	QList<QPointer<QObject> >  _widgetTrees;
+    static ActionManager *    _instance;
+    QList<QPointer<QObject> > _widgetTrees;
 
-    };	// class ActionManager
-
-}	// namespace QDirStat
+};	// class ActionManager
 
 
 #endif	// ActionManager_h

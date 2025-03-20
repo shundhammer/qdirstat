@@ -1,9 +1,9 @@
 /*
  *   File name: MainWindow.h
- *   Summary:	QDirStat main window
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   QDirStat main window
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
@@ -27,28 +27,17 @@
 
 
 class QCloseEvent;
+class QMenu;
 class QMouseEvent;
 class QSignalMapper;
-class TreeLayout;
 class SysCallFailedException;
-class QMenu;
+class TreeLayout;
 
-
-namespace QDirStat
-{
-    class ConfigDialog;
-    class FileInfo;
-    class DiscoverActions;
-    class PkgManager;
-    class UnpkgSettings;
-}
-
-using QDirStat::FileAgeStatsWindow;
-using QDirStat::FileInfo;
-using QDirStat::FilesystemsWindow;
-using QDirStat::PanelMessage;
-using QDirStat::PkgManager;
-using QDirStat::UnpkgSettings;
+class ConfigDialog;
+class FileInfo;
+class DiscoverActions;
+class PkgManager;
+class UnpkgSettings;
 
 
 class MainWindow: public QMainWindow
@@ -95,7 +84,7 @@ public slots:
      *
      * The URL may start with "unpkg:".
      **/
-    void showUnpkgFiles( const QDirStat::UnpkgSettings & unpkgSettings );
+    void showUnpkgFiles( const UnpkgSettings & unpkgSettings );
 
     /**
      * Show unpackaged files with the UnpkgSettings parameters from the config
@@ -127,7 +116,7 @@ public slots:
      * Clear the current tree and replace it with the list of installed
      * packages from the system's package manager that match 'pkgUrl'.
      **/
-    void readPkg( const QDirStat::PkgFilter & pkgFilter );
+    void readPkg( const PkgFilter & pkgFilter );
 
     /**
      * Clear the current tree and replace it with the content of the specified
@@ -509,28 +498,28 @@ protected:
 
 private:
 
-    Ui::MainWindow		 * _ui;
-    QDirStat::ConfigDialog	 * _configDialog;
-    QDirStat::HistoryButtons     * _historyButtons;
-    QDirStat::DiscoverActions    * _discoverActions;
-    QActionGroup		 * _layoutActionGroup;
+    Ui::MainWindow  *              _ui;
+    ConfigDialog    *              _configDialog;
+    HistoryButtons  *              _historyButtons;
+    DiscoverActions *              _discoverActions;
+    QActionGroup    *              _layoutActionGroup;
     QPointer<FileAgeStatsWindow>   _fileAgeStatsWindow;
     QPointer<FilesystemsWindow>    _filesystemsWindow;
-    QPointer<PanelMessage>	   _dirPermissionsWarning;
-    QString			   _dUrl;
-    QElapsedTimer		   _stopWatch;
-    bool			   _enableDirPermissionsWarning;
-    bool			   _verboseSelection;
-    bool			   _urlInWindowTitle;
-    bool			   _useTreemapHover;
-    QString			   _layoutName;
-    int				   _statusBarTimeout; // millisec
-    QSignalMapper	       *   _treeLevelMapper;
-    QMap<QString, TreeLayout *>	   _layouts;
-    TreeLayout *		   _currentLayout;
-    QTimer			   _updateTimer;
+    QPointer<PanelMessage>         _dirPermissionsWarning;
+    QString                        _dUrl;
+    QElapsedTimer                  _stopWatch;
+    bool                           _enableDirPermissionsWarning;
+    bool                           _verboseSelection;
+    bool                           _urlInWindowTitle;
+    bool                           _useTreemapHover;
+    QString                        _layoutName;
+    int                            _statusBarTimeout; // millisec
+    QSignalMapper              *   _treeLevelMapper;
+    QMap<QString, TreeLayout *>    _layouts;
+    TreeLayout *                   _currentLayout;
+    QTimer                         _updateTimer;
     QTimer                         _treeExpandTimer;
-    QDirStat::Subtree              _futureSelection;
+    Subtree                        _futureSelection;
 
 }; // class MainWindow
 
@@ -549,9 +538,9 @@ class TreeLayout
 public:
 
     TreeLayout( const QString & name ):
-	name( name ),
-	showDetailsPanel( true )
-	{}
+        name( name ),
+        showDetailsPanel( true )
+        {}
 
     QString name;
     bool    showDetailsPanel;

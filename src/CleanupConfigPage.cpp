@@ -23,7 +23,6 @@
 // classes. Yes, this is ugly.
 #define CLEANUP_CAST(VOID_PTR) (static_cast<Cleanup *>(VOID_PTR))
 
-using namespace QDirStat;
 
 
 CleanupConfigPage::CleanupConfigPage( QWidget * parent ):

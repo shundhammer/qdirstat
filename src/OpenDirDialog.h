@@ -1,9 +1,9 @@
 /*
  *   File name: OpenDirDialog.h
- *   Summary:	QDirStat "open directory" dialog
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   QDirStat "open directory" dialog
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
@@ -16,136 +16,131 @@
 #include "ui_open-dir-dialog.h"
 
 class QFileSystemModel;
+class ExistingDirValidator;
 
-
-namespace QDirStat
+/**
+ * Dialog to let the user select installed packages to open, very much like
+ * a "get existing directory" dialog, but returning a PkgFilter instead.
+ **/
+class OpenDirDialog: public QDialog
 {
-    class ExistingDirValidator;
+    Q_OBJECT
+
+public:
+    /**
+     * Constructor.
+     *
+     * Consider using the static methods instead.
+     **/
+    OpenDirDialog( QWidget * parent = 0 );
 
     /**
-     * Dialog to let the user select installed packages to open, very much like
-     * a "get existing directory" dialog, but returning a PkgFilter instead.
+     * Destructor.
      **/
-    class OpenDirDialog: public QDialog
-    {
-	Q_OBJECT
+    virtual ~OpenDirDialog();
 
-    public:
-	/**
-	 * Constructor.
-	 *
-	 * Consider using the static methods instead.
-	 **/
-	OpenDirDialog( QWidget * parent = 0 );
+    /**
+     * Open an "open directory" dialog, wait for the user to select one and
+     * return that path. If the user cancelled the dialog, this returns an
+     * empty string.
+     *
+     * 'crossFilesystems_ret' (if non-null) returns the "cross filesystems"
+     * flag of the dialog.
+     **/
+    static QString askOpenDir( bool *    crossFilesystems_ret,
+                               QWidget * parent = 0 );
 
-	/**
-	 * Destructor.
-	 **/
-	virtual ~OpenDirDialog();
+    /**
+     * The path of the directory the user selected.
+     **/
+    QString selectedPath() const;
 
-	/**
-	 * Open an "open directory" dialog, wait for the user to select one and
-         * return that path. If the user cancelled the dialog, this returns an
-         * empty string.
-         *
-         * 'crossFilesystems_ret' (if non-null) returns the "cross filesystems"
-         * flag of the dialog.
-	 **/
-	static QString askOpenDir( bool *    crossFilesystems_ret,
-                                   QWidget * parent = 0 );
+    /**
+     * The "cross filesystems" flag of this dialog (overriding the global
+     * "cross filesystems" setting" from the config dialog).
+     **/
+    bool crossFilesystems() const;
 
-	/**
-	 * The path of the directory the user selected.
-	 **/
-        QString selectedPath() const;
-
-        /**
-         * The "cross filesystems" flag of this dialog (overriding the global
-         * "cross filesystems" setting" from the config dialog).
-         **/
-        bool crossFilesystems() const;
-
-        /**
-         * Return this dialog's path selector so it can be populated.
-         **/
-        PathSelector * pathSelector() const { return _ui->pathSelector; }
+    /**
+     * Return this dialog's path selector so it can be populated.
+     **/
+    PathSelector * pathSelector() const { return _ui->pathSelector; }
 
 
-    public slots:
+public slots:
 
-        /**
-         * Set a path in the dirTree.
-         **/
-        void setPath( const QString & path );
+    /**
+     * Set a path in the dirTree.
+     **/
+    void setPath( const QString & path );
 
-        /**
-         * Set a path in the dirTree and expand (open) that branch.
-         **/
-        void setPathAndExpand( const QString & path );
+    /**
+     * Set a path in the dirTree and expand (open) that branch.
+     **/
+    void setPathAndExpand( const QString & path );
 
-        /**
-         * Set a path in the dirTree and accept the dialog.
-         **/
-        void setPathAndAccept( const QString & path );
+    /**
+     * Set a path in the dirTree and accept the dialog.
+     **/
+    void setPathAndAccept( const QString & path );
 
-        /**
-         * Go up one directory level.
-         **/
-        void goUp();
+    /**
+     * Go up one directory level.
+     **/
+    void goUp();
 
-	/**
-	 * Read settings from the config file
-	 **/
-	void readSettings();
+    /**
+     * Read settings from the config file
+     **/
+    void readSettings();
 
-	/**
-	 * Write settings to the config file
-	 **/
-	void writeSettings();
-
-
-    protected slots:
-
-        /**
-         * Notification that the user selected a directory in the tree
-         **/
-        void treeSelection( const QModelIndex & newCurrentItem,
-                            const QModelIndex & oldCurrentItem );
-
-        /**
-         * Notification that the user edited a path in the combo box.
-         * 'ok' is the result of the validator's check.
-         **/
-        void pathEdited( bool ok );
-
-        /**
-         * Select a directory once everything is initialized and the first
-         * signals are processed.
-         **/
-        void initialSelection();
+    /**
+     * Write settings to the config file
+     **/
+    void writeSettings();
 
 
-    protected:
+protected slots:
 
-        void initPathComboBox();
-        void initDirTree();
-        void initConnections();
+    /**
+     * Notification that the user selected a directory in the tree
+     **/
+    void treeSelection( const QModelIndex & newCurrentItem,
+                        const QModelIndex & oldCurrentItem );
 
-        void populatePathComboBox( const QString & path );
+    /**
+     * Notification that the user edited a path in the combo box.
+     * 'ok' is the result of the validator's check.
+     **/
+    void pathEdited( bool ok );
+
+    /**
+     * Select a directory once everything is initialized and the first
+     * signals are processed.
+     **/
+    void initialSelection();
 
 
-	Ui::OpenDirDialog *     _ui;
-        QFileSystemModel *      _filesystemModel;
-	QPushButton *           _okButton;
-        ExistingDirValidator *  _validator;
-        bool                    _settingPath;
-        QString                 _lastPath;
+protected:
 
-        static bool             _crossFilesystems;
-        static bool             _firstRun;
+    void initPathComboBox();
+    void initDirTree();
+    void initConnections();
 
-    };	// class OpenDirDialog
+    void populatePathComboBox( const QString & path );
 
-}	// namespace QDirStat
 
-#endif	// OpenDirDialog_h
+    Ui::OpenDirDialog *     _ui;
+    QFileSystemModel *      _filesystemModel;
+    QPushButton *           _okButton;
+    ExistingDirValidator *  _validator;
+    bool                    _settingPath;
+    QString                 _lastPath;
+
+    static bool             _crossFilesystems;
+    static bool             _firstRun;
+
+};  // class OpenDirDialog
+
+
+#endif  // OpenDirDialog_h

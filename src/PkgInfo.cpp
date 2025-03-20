@@ -11,7 +11,6 @@
 #include "DirTree.h"
 #include "FileInfoIterator.h"
 
-using namespace QDirStat;
 
 
 PkgInfo::PkgInfo( const QString & name,

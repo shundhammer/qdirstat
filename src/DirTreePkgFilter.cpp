@@ -14,7 +14,6 @@
 #include "Logger.h"
 
 
-using namespace QDirStat;
 
 
 DirTreePkgFilter::DirTreePkgFilter( PkgManager * pkgManager )

@@ -10,7 +10,6 @@
 #include "Subtree.h"
 #include "DirInfo.h"
 
-using namespace QDirStat;
 
 
 FileInfo * Subtree::subtree()

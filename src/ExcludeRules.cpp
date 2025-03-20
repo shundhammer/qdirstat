@@ -19,7 +19,6 @@
 
 #define VERBOSE_EXCLUDE_MATCHES	1
 
-using namespace QDirStat;
 
 
 ExcludeRule::ExcludeRule( const QRegExp & regexp,

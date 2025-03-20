@@ -13,7 +13,6 @@
 #include "Logger.h"
 
 
-using namespace QDirStat;
 
 
 DotEntry::DotEntry( DirTree * tree,

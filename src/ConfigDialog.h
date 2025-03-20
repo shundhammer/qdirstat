@@ -1,9 +1,9 @@
 /*
  *   File name: ConfigDialog.h
- *   Summary:	QDirStat configuration dialog classes
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   QDirStat configuration dialog classes
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
@@ -14,118 +14,115 @@
 #include "ui_config-dialog.h"
 
 
-namespace QDirStat
-{
-    class CleanupConfigPage;
-    class MimeCategoryConfigPage;
-    class ExcludeRulesConfigPage;
-    class GeneralConfigPage;
+class CleanupConfigPage;
+class MimeCategoryConfigPage;
+class ExcludeRulesConfigPage;
+class GeneralConfigPage;
 
+
+/**
+ * Configuration dialog for QDirStat.
+ *
+ * This class is only the wrapper for the individual config pages; it
+ * maintains the tab widget to switch between the pages (the tabs) and the
+ * dialog buttons ("OK", "Apply", "Cancel").
+ *
+ * Each page is pretty much self-sufficient.
+ **/
+class ConfigDialog: public QDialog
+{
+    Q_OBJECT
+
+public:
+    /**
+     * Constructor. Create the dialog and all pages.
+     **/
+    ConfigDialog( QWidget * parent );
 
     /**
-     * Configuration dialog for QDirStat.
-     *
-     * This class is only the wrapper for the individual config pages; it
-     * maintains the tab widget to switch between the pages (the tabs) and the
-     * dialog buttons ("OK", "Apply", "Cancel").
-     *
-     * Each page is pretty much self-sufficient.
+     * Destructor.
      **/
-    class ConfigDialog: public QDialog
-    {
-	Q_OBJECT
+    virtual ~ConfigDialog();
 
-    public:
-	/**
-	 * Constructor. Create the dialog and all pages.
-	 **/
-	ConfigDialog( QWidget * parent );
+    /**
+     * Return the cleanup config page.
+     **/
+    CleanupConfigPage * cleanupConfigPage() const
+        { return _cleanupConfigPage; }
 
-	/**
-	 * Destructor.
-	 **/
-	virtual ~ConfigDialog();
+    /**
+     * Return the mime category config page.
+     **/
+    MimeCategoryConfigPage * mimeCategoryConfigPage() const
+        { return _mimeCategoryConfigPage; }
 
-	/**
-	 * Return the cleanup config page.
-	 **/
-	CleanupConfigPage * cleanupConfigPage() const
-	    { return _cleanupConfigPage; }
+public slots:
 
-	/**
-	 * Return the mime category config page.
-	 **/
-	MimeCategoryConfigPage * mimeCategoryConfigPage() const
-	    { return _mimeCategoryConfigPage; }
+    /**
+     * Notification to reinitialize and populate the widgets of config
+     * pages.
+     **/
+    void setup();
 
-    public slots:
+    /**
+     * Apply the changes in dialog contents, but leave the dialog open.
+     **/
+    void apply();
 
-	/**
-	 * Notification to reinitialize and populate the widgets of config
-	 * pages.
-	 **/
-	void setup();
+    /**
+     * Accept the dialog contents, i.e. the user clicked the "OK" button.
+     *
+     * Reimplemented from QDialog.
+     **/
+    virtual void accept() Q_DECL_OVERRIDE;
 
-	/**
-	 * Apply the changes in dialog contents, but leave the dialog open.
-	 **/
-	void apply();
+    /**
+     * Reject the dialog contents, i.e. the user clicked the "Cancel"
+     * button.
+     *
+     * Reimplemented from QDialog.
+     **/
+    virtual void reject() Q_DECL_OVERRIDE;
 
-	/**
-	 * Accept the dialog contents, i.e. the user clicked the "OK" button.
-	 *
-	 * Reimplemented from QDialog.
-	 **/
-	virtual void accept() Q_DECL_OVERRIDE;
+signals:
 
-	/**
-	 * Reject the dialog contents, i.e. the user clicked the "Cancel"
-	 * button.
-	 *
-	 * Reimplemented from QDialog.
-	 **/
-	virtual void reject() Q_DECL_OVERRIDE;
+    /**
+     * Emitted in setup().
+     *
+     * This is the signal to reinitialize and populate the widgets of
+     * config pages.
+     **/
+    void reinit();
 
-    signals:
+    /**
+     * Emitted when the "OK" or the "Apply" button was clicked:
+     *
+     * This is the signal to apply all changes to the settings and/or the
+     * widgets.
+     **/
+    void applyChanges();
 
-	/**
-	 * Emitted in setup().
-	 *
-	 * This is the signal to reinitialize and populate the widgets of
-	 * config pages.
-	 **/
-	void reinit();
+    /**
+     * Emitted when the "Cancel" button was clicked:
+     *
+     * This is the signal to discard all changes and re-apply the old
+     * settings.
+     **/
+    void discardChanges();
 
-	/**
-	 * Emitted when the "OK" or the "Apply" button was clicked:
-	 *
-	 * This is the signal to apply all changes to the settings and/or the
-	 * widgets.
-	 **/
-	void applyChanges();
+protected:
 
-	/**
-	 * Emitted when the "Cancel" button was clicked:
-	 *
-	 * This is the signal to discard all changes and re-apply the old
-	 * settings.
-	 **/
-	void discardChanges();
+    //
+    // Data members
+    //
 
-    protected:
+    Ui::ConfigDialog        * _ui;
+    CleanupConfigPage       * _cleanupConfigPage;
+    MimeCategoryConfigPage  * _mimeCategoryConfigPage;
+    ExcludeRulesConfigPage  * _excludeRulesConfigPage;
+    GeneralConfigPage       * _generalConfigPage;
 
-	//
-	// Data members
-	//
+};  // class ConfigDialog
 
-	Ui::ConfigDialog	* _ui;
-	CleanupConfigPage	* _cleanupConfigPage;
-	MimeCategoryConfigPage	* _mimeCategoryConfigPage;
-	ExcludeRulesConfigPage  * _excludeRulesConfigPage;
-	GeneralConfigPage	* _generalConfigPage;
 
-    };	// class ConfigDialog
-
-}	// namespace QDirStat
-
-#endif	// ConfigDialog_h
+#endif  // ConfigDialog_h

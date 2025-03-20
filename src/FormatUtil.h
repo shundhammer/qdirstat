@@ -19,119 +19,116 @@
 #include "Logger.h"
 
 
-namespace QDirStat
+/**
+ * Singleton class to hold some options for the formatting methods.
+ **/
+class FormatOptions
 {
-    /**
-     * Singleton class to hold some options for the formatting methods.
-     **/
-    class FormatOptions
-    {
-    protected:
-
-        /**
-         * Constructor. Use the static instance() method instead.
-         **/
-        FormatOptions();
-
-
-    public:
-
-        /**
-         * Access the instance of this singleton class.
-         **/
-        static FormatOptions * instance();
-
-        /**
-         * Read settings from the config file.
-         **/
-        void readSettings();
-
-        //
-        // Data members
-        //
-
-        bool useIsoDate;        // "2024-12-28  17:38"
-
-    protected:
-
-        static FormatOptions * _instance;
-    };
-
+protected:
 
     /**
-     * Format a file / subtree size human readable, i.e. in "GB" / "MB"
-     * etc. rather than huge numbers of digits. 'precision' is the number of
-     * digits after the decimal point.
-     *
-     * Note: For logDebug() etc., operator<< is overwritten to do exactly that:
-     *
-     *	   logDebug() << "Size: " << x->totalSize() << endl;
+     * Constructor. Use the static instance() method instead.
      **/
-    QString formatSize( FileSize size );
+    FormatOptions();
 
-    // Can't use a default argument when using this as a function pointer,
-    // so we really need the above overloaded version.
-    QString formatSize( FileSize size, int precision );
+
+public:
 
     /**
-     * Format a file / subtree size as bytes, but still human readable with a
-     * space as a thousands separator, i.e. "12 345 678 Bytes".
-     *
-     * Intentionally NOT using the locale's thousands separator since this
-     * causes confusion to no end when it's only one of them, and it's unclear
-     * what locale is used: German uses "," as the decimal separator and "." as
-     * the thousands separator, exactly the other way round as English. So it's
-     * never clear if 12.345 is a little more than twelve or twelve thousand.
-     * A space character avoids this confusion.
+     * Access the instance of this singleton class.
      **/
-    QString formatByteSize( FileSize size );
+    static FormatOptions * instance();
 
     /**
-     * Format a timestamp (like the latestMTime()) human-readable.
+     * Read settings from the config file.
      **/
-    QString formatTime( time_t rawTime );
+    void readSettings();
 
-    /**
-     * Format a millisecond-based time
-     **/
-    QString formatMillisec( qint64 millisec, bool showMillisec = true );
+    //
+    // Data members
+    //
 
-    /**
-     * Format a percentage.
-     **/
-    QString formatPercent( float percent );
+    bool useIsoDate;        // "2024-12-28  17:38"
 
-    /**
-     * Format the mode (the permissions bits) returned from the stat() system
-     * call in the commonly used formats, both symbolic and octal, e.g.
-     *	   drwxr-xr-x  0755
-     **/
-    QString formatPermissions( mode_t mode );
+protected:
 
-    /**
-     * Format a number in octal with a leading zero.
-     **/
-    QString formatOctal( int number );
-
-    /**
-     * Return the mode (the permission bits) returned from stat() like the
-     * "ls -l" shell command does, e.g.
-     *
-     *	   drwxr-xr-x
-     *
-     * 'omitTypeForRegularFiles' specifies if the leading "-" should be omitted.
-     **/
-    QString symbolicMode( mode_t perm, bool omitTypeForRegularFiles = false );
-
-    /**
-     * Format the filesystem object type from a mode, e.g. "Directory",
-     * "Symbolic Link", "Block Device", "File".
-     **/
-    QString formatFilesystemObjectType( mode_t mode );
+    static FormatOptions * _instance;
+};
 
 
-    LogStream & operator<< ( LogStream & stream, FileSize lSize );
+/**
+ * Format a file / subtree size human readable, i.e. in "GB" / "MB"
+ * etc. rather than huge numbers of digits. 'precision' is the number of
+ * digits after the decimal point.
+ *
+ * Note: For logDebug() etc., operator<< is overwritten to do exactly that:
+ *
+ *	   logDebug() << "Size: " << x->totalSize() << endl;
+ **/
+QString formatSize( FileSize size );
 
-}       // namespace QDirStat
+// Can't use a default argument when using this as a function pointer,
+// so we really need the above overloaded version.
+QString formatSize( FileSize size, int precision );
+
+/**
+ * Format a file / subtree size as bytes, but still human readable with a
+ * space as a thousands separator, i.e. "12 345 678 Bytes".
+ *
+ * Intentionally NOT using the locale's thousands separator since this
+ * causes confusion to no end when it's only one of them, and it's unclear
+ * what locale is used: German uses "," as the decimal separator and "." as
+ * the thousands separator, exactly the other way round as English. So it's
+ * never clear if 12.345 is a little more than twelve or twelve thousand.
+ * A space character avoids this confusion.
+ **/
+QString formatByteSize( FileSize size );
+
+/**
+ * Format a timestamp (like the latestMTime()) human-readable.
+ **/
+QString formatTime( time_t rawTime );
+
+/**
+ * Format a millisecond-based time
+ **/
+QString formatMillisec( qint64 millisec, bool showMillisec = true );
+
+/**
+ * Format a percentage.
+ **/
+QString formatPercent( float percent );
+
+/**
+ * Format the mode (the permissions bits) returned from the stat() system
+ * call in the commonly used formats, both symbolic and octal, e.g.
+ *	   drwxr-xr-x  0755
+ **/
+QString formatPermissions( mode_t mode );
+
+/**
+ * Format a number in octal with a leading zero.
+ **/
+QString formatOctal( int number );
+
+/**
+ * Return the mode (the permission bits) returned from stat() like the
+ * "ls -l" shell command does, e.g.
+ *
+ *	   drwxr-xr-x
+ *
+ * 'omitTypeForRegularFiles' specifies if the leading "-" should be omitted.
+ **/
+QString symbolicMode( mode_t perm, bool omitTypeForRegularFiles = false );
+
+/**
+ * Format the filesystem object type from a mode, e.g. "Directory",
+ * "Symbolic Link", "Block Device", "File".
+ **/
+QString formatFilesystemObjectType( mode_t mode );
+
+
+LogStream & operator<< ( LogStream & stream, FileSize lSize );
+
 
 #endif  // FormatUtil_h

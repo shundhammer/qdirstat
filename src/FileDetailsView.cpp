@@ -26,7 +26,6 @@
 #define ALLOCATED_FAT_PERCENT	33
 #define MAX_SYMLINK_TARGET_LEN	25
 
-using namespace QDirStat;
 
 
 FileDetailsView::FileDetailsView( QWidget * parent ):

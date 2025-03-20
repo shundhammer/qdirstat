@@ -15,7 +15,6 @@
 #define MAX_TOTAL_LEN           150
 #define SHORTENED_LEN            12
 
-using namespace QDirStat;
 
 
 

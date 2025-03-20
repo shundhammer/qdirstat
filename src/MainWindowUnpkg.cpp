@@ -18,7 +18,6 @@
 #include "Exception.h"
 #include "Logger.h"
 
-using namespace QDirStat;
 
 
 void MainWindow::askShowUnpkgFiles()

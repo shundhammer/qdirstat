@@ -25,7 +25,6 @@
 
 #define MAX_URLS_IN_CONFIRMATION_POPUP 7
 
-using namespace QDirStat;
 
 
 CleanupCollection::CleanupCollection( SelectionModel * selectionModel,

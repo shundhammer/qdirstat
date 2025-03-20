@@ -13,7 +13,6 @@
 #include "Logger.h"
 #include "Exception.h"
 
-using namespace QDirStat;
 
 
 BucketsTableModel::BucketsTableModel( QWidget * parent, HistogramView * histogram ):

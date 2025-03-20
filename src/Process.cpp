@@ -10,7 +10,6 @@
 
 #include <Process.h>
 
-using namespace QDirStat;
 
 
 Process::Process( QObject *parent ):

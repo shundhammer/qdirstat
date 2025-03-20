@@ -1,9 +1,9 @@
 /*
  *   File name: SizeColDelegate.h
- *   Summary:	DirTreeView delegate for the size column
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   DirTreeView delegate for the size column
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 #ifndef SizeColDelegate_h
@@ -11,67 +11,63 @@
 
 
 #include <QStyledItemDelegate>
+
 class QTreeView;
+class DirTreeModel;
 
-
-namespace QDirStat
+/**
+ * Item delegate for the size column in the DirTreeView.
+ *
+ * This class can handle different font attributes and colors.
+ **/
+class SizeColDelegate: public QStyledItemDelegate
 {
-    class DirTreeModel;
+    Q_OBJECT
+
+public:
 
     /**
-     * Item delegate for the size column in the DirTreeView.
-     *
-     * This class can handle different font attributes and colors.
+     * Constructor.
      **/
-    class SizeColDelegate: public QStyledItemDelegate
-    {
-	Q_OBJECT
+    SizeColDelegate( QTreeView * treeView );
 
-    public:
+    /**
+     * Destructor.
+     **/
+    virtual ~SizeColDelegate();
 
-        /**
-         * Constructor.
-         **/
-	SizeColDelegate( QTreeView * treeView );
+    /**
+     * Paint one cell in the view.
+     * Inherited from QStyledItemDelegate.
+     **/
+    void paint( QPainter                   * painter,
+                const QStyleOptionViewItem & option,
+                const QModelIndex          & index ) const Q_DECL_OVERRIDE;
 
-        /**
-         * Destructor.
-         **/
-        virtual ~SizeColDelegate();
+    /**
+     * Return a size hint for one cell in the view.
+     * Inherited from QStyledItemDelegate.
+     **/
+    QSize sizeHint( const QStyleOptionViewItem & option,
+                    const QModelIndex          & index) const Q_DECL_OVERRIDE;
 
-	/**
-	 * Paint one cell in the view.
-	 * Inherited from QStyledItemDelegate.
-	 **/
-	void paint( QPainter		       * painter,
-		    const QStyleOptionViewItem & option,
-		    const QModelIndex	       & index ) const Q_DECL_OVERRIDE;
+protected:
 
-	/**
-	 * Return a size hint for one cell in the view.
-	 * Inherited from QStyledItemDelegate.
-	 **/
-	QSize sizeHint( const QStyleOptionViewItem & option,
-			const QModelIndex	   & index) const Q_DECL_OVERRIDE;
-
-    protected:
-
-        /**
-         * Get the model from a model index and store it in _model.
-         **/
-        void ensureModel( const QModelIndex & index ) const;
+    /**
+     * Get the model from a model index and store it in _model.
+     **/
+    void ensureModel( const QModelIndex & index ) const;
 
 
-        //
-        // Data members
-        //
+    //
+    // Data members
+    //
 
-        QTreeView *             _treeView;
-        mutable DirTreeModel *  _model;
-        bool                    _usingDarkTheme;
+    QTreeView *             _treeView;
+    mutable DirTreeModel *  _model;
+    bool                    _usingDarkTheme;
 
-    };  // class SizeColDelegate
+};  // class SizeColDelegate
 
-}       // namespace QDirStat
 
 #endif  // SizeColDelegate_h

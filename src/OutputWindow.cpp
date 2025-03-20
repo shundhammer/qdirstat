@@ -17,11 +17,6 @@
 #include "Logger.h"
 #include "Exception.h"
 
-using QDirStat::readColorEntry;
-using QDirStat::writeColorEntry;
-using QDirStat::readFontEntry;
-using QDirStat::writeFontEntry;
-
 
 #define CONNECT_ACTION(ACTION, RECEIVER, RCVR_SLOT) \
     connect( (ACTION), SIGNAL( triggered() ), (RECEIVER), SLOT( RCVR_SLOT ) )
@@ -515,7 +510,7 @@ void OutputWindow::timeoutShow()
 
 void OutputWindow::readSettings()
 {
-    QDirStat::Settings settings;
+    Settings settings;
     settings.beginGroup( "OutputWindow" );
 
     _terminalBackground	 = readColorEntry( settings, "TerminalBackground", QColor( Qt::black  ) );
@@ -529,13 +524,13 @@ void OutputWindow::readSettings()
 
     _ui->terminal->setFont( _terminalDefaultFont );
 
-    QDirStat::readWindowSettings( this, "OutputWindow" );
+    readWindowSettings( this, "OutputWindow" );
 }
 
 
 void OutputWindow::writeSettings()
 {
-    QDirStat::Settings settings;
+    Settings settings;
     settings.beginGroup( "OutputWindow" );
 
     writeColorEntry( settings, "TerminalBackground", _terminalBackground  );
@@ -547,7 +542,7 @@ void OutputWindow::writeSettings()
 
     settings.endGroup();
 
-    QDirStat::writeWindowSettings( this, "OutputWindow" );
+    writeWindowSettings( this, "OutputWindow" );
 }
 
 

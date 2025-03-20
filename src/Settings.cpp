@@ -23,7 +23,6 @@
 #include "Logger.h"
 #include "Exception.h"
 
-using namespace QDirStat;
 
 
 QSet<QString> Settings::_usedConfigFiles;

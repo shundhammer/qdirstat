@@ -18,7 +18,6 @@
 
 #define UnicodeMathSigma	0x2211	// 'n-ary summation'
 
-using namespace QDirStat;
 
 
 void HistogramView::addHistogram()

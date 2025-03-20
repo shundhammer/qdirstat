@@ -114,7 +114,7 @@ int main( int argc, char *argv[] )
     bool dont_ask = commandLineSwitch( "--dont-ask", "-d", argList );
 
     if ( commandLineSwitch( "--slow-update", "-s", argList ) )
-        QDirStat::app()->dirTreeModel()->setSlowUpdate();
+        app()->dirTreeModel()->setSlowUpdate();
 
     if ( argList.isEmpty() )
     {
@@ -155,7 +155,7 @@ int main( int argc, char *argv[] )
     // by root which means that the real user can't write to those files
     // anymore if once invoking QDirStat with 'sudo'. Fixing the file owner for
     // our config files if possible.
-    QDirStat::Settings::fixFileOwners();
+    Settings::fixFileOwners();
 
     return fatal ? 1 : 0;
 }

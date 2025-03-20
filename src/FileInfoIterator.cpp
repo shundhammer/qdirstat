@@ -14,7 +14,6 @@
 #include "DotEntry.h"
 #include "Exception.h"
 
-using namespace QDirStat;
 
 
 

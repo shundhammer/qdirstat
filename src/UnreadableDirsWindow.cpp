@@ -17,7 +17,6 @@
 #include "Logger.h"
 #include "Exception.h"
 
-using namespace QDirStat;
 
 
 QPointer<UnreadableDirsWindow> UnreadableDirsWindow::_sharedInstance = 0;

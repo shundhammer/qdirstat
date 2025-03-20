@@ -57,7 +57,6 @@
 
 #define USE_CUSTOM_OPEN_DIR_DIALOG 1
 
-using namespace QDirStat;
 
 
 MainWindow::MainWindow():
@@ -332,7 +331,7 @@ void MainWindow::updateActions()
 
 void MainWindow::readSettings()
 {
-    QDirStat::Settings settings;
+    Settings settings;
     settings.beginGroup( "MainWindow" );
 
     _statusBarTimeout	  = settings.value( "StatusBarTimeoutMillisec", 3000  ).toInt();
@@ -385,7 +384,7 @@ void MainWindow::readSettings()
 
 void MainWindow::writeSettings()
 {
-    QDirStat::Settings settings;
+    Settings settings;
     settings.beginGroup( "MainWindow" );
 
     settings.setValue( "ShowTreemap"	 , _ui->actionShowTreemap->isChecked() );
@@ -441,7 +440,7 @@ void MainWindow::busyDisplay()
     // the hell out of the Qt side of the data model; so let's sort by name
     // instead.
 
-    int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::NameCol );
+    int sortCol = DataColumns::toViewCol( NameCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::AscendingOrder );
 
     if ( ! PkgFilter::isPkgUrl( app()->dirTree()->url() ) &&
@@ -460,7 +459,7 @@ void MainWindow::idleDisplay()
 
     updateActions();
     _updateTimer.stop();
-    int sortCol = QDirStat::DataColumns::toViewCol( QDirStat::PercentNumCol );
+    int sortCol = DataColumns::toViewCol( PercentNumCol );
     _ui->dirTreeView->sortByColumn( sortCol, Qt::DescendingOrder );
 
     if ( _futureSelection.subtree() )
@@ -656,7 +655,7 @@ void MainWindow::askOpenDir()
     bool crossFilesystems = tree->crossFilesystems();
 
 #if USE_CUSTOM_OPEN_DIR_DIALOG
-    path = QDirStat::OpenDirDialog::askOpenDir( &crossFilesystems, this );
+    path = OpenDirDialog::askOpenDir( &crossFilesystems, this );
 #else
     path = QFileDialog::getExistingDirectory( this, // parent
                                               tr("Select directory to scan") );
@@ -1354,7 +1353,7 @@ void MainWindow::itemClicked( const QModelIndex & index )
 
 	logDebug() << "Clicked row " << index.row()
 		   << " col " << index.column()
-		   << " (" << QDirStat::DataColumns::fromViewCol( index.column() ) << ")"
+		   << " (" << DataColumns::fromViewCol( index.column() ) << ")"
 		   << "\t" << item
 		   << endl;
 	// << " data(0): " << index.model()->data( index, 0 ).toString()

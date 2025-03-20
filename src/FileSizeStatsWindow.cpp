@@ -24,7 +24,6 @@
 #include "Logger.h"
 #include "Exception.h"
 
-using namespace QDirStat;
 
 
 QPointer<FileSizeStatsWindow> FileSizeStatsWindow::_sharedInstance = 0;

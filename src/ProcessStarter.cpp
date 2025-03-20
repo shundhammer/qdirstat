@@ -12,7 +12,6 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
 
 
 ProcessStarter::ProcessStarter( QObject * parent ):

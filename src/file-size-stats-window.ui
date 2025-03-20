@@ -38,7 +38,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="histogramPageLayout">
        <item>
-        <widget class="QDirStat::HistogramView" name="histogramView"/>
+        <widget class="HistogramView" name="histogramView"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="optionsButtonLayout">
@@ -999,7 +999,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QDirStat::HistogramView</class>
+   <class>HistogramView</class>
    <extends>QGraphicsView</extends>
    <header>HistogramView.h</header>
   </customwidget>

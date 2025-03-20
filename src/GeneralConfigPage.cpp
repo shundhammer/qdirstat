@@ -14,7 +14,6 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
 
 
 GeneralConfigPage::GeneralConfigPage( QWidget * parent ):
@@ -60,7 +59,7 @@ void GeneralConfigPage::readSettings()
 {
     // logDebug() << endl;
 
-    QDirStat::Settings settings;
+    Settings settings;
     settings.beginGroup( "MainWindow" );
 
     _ui->urlInWindowTitleCheckBox->setChecked( settings.value( "UrlInWindowTitle" , false ).toBool() );
@@ -95,7 +94,7 @@ void GeneralConfigPage::writeSettings()
 {
     // logDebug() << endl;
 
-    QDirStat::Settings settings;
+    Settings settings;
     settings.beginGroup( "MainWindow" );
 
     settings.setValue( "UrlInWindowTitle"        , _ui->urlInWindowTitleCheckBox->isChecked() );

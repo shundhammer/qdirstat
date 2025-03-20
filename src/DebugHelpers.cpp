@@ -18,7 +18,6 @@
 
 namespace Debug
 {
-    using namespace QDirStat;
 
     void dumpDirectChildren( FileInfo * dir )
     {
@@ -66,7 +65,7 @@ namespace Debug
     {
 	logDebug() << "Direct children of " << dir << " by size:" << endl;
 
-	QDirStat::FileInfoSortedBySizeIterator it( dir );
+	FileInfoSortedBySizeIterator it( dir );
 
 	while ( *it )
 	{

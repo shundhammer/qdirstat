@@ -16,7 +16,6 @@
 #include "Logger.h"
 #include "Exception.h"
 
-using namespace QDirStat;
 
 
 HistoryButtons::HistoryButtons( QAction * actionGoBack,

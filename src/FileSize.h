@@ -1,9 +1,9 @@
 /*
  *   File name: FileSize.h
- *   Summary:	Basic typedefs for QDirStat
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   Basic typedefs for QDirStat
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
@@ -17,10 +17,7 @@
 // 0x7FFFFFFFFFFFFFFFLL == 9223372036854775807LL
 
 
-namespace QDirStat
-{
-    typedef long long FileSize;
-}
+typedef long long FileSize;
 
 
 #endif  // FileSize_h

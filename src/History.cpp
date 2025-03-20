@@ -13,7 +13,6 @@
 
 #define HISTORY_MAX     16
 
-using namespace QDirStat;
 
 
 History::History():

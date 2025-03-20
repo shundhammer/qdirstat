@@ -27,7 +27,6 @@
 // Number of suffixes in the "other" category
 #define TOP_X	20
 
-using namespace QDirStat;
 
 
 QPointer<LocateFileTypeWindow> FileTypeStatsWindow::_locateFileTypeWindow = 0;

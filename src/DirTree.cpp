@@ -26,7 +26,6 @@
 
 #define VERBOSE_EXCLUDE_RULES	1
 
-using namespace QDirStat;
 
 
 DirTree::DirTree():

@@ -58,7 +58,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QDirStat::MessagePanel" name="messagePanel" native="true">
+    <widget class="MessagePanel" name="messagePanel" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -118,7 +118,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QDirStat::MessagePanel</class>
+   <class>MessagePanel</class>
    <extends>QWidget</extends>
    <header>MessagePanel.h</header>
    <container>1</container>

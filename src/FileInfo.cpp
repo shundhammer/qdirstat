@@ -32,7 +32,6 @@
 
 #define FRAGMENT_SIZE	2048
 
-using namespace QDirStat;
 
 
 bool FileInfo::_ignoreHardLinks = false;
@@ -607,7 +606,7 @@ QString FileInfo::octalPermissions() const
 
 QString FileInfo::baseName() const
 {
-    return QDirStat::baseName( _name );
+    return baseName( _name );
 }
 
 
@@ -754,7 +753,7 @@ bool FileInfo::isDominant()
 
 // See also FileInfo::baseName()
 
-QString QDirStat::baseName( const QString & fileName )
+QString baseName( const QString & fileName )
 {
     QStringList segments = fileName.split( '/', QString::SkipEmptyParts );
     return segments.isEmpty() ? "" : segments.last();

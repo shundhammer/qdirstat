@@ -15,7 +15,6 @@
 #include "Settings.h"
 #include "SettingsHelpers.h"
 
-using namespace QDirStat;
 
 
 FormatOptions * FormatOptions::_instance = 0;
@@ -53,13 +52,13 @@ void FormatOptions::readSettings()
 
 
 
-QString QDirStat::formatSize( FileSize lSize )
+QString formatSize( FileSize lSize )
 {
     return formatSize( lSize, 1 );
 }
 
 
-QString QDirStat::formatSize( FileSize lSize, int precision )
+QString formatSize( FileSize lSize, int precision )
 {
     QString sizeString;
     int	    unitIndex = 0;
@@ -102,7 +101,7 @@ QString QDirStat::formatSize( FileSize lSize, int precision )
 }
 
 
-QString QDirStat::formatByteSize( FileSize size )
+QString formatByteSize( FileSize size )
 {
 
     QString bytesString;
@@ -135,7 +134,7 @@ LogStream & operator<< ( LogStream & stream, FileSize lSize )
 }
 
 
-QString QDirStat::formatPercent( float percent )
+QString formatPercent( float percent )
 {
     if ( percent < 0.0 )	// Invalid percentage?
 	return "";
@@ -148,7 +147,7 @@ QString QDirStat::formatPercent( float percent )
 }
 
 
-QString QDirStat::formatTime( time_t rawTime )
+QString formatTime( time_t rawTime )
 {
     if ( rawTime == (time_t) 0 )
 	return "";
@@ -174,13 +173,13 @@ QString QDirStat::formatTime( time_t rawTime )
 }
 
 
-QString QDirStat::formatPermissions( mode_t mode )
+QString formatPermissions( mode_t mode )
 {
     return symbolicMode( mode, true ) + "  " + formatOctal( ALLPERMS & mode );
 }
 
 
-QString QDirStat::formatFilesystemObjectType( mode_t mode )
+QString formatFilesystemObjectType( mode_t mode )
 {
     if	    ( S_ISDIR ( mode ) ) return QObject::tr( "Directory"	);
     else if ( S_ISCHR ( mode ) ) return QObject::tr( "Character Device" );
@@ -192,13 +191,13 @@ QString QDirStat::formatFilesystemObjectType( mode_t mode )
 }
 
 
-QString QDirStat::formatOctal( int number )
+QString formatOctal( int number )
 {
     return QString( "0" ) + QString::number( number, 8 );
 }
 
 
-QString QDirStat::symbolicMode( mode_t mode, bool omitTypeForRegularFiles )
+QString symbolicMode( mode_t mode, bool omitTypeForRegularFiles )
 {
     QString result;
 
@@ -246,7 +245,7 @@ QString QDirStat::symbolicMode( mode_t mode, bool omitTypeForRegularFiles )
 }
 
 
-QString QDirStat::formatMillisec( qint64 millisec, bool showMillisec )
+QString formatMillisec( qint64 millisec, bool showMillisec )
 {
     QString formattedTime;
     int hours;

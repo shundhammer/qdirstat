@@ -20,7 +20,6 @@
 
 #define WARN_PERCENT	10.0
 
-using namespace QDirStat;
 
 
 FilesystemsWindow::FilesystemsWindow( QWidget * parent ):

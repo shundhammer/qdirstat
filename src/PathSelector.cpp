@@ -17,7 +17,6 @@
 
 #define SHOW_SIZES_IN_TOOLTIP   0
 
-using namespace QDirStat;
 
 
 

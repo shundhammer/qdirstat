@@ -1,9 +1,9 @@
 /*
  *   File name: BusyPopup.h
- *   Summary:	QDirStat generic widget classes
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   QDirStat generic widget classes
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 
@@ -14,72 +14,68 @@
 #include <QString>
 
 
-namespace QDirStat
+/**
+ * Simple popup dialog to show a message just prior to a lengthy operation.
+ * The popup does some event handling to make sure that it really appears
+ * before that lengthy operation starts: It processes events for some
+ * milliseconds so its own show, resize, move and paint events are
+ * processed.
+ *
+ * Usage:
+ *
+ *     BusyPopup msg( "Calculating...", mainWin );
+ *     calc();
+ *
+ * In the normal case, just let the variable go out of scope, and the popup
+ * is destroyed and thus closed. Of course you can also create it with
+ * 'new' and destroy it with 'delete' or simply call 'hide()'.
+ **/
+class BusyPopup: public QLabel
 {
+    Q_OBJECT
+
+public:
+
     /**
-     * Simple popup dialog to show a message just prior to a lengthy operation.
-     * The popup does some event handling to make sure that it really appears
-     * before that lengthy operation starts: It processes events for some
-     * milliseconds so its own show, resize, move and paint events are
-     * processed.
+     * Create a BusyPopup with the specified text.
      *
-     * Usage:
-     *
-     *	   BusyPopup msg( "Calculating...", mainWin );
-     *	   calc();
-     *
-     * In the normal case, just let the variable go out of scope, and the popup
-     * is destroyed and thus closed. Of course you can also create it with
-     * 'new' and destroy it with 'delete' or simply call 'hide()'.
+     * If 'autoPost' is 'true', automatically post it, i.e. show it and
+     * process events for some milliseconds to makes sure it is rendered.
      **/
-    class BusyPopup: public QLabel
-    {
-	Q_OBJECT
+    BusyPopup( const QString & text,
+               QWidget *       parent   = 0,
+               bool            autoPost = true );
 
-    public:
+    /**
+     * Destructor.
+     **/
+    virtual ~BusyPopup();
 
-	/**
-	 * Create a BusyPopup with the specified text.
-	 *
-	 * If 'autoPost' is 'true', automatically post it, i.e. show it and
-	 * process events for some milliseconds to makes sure it is rendered.
-	 **/
-	BusyPopup( const QString & text,
-		   QWidget *	   parent   = 0,
-		   bool		   autoPost = true );
+    /**
+     * Show the BusyPopup and process events for some milliseconds to make
+     * sure it is rendered. This is done automatically if 'autoPost' is
+     * 'true' in the constructor.
+     **/
+    void post();
 
-	/**
-	 * Destructor.
-	 **/
-	virtual ~BusyPopup();
+    /**
+     * Process events (except user input events) for the specified time.
+     **/
+    void processEvents( int millisec );
 
-	/**
-	 * Show the BusyPopup and process events for some milliseconds to make
-	 * sure it is rendered. This is done automatically if 'autoPost' is
-	 * 'true' in the constructor.
-	 **/
-	void post();
-
-	/**
-	 * Process events (except user input events) for the specified time.
-	 **/
-	void processEvents( int millisec );
-
-	/**
-	 * Process a show event.
-	 *
-	 * Reimplemented from QLabel / QWidget.
-	 **/
-	virtual void showEvent( QShowEvent * event ) Q_DECL_OVERRIDE;
+    /**
+     * Process a show event.
+     *
+     * Reimplemented from QLabel / QWidget.
+     **/
+    virtual void showEvent( QShowEvent * event ) Q_DECL_OVERRIDE;
 
 
-    protected:
+protected:
 
-	bool _posted;
+    bool _posted;
 
-    };	// BusyPopup
-
-}	// namespace QDirStat
+};  // BusyPopup
 
 
-#endif	// BusyPopup_h
+#endif  // BusyPopup_h

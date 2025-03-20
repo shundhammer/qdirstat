@@ -89,7 +89,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QDirStat::PathSelector" name="pathSelector"/>
+        <widget class="PathSelector" name="pathSelector"/>
        </item>
       </layout>
      </widget>
@@ -234,7 +234,7 @@ just for this program run.</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QDirStat::PathSelector</class>
+   <class>PathSelector</class>
    <extends>QListWidget</extends>
    <header>PathSelector.h</header>
   </customwidget>

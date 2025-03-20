@@ -11,7 +11,6 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
 
 
 FileSearchFilter::FileSearchFilter( DirInfo *       subtree,

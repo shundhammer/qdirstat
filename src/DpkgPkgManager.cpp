@@ -17,7 +17,6 @@
 #include "SysUtil.h"
 
 
-using namespace QDirStat;
 
 using SysUtil::runCommand;
 using SysUtil::tryRunCommand;

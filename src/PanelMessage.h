@@ -1,9 +1,9 @@
 /*
  *   File name: PanelMessage.h
- *   Summary:	Message in a panel with icon and close button
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   Message in a panel with icon and close button
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 #ifndef PanelMessage_h
@@ -12,96 +12,93 @@
 #include <QWidget>
 #include "ui_panel-message.h"
 
+class PanelMessage;
 
-namespace QDirStat
+
+/**
+ * Message in a small panel with an icon, a bold face heading,
+ * a message text, an optional "Details..." hyperlink
+ * and a small [x] window close button.
+ *
+ * Those panels are intended to be put into a MessagePanel
+ * (but any Qt container widget can be used as well).
+ *
+ * The close button calls deleteLater on the panel, so it is completely
+ * self-sufficient once set up.
+ **/
+class PanelMessage: public QWidget
 {
-    class PanelMessage;
+    Q_OBJECT
+
+public:
+    /**
+     * Constructor.
+     **/
+    PanelMessage( QWidget * parent = 0 );
 
     /**
-     * Message in a small panel with an icon, a bold face heading,
-     * a message text, an optional "Details..." hyperlink
-     * and a small [x] window close button.
-     *
-     * Those panels are intended to be put into a MessagePanel
-     * (but any Qt container widget can be used as well).
-     *
-     * The close button calls deleteLater on the panel, so it is completely
-     * self-sufficient once set up.
+     * Destructor.
      **/
-    class PanelMessage: public QWidget
-    {
-	Q_OBJECT
+    virtual ~PanelMessage();
 
-    public:
-	/**
-	 * Constructor.
-	 **/
-	PanelMessage( QWidget * parent = 0 );
+    /**
+     * Set the heading text.
+     **/
+    void setHeading( const QString & headingText );
 
-	/**
-	 * Destructor.
-	 **/
-	virtual ~PanelMessage();
+    /**
+     * Set the body text.
+     **/
+    void setText( const QString & bodyText );
 
-	/**
-	 * Set the heading text.
-	 **/
-	void setHeading( const QString & headingText );
+    /**
+     * Set the icon. If not set, a generic light bulb icon is used.
+     **/
+    void setIcon( const QPixmap & pixmap );
 
-	/**
-	 * Set the body text.
-	 **/
-	void setText( const QString & bodyText );
+    /**
+     * Connect the "Details..." hyperlink to a receiver's slot.
+     * The hyperlink is only shown if it is connected.
+     *
+     * Use the same Qt macros as if connecting a normal widget:
+     *
+     *   connectDetailsLink( someAction, SLOT( triggered() ) );
+     **/
+    void connectDetailsLink( const QObject * receiver,
+                             const char    * slotName );
 
-	/**
-	 * Set the icon. If not set, a generic light bulb icon is used.
-	 **/
-	void setIcon( const QPixmap & pixmap );
+    /**
+     * Connect the "Details..." hyperlink to a web URL that will be opened
+     * in an external browser.
+     **/
+    void setDetailsUrl( const QString url );
 
-	/**
-	 * Connect the "Details..." hyperlink to a receiver's slot.
-	 * The hyperlink is only shown if it is connected.
-	 *
-	 * Use the same Qt macros as if connecting a normal widget:
-	 *
-	 *   connectDetailsLink( someAction, SLOT( triggered() ) );
-	 **/
-	void connectDetailsLink( const QObject * receiver,
-				 const char    * slotName );
-
-        /**
-         * Connect the "Details..." hyperlink to a web URL that will be opened
-         * in an external browser.
-         **/
-        void setDetailsUrl( const QString url );
-
-        /**
-         * Return the URL set with setDetailsUrl().
-         **/
-        QString detailsUrl() const { return _detailsUrl; }
+    /**
+     * Return the URL set with setDetailsUrl().
+     **/
+    QString detailsUrl() const { return _detailsUrl; }
 
 
-    protected slots:
+protected slots:
 
-        /**
-         * Open the URL set with setDetailsUrl() in an external browser.
-         **/
-        void openDetailsUrl() const;
+    /**
+     * Open the URL set with setDetailsUrl() in an external browser.
+     **/
+    void openDetailsUrl() const;
 
 
-    protected:
+protected:
 
-        /**
-         * Override the HTML on the "Details..." label
-         * to sanitize it from undesired styling (GitHub issue #213)
-         */
-        void initDetailsLinkLabel();
+    /**
+     * Override the HTML on the "Details..." label
+     * to sanitize it from undesired styling (GitHub issue #213)
+     */
+    void initDetailsLinkLabel();
 
-	Ui::PanelMessage * _ui;
-        QString            _detailsUrl;
+    Ui::PanelMessage * _ui;
+    QString            _detailsUrl;
 
-    };	// class PanelMessage
+};  // class PanelMessage
 
-}	// namespace QDirStat
 
-#endif	// PanelMessage_h
+#endif  // PanelMessage_h

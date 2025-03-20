@@ -179,7 +179,7 @@ namespace QDirStat
 
     void readWindowSettings( QWidget * widget, const QString & settingsGroup )
     {
-        QDirStat::Settings settings;
+        Settings settings;
         settings.beginGroup( settingsGroup );
 
         QPoint winPos	 = settings.value( "WindowPos" , QPoint( -99, -99 ) ).toPoint();
@@ -195,7 +195,7 @@ namespace QDirStat
 
     void writeWindowSettings( QWidget * widget, const QString & settingsGroup )
     {
-        QDirStat::Settings settings;
+        Settings settings;
         settings.beginGroup( settingsGroup );
 
         settings.setValue( "WindowPos" , widget->pos()  );

@@ -19,7 +19,6 @@
 #include "Logger.h"
 #include "Exception.h"
 
-using namespace QDirStat;
 
 
 // This is a mess that became necessary because Qt's moc cannot handle template

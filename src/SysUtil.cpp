@@ -22,7 +22,6 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
 
 
 bool SysUtil::tryRunCommand( const QString & commandLine,

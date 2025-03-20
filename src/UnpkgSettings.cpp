@@ -13,7 +13,6 @@
 #include "Logger.h"
 
 
-using namespace QDirStat;
 
 
 UnpkgSettings::UnpkgSettings( InitPolicy initPolicy )
@@ -40,7 +39,7 @@ void UnpkgSettings::read()
 {
     // logDebug() << endl;
 
-    QDirStat::Settings settings;
+    Settings settings;
 
     settings.beginGroup( "UnpkgSettings" );
 
@@ -56,7 +55,7 @@ void UnpkgSettings::write()
 {
     // logDebug() << endl;
 
-    QDirStat::Settings settings;
+    Settings settings;
 
     settings.beginGroup( "UnpkgSettings" );
 

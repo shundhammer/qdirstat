@@ -36,7 +36,6 @@
 #define VERBOSE_SELECTION       0
 
 
-using namespace QDirStat;
 
 
 bool OpenDirDialog::_firstRun         = true;

@@ -18,7 +18,6 @@
 
 #define MIN_PERCENT_BAR_HEIGHT  22
 
-using namespace QDirStat;
 
 
 PercentBarDelegate::PercentBarDelegate( QTreeView * treeView,

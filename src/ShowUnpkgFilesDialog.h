@@ -1,9 +1,9 @@
 /*
  *   File name: ShowUnpkgFilesDialog.h
- *   Summary:	QDirStat "show unpackaged files" dialog
- *   License:	GPL V2 - See file LICENSE for details.
+ *   Summary:   QDirStat "show unpackaged files" dialog
+ *   License:   GPL V2 - See file LICENSE for details.
  *
- *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
+ *   Author:    Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */
 
 #ifndef ShowUnpkgFilesDialog_h
@@ -17,114 +17,109 @@
 #include "ui_show-unpkg-files-dialog.h"
 #include "UnpkgSettings.h"
 
-
 class QContextMenuEvent;
+class ExistingDirCompleter;
 
 
-namespace QDirStat
+/**
+ * Dialog to let the user select parameters for showing unpackaged
+ * files. This is very much like a "get existing directory" dialog with
+ * some more widgets.
+ *
+ * Usage:
+ *
+ *     ShowUnpkgFilesDialog dialog( this );
+ *
+ *     if ( dialog.exec() == QDialog::Accepted )
+ *     {
+ *         QString dir = dialog.startingDir();
+ *         QStringList excludeDirs = dialog.excludeDirs();
+ *
+ *         readUnpkgFiles( dir, excludeDirs );
+ *     }
+ **/
+class ShowUnpkgFilesDialog: public QDialog
 {
-    class ExistingDirCompleter;
+    Q_OBJECT
+
+public:
 
     /**
-     * Dialog to let the user select parameters for showing unpackaged
-     * files. This is very much like a "get existing directory" dialog with
-     * some more widgets.
-     *
-     * Usage:
-     *
-     *	   ShowUnpkgFilesDialog dialog( this );
-     *
-     *	   if ( dialog.exec() == QDialog::Accepted )
-     *	   {
-     *	       QString dir = dialog.startingDir();
-     *	       QStringList excludeDirs = dialog.excludeDirs();
-     *
-     *	       readUnpkgFiles( dir, excludeDirs );
-     *	   }
+     * Constructor.
      **/
-    class ShowUnpkgFilesDialog: public QDialog
-    {
-	Q_OBJECT
+    ShowUnpkgFilesDialog( QWidget * parent = 0 );
 
-    public:
+    /**
+     * Destructor.
+     **/
+    virtual ~ShowUnpkgFilesDialog();
 
-	/**
-	 * Constructor.
-	 **/
-	ShowUnpkgFilesDialog( QWidget * parent = 0 );
+    /**
+     * Get all values from the widgets at once.
+     **/
+    UnpkgSettings values() const;
 
-	/**
-	 * Destructor.
-	 **/
-	virtual ~ShowUnpkgFilesDialog();
+    /**
+     * Get the starting directory from the dialog's widgets or an empty
+     * string if the dialog was cancelled.
+     **/
+    QString startingDir() const;
 
-        /**
-         * Get all values from the widgets at once.
-         **/
-        UnpkgSettings values() const;
+    /**
+     * Get the directories to exclude from the dialog's widgets.
+     **/
+    QStringList excludeDirs() const;
 
-	/**
-	 * Get the starting directory from the dialog's widgets or an empty
-	 * string if the dialog was cancelled.
-	 **/
-	QString startingDir() const;
-
-	/**
-	 * Get the directories to exclude from the dialog's widgets.
-	 **/
-	QStringList excludeDirs() const;
-
-	/**
-	 * Get the wildcard patterns of files to ignore from the dialog's
-	 * widgets.
-	 **/
-	QStringList ignorePatterns() const;
+    /**
+     * Get the wildcard patterns of files to ignore from the dialog's
+     * widgets.
+     **/
+    QStringList ignorePatterns() const;
 
 
-    public slots:
+public slots:
 
-	/**
-	 * Read settings from the config file
-	 **/
-	void readSettings();
+    /**
+     * Read settings from the config file
+     **/
+    void readSettings();
 
-	/**
-	 * Write settings to the config file
-	 **/
-	void writeSettings();
-
-
-    protected slots:
-
-	/**
-	 * Reset the exclude directories etc. to the default values after a
-	 * confirmation.
-	 **/
-	void restoreDefaults();
+    /**
+     * Write settings to the config file
+     **/
+    void writeSettings();
 
 
-    protected:
+protected slots:
 
-        /**
-         * Set all values at once.
-         **/
-        void setValues( const UnpkgSettings & settings );
-
-	/**
-	 * Get the content of a QPlainTextEdit widget as QStringList with
-	 * leading and trailing whitespace removed from each line and without
-	 * empty lines.
-	 **/
-	QStringList cleanedLines( QPlainTextEdit * widget ) const;
+    /**
+     * Reset the exclude directories etc. to the default values after a
+     * confirmation.
+     **/
+    void restoreDefaults();
 
 
-	// Data members
+protected:
 
-	Ui::ShowUnpkgFilesDialog * _ui;
-	QPushButton *		   _okButton;
+    /**
+     * Set all values at once.
+     **/
+    void setValues( const UnpkgSettings & settings );
 
-    };	// class ShowUnpkgFilesDialog
+    /**
+     * Get the content of a QPlainTextEdit widget as QStringList with
+     * leading and trailing whitespace removed from each line and without
+     * empty lines.
+     **/
+    QStringList cleanedLines( QPlainTextEdit * widget ) const;
 
-}	// namespace QDirStat
 
-#endif	// ShowUnpkgFilesDialog_h
+    // Data members
+
+    Ui::ShowUnpkgFilesDialog * _ui;
+    QPushButton *              _okButton;
+
+};  // class ShowUnpkgFilesDialog
+
+
+#endif  // ShowUnpkgFilesDialog_h

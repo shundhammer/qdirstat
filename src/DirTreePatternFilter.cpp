@@ -14,7 +14,6 @@
 #define VERBOSE_MATCH	0
 
 
-using namespace QDirStat;
 
 
 DirTreeFilter * DirTreePatternFilter::create( const QString & pattern )

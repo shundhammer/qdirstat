@@ -28,7 +28,6 @@
 #define VERBOSE_DOMINANCE_CHECK                 0
 #define DIRECT_CHILDREN_COUNT_SANITY_CHECK      0
 
-using namespace QDirStat;
 
 
 DirInfo::DirInfo( DirTree * tree,

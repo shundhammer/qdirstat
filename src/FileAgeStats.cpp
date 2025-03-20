@@ -14,7 +14,6 @@
 #include "Logger.h"
 #include "Exception.h"
 
-using namespace QDirStat;
 
 
 short FileAgeStats::_thisYear  = 0;

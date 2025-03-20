@@ -28,7 +28,6 @@
 #define VERBOSE_CUSHIONS        0
 
 
-using namespace QDirStat;
 
 
 TreemapTile::TreemapTile( TreemapView *	 parentView,

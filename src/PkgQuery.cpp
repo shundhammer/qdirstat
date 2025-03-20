@@ -26,7 +26,6 @@
 #define VERBOSE_PKG_QUERY	1
 
 
-using namespace QDirStat;
 
 using SysUtil::runCommand;
 using SysUtil::tryRunCommand;

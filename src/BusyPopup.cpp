@@ -15,7 +15,6 @@
 
 #define PROCESS_EVENTS_MILLISEC 500
 
-using namespace QDirStat;
 
 
 BusyPopup::BusyPopup( const QString & text,

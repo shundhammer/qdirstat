@@ -12,7 +12,6 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
 
 
 PanelMessage::PanelMessage( QWidget * parent ):

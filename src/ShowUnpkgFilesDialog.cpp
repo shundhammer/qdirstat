@@ -21,7 +21,6 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
 
 
 ShowUnpkgFilesDialog::ShowUnpkgFilesDialog( QWidget * parent ):

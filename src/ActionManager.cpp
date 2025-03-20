@@ -13,7 +13,6 @@
 #include "Exception.h"
 #include "Logger.h"
 
-using namespace QDirStat;
 
 
 ActionManager * ActionManager::_instance = 0;

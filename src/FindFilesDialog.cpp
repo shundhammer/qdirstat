@@ -19,7 +19,6 @@
 #include "Exception.h"
 
 
-using namespace QDirStat;
 
 // Values that should be persistent for one program run,
 // but not written to the settings / config file
@@ -188,7 +187,7 @@ void FindFilesDialog::readSettings()
 {
     // logDebug() << endl;
 
-    QDirStat::Settings settings;
+    Settings settings;
 
     settings.beginGroup( "FindFilesDialog" );
 
@@ -218,7 +217,7 @@ void FindFilesDialog::writeSettings()
 {
     // logDebug() << endl;
 
-    QDirStat::Settings settings;
+    Settings settings;
 
     settings.beginGroup( "FindFilesDialog" );
 

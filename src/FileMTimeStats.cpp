@@ -14,7 +14,6 @@
 
 #define VERBOSE_SORT_THRESHOLD  50000
 
-using namespace QDirStat;
 
 
 FileMTimeStats::FileMTimeStats( FileInfo * subtree ):

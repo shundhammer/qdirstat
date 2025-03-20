@@ -11,7 +11,6 @@
 #include "Logger.h"
 #include "Exception.h"
 
-using namespace QDirStat;
 
 
 MimeCategory::MimeCategory( const QString & name, const QColor & color ):
