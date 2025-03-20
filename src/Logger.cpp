@@ -12,6 +12,10 @@
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
+#include <QRectF>
+#include <QPointF>
+#include <QSizeF>
+#include <QSize>
 
 #include <string.h>     // strlen()
 #include <stdlib.h>     // abort(), mkdtemp()
