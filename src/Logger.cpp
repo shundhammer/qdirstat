@@ -7,47 +7,39 @@
  */
 
 
-#define DONT_DEPRECATE_STRERROR
-#include "Logger.h"
-
 #include <QFile>
 #include <QDir>
 #include <QDateTime>
 #include <QString>
-#include <QRectF>
-#include <QPointF>
-#include <QSizeF>
-#include <QSize>
 #include <QStringList>
 
-#include <stdio.h>      // stderr, fprintf()
+#include <string.h>     // strlen()
 #include <stdlib.h>     // abort(), mkdtemp()
 #include <unistd.h>     // getpid()
 #include <errno.h>
 #include <pwd.h>        // getpwuid()
 #include <sys/types.h>  // pid_t, getpwuid()
 
+#include "Logger.h"
 
-#define VERBOSE_ROTATE 0
 
+#define VERBOSE_ROTATE  0
+
+using std::endl;
+using std::cerr;
 
 static LogSeverity toLogSeverity( QtMsgType msgType );
 
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-static void qt_logger( QtMsgType msgType, const char *msg);
-#else
-static void qt_logger( QtMsgType msgType,
+static void qt_logger( QtMsgType                  msgType,
                        const QMessageLogContext & context,
-                       const QString & msg );
-#endif
+                       const QString &            msg );
 
 
 Logger * Logger::_defaultLogger = 0;
+QString  Logger::_lastLogDir;
 
 
-Logger::Logger( const QString &filename ):
-    _logStream( stderr, QIODevice::WriteOnly ),
-    _nullStream( stderr, QIODevice::WriteOnly )
+Logger::Logger( const QString & filename )
 {
     init();
     createNullStream();
@@ -58,9 +50,7 @@ Logger::Logger( const QString &filename ):
 Logger::Logger( const QString & rawLogDir,
                 const QString & rawFilename,
                 bool            doRotate,
-                int             logRotateCount ):
-    _logStream( stderr, QIODevice::WriteOnly ),
-    _nullStream( stderr, QIODevice::WriteOnly )
+                int             logRotateCount )
 {
     init();
     createNullStream();
@@ -69,6 +59,7 @@ Logger::Logger( const QString & rawLogDir,
     QString filename = expandVariables( rawFilename );
 
     logDir = createLogDir( logDir );
+    _lastLogDir = logDir;
 
     if ( doRotate )
         logRotate( logDir, filename, logRotateCount );
@@ -79,20 +70,16 @@ Logger::Logger( const QString & rawLogDir,
 
 Logger::~Logger()
 {
-    if ( _logFile.isOpen() )
+    if ( _logStream.is_open() )
     {
-        logInfo() << "-- Log End --\n" << endl;
-        _logFile.close();
+        // logInfo() << "-- Log End --\n" << endl;
+        _logStream.close();
     }
 
     if ( this == _defaultLogger )
     {
         _defaultLogger = 0;
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-        qInstallMsgHandler(0);
-#else
         qInstallMessageHandler(0); // Restore default message handler
-#endif
     }
 }
 
@@ -100,52 +87,45 @@ Logger::~Logger()
 void Logger::init()
 {
     _logLevel = LogSeverityVerbose;
-    _nullDevice.setFileName( "/dev/null" );
 }
 
 
 void Logger::createNullStream()
 {
     // Open the null device to suppress output below the log level: This is
-    // necessary because each call to operator<<() for QTextStream returns the
-    // QTextStream, so we really need to return _nullStream (connected with
+    // necessary because each call to operator<<() for LogStream returns the
+    // LogStream, so we really need to return _nullStream (connected with
     // /dev/null) to actually suppress anything; otherwise, it's just the
     // logger time stamp etc. that gets suppressed, not the real logging
     // output.
 
-    if ( _nullDevice.open( QIODevice::WriteOnly | QIODevice::Text ) )
-    {
-        _nullStream.setDevice( &_nullDevice );
-    }
-    else
-    {
-        fprintf( stderr, "ERROR: Can't open /dev/null to suppress log output\n" );
-    }
+    _nullStream.open( "/dev/null" );
+
+    if ( _nullStream.fail() )
+        cerr << "ERROR: Can't open /dev/null to suppress log output" << endl;
 }
 
 
 void Logger::openLogFile( const QString & filename )
 {
-    if ( ! _logFile.isOpen() || _logFile.fileName() != filename )
+    if ( ! _logStream.is_open() || _logFilename != filename )
     {
-        _logFile.setFileName( filename );
+        _logFilename = filename;
+        _logStream.open( filename.toUtf8(), std::ofstream::out | std::ofstream::app );
 
-        if ( _logFile.open( QIODevice::WriteOnly |
-                            QIODevice::Text      |
-                            QIODevice::Append      ) )
+        if ( _logStream.good() )
         {
             if ( ! _defaultLogger )
                 setDefaultLogger();
 
-            fprintf( stderr, "Logging to %s\n", qPrintable( filename ) );
-            _logStream.setDevice( &_logFile );
+            cerr << "Logging to " << qPrintable( filename ) << endl;
             _logStream << "\n\n";
             log( __FILE__, __LINE__, __FUNCTION__, LogSeverityInfo )
                 << "-- Log Start --" << endl;
         }
         else
         {
-            fprintf( stderr, "ERROR: Can't open log file %s\n", qPrintable( filename ) );
+            cerr << "ERROR: Can't open log file " << qPrintable( filename ) << endl;
         }
     }
 }
@@ -154,21 +134,17 @@ void Logger::openLogFile( const QString & filename )
 void Logger::setDefaultLogger()
 {
     _defaultLogger = this;
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-    qInstallMsgHandler( qt_logger );
-#else
     qInstallMessageHandler( qt_logger );
-#endif
 }
 
 
-QTextStream & Logger::log( Logger *       logger,
-                           const QString &srcFile,
-                           int            srcLine,
-                           const QString &srcFunction,
-                           LogSeverity    severity )
+LogStream & Logger::log( Logger *        logger,
+                         const QString & srcFile,
+                         int             srcLine,
+                         const QString & srcFunction,
+                         LogSeverity     severity )
 {
-    static QTextStream stderrStream( stderr, QIODevice::WriteOnly );
+    static LogStream stderrStream;
 
     if ( ! logger )
         logger = Logger::defaultLogger();
@@ -176,19 +152,24 @@ QTextStream & Logger::log( Logger *       logger,
     if ( logger )
         return logger->log( srcFile, srcLine, srcFunction, severity );
     else
+    {
+        if ( ! stderrStream.is_open() )
+            stderrStream.open( "/dev/stderr" );
+
         return stderrStream;
+    }
 }
 
 
-QTextStream & Logger::log( const QString &srcFile,
-                           int            srcLine,
-                           const QString &srcFunction,
-                           LogSeverity    severity )
+LogStream & Logger::log( const QString & srcFile,
+                         int             srcLine,
+                         const QString & srcFunction,
+                         LogSeverity     severity )
 {
     if ( severity < _logLevel )
         return _nullStream;
 
-    QString sev;
+    std::string sev;
 
     switch ( severity )
     {
@@ -207,7 +188,23 @@ QTextStream & Logger::log( const QString &srcFile,
 
     if ( ! srcFile.isEmpty() )
     {
-        _logStream << srcFile;
+        if ( srcFile.contains( "/") )
+        {
+            // CMake just dumps the whole path wholesale to the compiler
+            // command line which gcc merrily uses as __FILE__;
+            // which results in an abysmal-looking log line.
+            // So let's cut off the path: Use only the last (No. -1)
+            // section delimited with '/'.
+
+            QString basename = srcFile.section( '/', -1 );
+            _logStream << basename;
+
+            // I hate CMake. Seriously, WTF?!
+        }
+        else
+        {
+            _logStream << srcFile;
+        }
 
         if ( srcLine > 0 )
             _logStream << ":" << srcLine;
@@ -215,7 +212,7 @@ QTextStream & Logger::log( const QString &srcFile,
         _logStream << " ";
 
         if ( ! srcFunction.isEmpty() )
-        _logStream << srcFunction << "():  ";
+            _logStream << srcFunction << "():  ";
     }
 
     return _logStream;
@@ -266,8 +263,8 @@ QString Logger::timeStamp()
 }
 
 
-QString Logger::prefixLines( const QString &prefix,
-                             const QString &multiLineText )
+QString Logger::prefixLines( const QString & prefix,
+                             const QString & multiLineText )
 {
     QStringList lines = multiLineText.split( "\n" );
     QString result = lines.isEmpty() ? QString() : prefix;
@@ -277,8 +274,8 @@ QString Logger::prefixLines( const QString &prefix,
 }
 
 
-QString Logger::indentLines( int indentWidth,
-                             const QString &multiLineText )
+QString Logger::indentLines( int             indentWidth,
+                             const QString & multiLineText )
 {
     QString prefix( indentWidth, ' ' );
 
@@ -297,45 +294,20 @@ static LogSeverity toLogSeverity( QtMsgType msgType )
         case QtWarningMsg:  severity = LogSeverityWarning; break;
         case QtCriticalMsg: severity = LogSeverityError;   break;
         case QtFatalMsg:    severity = LogSeverityError;   break;
-#if QT_VERSION >= 0x050500
         case QtInfoMsg:     severity = LogSeverityInfo;    break;
-#endif
     }
 
     return severity;
 }
 
 
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 )) // Qt 4.x
-
-static void qt_logger( QtMsgType msgType, const char *msg)
-{
-    Logger::log( 0, // use default logger
-                 "[Qt]", 0, "", // file, line, function
-                 toLogSeverity( msgType ) )
-        << msg << endl;
-
-    if ( msgType == QtFatalMsg )
-    {
-        fprintf( stderr, "FATAL: %s\n", msg );
-        abort();
-    }
-
-    if ( msgType == QtWarningMsg &&
-         QString( msg ).contains( "cannot connect to X server" ) )
-    {
-        fprintf( stderr, "FATAL: %s\n", msg );
-        exit( 1 );
-    }
-}
-
-#else // Qt 5.x
-
-static void qt_logger( QtMsgType msgType,
+static void qt_logger( QtMsgType                  msgType,
                        const QMessageLogContext & context,
-                       const QString & msg )
+                       const QString &            msg )
 {
-    foreach ( QString line, msg.split( "\n" ) )
+    const QStringList & lines = msg.split( "\n" );
+
+    for ( QString line: lines )
     {
         // Remove utterly misleading message that will just dump a ton of bug
         // reports on the application maintainers just because some clueless
@@ -390,7 +362,7 @@ static void qt_logger( QtMsgType msgType,
                 // non-information about the various plug-ins? This is a
                 // perfect example of completely overengineered bullshit.
                 //
-                // I with my 25+ years as a Unix/Linux/X11 software developer
+                // I with my 35+ years as a Unix/Linux/X11 software developer
                 // have no clue what to do when they dump this message on
                 // me. WTF do they expect from a normal user?
                 //
@@ -399,13 +371,13 @@ static void qt_logger( QtMsgType msgType,
                 // designed by a committee of clueless product managers and
                 // marketing people.
 
-                QString text = "FATAL: Could not connect to the display.";
-                fprintf( stderr, "\n%s\n", qPrintable( text ) );
+                std::string text = "FATAL: Could not connect to the display.";
+                cerr << "\n" << text << endl;
                 logError() << text << endl;
             }
             else
             {
-                fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
+                cerr << "FATAL: " << qPrintable( msg ) << endl;
             }
 
             logInfo() << "-- Exiting --\n" << endl;
@@ -413,7 +385,7 @@ static void qt_logger( QtMsgType msgType,
         }
         else
         {
-            fprintf( stderr, "FATAL: %s\n", qPrintable( msg ) );
+            cerr << "FATAL: " << qPrintable( msg ) << endl;
             logInfo() << "-- Aborting with core dump --\n" << endl;
             abort(); // Exit with core dump (it might contain a useful backtrace)
         }
@@ -424,11 +396,9 @@ static void qt_logger( QtMsgType msgType,
            msg.contains( "QObject::disconnect" )    ) )
     {
         // Duplicate this on stderr
-        fprintf( stderr, "Qt Warning: %s\n", qPrintable( msg ) );
+        cerr << "Qt Warning: " << qPrintable( msg ) << endl;
     }
 }
-
-#endif // Qt 5.x
 
 
 QString Logger::userName()
@@ -478,7 +448,7 @@ QString Logger::createLogDir( const QString & rawLogDir )
         }
         else
         {
-            logError() << "Could not create log dir " << nameTemplate
+            logError() << "Could not create log dir " << QString( nameTemplate )
                        << ": " << formatErrno() << endl;
 
             logDir = "/";
@@ -504,7 +474,7 @@ QString Logger::oldName( const QString & filename, int no )
     QString oldName = filename;
 
     if ( oldName.endsWith( ".log" ) )
-        oldName.remove( QRegExp( "\\.log$" ) );
+        oldName.chop( sizeof( ".log" ) - 1 );
 
     oldName += QString( "-%1.old" ).arg( no, 2, 10, QChar( '0' ) );
 
@@ -517,7 +487,7 @@ QString Logger::oldNamePattern( const QString & filename )
     QString pattern = filename;
 
     if ( pattern.endsWith( ".log" ) )
-        pattern.remove( QRegExp( "\\.log$" ) );
+        pattern.chop( sizeof( ".log" ) - 1 );
 
     pattern += "-??.old";
 
@@ -563,10 +533,10 @@ void Logger::logRotate( const QString & logDir,
         }
     }
 
-    QStringList matches = dir.entryList( QStringList() << oldNamePattern( filename ),
-                                         QDir::Files );
+    const QStringList & matches = dir.entryList( QStringList() << oldNamePattern( filename ),
+                                                 QDir::Files );
 
-    foreach ( const QString & match, matches )
+    for ( const QString & match: matches )
     {
         if ( ! keepers.contains( match ) )
         {
@@ -593,72 +563,78 @@ QString Logger::expandVariables( const QString & unexpanded )
 
 
 
-QTextStream & operator<<( QTextStream & str, bool val )
+LogStream & operator<<( LogStream & str, const char * text )
 {
-    str << ( val ? "true" : "false" );
+    // Need to resort to ugly low-level ostream::write()
+    // to prevent an endless recursion
+    str.write( text, strlen( text ) );
+
     return str;
 }
 
 
-QTextStream & operator<<( QTextStream & str, const QStringList &stringList )
+LogStream & operator<<( LogStream & str, const QString & text )
+{
+    str << text.toUtf8().constData();
+    return str;
+}
+
+
+LogStream & operator<<( LogStream & str, const QStringList & stringList )
 {
     str << stringList.join( ", " );
     return str;
 }
 
 
-QTextStream & operator<<( QTextStream & str, const QRectF & rect )
+
+LogStream & operator<<( LogStream & str, const QRectF & rect )
 {
     str << "QRectF("
-           << " x: " << rect.x()
-           << " y: " << rect.y()
-           << " width: " << rect.width()
-           << " height: " << rect.height()
-           << " )";
+        << " x: " << rect.x()
+        << " y: " << rect.y()
+        << " width: " << rect.width()
+        << " height: " << rect.height()
+        << " )";
 
     return str;
 }
 
 
-QTextStream & operator<<( QTextStream & str, const QPointF & point )
+LogStream & operator<<( LogStream & str, const QPointF & point )
 {
     str << "QPointF("
-           << " x: " << point.x()
-           << " y: " << point.y()
-           << " )";
+        << " x: " << point.x()
+        << " y: " << point.y()
+        << " )";
 
     return str;
 }
 
 
-QTextStream & operator<<( QTextStream & str, const QSizeF & size )
+LogStream & operator<<( LogStream & str, const QSizeF & size )
 {
     str << "QSizeF("
-           << " width: " << size.width()
-           << " height: " << size.height()
-           << " )";
+        << " width: " << size.width()
+        << " height: " << size.height()
+        << " )";
 
     return str;
 }
 
 
-QTextStream & operator<<( QTextStream & str, const QSize & size )
+LogStream & operator<<( LogStream & str, const QSize & size )
 {
     str << "QSize("
-           << " width: " << size.width()
-           << " height: " << size.height()
-           << " )";
+        << " width: " << size.width()
+        << " height: " << size.height()
+        << " )";
 
     return str;
 }
 
-
-// Un-deprecate strerror() just for this one call.
-#ifdef strerror
-#    undef strerror
-#endif
 
 QString formatErrno()
 {
-    return QString::fromUtf8( strerror( errno ) );
+    return QString::number( errno );
 }
