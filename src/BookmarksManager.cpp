@@ -7,10 +7,11 @@
  */
 
 
+#include <QMenu>
 #include <QAction>
 #include <QDir>
 #include <QFile>
-// #include <QTextStream>
+#include <QTextStream>
 
 #include "DirTree.h"
 #include "BookmarksManager.h"
@@ -19,11 +20,8 @@
 #define BookmarksFile           "~/.config/QDirStat/bookmarks.txt"
 #define BookmarksManagerAction  "bookmarksManagerAction"
 
-
 using namespace QDirStat;
-
-#define BROKEN_COMPILER_QSTRING(QSTR)  ( QSTR.toUtf8().constData() )
-LogStream & operator<<( LogStream & str, const QString & text );
+using ::operator<<;
 
 
 BookmarksManager::BookmarksManager( QObject * parent ):
@@ -70,7 +68,7 @@ void BookmarksManager::remove( const QString & bookmark, bool update )
     if ( ! _bookmarks.contains( bookmark, Qt::CaseSensitive ) )
         return;
 
-    logInfo() << "Removing bookmark \"" << BROKEN_COMPILER_QSTRING( bookmark ) << "\"" << endl;
+    logInfo() << "Removing bookmark \"" << bookmark << "\"" << endl;
 
     _bookmarks.removeAll( bookmark );
     _dirty = true;
@@ -165,7 +163,7 @@ void BookmarksManager::navigateToBookmark()
 
         if ( ! bookmark.isEmpty() )
         {
-            logDebug() << BROKEN_COMPILER_QSTRING( bookmark ) << endl;
+            logDebug() << bookmark << endl;
             emit navigateToUrl( expandedPath( bookmark ) );
         }
     }
@@ -201,7 +199,7 @@ void BookmarksManager::read()
 
     if ( ! bookmarksFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
-	logError() << "Can't open " << BROKEN_COMPILER_QSTRING( bookmarksFileName() ) << endl;
+	logError() << "Can't open " << bookmarksFileName() << endl;
 	return;
     }
 
@@ -239,7 +237,7 @@ void BookmarksManager::write()
 
     if ( ! bookmarksFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
     {
-	logError() << "Can't open " << BROKEN_COMPILER_QSTRING( bookmarksFileName() ) << endl;
+	logError() << "Can't open " << bookmarksFileName() << endl;
 	return;
     }
 
