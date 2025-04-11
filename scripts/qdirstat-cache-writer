@@ -27,11 +27,11 @@
 #	qdirstat can read gzipped and plain text cache files.
 #
 #	-l	long format - always add full path, even for plain files
-#       -1      file format 1.0 without UID/GID/permissions
-#       -2      (default) file format 2.0 with UID/GID/permissions
+#	-1	file format 1.0 without UID/GID/permissions
+#	-2	(default) file format 2.0 with UID/GID/permissions
 #	-m	scan mounted filesystems (cross filesystem boundaries)
-#   -i	ignore directory own size (useful if filesystem reports recursive
-#         size of directory, which can be misleading on e.g. CEPHFS)
+#	-i	ignore directory own size. Useful if the filesystem reports
+#		the subtree size as the size of the directory (like CephFS).
 #	-v	verbose
 #	-d	debug
 #	-h	help (usage message)
@@ -101,13 +101,13 @@ sub main()
     getopts('l12mvdhi');
 
     usage()			if $opt_h;
-    $long_format	= 1	if $opt_l;
-    $with_uid_gid_perm  = 0     if $opt_1;
-    $with_uid_gid_perm  = 1     if $opt_2;
-    $scan_mounted	= 1	if $opt_m;
-    $verbose		= 1 	if $opt_v;
-    $debug		= 1 	if $opt_d;
-    $ignore_dir_own_size= 1     if $opt_i;
+    $long_format	 = 1	if $opt_l;
+    $with_uid_gid_perm	 = 0	if $opt_1;
+    $with_uid_gid_perm	 = 1	if $opt_2;
+    $scan_mounted	 = 1	if $opt_m;
+    $verbose		 = 1	if $opt_v;
+    $debug		 = 1	if $opt_d;
+    $ignore_dir_own_size = 1	if $opt_i;
 
     # One or two parameters are required
     # (yes, Perl does weird counting)
@@ -336,9 +336,7 @@ sub write_dir_entry()
 	 $blksize,
 	 $blocks ) = @lstat_result;
 
-    if ($ignore_dir_own_size){
-        $size=0;
-    }
+    $size = 0 if $ignore_dir_own_size; # issue #281
 
     $dir =~ s://+:/:g;    # Replace multiple // with one
     my $escaped_dir = uri_escape( $dir, $unsafe_chars );
@@ -595,11 +593,11 @@ Usage:
 	qdirstat can read gzipped and plain text cache files.
 
 	-l	long format - always add full path, even for plain files
-        -1      file format 1.0 without UID/GID/permissions
-        -2      (default) file format 2.0 with UID/GID/permissions
+	-1	file format 1.0 without UID/GID/permissions
+	-2	(default) file format 2.0 with UID/GID/permissions
 	-m	scan mounted filesystems (cross filesystem boundaries)
-	-i	ignore directory own size (useful if filesystem reports recursive
-                    size of directory, which can be misleading on e.g. CEPHFS)
+	-i	ignore directory own size. Uuseful if the filesystem reports
+		the subtree size as the size of the directory (like CephFS).
 	-v	verbose
 	-d	debug
 	-h	help (this usage message)
