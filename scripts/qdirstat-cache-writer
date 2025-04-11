@@ -18,7 +18,7 @@
 # This is what this Perl script is for.
 #
 # Usage:
-#	qdirstat-cache-writer [-lvdh] <directory> [<cache-file-name>]
+#	qdirstat-cache-writer [-lvdhi] <directory> [<cache-file-name>]
 #
 #	If not specified, <cache-file-name> defaults to ".qdirstat.cache.gz"
 #	in <directory>.
@@ -30,6 +30,8 @@
 #       -1      file format 1.0 without UID/GID/permissions
 #       -2      (default) file format 2.0 with UID/GID/permissions
 #	-m	scan mounted filesystems (cross filesystem boundaries)
+#   -i	ignore directory own size (useful if filesystem reports recursive
+#         size of directory, which can be misleading on e.g. CEPHFS)
 #	-v	verbose
 #	-d	debug
 #	-h	help (usage message)
@@ -54,7 +56,7 @@ use Fcntl ':mode';
 use Encode;
 use Cwd;
 use URI::Escape qw(uri_escape);
-use vars qw( $opt_l $opt_1 $opt_2 $opt_m $opt_v $opt_d $opt_h );
+use vars qw( $opt_l $opt_1 $opt_2 $opt_m $opt_v $opt_d $opt_h $opt_i);
 
 
 # Forward declarations.
@@ -69,6 +71,7 @@ my $with_uid_gid_perm   = 1;
 my $scan_mounted	= 0;
 my $verbose		= 0;
 my $debug		= 0;
+my $ignore_dir_own_size = 0;
 
 my $default_cache_file_name = ".qdirstat.cache.gz";
 
@@ -95,7 +98,7 @@ sub main()
     # This will set a variable opt_? for any option,
     # e.g. opt_v if option '-v' is passed on the command line.
 
-    getopts('l12mvdh');
+    getopts('l12mvdhi');
 
     usage()			if $opt_h;
     $long_format	= 1	if $opt_l;
@@ -104,6 +107,7 @@ sub main()
     $scan_mounted	= 1	if $opt_m;
     $verbose		= 1 	if $opt_v;
     $debug		= 1 	if $opt_d;
+    $ignore_dir_own_size= 1     if $opt_i;
 
     # One or two parameters are required
     # (yes, Perl does weird counting)
@@ -332,6 +336,9 @@ sub write_dir_entry()
 	 $blksize,
 	 $blocks ) = @lstat_result;
 
+    if ($ignore_dir_own_size){
+        $size=0;
+    }
 
     $dir =~ s://+:/:g;    # Replace multiple // with one
     my $escaped_dir = uri_escape( $dir, $unsafe_chars );
@@ -579,7 +586,7 @@ an X display - which cron does not provide.
 This is what this Perl script is for.
 
 Usage:
-	$0 [-ldvh] <directory> [<cache-file-name>]
+	$0 [-ldvhi] <directory> [<cache-file-name>]
 
 	If not specified, <cache-file-name> defaults to \"$default_cache_file_name\"
 	in <directory>.
@@ -591,6 +598,8 @@ Usage:
         -1      file format 1.0 without UID/GID/permissions
         -2      (default) file format 2.0 with UID/GID/permissions
 	-m	scan mounted filesystems (cross filesystem boundaries)
+	-i	ignore directory own size (useful if filesystem reports recursive
+                    size of directory, which can be misleading on e.g. CEPHFS)
 	-v	verbose
 	-d	debug
 	-h	help (this usage message)
