@@ -49,7 +49,7 @@ void BookmarksManager::add( const QString & bookmark, bool update )
     if ( _bookmarks.contains( bookmark, Qt::CaseSensitive ) )
         return;
 
-    logInfo() << "Adding bookmark \"" << bookmark << "\"" << endl;
+    logInfo() << "Adding bookmark \"" << bookmark << "\"" << ENDL;
 
     _bookmarks << bookmark;
     _dirty = true;
@@ -67,7 +67,7 @@ void BookmarksManager::remove( const QString & bookmark, bool update )
     if ( ! _bookmarks.contains( bookmark, Qt::CaseSensitive ) )
         return;
 
-    logInfo() << "Removing bookmark \"" << bookmark << "\"" << endl;
+    logInfo() << "Removing bookmark \"" << bookmark << "\"" << ENDL;
 
     _bookmarks.removeAll( bookmark );
     _dirty = true;
@@ -81,7 +81,7 @@ void BookmarksManager::rebuildBookmarksMenu()
 {
     if ( ! _bookmarksMenu )
     {
-        logError() << "NULL _bookmarksMenu" << endl;
+        logError() << "NULL _bookmarksMenu" << ENDL;
         return;
     }
 
@@ -162,7 +162,7 @@ void BookmarksManager::navigateToBookmark()
 
         if ( ! bookmark.isEmpty() )
         {
-            logDebug() << bookmark << endl;
+            logDebug() << bookmark << ENDL;
             emit navigateToUrl( expandedPath( bookmark ) );
         }
     }
@@ -191,14 +191,14 @@ void BookmarksManager::read()
     if ( ! bookmarksFile.exists() )
     {
         logInfo() << "Bookmarks file " << BookmarksFile
-                  << " does not exist" << endl;
+                  << " does not exist" << ENDL;
 
         return;
     }
 
     if ( ! bookmarksFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
-	logError() << "Can't open " << bookmarksFileName() << endl;
+	logError() << "Can't open " << bookmarksFileName() << ENDL;
 	return;
     }
 
@@ -214,11 +214,11 @@ void BookmarksManager::read()
     }
 
     sort();
-    logInfo() << _bookmarks.size() << " bookmarks read from " << BookmarksFile << endl;
+    logInfo() << _bookmarks.size() << " bookmarks read from " << BookmarksFile << ENDL;
 
 #if 0
     foreach ( const QString & bookmark, _bookmarks )
-        logDebug() << "Read bookmark \"" << bookmark << "\"" << endl;
+        logDebug() << "Read bookmark \"" << bookmark << "\"" << ENDL;
 #endif
 }
 
@@ -227,7 +227,7 @@ void BookmarksManager::write()
 {
     if ( ! _dirty )
     {
-        logDebug() << "No changes to write to " << BookmarksFile << endl;
+        logDebug() << "No changes to write to " << BookmarksFile << ENDL;
         return;
     }
 
@@ -235,7 +235,7 @@ void BookmarksManager::write()
 
     if ( ! bookmarksFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
     {
-	logError() << "Can't open " << bookmarksFileName() << endl;
+	logError() << "Can't open " << bookmarksFileName() << ENDL;
 	return;
     }
 
@@ -246,7 +246,7 @@ void BookmarksManager::write()
         out << shortenedPath( bookmark ) << "\n";
     }
 
-    logInfo() << _bookmarks.size() << " bookmarks written to " << BookmarksFile << endl;
+    logInfo() << _bookmarks.size() << " bookmarks written to " << BookmarksFile << ENDL;
     _dirty = false;
 }
 

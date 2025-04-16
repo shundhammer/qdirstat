@@ -140,14 +140,14 @@ FileInfo::FileInfo( const QString & filenameWithoutPath,
 		       << "    Byte size: "     << formatSize( _size )
 		       << "  Allocated: "       << formatSize( _allocatedSize )
 		       << " (" << (int) _blocks << " blocks)"
-		       << endl;
+		       << ENDL;
 	}
 #endif
 
 #if 0
 	if ( isFile() && _links > 1 )
 	{
-	    logDebug() << _links << " hard links: " << this << endl;
+	    logDebug() << _links << " hard links: " << this << ENDL;
 	}
 #endif
     }
@@ -614,7 +614,7 @@ QString FileInfo::baseName() const
 void FileInfo::setIgnoreHardLinks( bool ignore )
 {
     if ( ignore )
-	logInfo() << "Ignoring hard links" << endl;
+	logInfo() << "Ignoring hard links" << ENDL;
 
     _ignoreHardLinks = ignore;
 }
@@ -756,7 +756,7 @@ bool FileInfo::isDominant()
 
 QString QDirStat::baseName( const QString & fileName )
 {
-    QStringList segments = fileName.split( '/', QString::SkipEmptyParts );
+    QStringList segments = fileName.split( '/', SKIPEMPTYPARTS );
     return segments.isEmpty() ? "" : segments.last();
 }
 

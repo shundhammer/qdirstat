@@ -72,7 +72,7 @@ void Subtree::setUrl( const QString & newUrl )
     _url = newUrl;
 
     if ( ! _tree )
-        logWarning() << "NULL tree!" << endl;
+        logWarning() << "NULL tree!" << ENDL;
 }
 
 

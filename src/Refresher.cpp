@@ -37,13 +37,13 @@ void Refresher::refresh()
 {
     if ( ! _items.isEmpty() && _tree )
     {
-	logDebug() << "Refreshing " << _items.size() << " items" << endl;
+	logDebug() << "Refreshing " << _items.size() << " items" << ENDL;
 
 	_tree->refresh( _items );
     }
     else
     {
-	logWarning() << "No items to refresh" << endl;
+	logWarning() << "No items to refresh" << ENDL;
     }
 
     this->deleteLater();

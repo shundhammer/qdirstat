@@ -35,12 +35,12 @@ PkgFilter::PkgFilter( const QString & pattern,
 void PkgFilter::normalizePattern()
 {
     QString oldPattern = _pattern;
-    _pattern.remove( QRegExp( "^Pkg:/*", Qt::CaseInsensitive ) );
-    _pattern.remove( QRegExp( "/.*$" ) );
+    _pattern = qregexp_removeIn( QRegExp( "^Pkg:/?", Qt::CaseInsensitive ), _pattern ) ;
+    _pattern = qregexp_removeIn( QRegExp( "/.*$" ), _pattern );
 
     if ( _pattern != oldPattern )
     {
-        logInfo() << "Normalizing pkg pattern to \"" << _pattern << "\"" << endl;
+        logInfo() << "Normalizing pkg pattern to \"" << _pattern << "\"" << ENDL;
         _regexp.setPattern( _pattern );
     }
 }
