@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2025-03-17
+Updated: 2025-04-16
 
 
 ## Screenshot
@@ -134,12 +134,17 @@ Download installable binary packages for various Linux distributions here:
 
 ## Latest News
 
+- 2025-04-16
+
+  - Article about QDirStat on [openSUSE News](https://news.opensuse.org/2025/04/16/no-hidden-software-no-surprises/) about package manager integration and system introspection.
+
+
 - 2025-03-17
 
   - Somebody got creative to use QDirStat for a whole different thing:
     Visualizing ELF binaries via QDirStat cache files with
     [elf_mem_map](https://gitlab.com/wavexx/elf_mem_map).
-  
+
 
 - 2024-09-28
 
