@@ -11,6 +11,7 @@
 
 
 #include <QLabel>
+#include <QEnterEvent>
 
 class QMouseEvent;
 
@@ -89,7 +90,11 @@ namespace QDirStat
 	// Event handlers (all inherited from QWidget)
 
 	virtual void mousePressEvent( QMouseEvent * event ) Q_DECL_OVERRIDE;
+#if (QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 ))
 	virtual void enterEvent( QEvent * event ) Q_DECL_OVERRIDE;
+#else
+	virtual void enterEvent( QEnterEvent * event ) Q_DECL_OVERRIDE;
+#endif
 	virtual void leaveEvent( QEvent * event ) Q_DECL_OVERRIDE;
 
 

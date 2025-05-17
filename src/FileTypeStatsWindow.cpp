@@ -220,7 +220,7 @@ void FileTypeStatsWindow::populate( FileInfo * newSubtree )
 		parentItem->addChild( item );
 	    else
 	    {
-		logError() << "ERROR: No parent category item for " << suffix << endl;
+		logError() << "ERROR: No parent category item for " << suffix << ENDL;
 		otherItems << item;
 		otherCount += count;
 		otherSum   += sum;
@@ -324,10 +324,10 @@ void FileTypeStatsWindow::addTopXOtherItems( CategoryFileTypeItem  * otherCatego
         foreach ( FileTypeItem * item, otherItems )
             suffixes << item->text(0);
 
-        logDebug() << "Discarding " << otherItems.size()
+        logDebug() << "Discarding " << (quint64)otherItems.size()
                    << " suffixes below <other>: "
                    << suffixes.join( ", " )
-                   << endl;
+                   << ENDL;
 #endif
         // Delete all items that are not in the top X
         qDeleteAll( otherItems );
@@ -383,7 +383,7 @@ void FileTypeStatsWindow::sizeStatsForCurrentFileType()
     if ( suffix.isEmpty() || ! dir )
         return;
 
-    logDebug() << "Size stats for " << suffix << endl;
+    logDebug() << "Size stats for " << suffix << ENDL;
 
     FileSizeStatsWindow::populateSharedInstance( dir, suffix );
 }
@@ -399,13 +399,13 @@ QString FileTypeStatsWindow::currentSuffix() const
 
     if ( current->suffix() == NO_SUFFIX )
     {
-	logWarning() << "NO_SUFFIX selected" << endl;
+	logWarning() << "NO_SUFFIX selected" << ENDL;
 
 	return QString();
     }
     if ( current->suffix() == NON_SUFFIX_RULE )
     {
-	logWarning() << "NON_SUFFIX_RULE selected" << endl;
+	logWarning() << "NON_SUFFIX_RULE selected" << ENDL;
 
 	return QString();
     }

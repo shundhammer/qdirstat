@@ -41,7 +41,7 @@ void SearchFilter::guessFilterMode()
     else if ( _pattern.startsWith( "=" ) )
     {
         _filterMode = ExactMatch;
-        _pattern.remove( QRegExp( "^=" ) );
+        _pattern = qregexp_removeIn( QRegExp( "^=" ), _pattern );
         _regexp.setPattern( _pattern );
     }
     else if ( _pattern.contains( "*.*" ) )
@@ -73,7 +73,7 @@ void SearchFilter::guessFilterMode()
 #if 0
     logDebug() << "using filter mode " << toString( _filterMode )
                << " from \"" << _pattern << "\""
-               << endl;
+               << ENDL;
 #endif
 }
 
@@ -88,14 +88,14 @@ bool SearchFilter::matches( const QString & str ) const
         case StartsWith: return str.startsWith( _pattern, caseSensitivity );
         case ExactMatch: return QString::compare( str, _pattern, caseSensitivity ) == 0;
         case Wildcard:   return _regexp.exactMatch( str );
-        case RegExp:     return str.contains( _regexp );
+        case RegExp:     return qregexp_containedIn(_regexp, str);
         case SelectAll:  return true;
         case Auto:
-            logWarning() << "Unexpected filter mode 'Auto' - assuming 'Contains'" << endl;
+            logWarning() << "Unexpected filter mode 'Auto' - assuming 'Contains'" << ENDL;
             return str.contains( _pattern );
     }
 
-    logError() << "Undefined filter mode " << (int) _filterMode << endl;
+    logError() << "Undefined filter mode " << (int) _filterMode << ENDL;
     return false;
 }
 
