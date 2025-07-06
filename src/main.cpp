@@ -10,6 +10,7 @@
 #include <iostream>	// cerr
 
 #include <QApplication>
+#include <QTranslator>
 #include "QDirStatApp.h"
 #include "MainWindow.h"
 #include "DirTreeModel.h"
@@ -103,6 +104,9 @@ int main( int argc, char *argv[] )
     QCoreApplication::setApplicationName ( "QDirStat" );
 
     QApplication qtApp( argc, argv);
+    QTranslator translator;
+    if (translator.load(QLocale(), QLatin1String("i18n"), QLatin1String("_"), QLatin1String(":/i18n")))
+        QCoreApplication::installTranslator(&translator);
     QStringList argList = QCoreApplication::arguments();
     argList.removeFirst(); // Remove program name
 

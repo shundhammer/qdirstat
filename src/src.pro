@@ -291,7 +291,10 @@ FORMS	  = main-window.ui		   \
 
 
 
-RESOURCES = icons.qrc
+RESOURCES = icons.qrc \
+            translations/i18n.qrc
+
+TRANSLATIONS += translations/i18n_zh_CN.ts
 
 desktop.files	= *.desktop
 desktop.path	= $$INSTALL_PREFIX/share/applications
