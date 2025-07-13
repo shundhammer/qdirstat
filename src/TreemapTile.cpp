@@ -115,9 +115,7 @@ void TreemapTile::init()
 
     setFlags( ItemIsSelectable );
     _highlighter = 0;
-
-    if ( ( _orig->isDir() && _orig->totalSubDirs() == 0 ) || _orig->isDotEntry() )
-        setAcceptHoverEvents( true );
+    setAcceptHoverEvents( true );
 
     if ( ! _parentTile )
 	_parentView->scene()->addItem( this );
