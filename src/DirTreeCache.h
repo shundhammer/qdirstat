@@ -129,7 +129,7 @@ namespace QDirStat
          * Indicate that reading the cache was aborted, e.g. due to the initial
          * directory in the cache not matching the currently read directory.
          **/
-        void setAborted() { _aborted = false; }
+        void setAborted() { _aborted = true; }
 
 	/**
 	 * Resets the reader so all data lines of the cache can be read with
