@@ -509,6 +509,7 @@ bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
 		     << " for " << _dirName
 		     << endl;
 
+        cacheReadJob->reader()->setAborted();
 	delete cacheReadJob;
 
 	return false;

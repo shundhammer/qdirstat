@@ -123,7 +123,13 @@ namespace QDirStat
 	/**
 	 * Returns true if reading the cache file went OK.
 	 **/
-	bool ok() const { return _ok; }
+	bool ok() const { return _ok && ! _aborted; }
+
+        /**
+         * Indicate that reading the cache was aborted, e.g. due to the initial
+         * directory in the cache not matching the currently read directory.
+         **/
+        void setAborted() { _aborted = false; }
 
 	/**
 	 * Resets the reader so all data lines of the cache can be read with
@@ -289,6 +295,7 @@ namespace QDirStat
 	char *		_fields[ MAX_FIELDS_PER_LINE ];
 	int		_fieldsCount;
 	bool		_ok;
+        bool            _aborted;
         int             _errorCount;
 	DirInfo *	_toplevel;
 	DirInfo *	_lastDir;

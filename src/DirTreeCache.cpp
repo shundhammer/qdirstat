@@ -247,6 +247,7 @@ CacheReader::CacheReader( const QString & fileName,
     _line		= _buffer;
     _lineNo		= 0;
     _ok			= true;
+    _aborted            = false;
     _errorCount         = 0;
     _tree		= tree;
     _toplevel		= parent;
@@ -275,7 +276,7 @@ CacheReader::~CacheReader()
 
     logDebug() << "Cache reading finished" << endl;
 
-    if ( _toplevel )
+    if ( _toplevel && ! _aborted )
     {
 	// logDebug() << "Finalizing recursive for " << _toplevel << endl;
 	finalizeRecursive( _toplevel );
