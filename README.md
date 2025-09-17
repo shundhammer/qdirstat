@@ -1,14 +1,14 @@
 # QDirStat
 <img src="https://github.com/shundhammer/qdirstat/blob/master/src/icons/qdirstat.svg" height="64">
 
-Qt-based directory statistics: KDirStat without any KDE -- from the author of
+Qt-based directory statistics: KDirStat without any KDE - from the author of
 the original KDirStat.
 
 (c) 2015-2025 Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
 
 Target Platforms: Linux, BSD, Unix-like systems; macOS
 
-License: GPL V2
+License: GPL v2
 
 Updated: 2025-05-11
 
@@ -201,7 +201,7 @@ Download installable binary packages for various Linux distributions here:
     > redirect any users having macOS-specific problems to your repo's issue
     > tracker.
 
-    So here is his new GitHub repo for those binaries:
+    So here is his new GitHub repository for those binaries:
 
     https://github.com/jesusha123/qdirstat-macos
 
@@ -331,7 +331,7 @@ This is just a rough summary. For more details, see [DevHistory.md](doc/DevHisto
 
 - 2021-04-05 New stable release: 1.7.1
 
-  - Added a "Discover" toplevel menu with actions to easily find
+  - Added a "Discover" top-level menu with actions to easily find
     - the largest files
     - the newest files
     - the oldest files
@@ -454,7 +454,7 @@ KDE 3.
 
 QDirStat is based on that code, but made independent of any KDE libraries or
 infrastructure, so it has much fewer library and package dependencies;
-basically only the Qt 5 libs and libz, both of which most Linux / BSD machines
+basically only the Qt5 libs and libz, both of which most Linux / BSD machines
 have installed anyway if there is any graphical desktop installed.
 
 
@@ -465,17 +465,16 @@ Linux port of WinDirStat". Well, nothing could be further from the truth:
 **WinDirStat is a Windows port of KDirStat**, the predecessor of QDirStat.
 
 So it's the other way round: **The Linux version was there first**, and
-somebody liked it so much that he wrote a Windows version based on that
-idea. That's a rare thing; usually people port Windows originals to Linux.
+somebody liked it so much that they wrote a Windows version based on that
+idea.
 
 See also https://windirstat.net/background.html and the WinDirStat "About"
 dialog.
 
 
-
 ### QDirStat and K4DirStat
 
-K4DirStat is a port to KDE 4 / Qt 4 of the old KDE 3 / Qt 3 KDirStat. QDirStat is
+K4DirStat is a port to KDE 4 / Qt4 of the old KDE 3 / Qt3 KDirStat. QDirStat is
 independent of that; it is based on the old KDE 3 KDirStat directly.
 
 
@@ -521,7 +520,7 @@ To name a few:
   point of Konqueror (and thus KDE) no longer exists.
 
 - I don't like the fact that I can't simply put icons on my desktop anymore --
-  no, I have to create a plasmoid first as a container, and those things keep
+  no, I have to create a Plasmoid first as a container, and those things keep
   doing weird stuff that drives every user crazy. With one false move of your
   mouse, it might be gone, change shape, move to another place or whatever.
 
@@ -541,9 +540,9 @@ To name a few:
   keeps rearranging my carefully placed and named activities at random. WTF?!
 
 - Everything is so fragmented that not even the naming is clear anymore. What
-  used to be KDE is now a jumble of the KF Framework, the KF libs, the KF apps
+  used to be KDE is now a jumble of the KF Framework, the KF libraries, the KF apps
   and the Plasma desktop. Yeah, great job, folks; people used to know what KDE
-  stood for. Nobody knows what the hell all those components are, and neither
+  stood for. Nobody knows what the all those components are, and neither
   does anybody care anymore. You paved your way to oblivion with buzzwords.
   Great marketing strategy for gaining more visibility!
 
@@ -576,17 +575,14 @@ for a long time, yet I had never gotten myself to start working on:
 
 - Move away from the arcane KDE build system: Back with KDE 1/2/3 it was the
   _Autotools_ with custom KDE extensions that only a handful people in the
-  world really understood (I was not among them), later _CMake_ which is little
+  world really understood and later _CMake_ which is little
   better, just differently confusing.
 
 Yes, there is a Qt4 / Qt5 port of KDirStat called K4DirStat. K4DirStat is an
 independent project that started when I had not worked on the old KDirStat for
 a long time (my last KDirStat release had been in mid-2006).
 
-QDirStat is based on that same code from the 2006 KDirStat. It's an 80% rewrite
-using a lot of newer Qt technologies. And there was a lot of cleaning up that
-old code base that had been long overdue.
-
+QDirStat is based on that same code from the 2006 KDirStat. It's a rewrite of most of the KDirStat code using a lot of newer Qt technologies. And there was a lot of cleaning up that old codebase that had been long overdue.
 
 
 ## Features
@@ -602,10 +598,10 @@ old code base that had been long overdue.
 
   - Tree view:
     - Shift-click: Select a range of items.
-    - Ctrl-Click:  Select an additional item or deselect a selected one.
+    - Ctrl-click:  Select an additional item or deselect a selected one.
 
   - {Treemap](doc/Treemap.md):
-    - Ctrl-Click:  Select an additional item or deselect a selected one.
+    - Ctrl-click:  Select an additional item or deselect a selected one.
 
     - The current item is highlighted with a red rectangle, all other selected
       ones with a yellow rectangle. If the current item is not also selected,
