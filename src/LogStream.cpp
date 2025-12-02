@@ -146,3 +146,14 @@ LogStream & operator<<( LogStream & str, char val )
     return logStreamOut<char>( str, val );
 }
 
+
+// Qt types
+
+#include <QSizeF>
+
+LogStream & operator<<( LogStream & str, const QSizeF & val )
+{
+    str.str() << "QSizeF( w: " << val.width() << " h: " << val.height() << ")";
+    return str;
+}
+

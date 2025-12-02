@@ -15,6 +15,7 @@
 #include <QTextStream>
 
 
+
 /**
  * Stream class for the logger as a base for overloaded stream output operators
  * without predefined operator<<() getting in the way all the time.
@@ -120,6 +121,14 @@ LogStream & operator<<( LogStream & str, unsigned long val );
 LogStream & operator<<( LogStream & str, double        val );
 LogStream & operator<<( LogStream & str, bool val );
 LogStream & operator<<( LogStream & str, char val );
+
+
+
+// More Qt types
+
+class QSizeF;
+
+LogStream & operator<<( LogStream & str, const QSizeF & size );
 
 
 #endif // LogStream_h
