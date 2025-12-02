@@ -14,11 +14,12 @@
 #include <sys/types.h>  // dev_t, mode_t, nlink_t
 #include <sys/stat.h>   // S_ISDIR() etc.
 
-#include <QTextStream>
 #include <QList>
 
+#include "LogStream.h"
 #include "FileSize.h"
 #include "Logger.h"
+
 
 // The size of a standard disk block.
 //
@@ -183,7 +184,7 @@ namespace QDirStat
 	 * Very much like FileInfo::url(), but with "/<Files>" appended if this
 	 * is a dot entry. Useful for debugging.
 	 *
-	 * Notice: You can simply use the QTextStream operator<< to output
+	 * Notice: You can simply use the LogStream operator<< to output
 	 * exactly this:
 	 *
 	 * logDebug() << "Found fileInfo " << info << endl;
@@ -1010,7 +1011,8 @@ namespace QDirStat
     /**
      * Print the debugUrl() of a FileInfo in a debug stream.
      **/
-    inline QTextStream & operator<< ( QTextStream & stream, const FileInfo * info )
+    inline LogStream & operator<< ( LogStream      & stream,
+                                    const FileInfo * info )
     {
 	if ( info )
 	{

@@ -172,7 +172,8 @@ namespace QDirStat
     /**
      * Print the debugUrl() of a PkgInfo in a debug stream.
      **/
-    inline QTextStream & operator<< ( QTextStream & stream, const PkgInfo * info )
+    inline LogStream & operator<< ( LogStream     & stream,
+                                    const PkgInfo * info )
     {
 	if ( info )
 	{

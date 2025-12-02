@@ -14,8 +14,8 @@
 #include <QString>
 #include <QRegExp>
 #include <QList>
-#include <QTextStream>
 
+#include "LogStream.h"
 #include "ListMover.h"
 
 
@@ -305,7 +305,8 @@ namespace QDirStat
     /**
      * Print the regexp of a FileInfo in a debug stream.
      **/
-    inline QTextStream & operator<< ( QTextStream & stream, const ExcludeRule * rule )
+    inline LogStream & operator<< ( LogStream         & stream,
+                                    const ExcludeRule * rule )
     {
 	if ( rule )
 	    stream << "<ExcludeRule \"" << rule->regexp().pattern() << "\""

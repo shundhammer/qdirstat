@@ -533,7 +533,7 @@ namespace QDirStat
     /**
      * Human-readable output of a DirReadJob in a debug stream.
      **/
-    inline QTextStream & operator<< ( QTextStream & str, DirReadJob * job )
+    inline LogStream & operator<< ( LogStream & str, DirReadJob * job )
     {
 	if ( job )
 	{

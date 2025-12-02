@@ -16,8 +16,8 @@
 #include <QIcon>
 #include <QSet>
 #include <QTimer>
-#include <QTextStream>
 
+#include "LogStream.h"
 #include "DataColumns.h"
 #include "FileInfo.h"
 #include "PkgFilter.h"
@@ -564,7 +564,8 @@ namespace QDirStat
     /**
      * Print a QModelIndex of this model in text form to a debug stream.
      **/
-    inline QTextStream & operator<< ( QTextStream & stream, const QModelIndex & index )
+    inline LogStream & operator<< ( LogStream         & stream,
+                                    const QModelIndex & index )
     {
 	if ( ! index.isValid() )
 	    stream << "<Invalid QModelIndex>";

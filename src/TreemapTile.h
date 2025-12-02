@@ -377,7 +377,8 @@ namespace QDirStat
 
 
 
-    inline QTextStream & operator<< ( QTextStream & stream, TreemapTile * tile )
+    inline LogStream & operator<< ( LogStream   & stream,
+                                    TreemapTile * tile )
     {
 	if ( tile )
 	    stream << tile->orig();

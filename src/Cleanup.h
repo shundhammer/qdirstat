@@ -16,6 +16,7 @@
 
 #include "LogStream.h"
 
+
 class OutputWindow;
 
 
@@ -437,7 +438,8 @@ namespace QDirStat
     typedef CleanupList::const_iterator CleanupListIterator;
 
 
-    inline LogStream & operator<< ( LogStream & stream, const QDirStat::Cleanup * cleanup )
+    inline LogStream & operator<< ( LogStream     & stream,
+                                    const Cleanup * cleanup )
     {
 	if ( cleanup )
 	    stream << cleanup->cleanTitle();

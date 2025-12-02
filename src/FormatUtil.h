@@ -14,8 +14,8 @@
 #include <sys/types.h>  // mode_t
 
 #include <QString>
-#include <QTextStream>
 
+#include "LogStream.h"
 #include "FileSize.h"
 
 
@@ -133,7 +133,7 @@ namespace QDirStat
     /**
      * Human-readable output of a file size in a debug stream.
      **/
-    inline QTextStream & operator<< ( QTextStream & stream, FileSize lSize )
+    inline LogStream & operator<< ( LogStream & stream, FileSize lSize )
     {
 	stream << formatSize( lSize );
 

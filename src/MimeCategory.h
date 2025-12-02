@@ -15,7 +15,8 @@
 #include <QStringList>
 #include <QColor>
 #include <QRegExp>
-#include <QTextStream>
+
+#include "LogStream.h"
 
 
 namespace QDirStat
@@ -180,7 +181,7 @@ namespace QDirStat
     /**
      * Human-readable output of a MimeCategory in a debug stream.
      **/
-    inline QTextStream & operator<< ( QTextStream & str, MimeCategory * category )
+    inline LogStream & operator<< ( LogStream & str, MimeCategory * category )
     {
         if ( category )
             str << "<MimeCategory " << category->name() << ">";

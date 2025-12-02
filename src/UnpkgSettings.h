@@ -13,7 +13,8 @@
 
 #include <QString>
 #include <QStringList>
-#include <QTextStream>
+
+#include "LogStream.h"
 
 
 namespace QDirStat

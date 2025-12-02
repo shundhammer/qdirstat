@@ -11,8 +11,8 @@
 
 #include <QString>
 #include <QRegExp>
-#include <QTextStream>
 
+#include "LogStream.h"
 #include "SearchFilter.h"
 
 
@@ -76,8 +76,8 @@ namespace QDirStat
     };  // class PkgFilter
 
 
-    inline QTextStream & operator<< ( QTextStream     & stream,
-                                      const PkgFilter & filter )
+    inline LogStream & operator<< ( LogStream       & stream,
+                                    const PkgFilter & filter )
     {
         stream << "<PkgFilter \""
                << filter.pattern()

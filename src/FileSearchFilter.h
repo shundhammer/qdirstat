@@ -11,8 +11,8 @@
 
 #include <QString>
 #include <QRegExp>
-#include <QTextStream>
 
+#include "LogStream.h"
 #include "SearchFilter.h"
 
 
@@ -77,8 +77,8 @@ namespace QDirStat
     };  // class FileSearchFilter
 
 
-    inline QTextStream & operator<< ( QTextStream            & stream,
-                                      const FileSearchFilter & filter )
+    inline LogStream & operator<< ( LogStream              & stream,
+                                    const FileSearchFilter & filter )
     {
         QString findType = filter.findFiles() ? "files" : "";
 

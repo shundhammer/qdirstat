@@ -11,7 +11,8 @@
 
 #include <QString>
 #include <QRegExp>
-#include <QTextStream>
+
+#include "LogStream.h"
 
 
 namespace QDirStat
@@ -108,8 +109,8 @@ namespace QDirStat
     };  // class SearchFilter
 
 
-    inline QTextStream & operator<< ( QTextStream        & stream,
-                                      const SearchFilter & filter )
+    inline LogStream & operator<< ( LogStream          & stream,
+                                    const SearchFilter & filter )
     {
         stream << "<SearchFilter \""
                << filter.pattern()
