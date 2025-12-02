@@ -109,7 +109,7 @@ SOURCES	  = main.cpp			\
 	    LocateFileTypeWindow.cpp	\
 	    LocateFilesWindow.cpp	\
             Logger.cpp			\
-            LogSteam.cpp                \
+            LogStream.cpp               \
 	    MainWindow.cpp		\
 	    MainWindowHelp.cpp          \
 	    MainWindowLayout.cpp	\
@@ -213,7 +213,7 @@ HEADERS	  =				\
 	    LocateFileTypeWindow.h	\
 	    LocateFilesWindow.h		\
 	    Logger.h			\
-            LogSteam.h                  \
+            LogStream.h                 \
 	    MainWindow.h		\
 	    MessagePanel.h		\
 	    MimeCategorizer.h		\
