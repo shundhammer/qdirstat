@@ -8,7 +8,6 @@
 
 #include <QObject>
 #include <QDateTime>
-#include <QTextStream>
 
 #include "FormatUtil.h"
 #include "Exception.h"
