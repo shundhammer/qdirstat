@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2025-05-11
+Updated: 2025-12-03
 
 
 ## Screenshot
@@ -35,7 +35,7 @@ you can instantly move it to the trash if you like. The color corresponds to
 the file type: Images, videos or whatever.
 
 This is a Qt-only port of the old Qt3/KDE3-based KDirStat, now based on the
-latest Qt 5. It does not need any KDE libs or infrastructure. It runs on every
+latest Qt 6. It does not need any KDE libs or infrastructure. It runs on every
 X11-based desktop on Linux, BSD and other Unix-like systems, and in a Docker
 container.
 
@@ -454,7 +454,7 @@ KDE 3.
 
 QDirStat is based on that code, but made independent of any KDE libraries or
 infrastructure, so it has much fewer library and package dependencies;
-basically only the Qt 5 libs and libz, both of which most Linux / BSD machines
+basically only the Qt 6 libs and libz, both of which most Linux / BSD machines
 have installed anyway if there is any graphical desktop installed.
 
 
@@ -1096,11 +1096,11 @@ package manager._
 
 ### Build Environment
 
-Make sure you have a working Qt 5 build environment installed. This includes:
+Make sure you have a working Qt 6 build environment installed. This includes:
 
 - C++ compiler (gcc recommended)
-- Qt 5 runtime environment
-- Qt 5 header files
+- Qt 6 runtime environment
+- Qt 6 header files
 - libz (compression lib) runtime and header file
 
 If anything doesn't work, first of all **make sure you can build any of the
@@ -1112,23 +1112,15 @@ simple examples supplied with Qt**, e.g. the
 
 Install the required packages for building:
 
-    sudo apt-get install build-essential qtbase5-dev zlib1g-dev
+    sudo apt-get install build-essential qtbase6-dev zlib1g-dev
 
 Dependent packages will be added automatically.
 
-Recommended packages for developers:
-
-    sudo apt-get install qttools5-dev-tools qtbase5-doc qtbase5-doc-html qtbase5-examples
-
-See also
-
-https://askubuntu.com/questions/508503/whats-the-development-package-for-qt5-in-14-04
-
-If you also have a Qt4 development environment installed, select the desired
-one via _qtchooser_:
+If you also have a Qt4 or Qt5 development environment installed, you might have
+to select the desired one via _qtchooser_:
 
     sudo apt-get install qtchooser
-    export QT_SELECT="qt5"
+    export QT_SELECT="qt6"
 
 
 #### SUSE
@@ -1136,12 +1128,7 @@ one via _qtchooser_:
 Install the required packages for building:
 
     sudo zypper install -t pattern devel_C_C++
-    sudo zypper install libQt5Widgets-devel libqt5-qttools zlib-devel
-
-If you also have a Qt4 development environment installed, make sure that the
-Qt5 version of 'qmake' is the first in your $PATH:
-
-    export PATH=/usr/lib64/qt5/bin:$PATH
+    sudo zypper install qt6-widgets-devel zlib-devel
 
 
 ### Compiling
@@ -1149,7 +1136,7 @@ Qt5 version of 'qmake' is the first in your $PATH:
 Open a shell window, go to the QDirStat source directory, then enter these
 commands:
 
-    qmake
+    qmake6
     make
 
 
@@ -1165,11 +1152,11 @@ or
 ### Install to a Custom Directory
 
 The default setup installs everything to `/usr`. To install to another
-directory, set `INSTALL_PREFIX` during `qmake`.
+directory, set `INSTALL_PREFIX` during `qmake6`.
 
 <details>
 
-    qmake INSTALL_PREFIX=/usr/local
+    qmake6 INSTALL_PREFIX=/usr/local
 
 Beware that some things might not work as expected; for example, you will not
 get a `.desktop` file in the proper place to make QDirStat appear in any menus
