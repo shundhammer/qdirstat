@@ -10,8 +10,6 @@
 #include <QMenu>
 #include <QAction>
 
-#include "Qt4Compat.h"
-
 #include "HeaderTweaker.h"
 #include "DirTreeView.h"
 #include "Settings.h"

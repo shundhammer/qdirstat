@@ -7,8 +7,6 @@
  */
 
 
-#include "Qt4Compat.h"       // qEnableClearButton()
-
 #include "FindFilesDialog.h"
 #include "Settings.h"
 #include "SettingsHelpers.h"
@@ -40,7 +38,7 @@ FindFilesDialog::FindFilesDialog( QWidget * parent ):
     if ( lastPath.isEmpty() && app()->root() )
         lastPath = app()->root()->url();
 
-    qEnableClearButton( _ui->patternField );
+    _ui->patternField->setClearButtonEnabled( true );
     _ui->patternField->setFocus();
 
     connect( this, SIGNAL( accepted()	   ),

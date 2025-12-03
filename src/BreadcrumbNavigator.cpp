@@ -7,8 +7,6 @@
  */
 
 
-#include "Qt4Compat.h" // qHtmlEscape()
-
 #include "BreadcrumbNavigator.h"
 #include "DirInfo.h"
 #include "Logger.h"
@@ -117,13 +115,13 @@ QString BreadcrumbNavigator::html() const
         {
             if ( crumb.url.isEmpty() )
             {
-                html += qHtmlEscape( name );
+                html += name.toHtmlEscaped();
             }
             else
             {
                 html += QString( "<a href=\"%1\">%2</a>" )
                     .arg( crumb.url )
-                    .arg( qHtmlEscape( name ) );
+                    .arg( name.toHtmlEscaped() );
             }
 
             if ( ! name.endsWith( "/" ) )
