@@ -221,7 +221,7 @@ void BreadcrumbNavigator::splitBasePath( const QString & path,
 
     if ( path != "/" && path.contains( "/" ) )
     {
-        QStringList components = path.split( "/", QString::SkipEmptyParts );
+        QStringList components = path.split( "/", Qt::SkipEmptyParts );
 
         if ( ! components.empty() )
             name_ret = components.takeLast();

@@ -84,7 +84,7 @@ QString Trash::toplevel( const QString & rawPath )
     dev_t dev = device( rawPath );
     QFileInfo fileInfo( rawPath );
     QString path = fileInfo.canonicalPath();
-    QStringList components = path.split( "/", QString::SkipEmptyParts );
+    QStringList components = path.split( "/", Qt::SkipEmptyParts );
     QString lastPath;
 
     // Go one directory level up as long as we are on the same device

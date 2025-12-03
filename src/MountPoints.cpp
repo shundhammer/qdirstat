@@ -262,7 +262,7 @@ MountPoint * MountPoints::findNearestMountPoint( const QString & startPath )
 
     if ( ! mountPoint )
     {
-	QStringList pathComponents = startPath.split( "/", QString::SkipEmptyParts );
+	QStringList pathComponents = startPath.split( "/", Qt::SkipEmptyParts );
 
 	while ( ! mountPoint && ! pathComponents.isEmpty() )
 	{
@@ -364,7 +364,7 @@ bool MountPoints::read( const QString & filename )
     while ( ! line.isNull() ) // in.atEnd() always returns true for /proc/*
     {
 	++lineNo;
-	QStringList fields = line.split( QRegExp( "\\s+" ), QString::SkipEmptyParts );
+	QStringList fields = line.split( QRegExp( "\\s+" ), Qt::SkipEmptyParts );
 
 	if ( fields.isEmpty() ) // allow empty lines
 	    continue;
