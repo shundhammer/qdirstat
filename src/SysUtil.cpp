@@ -203,7 +203,7 @@ bool SysUtil::isBrokenSymLink( const QString & path )
 
     // Start from the symlink's parent directory
 
-    QStringList pathSegments = path.split( '/', QString::SkipEmptyParts );
+    QStringList pathSegments = path.split( '/', Qt::SkipEmptyParts );
     pathSegments.removeLast(); // We already know it's a symlink, not a directory
     QString parentPath = QString( path.startsWith( "/" ) ? "/" : "" ) + pathSegments.join( "/" );
     DirSaver dir( parentPath );
