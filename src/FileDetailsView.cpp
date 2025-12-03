@@ -7,8 +7,6 @@
  */
 
 
-#include "Qt4Compat.h"
-
 #include "FileDetailsView.h"
 #include "AdaptiveTimer.h"
 #include "DirInfo.h"
@@ -42,7 +40,7 @@ FileDetailsView::FileDetailsView( QWidget * parent ):
     clear();
     readSettings();
 
-    _normalTextColor = qAppPalette().color( QPalette::Active, QPalette::WindowText );
+    _normalTextColor = QGuiApplication::palette().color( QPalette::Active, QPalette::WindowText );
     _labelLimit = 0; // Unlimited
     // TO DO: Read _labelLimit from the config file
 

@@ -12,7 +12,6 @@
 
 #include "SizeColDelegate.h"
 #include "DirTreeModel.h"
-#include "Qt4Compat.h"
 #include "Exception.h"
 #include "FileInfo.h"
 #include "Logger.h"
@@ -33,7 +32,7 @@ SizeColDelegate::SizeColDelegate( QTreeView * treeView ):
     _treeView( treeView ),
     _model( 0 )
 {
-    QColor background = qAppPalette().color( QPalette::Active, QPalette::Base );
+    QColor background = QGuiApplication::palette().color( QPalette::Active, QPalette::Base );
     _usingDarkTheme = background.lightness() < 128; // 0 (black) .. 255 (white)
 }
 

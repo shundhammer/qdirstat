@@ -7,10 +7,9 @@
  */
 
 
-#include <QPushButton>
+#include <QLineEdit>
 #include <QMessageBox>
-
-#include "Qt4Compat.h"
+#include <QPushButton>
 
 #include "ShowUnpkgFilesDialog.h"
 #include "ExistingDirCompleter.h"
@@ -43,7 +42,7 @@ ShowUnpkgFilesDialog::ShowUnpkgFilesDialog( QWidget * parent ):
     CHECK_NEW( validator );
 
     _ui->startingDirComboBox->setValidator( validator );
-    qEnableClearButton( _ui->startingDirComboBox );
+    _ui->startingDirComboBox->lineEdit()->setClearButtonEnabled( true );
 
     connect( validator, SIGNAL( isOk	  ( bool ) ),
 	     _okButton, SLOT  ( setEnabled( bool ) ) );
@@ -135,7 +134,7 @@ UnpkgSettings ShowUnpkgFilesDialog::values() const
 void ShowUnpkgFilesDialog::setValues( const UnpkgSettings & settings )
 {
     // settings.dump();
-    qSetComboBoxText( _ui->startingDirComboBox, settings.startingDir );
+    _ui->startingDirComboBox->setCurrentText( settings.startingDir );
     _ui->excludeDirsTextEdit->setPlainText( settings.excludeDirs.join( "\n" ) );
     _ui->ignorePatternsTextEdit->setPlainText( settings.ignorePatterns.join( "\n" ) );
 }

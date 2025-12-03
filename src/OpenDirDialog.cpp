@@ -7,12 +7,11 @@
  */
 
 
-#include <QPushButton>
 #include <QDir>
 #include <QFileSystemModel>
+#include <QLineEdit>
+#include <QPushButton>
 #include <QTimer>
-
-#include "Qt4Compat.h"
 
 #include "OpenDirDialog.h"
 #include "MountPoints.h"
@@ -78,7 +77,7 @@ OpenDirDialog::~OpenDirDialog()
 
 void OpenDirDialog::initPathComboBox()
 {
-    qEnableClearButton( _ui->pathComboBox );
+    _ui->pathComboBox->lineEdit()->setClearButtonEnabled( true );
 
 #if USE_COMPLETER
     QCompleter * completer = new ExistingDirCompleter( this );
@@ -188,7 +187,7 @@ void OpenDirDialog::setPath( const QString & path )
     // so any change would not become visible in the tree.
 
     populatePathComboBox( path );
-    qSetComboBoxText( _ui->pathComboBox, path );
+    _ui->pathComboBox->setCurrentText( path );
     QModelIndex index = _filesystemModel->index( path );
     _ui->dirTreeView->setCurrentIndex( index );
     _ui->dirTreeView->scrollTo( index );

@@ -8,8 +8,7 @@
 
 
 #include <QPalette>
-
-#include "Qt4Compat.h"
+#include <QGuiApplication>
 
 #include "DirTreeModel.h"
 #include "DirTree.h"
@@ -129,7 +128,7 @@ void DirTreeModel::writeSettings()
 
 bool DirTreeModel::usingDarkTheme()
 {
-    QColor background = qAppPalette().color( QPalette::Active, QPalette::Base );
+    QColor background = QGuiApplication::palette().color( QPalette::Active, QPalette::Base );
 
     return background.lightness() < 128; // 0 (black) .. 255 (white)
 }
@@ -436,7 +435,7 @@ QVariant DirTreeModel::data( const QModelIndex & index, int role ) const
 	case Qt::ForegroundRole: // Text color
 	    {
 		if ( item->isIgnored() || item->isAttic() )
-		    return qAppPalette().brush( QPalette::Disabled, QPalette::WindowText );
+		    return QGuiApplication::palette().brush( QPalette::Disabled, QPalette::WindowText );
 
 		if ( item->isDir() )
 		{
