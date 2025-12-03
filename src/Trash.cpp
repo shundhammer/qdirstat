@@ -294,9 +294,9 @@ void TrashDir::createTrashInfo( const QString & path,
 	THROW( FileException( trashInfo.fileName(), "Can't open " + trashInfo.fileName() ) );
 
     QTextStream str( &trashInfo );
-    str << "[Trash Info]" << endl;
-    str << "Path=" << path << endl;
-    str << "DeletionDate=" << QDateTime::currentDateTime().toString( Qt::ISODate ) << endl;
+    str << "[Trash Info]" << Qt::endl;
+    str << "Path=" << path << Qt::endl;
+    str << "DeletionDate=" << QDateTime::currentDateTime().toString( Qt::ISODate ) << Qt::endl;
 }
 
 
