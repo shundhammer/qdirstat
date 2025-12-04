@@ -35,8 +35,8 @@ PkgFilter::PkgFilter( const QString & pattern,
 void PkgFilter::normalizePattern()
 {
     QString oldPattern = _pattern;
-    _pattern.remove( QRegExp( "^Pkg:/*", Qt::CaseInsensitive ) );
-    _pattern.remove( QRegExp( "/.*$" ) );
+    _pattern = QRegExp( "^Pkg:/*", Qt::CaseInsensitive ).removeIn( _pattern );
+    _pattern = QRegExp( "/.*$" ).removeIn( _pattern );
 
     if ( _pattern != oldPattern )
     {
