@@ -15,6 +15,8 @@
 #include <sys/stat.h>   // lstat()
 #include <sys/types.h>
 
+#include <QRegularExpression>
+
 #include "SysUtil.h"
 #include "Process.h"
 #include "DirSaver.h"
@@ -58,7 +60,7 @@ QString SysUtil::runCommand( const QString & commandLine,
     if ( exitCode_ret )
 	*exitCode_ret = -1;
 
-    QStringList args = commandLine.split( QRegExp( "\\s+" ) );
+    QStringList args = commandLine.split( QRegularExpression( "\\s+" ) );
 
     if ( args.size() < 1 )
     {
