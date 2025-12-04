@@ -308,7 +308,7 @@ bool FileTypeStats::isCruft( const QString & suffix ) const
 
     int count	 = _suffixCount[ suffix ];
     int len	 = suffix.size();
-    int letters	 = suffix.count( QRegExp( "[a-zA-Z]" ) );
+    int letters	 = QRegExp( "[a-zA-Z]" ).countIn( suffix );
     float lettersPercent = len > 0 ? (100.0 * letters) / len : 0.0;
 
     if ( letters == 0 )
