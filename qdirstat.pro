@@ -1,6 +1,8 @@
+# -*- mode: makefile -*-
+#
 # Toplevel qmake .pro file. Create a Makefile from this with
 #
-#     qmake
+#     qmake6
 #
 # Then build the program with
 #
@@ -13,7 +15,7 @@
 # By default, everything is installed to /usr.
 # If you want to install to, say, /usr/local, set INSTALL_PREFIX:
 #
-#     qmake INSTALL_PREFIX=/usr/local
+#     qmake6 INSTALL_PREFIX=/usr/local
 
 TEMPLATE = subdirs
 CONFIG  += ordered
