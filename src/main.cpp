@@ -10,6 +10,9 @@
 #include <iostream>	// cerr
 
 #include <QApplication>
+#include <QProcess>
+#include <QProcessEnvironment>
+
 #include "QDirStatApp.h"
 #include "MainWindow.h"
 #include "DirTreeModel.h"
@@ -95,6 +98,20 @@ bool commandLineSwitch( const QString & longName,
 }
 
 
+void logQtEnv()
+{
+    QStringList env( QProcess::systemEnvironment() );
+
+    for ( const QString & envVar: env )
+    {
+        if ( envVar.startsWith( "QT" ) )
+        {
+            logDebug() << envVar << endl;
+        }
+    }
+}
+
+
 int main( int argc, char *argv[] )
 {
     Logger logger( "/tmp/qdirstat-$USER", "qdirstat.log" );
@@ -107,6 +124,7 @@ int main( int argc, char *argv[] )
     QApplication qtApp( argc, argv);
     QStringList argList = QCoreApplication::arguments();
     argList.removeFirst(); // Remove program name
+    logQtEnv();
 
     MainWindow * mainWin = new MainWindow();
     CHECK_PTR( mainWin );
