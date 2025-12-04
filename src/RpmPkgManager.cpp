@@ -24,7 +24,6 @@
 
 
 using std::cerr;
-using std::endl;
 using namespace QDirStat;
 
 
@@ -246,7 +245,7 @@ void RpmPkgManager::rebuildRpmDbWarning()
 
     if ( ! issuedWarning )
     {
-	cerr << "WARNING: rpm is very slow. Run	  sudo rpm --rebuilddb\n" << endl;
+	cerr << "WARNING: rpm is very slow. Run	  sudo rpm --rebuilddb\n" << std::endl;
 	logWarning()  << "rpm is very slow. Run	  sudo rpm --rebuilddb"	  << endl;
     }
 
