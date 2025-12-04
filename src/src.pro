@@ -10,11 +10,18 @@
 #
 #     make
 
+!equals( QT_MAJOR_VERSION, 6 ) {
+    message( "Trying to use Qt $${QT_VERSION}" )
+    error( "This project rquires Qt 6!" )
+}
+
+
 TEMPLATE	 = app
 QT		+= widgets
 
 # QRegExp
 QT		+= core5compat
+
 
 # Commented out to get -O2 optimization by default (issue #160)
 # CONFIG	+= debug
