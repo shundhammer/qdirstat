@@ -9,7 +9,6 @@
 
 #include <QElapsedTimer>
 #include <QResizeEvent>
-#include <QRegExp>
 #include <QTimer>
 
 #include "TreemapView.h"
