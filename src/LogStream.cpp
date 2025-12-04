@@ -134,6 +134,12 @@ LogStream & operator<<( LogStream & str, double val )
 }
 
 
+LogStream & operator<<( LogStream & str, long long val )
+{
+    return logStreamOut<long long>( str, val );
+}
+
+
 LogStream & operator<<( LogStream & str, bool val )
 {
     str.str() << ( val ? "true" : "false" );
