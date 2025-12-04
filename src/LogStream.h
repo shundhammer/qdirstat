@@ -118,6 +118,7 @@ LogStream & operator<<( LogStream & str, int           val );
 LogStream & operator<<( LogStream & str, unsigned      val );
 LogStream & operator<<( LogStream & str, long          val );
 LogStream & operator<<( LogStream & str, unsigned long val );
+LogStream & operator<<( LogStream & str, long long     val );
 LogStream & operator<<( LogStream & str, double        val );
 LogStream & operator<<( LogStream & str, bool val );
 LogStream & operator<<( LogStream & str, char val );
