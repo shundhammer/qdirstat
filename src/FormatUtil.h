@@ -130,6 +130,11 @@ namespace QDirStat
     QString formatFilesystemObjectType( mode_t mode );
 
 
+#if 0
+    // This clashes ("ambiguous overload") with
+    //   operator<<( ..., long long ) or
+    //   operator<<( ..., qsizetype )
+
     /**
      * Human-readable output of a file size in a debug stream.
      **/
@@ -139,6 +144,7 @@ namespace QDirStat
 
 	return stream;
     }
+#endif
 
 }       // namespace QDirStat
 
