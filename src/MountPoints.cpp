@@ -8,7 +8,7 @@
 
 
 #include <QFile>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QFileInfo>
 
 #include "MountPoints.h"
@@ -360,11 +360,12 @@ bool MountPoints::read( const QString & filename )
     int lineNo = 0;
     int count  = 0;
     QString line = in.readLine();
+    const QRegularExpression whitespace( "\\s+" );
 
     while ( ! line.isNull() ) // in.atEnd() always returns true for /proc/*
     {
 	++lineNo;
-	QStringList fields = line.split( QRegExp( "\\s+" ), Qt::SkipEmptyParts );
+	QStringList fields = line.split( whitespace, Qt::SkipEmptyParts );
 
 	if ( fields.isEmpty() ) // allow empty lines
 	    continue;
@@ -534,14 +535,25 @@ void MountPoints::findNtfsDevices()
                                           false );      // ignoreErrCode
     if ( exitCode == 0 )
     {
-        QStringList lines = output.split( "\n" )
-            .filter( QRegExp( "\\s+ntfs", Qt::CaseInsensitive ) );
+        QStringList lines = output.split( QChar( '\n' ) );
 
         foreach ( QString line, lines )
         {
-            QString device = "/dev/" + line.split( QRegExp( "\\s+" ) ).first();
-            logDebug() << "NTFS on " << device << endl;
-            _ntfsDevices << device;
+            // Sample output:
+            //
+            // sda
+            // sda0 swap
+            // sda1 ext4
+            // sda2 ntfs
+
+            QString device = "/dev/" + line.section( QChar( ' ' ), 0 );
+            QString fstype = line.section( QChar( ' ' ), 1 );
+
+            if ( fstype.toLower() == "ntfs" )
+            {
+                logDebug() << "NTFS on " << device << endl;
+                _ntfsDevices << device;
+            }
         }
     }
 
