@@ -72,12 +72,12 @@ void PopupLabel::mousePressEvent( QMouseEvent * event )
     if ( event->buttons() == Qt::LeftButton ||
 	 event->buttons() == Qt::RightButton  )
     {
-	showContextMenu( event->globalPos() );
+	showContextMenu( event->globalPosition().toPoint() );
     }
 }
 
 
-void PopupLabel::enterEvent( QEvent * event )
+void PopupLabel::enterEvent( QEnterEvent * event )
 {
     Q_UNUSED( event );
 
