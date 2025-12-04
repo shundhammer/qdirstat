@@ -1,3 +1,5 @@
+# -*- mode: makefile -*-
+#
 # qmake .pro file for qdirstat/src
 #
 # Go to the project toplevel dir and build all Makefiles:
@@ -7,13 +9,16 @@
 # Then build with
 #
 #     make
-#
 
 TEMPLATE	 = app
-
 QT		+= widgets
+
+# QRegExp
+QT		+= core5compat
+
 # Commented out to get -O2 optimization by default (issue #160)
 # CONFIG	+= debug
+
 DEPENDPATH	+= .
 MOC_DIR		 = .moc
 OBJECTS_DIR	 = .obj
