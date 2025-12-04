@@ -176,7 +176,7 @@ void CleanupCollection::updateActions()
 
 void CleanupCollection::updateMenus()
 {
-    _menus.removeAll( 0 ); // Remove QPointers that have become invalid
+    _menus.removeAll( nullptr ); // Remove QPointers that have become invalid
 
     foreach ( QMenu * menu, _menus )
     {
@@ -201,7 +201,7 @@ void CleanupCollection::updateMenus()
 
 void CleanupCollection::updateToolBars()
 {
-    _toolBars.removeAll( 0 ); // Remove QPointers that have become invalid
+    _toolBars.removeAll( nullptr ); // Remove QPointers that have become invalid
 
     foreach ( QToolBar * toolBar, _toolBars )
     {

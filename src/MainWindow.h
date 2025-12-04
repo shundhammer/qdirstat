@@ -11,10 +11,11 @@
 #define MainWindow_h
 
 #include <QMainWindow>
-#include <QString>
+#include <QActionGroup>
 #include <QElapsedTimer>
-#include <QTimer>
 #include <QPointer>
+#include <QString>
+#include <QTimer>
 
 #include "ui_main-window.h"
 #include "FileAgeStatsWindow.h"
