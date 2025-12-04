@@ -200,7 +200,7 @@ namespace QDirStat
 	/**
 	 * Set the text alignment for all items in a table column.
 	 **/
-	void setColAlignment( QTableWidget * table, int col, int alignment );
+	void setColAlignment( QTableWidget * table, int col, Qt::Alignment alignment );
 
 	/**
 	 * Fill the histogram with content.

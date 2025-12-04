@@ -366,7 +366,7 @@ void FileSizeStatsWindow::setRowBackground( QTableWidget * table, int row, const
 }
 
 
-void FileSizeStatsWindow::setColAlignment( QTableWidget * table, int col, int alignment )
+void FileSizeStatsWindow::setColAlignment( QTableWidget * table, int col, Qt::Alignment alignment )
 {
     for ( int row=0; row < table->rowCount(); ++row )
     {

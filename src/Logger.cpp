@@ -564,5 +564,5 @@ QString Logger::expandVariables( const QString & unexpanded )
 
 QString formatErrno()
 {
-    return QString( errno );
+    return QString( "errno %1" ).arg( errno );
 }
