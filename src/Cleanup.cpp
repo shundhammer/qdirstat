@@ -8,7 +8,6 @@
 
 
 #include <QApplication>
-#include <QRegExp>
 #include <QProcessEnvironment>
 #include <QFileInfo>
 
@@ -140,9 +139,20 @@ const QString Cleanup::itemDir( const FileInfo *item ) const
 {
     QString dir = item->path();
 
-    if ( ! item->isDir() && ! item->isPseudoDir() )
+    if ( item->isDir() && item->isPseudoDir() )
     {
-	dir.replace( QRegExp ( "/[^/]*$" ), "" );
+
+        // Cut off the last (#-1) path component,
+        // delimited with '/', from start (#0) to the last-but-one (#-2)
+        //
+        // "/usr/share/foo/bar" -> "/usr/share/foo"
+        //    0   1     2   3
+        //   -4  -3    -2  -1
+
+        dir = dir.section( '/', 0, -2 );
+
+        if ( dir.isEmpty() )
+            dir = "/";
     }
 
     return dir;
@@ -160,7 +170,7 @@ QString Cleanup::cleanTitle() const
 
     // Get rid of any "&" characters in the text that denote keyboard
     // shortcuts in menus.
-    title.replace( QRegExp( "&" ), "" );
+    title.remove( QChar( '&' ) );
 
     return title;
 }
