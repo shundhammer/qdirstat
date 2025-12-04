@@ -161,7 +161,7 @@ void MainWindow::connectGoMenu()
     _ui->actionGoToToplevel->setShortcutContext( Qt::ApplicationShortcut );
 
     QList<QKeySequence> shortcuts = _ui->actionGoToToplevel->shortcuts();
-    shortcuts << Qt::CTRL + Qt::Key_Home;
+    shortcuts << ( Qt::CTRL | Qt::Key_Home );
     _ui->actionGoToToplevel->setShortcuts( shortcuts );
 }
 

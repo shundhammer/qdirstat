@@ -53,7 +53,7 @@ Cleanup * StdCleanup::openFileManagerHere( QObject * parent )
     cleanup->setWorksForDotEntry( true );
     cleanup->setRefreshPolicy( Cleanup::NoRefresh );
     cleanup->setIcon( ":/icons/file-manager.png" );
-    cleanup->setShortcut( Qt::CTRL + Qt::Key_G );
+    cleanup->setShortcut( Qt::CTRL | Qt::Key_G );
     cleanup->setOutputWindowPolicy( Cleanup::ShowNever );
 
     return cleanup;
@@ -71,7 +71,7 @@ Cleanup * StdCleanup::openTerminalHere( QObject * parent )
     cleanup->setWorksForDotEntry( true );
     cleanup->setRefreshPolicy( Cleanup::NoRefresh );
     cleanup->setIcon( ":/icons/terminal.png" );
-    cleanup->setShortcut( Qt::CTRL + Qt::Key_T );
+    cleanup->setShortcut( Qt::CTRL | Qt::Key_T );
     cleanup->setOutputWindowPolicy( Cleanup::ShowNever ); // Make KDE konsole shut up
 
     return cleanup;
@@ -89,7 +89,7 @@ Cleanup * StdCleanup::checkFileType( QObject * parent )
     cleanup->setWorksForDotEntry( false );
     cleanup->setRefreshPolicy( Cleanup::NoRefresh );
     cleanup->setOutputWindowPolicy( Cleanup::ShowAlways );
-    cleanup->setShortcut( Qt::CTRL + Qt::Key_Y );
+    cleanup->setShortcut( Qt::CTRL | Qt::Key_Y );
 
     return cleanup;
 }
@@ -171,7 +171,7 @@ Cleanup * StdCleanup::hardDelete( QObject * parent )
     cleanup->setAskForConfirmation( true );
     cleanup->setRefreshPolicy( Cleanup::RefreshParent );
     cleanup->setIcon( ":/icons/delete.png" );
-    cleanup->setShortcut( Qt::CTRL + Qt::Key_Delete );
+    cleanup->setShortcut( Qt::CTRL | Qt::Key_Delete );
 
     return cleanup;
 }
