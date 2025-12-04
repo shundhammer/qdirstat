@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2025-12-03
+Updated: 2025-12-04
 
 
 ## Screenshot
@@ -1112,7 +1112,7 @@ simple examples supplied with Qt**, e.g. the
 
 Install the required packages for building:
 
-    sudo apt-get install build-essential qtbase6-dev zlib1g-dev
+    sudo apt-get install build-essential qtbase6-dev qt6-5compat-dev zlib1g-dev
 
 Dependent packages will be added automatically.
 
@@ -1128,7 +1128,7 @@ to select the desired one via _qtchooser_:
 Install the required packages for building:
 
     sudo zypper install -t pattern devel_C_C++
-    sudo zypper install qt6-widgets-devel zlib-devel
+    sudo zypper install qt6-widgets-devel qt6-qt5compat-devel zlib-devel
 
 
 ### Compiling
