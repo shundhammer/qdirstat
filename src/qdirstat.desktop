@@ -2,8 +2,13 @@
 Type=Application
 Name=QDirStat
 Exec=qdirstat %f
+# Uncomment one of the lines below instead to change HiDPI scaling:
+# Exec=sh -c "QT_SCALE_FACTOR=2 qdirstat %f"
+# Exec=sh -c "QT_ENABLE_HIGHDPI_SCALING=0 qdirstat %f"
+
 Icon=qdirstat
 GenericName=QDirStat Directory Statistics
+Comment=QDirStat Directory Statistics
 Terminal=false
 MimeType=inode/directory;inode/mount-point;
 Categories=Qt;System;Filesystem;
