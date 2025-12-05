@@ -139,7 +139,7 @@ const QString Cleanup::itemDir( const FileInfo *item ) const
 {
     QString dir = item->path();
 
-    if ( item->isDir() && item->isPseudoDir() )
+    if ( ! item->isDir() && ! item->isPseudoDir() )
     {
 
         // Cut off the last (#-1) path component,
