@@ -100,18 +100,14 @@ void FilesystemsWindow::clear()
 void FilesystemsWindow::initWidgets()
 {
     QStringList headers;
-    headers << tr( "Device" )
+    headers << tr( "Device"      )
 	    << tr( "Mount Point" )
-	    << tr( "Type" );
-
-    if ( MountPoints::hasSizeInfo() )
-    {
-	headers << tr( "Size"	  )
-		<< tr( "Used"	  )
-		<< tr( "Reserved" )
-		<< tr( "Free"	  )
-		<< tr( "Free %"	  );
-    }
+	    << tr( "Type"        )
+            << tr( "Size"	 )
+            << tr( "Used"	 )
+            << tr( "Reserved"    )
+            << tr( "Free"	 )
+            << tr( "Free %"	 );
 
     _ui->fsTree->setHeaderLabels( headers );
     _ui->fsTree->header()->setStretchLastSection( false );

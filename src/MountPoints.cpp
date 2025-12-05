@@ -29,10 +29,8 @@ MountPoint::MountPoint( const QString & device,
     _device( device ),
     _path( path ),
     _filesystemType( filesystemType ),
-    _isDuplicate( false )
-#if HAVE_Q_STORAGE_INFO
-    , _storageInfo( 0 )
-#endif
+    _isDuplicate( false ),
+    _storageInfo( 0 )
 {
     _mountOptions = mountOptions.split( "," );
 }
@@ -40,10 +38,8 @@ MountPoint::MountPoint( const QString & device,
 
 MountPoint::~MountPoint()
 {
-#if HAVE_Q_STORAGE_INFO
     if ( _storageInfo )
         delete _storageInfo;
-#endif
 }
 
 
@@ -119,8 +115,6 @@ bool MountPoint::isSnapPackage() const
 }
 
 
-#if HAVE_Q_STORAGE_INFO
-
 QStorageInfo * MountPoint::storageInfo()
 {
     if ( ! _storageInfo )
@@ -133,12 +127,6 @@ QStorageInfo * MountPoint::storageInfo()
     }
 
     return _storageInfo;
-}
-
-
-bool MountPoint::hasSizeInfo() const
-{
-    return true;
 }
 
 
@@ -170,20 +158,6 @@ FileSize MountPoint::freeSizeForRoot()
 {
     return storageInfo()->bytesFree();
 }
-
-#else  // ! HAVE_Q_STORAGE_INFO
-
-// Qt before 5.4 does not have QStorageInfo,
-// and statfs() is Linux-specific (not POSIX).
-
-bool	 MountPoint::hasSizeInfo() const { return false; }
-FileSize MountPoint::totalSize()	 { return -1; }
-FileSize MountPoint::usedSize()		 { return -1; }
-FileSize MountPoint::reservedSize()	 { return -1; }
-FileSize MountPoint::freeSizeForUser()	 { return -1; }
-FileSize MountPoint::freeSizeForRoot()   { return -1; }
-
-#endif // ! HAVE_Q_STORAGE_INFO
 
 
 
@@ -331,12 +305,8 @@ void MountPoints::ensurePopulated()
 
 #endif
 
-#if HAVE_Q_STORAGE_INFO
-
     if ( ! _isPopulated )
         readStorageInfo();
-
-#endif
 
     _isPopulated = true; // don't try more than once
     // dumpNormalMountPoints();
@@ -449,8 +419,6 @@ void MountPoints::add( MountPoint * mountPoint )
 }
 
 
-#if HAVE_Q_STORAGE_INFO
-
 bool MountPoints::readStorageInfo()
 {
     findNtfsDevices();
@@ -489,8 +457,6 @@ bool MountPoints::readStorageInfo()
 	return true;
     }
 }
-
-#endif // HAVE_Q_STORAGE_INFO
 
 
 bool MountPoints::checkForBtrfs()
@@ -605,10 +571,3 @@ void MountPoints::reload()
     instance()->clear();
     instance()->ensurePopulated();
 }
-
-
-#if HAVE_Q_STORAGE_INFO
-  bool MountPoints::hasSizeInfo() { return true; }
-#else
-  bool MountPoints::hasSizeInfo() { return false; }
-#endif

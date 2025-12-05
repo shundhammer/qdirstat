@@ -176,10 +176,8 @@ PathSelectorItem::PathSelectorItem( MountPoint *   mountPoint,
 {
     QString text = _path + "\n";
 
-    if ( _mountPoint->hasSizeInfo() && _mountPoint->totalSize() > 0 )
-    {
+    if ( _mountPoint->totalSize() > 0 )
 	text += formatSize( _mountPoint->totalSize() ) + "  ";
-    }
 
     text += _mountPoint->filesystemType();
     setText( text );
@@ -188,8 +186,6 @@ PathSelectorItem::PathSelectorItem( MountPoint *   mountPoint,
 
 #if SHOW_SIZES_IN_TOOLTIP
 
-    if ( _mountPoint->hasSizeInfo() )
-    {
         tooltip += "\n";
         tooltip += "\n" + QObject::tr( "Used: %1" )
             .arg( formatSize( _mountPoint->usedSize() ) );
@@ -199,7 +195,6 @@ PathSelectorItem::PathSelectorItem( MountPoint *   mountPoint,
 
         tooltip += "\n" + QObject::tr( "Free for root: %1" )
             .arg( formatSize( _mountPoint->freeSizeForRoot() ) );
-    }
 #endif
 
     setToolTip( tooltip );

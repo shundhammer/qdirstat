@@ -10,22 +10,13 @@
 #define MountPoints_h
 
 
-#include <QString>
-#include <QStringList>
 #include <QList>
 #include <QMap>
+#include <QStorageInfo>
+#include <QString>
+#include <QStringList>
 
 #include "LogStream.h"
-
-
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 4, 0 ))
-#  define HAVE_Q_STORAGE_INFO 0
-typedef void * QStorageInfo;
-#else
-#  define HAVE_Q_STORAGE_INFO 1
-#  include <QStorageInfo>
-#endif
-
 #include "FileSize.h"
 
 
@@ -136,12 +127,6 @@ namespace QDirStat
 	void setDuplicate( bool dup = true ) { _isDuplicate = dup; }
 
 	/**
-	 * Return 'true' if size information for this mount point is available.
-	 * This may depend on the build OS and the Qt version.
-	 **/
-	bool hasSizeInfo() const;
-
-	/**
 	 * Total size of the filesystem of this mount point.
 	 * This returns -1 if no size information is available.
 	 **/
@@ -174,12 +159,10 @@ namespace QDirStat
 
     protected:
 
-#if HAVE_Q_STORAGE_INFO
         /**
          * Lazy access to the QStorageInfo for this mount.
          **/
         QStorageInfo * storageInfo();
-#endif
 
 	QString	    _device;
 	QString	    _path;
@@ -187,9 +170,7 @@ namespace QDirStat
 	QStringList _mountOptions;
 	bool	    _isDuplicate;
 
-#if HAVE_Q_STORAGE_INFO
 	QStorageInfo * _storageInfo;
-#endif
     }; // class MountPoint
 
 
@@ -277,12 +258,6 @@ namespace QDirStat
 	 **/
 	static void dumpNormalMountPoints();
 
-	/**
-	 * Return 'true' if size information for mount points is available.
-	 * This may depend on the build OS and the Qt version.
-	 **/
-	static bool hasSizeInfo();
-
         /**
          * Clear all information and reload it from disk.
          * NOTICE: This invalidates ALL MountPoint pointers!
@@ -315,14 +290,11 @@ namespace QDirStat
 	 **/
 	bool read( const QString & filename );
 
-#if HAVE_Q_STORAGE_INFO
-
         /**
          * Fallback method if neither /proc/mounts nor /etc/mtab is available:
          * Try using QStorageInfo. Return 'true' if any mount point was found.
          **/
         bool readStorageInfo();
-#endif
 
         /**
          * Post-process a mount point and add it to the internal list and map.
