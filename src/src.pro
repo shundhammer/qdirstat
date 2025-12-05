@@ -132,7 +132,6 @@ SOURCES	  = main.cpp			\
 	    PkgQuery.cpp		\
 	    PkgReader.cpp		\
 	    PopupLabel.cpp		\
-	    Process.cpp			\
 	    ProcessStarter.cpp		\
 	    Refresher.cpp		\
 	    RpmPkgManager.cpp		\
@@ -232,7 +231,6 @@ HEADERS	  =				\
 	    PkgQuery.h			\
 	    PkgReader.h			\
 	    PopupLabel.h		\
-	    Process.h			\
 	    ProcessStarter.h		\
 	    Refresher.h			\
 	    RpmPkgManager.h		\

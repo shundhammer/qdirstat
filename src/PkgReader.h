@@ -10,12 +10,12 @@
 #define PkgReader_h
 
 #include <QMap>
+#include <QProcess>
 #include <QSharedPointer>
 
 #include "DirReadJob.h"
 #include "PkgInfo.h"
 #include "PkgFilter.h"
-#include "Process.h"
 
 
 namespace QDirStat
@@ -123,7 +123,7 @@ namespace QDirStat
          * Create a process for reading the file list for 'pkg' with the
          * appropriate external command. The process is not started yet.
          **/
-        Process * createReadFileListProcess( PkgInfo * pkg );
+        QProcess * createReadFileListProcess( PkgInfo * pkg );
 
 
 	// Data members
@@ -280,9 +280,9 @@ namespace QDirStat
          * Reading is then started from the outside with startReading() when
          * the job is scheduled.
 	 **/
-	AsyncPkgReadJob( DirTree * tree,
-                         PkgInfo * pkg,
-                         Process * readFileListProcess );
+	AsyncPkgReadJob( DirTree  * tree,
+                         PkgInfo  * pkg,
+                         QProcess * readFileListProcess );
 
 
 	/**
@@ -312,7 +312,7 @@ namespace QDirStat
 
         // Data members
 
-        Process *   _readFileListProcess;
+        QProcess *  _readFileListProcess;
         QStringList _fileList;
 
     };  // class AsyncPkgReadJob

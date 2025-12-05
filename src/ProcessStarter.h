@@ -10,10 +10,9 @@
 #ifndef ProcessStarter_h
 #define ProcessStarter_h
 
-#include <QObject>
 #include <QList>
-
-#include "Process.h"
+#include <QObject>
+#include <QProcess>
 
 
 namespace QDirStat
@@ -41,7 +40,7 @@ namespace QDirStat
          * Add another process. This class does not take over ownership of the
          * process objects.
          **/
-        void add( Process * process );
+        void add( QProcess * process );
 
         /**
          * Begin starting processes.
@@ -93,11 +92,11 @@ namespace QDirStat
 
         // Data members
 
-        int              _maxParallel;
-        bool             _autoDelete;
-        bool             _started;
-        QList<Process *> _running;
-        QList<Process *> _waiting;
+        int               _maxParallel;
+        bool              _autoDelete;
+        bool              _started;
+        QList<QProcess *> _running;
+        QList<QProcess *> _waiting;
     };
 }
 
