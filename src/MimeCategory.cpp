@@ -132,11 +132,7 @@ QStringList MimeCategory::humanReadablePatternList( Qt::CaseSensitivity caseSens
 
     result = humanReadableSuffixList( result );
     result << humanReadablePatternList( _patternList, caseSensitivity );
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 0, 0 ))
-    result.sort();
-#else
     result.sort( caseSensitivity );
-#endif
 
     return result;
 }
