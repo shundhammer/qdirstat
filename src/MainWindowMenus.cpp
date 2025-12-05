@@ -17,14 +17,6 @@
 #include "Exception.h"
 #include "Logger.h"
 
-
-#if (QT_VERSION < QT_VERSION_CHECK( 5, 13, 0 ))
-#  define HAVE_SIGNAL_MAPPER	  1
-#else
-// QSignalMapper is deprecated from Qt 5.13 on
-#  define HAVE_SIGNAL_MAPPER	  0
-#endif
-
 using namespace QDirStat;
 
 
@@ -96,31 +88,6 @@ void MainWindow::connectViewMenu()
 
 void MainWindow::connectViewExpandMenu()
 {
-#if HAVE_SIGNAL_MAPPER
-
-    // QSignalMapper is deprecated from Qt 5.13 on.
-    // On systems with older versions, there may or may not be C++11 compiler.
-
-    _treeLevelMapper = new QSignalMapper( this );
-
-    connect( _treeLevelMapper, SIGNAL( mapped		( int ) ),
-	     this,	       SLOT  ( expandTreeToLevel( int ) ) );
-
-    mapTreeExpandAction( _ui->actionExpandTreeLevel0, 0 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel1, 1 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel2, 2 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel3, 3 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel4, 4 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel5, 5 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel6, 6 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel7, 7 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel8, 8 );
-    mapTreeExpandAction( _ui->actionExpandTreeLevel9, 9 );
-
-    mapTreeExpandAction( _ui->actionCloseAllTreeLevels, 0 );
-
-#else   // QSignalMapper not available / deprecated? (Qt 5.13 or later) -> use a C++11 lambda
-
     connect( _ui->actionExpandTreeLevel0,   &QAction::triggered, [=]() { expandTreeToLevel( 0 ); } );
     connect( _ui->actionExpandTreeLevel1,   &QAction::triggered, [=]() { expandTreeToLevel( 1 ); } );
     connect( _ui->actionExpandTreeLevel2,   &QAction::triggered, [=]() { expandTreeToLevel( 2 ); } );
@@ -133,8 +100,6 @@ void MainWindow::connectViewExpandMenu()
     connect( _ui->actionExpandTreeLevel9,   &QAction::triggered, [=]() { expandTreeToLevel( 9 ); } );
 
     connect( _ui->actionCloseAllTreeLevels, &QAction::triggered, [=]() { expandTreeToLevel( 0 ); } );
-
-#endif
 }
 
 
