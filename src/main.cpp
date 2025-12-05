@@ -64,9 +64,7 @@ void logVersion()
               << " built with Qt " << QT_VERSION_STR
               << endl;
 
-#if (QT_VERSION < QT_VERSION_CHECK( 6, 10, 0 ))
-    // TO DO: Which version is absolutely needed?
-
+#if (QT_VERSION < QT_VERSION_CHECK( 6, 6, 0 ))
     logWarning() << "WARNING: You are using Qt " << QT_VERSION_STR
                  << ". This may or may not work." << endl;
     logWarning() << "The supported Qt version for QDirStat is Qt 6.10 or newer." << endl;
