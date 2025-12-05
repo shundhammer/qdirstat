@@ -35,7 +35,7 @@ void ProcessStarter::start()
 }
 
 
-void ProcessStarter::add( Process * process )
+void ProcessStarter::add( QProcess * process )
 {
     _waiting.append( process );
 
@@ -54,7 +54,7 @@ void ProcessStarter::startProcesses()
         if ( _waiting.isEmpty() )
             return;
 
-        Process * process = _waiting.takeFirst();
+        QProcess * process = _waiting.takeFirst();
 
         if ( process )
         {
@@ -71,7 +71,7 @@ void ProcessStarter::processFinished( int                  exitCode,
     Q_UNUSED( exitCode   );
     Q_UNUSED( exitStatus );
 
-    Process * process = qobject_cast<Process *>( sender() );
+    QProcess * process = qobject_cast<QProcess *>( sender() );
 
     if ( ! process )
     {

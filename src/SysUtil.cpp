@@ -15,10 +15,10 @@
 #include <sys/stat.h>   // lstat()
 #include <sys/types.h>
 
+#include <QProcess>
 #include <QRegularExpression>
 
 #include "SysUtil.h"
-#include "Process.h"
 #include "DirSaver.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -95,7 +95,7 @@ QString SysUtil::runCommand( const QString &	 command,
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     env.insert( "LANG", "C" ); // Prevent output in translated languages
 
-    Process process;
+    QProcess process;
     process.setProgram( command );
     process.setArguments( args );
     process.setProcessEnvironment( env );
@@ -153,7 +153,7 @@ void SysUtil::openInBrowser( const QString & url )
 {
     logDebug() << "Opening URL " << url << endl;
 
-    Process::startDetached( "/usr/bin/xdg-open", QStringList() << url );
+    QProcess::startDetached( "/usr/bin/xdg-open", QStringList() << url );
 }
 
 

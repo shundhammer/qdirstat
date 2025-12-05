@@ -60,7 +60,7 @@ OutputWindow::~OutputWindow()
     {
 	logWarning() << _processList.size() << " processes left over" << endl;
 
-	foreach ( Process * process, _processList )
+	foreach ( QProcess * process, _processList )
 	    logWarning() << "Left over: " << process << endl;
 
 	qDeleteAll( _processList );
@@ -71,7 +71,7 @@ OutputWindow::~OutputWindow()
 }
 
 
-void OutputWindow::addProcess( Process * process )
+void OutputWindow::addProcess( QProcess * process )
 {
     CHECK_PTR( process );
 
@@ -92,8 +92,8 @@ void OutputWindow::addProcess( Process * process )
     connect( process, SIGNAL( readyReadStandardError() ),
 	     this,    SLOT  ( readStderr()	       ) );
 
-    connect( process, SIGNAL( error	  ( QProcess::ProcessError ) ),
-	     this,    SLOT  ( processError( QProcess::ProcessError ) ) );
+    connect( process, SIGNAL( errorOccurred( QProcess::ProcessError ) ),
+	     this,    SLOT  ( processError ( QProcess::ProcessError ) ) );
 
     connect( process, SIGNAL( finished	     ( int, QProcess::ExitStatus ) ),
 	     this,    SLOT  ( processFinished( int, QProcess::ExitStatus ) ) );
@@ -152,9 +152,9 @@ void OutputWindow::clearOutput()
 }
 
 
-Process * OutputWindow::senderProcess( const char * function ) const
+QProcess * OutputWindow::senderProcess( const char * function ) const
 {
-    Process * process = qobject_cast<Process *>( sender() );
+    QProcess * process = qobject_cast<QProcess *>( sender() );
 
     if ( ! process )
     {
@@ -176,7 +176,7 @@ Process * OutputWindow::senderProcess( const char * function ) const
 
 void OutputWindow::readStdout()
 {
-    Process * process = senderProcess( __FUNCTION__ );
+    QProcess * process = senderProcess( __FUNCTION__ );
 
     if ( process )
 	addStdout( QString::fromUtf8( process->readAllStandardOutput() ) );
@@ -185,7 +185,7 @@ void OutputWindow::readStdout()
 
 void OutputWindow::readStderr()
 {
-    Process * process = senderProcess( __FUNCTION__ );
+    QProcess * process = senderProcess( __FUNCTION__ );
 
     if ( process )
 	addStderr( QString::fromUtf8( process->readAllStandardError() ) );
@@ -221,7 +221,7 @@ void OutputWindow::processFinished( int exitCode, QProcess::ExitStatus exitStatu
 	    break;
     }
 
-    Process * process = senderProcess( __FUNCTION__ );
+    QProcess * process = senderProcess( __FUNCTION__ );
 
     if ( process )
     {
@@ -277,7 +277,7 @@ void OutputWindow::processError( QProcess::ProcessError error )
 	addStderr( msg );
     }
 
-    Process * process = senderProcess( __FUNCTION__ );
+    QProcess * process = senderProcess( __FUNCTION__ );
 
     if ( process )
     {
@@ -371,7 +371,7 @@ void OutputWindow::killAll()
 {
     int killCount = 0;
 
-    foreach ( Process * process, _processList )
+    foreach ( QProcess * process, _processList )
     {
 	logInfo() << "Killing process " << process << endl;
 	process->kill();
@@ -397,7 +397,7 @@ void OutputWindow::setTerminalBackground( const QColor & newColor )
 
 bool OutputWindow::hasActiveProcess() const
 {
-    foreach ( Process * process, _processList )
+    foreach ( QProcess * process, _processList )
     {
 	if ( process->state() == QProcess::Starting ||
 	     process->state() == QProcess::Running )
@@ -410,9 +410,9 @@ bool OutputWindow::hasActiveProcess() const
 }
 
 
-Process * OutputWindow::pickQueuedProcess()
+QProcess * OutputWindow::pickQueuedProcess()
 {
-    foreach ( Process * process, _processList )
+    foreach ( QProcess * process, _processList )
     {
 	if ( process->state() == QProcess::NotRunning )
 	    return process;
@@ -422,9 +422,9 @@ Process * OutputWindow::pickQueuedProcess()
 }
 
 
-Process * OutputWindow::startNextProcess()
+QProcess * OutputWindow::startNextProcess()
 {
-    Process * process = pickQueuedProcess();
+    QProcess * process = pickQueuedProcess();
 
     if ( process )
     {
@@ -449,7 +449,7 @@ Process * OutputWindow::startNextProcess()
 }
 
 
-QString OutputWindow::command( Process * process )
+QString OutputWindow::command( QProcess * process )
 {
     // The common case is to start an external command with
     //	  /bin/sh -c theRealCommand arg1 arg2 arg3 ...

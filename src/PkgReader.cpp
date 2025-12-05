@@ -221,7 +221,7 @@ void PkgReader::createAsyncPkgReadJobs()
 
     foreach ( PkgInfo * pkg, _pkgList )
     {
-	Process * process = createReadFileListProcess( pkg );
+	QProcess * process = createReadFileListProcess( pkg );
 
 	if ( process )
 	{
@@ -236,7 +236,7 @@ void PkgReader::createAsyncPkgReadJobs()
 }
 
 
-Process * PkgReader::createReadFileListProcess( PkgInfo * pkg )
+QProcess * PkgReader::createReadFileListProcess( PkgInfo * pkg )
 {
     CHECK_PTR( pkg );
     CHECK_PTR( pkg->pkgManager() );
@@ -255,7 +255,7 @@ Process * PkgReader::createReadFileListProcess( PkgInfo * pkg )
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     env.insert( "LANG", "C" ); // Prevent output in translated languages
 
-    Process * process = new Process();
+    QProcess * process = new QProcess();
     process->setProgram( program );
     process->setArguments( args );
     process->setProcessEnvironment( env );
@@ -530,9 +530,9 @@ struct stat * PkgReadJob::lstat( const QString & path )
 
 
 
-AsyncPkgReadJob::AsyncPkgReadJob( DirTree * tree,
-				  PkgInfo * pkg,
-				  Process * readFileListProcess ):
+AsyncPkgReadJob::AsyncPkgReadJob( DirTree  * tree,
+				  PkgInfo  * pkg,
+				  QProcess * readFileListProcess ):
     PkgReadJob( tree, pkg ),
     _readFileListProcess( readFileListProcess )
 {
@@ -551,7 +551,7 @@ void AsyncPkgReadJob::readFileListFinished( int			 exitCode,
     CHECK_PTR( _pkg );
     CHECK_PTR( _pkg->pkgManager() );
 
-    bool ok	   = true;
+    bool ok = true;
 
     if ( exitStatus != QProcess::NormalExit )
     {

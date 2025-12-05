@@ -8,14 +8,14 @@
 
 
 #include <QApplication>
-#include <QProcessEnvironment>
 #include <QFileInfo>
+#include <QProcess>
+#include <QProcessEnvironment>
 
 #include "Cleanup.h"
 #include "DirTree.h"
 #include "DirInfo.h"
 #include "OutputWindow.h"
-#include "Process.h"
 #include "Logger.h"
 #include "Exception.h"
 
@@ -278,7 +278,7 @@ void Cleanup::runCommand( const FileInfo * item,
     }
 
     QString cleanupCommand( expandVariables( item, command ));
-    Process * process = new Process( parent() );
+    QProcess * process = new QProcess( parent() );
     CHECK_NEW( process );
 
     process->setProgram( shell );
