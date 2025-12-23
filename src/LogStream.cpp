@@ -74,6 +74,22 @@ namespace LogStr
 
         return str;
     }
+
+
+    LogStream & hex( LogStream & str )
+    {
+        str.str() << Qt::hex;
+
+        return str;
+    }
+
+
+    LogStream & dec( LogStream & str )
+    {
+        str.str() << Qt::dec;
+
+        return str;
+    }
 }
 
 

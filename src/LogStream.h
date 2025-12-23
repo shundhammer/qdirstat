@@ -93,6 +93,16 @@ namespace LogStr
      * 'endl' stream manipulator: Output a newline and flush the stream.
      **/
     LogStream & endl( LogStream & str );
+
+    /**
+     * 'hex' stream manipulator: Switch numeric output to hexadecimal.
+     **/
+    LogStream & hex( LogStream & str );
+
+    /**
+     * 'dec' stream manipulator: Switch numeric output to decimal.
+     **/
+    LogStream & dec( LogStream & str );
 };
 
 
