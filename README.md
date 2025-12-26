@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2025-12-04
+Updated: 2025-12-26
 
 
 ## Screenshot
@@ -35,7 +35,7 @@ you can instantly move it to the trash if you like. The color corresponds to
 the file type: Images, videos or whatever.
 
 This is a Qt-only port of the old Qt3/KDE3-based KDirStat, now based on the
-latest Qt 6. It does not need any KDE libs or infrastructure. It runs on every
+latest Qt6. It does not need any KDE libs or infrastructure. It runs on every
 X11-based desktop on Linux, BSD and other Unix-like systems, and in a Docker
 container.
 
@@ -133,6 +133,43 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2025-12-26
+
+  - **Port to Qt6**
+
+    Yes, this took quite a while. But now QDirStat is ported to Qt6.
+    There was quite some discussion here in
+    [issue #280](https://github.com/shundhammer/qdirstat/issues/280)
+    about it.
+
+    While the overall end user benefit may really be underwhelming, it makes
+    QDirStat future proof; Qt5 is being phased out in many Linux distributions,
+    and Qt6 has already advanced to version 6.10.
+
+  - **Translations**
+
+    Added infrastructure for program translations: A _translator_ class based
+    on _QTranslator_ and using _GNU gettext_, imported from the
+    [Myrlyn project](https://github.com/shundhammer/myrlyn),
+    and a _makepot_ script to generate .pot files as a base for
+    translations.
+
+    Notice that translations will not be hosted in the QDirStat source
+    repository, so source code and translations will be kept separate.
+
+    The intention is that a translations maintainer will create a separate
+    translations project and repo _qdirstat-lang_ and manage the contributions
+    of community translators for different languages with _GNU gettext_ tools
+    and a web translations tool like [weblate](https://weblate.org/).
+
+  - Upcoming **QDirStat 2.0** release:
+
+    Those who can and who are willing please build QDirStat from Git master and
+    test it thoroughly. Right now it shows a version _1.95+_, but there is no
+    Git tag to avoid misleading users into believing that it's a stable
+    version. That would be premature; it still needs some testing.
+
 
 - 2025-04-16
 
