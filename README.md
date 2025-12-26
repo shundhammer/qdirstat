@@ -604,7 +604,7 @@ old code base that had been long overdue.
     - Shift-click: Select a range of items.
     - Ctrl-Click:  Select an additional item or deselect a selected one.
 
-  - {Treemap](doc/Treemap.md):
+  - [Treemap](doc/Treemap.md):
     - Ctrl-Click:  Select an additional item or deselect a selected one.
 
     - The current item is highlighted with a red rectangle, all other selected
