@@ -1,0 +1,83 @@
+#!/bin/sh
+#
+# makepot - generate a .pot file for gettext translations from the sources
+#
+
+ensure_installed()
+{
+    local command=$1
+    local package=$2
+
+    if [ -z `type -p $command` ]; then
+        echo
+        echo "FATAL: Missing command \"$command\" - install package \"$package\""
+        echo
+        exit 1
+    fi
+}
+
+
+# Check if all required commands are available
+
+#                command    package
+ensure_installed lupdate6   qt6-tools-linguist
+ensure_installed lconvert6  qt6-tools-linguist
+ensure_installed xgettext   gettext-tools
+ensure_installed msgcat     gettext-tools
+
+
+# Constants for files and direcories
+
+UI_TS="ui-files.ts"
+UI_POT="ui-files.pot"
+CC_POT="cc-files.pot"
+RESULT_POT="myrlyn.pot"
+SRC_DIR=.
+
+
+# Extract messages from the Qt Designer .ui files
+# using Qt6 Linguist tools that understand that file format
+# but convert immediately to gettext .pot format.
+
+lupdate6  -silent $SRC_DIR/*.ui -ts $UI_TS
+lconvert6 $UI_TS -o $UI_POT
+
+
+# Extract messages from the .h and .cc files
+# using xgettext, searching for  _( "foo" ) messages
+
+xgettext --language=c++ -k --keyword=_ --qt \
+         --omit-header          \
+         --output=$CC_POT       \
+         $SRC_DIR/*.cc
+
+# .h files don't normally contain any translatable messages.
+#
+# The ones that do are ui_*.h files generated with Qt's 'uic' from Qt Designer
+# .ui files, and they are just temporary files in the build/ directory, and
+# they call QCoreApplication::translate(), not _(...).
+# QCoreApplication::translate() uses MyrlynTranslator (a subclass of
+# QTranslator) which uses GNU gettext via dgettext( "myrlyn", message ).
+#
+# lupdate6 above takes care of extracting the messages directly from the .ui
+# files, so the ui_*.h files are not needed, and no messages need to be
+# extracted from them.
+
+
+# Merge into the result .pot file
+
+msgcat -o $RESULT_POT $UI_POT $CC_POT
+grep -c 'msgid'  $UI_POT $CC_POT $RESULT_POT
+
+
+# Clean up
+
+# Comment out to keep the temp files for debugging
+rm -f $UI_TS $UI_POT $CC_POT
+
+
+# Stats
+
+echo
+ls -l *.pot
+echo

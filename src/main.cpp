@@ -17,6 +17,7 @@
 #include "MainWindow.h"
 #include "DirTreeModel.h"
 #include "Settings.h"
+#include "Translator.h"
 #include "Logger.h"
 #include "Exception.h"
 #include "Version.h"
@@ -37,6 +38,7 @@ void usage( const QStringList & argList )
 	 << "  " << progName << " unpkg:/dir\n"
 	 << "  " << progName << " --dont-ask|-d\n"
 	 << "  " << progName << " --cache|-c <cache-file-name>\n"
+	 << "  " << progName << " --fake-translations\n"
 	 << "  " << progName << " --help|-h\n"
 	 << "\n"
 	 << "\n"
@@ -123,6 +125,12 @@ int main( int argc, char *argv[] )
     QStringList argList = QCoreApplication::arguments();
     argList.removeFirst(); // Remove program name
     logQtEnv();
+
+    if ( commandLineSwitch( "--fake-translations", "--xixo", argList ) )
+        Translator::useFakeTranslations();
+
+    Translator translator( "qdirstat" );
+    qApp->installTranslator( &translator );
 
     MainWindow * mainWin = new MainWindow();
     CHECK_PTR( mainWin );

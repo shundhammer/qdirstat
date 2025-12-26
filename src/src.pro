@@ -145,6 +145,7 @@ SOURCES	  = main.cpp			\
 	    Subtree.cpp			\
 	    SysUtil.cpp			\
 	    SystemFileChecker.cpp	\
+	    Translator.cpp		\
 	    Trash.cpp			\
 	    TreeWalker.cpp		\
 	    TreemapTile.cpp		\
@@ -245,6 +246,7 @@ HEADERS	  =				\
 	    Subtree.h			\
 	    SysUtil.h			\
 	    SystemFileChecker.h		\
+	    Translator.h		\
 	    Trash.h			\
 	    TreemapTile.h		\
 	    UnpkgSettings.cpp		\
