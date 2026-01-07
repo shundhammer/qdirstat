@@ -512,7 +512,7 @@ void MountPoints::findNtfsDevices()
             // sda1 ext4
             // sda2 ntfs
 
-            QString device = "/dev/" + line.section( QChar( ' ' ), 0 );
+            QString device = "/dev/" + line.section( QChar( ' ' ), 0, 0 );
             QString fstype = line.section( QChar( ' ' ), 1 );
 
             if ( fstype.toLower() == "ntfs" )
