@@ -434,7 +434,7 @@ const QMap<QString, QString> & Cleanup::desktopSpecificApps()
                 // Using xdg-open to enable using konqueror if configured,
                 // falling back to dolphin otherwise.
 
-		apps[ "%filemanager" ] = "xdg-open %d";
+		apps[ "%filemanager" ] = "xdg-open";
 	    }
 	    else if ( desktop == "gnome" ||
 		      desktop == "unity"   )
