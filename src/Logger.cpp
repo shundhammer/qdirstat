@@ -308,6 +308,11 @@ static void qt_logger( QtMsgType                  msgType,
 
     for ( QString line: lines )
     {
+        // Suppress bullshit messages that keep flodding the log
+
+        if ( msg.contains( "OpenType support missing" ) )
+            continue;
+
         // Remove utterly misleading message that will just dump a ton of bug
         // reports on the application maintainers just because some clueless
         // moron put this message into the Qt libs
