@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2025-12-26
+Updated: 2026-01-18
 
 
 ## Screenshot
@@ -124,7 +124,7 @@ You can donate any amount of your choice via PayPal:
 
 ## Latest Stable Release
 
-**QDirStat V1.9**
+**QDirStat V2.0**
 
 See the [release announcement](https://github.com/shundhammer/qdirstat/releases).
 
@@ -133,6 +133,24 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2026-01-18 **New stable release: 2.0**
+
+  **Summary:**
+
+  - Migration to Qt6
+
+  - Added infrastructure for program translations in case somebody volunteers
+    to create a (separate!) GitHub project and package "qdirstat-lang" for
+    translations.
+
+  - You can now select the ISO date and time format: "2024-12-28  17:38" instead
+    of the current locale settings. There is now a checkbox in the "General"
+    tab for that.
+
+    There is now no more need to endure insane date / time formats like
+    "Dec 28, 2025 5:38 PM" just because you set your locale environment to English.
+
 
 - 2025-12-26
 
