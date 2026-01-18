@@ -1,0 +1,147 @@
+-------------------------------------------------------------------
+Sun Jan 18 17:46:37 UTC 2026 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Update to version 2.0:
+  * Change log and version bump to 2.0
+  * Suppress Qt bullshit messages that keep flooding the log
+  * No duplicate %d in 'open with filemanager here' std cleanup (Closes #297)
+  * Added missing section end
+  * Document current development status
+  * Use imported Myrlyn Translator class
+  * Added LogStream manipulators hex and dec
+  * QStorageInfo is now available on all Qt6 platforms
+  * Drop Qt4 support
+  * Get rid of now obsolete Qt4 QProcess wrapper class
+
+-------------------------------------------------------------------
+Wed Feb 19 12:39:16 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Removed the FlatPak metainfo again (not useful for an RPM build)
+
+-------------------------------------------------------------------
+Sat Feb 15 15:27:21 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Added FlatPak AppStream metainfo to files list (gh#278)
+
+-------------------------------------------------------------------
+Sun Jan 14 14:13:55 UTC 2024 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Update to V1.9:
+  - Greatly improved the visual appearance of the treemap
+  - Dominant items are now highlighted in bold font in the tree view
+  - New "Find" function in the scanned directory tree
+  - Added support for bookmarks
+  - New documentation to explain the treemap
+  - Some small improvements
+  - Bug fixes
+
+-------------------------------------------------------------------
+Thu Jun 30 08:50:08 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Update to V1.8.1:
+  - New treemap interaction: Middle click to show parent hierarchy
+  - Some small improvements
+  - Bug fixes
+
+-------------------------------------------------------------------
+Sat Aug 28 18:39:57 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Update to V1.8:
+  - New view: File Age Statistics
+  - Navigation history like in a web browser (Back, Forward)
+  - Bug fixes
+  - Some small improvements
+
+-------------------------------------------------------------------
+Mon Apr  5 14:45:00 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Update to V1.7.1:
+  - New "Discover" actions to easily find
+    - the largest files
+    - the newest files
+    - the oldest files
+    - files with multiple hard links
+    - broken symbolic links
+    - sparse files
+   - Now showing the target of symbolic links in the details panel
+   - Menu reorganization
+   - Bug fixes
+
+-------------------------------------------------------------------
+Sun Jul 26 12:23:47 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Update to V1.7:
+  - Closing the gap between sizes reported by QDirstat and sizes
+    reported by the "du" command: Now also taking the allocated
+    size into account
+  - New "Mounted Filesystems" window showing output similar to "df"
+  - New directory selection dialog showing all (real) filesystems
+  - Workaround for NTFS oddities: Ignoring hard links on NTFS
+  - Bug fixes
+
+-------------------------------------------------------------------
+Thu Feb 13 13:35:07 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Update to V1.6.1:
+  - Improved handling for "permission denied" errors while reading
+    directories
+  - Show exact byte size on demand
+  - New optional tree column "oldest file"
+  - Bug fix: Fixed text color in histogram in dark widget themes
+
+-------------------------------------------------------------------
+Mon Jul 22 15:20:45 CEST 2019 - shundhammer@suse.de
+
+- Update to V1.6:
+  - Packages view
+  - Unpackaged files view
+  - Performance improvements
+  - Bug fixes
+
+-------------------------------------------------------------------
+Wed Nov  7 21:32:14 CET 2018 - shundhammer@suse.de
+
+- Update to V1.5:
+  - Breadcrumbs navigation
+  - File details panel
+  - Package manager support for rpm, dpkg, pacman
+  - Switchable different main window layouts
+  - Bug fixes
+
+-------------------------------------------------------------------
+Sun Jun  4 17:33:35 CEST 2017 - shundhammer@suse.de
+
+- Update to V1.4 (File size stats (histogram) and more)
+
+-------------------------------------------------------------------
+Sun Mar  5 15:37:43 CET 2017 - shundhammer@suse.de
+
+- Update to V1.3 (File type stats window and more)
+
+-------------------------------------------------------------------
+Mon Jan  9 13:49:25 CET 2017 - shundhammer@suse.de
+
+- Update to V1.2 (Improved Btrfs subvolume support)
+
+-------------------------------------------------------------------
+Sat Nov 12 22:06:55 UTC 2016 - jengelh@inai.de
+
+- Own hicolor, because BuildRequiring it does not fix the
+  post-build situation.
+
+-------------------------------------------------------------------
+Mon Oct 31 19:44:16 CET 2016 - Stefan.Hundhammer@gmx.de
+
+- Update to V1.1-Pumpkin
+
+-------------------------------------------------------------------
+Tue Jul 26 01:44:18 UTC 2016 - sflees@suse.de
+
+- Include the hicolor-icon-theme rather than trying to make its
+  directories owned by this rpm
+
+-------------------------------------------------------------------
+Mon May 16 16:29:52 CEST 2016 - Stefan.Hundhammer@gmx.de
+
+- Initial stable release V1.0
+

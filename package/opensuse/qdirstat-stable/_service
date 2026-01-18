@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<services>
+  <service name="obs_scm" mode="manual">
+    <param name="url">https://github.com/shundhammer/qdirstat.git</param>
+    <param name="scm">git</param>
+    <param name="exclude">.git</param>
+    <param name="versionformat">@PARENT_TAG@+@TAG_OFFSET@</param>
+    <param name="versionrewrite-pattern">(.*)\+0</param>
+    <param name="versionrewrite-replacement">\1</param>
+    <param name="revision">2.0</param>
+    <param name="changesgenerate">enable</param>
+  </service>
+  <service name="set_version" mode="manual"/>
+  <service name="tar" mode="buildtime"/>
+  <service name="recompress" mode="buildtime">
+    <param name="file">*.tar</param>
+    <param name="compression">zst</param>
+  </service>
+</services>

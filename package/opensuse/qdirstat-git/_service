@@ -1,0 +1,17 @@
+<!-- Doc: https://openbuildservice.org/help/manuals/obs-user-guide/cha.obs.source_service.html -->
+<services>
+  <service name="tar_scm">
+    <param name="url">https://github.com/shundhammer/qdirstat.git</param>
+    <param name="scm">git</param>
+    <!--  <param name="versionformat">@PARENT_TAG@+git%cd.%h</param> -->
+    <param name="versionformat">2.0.0+git%cd.%h</param>
+    <param name="exclude">.git</param>
+    <param name="revision">master</param>
+    <param name="filename">qdirstat</param>
+  </service>
+  <service name="set_version"/>
+  <service name="recompress">
+    <param name="file">*.tar</param>
+    <param name="compression">bz2</param>
+  </service>
+</services>
