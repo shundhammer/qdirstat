@@ -316,7 +316,7 @@ void LocalDirReadJob::startReading()
                         {
                             logWarning() << "Not trusting NTFS with hard links: \""
                                          << _dir->url() << "/" << entryName
-                                         << "\" links: " << statInfo.st_nlink
+                                         << "\" links: " << (long) statInfo.st_nlink
                                          << " -> resetting to 1"
                                          << endl;
                             _warnedAboutNtfsHardLinks = true;
