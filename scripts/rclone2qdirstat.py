@@ -27,9 +27,15 @@ D\t/\t0\t0
 
         csv_reader = csv.DictReader(csv_fp, ['size', 'mtime', 'mimetype', 'path'])
         for row in csv_reader:
-            # TODO: do some sanity checks on the input (to detect e.g. if wrong --format parameter was used).
-            item_type = 'D' if row['mimetype'].startswith('inode/directory') else 'F'
-            formatted_path = '/' + urllib.parse.quote(row["path"])
-            formatted_size = '0' if row['size'] == '-1' else row['size']
-            mtime_unix_seconds = int(datetime.strptime(row['mtime'], '%Y-%m-%d %H:%M:%S').timestamp())
+            try:
+                assert int(row['size']) >= -1, 'size must be an integer >= -1'
+                formatted_size = '0' if row['size'] == '-1' else row['size']
+                assert row['mimetype'].find('/') != -1, 'mime type must contain a slash'
+                item_type = 'D' if row['mimetype'].startswith('inode/directory') else 'F'
+                assert row['path'], 'path must not be empty'
+                formatted_path = '/' + urllib.parse.quote(row["path"])
+                mtime_unix_seconds = int(datetime.strptime(row['mtime'], '%Y-%m-%d %H:%M:%S').timestamp())
+            except Exception as ex:
+                sys.stderr.write(f'\nError reading {input_file}:{csv_reader.line_num}: {ex}.\nDid you run "rclone lsf" with "--format=stmp" and --csv parameters?\n')
+                sys.exit(1)
             print(f'{item_type}\t{formatted_path}\t{formatted_size}\t{mtime_unix_seconds}')
