@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #
-# Converts output from "rclone lsf -R --format 'stmp' --csv" into qdirstat cache format.
+# Converts output from "rclone lsf --recursive --format=stmp --csv" into qdirstat cache format.
 # This allows to create remote directory listings with rclone and inspect their disk usage with qdirstat.
 #
 # See https://github.com/shundhammer/qdirstat/blob/master/doc/cache-file-format.txt for output format.
@@ -14,6 +14,12 @@ import sys
 import urllib.parse
 
 if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print(f'''Usage: {sys.argv[0]} <input CSV file> <output file>
+Input CSV file must be created with:
+    rclone lsf --recursive --format=stmp --csv ...''')
+        sys.exit(1)
+
     input_file = sys.argv[1]
     output_file = sys.argv[2]
     with open(input_file) as csv_fp, open(output_file, 'w') as out_fp:
