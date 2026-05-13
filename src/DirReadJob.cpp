@@ -397,7 +397,17 @@ void LocalDirReadJob::processSubDir( const QString & entryName, DirInfo * subDir
     _dir->insertChild( subDir );
     childAdded( subDir );
 
-    if ( matchesExcludeRule( entryName ) )
+    // On macOS, /System/Volumes/Data is the APFS data volume that backs the
+    // firmlinks at /Users, /Applications, /Library, etc. Walking into it
+    // re-counts everything already read via the firmlinks. The existing
+    // mount-point / cross-filesystem logic doesn't catch this, so handle it
+    // explicitly here.
+    bool isMacFirmlinkOrigin = false;
+#ifdef Q_OS_MACOS
+    isMacFirmlinkOrigin = ( subDir->url() == "/System/Volumes/Data" );
+#endif
+
+    if ( matchesExcludeRule( entryName ) || isMacFirmlinkOrigin )
     {
 	subDir->setExcluded();
 	finishReading( subDir, DirOnRequestOnly );
