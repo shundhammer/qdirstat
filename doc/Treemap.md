@@ -4,7 +4,7 @@
 
 In general, a treemap is a graphical method to visualize a hierarchical
 structure, also known as a _tree_. It shows the whole tree at once with each
-item of the tree coresponding to a rectangle in the treemap.
+item of the tree corresponding to a rectangle in the treemap.
 
 What makes the treemap special is that the area (the size) of each rectangle
 corresponds to a _value_ of the item, so you can instantly see how any
