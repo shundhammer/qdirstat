@@ -122,6 +122,15 @@ int main( int argc, char *argv[] )
     QCoreApplication::setApplicationName ( "QDirStat" );
 
     QApplication qtApp( argc, argv);
+
+#ifdef Q_OS_MAC
+    // Qt 6's cocoa platform theme hardcodes ShowIconsInMenus=false on all
+    // pre-Tahoe macOS, and QApplication's ctor flips AA_DontShowIconsInMenus
+    // to match -- *after* any user-supplied value. Re-flip it here, AFTER
+    // construction, to restore the Qt 5 behavior of icons in the menubar.
+    QCoreApplication::setAttribute( Qt::AA_DontShowIconsInMenus, false );
+#endif
+
     QStringList argList = QCoreApplication::arguments();
     argList.removeFirst(); // Remove program name
     logQtEnv();
