@@ -153,7 +153,11 @@ void SysUtil::openInBrowser( const QString & url )
 {
     logDebug() << "Opening URL " << url << endl;
 
+#ifdef Q_OS_MAC
+    QProcess::startDetached( "/usr/bin/open", QStringList() << url );
+#else
     QProcess::startDetached( "/usr/bin/xdg-open", QStringList() << url );
+#endif
 }
 
 

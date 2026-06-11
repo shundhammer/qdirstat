@@ -2,7 +2,7 @@
 
 isEmpty(INSTALL_PREFIX):INSTALL_PREFIX = /usr
 
-TEMPLATE   = app
+TEMPLATE   = aux
 TARGET     = $(nothing)
 doc.files  = *.txt *.md
 

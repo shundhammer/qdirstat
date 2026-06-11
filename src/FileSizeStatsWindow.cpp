@@ -499,7 +499,11 @@ void FileSizeStatsWindow::showHelp()
 
     logInfo() << "Help topic: " << topic << endl;
     QString helpUrl = "https://github.com/shundhammer/qdirstat/blob/master/doc/stats/" + topic;
+#ifdef Q_OS_MAC
+    QString program = "/usr/bin/open";
+#else
     QString program = "/usr/bin/xdg-open";
+#endif
 
     logInfo() << "Starting  " << program << " " << helpUrl << endl;
     QProcess::startDetached( program, QStringList() << helpUrl );

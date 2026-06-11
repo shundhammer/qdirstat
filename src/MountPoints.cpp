@@ -16,6 +16,11 @@
 #include "Logger.h"
 #include "Exception.h"
 
+#ifdef Q_OS_MAC
+#  include <sys/param.h>
+#  include <sys/mount.h>
+#endif
+
 #define LSBLK_TIMEOUT_SEC       10
 #define USE_PROC_MOUNTS         1
 
@@ -296,7 +301,9 @@ void MountPoints::ensurePopulated()
     if ( _isPopulated )
 	return;
 
-#if USE_PROC_MOUNTS
+#ifdef Q_OS_MAC
+    readGetmntinfo();
+#elif USE_PROC_MOUNTS
 
     read( "/proc/mounts" ) || read( "/etc/mtab" );
 
@@ -311,6 +318,27 @@ void MountPoints::ensurePopulated()
     _isPopulated = true; // don't try more than once
     // dumpNormalMountPoints();
 }
+
+
+#ifdef Q_OS_MAC
+bool MountPoints::readGetmntinfo()
+{
+    struct statfs * fs = nullptr;
+    int n = getmntinfo( &fs, MNT_NOWAIT );
+    findNtfsDevices();
+    for ( int i = 0; i < n; ++i )
+    {
+        QString opts = ( fs[i].f_flags & MNT_RDONLY ) ? "ro" : QString();
+        MountPoint * mp = new MountPoint( fs[i].f_mntfromname, fs[i].f_mntonname,
+                                          fs[i].f_fstypename, opts );
+        CHECK_NEW( mp );
+        postProcess( mp );
+        add( mp );
+    }
+    if ( n > 0 ) _isPopulated = true;
+    return _isPopulated;
+}
+#endif
 
 
 bool MountPoints::read( const QString & filename )

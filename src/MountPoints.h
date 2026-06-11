@@ -296,6 +296,14 @@ namespace QDirStat
          **/
         bool readStorageInfo();
 
+#ifdef Q_OS_MAC
+        /**
+         * Read mount points via the BSD getmntinfo(3) syscall on macOS.
+         * Returns 'true' if any mount point was found.
+         **/
+        bool readGetmntinfo();
+#endif
+
         /**
          * Post-process a mount point and add it to the internal list and map.
          **/

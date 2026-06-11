@@ -2,7 +2,7 @@
 
 isEmpty(INSTALL_PREFIX):INSTALL_PREFIX = /usr
 
-TEMPLATE       = app
+TEMPLATE       = aux
 TARGET         = $(nothing)
 QMAKE_STRIP    = /bin/true # prevent stripping the script(s)
 
