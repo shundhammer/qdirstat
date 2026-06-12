@@ -1,7 +1,7 @@
 /*
  *   File name: FilesystemsWindow.h
  *   Summary:	QDirStat "Mounted Filesystems" window
- *   License:	GPL V2 - See file LICENSE for details.
+ *   License:	GPL-2.0-only - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */

@@ -6,7 +6,7 @@ Qt-based directory statistics: KDirStat without any KDE -- from the original KDi
 
 Target Platforms: Linux, BSD, Unix-like systems
 
-License: GPL V2
+License: GPL-2.0-only
 
 
 ## QDirStat Main Window

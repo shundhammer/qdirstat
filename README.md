@@ -8,7 +8,7 @@ the original KDirStat.
 
 Target Platforms: Linux, BSD, Unix-like systems; macOS
 
-License: GPL V2
+License: GPL-2.0-only
 
 Updated: 2026-01-18
 

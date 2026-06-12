@@ -1,7 +1,7 @@
 /*
  *   File name: FileDetailsView.h
  *   Summary:	Details view for the currently selected file or directory
- *   License:	GPL V2 - See file LICENSE for details.
+ *   License:	GPL-2.0-only - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */

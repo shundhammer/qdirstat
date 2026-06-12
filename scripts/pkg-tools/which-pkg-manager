@@ -4,7 +4,7 @@
 # Currently supported: dpkg, rpm, pacman
 #
 # Author:  Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
-# License: GPL V2
+# License: GPL-2.0-only
 #
 
 RPM=/bin/rpm

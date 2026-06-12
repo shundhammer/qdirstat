@@ -1,7 +1,7 @@
 /*
  *   File name: Translator.h
  *   Summary:	Helper class for user message translations
- *   License:	GPL V2 - See file LICENSE for details.
+ *   License:	GPL-2.0-only - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  *              Donated by the Myrlyn project

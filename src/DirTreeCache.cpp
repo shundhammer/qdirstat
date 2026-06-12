@@ -1,7 +1,7 @@
 /*
  *   File name: DirTreeCache.cpp
  *   Summary:	QDirStat cache reader / writer
- *   License:	GPL V2 - See file LICENSE for details.
+ *   License:	GPL-2.0-only - See file LICENSE for details.
  *
  *   Author:	Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
  */

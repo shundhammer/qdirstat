@@ -96,7 +96,7 @@ Misleading documentation is worse than no documentation at all.
 **Do not** copy 30+ lines of legalese bullshit into any source file. One line
 in the header like
 
-    License: GPL V2 - see file LICENSE
+    License: GPL-2.0-only - see file LICENSE
 
 is plenty. Seriously, what are those people thinking who put all that legalese
 into source files? Sure, they listened to spineless corporate lawyers who just

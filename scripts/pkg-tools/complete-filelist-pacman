@@ -4,7 +4,7 @@
 # rpm version
 #
 # Author:  Stefan Hundhammer <Stefan.Hundhammer@gmx.de>
-# License: GPL V2
+# License: GPL-2.0-only
 
 
 SCRIPT_NAME=$(basename $0)
