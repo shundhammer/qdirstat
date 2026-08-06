@@ -676,6 +676,9 @@
    <property name="toolTip">
     <string>About QDirStat</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
   </action>
   <action name="actionAboutQt">
    <property name="text">
@@ -686,6 +689,9 @@
    </property>
    <property name="toolTip">
     <string>About Qt</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutQtRole</enum>
    </property>
   </action>
   <action name="actionRefreshSelected">
