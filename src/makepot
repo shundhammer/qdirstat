@@ -43,13 +43,13 @@ lupdate6  -silent $SRC_DIR/*.ui -ts $UI_TS
 lconvert6 $UI_TS -o $UI_POT
 
 
-# Extract messages from the .h and .cc files
+# Extract messages from the .h and .cpp files
 # using xgettext, searching for  _( "foo" ) messages
 
 xgettext --language=c++ -k --keyword=_ --qt \
          --omit-header          \
          --output=$CC_POT       \
-         $SRC_DIR/*.cc
+         $SRC_DIR/*.cpp
 
 # .h files don't normally contain any translatable messages.
 #
