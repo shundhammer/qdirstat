@@ -50,9 +50,15 @@ Translator::translate( const char * context_str,
     Q_UNUSED( disambiguation );
     Q_UNUSED( nPlural );
 
+    // Don't attempt to translate an empty string to avoid the initial
+    //   msgid ""
+    // to be translated into some non-message gibberish
+
+    if ( sourceText && *sourceText == '\0' )
+        return "";
+
     if ( _useFakeTranslations )
         return fakeTranslation( sourceText ); // -> "xixoxixo..."
-
 
 #if ENABLE_QT_INTERNAL_MESSAGES
 
