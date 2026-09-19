@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>654</width>
-    <height>569</height>
+    <height>669</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="handleWidth">
       <number>13</number>
@@ -45,7 +45,7 @@
             <string>Move the current cleanup action to the top of the list.</string>
            </property>
            <property name="text">
-            <string>...</string>
+            <string notr="true">...</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
@@ -59,7 +59,7 @@
             <string>Move the current cleanup action one position up in the list.</string>
            </property>
            <property name="text">
-            <string>...</string>
+            <string notr="true">...</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
@@ -70,7 +70,7 @@
          <item>
           <spacer name="toolButtonUpperSpacer">
            <property name="orientation">
-            <enum>Qt::Vertical</enum>
+            <enum>Qt::Orientation::Vertical</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -87,7 +87,7 @@
 You can create as many as you like.</string>
            </property>
            <property name="text">
-            <string>...</string>
+            <string notr="true">...</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
@@ -101,7 +101,7 @@ You can create as many as you like.</string>
             <string>Remove the current cleanup action.</string>
            </property>
            <property name="text">
-            <string>...</string>
+            <string notr="true">...</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
@@ -112,7 +112,7 @@ You can create as many as you like.</string>
          <item>
           <spacer name="toolButtonLowerSpacer">
            <property name="orientation">
-            <enum>Qt::Vertical</enum>
+            <enum>Qt::Orientation::Vertical</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -128,7 +128,7 @@ You can create as many as you like.</string>
             <string>Move the current cleanup action one position down in the list.</string>
            </property>
            <property name="text">
-            <string>...</string>
+            <string notr="true">...</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
@@ -142,7 +142,7 @@ You can create as many as you like.</string>
             <string>Move the current cleanup action to the bottom of the list.</string>
            </property>
            <property name="text">
-            <string>...</string>
+            <string notr="true">...</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
@@ -229,10 +229,10 @@ You can add a hotkey with &quot;&amp;&quot;.</string>
            <item>
             <spacer name="miniHelpLeftSpacer">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::Preferred</enum>
+              <enum>QSizePolicy::Policy::Preferred</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -257,14 +257,14 @@ executed multiple times.</string>
 </string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
             </widget>
            </item>
            <item>
             <spacer name="miniHelpRightSpacer">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -379,10 +379,10 @@ re-read from disk after the cleanup action is finished.</string>
        <item>
         <spacer name="toolBoxSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Preferred</enum>
+          <enum>QSizePolicy::Policy::Preferred</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -408,8 +408,8 @@ re-read from disk after the cleanup action is finished.</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>330</width>
-            <height>147</height>
+            <width>345</width>
+            <height>168</height>
            </rect>
           </property>
           <attribute name="label">
@@ -454,7 +454,7 @@ Note that they don't really have a counterpart on the disk.</string>
            <item>
             <spacer name="worksForPageSpacer">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -471,8 +471,8 @@ Note that they don't really have a counterpart on the disk.</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>330</width>
-            <height>152</height>
+            <width>322</width>
+            <height>177</height>
            </rect>
           </property>
           <attribute name="label">
@@ -602,10 +602,10 @@ command, uncheck this.</string>
            <item>
             <spacer name="outputWindowPageSpacer">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::MinimumExpanding</enum>
+              <enum>QSizePolicy::Policy::MinimumExpanding</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -622,8 +622,8 @@ command, uncheck this.</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>330</width>
-            <height>142</height>
+            <width>340</width>
+            <height>133</height>
            </rect>
           </property>
           <attribute name="label">
@@ -698,10 +698,10 @@ and the '-c' option.</string>
            <item>
             <spacer name="shellPageSpacer">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeType">
-              <enum>QSizePolicy::MinimumExpanding</enum>
+              <enum>QSizePolicy::Policy::MinimumExpanding</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>

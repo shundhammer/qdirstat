@@ -61,7 +61,7 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -97,7 +97,7 @@
     <string>Si&amp;ze Statistics</string>
    </property>
    <property name="shortcut">
-    <string>F2</string>
+    <string notr="true">F2</string>
    </property>
   </action>
  </widget>

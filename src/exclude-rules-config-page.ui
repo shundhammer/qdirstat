@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>520</width>
+    <width>573</width>
     <height>481</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <item>
     <widget class="QSplitter" name="mainSplitter">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="handleWidth">
       <number>24</number>
@@ -45,7 +45,7 @@
             <string>Move the current exclude rule to the top of the list.</string>
            </property>
            <property name="text">
-            <string>...</string>
+            <string notr="true">...</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
@@ -59,7 +59,7 @@
             <string>Move the current exclude rule one position up in the list.</string>
            </property>
            <property name="text">
-            <string>...</string>
+            <string notr="true">...</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
@@ -70,7 +70,7 @@
          <item>
           <spacer name="toolButtonUpperSpacer">
            <property name="orientation">
-            <enum>Qt::Vertical</enum>
+            <enum>Qt::Orientation::Vertical</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -87,7 +87,7 @@
 You can create as many as you like.</string>
            </property>
            <property name="text">
-            <string>...</string>
+            <string notr="true">...</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
@@ -101,7 +101,7 @@ You can create as many as you like.</string>
             <string>Remove the current exclude rule.</string>
            </property>
            <property name="text">
-            <string>...</string>
+            <string notr="true">...</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
@@ -112,7 +112,7 @@ You can create as many as you like.</string>
          <item>
           <spacer name="toolButtonLowerSpacer">
            <property name="orientation">
-            <enum>Qt::Vertical</enum>
+            <enum>Qt::Orientation::Vertical</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -128,7 +128,7 @@ You can create as many as you like.</string>
             <string>Move the current exclude rule one position down in the list.</string>
            </property>
            <property name="text">
-            <string>...</string>
+            <string notr="true">...</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
@@ -142,7 +142,7 @@ You can create as many as you like.</string>
             <string>Move the current exclude rule to the bottom of the list.</string>
            </property>
            <property name="text">
-            <string>...</string>
+            <string notr="true">...</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
@@ -172,7 +172,7 @@ You can create as many as you like.</string>
        <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -215,7 +215,7 @@ You can create as many as you like.</string>
        <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -258,7 +258,7 @@ You can create as many as you like.</string>
        <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -271,7 +271,7 @@ You can create as many as you like.</string>
        <item>
         <spacer name="verticalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -284,7 +284,7 @@ You can create as many as you like.</string>
        <item>
         <spacer name="verticalSpacer_5">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>

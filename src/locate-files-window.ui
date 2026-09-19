@@ -21,7 +21,6 @@
     <widget class="QLabel" name="heading">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -63,10 +62,10 @@
      <item>
       <spacer name="hStretch2">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Minimum</enum>
+        <enum>QSizePolicy::Policy::Minimum</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -79,14 +78,14 @@
      <item>
       <widget class="QLabel" name="resultsLabel">
        <property name="text">
-        <string>42 Results</string>
+        <string notr="true">42 Results</string>
        </property>
       </widget>
      </item>
      <item>
       <spacer name="hStretch1">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

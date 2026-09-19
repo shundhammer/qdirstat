@@ -158,8 +158,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>63</width>
-           <height>303</height>
+           <width>88</width>
+           <height>289</height>
           </rect>
          </property>
         </widget>
@@ -176,7 +176,7 @@
      <x>0</x>
      <y>0</y>
      <width>1157</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -422,7 +422,7 @@
     <string>Expand (open) the directory tree to level 1.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+1</string>
+    <string notr="true">Ctrl+1</string>
    </property>
   </action>
   <action name="actionExpandTreeLevel2">
@@ -433,7 +433,7 @@
     <string>Expand (open) the directory tree to level 2.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+2</string>
+    <string notr="true">Ctrl+2</string>
    </property>
   </action>
   <action name="actionExpandTreeLevel3">
@@ -444,7 +444,7 @@
     <string>Expand (open) the directory tree to level 3.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+3</string>
+    <string notr="true">Ctrl+3</string>
    </property>
   </action>
   <action name="actionExpandTreeLevel4">
@@ -455,7 +455,7 @@
     <string>Expand (open) the directory tree to level 4.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+4</string>
+    <string notr="true">Ctrl+4</string>
    </property>
   </action>
   <action name="actionExpandTreeLevel5">
@@ -466,7 +466,7 @@
     <string>Expand (open) the directory tree to level 5.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+5</string>
+    <string notr="true">Ctrl+5</string>
    </property>
   </action>
   <action name="actionExpandTreeLevel6">
@@ -477,7 +477,7 @@
     <string>Expand (open) the directory tree to level 6.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+6</string>
+    <string notr="true">Ctrl+6</string>
    </property>
   </action>
   <action name="actionExpandTreeLevel7">
@@ -488,7 +488,7 @@
     <string>Expand (open) the directory tree to level 7.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+7</string>
+    <string notr="true">Ctrl+7</string>
    </property>
   </action>
   <action name="actionExpandTreeLevel8">
@@ -499,7 +499,7 @@
     <string>Expand (open) the directory tree to level 8.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+8</string>
+    <string notr="true">Ctrl+8</string>
    </property>
   </action>
   <action name="actionExpandTreeLevel9">
@@ -510,7 +510,7 @@
     <string>Expand (open) the directory tree to level 9.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+9</string>
+    <string notr="true">Ctrl+9</string>
    </property>
   </action>
   <action name="actionStopReading">
@@ -564,7 +564,7 @@
     <string>Re-read the entire directory tree from disk.</string>
    </property>
    <property name="shortcut">
-    <string>F5</string>
+    <string notr="true">F5</string>
    </property>
   </action>
   <action name="actionCopyPathToClipboard">
@@ -649,7 +649,7 @@
     <string>Enable or disable showing the treemap view.</string>
    </property>
    <property name="shortcut">
-    <string>F9</string>
+    <string notr="true">F9</string>
    </property>
   </action>
   <action name="actionGoUp">
@@ -719,7 +719,7 @@
     <string>Reread the selected branch from disk.</string>
    </property>
    <property name="shortcut">
-    <string>F6</string>
+    <string notr="true">F6</string>
    </property>
   </action>
   <action name="actionReadExcludedDirectory">
@@ -765,7 +765,7 @@
     <string>Switch verbose logging of selecting and unselecting items on or off.</string>
    </property>
    <property name="shortcut">
-    <string>Shift+F7</string>
+    <string notr="true">Shift+F7</string>
    </property>
   </action>
   <action name="actionMoveToTrash">
@@ -780,7 +780,7 @@
     <string>Move the selected items to the trash bin.</string>
    </property>
    <property name="shortcut">
-    <string>Del</string>
+    <string notr="true">Del</string>
    </property>
   </action>
   <action name="actionDumpSelection">
@@ -788,7 +788,7 @@
     <string>Dump Selection to Log</string>
    </property>
    <property name="shortcut">
-    <string>F7</string>
+    <string notr="true">F7</string>
    </property>
   </action>
   <action name="actionFileTypeStats">
@@ -799,7 +799,7 @@
     <string>File Type Statistics</string>
    </property>
    <property name="shortcut">
-    <string>F3</string>
+    <string notr="true">F3</string>
    </property>
   </action>
   <action name="actionHelp">
@@ -816,7 +816,7 @@
     <string>https://github.com/shundhammer/qdirstat/blob/master/README.md</string>
    </property>
    <property name="shortcut">
-    <string>F1</string>
+    <string notr="true">F1</string>
    </property>
   </action>
   <action name="actionFileSizeStats">
@@ -824,7 +824,7 @@
     <string>File &amp;Size Statistics</string>
    </property>
    <property name="shortcut">
-    <string>F2</string>
+    <string notr="true">F2</string>
    </property>
   </action>
   <action name="actionShowDetailsPanel">
@@ -852,7 +852,7 @@
     <string>L1</string>
    </property>
    <property name="shortcut">
-    <string>Alt+1</string>
+    <string notr="true">Alt+1</string>
    </property>
   </action>
   <action name="actionLayout2">
@@ -869,7 +869,7 @@
     <string>L2</string>
    </property>
    <property name="shortcut">
-    <string>Alt+2</string>
+    <string notr="true">Alt+2</string>
    </property>
   </action>
   <action name="actionLayout3">
@@ -883,7 +883,7 @@
     <string>L3</string>
    </property>
    <property name="shortcut">
-    <string>Alt+3</string>
+    <string notr="true">Alt+3</string>
    </property>
   </action>
   <action name="actionDonate">
@@ -1065,7 +1065,7 @@
     <string>File &amp;Age Statistics</string>
    </property>
    <property name="shortcut">
-    <string>F4</string>
+    <string notr="true">F4</string>
    </property>
   </action>
   <action name="actionDiscoverFilesFromYear">
@@ -1085,7 +1085,7 @@
     <string>Go back to the previous directory</string>
    </property>
    <property name="shortcut">
-    <string>Alt+Left</string>
+    <string notr="true">Alt+Left</string>
    </property>
   </action>
   <action name="actionGoForward">
@@ -1100,7 +1100,7 @@
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Go forward again to the next directory (after going back).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="shortcut">
-    <string>Alt+Right</string>
+    <string notr="true">Alt+Right</string>
    </property>
   </action>
   <action name="actionFileAgeStatsHelp">

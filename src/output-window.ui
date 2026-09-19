@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>660</width>
-    <height>400</height>
+    <width>937</width>
+    <height>570</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,23 +90,25 @@
      <property name="font">
       <font>
        <family>DejaVu Sans Mono</family>
-       <weight>50</weight>
        <bold>false</bold>
       </font>
      </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="lineWidth">
       <number>1</number>
      </property>
      <property name="lineWrapMode">
-      <enum>QTextEdit::NoWrap</enum>
+      <enum>QTextEdit::LineWrapMode::NoWrap</enum>
      </property>
      <property name="html">
       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans Mono'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This is where output of the cleanup action will appear.&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -122,7 +124,7 @@ p, li { white-space: pre-wrap; }
       <bool>false</bool>
      </property>
      <property name="textInteractionFlags">
-      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+      <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
      </property>
     </widget>
    </item>
@@ -131,7 +133,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QToolButton" name="zoomInButton">
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
        <property name="icon">
         <iconset resource="icons.qrc">
@@ -142,7 +144,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QToolButton" name="zoomOutButton">
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
        <property name="icon">
         <iconset resource="icons.qrc">
@@ -153,7 +155,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QToolButton" name="resetZoomButton">
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
        <property name="icon">
         <iconset resource="icons.qrc">
@@ -164,7 +166,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -184,7 +186,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
