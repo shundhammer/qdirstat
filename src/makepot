@@ -27,6 +27,7 @@ ensure_installed lconvert6  qt6-tools-linguist
 # Constants for files and direcories
 
 TS="qdirstat.ts"
+POT_RAW="qdirstat-raw.pot"
 POT="qdirstat.pot"
 SRC_DIR=.
 
@@ -36,13 +37,14 @@ SRC_DIR=.
 # to gettext .pot format.
 
 lupdate6  -silent $SRC_DIR/*.ui $SRC_DIR/*.cpp -ts $TS
-lconvert6 $TS -o $POT
+lconvert6 $TS -o $POT_RAW
+sed -e '/^msgctxt/d' <$POT_RAW >$POT
 
 
 # Clean up
 
 # Comment out to keep the temp files for debugging
-rm -f $TS
+rm -f $TS $POT_RAW
 
 
 # Stats
