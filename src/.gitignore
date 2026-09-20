@@ -5,3 +5,4 @@ qrc_icons.cpp
 .obj
 .moc
 heaptrack*.zst
+qdirstat.pot

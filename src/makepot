@@ -22,6 +22,7 @@ ensure_installed()
 #                command    package
 ensure_installed lupdate6   qt6-tools-linguist
 ensure_installed lconvert6  qt6-tools-linguist
+ensure_installed msguniq    gettext-tools
 
 
 # Constants for files and direcories
@@ -38,7 +39,10 @@ SRC_DIR=.
 
 lupdate6  -silent $SRC_DIR/*.ui $SRC_DIR/*.cpp -ts $TS
 lconvert6 $TS -o $POT_RAW
-sed -e '/^msgctxt/d' <$POT_RAW >$POT
+
+# Remove msgctxt lines and merge duplicate msgids
+sed -i -e '/^msgctxt/d' $POT_RAW
+msguniq -o $POT $POT_RAW
 
 
 # Clean up
@@ -52,7 +56,7 @@ rm -f $TS $POT_RAW
 echo
 ls -l *.pot
 echo
-echo -n "Number of messages: "
+echo -n "Number of messages in $POT: "
 grep -c 'msgid' $POT
 echo
 
