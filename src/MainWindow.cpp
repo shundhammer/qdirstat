@@ -1138,6 +1138,19 @@ void MainWindow::bookmarkCurrentPath( bool isChecked )
 
 void MainWindow::moveToTrash()
 {
+    QWidget * win     = QApplication::activeWindow();
+    QString   winName = win ? win->objectName() : "<unknown>";
+
+    logDebug() << "Active window: " << winName << endl;
+
+    if ( winName != "MainWindow" &&
+         winName != "LocateFilesWindow" )
+    {
+        logError() << "Refusing to move to trash with this active window" << endl;
+        return;
+    }
+
+
     // _ui->actionMoveToTrash() is not a subclass of Cleanup and not owned by
     // CleanupCollection, so this has to replicate some of its functionality.
 
