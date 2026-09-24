@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2026-01-18
+Updated: 2026-09-24
 
 
 ## Screenshot
@@ -133,6 +133,19 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2026-09-24 Program translations are starting to arrive!
+
+  - Portuguese (pt_PT) translation by **Ricardo Simões**.
+    See [issue #318](https://github.com/shundhammer/qdirstat/issues/318).
+
+    Interested users will have to install the `qdirstat-lang` package from his
+    GitHub repository. We'll have to work out the packaging workflow.
+
+    But right now it's as simple as copying the relevant `qdirstat.mo` file to
+    the correct path below `/usr/share/locale/`, in the case of Portuguese to
+    `/usr/share/locale/pt_PT/LC_MESSAGES/qdirstat.mo`.
+
 
 - 2026-01-18 **New stable release: 2.0**
 
