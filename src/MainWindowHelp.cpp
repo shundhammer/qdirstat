@@ -52,7 +52,7 @@ void MainWindow::showDonateDialog()
 {
     QString dUrl = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EYJXAVLGNRR5W";
 
-    QString text = "<h2>Donate</h2>";
+    QString text = QString( "<h2>%1</h2>" ).arg( tr( "Donate" ) );
     text += "<p>";
     text += tr( "QDirStat is Free Open Source Software." );
     text += "</p><p>";
