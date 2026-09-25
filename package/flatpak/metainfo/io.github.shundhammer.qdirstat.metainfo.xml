@@ -19,6 +19,9 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="2.0" date="2026-01-18" type="stable">
+      <url>https://github.com/shundhammer/qdirstat/releases/tag/2.0</url>
+    </release>    
     <release version="1.9" date="2024-01-14" type="stable">
       <url>https://github.com/shundhammer/qdirstat/releases/tag/1.9</url>
     </release>
