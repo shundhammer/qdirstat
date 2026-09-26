@@ -144,7 +144,6 @@ SOURCES	  = main.cpp			\
 	    SysUtil.cpp			\
 	    SystemFileChecker.cpp	\
 	    Translator.cpp		\
-	    Trash.cpp			\
 	    TreeWalker.cpp		\
 	    TreemapTile.cpp		\
 	    TreemapView.cpp		\
@@ -245,7 +244,6 @@ HEADERS	  =				\
 	    SysUtil.h			\
 	    SystemFileChecker.h		\
 	    Translator.h		\
-	    Trash.h			\
 	    TreemapTile.h		\
 	    UnpkgSettings.cpp		\
 	    UnreadableDirsWindow.h	\
