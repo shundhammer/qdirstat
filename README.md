@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2026-09-24
+Updated: 2026-09-26
 
 
 ## Screenshot
@@ -938,8 +938,7 @@ Features ported from the old KDirStat:
     QDirStat tries its best to guess the name of the relevant terminal window
     application for the current desktop.
 
-  - Move to trash bin. QDirStat has its own implementation of the XDG trash
-    specification.
+  - Move to trash bin.
 
   - Delete immediately.
 
@@ -1071,8 +1070,8 @@ There are currently no plans for doing a native Windows port.
 Directory reading might be quite easy to replace for Windows; we don't have
 that problem with devices and crossing filesystems on that platform.
 
-But the cleanups might be a challenge, "move to trash" works completely
-differently, and we'd need an installer for a Windows version.
+But the cleanups might be a challenge, and we'd need an installer for a Windows
+version.
 
 So, for the time being, use the [docker](#qdirstat-docker-containers) or
 [WinDirStat](https://windirstat.info/) instead.
@@ -1241,20 +1240,12 @@ See file [Contributing.md](doc/Contributing.md)
 and [GitHub-Workflow.md](doc/GitHub-Workflow.md)
 
 
-## Troubleshooting
-
-### Can't Move a Directory to Trash
-
-See file [Troubleshooting.md](doc/Troubleshooting.md)
-
-
 ## Further Reading
 
 - Original [KDirStat](http://kdirstat.sourceforge.net/)  ([source code](https://github.com/shundhammer/kdirstat))
 - [K4Dirstat](https://bitbucket.org/jeromerobert/k4dirstat/wiki/Home) ([source code](https://bitbucket.org/jeromerobert/k4dirstat/src))
 - [WinDirStat](https://windirstat.info/) (for Windows)
 - [Disk Usage Tools Compared: QDirStat vs. K4DirStat vs. Baobab vs. Filelight vs. ncdu](https://github.com/shundhammer/qdirstat/wiki/disk-usage-tools-compared) (including benchmarks)
-- [XDG Trash Spec](http://standards.freedesktop.org/trash-spec/trashspec-1.0.html)
 - [Spatry's QDirStat Review on YouTube](https://www.youtube.com/watch?v=ysm4-x_5ftI)
 
 Of course, don't forget to check out the [doc directory](doc/).

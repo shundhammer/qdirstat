@@ -158,8 +158,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>88</width>
-           <height>289</height>
+           <width>63</width>
+           <height>303</height>
           </rect>
          </property>
         </widget>
@@ -176,7 +176,7 @@
      <x>0</x>
      <y>0</y>
      <width>1157</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -280,7 +280,6 @@
      <property name="title">
       <string>Problems and &amp;Solutions</string>
      </property>
-     <addaction name="actionCantMoveDirToTrash"/>
      <addaction name="actionBtrfsSizeReporting"/>
      <addaction name="actionShadowedByMount"/>
      <addaction name="actionHeadlessServers"/>
@@ -1050,14 +1049,6 @@
    </property>
    <property name="statusTip">
     <string>https://github.com/shundhammer/qdirstat/blob/master/doc/QDirStat-for-Servers.md</string>
-   </property>
-  </action>
-  <action name="actionCantMoveDirToTrash">
-   <property name="text">
-    <string>Can't Move a Directory to &amp;Trash...</string>
-   </property>
-   <property name="statusTip">
-    <string>https://github.com/shundhammer/qdirstat/blob/master/doc/Troubleshooting.md#cant-move-a-directory-to-trash</string>
    </property>
   </action>
   <action name="actionFileAgeStats">

@@ -3,6 +3,8 @@
 
 ### Can't Move a Directory to Trash
 
+**Mostly obsolete - using QFile::moveToTrash() now**
+
 QDirStat does not copy entire directory trees to the trash directory in your
 home directory. It tries its best to copy single files there, but for anything
 larger, it strictly sticks to the XDG trash specification. So, if you have a
