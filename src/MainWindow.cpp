@@ -9,6 +9,7 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
@@ -49,7 +50,6 @@
 #include "SettingsHelpers.h"
 #include "SignalBlocker.h"
 #include "SysUtil.h"
-#include "Trash.h"
 #include "UnreadableDirsWindow.h"
 #include "Version.h"
 
@@ -1170,7 +1170,7 @@ void MainWindow::moveToTrash()
 
     foreach ( FileInfo * item, selectedItems )
     {
-	bool success = Trash::trash( item->path() );
+	bool success = QFile::moveToTrash( item->path() );
 
 	if ( success )
 	    outputWindow->addStdout( tr( "Moved to trash: %1" ).arg( item->path() ) );
