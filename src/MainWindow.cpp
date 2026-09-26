@@ -56,8 +56,6 @@
 #define LONG_MESSAGE		25*1000
 #define UPDATE_MILLISEC		200
 
-#define USE_CUSTOM_OPEN_DIR_DIALOG 1
-
 using namespace QDirStat;
 
 
@@ -683,16 +681,10 @@ void MainWindow::newInstance()
 
 void MainWindow::askOpenDir()
 {
-    QString path;
     DirTree * tree = app()->dirTree();
     bool crossFilesystems = tree->crossFilesystems();
 
-#if USE_CUSTOM_OPEN_DIR_DIALOG
-    path = QDirStat::OpenDirDialog::askOpenDir( &crossFilesystems, this );
-#else
-    path = QFileDialog::getExistingDirectory( this, // parent
-                                              tr("Select directory to scan") );
-#endif
+    QString path = QDirStat::OpenDirDialog::askOpenDir( &crossFilesystems, this );
 
     if ( ! path.isEmpty() )
     {
