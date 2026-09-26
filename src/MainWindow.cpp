@@ -837,9 +837,12 @@ void MainWindow::readCache( const QString & cacheFileName )
 
 void MainWindow::askReadCache()
 {
-    QString fileName = QFileDialog::getOpenFileName( this, // parent
-						     tr( "Select QDirStat cache file" ),
-						     DEFAULT_CACHE_NAME );
+    QString fileName = QFileDialog::getOpenFileName( this,  // parent
+						     tr( "Select QDirStat cache file" ), // caption
+						     DEFAULT_CACHE_NAME,                 // dir (+name),
+                                                     QString(),                          // filter
+                                                     0,                                  // selectedFilter
+                                                     QFileDialog::DontUseNativeDialog ); // opt (issue #320)
     if ( ! fileName.isEmpty() )
 	readCache( fileName );
 
@@ -849,9 +852,13 @@ void MainWindow::askReadCache()
 
 void MainWindow::askWriteCache()
 {
-    QString fileName = QFileDialog::getSaveFileName( this, // parent
-						     tr( "Enter name for QDirStat cache file"),
-						     DEFAULT_CACHE_NAME );
+    QString fileName = QFileDialog::getSaveFileName( this,  // parent
+						     tr( "Enter name for QDirStat cache file"), // caption
+						     DEFAULT_CACHE_NAME,                 // dir (+name)
+                                                     QString(),                          // filter
+                                                     0,                                  // selectedFilter
+                                                     QFileDialog::DontUseNativeDialog ); // opt (issue #320)
+
     if ( ! fileName.isEmpty() )
     {
 	bool ok = app()->dirTree()->writeCache( fileName );
