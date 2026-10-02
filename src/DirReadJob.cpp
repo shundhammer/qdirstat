@@ -472,11 +472,8 @@ bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
 
     if ( ! cacheReadJob->reader() )
     {
-	logWarning() << "NOT using invalid cache file " << cacheFullName
-		     << " for " << _dirName
-		     << endl;
+	logWarning() << "Ignoring invalid cache file " << cacheFullName << endl;
 
-        cacheReadJob->reader()->setAborted();
 	delete cacheReadJob;
 
 	return false;
@@ -702,6 +699,7 @@ void CacheReadJob::init()
 	}
 	else
 	{
+            logError() << "Reading the cache failed - destroying the CacheReader." << endl;
 	    delete _reader;
 	    _reader = 0;
 	}

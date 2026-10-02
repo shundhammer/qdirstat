@@ -271,10 +271,10 @@ CacheReader::CacheReader( const QString & fileName,
 
 CacheReader::~CacheReader()
 {
+    logDebug() << "CacheReader destructor" << endl;
+
     if ( _cache )
 	gzclose( _cache );
-
-    logDebug() << "Cache reading finished" << endl;
 
     if ( _toplevel && ! _aborted )
     {
@@ -611,14 +611,13 @@ bool CacheReader::checkHeader()
     {
 	if ( ( strcmp( field( 0 ), "[qdirstat" ) != 0 &&
 	       strcmp( field( 0 ), "[kdirstat" ) != 0	) ||
-	     strcmp( field( 2 ), "cache"     ) != 0 ||
-	     strcmp( field( 3 ), "file]"     ) != 0 )
+	     strcmp  ( field( 2 ), "cache"     ) != 0 ||
+	     strcmp  ( field( 3 ), "file]"     ) != 0 )
 	{
 	    _ok = false;
-	    logError() << _fileName << ":" << _lineNo
-		      << ": Unknown file format" << endl;
 	}
     }
+
 
     if ( _ok )
     {
@@ -634,7 +633,13 @@ bool CacheReader::checkHeader()
     // logDebug() << "Cache file header check OK: " << _ok << endl;
 
     if ( ! _ok )
+    {
+        _aborted = true;
+        logError() << _fileName << ":" << _lineNo
+                   << ": Unknown or invalid file format!" << endl;
+
 	emit error();
+    }
 
     return _ok;
 }
