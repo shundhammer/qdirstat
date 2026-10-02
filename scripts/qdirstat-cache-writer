@@ -128,7 +128,6 @@ sub main()
     }
 
     write_cache_file( $toplevel_dir, $cache_file_name );
-    compress_file( $cache_file_name );
 }
 
 
@@ -146,8 +145,7 @@ sub write_cache_file()
     my ( $toplevel_dir, $cache_file_name ) = @_;
     my $start_time = time();
 
-    open( CACHE,  ">" . $cache_file_name ) or die "Can't open $cache_file_name";
-    binmode( CACHE, ":bytes" );
+    open_cache_file( $cache_file_name );
     write_cache_header();
     write_cache_tree( $toplevel_dir );
 
@@ -162,23 +160,29 @@ sub write_cache_file()
 #-----------------------------------------------------------------------------
 
 
-# Compress a file if its extension is ".gz".
+# Open the cache file and pipe the data through gzip if its extension is ".gz".
 #
 # Parameters:
 #	$file_name
 
-sub compress_file()
+sub open_cache_file()
 {
     my ( $file_name ) = @_;
 
+    # Compress a file if its extension is ".gz".
     if ( $file_name =~ /.*\.gz$/ )
     {
-	my $uncompressed_name = $file_name;
-	$uncompressed_name =~ s/\.gz$//;	# Cut off ".gz" extension
-	rename( $file_name, $uncompressed_name );
-	logf( "Compressing $file_name" );
-	system( "gzip $uncompressed_name" );
+	# use env var to avoid quoting file name
+	local $ENV{env_cache_file_name} = $file_name;
+	my $child_pid = open( CACHE,  '| gzip > "$env_cache_file_name"' );
+	die "Can't open $file_name" unless ( defined $child_pid );
+	exit unless ( $child_pid ); # we are the child process
     }
+    else
+    {
+	open( CACHE,  ">" . $file_name ) or die "Can't open $file_name";
+    }
+    binmode( CACHE, ":bytes" );
 
 }
 
