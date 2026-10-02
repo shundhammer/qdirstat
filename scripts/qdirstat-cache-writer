@@ -182,8 +182,8 @@ sub open_cache_file()
     {
 	open( CACHE,  ">" . $file_name ) or die "Can't open $file_name";
     }
-    binmode( CACHE, ":bytes" );
 
+    binmode( CACHE, ":bytes" );
 }
 
 
