@@ -469,6 +469,19 @@ bool LocalDirReadJob::readCacheFile( const QString & cacheFileName )
     QString cacheFullName = fullName( cacheFileName );
     CacheReadJob * cacheReadJob = new CacheReadJob( _tree, _dir->parent(), cacheFullName );
     CHECK_NEW( cacheReadJob );
+
+    if ( ! cacheReadJob->reader() )
+    {
+	logWarning() << "NOT using invalid cache file " << cacheFullName
+		     << " for " << _dirName
+		     << endl;
+
+        cacheReadJob->reader()->setAborted();
+	delete cacheReadJob;
+
+	return false;
+    }
+
     QString firstDirInCache = cacheReadJob->reader()->firstDir();
 
     if ( firstDirInCache == _dirName )	 // Does this cache file match this directory?
