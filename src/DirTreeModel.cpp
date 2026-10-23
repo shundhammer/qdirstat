@@ -974,6 +974,8 @@ bool DirTreeModel::isSmallFileOrSymLink( FileInfo * item )
 
 QVariant DirTreeModel::sizeColText( FileInfo * item ) const
 {
+    if ( item && item->isExcluded() )
+        return tr( "Excluded" );
     if ( item->isDevice() )
 	return QVariant();
 
