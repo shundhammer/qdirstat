@@ -19,6 +19,7 @@
 #include "SizeColDelegate.h"
 #include "HeaderTweaker.h"
 #include "DirTree.h"
+#include "DirInfo.h"
 #include "FormatUtil.h"
 #include "Exception.h"
 #include "Logger.h"
@@ -147,7 +148,29 @@ void DirTreeView::actionContextMenu( const QPoint & pos, FileInfo * item )
         ActionManager::instance()->addActions( subMenu, actions );
     }
 
-    menu.exec( mapToGlobal( pos ) );
+    DirTreeModel * dirModel = dynamic_cast<DirTreeModel *>( model() );
+    DirTree * tree = dirModel ? dirModel->tree() : nullptr;
+
+    QAction * excludeAction = nullptr;
+    QAction * includeAction = nullptr;
+
+    if ( tree && ! tree->isBusy() &&
+         item->isDir() && ! tree->isToplevel( item ) )
+    {
+        menu.addSeparator();
+
+        if ( item->isExcluded() )
+            includeAction = menu.addAction( tr( "Include in analysis" ) );
+        else
+            excludeAction = menu.addAction( tr( "Exclude from analysis" ) );
+    }
+
+    QAction * chosen = menu.exec( mapToGlobal( pos ) );
+
+    if ( tree && chosen == excludeAction && excludeAction )
+        tree->excludeDirectory( item->toDirInfo() );
+    else if ( tree && chosen == includeAction && includeAction )
+        tree->refresh( item->toDirInfo() );
 }
 
 

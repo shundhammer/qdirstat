@@ -230,6 +230,8 @@ namespace QDirStat
 	 **/
 	void deleteNotify( FileInfo * node );
 
+	void subtreeClearingNotify( DirInfo * dir );
+
 	/**
 	 * Sync the selected items and the current item to the selection model.
 	 **/

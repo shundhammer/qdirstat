@@ -125,6 +125,12 @@ void TreemapView::setDirTree( DirTree * newTree )
     connect( _tree, SIGNAL( childDeleted()   ),
 	     this,  SLOT  ( rebuildTreemap() ) );
 
+    connect( _tree, SIGNAL( clearingSubtree( DirInfo * ) ),
+	    this, SLOT( subtreeClearingNotify( DirInfo * ) ) );
+
+    connect( _tree, SIGNAL( subtreeCleared( DirInfo * ) ),
+	    this, SLOT( rebuildTreemap() ) );
+
     connect( _tree, SIGNAL( clearing() ),
 	     this,  SLOT  ( clear()    ) );
 
@@ -406,6 +412,10 @@ void TreemapView::rebuildTreemapDelayed()
         rebuildTreemap( _newRoot );
 }
 
+void TreemapView::subtreeClearingNotify( DirInfo * dir )
+{
+    deleteNotify( dir );
+}
 
 void TreemapView::deleteNotify( FileInfo * )
 {

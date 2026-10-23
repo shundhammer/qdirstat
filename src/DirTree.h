@@ -107,6 +107,12 @@ namespace QDirStat
 	 **/
 	void clearSubtree( DirInfo * subtree );
 
+        /**
+         * Exclude a scanned directory without changing the filesystem.
+         * The directory node remains visible.
+         **/
+        void excludeDirectory( DirInfo * dir );
+
 	/**
 	 * Finalize the complete tree after all read jobs are done.
 	 **/
