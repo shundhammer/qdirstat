@@ -148,6 +148,8 @@ void DirTreeModel::createTree()
 {
     _tree = new DirTree();
     CHECK_NEW( _tree );
+    connect( _tree, SIGNAL( manualExclusionFinished( DirInfo * ) ),
+             this, SLOT( manualExclusionFinished( DirInfo * ) ) );
 
     connect( _tree, SIGNAL( startingReading() ),
 	     this,  SLOT  ( busyDisplay() ) );
@@ -1177,7 +1179,7 @@ void DirTreeModel::dataChangedNotify( DirInfo * dir )
 	QModelIndex bottomRight = createIndex( topLeft.row(), DataColumns::instance()->colCount() - 1, dir );
 
 	QVector<int> roles;
-	roles << Qt::DisplayRole;
+	roles << Qt::DisplayRole << Qt::DecorationRole;
 
 	emit dataChanged( topLeft, bottomRight, roles );
 	// logDebug() << "Data changed for " << dir << endl;
@@ -1192,6 +1194,11 @@ void DirTreeModel::dataChangedNotify( DirInfo * dir )
     }
 }
 
+void DirTreeModel::manualExclusionFinished( DirInfo * dir )
+{
+    delayedUpdate( dir );
+    sendPendingUpdates();
+}
 
 void DirTreeModel::readingFinished()
 {

@@ -373,20 +373,19 @@ void DirTree::deleteSubtree( FileInfo *subtree )
 void DirTree::excludeDirectory( DirInfo * dir )
 {
     if ( ! dir || isBusy() || isToplevel( dir ) ||
-         ! dir->isDir() || dir->isExcluded() )
+         ! dir->isDir() || dir->isPseudoDir() ||
+         dir->isExcluded() )
         return;
 
     clearSubtree( dir );
+
     dir->setExcluded();
     dir->setReadState( DirOnRequestOnly );
 
     recalc( _root );
 
-    // Notify the model about updated directory summaries.
-    for ( DirInfo * current = dir; current; current = current->parent() )
-        sendReadJobFinished( current );
+    emit manualExclusionFinished( dir );
 }
-
 
 void DirTree::clearSubtree( DirInfo * subtree )
 {

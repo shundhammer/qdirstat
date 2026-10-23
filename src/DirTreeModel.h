@@ -163,6 +163,7 @@ namespace QDirStat
 
 
     public slots:
+        void manualExclusionFinished( DirInfo * dir );
 	/**
 	 * Open a directory URL.
 	 **/

@@ -153,9 +153,9 @@ void DirTreeView::actionContextMenu( const QPoint & pos, FileInfo * item )
 
     QAction * excludeAction = nullptr;
     QAction * includeAction = nullptr;
-
     if ( tree && ! tree->isBusy() &&
-         item->isDir() && ! tree->isToplevel( item ) )
+         item->isDir() && ! item->isPseudoDir() &&
+         ! tree->isToplevel( item ) )
     {
         menu.addSeparator();
 
@@ -178,8 +178,7 @@ void DirTreeView::actionContextMenu( const QPoint & pos, FileInfo * item )
         const Qt::SortOrder order = header()->sortIndicatorOrder();
 
         emit restoreSortRequested( column, order );
-
-        tree->refresh( item->toDirInfo() );
+        emit includeDirectoryRequested( item->url() );
     }
 }
 

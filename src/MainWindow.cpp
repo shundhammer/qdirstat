@@ -232,6 +232,22 @@ void MainWindow::checkPkgManagerSupport()
     }
 }
 
+void MainWindow::includeDirectory( const QString & path )
+{
+    DirTree * tree = app()->dirTree();
+    FileInfo * item = tree->locate( path, true );
+
+    if ( ! item || ! item->isDirInfo() || ! item->isExcluded() )
+        return;
+
+    _futureSelection.set( item );
+    app()->selectionModel()->setCurrentItem( path );
+    DirTreeModel * model = app()->dirTreeModel();
+    QModelIndex index = model->modelIndex( item );
+
+    _collapseAfterInclude = ! _ui->dirTreeView->isExpanded( index );
+    tree->refresh( item->toDirInfo() );
+}
 
 void MainWindow::connectSignals()
 {
@@ -281,6 +297,11 @@ void MainWindow::connectSignals()
              SIGNAL( restoreSortRequested( int, Qt::SortOrder ) ),
              this,
              SLOT( saveSortForInclude( int, Qt::SortOrder ) ) );
+
+    connect( _ui->dirTreeView,
+             SIGNAL( includeDirectoryRequested( QString ) ),
+             this,
+             SLOT( includeDirectory( QString ) ) );
 
     connect( app()->cleanupCollection(), SIGNAL( startingCleanup( QString ) ),
 	     this,			 SLOT  ( startingCleanup( QString ) ) );
@@ -561,6 +582,16 @@ void MainWindow::readingFinished()
         _restoreSortAfterInclude = false;
     }
 
+    if ( _collapseAfterInclude )
+    {
+        FileInfo * sel = app()->selectionModel()->currentItem();
+
+        if ( sel && sel->isDirInfo() )
+            _ui->dirTreeView->setExpanded( sel, false );
+
+        _collapseAfterInclude = false;
+    }
+
     QString elapsedTime = formatMillisec( _stopWatch.elapsed() );
     _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );
     logInfo() << "Reading finished after " << elapsedTime << endl;
@@ -578,6 +609,9 @@ void MainWindow::readingFinished()
 void MainWindow::readingAborted()
 {
     logInfo() << endl;
+
+    _restoreSortAfterInclude = false;
+    _collapseAfterInclude = false;
 
     idleDisplay();
     QString elapsedTime = formatMillisec( _stopWatch.elapsed() );

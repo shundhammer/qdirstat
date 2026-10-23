@@ -246,7 +246,11 @@ public slots:
 
 
 protected slots:
+
     void saveSortForInclude( int column, Qt::SortOrder order );
+
+    void includeDirectory( const QString & path );
+
     /**
      * Switch display to "busy display" after reading was started and restart
      * the stopwatch.
@@ -546,6 +550,7 @@ private:
     bool _restoreSortAfterInclude = false;
     int _includeSortColumn = 0;
     Qt::SortOrder _includeSortOrder = Qt::AscendingOrder;
+    bool _collapseAfterInclude = false;
 
 }; // class MainWindow
 

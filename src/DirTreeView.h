@@ -92,6 +92,8 @@ namespace QDirStat
     signals:
         void restoreSortRequested( int column, Qt::SortOrder order );
 
+        void includeDirectoryRequested( const QString & path );
+
     public slots:
 
 	/**

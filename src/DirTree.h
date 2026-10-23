@@ -404,6 +404,12 @@ namespace QDirStat
 	void subtreeCleared( DirInfo * subtree );
 
 	/**
+         * Emitted after a manual exclusion has been completed
+         * and directory summaries have been recalculated.
+         **/
+        void manualExclusionFinished( DirInfo * dir );
+
+        /**
 	 * Emitted when reading is started.
 	 **/
 	void startingReading();
