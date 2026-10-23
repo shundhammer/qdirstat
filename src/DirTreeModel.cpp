@@ -597,6 +597,18 @@ QModelIndex DirTreeModel::parent( const QModelIndex & index ) const
     return createIndex( row, 0, parent );
 }
 
+void DirTreeModel::refreshSorting()
+{
+    if ( ! _tree || ! _tree->root() )
+        return;
+
+    emit layoutAboutToBeChanged();
+
+    _tree->root()->dropSortCache( true );
+    updatePersistentIndexes();
+
+    emit layoutChanged();
+}
 
 void DirTreeModel::sort( int column, Qt::SortOrder order )
 {

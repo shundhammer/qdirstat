@@ -168,9 +168,19 @@ void DirTreeView::actionContextMenu( const QPoint & pos, FileInfo * item )
     QAction * chosen = menu.exec( mapToGlobal( pos ) );
 
     if ( tree && chosen == excludeAction && excludeAction )
+    {
         tree->excludeDirectory( item->toDirInfo() );
+        dirModel->refreshSorting();
+    }
     else if ( tree && chosen == includeAction && includeAction )
+    {
+        const int column = header()->sortIndicatorSection();
+        const Qt::SortOrder order = header()->sortIndicatorOrder();
+
+        emit restoreSortRequested( column, order );
+
         tree->refresh( item->toDirInfo() );
+    }
 }
 
 

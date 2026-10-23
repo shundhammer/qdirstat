@@ -277,6 +277,11 @@ void MainWindow::connectSignals()
     connect( _ui->treemapView,		 SIGNAL( treemapChanged() ),
 	     this,			 SLOT  ( updateActions()  ) );
 
+    connect( _ui->dirTreeView,
+             SIGNAL( restoreSortRequested( int, Qt::SortOrder ) ),
+             this,
+             SLOT( saveSortForInclude( int, Qt::SortOrder ) ) );
+
     connect( app()->cleanupCollection(), SIGNAL( startingCleanup( QString ) ),
 	     this,			 SLOT  ( startingCleanup( QString ) ) );
 
@@ -537,12 +542,24 @@ void MainWindow::startingReading()
     busyDisplay();
 }
 
+void MainWindow::saveSortForInclude( int column, Qt::SortOrder order )
+{
+    _includeSortColumn = column;
+    _includeSortOrder = order;
+    _restoreSortAfterInclude = true;
+}
 
 void MainWindow::readingFinished()
 {
     logInfo() << endl;
 
     idleDisplay();
+
+    if ( _restoreSortAfterInclude )
+    {
+        _ui->dirTreeView->sortByColumn( _includeSortColumn, _includeSortOrder );
+        _restoreSortAfterInclude = false;
+    }
 
     QString elapsedTime = formatMillisec( _stopWatch.elapsed() );
     _ui->statusBar->showMessage( tr( "Finished. Elapsed time: %1").arg( elapsedTime ), LONG_MESSAGE );

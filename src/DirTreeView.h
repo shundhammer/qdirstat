@@ -89,6 +89,8 @@ namespace QDirStat
          **/
         void setExpanded( FileInfo * item, bool expanded = true );
 
+    signals:
+        void restoreSortRequested( int column, Qt::SortOrder order );
 
     public slots:
 

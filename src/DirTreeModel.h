@@ -225,6 +225,12 @@ namespace QDirStat
 	 **/
 	void refreshSelected();
 
+        /**
+         * Re-sort directories after their calculated sizes change.
+         * Preserve the current sort column and direction.
+         **/
+        void refreshSorting();
+
 	/**
 	 * Set the update speed to slow (3 sec instead of 333 millisec).
 	 **/
