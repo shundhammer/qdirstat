@@ -232,13 +232,19 @@ void MainWindow::checkPkgManagerSupport()
     }
 }
 
-void MainWindow::includeDirectory( const QString & path )
+void MainWindow::includeDirectory( const QString & path,
+                                   int column,
+                                   Qt::SortOrder order )
 {
     DirTree * tree = app()->dirTree();
     FileInfo * item = tree->locate( path, true );
 
     if ( ! item || ! item->isDirInfo() || ! item->isExcluded() )
         return;
+
+    _includeSortColumn = column;
+    _includeSortOrder = order;
+    _restoreSortAfterInclude = true;
 
     _futureSelection.set( item );
     app()->selectionModel()->setCurrentItem( path );
@@ -294,14 +300,9 @@ void MainWindow::connectSignals()
 	     this,			 SLOT  ( updateActions()  ) );
 
     connect( _ui->dirTreeView,
-             SIGNAL( restoreSortRequested( int, Qt::SortOrder ) ),
+             SIGNAL( includeDirectoryRequested( QString, int, Qt::SortOrder ) ),
              this,
-             SLOT( saveSortForInclude( int, Qt::SortOrder ) ) );
-
-    connect( _ui->dirTreeView,
-             SIGNAL( includeDirectoryRequested( QString ) ),
-             this,
-             SLOT( includeDirectory( QString ) ) );
+             SLOT( includeDirectory( QString, int, Qt::SortOrder ) ) );
 
     connect( app()->cleanupCollection(), SIGNAL( startingCleanup( QString ) ),
 	     this,			 SLOT  ( startingCleanup( QString ) ) );
@@ -561,13 +562,6 @@ void MainWindow::startingReading()
 {
     _stopWatch.start();
     busyDisplay();
-}
-
-void MainWindow::saveSortForInclude( int column, Qt::SortOrder order )
-{
-    _includeSortColumn = column;
-    _includeSortOrder = order;
-    _restoreSortAfterInclude = true;
 }
 
 void MainWindow::readingFinished()

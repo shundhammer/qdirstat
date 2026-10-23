@@ -177,8 +177,7 @@ void DirTreeView::actionContextMenu( const QPoint & pos, FileInfo * item )
         const int column = header()->sortIndicatorSection();
         const Qt::SortOrder order = header()->sortIndicatorOrder();
 
-        emit restoreSortRequested( column, order );
-        emit includeDirectoryRequested( item->url() );
+        emit includeDirectoryRequested( item->url(), column, order );
     }
 }
 

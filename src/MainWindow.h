@@ -247,9 +247,9 @@ public slots:
 
 protected slots:
 
-    void saveSortForInclude( int column, Qt::SortOrder order );
-
-    void includeDirectory( const QString & path );
+    void includeDirectory( const QString & path,
+                           int column,
+                           Qt::SortOrder order );
 
     /**
      * Switch display to "busy display" after reading was started and restart

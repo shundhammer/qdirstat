@@ -90,9 +90,9 @@ namespace QDirStat
         void setExpanded( FileInfo * item, bool expanded = true );
 
     signals:
-        void restoreSortRequested( int column, Qt::SortOrder order );
-
-        void includeDirectoryRequested( const QString & path );
+        void includeDirectoryRequested( const QString & path,
+                                        int column,
+                                        Qt::SortOrder order );
 
     public slots:
 
