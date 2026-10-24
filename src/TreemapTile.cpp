@@ -152,7 +152,6 @@ void TreemapTile::createChildrenSimple( const QRectF & rect,
 
     int offset	 = 0;
     int size	 = dir == TreemapHorizontal ? rect.width() : rect.height();
-    int count	 = 0;
     double scale = (double) size / (double) _orig->totalAllocatedSize();
 
     _cushionSurface.addRidge( childDir, rect );
@@ -182,7 +181,6 @@ void TreemapTile::createChildrenSimple( const QRectF & rect,
 	    offset += childSize;
 	}
 
-	++count;
 	++it;
     }
 }
