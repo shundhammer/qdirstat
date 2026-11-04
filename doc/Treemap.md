@@ -135,6 +135,35 @@ space for the tree view. Use the `F9` function key to quickly toggle it off or
 on.
 
 
+## Showing Folder Names
+
+Use menu "View" -> "Treemap" -> "Show Folder Names in Treemap" to get a
+narrow header with the name and the size at the top of each directory tile
+that is large enough. The contents of the directory are laid out below that
+header, so nested directories become a stack of names:
+
+    kilroy/ (48.2 GB)
+    .cache/ (6.1 GB)
+    mozilla/ (1.4 GB)
+    firefox/ (1.4 GB)
+
+This makes it easy to spot things like the cache directories described in
+"Browser Caches Everywhere" below without clicking on any tiles.
+
+Large files get a label with their name and size as well. Smaller directories
+and files don't get any; they look just like with this option off.
+
+Click on a header to select that directory.
+
+Notice that the headers and the narrow frames around the directory contents
+take some space away from the files, so the file tiles are no longer exactly
+proportional to their size: The deeper they are in the tree, the more space
+they lose. This is why this option is off by default.
+
+The header color can be changed with `DirHeaderColor` in the `[Treemaps]`
+section of the config file; the text color is chosen automatically.
+
+
 ## Getting Rid of the Tree View
 
 Some (few) users wanted to use _only_ the treemap and get rid of the tree view

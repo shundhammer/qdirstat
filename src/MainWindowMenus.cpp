@@ -113,6 +113,12 @@ void MainWindow::connectViewTreemapMenu()
     CONNECT_ACTION( _ui->actionTreemapZoomOut,	 _ui->treemapView, zoomOut()	    );
     CONNECT_ACTION( _ui->actionResetTreemapZoom, _ui->treemapView, resetZoom()	    );
     CONNECT_ACTION( _ui->actionTreemapRebuild,	 _ui->treemapView, rebuildTreemap() );
+
+    connect( _ui->actionShowDirHeaders, SIGNAL( toggled          ( bool ) ),
+             _ui->treemapView,          SLOT  ( setShowDirHeaders( bool ) ) );
+
+    // The check state was already restored from the settings
+    _ui->treemapView->setShowDirHeaders( _ui->actionShowDirHeaders->isChecked() );
 }
 
 

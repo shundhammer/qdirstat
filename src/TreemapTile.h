@@ -197,9 +197,21 @@ namespace QDirStat
 
 	/**
 	 * Create children (sub-tiles) of this tile.
+         *
+         * For a folder tile with a header, the space for the header is
+         * reserved first, and the children are laid out below it, so the
+         * header never covers any of them.
 	 **/
 	void createChildren( const QRectF & rect,
 			     Orientation    orientation );
+
+        /**
+         * Return 'true' if this tile should get a folder header when it
+         * occupies 'rect', 'false' if not: If folder headers are disabled,
+         * for files and pseudo directories like <Files>, and if 'rect' is too
+         * small to leave enough space for the contents below the header.
+         **/
+        bool wantDirHeader( const QRectF & rect ) const;
 
 	/**
 	 * Create children (sub-tiles) using the simple treemap algorithm:
@@ -273,6 +285,29 @@ namespace QDirStat
          * Paint a (yellow) selection rectangle for this tile.
          **/
         void paintSelectionRect( QPainter * painter );
+
+        /**
+         * Paint the folder header or the file label, whichever applies.
+         **/
+        void paintLabel( QPainter * painter );
+
+        /**
+         * Paint the folder header and an outline around this tile.
+         **/
+        void paintDirHeader( QPainter * painter );
+
+        /**
+         * Paint the name and size of a file if its tile is large enough.
+         **/
+        void paintFileLabel( QPainter * painter );
+
+        /**
+         * Return the folder header text: The name and the size, with the
+         * name shortened to fit into 'width' pixels if necessary. The size
+         * is left out if there is not enough space for both. For very small
+         * widths, this may return just "...".
+         **/
+        QString dirHeaderText( int width ) const;
 
 	/**
 	 * Notification that item attributes (such as the 'selected' state)
@@ -372,6 +407,10 @@ namespace QDirStat
 	CushionSurface	_cushionSurface;
 	QPixmap		_cushion;
 	HighlightRect * _highlighter;
+        bool            _hasDirHeader;
+        bool            _labelDone;
+        QString         _labelLine1;
+        QString         _labelLine2;
 
     }; // class TreemapTile
 

@@ -52,11 +52,16 @@ TreemapView::TreemapView( QWidget * parent ):
     _newRoot(0),
     _highlightedTile(0),
     _useFixedColor(false),
-    _useDirGradient(true)
+    _useDirGradient(true),
+    _showDirHeaders(false),
+    _dirHeaderHeight(0),
+    _minDirHeaderWidth(0),
+    _labelFontMetrics( QFont() )
 {
     // logDebug() << endl;
 
     readSettings();
+    updateLabelFont();
 
     // Default values for light sources taken from Wiik / Wetering's paper
     // about "cushion treemaps".
@@ -186,8 +191,50 @@ void TreemapView::readSettings()
     _dirFillColor	= readColorEntry( settings, "DirFillColor"	, QColor( 0x10, 0x7d, 0xb4 ) );
     _dirGradientStart	= readColorEntry( settings, "DirGradientStart"	, QColor( 0x60, 0x60, 0x70 ) );
     _dirGradientEnd	= readColorEntry( settings, "DirGradientEnd"	, QColor( 0x70, 0x70, 0x80 ) );
+    _dirHeaderColor     = readColorEntry( settings, "DirHeaderColor"    , QColor( 0x3c, 0x3c, 0x42 ) );
 
     settings.endGroup();
+
+    updateDirHeaderColors();
+}
+
+
+void TreemapView::updateDirHeaderColors()
+{
+    const bool darkHeader = qGray( _dirHeaderColor.rgb() ) < 128;
+
+    _dirHeaderTextColor = darkHeader ? QColor( 0xf0, 0xf0, 0xf0 ) : QColor( 0x10, 0x10, 0x10 );
+    _dirFrameColor      = _dirHeaderColor.darker( darkHeader ? 180 : 140 );
+}
+
+
+void TreemapView::updateLabelFont()
+{
+    // Slightly smaller than the normal font to take as little space as
+    // possible away from the tiles
+
+    _labelFont = font();
+
+    if ( _labelFont.pixelSize() != -1 )
+        _labelFont.setPixelSize( qRound( _labelFont.pixelSize() * 0.9 ) );
+    else
+        _labelFont.setPointSizeF( _labelFont.pointSizeF() * 0.9 );
+
+    _labelFontMetrics  = QFontMetrics( _labelFont );
+    _dirHeaderHeight   = _labelFontMetrics.height() + 2;
+    _minDirHeaderWidth = 2 * DirHeaderPadding + 4 + 5 * _labelFontMetrics.averageCharWidth();
+}
+
+
+void TreemapView::setShowDirHeaders( bool show )
+{
+    if ( show == _showDirHeaders )
+        return;
+
+    _showDirHeaders = show;
+
+    if ( _rootTile )
+        rebuildTreemap( _rootTile->orig() );
 }
 
 
@@ -214,6 +261,7 @@ void TreemapView::writeSettings()
     writeColorEntry( settings, "DirFillColor"	   , _dirFillColor	 );
     writeColorEntry( settings, "DirGradientStart"  , _dirGradientStart	 );
     writeColorEntry( settings, "DirGradientEnd"	   , _dirGradientEnd	 );
+    writeColorEntry( settings, "DirHeaderColor"    , _dirHeaderColor     );
 
     settings.endGroup();
 }
@@ -332,6 +380,9 @@ void TreemapView::rebuildTreemap( FileInfo *	 newRoot,
 
     // Delete all old stuff.
     clear();
+
+    // The widget font might have changed since the last rebuild
+    updateLabelFont();
 
     if ( ! scene() )
     {

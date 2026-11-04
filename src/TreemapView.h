@@ -15,6 +15,8 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsPathItem>
 #include <QList>
+#include <QFont>
+#include <QFontMetrics>
 
 #include "MimeCategorizer.h"
 #include "FileInfo.h"
@@ -28,6 +30,9 @@
 #define DefaultHeightScaleFactor   ( DefaultHeightScalePercent / 100.0 )
 
 #define DefaultMinTileSize	   3
+
+// Frame in pixels around the children of a folder tile with a header
+#define DirHeaderPadding           2
 
 
 class QMouseEvent;
@@ -266,6 +271,19 @@ namespace QDirStat
          **/
         void clearSceneMask();
 
+        /**
+         * Show or hide the folder headers: A narrow strip with the name and
+         * size at the top of each folder tile that is large enough, with the
+         * folder's contents laid out below it. Large file tiles also get a
+         * label with the name and size.
+         *
+         * Since the headers are part of the layout, this rebuilds the treemap
+         * (keeping the current zoom) if anything changed.
+         *
+         * This is off by default.
+         **/
+        void setShowDirHeaders( bool show );
+
 	/**
 	 * Read parameters from the settings file.
 	 **/
@@ -383,6 +401,49 @@ namespace QDirStat
 	 * this in width or height are desired.
 	 **/
 	int minTileSize() const { return _minTileSize; }
+
+        /**
+         * Returns 'true' if folder headers and file labels are to be shown,
+         * 'false' if not. See setShowDirHeaders().
+         **/
+        bool showDirHeaders() const { return _showDirHeaders; }
+
+        /**
+         * Returns the height of a folder header in pixels.
+         **/
+        int dirHeaderHeight() const { return _dirHeaderHeight; }
+
+        /**
+         * Returns the minimum width in pixels of a folder tile to get a
+         * header.
+         **/
+        int minDirHeaderWidth() const { return _minDirHeaderWidth; }
+
+        /**
+         * Returns the fill color for folder tiles with a header.
+         **/
+        const QColor & dirHeaderColor() const { return _dirHeaderColor; }
+
+        /**
+         * Returns the text color for folder headers: Light if
+         * dirHeaderColor() is dark, dark if it is light.
+         **/
+        const QColor & dirHeaderTextColor() const { return _dirHeaderTextColor; }
+
+        /**
+         * Returns the outline color for folder tiles with a header.
+         **/
+        const QColor & dirFrameColor() const { return _dirFrameColor; }
+
+        /**
+         * Returns the font for folder headers and file labels.
+         **/
+        const QFont & labelFont() const { return _labelFont; }
+
+        /**
+         * Returns the font metrics for labelFont().
+         **/
+        const QFontMetrics & labelFontMetrics() const { return _labelFontMetrics; }
 
 	/**
 	 * Returns the cushion grid color.
@@ -505,6 +566,18 @@ namespace QDirStat
 	 **/
 	virtual void resizeEvent( QResizeEvent * event ) Q_DECL_OVERRIDE;
 
+        /**
+         * Set up the label font from the widget font and the folder header
+         * sizes that depend on it.
+         **/
+        void updateLabelFont();
+
+        /**
+         * Set up the folder header text and outline colors from the folder
+         * header color.
+         **/
+        void updateDirHeaderColors();
+
 
 	// Data members
 
@@ -529,6 +602,12 @@ namespace QDirStat
 	bool   _useFixedColor;
 	int    _minTileSize;
         bool   _useDirGradient;
+        bool   _showDirHeaders;
+        int    _dirHeaderHeight;
+        int    _minDirHeaderWidth;
+
+        QFont        _labelFont;
+        QFontMetrics _labelFontMetrics;
 
 	QColor _currentItemColor;
 	QColor _selectedItemsColor;
@@ -539,6 +618,9 @@ namespace QDirStat
         QColor _dirGradientStart;
         QColor _dirGradientEnd;
 	QColor _fixedColor;
+        QColor _dirHeaderColor;
+        QColor _dirHeaderTextColor;
+        QColor _dirFrameColor;
 
 	int    _ambientLight;
 

@@ -19,6 +19,7 @@
 #include "SelectionModel.h"
 #include "ActionManager.h"
 #include "CleanupCollection.h"
+#include "FormatUtil.h"
 #include "Exception.h"
 #include "Logger.h"
 
@@ -115,6 +116,8 @@ void TreemapTile::init()
 
     setFlags( ItemIsSelectable );
     _highlighter = 0;
+    _hasDirHeader = false;
+    _labelDone    = false;
     setAcceptHoverEvents( true );
 
     if ( ! _parentTile )
@@ -131,10 +134,40 @@ void TreemapTile::createChildren( const QRectF & rect,
     if ( _orig->totalAllocatedSize() == 0 )	// Prevent division by zero
 	return;
 
+    QRectF childrenRect = rect;
+
+    if ( wantDirHeader( rect ) )
+    {
+        // Reserve the header strip at the top and a narrow frame around the
+        // children _before_ laying them out.
+
+        const int pad = DirHeaderPadding;
+
+        _hasDirHeader = true;
+        childrenRect  = rect.adjusted( pad, _parentView->dirHeaderHeight(), -pad, -pad );
+        setBrush( _parentView->dirHeaderColor() );
+    }
+
     if ( _parentView->squarify() )
-	createSquarifiedChildren( rect );
+        createSquarifiedChildren( childrenRect );
     else
-	createChildrenSimple( rect, orientation );
+        createChildrenSimple( childrenRect, orientation );
+}
+
+
+bool TreemapTile::wantDirHeader( const QRectF & rect ) const
+{
+    if ( ! _parentView->showDirHeaders() )
+        return false;
+
+    if ( ! _orig->isDirInfo() || _orig->isPseudoDir() || ! _orig->hasChildren() )
+        return false;
+
+    // The header should never squeeze out the contents of the tile:
+    // Leave at least twice the header height for the children.
+
+    return rect.height() >= 3 * _parentView->dirHeaderHeight() &&
+           rect.width()  >= _parentView->minDirHeaderWidth();
 }
 
 
@@ -394,6 +427,7 @@ void TreemapTile::paint( QPainter			* painter,
 	if ( _orig->isDir() || _orig->isDotEntry() || _orig->isPkgInfo() )
 	{
 	    QGraphicsRectItem::paint( painter, option, widget );
+            paintLabel( painter );
 
 	    if ( isSelected() )
                 paintSelectionRect( painter );
@@ -407,6 +441,8 @@ void TreemapTile::paint( QPainter			* painter,
 
 	    if ( ! _cushion.isNull() )
 		painter->drawPixmap( rect.topLeft(), _cushion );
+
+            paintLabel( painter );
 
 	    if ( isSelected() && ! _orig->hasChildren() )
 	    {
@@ -441,16 +477,156 @@ void TreemapTile::paint( QPainter			* painter,
 
 	if ( _orig->isDir() || _orig->isDotEntry() )
 	{
-            if ( ! _parentView->useDirGradient() )
+            if ( ! _parentView->useDirGradient() && ! _hasDirHeader )
                 setBrush( _parentView->dirFillColor() );
 	}
-	else
+        else if ( ! _hasDirHeader )  // A package with a header keeps the header color
 	{
 	    setBrush( _parentView->tileColor( _orig ) );
 	}
 
 	QGraphicsRectItem::paint( painter, option, widget );
+        paintLabel( painter );
     }
+}
+
+
+void TreemapTile::paintLabel( QPainter * painter )
+{
+    if ( ! _parentView->showDirHeaders() )
+        return;
+
+    if ( _hasDirHeader )
+        paintDirHeader( painter );
+    else
+        paintFileLabel( painter );
+}
+
+
+QString TreemapTile::dirHeaderText( int width ) const
+{
+    const QFontMetrics & fm = _parentView->labelFontMetrics();
+    QString name = _orig->name();
+
+    // The toplevel directory's name is a complete path; if that needs to be
+    // shortened, keep the last part which is the most interesting one.
+
+    const Qt::TextElideMode elideMode = name.contains( '/' ) ? Qt::ElideLeft : Qt::ElideRight;
+
+    if ( ! name.endsWith( '/' ) && ! _orig->isPkgInfo() )
+        name += '/';
+
+    const QString sizeText = " (" + formatSize( _orig->totalAllocatedSize() ) + ")";
+    const QString fullText = name + sizeText;
+
+    if ( fm.horizontalAdvance( fullText ) <= width )
+        return fullText;
+
+    const int nameWidth = width - fm.horizontalAdvance( sizeText );
+
+    if ( nameWidth >= 6 * fm.averageCharWidth() )
+        return fm.elidedText( name, elideMode, nameWidth ) + sizeText;
+
+    return fm.elidedText( name, elideMode, width );
+}
+
+
+void TreemapTile::paintDirHeader( QPainter * painter )
+{
+    const QRectF rect = QGraphicsRectItem::rect();
+    const int    pad  = DirHeaderPadding;
+
+    const QRectF textRect( rect.x() + pad + 2,
+                           rect.y() + 1,
+                           rect.width() - 2 * ( pad + 2 ),
+                           _parentView->dirHeaderHeight() - 1 );
+
+    if ( ! _labelDone )
+    {
+        _labelLine1 = dirHeaderText( (int) textRect.width() );
+        _labelDone  = true;
+    }
+
+    painter->save();
+
+    // The outline makes the boundaries of nested folders visible
+
+    QRectF outlineRect = rect;
+    outlineRect.setSize( outlineRect.size() - QSizeF( 1.0, 1.0 ) );
+    painter->setBrush( Qt::NoBrush );
+    painter->setPen( QPen( _parentView->dirFrameColor(), 1 ) );
+    painter->drawRect( outlineRect );
+
+    if ( _labelLine1.length() > 1 )  // Not just "..."
+    {
+        painter->setFont( _parentView->labelFont() );
+        painter->setPen( _parentView->dirHeaderTextColor() );
+        painter->drawText( textRect,
+                           Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
+                           _labelLine1 );
+    }
+
+    painter->restore();
+}
+
+
+void TreemapTile::paintFileLabel( QPainter * painter )
+{
+    const QFontMetrics & fm         = _parentView->labelFontMetrics();
+    const int            lineHeight = fm.height();
+    const QRectF         rect       = QGraphicsRectItem::rect();
+    const QRectF         textRect   = rect.adjusted( 3, 2, -3, -2 );
+
+    if ( ! _labelDone )
+    {
+        _labelDone = true;
+
+        // Only for large tiles: In smaller ones, the label would be cut off so
+        // much that it would only be visual noise.
+
+        if ( _orig->isDirInfo() ||
+             rect.height() < 2 * lineHeight + 4 ||
+             rect.width()  < 10 * fm.averageCharWidth() )
+        {
+            return;
+        }
+
+        const int     width    = (int) textRect.width();
+        const QString name     = _orig->name();
+        const QString sizeText = "(" + formatSize( _orig->totalAllocatedSize() ) + ")";
+        const QString fullText = name + " " + sizeText;
+
+        if ( fm.horizontalAdvance( fullText ) <= width )
+        {
+            _labelLine1 = fullText;
+        }
+        else    // Name and size in separate lines
+        {
+            _labelLine1 = fm.elidedText( name, Qt::ElideRight, width );
+
+            if ( fm.horizontalAdvance( sizeText ) <= width )
+                _labelLine2 = sizeText;
+        }
+    }
+
+    if ( _labelLine1.isEmpty() || _labelLine1 == QString( QChar( 0x2026 ) ) )  // Just "..."
+        return;
+
+    const QColor tileColor = _parentView->tileColor( _orig );
+    const QColor textColor = qGray( tileColor.rgb() ) < 128 ?
+        QColor( 0xf8, 0xf8, 0xf8 ) : QColor( 0x10, 0x10, 0x10 );
+
+    const int flags = Qt::AlignLeft | Qt::AlignTop | Qt::TextSingleLine;
+
+    painter->save();
+    painter->setFont( _parentView->labelFont() );
+    painter->setPen( textColor );
+    painter->drawText( textRect, flags, _labelLine1 );
+
+    if ( ! _labelLine2.isEmpty() )
+        painter->drawText( textRect.adjusted( 0, lineHeight, 0, 0 ), flags, _labelLine2 );
+
+    painter->restore();
 }
 
 

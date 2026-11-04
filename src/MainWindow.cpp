@@ -360,6 +360,7 @@ void MainWindow::readSettings()
 
     _statusBarTimeout	  = settings.value( "StatusBarTimeoutMillisec", 3000  ).toInt();
     bool showTreemap	  = settings.value( "ShowTreemap"	      , true  ).toBool();
+    bool showDirHeaders   = settings.value( "ShowDirHeaders"          , false ).toBool();
 
     _verboseSelection	  = settings.value( "VerboseSelection"	      , false ).toBool();
     _urlInWindowTitle	  = settings.value( "UrlInWindowTitle"	      , false ).toBool();
@@ -374,6 +375,7 @@ void MainWindow::readSettings()
     settings.endGroup();
 
     _ui->actionShowTreemap->setChecked( showTreemap );
+    _ui->actionShowDirHeaders->setChecked( showDirHeaders );
     _ui->actionVerboseSelection->setChecked( _verboseSelection );
 
     foreach ( QAction * action, _layoutActionGroup->actions() )
@@ -412,6 +414,7 @@ void MainWindow::writeSettings()
     settings.beginGroup( "MainWindow" );
 
     settings.setValue( "ShowTreemap"	 , _ui->actionShowTreemap->isChecked() );
+    settings.setValue( "ShowDirHeaders"  , _ui->actionShowDirHeaders->isChecked() );
     settings.setValue( "VerboseSelection", _verboseSelection );
     settings.setValue( "Layout"		 , _layoutName );
 

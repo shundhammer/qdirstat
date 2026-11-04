@@ -219,6 +219,7 @@
       <string>Tree&amp;map</string>
      </property>
      <addaction name="actionShowTreemap"/>
+     <addaction name="actionShowDirHeaders"/>
      <addaction name="actionTreemapZoomIn"/>
      <addaction name="actionTreemapZoomOut"/>
      <addaction name="actionResetTreemapZoom"/>
@@ -649,6 +650,17 @@
    </property>
    <property name="shortcut">
     <string notr="true">F9</string>
+   </property>
+  </action>
+  <action name="actionShowDirHeaders">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show &amp;Folder Names in Treemap</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the names of folders and large files in the treemap.</string>
    </property>
   </action>
   <action name="actionGoUp">
