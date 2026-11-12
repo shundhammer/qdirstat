@@ -48,6 +48,21 @@ FileInfoSet FileInfoSet::normalized() const
 }
 
 
+bool FileInfoSet::containsAncestors() const
+{
+    foreach ( FileInfo * item, *this )
+    {
+	if ( containsAncestorOf( item ) )
+        {
+            logWarning() << item << " has an ancestor in the set" << endl;
+            return true; // contains ancestors
+        }
+    }
+
+    return false; // no ancestors
+}
+
+
 FileInfoSet FileInfoSet::invalidRemoved() const
 {
     FileInfoSet result;

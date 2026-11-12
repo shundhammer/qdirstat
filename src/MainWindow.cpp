@@ -52,6 +52,8 @@
 #include "SysUtil.h"
 #include "UnreadableDirsWindow.h"
 #include "Version.h"
+#include "ui_dangerous-selection-warning.h"
+
 
 #define LONG_MESSAGE		25*1000
 #define UPDATE_MILLISEC		200
@@ -303,6 +305,9 @@ void MainWindow::connectSignals()
 
     connect( app()->selectionModel(),	  SIGNAL( currentItemChanged( FileInfo *, FileInfo * ) ),
 	     this,			  SLOT	( currentItemChanged( FileInfo *, FileInfo * ) ) );
+
+    connect( app()->selectionModel(),	  SIGNAL( dangerousSelection()       ),
+	     this,			  SLOT	( handleDangerousSelection() ) );
 }
 
 
@@ -330,7 +335,7 @@ void MainWindow::updateActions()
     bool pseudoDirSelected = selectedItems.containsPseudoDir();
     bool pkgSelected	   = selectedItems.containsPkg();
 
-    _ui->actionMoveToTrash->setEnabled( sel && ! pseudoDirSelected && ! pkgSelected && ! reading );
+    _ui->actionMoveToTrash->setEnabled( sel && ! pseudoDirSelected && ! pkgSelected && ! reading && ! app()->restrictedMode() );
     _ui->actionRefreshSelected->setEnabled( selSize == 1 && ! sel->isExcluded() && ! sel->isMountPoint() && ! pkgView );
     _ui->actionContinueReadingAtMountPoint->setEnabled( oneDirSelected && sel->isMountPoint() );
     _ui->actionReadExcludedDirectory->setEnabled      ( oneDirSelected && sel->isExcluded()   );
@@ -1413,10 +1418,40 @@ void MainWindow::itemClicked( const QModelIndex & index )
 }
 
 
+void MainWindow::handleDangerousSelection()
+{
+    setRestrictedMode();
+    showDangerousSelectionWarning();
+}
+
+
+void MainWindow::showDangerousSelectionWarning()
+{
+    QDialog dialog( this );
+
+    Ui::DangerousSelectionWarningDialog * ui( new Ui::DangerousSelectionWarningDialog );
+    CHECK_NEW( ui );
+    ui->setupUi( &dialog );
+    dialog.exec();
+    delete ui;
+}
+
+
+void MainWindow::setRestrictedMode()
+{
+    logWarning() << "Entering restricted mode." << endl;
+
+    app()->setRestrictedMode();
+    _ui->dirTreeView->setSelectionMode( QAbstractItemView::SingleSelection );
+    _ui->treemapView->setRestrictedMode();
+    app()->cleanupCollection()->setRestrictedMode();
+    app()->selectionModel()->clearSelection(); // This triggers updateActions()
+}
+
+
 // For more MainWindow:: methods, See also:
 //
 //   - MainWindowHelp.cpp
 //   - MainWindowLayout.cpp
 //   - MainWindowMenus.cpp
 //   - MainWindowUnpkg.cpp
-

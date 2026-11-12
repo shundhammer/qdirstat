@@ -155,6 +155,17 @@ namespace QDirStat
          **/
         TreemapTile * highlightedParent() const;
 
+        /**
+         * Return 'true' if running in restricted mode with some dangerous
+         * features disabled, 'false' if not.
+         **/
+        bool restrictedMode() const { return _restrictedMode; }
+
+        /**
+         * Set restricted mode on or off.
+         **/
+        void setRestrictedMode( bool val = true ) { _restrictedMode = val; }
+
 
     public slots:
 
@@ -521,6 +532,7 @@ namespace QDirStat
         TreemapTile         * _highlightedTile;
         HighlightRectList     _parentHighlightList;
 	QString		      _savedRootUrl;
+        bool                  _restrictedMode;
 
 	bool   _squarify;
 	bool   _doCushionShading;

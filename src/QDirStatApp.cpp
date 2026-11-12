@@ -60,7 +60,8 @@ DirTree * QDirStatApp::dirTree() const
 }
 
 
-QDirStatApp::QDirStatApp()
+QDirStatApp::QDirStatApp():
+    _restrictedMode( false )
 {
     // logDebug() << "Creating app" << endl;
 

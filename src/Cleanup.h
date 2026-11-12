@@ -133,6 +133,12 @@ namespace QDirStat
 	 **/
 	bool askForConfirmation() const { return _askForConfirmation; }
 
+        /**
+         * Return 'true' if this is a destructive action, e.g., containing a
+         * command "rm -rf".
+         **/
+        bool isDestructive() const { return _destructive; }
+
 	/**
 	 * Return the shell to use to invoke the command of this cleanup.
 	 * If this is is empty, use defaultShells().first().
@@ -299,8 +305,8 @@ namespace QDirStat
 	// Setters (see the corresponding getter for documentation)
 	//
 
-	void setTitle		     ( const QString & title  );
-	void setCommand		     ( const QString & command)	   { _command		    = command;	 }
+	void setTitle		     ( const QString & title    );
+	void setCommand		     ( const QString & command  );
 	void setIcon		     ( const QString & iconName );
 	void setActive		     ( bool active   )		   { _active		    = active;	 }
 	void setWorksForDir	     ( bool canDo    )		   { _worksForDir	    = canDo;	 }
@@ -328,6 +334,12 @@ namespace QDirStat
 
 
     protected:
+
+        /**
+         * Check if the command is a destructive action (e.g., containing
+         * "rf -rf") and set the _destructive flag accordingly.
+         **/
+        void checkDestructive();
 
 	/**
 	 * Recursively perform the cleanup.
@@ -418,6 +430,7 @@ namespace QDirStat
 	//
 
 	QString		   _command;
+        QString            _lastCommand;
 	QString		   _title;
 	QString		   _iconName;
 	bool		   _active;
@@ -426,6 +439,7 @@ namespace QDirStat
 	bool		   _worksForDotEntry;
 	bool		   _recurse;
 	bool		   _askForConfirmation;
+        bool               _destructive;
 	QString		   _shell;
 	RefreshPolicy	   _refreshPolicy;
 	OutputWindowPolicy _outputWindowPolicy;

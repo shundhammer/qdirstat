@@ -32,7 +32,8 @@ CleanupCollection::CleanupCollection( SelectionModel * selectionModel,
 				      QObject	     * parent ):
     QObject( parent ),
     _selectionModel( selectionModel ),
-    _listMover( _cleanupList )
+    _listMover( _cleanupList ),
+    _restrictedMode( false )
 {
     readSettings();
 
@@ -166,6 +167,9 @@ void CleanupCollection::updateActions()
 		enabled = false;
 
             if ( pkgSelected )
+                enabled = false;
+
+            if ( _restrictedMode && cleanup->isDestructive() )
                 enabled = false;
 
 	    cleanup->setEnabled( enabled );

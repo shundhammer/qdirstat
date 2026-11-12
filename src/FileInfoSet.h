@@ -89,6 +89,12 @@ namespace QDirStat
 	 **/
 	FileSize totalAllocatedSize() const;
 
+        /**
+         * Return 'true' if this set has any ancestors (parent, parent's parent
+         * etc.) of any other item in the set.
+         **/
+        bool containsAncestors() const;
+
 	/**
 	 * Return 'true' if this set contains any ancestor (parent, parent's
 	 * parent etc.) of 'item'. This does not check if 'item' itself is in

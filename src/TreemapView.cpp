@@ -51,8 +51,9 @@ TreemapView::TreemapView( QWidget * parent ):
     _sceneMask(0),
     _newRoot(0),
     _highlightedTile(0),
-    _useFixedColor(false),
-    _useDirGradient(true)
+    _restrictedMode( false ),
+    _useFixedColor ( false ),
+    _useDirGradient( true  )
 {
     // logDebug() << endl;
 

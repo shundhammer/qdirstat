@@ -634,6 +634,14 @@ QVariant TreemapTile::itemChange( GraphicsItemChange   change,
 
 void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
 {
+            
+    if ( _parentView->restrictedMode() &&
+         ( event->modifiers() & Qt::ControlModifier ) != 0 )
+    {
+        logWarning() << "Ignoring ctrl-click in restricted mode" << endl;
+        return;
+    }
+    
     switch ( event->button() )
     {
 	case Qt::LeftButton:
@@ -645,7 +653,7 @@ void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	    // item ends up selected or not, the mouse press makes it the
 	    // current item, so let's update the red highlighter rectangle
 	    // here.
-
+                 
 	    QGraphicsRectItem::mousePressEvent( event );
 	    // logDebug() << this << " mouse pressed" << endl;
 	    _parentView->setCurrentItem( this );

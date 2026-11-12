@@ -264,6 +264,7 @@ HEADERS	  =				\
 FORMS	  = main-window.ui		   \
 	    cleanup-config-page.ui	   \
 	    config-dialog.ui		   \
+	    dangerous-selection-warning.ui \
 	    exclude-rules-config-page.ui   \
             find-files-dialog.ui           \
 	    file-age-stats-window.ui	   \

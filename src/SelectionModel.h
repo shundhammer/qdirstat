@@ -74,6 +74,20 @@ namespace QDirStat
 	bool verbose() const { return _verbose; }
 
 
+    signals:
+
+        /**
+         * Emitted when there is a dangerous selection:
+         * When an item and any of its ancestors (parent, grandparent, ...)
+         * is selected at the same time (see #316, #329).
+         *
+         * Users can't be trusted to get the finer points of mouse operations
+         * right: They do Shift-/Ctrl-clicking without knowing WTF they are
+         * doing, and then they come complaining.
+         **/
+        void dangerousSelection();
+
+
     public slots:
 
 	/**

@@ -384,6 +384,11 @@ protected slots:
     void applyFutureSelection();
 
     /**
+     * Handle a dangerous selection.
+     **/
+    void handleDangerousSelection();
+
+    /**
      * Open a popup dialog with a message that this feature is not implemented.
      **/
     void notImplemented();
@@ -516,6 +521,17 @@ protected:
      * actionGoForward with the "back" and "forward" mouse buttons as well.
      **/
     virtual void mousePressEvent( QMouseEvent * event ) Q_DECL_OVERRIDE;
+
+    /**
+     * Show a warning dialog about a dangerous selection.
+     **/
+    void showDangerousSelectionWarning();
+
+    /**
+     * Prevent the user from shooting himself in the foot
+     * and afterwards come whining in the issue tracker
+     **/
+    void setRestrictedMode();
 
 
 private:

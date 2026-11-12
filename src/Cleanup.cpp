@@ -31,8 +31,10 @@ Cleanup::Cleanup( QString   command,
 		  QObject * parent ):
     QAction( title, parent ),
     _command( command ),
-    _title( title )
+    _title( title ),
+    _destructive( false )
 {
+    setCommand( command );
     _active		   = true;
     _worksForDir	   = true;
     _worksForFile	   = true;
@@ -44,6 +46,7 @@ Cleanup::Cleanup( QString   command,
     _outputWindowTimeout   = 500;
     _outputWindowAutoClose = false;
 
+    checkDestructive();
     QAction::setEnabled( true );
 }
 
@@ -52,6 +55,28 @@ void Cleanup::setTitle( const QString &title )
 {
     _title = title;
     QAction::setText( _title );
+}
+
+
+void Cleanup::setCommand( const QString & command)
+{
+    _command = command;
+    checkDestructive();
+}
+
+
+void Cleanup::checkDestructive()
+{
+    _destructive = _command.contains( "rm -rf" );
+
+    if ( _destructive && _command != _lastCommand )
+    {
+        logInfo() << "Cleanup \"" << _title
+                  << "\" is a destructive action: \"" << _command << "\""
+                  << endl;
+
+        _lastCommand = _command;
+    }
 }
 
 

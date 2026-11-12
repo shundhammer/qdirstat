@@ -119,6 +119,18 @@ namespace QDirStat
 	 **/
 	void clear();
 
+        /**
+         * Return 'true' if running in restricted mode with some dangerous
+         * features disabled, 'false' if not.
+         **/
+        bool restrictedMode() const { return _restrictedMode; }
+
+        /**
+         * Set restricted mode on or off.
+         **/
+        void setRestrictedMode( bool val = true ) { _restrictedMode = val; }
+
+
 	/**
 	 * Return the internal cleanup list.
 	 **/
@@ -239,6 +251,7 @@ namespace QDirStat
 	ListMover<Cleanup *>	   _listMover;
 	QList<QPointer<QMenu> >	   _menus;
 	QList<QPointer<QToolBar> > _toolBars;
+        bool                       _restrictedMode;
     };
 }	// namespace QDirStat
 

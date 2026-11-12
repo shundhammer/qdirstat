@@ -133,6 +133,17 @@ namespace QDirStat
          **/
         BookmarksManager * bookmarksManager() const { return _bookmarksManager; }
 
+        /**
+         * Return 'true' if running in restricted mode with some dangerous
+         * features disabled, 'false' if not.
+         **/
+        bool restrictedMode() const { return _restrictedMode; }
+
+        /**
+         * Set restricted mode on or off.
+         **/
+        void setRestrictedMode( bool val = true ) { _restrictedMode = val; }
+
 
         //
         // Convenience methods
@@ -193,6 +204,8 @@ namespace QDirStat
         SelectionModel          * _selectionModel;
         CleanupCollection       * _cleanupCollection;
         BookmarksManager        * _bookmarksManager;
+        bool                      _restrictedMode;
+
 
         static QDirStatApp      * _instance;
 

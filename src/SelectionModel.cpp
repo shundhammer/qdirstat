@@ -79,6 +79,12 @@ FileInfoSet SelectionModel::selectedItems()
 	    }
 	}
 
+        if ( _selectedItems.containsAncestors() )
+        {
+            logWarning() << "DANGEROUS selection!" << endl;
+            emit dangerousSelection();
+        }
+
 	_selectedItemsDirty = false;
     }
 
