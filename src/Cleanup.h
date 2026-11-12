@@ -430,7 +430,6 @@ namespace QDirStat
 	//
 
 	QString		   _command;
-        QString            _lastCommand;
 	QString		   _title;
 	QString		   _iconName;
 	bool		   _active;

@@ -34,7 +34,6 @@ Cleanup::Cleanup( QString   command,
     _title( title ),
     _destructive( false )
 {
-    setCommand( command );
     _active		   = true;
     _worksForDir	   = true;
     _worksForFile	   = true;
@@ -69,13 +68,11 @@ void Cleanup::checkDestructive()
 {
     _destructive = _command.contains( "rm -rf" );
 
-    if ( _destructive && _command != _lastCommand )
+    if ( _destructive )
     {
         logInfo() << "Cleanup \"" << _title
                   << "\" is a destructive action: \"" << _command << "\""
                   << endl;
-
-        _lastCommand = _command;
     }
 }
 
