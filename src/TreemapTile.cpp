@@ -634,11 +634,9 @@ QVariant TreemapTile::itemChange( GraphicsItemChange   change,
 
 void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
 {
-
-    if ( _parentView->restrictedMode() &&
-         ( event->modifiers() & Qt::ControlModifier ) != 0 )
+    if ( _parentView->restrictedMode() && ( event->modifiers() != Qt::NoModifier ) )
     {
-        logWarning() << "Ignoring ctrl-click in restricted mode" << endl;
+        logWarning() << "Ignoring [Shift]/[Ctrl] + click in restricted mode" << endl;
         return;
     }
 
@@ -690,6 +688,9 @@ void TreemapTile::mousePressEvent( QGraphicsSceneMouseEvent * event )
 
 void TreemapTile::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 {
+    if ( _parentView->restrictedMode() && ( event->modifiers() != Qt::NoModifier ) )
+        return;
+
     switch ( event->button() )
     {
 	case Qt::LeftButton:
