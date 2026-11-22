@@ -4,7 +4,7 @@
     <param name="url">https://github.com/shundhammer/qdirstat.git</param>
     <param name="scm">git</param>
     <!--  <param name="versionformat">@PARENT_TAG@+git%cd.%h</param> -->
-    <param name="versionformat">2.0.0+git%cd.%h</param>
+    <param name="versionformat">2.0.1+git%cd.%h</param>
     <param name="exclude">.git</param>
     <param name="revision">master</param>
     <param name="filename">qdirstat</param>

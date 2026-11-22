@@ -7,7 +7,7 @@
     <param name="versionformat">@PARENT_TAG@+@TAG_OFFSET@</param>
     <param name="versionrewrite-pattern">(.*)\+0</param>
     <param name="versionrewrite-replacement">\1</param>
-    <param name="revision">2.0</param>
+    <param name="revision">2.0.1</param>
     <param name="changesgenerate">enable</param>
   </service>
   <service name="set_version" mode="manual"/>
