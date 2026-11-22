@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2026-11-14
+Updated: 2026-11-22
 
 
 ## Screenshot
@@ -124,7 +124,7 @@ You can donate any amount of your choice via PayPal:
 
 ## Latest Stable Release
 
-**QDirStat V2.0**
+**QDirStat V2.0.1**
 
 See the [release announcement](https://github.com/shundhammer/qdirstat/releases).
 
@@ -133,6 +133,11 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2026-11-22 **New stable release: 2.0.1**
+
+  See the [release notes](https://github.com/shundhammer/qdirstat/releases/tag/2.0.1).
+
 
 - 2026-09-24 Program translations are starting to arrive!
 
