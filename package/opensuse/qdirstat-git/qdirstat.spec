@@ -17,7 +17,7 @@
 
 
 Name:           qdirstat
-Version:        2.0.1
+Version:        2.0.1+git20261114.d7730f1
 Release:        0
 Summary:        Directory Statistics
 License:        GPL-2.0-only
@@ -45,7 +45,7 @@ move it to the trash if you like. The color corresponds to the file
 type: Images, videos or whatever.
 
 This is a Qt-only port of the old Qt3/KDE3-based KDirStat, now based
-on the latest Qt 5. It does not need any KDE libs or
+on the latest Qt 6. It does not need any KDE libs or
 infrastructure. It runs on every X11-based desktop on Linux, BSD and
 other Unix-like systems, and in a Docker container.
 
