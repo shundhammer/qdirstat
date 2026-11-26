@@ -10,7 +10,7 @@ Target Platforms: Linux, BSD, Unix-like systems; macOS
 
 License: GPL V2
 
-Updated: 2026-11-22
+Updated: 2026-11-26
 
 
 ## Screenshot
@@ -133,6 +133,27 @@ Download installable binary packages for various Linux distributions here:
 
 
 ## Latest News
+
+- 2026-11-26 Weird website `qdirstat.com`
+
+  Somebody registered a new website `qdirstat.com`. This has **nothing** to do
+  with the QDirStat project; it's just a low-effort website with very little
+  information. There isn't even a _screenshot_ of QDirStat, that's how
+  low-effort it is. The "content" looks very much AI-generated.
+
+  What is the purpose? Just domain grabbing? Right now, there are no ads on the
+  site, but this may change in the future.
+
+  They have a download link to a `qdirstat-master.zip` file that looks (at the
+  time of this writing) like a snapshot of the _master_ branch of the QDirStat
+  source tree; which is of course completely bonkers because anybody who is
+  capable of building it manually can simply do a `git clone` without having to
+  trust a shady website that is not associated with the project.
+
+  And then they tell you to "follow the build instructions". What a great help.
+
+  **Do not download anything from there!** Only download from trusted sources!
+
 
 - 2026-11-22 **New stable release: 2.0.1**
 
