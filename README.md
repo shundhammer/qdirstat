@@ -152,7 +152,7 @@ Download installable binary packages for various Linux distributions here:
 
   And then they tell you to "follow the build instructions". What a great help.
 
-  **Do not download anything from there!** Only download from trusted sources!
+  _Do not download anything from there!_ Only download from trusted sources!
 
 
 - 2026-11-22 **New stable release: 2.0.1**
